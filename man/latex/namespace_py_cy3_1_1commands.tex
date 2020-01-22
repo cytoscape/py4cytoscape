@@ -1,0 +1,44 @@
+\hypertarget{namespace_py_cy3_1_1commands}{}\doxysection{Py\+Cy3.\+commands Namespace Reference}
+\label{namespace_py_cy3_1_1commands}\index{PyCy3.commands@{PyCy3.commands}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespace_py_cy3_1_1commands_ad2b39fc7e10c308555cc0a449cc50bbf}{cyrest\+\_\+get}} (operation=None, parameters=None, base\+\_\+url=D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+A\+S\+E\+\_\+\+U\+RL, require\+\_\+json=True)
+\item 
+def \mbox{\hyperlink{namespace_py_cy3_1_1commands_a2830cce77d4aa3730acd7fda11a46f90}{commands\+\_\+post}} (cmd, base\+\_\+url=D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+A\+S\+E\+\_\+\+U\+RL, require\+\_\+json=True)
+\item 
+def \mbox{\hyperlink{namespace_py_cy3_1_1commands_a9b0951f4c65050aecc1a3baba94e1979}{command\+\_\+2\+\_\+post\+\_\+query\+\_\+url}} (cmd, base\+\_\+url=D\+E\+F\+A\+U\+L\+T\+\_\+\+B\+A\+S\+E\+\_\+\+U\+RL)
+\item 
+def \mbox{\hyperlink{namespace_py_cy3_1_1commands_aa7063cc0d6c3a891a01d835253c5d771}{command\+\_\+2\+\_\+post\+\_\+query\+\_\+body}} (cmd)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_py_cy3_1_1commands_aa7063cc0d6c3a891a01d835253c5d771}\label{namespace_py_cy3_1_1commands_aa7063cc0d6c3a891a01d835253c5d771}} 
+\index{PyCy3.commands@{PyCy3.commands}!command\_2\_post\_query\_body@{command\_2\_post\_query\_body}}
+\index{command\_2\_post\_query\_body@{command\_2\_post\_query\_body}!PyCy3.commands@{PyCy3.commands}}
+\doxysubsubsection{\texorpdfstring{command\_2\_post\_query\_body()}{command\_2\_post\_query\_body()}}
+{\footnotesize\ttfamily def Py\+Cy3.\+commands.\+command\+\_\+2\+\_\+post\+\_\+query\+\_\+body (\begin{DoxyParamCaption}\item[{}]{cmd }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Construct body of POST as JSON representing inline parameters \end{DoxyVerb}
+ \mbox{\Hypertarget{namespace_py_cy3_1_1commands_a9b0951f4c65050aecc1a3baba94e1979}\label{namespace_py_cy3_1_1commands_a9b0951f4c65050aecc1a3baba94e1979}} 
+\index{PyCy3.commands@{PyCy3.commands}!command\_2\_post\_query\_url@{command\_2\_post\_query\_url}}
+\index{command\_2\_post\_query\_url@{command\_2\_post\_query\_url}!PyCy3.commands@{PyCy3.commands}}
+\doxysubsubsection{\texorpdfstring{command\_2\_post\_query\_url()}{command\_2\_post\_query\_url()}}
+{\footnotesize\ttfamily def Py\+Cy3.\+commands.\+command\+\_\+2\+\_\+post\+\_\+query\+\_\+url (\begin{DoxyParamCaption}\item[{}]{cmd,  }\item[{}]{base\+\_\+url = {\ttfamily DEFAULT\+\_\+BASE\+\_\+URL} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Construct complete command URL from base URL and Cytoscape command \end{DoxyVerb}
+ \mbox{\Hypertarget{namespace_py_cy3_1_1commands_a2830cce77d4aa3730acd7fda11a46f90}\label{namespace_py_cy3_1_1commands_a2830cce77d4aa3730acd7fda11a46f90}} 
+\index{PyCy3.commands@{PyCy3.commands}!commands\_post@{commands\_post}}
+\index{commands\_post@{commands\_post}!PyCy3.commands@{PyCy3.commands}}
+\doxysubsubsection{\texorpdfstring{commands\_post()}{commands\_post()}}
+{\footnotesize\ttfamily def Py\+Cy3.\+commands.\+commands\+\_\+post (\begin{DoxyParamCaption}\item[{}]{cmd,  }\item[{}]{base\+\_\+url = {\ttfamily DEFAULT\+\_\+BASE\+\_\+URL},  }\item[{}]{require\+\_\+json = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_py_cy3_1_1commands_ad2b39fc7e10c308555cc0a449cc50bbf}\label{namespace_py_cy3_1_1commands_ad2b39fc7e10c308555cc0a449cc50bbf}} 
+\index{PyCy3.commands@{PyCy3.commands}!cyrest\_get@{cyrest\_get}}
+\index{cyrest\_get@{cyrest\_get}!PyCy3.commands@{PyCy3.commands}}
+\doxysubsubsection{\texorpdfstring{cyrest\_get()}{cyrest\_get()}}
+{\footnotesize\ttfamily def Py\+Cy3.\+commands.\+cyrest\+\_\+get (\begin{DoxyParamCaption}\item[{}]{operation = {\ttfamily None},  }\item[{}]{parameters = {\ttfamily None},  }\item[{}]{base\+\_\+url = {\ttfamily DEFAULT\+\_\+BASE\+\_\+URL},  }\item[{}]{require\+\_\+json = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Perform HTTP GET and return a list object if JSON is returned; otherwise, just text \end{DoxyVerb}
+ 

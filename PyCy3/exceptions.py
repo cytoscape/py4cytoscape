@@ -1,0 +1,3 @@
+
+class CyError(Exception):
+    pass

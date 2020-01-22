@@ -1,0 +1,268 @@
+# -*- coding: utf-8 -*-
+
+from . import commands
+from . import network_selection
+from .pycy3_utils import DEFAULT_BASE_URL, node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
+from .exceptions import CyError
+from .decorators import debug
+import sys
+import re
+import os
+import warnings
+
+
+def __init__(self):
+    pass
+
+def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
+    suid = get_network_suid(network)
+    cmd = 'network set current network=SUID:"' + str(suid) + '"'
+    return commands.commands_post(cmd, base_url=base_url)
+
+def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
+    old_suid = get_network_suid(network, base_url=base_url)
+    cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
+    return commands.commands_post(cmd, base_url)
+
+def get_network_count(base_url=DEFAULT_BASE_URL):
+    res = commands.cyrest_get('networks/count', base_url=base_url)
+    return list(res.values())[0]
+
+def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
+    if isinstance(suid, str):
+        # title provided
+        if suid == 'current':
+            network_suid = get_network_suid(base_url=DEFAULT_BASE_URL)
+        else:
+            net_names = get_network_list(base_url=base_url)
+            if suid in net_names:
+                return suid
+            else:
+                raise CyError('Network does not exist: ' + suid)
+    elif isinstance(suid, int):
+        # suid provided
+        network_suid = suid
+    else:
+        network_suid = get_network_suid(base_url=DEFAULT_BASE_URL)
+
+    res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=DEFAULT_BASE_URL)
+    return res[0]['name']
+
+def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
+    if isinstance(title, str):
+        # Title was provided
+        if title == 'current':
+            network_title = title
+        else:
+            net_names = get_network_list(base_url=base_url)
+            if title in net_names:
+                network_title = title
+            else:
+                raise CyError('Network does not exist: ' + title)
+    elif isinstance(title, int):
+        # SUID was provided
+        net_suids = commands.cyrest_get('networks', base_url=base_url)
+        if title in net_suids:
+            return title
+        raise CyError('Network does not exist: ' + str(title))
+    else:
+        # Don't understand, so use current network
+        network_title = 'current'
+
+    # Make requested network current and return its SUID
+    cmd = 'network get attribute network="' + network_title + '" namespace="default" columnList="SUID"'
+    response = commands.commands_post(cmd, base_url=base_url)
+    return int(response[0]['SUID'])
+
+def get_network_list(base_url=DEFAULT_BASE_URL):
+    cy_network_names = []
+    if get_network_count(base_url=base_url):
+        cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
+        for suid in cy_networks_suids:
+            res = commands.cyrest_get('networks/' + str(suid), base_url=base_url)
+            cy_network_names.append(res['data']['name'])
+
+    return cy_network_names
+
+def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
+    cmd = 'network export'  # a good start
+
+    # filename must be suppled
+    if filename is None: filename = get_network_name(network)
+
+    # optional args
+    if network is not None: cmd += ' network="SUID:' + str(get_network_suid(network, base_url=base_url)) + '"'
+
+    type = type.upper()
+    if type == 'CYS':
+        sys.stderr.write('Saving session as a CYS file...')
+        raise CyError("Implement this") # TODO: saveSession(filename=filename, base.url = base.url)
+    else:
+        # e.g., CX, CYJS, GraphML, NNF, SIF, XGMML
+        if type == 'GRAPHML': type = 'GraphML'
+    cmd += ' options="' + type + '"'
+
+    ext = '.' + type.lower()
+    if re.search(ext + '$', filename) is None: filename += ext
+    filename = os.path.abspath(filename)
+    if os.path.exists(filename): warnings.warn('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+
+    return commands.commands_post(cmd + ' OutputFile="' + filename + '"', base_url=base_url)
+
+def delete_network(network=None, base_url=DEFAULT_BASE_URL):
+    suid = get_network_suid(network)
+    res = commands.cyrest_delete('networks/' + str(suid), base_url=base_url, require_json=False)
+    return res
+
+def delete_all_networks(base_url=DEFAULT_BASE_URL):
+    res = commands.cyrest_delete('networks', base_url=base_url, require_json=False)
+    return res
+
+def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
+    #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
+    if node_names is None:
+        node_names = network_selection.get_selected_nodes(network=network, base_url=base_url)
+        if node_names is None: raise CyError('No nodes selected')
+
+    if (len(node_names) == 0): return None
+
+    net_suid = get_network_suid(network, base_url=base_url)
+    neighbor_names = []
+
+    for node_name in node_names:
+        # get first neighbors for each node
+        node_suid = node_name_to_node_suid([node_name], net_suid, base_url=base_url)[0]
+        # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar
+
+        first_neighbors_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/' + str(node_suid) + '/neighbors', base_url=base_url)
+        first_neighbors_names = node_suid_to_node_name(first_neighbors_suids, net_suid, base_url=base_url)
+
+        if as_nested_list:
+            neighbor_names.append([node_name, first_neighbors_names])
+        else:
+            neighbor_names += first_neighbors_names
+            neighbor_names = list(dict.fromkeys(neighbor_names)) # dedup list
+
+    return neighbor_names
+
+
+def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    if skip_duplicate_names:
+        all_nodes_list = get_all_nodes(net_suid, base_url=base_url)
+        node_names = list(set(node_names) - set(all_nodes_list))
+
+    res = commands.cyrest_post('networks/' + str(net_suid) + '/nodes', body=node_names, base_url=base_url)
+    return res
+
+def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/count', base_url=base_url)
+    return res['count']
+
+def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    n_count = get_node_count(net_suid, base_url=base_url)
+    if n_count == 0: return None
+
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultnode/columns/name', base_url=base_url)
+    return res['values']
+
+def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+
+    # Create list of all nodes in order presented
+    if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0], str) and isinstance(source_target_list[1], str):
+        flat_source_target_list = source_target_list
+    else:
+        flat_source_target_list = [item    for sublist in source_target_list    for item in sublist]
+    edge_suid_list = node_name_to_node_suid(flat_source_target_list, net_suid, base_url=base_url)
+
+    # Verify that
+    if True in [True if isinstance(x, list) else False    for x in edge_suid_list]:
+        sys.stderr.write('add_cy_edges: more than one node found for a given source or target - no edges added')
+        return None
+        # TODO: Create consistent policy for logging to console and returning error values
+
+    edge_data = [{'source':edge_suid_list[x], 'target':edge_suid_list[x+1], 'directed':directed, 'interaction':edge_type}    for x in range(0, len(edge_suid_list) - 1, 2)]
+
+    res = commands.cyrest_post('networks/' + str(net_suid) + '/edges', body=edge_data, base_url=base_url)
+    return res
+
+def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/count', base_url=base_url)
+    return res['count']
+
+def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    if isinstance(edges, str): edges = [edges]
+
+    def convert_edge_name_to_edge_info(edge_name):
+        edge_suid = edge_name_to_edge_suid(edge_name, network, base_url=base_url)
+        res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/' + str(edge_suid[0]), base_url=base_url)
+        return res['data']
+
+    edge_info = [convert_edge_name_to_edge_info(x)   for x in edges]
+    # TODO: Verify that it's always OK to return a list instead of a single dict ... this happens in many places
+    return edge_info
+
+def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    e_count = get_edge_count(network, base_url=base_url)
+    if e_count == 0: return None
+
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultedge/columns/name', base_url=base_url)
+    return res['values']
+
+def clone_network(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"')
+    return res['network']
+
+def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
+    title = get_network_name(network, base_url=base_url)
+    exclude_edges = 'true' if exclude_edges else 'false'
+    if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
+    if isinstance(edges, str) and edges in ['all', 'selected', 'unselected']: edges_by_col = None
+    json_sub = {'source': 'SUID:' + title, 'excludeEdges': exclude_edges, 'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col), 'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
+    if not subnetwork_name is None: json_sub['networkName'] = subnetwork_name
+
+    res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
+    return res['network']
+
+def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement create_network_from_igraph
+
+def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement create_network_from_graph
+
+def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement create_network_from_data_frames
+
+def import_from_file(file=None, base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement import_from_file
+
+def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement create_igraph_from_network
+
+def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented') # TODO: implement create_graph_from_network
+
+def _edge_set_2_json(edge_set, source_id_list='source', target_id_list='target', interaction_type_list='interaction', *args):
+    raise CyError('Not implemented') # TODO: implement _edge_set_2_json
+
+def _node_set_2_json(node_set, node_id_list='id', *args):
+    raise CyError('Not implemented') # TODO: implement _node_set_2_json
+
+def _fast_append_list_global(item):
+    raise CyError('Not implemented') # TODO: implement _fast_append_list_global
+
+def first_func():
+    """ This is my first function """
+    print("Executing first_func()")
+
+    res = commands.cyrest_get()
+    print(res)
+
+    return res
