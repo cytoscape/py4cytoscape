@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import commands
+from . import tables
 from . import network_selection
 from .pycy3_utils import DEFAULT_BASE_URL, node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
 from .exceptions import CyError
@@ -9,7 +10,7 @@ import sys
 import re
 import os
 import warnings
-
+import pandas as pd
 
 def __init__(self):
     pass
@@ -221,15 +222,16 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
     return res['network']
 
 def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
-    title = get_network_name(network, base_url=base_url)
+    # TODO: Verify that node and edge names can't contain blanks or commas
+    title = get_network_suid(network, base_url=base_url)
     exclude_edges = 'true' if exclude_edges else 'false'
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
     if isinstance(edges, str) and edges in ['all', 'selected', 'unselected']: edges_by_col = None
-    json_sub = {'source': 'SUID:' + title, 'excludeEdges': exclude_edges, 'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col), 'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
+    json_sub = {'source': 'SUID:' + str(title), 'excludeEdges': exclude_edges, 'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col), 'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
     if not subnetwork_name is None: json_sub['networkName'] = subnetwork_name
 
     res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
-    return res['network']
+    return res['data']['network']
 
 def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_igraph
@@ -237,7 +239,62 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
 
-def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL):
+def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
+    # it looks like nodes is a dataframe like this (from R):
+    # #' nodes <- data.frame(id=c("node 0","node 1","node 2","node 3"),
+    # #'            group=c("A","A","B","B"), # categorical strings
+    # #'            score=as.integer(c(20,10,15,5))) # integers
+    # if nodes is empty, we get a list of nodes out of the source/target values for edges
+
+    # it looks like edges is a dataframe like this (from R):
+    # ' edges <- data.frame(source=c("node 0","node 0","node 0","node 2"),
+    # '            target=c("node 1","node 2","node 3","node 3"),
+    # '            interaction=c("inhibits","interacts",
+    # '                          "activates","interacts"),  # optional
+    # '            weight=c(5.1,3.0,5.2,9.9)) # numeric
+
+    # Create a node list even if we have to use the edges lists to infer nodes
+    if nodes is None:
+        if not edges is None:
+            # TODO: Verify that this dataframe is built properly
+            id_list = []
+            for x in edges:
+                id_list.append(x['source'])
+                id_list.append(x['target'])
+            nodes = pd.DataFrame(data=id_list, columns='id')
+        else:
+            return 'Create Network Failed: Must provide either nodes or edges'
+
+    # create the JSON for a node list ... in cytoscape.js format
+    json_nodes = [{'data': {'id': node}}    for node in nodes[node_id_list]]
+
+    # create the JSON for an edge list ... in cytoscape.js format
+    json_edges = []
+    if not edges is None:
+        if not interaction_type_list in edges.columns: edges[interaction_type_list] = 'interacts with'
+        edges_sub = edges[[source_id_list, target_id_list, interaction_type_list]]
+
+        def compute_edge(source, target, interaction):
+            computed_name = source + ' (' + interaction + ') ' + target
+            return {'data': {'name': computed_name, 'source': source, 'target': target, 'interaction': interaction}}
+
+        json_edges = [compute_edge(source, target, interaction)   for source, target, interaction in zip(edges_sub[source_id_list], edges_sub[target_id_list], edges_sub[interaction_type_list])]
+
+    # create the full JSON for a cytoscape.js-style network ... see http://manual.cytoscape.org/en/stable/Supported_Network_File_Formats.html#cytoscape-js-json
+    json_network = {'data': [{'name': title}], 'elements': {'nodes': json_nodes, 'edges': json_edges}}
+    print(json_network)
+
+    # call Cytoscape to create this network and return the SUID
+    network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection}, body=json_network, base_url=base_url)
+
+    # drop the SUID column if one is present
+    nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
+
+    # load node attributes into Cytoscape network
+    if not set(nodes.columns) - set('id') is None:
+        tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid, base_url=base_url)
+
+
     raise CyError('Not implemented') # TODO: implement create_network_from_data_frames
 
 def import_from_file(file=None, base_url=DEFAULT_BASE_URL):

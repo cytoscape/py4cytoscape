@@ -65,6 +65,13 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
 
     return df
 
+def get_table_column_names(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    suid = networks.get_network_suid(network, base_url=base_url)
+    tbl = namespace + table
+    res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + tbl + '/columns', base_url=base_url)
+    col_names = [x['name']   for x in res]
+    return col_names
+
 def get_table_column_types(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     suid = networks.get_network_suid(network, base_url=base_url)
     cmd = 'networks/' + str(suid) + '/tables/' + namespace + table + '/columns'
@@ -73,4 +80,51 @@ def get_table_column_types(table='node', namespace='default', network=None, base
 
     return col_types
 
+def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    table_key_column_values = get_table_columns(table=table, columns=table_key_column, network=net_suid, base_url=base_url)
 
+    if table_key_column_values.columns is None:
+        return "Failed to load data: Please check table.key.column"
+
+    if data_key_column == 'row.names':
+        data['row.names'] = data.index
+
+    if not data_key_column in data.columns:
+        return "Failed to load data: Please check data.key.column"
+
+    # verify that there is at least one key in the Cytoscape table that matches a key in the data
+    table_keys = table_key_column_values[table_key_column].values
+    filter = [key in table_keys    for key in data[data_key_column]]
+    if not True in filter:
+        return "Failed to load data: Provided key columns do not contain any matches"
+
+    # create table containing columns present in data and already present in Cytoscape table
+    data_subset = data[filter]
+
+    # look for elements that are lists (instead of scalars) and turn them into comma-separated strings.
+    # Note that CyREST doesn't accept lists or create columns of type list, but comma-separated strings is
+    # the best we can do for the user at this time.
+    for col in data_subset.columns:
+        col_val = [','.join(val) if isinstance(val, list) else val    for val in data_subset[col]]
+        data_subset[col] = col_val
+
+
+    # TODO: Find out whether "factors" are an issue in Python, and why factors could be troublesome in R
+
+    # convert whole data table to dictionary suitable for JSON encoding
+    data_list = data_subset.to_dict(orient='records')
+    # TODO: Verify that this gives the right answer for list of str, int, etc
+
+    tbl = namespace + table # calculate fully qualified table name
+
+    # if there are any columns that aren't in the Cytoscape table and they're going to be Int, add them explicitly now
+    def create_col(x):
+        return commands.cyrest_post('networks/' + str(net_suid) + '/tables/' + tbl + '/columns', body={'name':x, 'type':'Integer'}, require_json=False, base_url=base_url)
+    existing_cols = get_table_column_names(table, namespace, net_suid, base_url=base_url)
+    [create_col(x[0]) if x[1] == 'int64' and not x[0] in existing_cols else None     for x in data_subset.dtypes.iteritems()]
+
+    # finally, add the values for whatever columns we have (and create new columns as needed)
+    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl, body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list}, require_json=False, base_url=base_url)
+
+    return 'Success: Data loaded in ' + tbl + ' table'

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import pandas as df
+
 from PyCy3 import *
 from PyCy3.decorators import *
 
@@ -296,21 +298,47 @@ class NetworkTests(unittest.TestCase):
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 359)
 
+    @skip
     @print_entry_exit
     def test_clone_network(self):
         # Initialization
         input('Load galFiltered.sif (current)')
 
-        source_suid = get_network_suid()
-        source_name = get_network_name()
+        self._check_cloned_network(clone_network(), get_network_suid(), get_network_name(), 330, 359)
 
-        clone_suid = clone_network()
-        edge_count = get_edge_count(clone_suid)
-        node_count = get_node_count(clone_suid)
-        name = get_network_name(clone_suid)
-        self.assertNotEqual(source_suid, clone_suid)
-        self.assertEqual(edge_count, 359)
-        self.assertEqual(node_count, 330)
-        self.assertIn(source_name, name)
-        print('done')
+    @skip
+    @print_entry_exit
+    def test_create_subnet(self):
+        # Initialization
+        input('Load galFiltered.sif (current)')
+        base_suid = get_network_suid()
+        base_name = get_network_name(base_suid)
+
+        self._check_cloned_network(create_subnetwork(nodes='all', network=base_suid), base_suid, base_name, 330, 359)
+        self._check_cloned_network(create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx', network=base_suid), base_suid, base_name, 4, 3)
+
+    @print_entry_exit
+    def test_create_network_from_data_frames(self):
+        node_data = {'id':["node 0","node 1","node 2","node 3"],
+                     'group':["A","A","B","B"],
+                     'score':[20,10,15,5]}
+        nodes = df.DataFrame(data=node_data, columns=['id', 'group', 'score'])
+        edge_data = {'source':["node 0","node 0","node 0","node 2"],
+                     'target':["node 1","node 2","node 3","node 3"],
+                     'interaction':["inhibits","interacts","activates","interacts"],
+                     'weight':[5.1,3.0,5.2,9.9]}
+        edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
+        res = create_network_from_data_frames(nodes, edges)
+        print(res)
+
+
+
+    def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
+        self.assertIsInstance(subnet_suid, int)
+        self.assertNotEqual(base_suid, subnet_suid)
+        self.assertEqual(get_node_count(subnet_suid), base_nodes)
+        self.assertEqual(get_edge_count(subnet_suid), base_edges)
+        self.assertIn(base_name, get_network_name(subnet_suid))
+
+
 

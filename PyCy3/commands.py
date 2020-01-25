@@ -51,6 +51,24 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
         raise
 
 
+def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
+    """ Perform HTTP PUT and return a list object if JSON is returned; otherwise, just text """
+    try:
+        r = requests.put(url=build_url(base_url, operation), params=parameters, json=body)
+        r.raise_for_status()
+        try:
+            return r.json()
+        except ValueError as e:
+            if require_json:
+                raise
+            else:
+                return r.text
+    except requests.exceptions.RequestException as e:
+        content = json.loads(e.response.content)
+        print("In commands:cyrest_put(): " + str(e) + '\n' + str(content))
+        raise
+
+
 def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
     try:
         r = requests.delete(url = build_url(base_url, operation), params=parameters)
@@ -129,6 +147,6 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
         cmd_list_col = [cmd_by_col + ':' + cmd    for cmd in cmd_list]
         cmd_list_ready = ','.join(cmd_list_col)
     else:
-        cmd_list_ready = ','.join(cmd_list)
+        cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
 
     return cmd_list_ready
