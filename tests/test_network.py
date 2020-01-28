@@ -328,8 +328,48 @@ class NetworkTests(unittest.TestCase):
                      'interaction':["inhibits","interacts","activates","interacts"],
                      'weight':[5.1,3.0,5.2,9.9]}
         edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
-        res = create_network_from_data_frames(nodes, edges)
-        print(res)
+
+        res = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
+        suid_1 = res['networkSUID']
+        print(suid_1)
+        self.assertEqual(networks.get_network_name(suid_1), 'From node & edge dataframe')
+        self.assertEqual(networks.get_node_count(suid_1), 4)
+        self.assertEqual(networks.get_edge_count(suid_1), 4)
+        self.assertListEqual(networks.get_all_nodes(suid_1), ['node 0', 'node 1', 'node 2', 'node 3'])
+        self.assertListEqual(networks.get_all_edges(suid_1), ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3'])
+        self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_1)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
+        self.assertSetEqual(set(tables.get_table_column_names('edge', network=suid_1)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
+        self.assertDictEqual(tables.get_table_column_types('node', network=suid_1), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
+        self.assertDictEqual(tables.get_table_column_types('edge', network=suid_1), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+
+
+        res = create_network_from_data_frames(edges=edges, collection='Another collection', title='From just edge dataframe')
+        suid_2 = res['networkSUID']
+        print(suid_2)
+        self.assertEqual(networks.get_network_name(suid_2), 'From just edge dataframe')
+        self.assertEqual(networks.get_node_count(suid_2), 4)
+        self.assertEqual(networks.get_edge_count(suid_2), 4)
+        self.assertListEqual(networks.get_all_nodes(suid_2), ['node 0', 'node 1', 'node 2', 'node 3'])
+        self.assertListEqual(networks.get_all_edges(suid_2), ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3'])
+        self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_2)), set(['SUID', 'shared name', 'id', 'name', 'selected']))
+        self.assertSetEqual(set(tables.get_table_column_names('edge', network=suid_2)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
+        self.assertDictEqual(tables.get_table_column_types('node', network=suid_2), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'name': 'String', 'selected': 'Boolean'})
+        self.assertDictEqual(tables.get_table_column_types('edge', network=suid_2), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+
+        res = create_network_from_data_frames(nodes=nodes, collection='A third collection', title='From just nodes dataframe')
+        suid_3 = res['networkSUID']
+        print(suid_3)
+        self.assertEqual(networks.get_network_name(suid_3), 'From just nodes dataframe')
+        self.assertEqual(networks.get_node_count(suid_3), 4)
+        self.assertEqual(networks.get_edge_count(suid_3), 0)
+        self.assertListEqual(networks.get_all_nodes(suid_3), ['node 0', 'node 1', 'node 2', 'node 3'])
+        self.assertIsNone(networks.get_all_edges(suid_3))
+        self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_3)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
+        # TODO: Verify that this list of edge columns should be created ... why not source, target?
+        self.assertSetEqual(set(tables.get_table_column_names('edge', network=suid_3)), set(['SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction']))
+        self.assertDictEqual(tables.get_table_column_types('node', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
+        self.assertDictEqual(tables.get_table_column_types('edge', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+
 
 
 

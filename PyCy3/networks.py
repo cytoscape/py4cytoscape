@@ -3,6 +3,7 @@
 from . import commands
 from . import tables
 from . import network_selection
+from . import layouts
 from .pycy3_utils import DEFAULT_BASE_URL, node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
 from .exceptions import CyError
 from .decorators import debug
@@ -252,16 +253,17 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     # '            interaction=c("inhibits","interacts",
     # '                          "activates","interacts"),  # optional
     # '            weight=c(5.1,3.0,5.2,9.9)) # numeric
+    def compute_edge_name(source, target, interaction):
+        return source + ' (' + interaction + ') ' + target
 
     # Create a node list even if we have to use the edges lists to infer nodes
     if nodes is None:
         if not edges is None:
-            # TODO: Verify that this dataframe is built properly
             id_list = []
-            for x in edges:
-                id_list.append(x['source'])
-                id_list.append(x['target'])
-            nodes = pd.DataFrame(data=id_list, columns='id')
+            for source, target in zip(edges['source'].values, edges['target'].values):
+                id_list.append(source)
+                id_list.append(target)
+            nodes = pd.DataFrame(data=id_list, columns=['id'])
         else:
             return 'Create Network Failed: Must provide either nodes or edges'
 
@@ -273,16 +275,11 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     if not edges is None:
         if not interaction_type_list in edges.columns: edges[interaction_type_list] = 'interacts with'
         edges_sub = edges[[source_id_list, target_id_list, interaction_type_list]]
-
-        def compute_edge(source, target, interaction):
-            computed_name = source + ' (' + interaction + ') ' + target
-            return {'data': {'name': computed_name, 'source': source, 'target': target, 'interaction': interaction}}
-
-        json_edges = [compute_edge(source, target, interaction)   for source, target, interaction in zip(edges_sub[source_id_list], edges_sub[target_id_list], edges_sub[interaction_type_list])]
+        json_edges = [{'data': {'name': compute_edge_name(source, target, interaction), 'source': source, 'target': target, 'interaction': interaction}}   for source, target, interaction in zip(edges_sub[source_id_list], edges_sub[target_id_list], edges_sub[interaction_type_list])]
 
     # create the full JSON for a cytoscape.js-style network ... see http://manual.cytoscape.org/en/stable/Supported_Network_File_Formats.html#cytoscape-js-json
+    # Note that no node or edge attributes are included in this version of the network
     json_network = {'data': [{'name': title}], 'elements': {'nodes': json_nodes, 'edges': json_edges}}
-    print(json_network)
 
     # call Cytoscape to create this network and return the SUID
     network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection}, body=json_network, base_url=base_url)
@@ -294,8 +291,27 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     if not set(nodes.columns) - set('id') is None:
         tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid, base_url=base_url)
 
+    if not edges is None:
+        # get rid of SUID column if one is present
+        edges = edges.drop(['SUID'], axis=1, errors='ignore')
+        # create edge name out of source/interaction/target
+        edge_names = [compute_edge_name(source, target, interaction) for source, interaction, target in zip(edges[source_id_list], edges[interaction_type_list], edges[target_id_list])]
+        edges['name'] = edge_names
+        # find out the SUID of each node so it can be used in a multigraph if needed
+        edges['data.key.column'] = edge_name_to_edge_suid(edge_names, network_suid, base_url=base_url)
 
-    raise CyError('Not implemented') # TODO: implement create_network_from_data_frames
+        # if the edge list looks real, add the edge attributes (if any)
+        if not set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column']) is None:
+            tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID', network=network_suid, base_url=base_url)
+
+    print('Applying default style...')
+    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
+
+    print('Applying preferred layout')
+    layouts.layoutNetwork(network=network_suid)
+
+    return network_suid
+
 
 def import_from_file(file=None, base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement import_from_file
