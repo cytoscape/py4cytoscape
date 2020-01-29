@@ -2,6 +2,7 @@
 
 import unittest
 import pandas as df
+import igraph as ig
 
 from PyCy3 import *
 from PyCy3.decorators import *
@@ -317,6 +318,7 @@ class NetworkTests(unittest.TestCase):
         self._check_cloned_network(create_subnetwork(nodes='all', network=base_suid), base_suid, base_name, 330, 359)
         self._check_cloned_network(create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx', network=base_suid), base_suid, base_name, 4, 3)
 
+    @skip
     @print_entry_exit
     def test_create_network_from_data_frames(self):
         node_data = {'id':["node 0","node 1","node 2","node 3"],
@@ -370,6 +372,27 @@ class NetworkTests(unittest.TestCase):
         self.assertDictEqual(tables.get_table_column_types('node', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
         self.assertDictEqual(tables.get_table_column_types('edge', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
+    @skip
+    @print_entry_exit
+    def test_import_network_from_file(self):
+
+        # TODO: Package inst/extdata/* as part of PyCy3 package
+        res = import_network_from_file()
+        print(res)
+
+        # TODO: Come up with a more platform independent test
+        res = import_network_from_file('c:\\Program Files\\Cytoscape_v3.7.2\\sampleData\\galFiltered.sif')
+        print(res)
+
+    @print_entry_exit
+    def test_create_igraph_from_network(self):
+        # Initialization
+        input('Load galFiltered.sif (current)')
+
+        i = create_igraph_from_network()
+        print(i)
+        for x in i.vs: print(x)
+        for x in i.es: print(x)
 
 
 

@@ -12,6 +12,7 @@ import re
 import os
 import warnings
 import pandas as pd
+import igraph as ig
 
 def __init__(self):
     pass
@@ -313,23 +314,49 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     return network_suid
 
 
-def import_from_file(file=None, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented') # TODO: implement import_from_file
+def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
+    if file is None:
+        file = 'extdata/galfiltered.sif'
+    else:
+        file = os.path.abspath(file)
+    res = commands.commands_post('network load file file=' + file, base_url=base_url)
+    return res
 
 def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented') # TODO: implement create_igraph_from_network
+    suid = get_network_suid(network, base_url=base_url)
+
+    # get dataframes
+    cyedges = tables.get_table_columns('edge', network=suid, base_url=base_url)
+    cynodes = tables.get_table_columns('node', network=suid, base_url=base_url)
+
+    # check for source and target columns ... if they're not present, dig them out of the full name
+    if not ['source', 'target'] in list(cyedges.columns):
+        src_trg = [re.split("\ \\(.*\\)\ ", x) for x in cyedges['name']]
+        cyedges['source'] = [x[0] for x in src_trg]
+        cyedges['target'] = [x[1] for x in src_trg]
+
+    # set up iGraph vertices ... first create vertex by naming it, then pile on attributes
+    # Tutorial: https://igraph.org/python/doc/tutorial/tutorial.html
+    # Source: https://github.com/igraph/python-igraph/blob/master/src/igraph/__init__.py
+    g = ig.Graph(directed=True)
+
+    # add all nodes and their attributes
+    g.add_vertices(list(cynodes['name']))
+    for col in cynodes.columns:
+        if not col in ['name', 'SUID']: g.vs[col] = list(cynodes[col])
+
+    # add all edges and their nodes
+    g.add_edges([(src, trg) for src, trg in zip(cyedges['source'], cyedges['target'])])
+    cyedges.rename({'source': 'from', 'target': 'to'})
+    for col in cyedges.columns:
+        if not col in ['SUID']: g.es[col] = list(cyedges[col])
+
+    return g
+
 
 def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_graph_from_network
 
-def _edge_set_2_json(edge_set, source_id_list='source', target_id_list='target', interaction_type_list='interaction', *args):
-    raise CyError('Not implemented') # TODO: implement _edge_set_2_json
-
-def _node_set_2_json(node_set, node_id_list='id', *args):
-    raise CyError('Not implemented') # TODO: implement _node_set_2_json
-
-def _fast_append_list_global(item):
-    raise CyError('Not implemented') # TODO: implement _fast_append_list_global
 
 def first_func():
     """ This is my first function """
