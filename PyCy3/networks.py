@@ -1,12 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from . import commands
-from . import tables
-from . import network_selection
-from . import layouts
-from .pycy3_utils import DEFAULT_BASE_URL, node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
-from .exceptions import CyError
-from .decorators import debug
+# ==============================================================================
+# Functions for NETWORK management and retrieving information on networks, nodes
+# and edges. Includes all functions that result in the creation of a new network
+# in Cytoscape, in addition to funcitons that extract network models into
+# other useful objects.
+#
+# I. General network functions
+# II. General node functions
+# III. General edge functions
+# IV. Network creation
+# V. Network extraction
+# VI. Internal functions
+#
+# Note: Go to network_selection.py for all selection-related functions
+#
+# ==============================================================================
+# I. General network functions
+# ------------------------------------------------------------------------------
+
 import sys
 import re
 import os
@@ -14,15 +26,68 @@ import warnings
 import pandas as pd
 import igraph as ig
 
+from . import commands
+from . import tables
+from . import network_selection
+from . import layouts
+from .pycy3_utils import DEFAULT_BASE_URL, node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
+from .exceptions import CyError
+from .decorators import debug
+
 def __init__(self):
     pass
 
 def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Selects the given network as "current".
+
+    Args:
+        network (SUID, str, None): Network name or suid of the network that you want set as current
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        (dict) containing server JSON response
+
+    Raises:
+        ValueError: if server response has no JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        set_current_network() - sets current network to current
+        set_current_network('MyNetwork') - sets network named 'MyNetwork' as current
+        set_current_network(1502) - sets network having SUID 1502 as current
+        returns {"data': {}, "errors": []}
+    """
     suid = get_network_suid(network)
     cmd = 'network set current network=SUID:"' + str(suid) + '"'
     return commands.commands_post(cmd, base_url=base_url)
 
 def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
+    """Sets a new name for this network.
+
+    Duplicate network names are not allowed
+
+    Args:
+        title (str): New name for the network
+        network (SUID, str, None): name or suid of the network that you want to rename; default is "current" network
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        (dict) containing server JSON response
+
+    Raises:
+        ValueError: if server response has no JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        rename_network('renamed network') - changes "current" network's name to "renamed network"
+        rename_network('renamed network', 'MyNetwork') - changes network named 'MyNetwork' to be named "renamed network"
+        rename_network('renamed network', 1502) - sets network having SUID 1502 to be named "renamed network"
+        returns {"data': {}, "errors": []}
+    """
     old_suid = get_network_suid(network, base_url=base_url)
     cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
     return commands.commands_post(cmd, base_url)
@@ -121,6 +186,10 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_delete('networks', base_url=base_url, require_json=False)
     return res
 
+# ==============================================================================
+# II. General node functions
+# ------------------------------------------------------------------------------
+
 def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
@@ -171,6 +240,10 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultnode/columns/name', base_url=base_url)
     return res['values']
 
+# ==============================================================================
+# III. General edge functions
+# ------------------------------------------------------------------------------
+
 def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None, base_url=DEFAULT_BASE_URL):
     net_suid = get_network_suid(network, base_url=base_url)
 
@@ -217,6 +290,10 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
 
     res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultedge/columns/name', base_url=base_url)
     return res['values']
+
+# ==============================================================================
+# IV. Network creation
+# ------------------------------------------------------------------------------
 
 def clone_network(network=None, base_url=DEFAULT_BASE_URL):
     net_suid = get_network_suid(network, base_url=base_url)
@@ -322,6 +399,10 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network load file file=' + file, base_url=base_url)
     return res
 
+# ==============================================================================
+# V. Network extraction
+# ------------------------------------------------------------------------------
+
 def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     suid = get_network_suid(network, base_url=base_url)
 
@@ -357,6 +438,12 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_graph_from_network
 
+# ==============================================================================
+# VI. Internal functions
+#
+# Dev Notes: Prefix internal functions with a '_'. Skip doc_strings for these
+# functions.
+# ------------------------------------------------------------------------------
 
 def first_func():
     """ This is my first function """
