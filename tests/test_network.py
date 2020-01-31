@@ -9,10 +9,12 @@ from PyCy3.decorators import *
 
 class NetworkTests(unittest.TestCase):
     def setUp(self):
-        input('Close all Cytoscape networks')
+        delete_all_networks()
 
     def tearDown(self):
         pass
+
+
 
     @skip
     @print_entry_exit
@@ -27,7 +29,8 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_set_current_network(self):
         # Initialization
-        input('Load galFiltered.sif and yeastHighQuality.sif')
+        self._load_test_network('galFiltered.cys', make_current=False)
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
 
         self.assertRaises(CyError, set_current_network, 'bad title')
 
@@ -48,11 +51,12 @@ class NetworkTests(unittest.TestCase):
         set_and_check('yeastHighQuality.sif', yeast_suid)
         set_and_check('galFiltered.sif', gal_suid)
 
-    @skip
+    @unittest.skip('test_rename_network: Renaming non-current network needs fixing in Cytoscape')
     @print_entry_exit
     def test_rename_network(self):
         # Initialization
-        input('Load galFiltered.sif and yeastHighQuality.sif')
+        self._load_test_network('galFiltered.cys', make_current=False)
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
 
         def rename_and_check(new_title, network_suid, network=None):
             res = rename_network(new_title, network)
@@ -87,7 +91,7 @@ class NetworkTests(unittest.TestCase):
         check(0)
 
         # Initialization
-        input('Load galFiltered.sif')
+        self._load_test_network()
         check(1)
 
     @skip
@@ -96,7 +100,7 @@ class NetworkTests(unittest.TestCase):
         self.assertRaises(CyError, get_network_suid, '')
 
         # Initialization
-        input('Load galFiltered.sif')
+        self._load_test_network()
         self.assertRaises(CyError, get_network_suid, 'bad title')
         self.assertRaises(CyError, get_network_suid, 500) # bad SUID
 
@@ -113,7 +117,7 @@ class NetworkTests(unittest.TestCase):
         self.assertRaises(CyError, get_network_name, '')
 
         # Initialization
-        input('Load galFiltered.sif')
+        self._load_test_network()
         self.assertRaises(CyError, get_network_name, 'bad title')
         self.assertRaises(IndexError, get_network_name, 500) # bad SUID
 
@@ -128,26 +132,29 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_export_network(self):
         # Initialization
-        input('Load galFiltered.sif (current) and yeastHighQuality.sif')
+        self._load_test_network('galFiltered.cys')
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
 
         def check(res):
-            self.assertIsNotNone(res['data']['file'])
-            self.assertListEqual(res['errors'], [])
+            self.assertIsNotNone(res['file'])
 
         # For these tests, always answer Cytoscape verification message to allow overwrite
+        input('On the following tests, allow Cytoscape to overwrite network')
         check(export_network())
         check(export_network(filename='test', network='yeastHighQuality.sif', type='sif'))
 
         self.assertRaises(CyError, export_network, filename='test', network='totallybogus', type='sif')
 
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
+        input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(CyError, export_network)
 
     @skip
     @print_entry_exit
     def test_delete_network(self):
         # Initialization
-        input('Load galFiltered.sif (current) and yeastHighQuality.sif')
+        self._load_test_network('galFiltered.cys')
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
 
         self.assertEqual(delete_network('yeastHighQuality.sif'), '')
         self.assertRaises(CyError, delete_network, 'yeastHighQuality.sif')
@@ -156,7 +163,8 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_all_networks(self):
         # Initialization
-        input('Load galFiltered.sif (current) and yeastHighQuality.sif')
+        self._load_test_network('galFiltered.cys')
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
 
         self.assertEqual(get_network_count(), 2)
         self.assertEqual(delete_all_networks(), '')
@@ -167,14 +175,20 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_get_first_neighbors(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
-        input('select exactly nodes MIG1 and GAL1')
-        self.assertListEqual(get_first_neighbors(node_names=None, as_nested_list=False), ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C'])
-        self.assertListEqual(get_first_neighbors(node_names = None, as_nested_list=True), [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YPL248C', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']]])
+        self._select_nodes(['MIG1', 'GAL1'])
+        self.assertSetEqual(set(get_first_neighbors(node_names=None, as_nested_list=False)), set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
 
-        input('clear selections')
-        self.assertListEqual(get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False), ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C'])
+        # Verify that the two nested lists are equivalent
+        nested_neighbor_list = get_first_neighbors(node_names = None, as_nested_list=True)
+        expected_list = [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YPL248C', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']]]
+        for nested_list in nested_neighbor_list:
+            found = [nested_list[0] == expected[0] and set(nested_list[1]) == set(expected[1])  for expected in expected_list]
+            self.assertIn(True, found)
+
+        self._select_nodes([])
+        self.assertSetEqual(set(get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
         self.assertIsNone(get_first_neighbors([], as_nested_list=False))
         self.assertRaises(CyError, get_first_neighbors)
 
@@ -182,7 +196,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_get_node_count(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         self.assertEqual(get_node_count(), 330)
 
@@ -190,15 +204,15 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_get_all_nodes(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
-        self.assertListEqual(get_all_nodes(), ['YDL194W', 'YDR277C', 'YBR043C', 'YPR145W', 'YER054C', 'YBR045C', 'YBL079W', 'YLR345W', 'YIL052C', 'YER056CA', 'YNL069C', 'YDL075W', 'YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W', 'YGL202W', 'YLR197W', 'YDL088C', 'YOR215C', 'YPR010C', 'YMR117C', 'YML114C', 'YNL036W', 'YOR212W', 'YDR070C', 'YNL164C', 'YGR046W', 'YLR153C', 'YIL070C', 'YPR113W', 'YER081W', 'YGR088W', 'YDR395W', 'YGR085C', 'YER124C', 'YMR005W', 'YDL030W', 'YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W', 'YIL074C', 'YDR299W', 'YHR005C', 'YLR452C', 'YMR255W', 'YBR274W', 'YHR084W', 'YBL050W', 'YBL026W', 'YJL194W', 'YLR258W', 'YGL134W', 'YHR055C', 'YHR053C', 'YPR124W', 'YNL135C', 'YER052C', 'YLR284C', 'YHR198C', 'YPL240C', 'YPR102C', 'YLR075W', 'YKL161C', 'YAR007C', 'YIL160C', 'YDL078C', 'YDR142C', 'YDR244W', 'YLR432W', 'YDR167W', 'YLR175W', 'YNL117W', 'YOR089C', 'YPR167C', 'YNL214W', 'YBR135W', 'YML007W', 'YER110C', 'YGL153W', 'YLR191W', 'YOL149W', 'YMR044W', 'YOR362C', 'YER102W', 'YOL059W', 'YBR190W', 'YER103W', 'YPR110C', 'YNL113W', 'YDR354W', 'YER090W', 'YKL211C', 'YDR146C', 'YER111C', 'YOR039W', 'YML024W', 'YIL113W', 'YLL019C', 'YDR009W', 'YML051W', 'YHR071W', 'YPL031C', 'YML123C', 'YER145C', 'YMR058W', 'YJL190C', 'YML074C', 'YOR355W', 'YFL038C', 'YIL162W', 'YBR050C', 'YMR311C', 'YOR315W', 'YOR178C', 'YER133W', 'YOR290C', 'YFR037C', 'YFR034C', 'YAL040C', 'YPL222W', 'YGR048W', 'YMR291W', 'YGR009C', 'YMR183C', 'YDR100W', 'YGL161C', 'YPL131W', 'YDL063C', 'YNL167C', 'YHR115C', 'YEL041W', 'YDL113C', 'YJL036W', 'YBR109C', 'YOL016C', 'YKL001C', 'YNL311C', 'YLR319C', 'YPR062W', 'YPL111W', 'YDL236W', 'YNL189W', 'YBL069W', 'YGL073W', 'YBR072W', 'YLR321C', 'YPR048W', 'YNL199C', 'YPL075W', 'YHR179W', 'YCL040W', 'YFL039C', 'YDL130W', 'YDR382W', 'YJR066W', 'YKL204W', 'YNL154C', 'YNL047C', 'YNL116W', 'YHR135C', 'YML064C', 'YKL074C', 'YLR340W', 'YDL081C', 'YGL166W', 'YLL028W', 'YDR174W', 'YDR335W', 'YLR214W', 'YMR021C', 'YLR377C', 'YER065C', 'YJL089W', 'YHR030C', 'YPL089C', 'YGL208W', 'YGL115W', 'YLR310C', 'YNL098C', 'YGR019W', 'YPR035W', 'YER040W', 'YGL008C', 'YOR036W', 'YDR323C', 'YBL005W', 'YBR160W', 'YKL101W', 'YOL156W', 'YJL219W', 'YLL021W', 'YOL136C', 'YJL203W', 'YNR007C', 'YFL026W', 'YJL157C', 'YNL145W', 'YDR461W', 'YGR108W', 'YKR097W', 'YJL159W', 'YIL015W', 'YMR043W', 'YKL109W', 'YBR217W', 'YHR171W', 'YPL149W', 'YKL028W', 'YDR311W', 'YBL021C', 'YGL237C', 'YEL039C', 'YJR048W', 'YML054C', 'YLR256W', 'YOR303W', 'YJR109C', 'YGR058W', 'YLR229C', 'YDR309C', 'YOR264W', 'YLR116W', 'YNL312W', 'YML032C', 'YKL012W', 'YNL236W', 'YNL091W', 'YDR184C', 'YIL143C', 'YKR099W', 'YIR009W', 'YBR018C', 'YPL248C', 'YLR081W', 'YBR020W', 'YGL035C', 'YOL051W', 'YBR019C', 'YJR060W', 'YDR103W', 'YLR362W', 'YDR032C', 'YCL032W', 'YLR109W', 'YHR141C', 'YMR138W', 'YMR300C', 'YOL058W', 'YBR248C', 'YOR202W', 'YMR108W', 'YEL009C', 'YBR155W', 'YMR186W', 'YGL106W', 'YOR326W', 'YMR309C', 'YOR361C', 'YIL105C', 'YLR134W', 'YER179W', 'YOR310C', 'YDL014W', 'YPR119W', 'YLR117C', 'YGL013C', 'YCR086W', 'YDR412W', 'YPL201C', 'YER062C', 'YOR327C', 'YER143W', 'YAL030W', 'YOL086C', 'YDR050C', 'YOL127W', 'YIL069C', 'YER074W', 'YBR093C', 'YDR171W', 'YCL030C', 'YNL301C', 'YOL120C', 'YLR044C', 'YIL133C', 'YHR174W', 'YGR254W', 'YCR012W', 'YNL216W', 'YAL038W', 'YNL307C', 'YDL013W', 'YER116C', 'YNR053C', 'YLR264W', 'YEL015W', 'YNL050C', 'YNR050C', 'YJR022W', 'YOR167C', 'YER112W', 'YCL067C', 'YBR112C', 'YCR084C', 'YIL061C', 'YGR203W', 'YJL013C', 'YGL229C', 'YJL030W', 'YGR014W', 'YPL211W', 'YGL044C', 'YOL123W', 'YAL003W', 'YFL017C', 'YDR429C', 'YMR146C', 'YLR293C', 'YBR118W', 'YPR080W', 'YLR249W', 'YOR204W', 'YGL097W', 'YGR218W', 'YGL122C', 'YKR026C'])
+        self.assertSetEqual(set(get_all_nodes()), set(['YDL194W', 'YDR277C', 'YBR043C', 'YPR145W', 'YER054C', 'YBR045C', 'YBL079W', 'YLR345W', 'YIL052C', 'YER056CA', 'YNL069C', 'YDL075W', 'YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W', 'YGL202W', 'YLR197W', 'YDL088C', 'YOR215C', 'YPR010C', 'YMR117C', 'YML114C', 'YNL036W', 'YOR212W', 'YDR070C', 'YNL164C', 'YGR046W', 'YLR153C', 'YIL070C', 'YPR113W', 'YER081W', 'YGR088W', 'YDR395W', 'YGR085C', 'YER124C', 'YMR005W', 'YDL030W', 'YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W', 'YIL074C', 'YDR299W', 'YHR005C', 'YLR452C', 'YMR255W', 'YBR274W', 'YHR084W', 'YBL050W', 'YBL026W', 'YJL194W', 'YLR258W', 'YGL134W', 'YHR055C', 'YHR053C', 'YPR124W', 'YNL135C', 'YER052C', 'YLR284C', 'YHR198C', 'YPL240C', 'YPR102C', 'YLR075W', 'YKL161C', 'YAR007C', 'YIL160C', 'YDL078C', 'YDR142C', 'YDR244W', 'YLR432W', 'YDR167W', 'YLR175W', 'YNL117W', 'YOR089C', 'YPR167C', 'YNL214W', 'YBR135W', 'YML007W', 'YER110C', 'YGL153W', 'YLR191W', 'YOL149W', 'YMR044W', 'YOR362C', 'YER102W', 'YOL059W', 'YBR190W', 'YER103W', 'YPR110C', 'YNL113W', 'YDR354W', 'YER090W', 'YKL211C', 'YDR146C', 'YER111C', 'YOR039W', 'YML024W', 'YIL113W', 'YLL019C', 'YDR009W', 'YML051W', 'YHR071W', 'YPL031C', 'YML123C', 'YER145C', 'YMR058W', 'YJL190C', 'YML074C', 'YOR355W', 'YFL038C', 'YIL162W', 'YBR050C', 'YMR311C', 'YOR315W', 'YOR178C', 'YER133W', 'YOR290C', 'YFR037C', 'YFR034C', 'YAL040C', 'YPL222W', 'YGR048W', 'YMR291W', 'YGR009C', 'YMR183C', 'YDR100W', 'YGL161C', 'YPL131W', 'YDL063C', 'YNL167C', 'YHR115C', 'YEL041W', 'YDL113C', 'YJL036W', 'YBR109C', 'YOL016C', 'YKL001C', 'YNL311C', 'YLR319C', 'YPR062W', 'YPL111W', 'YDL236W', 'YNL189W', 'YBL069W', 'YGL073W', 'YBR072W', 'YLR321C', 'YPR048W', 'YNL199C', 'YPL075W', 'YHR179W', 'YCL040W', 'YFL039C', 'YDL130W', 'YDR382W', 'YJR066W', 'YKL204W', 'YNL154C', 'YNL047C', 'YNL116W', 'YHR135C', 'YML064C', 'YKL074C', 'YLR340W', 'YDL081C', 'YGL166W', 'YLL028W', 'YDR174W', 'YDR335W', 'YLR214W', 'YMR021C', 'YLR377C', 'YER065C', 'YJL089W', 'YHR030C', 'YPL089C', 'YGL208W', 'YGL115W', 'YLR310C', 'YNL098C', 'YGR019W', 'YPR035W', 'YER040W', 'YGL008C', 'YOR036W', 'YDR323C', 'YBL005W', 'YBR160W', 'YKL101W', 'YOL156W', 'YJL219W', 'YLL021W', 'YOL136C', 'YJL203W', 'YNR007C', 'YFL026W', 'YJL157C', 'YNL145W', 'YDR461W', 'YGR108W', 'YKR097W', 'YJL159W', 'YIL015W', 'YMR043W', 'YKL109W', 'YBR217W', 'YHR171W', 'YPL149W', 'YKL028W', 'YDR311W', 'YBL021C', 'YGL237C', 'YEL039C', 'YJR048W', 'YML054C', 'YLR256W', 'YOR303W', 'YJR109C', 'YGR058W', 'YLR229C', 'YDR309C', 'YOR264W', 'YLR116W', 'YNL312W', 'YML032C', 'YKL012W', 'YNL236W', 'YNL091W', 'YDR184C', 'YIL143C', 'YKR099W', 'YIR009W', 'YBR018C', 'YPL248C', 'YLR081W', 'YBR020W', 'YGL035C', 'YOL051W', 'YBR019C', 'YJR060W', 'YDR103W', 'YLR362W', 'YDR032C', 'YCL032W', 'YLR109W', 'YHR141C', 'YMR138W', 'YMR300C', 'YOL058W', 'YBR248C', 'YOR202W', 'YMR108W', 'YEL009C', 'YBR155W', 'YMR186W', 'YGL106W', 'YOR326W', 'YMR309C', 'YOR361C', 'YIL105C', 'YLR134W', 'YER179W', 'YOR310C', 'YDL014W', 'YPR119W', 'YLR117C', 'YGL013C', 'YCR086W', 'YDR412W', 'YPL201C', 'YER062C', 'YOR327C', 'YER143W', 'YAL030W', 'YOL086C', 'YDR050C', 'YOL127W', 'YIL069C', 'YER074W', 'YBR093C', 'YDR171W', 'YCL030C', 'YNL301C', 'YOL120C', 'YLR044C', 'YIL133C', 'YHR174W', 'YGR254W', 'YCR012W', 'YNL216W', 'YAL038W', 'YNL307C', 'YDL013W', 'YER116C', 'YNR053C', 'YLR264W', 'YEL015W', 'YNL050C', 'YNR050C', 'YJR022W', 'YOR167C', 'YER112W', 'YCL067C', 'YBR112C', 'YCR084C', 'YIL061C', 'YGR203W', 'YJL013C', 'YGL229C', 'YJL030W', 'YGR014W', 'YPL211W', 'YGL044C', 'YOL123W', 'YAL003W', 'YFL017C', 'YDR429C', 'YMR146C', 'YLR293C', 'YBR118W', 'YPR080W', 'YLR249W', 'YOR204W', 'YGL097W', 'YGR218W', 'YGL122C', 'YKR026C']))
 
     @skip
     @print_entry_exit
     def test_add_cy_nodes(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         res12 = add_cy_nodes(['newnode1', 'newnode2'], skip_duplicate_names=False)
         self.assertEqual(len(res12), 2)
@@ -217,7 +231,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_add_cy_edges(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
         df = tables.get_table_columns('node', ['name'], 'default')
 
         def check_edge(edge, source_name, target_name):
@@ -240,13 +254,11 @@ class NetworkTests(unittest.TestCase):
         check_edge(res[1], 'YJR066W', 'YLR452C')
         check_edge(res[2], 'YGR046W', 'YLR452C')
 
-        self.assertIsNone(add_cy_edges(['YLR075W', 'YGR009C']))
-
     @skip
     @print_entry_exit
     def test_get_edge_count(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         self.assertEqual(get_edge_count(), 359)
 
@@ -254,7 +266,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_get_edge_info(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         def check_edge_info(edge_info, source_name, target_name, edge_name, betweenness):
             source_suid = node_name_to_node_suid(source_name)[0]
@@ -293,7 +305,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_get_all_edges(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         res = get_all_edges()
         self.assertIsInstance(res, list)
@@ -303,7 +315,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_clone_network(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
 
         self._check_cloned_network(clone_network(), get_network_suid(), get_network_name(), 330, 359)
 
@@ -311,7 +323,7 @@ class NetworkTests(unittest.TestCase):
     @print_entry_exit
     def test_create_subnet(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
         base_suid = get_network_suid()
         base_name = get_network_name(base_suid)
 
@@ -333,12 +345,11 @@ class NetworkTests(unittest.TestCase):
 
         res = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
         suid_1 = res['networkSUID']
-        print(suid_1)
         self.assertEqual(networks.get_network_name(suid_1), 'From node & edge dataframe')
         self.assertEqual(networks.get_node_count(suid_1), 4)
         self.assertEqual(networks.get_edge_count(suid_1), 4)
-        self.assertListEqual(networks.get_all_nodes(suid_1), ['node 0', 'node 1', 'node 2', 'node 3'])
-        self.assertListEqual(networks.get_all_edges(suid_1), ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3'])
+        self.assertSetEqual(set(networks.get_all_nodes(suid_1)), set(['node 0', 'node 1', 'node 2', 'node 3']))
+        self.assertSetEqual(set(networks.get_all_edges(suid_1)), set(['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3']))
         self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_1)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
         self.assertSetEqual(set(tables.get_table_column_names('edge', network=suid_1)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
         self.assertDictEqual(tables.get_table_column_types('node', network=suid_1), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
@@ -347,12 +358,11 @@ class NetworkTests(unittest.TestCase):
 
         res = create_network_from_data_frames(edges=edges, collection='Another collection', title='From just edge dataframe')
         suid_2 = res['networkSUID']
-        print(suid_2)
         self.assertEqual(networks.get_network_name(suid_2), 'From just edge dataframe')
         self.assertEqual(networks.get_node_count(suid_2), 4)
         self.assertEqual(networks.get_edge_count(suid_2), 4)
-        self.assertListEqual(networks.get_all_nodes(suid_2), ['node 0', 'node 1', 'node 2', 'node 3'])
-        self.assertListEqual(networks.get_all_edges(suid_2), ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3'])
+        self.assertSetEqual(set(networks.get_all_nodes(suid_2)), set(['node 0', 'node 1', 'node 2', 'node 3']))
+        self.assertSetEqual(set(networks.get_all_edges(suid_2)), set(['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3']))
         self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_2)), set(['SUID', 'shared name', 'id', 'name', 'selected']))
         self.assertSetEqual(set(tables.get_table_column_names('edge', network=suid_2)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
         self.assertDictEqual(tables.get_table_column_types('node', network=suid_2), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'name': 'String', 'selected': 'Boolean'})
@@ -360,11 +370,10 @@ class NetworkTests(unittest.TestCase):
 
         res = create_network_from_data_frames(nodes=nodes, collection='A third collection', title='From just nodes dataframe')
         suid_3 = res['networkSUID']
-        print(suid_3)
         self.assertEqual(networks.get_network_name(suid_3), 'From just nodes dataframe')
         self.assertEqual(networks.get_node_count(suid_3), 4)
         self.assertEqual(networks.get_edge_count(suid_3), 0)
-        self.assertListEqual(networks.get_all_nodes(suid_3), ['node 0', 'node 1', 'node 2', 'node 3'])
+        self.assertSetEqual(set(networks.get_all_nodes(suid_3)), set(['node 0', 'node 1', 'node 2', 'node 3']))
         self.assertIsNone(networks.get_all_edges(suid_3))
         self.assertSetEqual(set(tables.get_table_column_names('node', network=suid_3)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
         # TODO: Verify that this list of edge columns should be created ... why not source, target?
@@ -377,22 +386,31 @@ class NetworkTests(unittest.TestCase):
     def test_import_network_from_file(self):
 
         # TODO: Package inst/extdata/* as part of PyCy3 package
-        res = import_network_from_file()
+        res = import_network_from_file('galFiltered.cys')
         print(res)
 
         # TODO: Come up with a more platform independent test
         res = import_network_from_file('c:\\Program Files\\Cytoscape_v3.7.2\\sampleData\\galFiltered.sif')
         print(res)
 
+#    @skip
     @print_entry_exit
     def test_create_igraph_from_network(self):
         # Initialization
-        input('Load galFiltered.sif (current)')
+        self._load_test_network('galFiltered.cys')
+        all_nodes = get_all_nodes()
+        all_edges = get_all_edges()
 
         i = create_igraph_from_network()
-        print(i)
-        for x in i.vs: print(x)
-        for x in i.es: print(x)
+
+        # verify that all nodes are present
+        self.assertEqual(len(i.vs), len(all_nodes))
+        self.assertNotIn(False, [v['name'] in all_nodes  for v in i.vs])
+
+        # verify that all edges are present
+        self.assertEqual(len(i.es), len(all_edges))
+        i_edges = [[x['source'], x['target']]   for x in i.es]
+        self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges   for x in all_edges])
 
 
 
@@ -403,5 +421,21 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_edge_count(subnet_suid), base_edges)
         self.assertIn(base_name, get_network_name(subnet_suid))
 
+    def _load_test_network(self, network_name='galFiltered.cys', make_current=True):
+        if make_current:
+            input('Load network ' + network_name + " and make it current")
+        else:
+            try:
+                cur_suid = get_network_suid()
+            except:
+                cur_suid = None
+            input('Load network ' + network_name)
+            if cur_suid: set_current_network(cur_suid)
+
+    def _select_nodes(self, node_list):
+        if len(node_list) == 0:
+            input('Deselect all nodes')
+        else:
+            input('Select these nodes: ' + str(node_list))
 
 

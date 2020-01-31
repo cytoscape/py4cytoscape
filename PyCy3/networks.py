@@ -260,7 +260,8 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
         return None
         # TODO: Create consistent policy for logging to console and returning error values
 
-    edge_data = [{'source':edge_suid_list[x], 'target':edge_suid_list[x+1], 'directed':directed, 'interaction':edge_type}    for x in range(0, len(edge_suid_list) - 1, 2)]
+    # Note: use str() for edge SUIDs in case the SUIDs exceed JSON's int encoding
+    edge_data = [{'source':str(edge_suid_list[x]), 'target':str(edge_suid_list[x+1]), 'directed':directed, 'interaction':edge_type}    for x in range(0, len(edge_suid_list) - 1, 2)]
 
     res = commands.cyrest_post('networks/' + str(net_suid) + '/edges', body=edge_data, base_url=base_url)
     return res
