@@ -7,3 +7,6 @@ Additionally, this project attempts to maintain the same function signatures, re
 This project uses PyCharm because of its excellent code management and debugging features.
 
 Over time, PyCy3 functionality should match RCy3 functionality. Once that occurs, novel Py2Cytoscape functions will be added to both as appropriate.
+
+An overall scorecard comparing Py2Cytoscape, RCy3 and PyCy3 can be found [here](https://docs.google.com/spreadsheets/d/1uhBTbOMI4QMKUpLaOTuf6BP5wgqU6-pOzkj6BNmC4CY/edit?usp=sharing). Pay close attention to columns E and F, which show how much of RCy3 is reflected in PyCy3.
+ 

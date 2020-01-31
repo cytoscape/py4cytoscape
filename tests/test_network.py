@@ -393,7 +393,7 @@ class NetworkTests(unittest.TestCase):
         res = import_network_from_file('c:\\Program Files\\Cytoscape_v3.7.2\\sampleData\\galFiltered.sif')
         print(res)
 
-#    @skip
+    @skip
     @print_entry_exit
     def test_create_igraph_from_network(self):
         # Initialization
