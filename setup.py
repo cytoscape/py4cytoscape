@@ -22,3 +22,5 @@ setuptools.setup(
 )
 
 # How to build distribution: https://packaging.python.org/tutorials/packaging-projects/
+# print('Packages:')
+# print(setuptools.find_packages())

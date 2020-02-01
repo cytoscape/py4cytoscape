@@ -5,4 +5,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="ReSTService">
+    <option name="DOC_DIR" value="$MODULE_DIR$" />
+  </component>
 </module>
