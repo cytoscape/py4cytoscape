@@ -23,8 +23,12 @@ setuptools.setup(
         'pandas',
         'networkx',
         'requests',
-        'python-igraph',
     ],
+    extras_require={
+        'python-igraph': (
+            'python-igraph'
+        )
+    },
     classifiers=[
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
