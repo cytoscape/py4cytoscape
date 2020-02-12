@@ -1,4 +1,4 @@
 pandas
 networkx
 requests
-python-igraph
+# python-igraph
