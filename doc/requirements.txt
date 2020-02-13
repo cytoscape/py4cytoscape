@@ -2,3 +2,4 @@ pandas
 networkx
 requests
 python-igraph
+sphinx_autodoc_typehints
