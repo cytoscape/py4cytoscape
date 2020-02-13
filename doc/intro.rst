@@ -18,10 +18,11 @@ Getting Started with PyCy3
   
 .. versionchanged:: 1.1
 
+
   This changed.
   
-|  That changed.
-|  More changed.
+  |  That changed.
+  |  More changed.
   
 
     
