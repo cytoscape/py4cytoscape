@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('./..'))
 # -- Project information -----------------------------------------------------
 
 project = 'PyCy3'
-copyright = '2020, Barry Demchak'
+copyright = '2020, The Cytoscape Consortium'
 author = 'Barry Demchak'
 
 # The short X.Y version
