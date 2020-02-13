@@ -20,8 +20,8 @@ Getting Started with PyCy3
 
   This changed.
   
-  That changed.
-  More changed.
+|  That changed.
+|  More changed.
   
 
     
