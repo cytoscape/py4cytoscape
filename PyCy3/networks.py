@@ -130,6 +130,13 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     Properties created with the ``@property`` decorator should be documented
     in the property's getter method.
 
+    Args:
+        title (str): New name for the network
+        network (SUID, str, None): name or suid of the network that you want to rename; default is "current" network
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+            
     Attributes:
         attr1 (str): Description of `attr1`.
         attr2 (:obj:`int`, optional): Description of `attr2`.
