@@ -48,9 +48,7 @@ PyCy3.networks module
 ---------------------
 
 .. automodule:: PyCy3.networks
-    aaa
     :members:
-        xxx    
     :undoc-members:
     :show-inheritance:
 
