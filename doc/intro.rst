@@ -3,6 +3,12 @@ Getting Started with PyCy3
 
 ... watch this space ...
 
+.. code-block::
+   :dedent: 4
+  
+   def some_function():
+     print("ho")
+     
 .. warning::
 
   This is a warning 
@@ -18,11 +24,7 @@ Getting Started with PyCy3
   That changed.
   More changed.
   
-.. code-block::
-   :dedent: 4
-  
-   def some_function():
-     print("ho")
+
     
 
   
