@@ -1,0 +1,4 @@
+pandas
+networkx
+requests
+python-igraph
