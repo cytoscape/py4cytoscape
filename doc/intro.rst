@@ -3,7 +3,7 @@ Getting Started with PyCy3
 
 ... watch this space ...
 
-.. code-block::
+.. code-block:: python
    :dedent: 4
   
    def some_function():
