@@ -1,8 +1,10 @@
 PyCy3 package
 =============
 
-Submodules
-----------
+.. automodule:: PyCy3
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 PyCy3.commands module
 ---------------------
@@ -69,10 +71,4 @@ PyCy3.tables module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: PyCy3
-    :members:
-    :undoc-members:
-    :show-inheritance:
