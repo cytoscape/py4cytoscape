@@ -42,6 +42,7 @@ release = '0.0.1'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx_autodoc_typehints',
 ]
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::) in autodoc
