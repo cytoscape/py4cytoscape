@@ -27,7 +27,10 @@ setuptools.setup(
     extras_require={
         'python-igraph': (
             'python-igraph'
-        )
+        ),
+        'sphinx_autodoc_typehints': (
+            'sphinx_autodoc_typehints'
+        ),
     },
     classifiers=[
         'Intended Audience :: Science/Research',
