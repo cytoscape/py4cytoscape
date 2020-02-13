@@ -140,9 +140,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL) -> str:
     Attributes:
         attr1 (str): Description of `attr1`.
         attr2 (:obj:`int`, optional): Description of `attr2`.
-        
-    Returns:
-        (str) Name of network
+
     """
     if isinstance(suid, str):
         # title provided
