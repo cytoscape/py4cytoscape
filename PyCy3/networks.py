@@ -54,9 +54,15 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        set_current_network() - sets current network to current
-        set_current_network('MyNetwork') - sets network named 'MyNetwork' as current
-        set_current_network(1502) - sets network having SUID 1502 as current
+        >> set_current_network() # sets current network to current
+        []
+
+        >> set_current_network('MyNetwork') # sets network named 'MyNetwork' as current
+        []
+
+        >>set_current_network(1502) # sets network having SUID 1502 as current
+        []
+
         returns {"data': {}, "errors": []}
     """
     suid = get_network_suid(network)
