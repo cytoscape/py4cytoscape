@@ -54,13 +54,11 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >> set_current_network() # sets current network to current
+        >>> set_current_network() # sets current network to current
         []
-
-        >> set_current_network('MyNetwork') # sets network named 'MyNetwork' as current
+        >>> set_current_network('MyNetwork') # sets network named 'MyNetwork' as current
         []
-
-        >>set_current_network(1502) # sets network having SUID 1502 as current
+        >>> set_current_network(1502) # sets network having SUID 1502 as current
         []
 
         returns {"data': {}, "errors": []}
@@ -89,9 +87,12 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        rename_network('renamed network') - changes "current" network's name to "renamed network"
-        rename_network('renamed network', 'MyNetwork') - changes network named 'MyNetwork' to be named "renamed network"
-        rename_network('renamed network', 1502) - sets network having SUID 1502 to be named "renamed network"
+        >>> rename_network('renamed network') # changes "current" network's name to "renamed network"
+        []
+        >>> rename_network('renamed network', 'MyNetwork') # changes network named 'MyNetwork' to be named "renamed network"
+        []
+        >>> rename_network('renamed network', 1502) # sets network having SUID 1502 to be named "renamed network"
+        []
         returns {"data': {}, "errors": []}
     """
     old_suid = get_network_suid(network, base_url=base_url)
@@ -119,6 +120,21 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
     return list(res.values())[0]
 
 def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
+    """The summary line for a class docstring should fit on one line.
+
+    If the class has public attributes, they may be documented here
+    in an ``Attributes`` section and follow the same formatting as a
+    function's ``Args`` section. Alternatively, attributes may be documented
+    inline with the attribute's declaration (see __init__ method below).
+
+    Properties created with the ``@property`` decorator should be documented
+    in the property's getter method.
+
+    Attributes:
+        attr1 (str): Description of `attr1`.
+        attr2 (:obj:`int`, optional): Description of `attr2`.
+
+    """
     if isinstance(suid, str):
         # title provided
         if suid == 'current':
