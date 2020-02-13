@@ -10,6 +10,9 @@ Welcome to PyCy3's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+.. autosummary::
+   :toctree: _autosummary
+
    intro
    PyCy3
 
