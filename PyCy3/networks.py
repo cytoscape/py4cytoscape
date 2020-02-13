@@ -99,6 +99,22 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     return commands.commands_post(cmd, base_url)
 
 def get_network_count(base_url=DEFAULT_BASE_URL):
+    """Generators have a ``Yields`` section instead of a ``Returns`` section.
+
+    Args:
+        n (int): The upper limit of the range to generate, from 0 to `n` - 1.
+
+    Yields:
+        int: The next number in the range of 0 to `n` - 1.
+
+    Examples:
+        Examples should be written in doctest format, and should illustrate how
+        to use the function.
+
+        >>> print([i for i in example_generator(4)])
+        [0, 1, 2, 3]
+
+    """
     res = commands.cyrest_get('networks/count', base_url=base_url)
     return list(res.values())[0]
 
