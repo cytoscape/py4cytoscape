@@ -4,7 +4,6 @@ Getting Started with PyCy3
 ... watch this space ...
 
 .. code-block:: python
-   :dedent: 4
   
    def some_function():
      print("ho")
