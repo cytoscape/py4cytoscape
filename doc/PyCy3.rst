@@ -1,3 +1,7 @@
+<style>
+.function {border-top:1px solid gray}
+</style>
+
 PyCy3 package
 =============
 
