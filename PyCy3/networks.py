@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
-# ==============================================================================
-# Functions for NETWORK management and retrieving information on networks, nodes
-# and edges. Includes all functions that result in the creation of a new network
-# in Cytoscape, in addition to funcitons that extract network models into
-# other useful objects.
-#
-# I. General network functions
-# II. General node functions
-# III. General edge functions
-# IV. Network creation
-# V. Network extraction
-# VI. Internal functions
-#
-# Note: Go to network_selection.py for all selection-related functions
-#
-# ==============================================================================
-# I. General network functions
-# ------------------------------------------------------------------------------
+"""Functions for NETWORK management and retrieving information on networks, nodes
+and edges. Includes all functions that result in the creation of a new network
+in Cytoscape, in addition to funcitons that extract network models into
+other useful objects.
+
+I. General network functions
+II. General node functions
+III. General edge functions
+IV. Network creation
+V. Network extraction
+VI. Internal functions
+
+Note:
+     Go to network_selection.py for all selection-related functions
+
+I. General network functions
+----------------------------
+"""
 
 import sys
 import re
