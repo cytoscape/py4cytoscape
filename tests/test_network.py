@@ -28,6 +28,7 @@ class NetworkTests(unittest.TestCase):
         self.assertIn('numberOfCores', res)
         self.assertIn('memoryStatus', res)
 
+    @skip
     @print_entry_exit
     def test_set_current_network(self):
         # Initialization

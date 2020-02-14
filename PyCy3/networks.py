@@ -41,7 +41,7 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     """Selects the given network as "current".
 
     Args:
-        network (SUID or str or None): Network name or suid of the network that you want set as current
+        network (SUID or str or None): Network name or SUID of the network that you want set as current
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
@@ -67,13 +67,43 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     return commands.commands_post(cmd, base_url=base_url)
 
 def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
-    """Sets a new name for this network.
+    """Sets a new name for a network.
 
     Duplicate network names are not allowed
 
     Args:
         title (str): New name for the network
-        network (SUID, str, None): name or suid of the network that you want to rename; default is "current" network
+        network (SUID or str or None): name or SUID of the network that you want to rename; default is "current" network
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: server JSON response
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> rename_network('renamed network') # changes "current" network's name to "renamed network"
+        {'network': 22752, 'title': 'renamed network'}
+        >>> rename_network('renamed network', 'MyNetwork') # changes network named 'MyNetwork' to be named "renamed network"
+        {'network': 22752, 'title': 'renamed network'}
+        >>> rename_network('renamed network', 1502) # sets network having SUID 1502 to be named "renamed network"
+        {'network': 1502, 'title': 'renamed network'}
+    """
+    old_suid = get_network_suid(network, base_url=base_url)
+    cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
+    return commands.commands_post(cmd, base_url)
+
+def get_network_count(base_url=DEFAULT_BASE_URL):
+    """Get the number of Cytoscape networks.
+
+    Returns the number of Cytoscape networks in the current Cytoscape session
+
+    Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
@@ -86,63 +116,43 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> rename_network('renamed network') # changes "current" network's name to "renamed network"
-        []
-        >>> rename_network('renamed network', 'MyNetwork') # changes network named 'MyNetwork' to be named "renamed network"
-        []
-        >>> rename_network('renamed network', 1502) # sets network having SUID 1502 to be named "renamed network"
-        []
-        returns {"data': {}, "errors": []}
-    """
-    old_suid = get_network_suid(network, base_url=base_url)
-    cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
-    return commands.commands_post(cmd, base_url)
-
-def get_network_count(base_url=DEFAULT_BASE_URL):
-    """Generators have a ``Yields`` section instead of a ``Returns`` section.
-
-    Args:
-        n (int): The upper limit of the range to generate, from 0 to `n` - 1.
-
-    Yields:
-        int: The next number in the range of 0 to `n` - 1.
-
-    Examples:
-        Examples should be written in doctest format, and should illustrate how
-        to use the function.
-
-        >>> print([i for i in example_generator(4)])
-        [0, 1, 2, 3]
-
+        >>> get_network_count()
+        3
     """
     res = commands.cyrest_get('networks/count', base_url=base_url)
     return list(res.values())[0]
 
 def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
-    """The summary line for a class docstring should fit on one line.
-
-    If the class has public attributes, they may be documented here
-    in an ``Attributes`` section and follow the same formatting as a
-    function's ``Args`` section. Alternatively, attributes may be documented
-    inline with the attribute's declaration (see __init__ method below).
-
-    Properties created with the ``@property`` decorator should be documented
-    in the property's getter method.
+    """Get the name of a network.
 
     Args:
-        title (str): New name for the network
-        network (SUID, str, None): name or suid of the network that you want to rename; default is "current" network
+        suid (SUID or str or None): SUID of the network; default is current network. If a name is
+            provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
-            
-    Attributes:
-        attr1 (str): Description of `attr1`.
-        attr2 (:obj:`int`, optional): Description of `attr2`.
-        
-    Returns:
-        str: name of network
 
+    Returns:
+        str: network name
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_network_name() # get name of current network
+        galFiltered.sif
+        >>> get_network_name(22752) # get name of network having SUID
+        galFiltered.sif
+        >>> get_network_name('galFiltered.sif') # verify that current network is galFiltered.sif
+        galFiltered.sif
+
+    Notes:
+        Together with getNetworkSuid, this function attempts to handle all
+        of the multiple ways we support network referencing (e.g., title, SUID,
+        'current', and NULL). These functions are then used by all other functions
+        that take a "network" argument.
     """
     if isinstance(suid, str):
         # title provided
