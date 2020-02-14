@@ -1,9 +1,3 @@
-<head>
-<style>
-.function {border-top:1px solid gray}
-</style>
-</head>
-
 
 PyCy3 package
 =============
