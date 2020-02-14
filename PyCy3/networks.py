@@ -119,7 +119,7 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/count', base_url=base_url)
     return list(res.values())[0]
 
-def get_network_name(suid=None, base_url=DEFAULT_BASE_URL) -> str:
+def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     """The summary line for a class docstring should fit on one line.
 
     If the class has public attributes, they may be documented here
