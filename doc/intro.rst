@@ -18,7 +18,6 @@ Look here for code block commenting examples: http://www.sphinx-doc.org/en/maste
   This is a note
   
 .. versionchanged:: 1.1
-
 |
 |  This changed.
 |  That changed.
