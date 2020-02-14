@@ -84,12 +84,13 @@ pygments_style = None
 # a list of builtin themes.
 #
 # Alabaster is the default, but is too white, so I commented out: html_theme = 'alabaster'
+# Note that this means we can also comment out certain CSS (located in _static/css)
 import sphinx_rtd_theme
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-def setup(app):
-  app.add_stylesheet( "css/tables.css" )
 # from http://stackoverflow.com/questions/32079200/how-do-i-set-up-custom-styles-for-restructuredtext-sphinx-readthedocs-etc/32079202#32079202
+html_logo = '_static/images/cytoscape3-icon-trans-128x128.png'
+html_favicon = '_static/images/cytoscape3-icon.ico'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
