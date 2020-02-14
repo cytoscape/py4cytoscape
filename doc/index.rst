@@ -4,14 +4,16 @@
    contain the root `toctree` directive.
 
 PyCy3 |version| Programmers Manual
+==================================
 
 The PyCy3 Programmers Manual copyright is owned by The Cytoscape Consortium, and is made available under the same GPL license as Cytoscape itself: LGPL 2.1, the GNU Lesser General Public License, version 2.1, February 1999 available in text at http://www.gnu.org/licenses/lgpl-2.1.html.
 
 Copyright (c) 2020 The Cytoscape Consortium
 
+.. rubric:: Table of Contents
+
 .. toctree::
    :maxdepth: 4
-   :caption: Table of Contents
 
    intro
    PyCy3
