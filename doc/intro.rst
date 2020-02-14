@@ -1,7 +1,8 @@
 Getting Started with PyCy3
 ==========================
 
-... watch this space ...
+Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
+
 
 .. code-block:: python
   
