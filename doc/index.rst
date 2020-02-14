@@ -20,7 +20,7 @@ Copyright (c) 2020 The Cytoscape Consortium
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
