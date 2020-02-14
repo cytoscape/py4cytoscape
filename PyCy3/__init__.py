@@ -5,6 +5,6 @@ from .network_selection import *
 from .tables import *
 from .commands import *
 from .decorators import *
-
+from .cytoscape_system import *
 
 print("Executing PyCy3.__init__.py")
