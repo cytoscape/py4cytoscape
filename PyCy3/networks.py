@@ -80,7 +80,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        (dict) containing server JSON response
+        dict: server JSON response
 
     Raises:
         ValueError: if server response has no JSON
@@ -142,7 +142,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL) -> str:
         attr2 (:obj:`int`, optional): Description of `attr2`.
         
     Returns:
-        name of network
+        str: name of network
 
     """
     if isinstance(suid, str):
