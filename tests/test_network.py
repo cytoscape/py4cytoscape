@@ -9,7 +9,10 @@ from PyCy3.decorators import *
 
 class NetworkTests(unittest.TestCase):
     def setUp(self):
-        delete_all_networks()
+        try:
+            delete_all_networks()
+        except:
+            pass
 
     def tearDown(self):
         pass
@@ -25,7 +28,6 @@ class NetworkTests(unittest.TestCase):
         self.assertIn('numberOfCores', res)
         self.assertIn('memoryStatus', res)
 
-    @skip
     @print_entry_exit
     def test_set_current_network(self):
         # Initialization

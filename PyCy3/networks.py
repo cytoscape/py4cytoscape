@@ -41,27 +41,26 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     """Selects the given network as "current".
 
     Args:
-        network (SUID, str, None): Network name or suid of the network that you want set as current
+        network (SUID or str or None): Network name or suid of the network that you want set as current
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        (dict) containing server JSON response
+        dict: {} (empty dict)
 
     Raises:
         ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> set_current_network() # sets current network to current
-        []
+        {}
         >>> set_current_network('MyNetwork') # sets network named 'MyNetwork' as current
-        []
+        {}
         >>> set_current_network(1502) # sets network having SUID 1502 as current
-        []
-
-        returns {"data': {}, "errors": []}
+        {}
     """
     suid = get_network_suid(network)
     cmd = 'network set current network=SUID:"' + str(suid) + '"'
