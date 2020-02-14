@@ -138,7 +138,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'PyCy3.tex', 'PyCy3 Documentation',
-     'Barry Demchak', 'manual'),
+     'The Cytoscape Consortium', 'manual'),
 ]
 
 
@@ -159,7 +159,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'PyCy3', 'PyCy3 Documentation',
-     author, 'PyCy3', 'One line description of project.',
+     author, 'PyCy3', 'Python interface to Cytoscape CyREST',
      'Miscellaneous'),
 ]
 
