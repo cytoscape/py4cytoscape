@@ -14,10 +14,11 @@ VI. Internal functions
 
 Note:
      Go to network_selection.py for all selection-related functions
-
-I. General network functions
-----------------------------
 """
+
+# ==============================================================================
+# II. General network functions
+# ------------------------------------------------------------------------------
 
 import sys
 import re
@@ -353,10 +354,9 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_delete('networks', base_url=base_url, require_json=False)
     return res
 
-"""
-II. General node functions
---------------------------
-"""
+# ==============================================================================
+# II. General node functions
+# ------------------------------------------------------------------------------
 
 def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
