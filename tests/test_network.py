@@ -131,6 +131,10 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_network_name('galFiltered.sif'), res)
         self.assertEqual(get_network_name(res), res)
 
+    @print_entry_exit
+    def test_get_network_list(self):
+        self.fail() # TODO: Implement this
+
     @skip
     @print_entry_exit
     def test_export_network(self):

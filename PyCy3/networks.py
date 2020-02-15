@@ -174,6 +174,37 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     return res[0]['name']
 
 def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
+    """Get the SUID of a network.
+
+    Args:
+        suid (SUID or str or None): Name of the network; default is "current" network. If an SUID is
+            provided, then it is validated and returned.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: network SUID
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_network_suid() # get SUID of current network
+        22752
+        >>> get_network_suid('galFiltered.sif') # get SUID of network having name
+        22752
+        >>> get_network_suid(22752) # verify that current network has SUID 22752
+        22752
+
+    Notes:
+        Together with getNetworkSuid, this function attempts to handle all
+        of the multiple ways we support network referencing (e.g., title, SUID,
+        'current', and NULL). These functions are then used by all other functions
+        that take a "network" argument.
+    """
     if isinstance(title, str):
         # Title was provided
         if title == 'current':
@@ -200,6 +231,24 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
     return int(response[0]['SUID'])
 
 def get_network_list(base_url=DEFAULT_BASE_URL):
+    """Returns the list of Cytoscape network names in the current Cytoscape session.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: network names
+
+    Raises:
+        ValueError: if server response has no JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_network_list()
+        ['galFiltered.sif', 'yeastHighQuality.sif']
+    """
     cy_network_names = []
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
@@ -210,6 +259,30 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     return cy_network_names
 
 def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
+    """Export a network to one of mulitple file formats.
+
+    Args:
+        filename (str): Full path or path relavtive to current working directory,
+            in addition to the name of the file. Extension is automatically added based
+            on the ``type`` argument. If blank, then the current network name is used.
+        type (str): File type. SIF (default), CX, cyjs, graphML, NNF,  xGMML.
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: server JSON response
+
+    Raises:
+        ValueError: if server response has no JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> export_network('/path/filename','SIF')
+        { 'data': {'file': 'C:\\Users\\CyDeveloper\\xx'}, 'errors': [] }
+    """
     cmd = 'network export'  # a good start
 
     # filename must be suppled
@@ -235,17 +308,55 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     return commands.commands_post(cmd + ' OutputFile="' + filename + '"', base_url=base_url)
 
 def delete_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Delete a network from the current Cytoscape session.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: None
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_network() # delete the current network
+        >>> delete_network(22752) # delete network having SUID
+        >>> delete_network('galFiltered.sif') # delete network having name
+    """
     suid = get_network_suid(network)
     res = commands.cyrest_delete('networks/' + str(suid), base_url=base_url, require_json=False)
     return res
 
 def delete_all_networks(base_url=DEFAULT_BASE_URL):
+    """Delete all networks from the current Cytoscape session.
+
+    Args:
+         base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: None
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_all_networks()
+    """
     res = commands.cyrest_delete('networks', base_url=base_url, require_json=False)
     return res
 
-# ==============================================================================
-# II. General node functions
-# ------------------------------------------------------------------------------
+"""
+II. General node functions
+--------------------------
+"""
 
 def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
