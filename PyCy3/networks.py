@@ -359,6 +359,29 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
 # ------------------------------------------------------------------------------
 
 def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
+    """Returns a non-redundant list of first neighbors of the supplied list of nodes or current node selection.
+
+    Args:
+        str: node_names (str): A ``list`` of node names from the ``name`` column of the ``node table``.
+            Default is currently selected nodes.
+        as_nested_list (bool): Whether to return lists of neighbors per query node.
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: deduped list of nodes neighboring specified nodes.
+            If as_nested_list, a list of neighbor node lists, one per specified node
+
+    Raises:
+        CyError: if network name or SUID doesn't exist, if no nodes are selected, or if node doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_all_networks()
+    """
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
         node_names = network_selection.get_selected_nodes(network=network, base_url=base_url)
