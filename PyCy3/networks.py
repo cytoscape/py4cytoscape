@@ -619,8 +619,8 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
           'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
           'interaction': 'pp', 'EdgeBetweenness': 988.0}]
 
-    Note: This function is kinda slow. It takes approximately 70ms per edge to return a result,
-        e.g., 850 edges will take a one minute.
+    Notes: This function is kinda slow. It takes approximately 70ms per edge to return a result, e.g., 850 edges
+        will take a one minute.
     """
     net_suid = get_network_suid(network, base_url=base_url)
     if isinstance(edges, str): edges = [edges]
