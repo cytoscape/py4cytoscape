@@ -619,8 +619,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
           'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
           'interaction': 'pp', 'EdgeBetweenness': 988.0}]
 
-    Notes: This function is kinda slow. It takes approximately 70ms per edge to return a result, e.g., 850 edges
-        will take a one minute.
+    Notes: This function is kinda slow. It takes approximately 70ms per edge to return a result, e.g., 850 edges will take one minute.
     """
     net_suid = get_network_suid(network, base_url=base_url)
     if isinstance(edges, str): edges = [edges]
@@ -635,6 +634,27 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
     return edge_info
 
 def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the names of all the edges in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a ``list`` of edges in the network
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+       >>> get_all_edges()
+       ['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W', 'YPR145W (pp) YMR117C', ...]
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     e_count = get_edge_count(network, base_url=base_url)
     if e_count == 0: return None
@@ -647,11 +667,63 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
 # ------------------------------------------------------------------------------
 
 def clone_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Makes a copy of a Cytoscape Network with all of its edges and nodes.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: The ```SUID``` of the new network
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+       >>> clone_network()
+       1477
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"')
     return res['network']
 
 def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Copies a subset of nodes and edges into a newly created subnetwork.
+
+    Args:
+        nodes (list): list of node names or keyword: selected, unselected or all. Default is currently selected nodes.
+        nodes_by_col (str): name of node table column corresponding to provided nodes list; default is 'SUID'
+        edges (list): list of edge names or keyword: selected, unselected or all. Default is currently selected edges.
+        edges_by_col (str): name of edge table column corresponding to provided edges list; default is 'SUID'
+        exclude_edges (bool): whether to exclude connecting edges; default is FALSE
+        subnetwork_name (str): name of new subnetwork to be created; default is to add a numbered suffix to source network name
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: The ```SUID``` of the new subnetwork
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_subnetwork(nodes='all') # choose all selected and unselected nodes
+        1477
+        >>> create_subnetwork(edges='selected') # choose only nodes whose edges are selected, and include those edges
+        1477
+        >>> create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx')
+       1477
+    """
     # TODO: Verify that node and edge names can't contain blanks or commas
     title = get_network_suid(network, base_url=base_url)
     exclude_edges = 'true' if exclude_edges else 'false'
@@ -670,18 +742,60 @@ def create_network_from_graph(graph, title='From graph', collection='My GraphNEL
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
 
 def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
-    # it looks like nodes is a dataframe like this (from R):
-    # #' nodes <- data.frame(id=c("node 0","node 1","node 2","node 3"),
-    # #'            group=c("A","A","B","B"), # categorical strings
-    # #'            score=as.integer(c(20,10,15,5))) # integers
-    # if nodes is empty, we get a list of nodes out of the source/target values for edges
+    """Create a network from data frames.
 
-    # it looks like edges is a dataframe like this (from R):
-    # ' edges <- data.frame(source=c("node 0","node 0","node 0","node 2"),
-    # '            target=c("node 1","node 2","node 3","node 3"),
-    # '            interaction=c("inhibits","interacts",
-    # '                          "activates","interacts"),  # optional
-    # '            weight=c(5.1,3.0,5.2,9.9)) # numeric
+    Takes data frames for nodes and edges, as well as naming parameters to generate the JSON data format required by
+    the "networks" POST operation via CyREST. Returns the network.suid and applies the preferred layout set in
+    Cytoscape preferences.
+
+    Notes:
+        ``nodes`` should contain a column of character strings named: id. This name can be overridden by the arg:
+        ``node_id_list. Additional columns are loaded as node attributes. ``edges`` should contain columns of
+        character strings named: source, target and interaction. These names can be overridden by args:
+        source_id_list, target_id_list, interaction_type_list. Additional columns are loaded as edge attributes.
+        The ``intaraction`` list can contain a single value to apply to all rows; and if excluded altogether, the
+        interaction type will be set to "interacts with". NOTE: attribute values of types (num) will be imported
+        as (Double); (int) as (Integer); (chr) as (String); and (logical) as (Boolean). (Lists) will be imported as
+        (Lists) in CyREST v3.9+.
+
+    Args:
+        nodes (DataFrame): see details and examples below; default NULL to derive nodes from edge sources and targets
+        edges (DataFrame): see details and examples below; default NULL for disconnected set of nodes
+        title (str): network name
+        collection (str): network collection name
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+        node_id_list (str): Name of column in ``nodes`` containing node id
+        source_id_list (str): Name of column in ``edges`` containing source node name
+        target_id_list (str): Name of column in ``edges``  containing target node name
+        interaction_type_list (str): Name of column in ``edges``  containing interaction name
+
+    Returns:
+        int: The ```SUID``` of the new network
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> node_data = {'id':["node 0","node 1","node 2","node 3"],
+        >>>              'group':["A","A","B","B"],
+        >>>              'score':[20,10,15,5]}
+        >>> nodes = df.DataFrame(data=node_data, columns=['id', 'group', 'score'])
+        >>> edge_data = {'source':["node 0","node 0","node 0","node 2"],
+        >>>              'target':["node 1","node 2","node 3","node 3"],
+        >>>              'interaction':["inhibits","interacts","activates","interacts"],
+        >>>              'weight':[5.1,3.0,5.2,9.9]}
+        >>> edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
+        >>>
+        >>> create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
+        1477
+    """
+    # TODO: Verify the above documentation
+
     def compute_edge_name(source, target, interaction):
         return source + ' (' + interaction + ') ' + target
 
