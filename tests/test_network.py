@@ -131,6 +131,7 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_network_name('galFiltered.sif'), res)
         self.assertEqual(get_network_name(res), res)
 
+    @skip
     @print_entry_exit
     def test_get_network_list(self):
         self.fail() # TODO: Implement this
@@ -269,7 +270,7 @@ class NetworkTests(unittest.TestCase):
 
         self.assertEqual(get_edge_count(), 359)
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_edge_info(self):
         # Initialization

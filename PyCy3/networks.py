@@ -510,6 +510,31 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
 # ------------------------------------------------------------------------------
 
 def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None, base_url=DEFAULT_BASE_URL):
+    """Add one or more edges to a Cytoscape network by listing source and target node pairs.
+
+    Args:
+        source_target_list (list or list of lists): Source and target node pairs
+        edgeType (str): The type of interaction. Default is 'interacts with'.
+        directed (bool): Indicates whether interactions are directed. Default is ``FALSE``.
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list of dicts: A ``list`` of dicts for each edge (SUID, source, target) added.
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> add_cy_edges(['YLR075W', 'YKL028W'])
+        [{'SUID': 2884, 'source': 1552, 'target': 1698}]
+        >>> add_cy_edges([['YKL028W', 'YJR066W'], ['YJR066W', 'YLR452C'], ['YGR046W', 'YLR452C']])
+        [{'SUID': 2886, 'source': 1698, 'target': 1645}, {'SUID': 2887, 'source': 1645, 'target': 1534} ...]
+    """
     net_suid = get_network_suid(network, base_url=base_url)
 
     # Create list of all nodes in order presented
@@ -532,11 +557,71 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     return res
 
 def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
+    """Reports the number of the edges in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+             port or version to connect to the CyREST API. Default is http://localhost:1234
+             and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: count of edges in network.
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_edge_count()
+        6
+        >>> get_edge_count(52)
+        6
+        >>> get_edge_count('galFiltered.sif')
+        6
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/count', base_url=base_url)
     return res['count']
 
 def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
+    """Returns source, target and edge table row values.
+
+    Args:
+        edges (list): list of SUIDs or names of edges, i.e., values in the "name" column.
+            Can also input single edge.
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+             port or version to connect to the CyREST API. Default is http://localhost:1234
+             and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list of dicts: list of dicts describing each edge
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_edge_info('YDR277C (pp) YDL194W')
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0}]
+        >>> get_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'])
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0},
+         {'source': 2919, 'target': 3220, 'SUID': 3249, 'shared name': 'YDR277C (pp) YJR022W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 988.0}]
+
+    Note: This function is kinda slow. It takes approximately 70ms per edge to return a result,
+        e.g., 850 edges will take a one minute.
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     if isinstance(edges, str): edges = [edges]
 
