@@ -362,7 +362,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     """Returns a non-redundant list of first neighbors of the supplied list of nodes or current node selection.
 
     Args:
-        str: node_names (str): A ``list`` of node names from the ``name`` column of the ``node table``.
+        node_names (list or None): A ``list`` of node names from the ``name`` column of the ``node table``.
             Default is currently selected nodes.
         as_nested_list (bool): Whether to return lists of neighbors per query node.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -373,14 +373,17 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
 
     Returns:
         list: deduped list of nodes neighboring specified nodes.
-            If as_nested_list, a list of neighbor node lists, one per specified node
+            If as_nested_list parameter is True, a list of neighbor node lists, one per specified node
 
     Raises:
         CyError: if network name or SUID doesn't exist, if no nodes are selected, or if node doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> delete_all_networks()
+        >>> get_first_neighbors(node_names = None, as_nested_list=True)
+        [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', ...]], ...]
+        >>> get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
     """
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
@@ -410,6 +413,31 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
 
 
 def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=DEFAULT_BASE_URL):
+    """Add one or more nodes to a Cytoscape network.
+
+    Args:
+        node_names (list or None): A ``list`` of node names
+        skip_duplicate_names (bool): Skip adding a node if a node with the same name is already in
+            the network. If ``FALSE`` then a duplicate node (with a unique SUID) will be added.
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: A ``list`` of ``named lists`` of name and SUID for each node added.
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> add_cy_nodes(['newnode1', 'newnode2'], skip_duplicate_names=False)
+        [{"name": "newnode1", "SUID": 1459}, {"name": "newnode2", "SUID": 1460}]
+        >>> add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
+        [{"name": "newnode3", "SUID": 1460}]
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     if skip_duplicate_names:
         all_nodes_list = get_all_nodes(net_suid, base_url=base_url)
@@ -419,11 +447,57 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
     return res
 
 def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
+    """Reports the number of nodes in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: count of nodes in network.
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_node_count()
+        6
+        >>> get_node_count(52)
+        6
+        >>> get_node_count('galFiltered.sif')
+        6
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/count', base_url=base_url)
     return res['count']
 
 def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the names of all the nodes in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a ``list`` of nodes in the network
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+       >>> get_all_nodes()
+       ['YDL194W', 'YDR277C', 'YBR043C', ... ]
+    """
     net_suid = get_network_suid(network, base_url=base_url)
     n_count = get_node_count(net_suid, base_url=base_url)
     if n_count == 0: return None
