@@ -896,6 +896,34 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
 # ------------------------------------------------------------------------------
 
 def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Create an igraph network from a Cytoscape network.
+
+    Notes:
+        Takes a Cytoscape network and generates data frames for vertices and edges to send to the graph_from_data_frame
+        function. Nodes and edges from the Cytoscape network will be translated into vertices and edges in igraph.
+        Associated table columns will also be passed to igraph as vertex and edge attributes. All networks are
+        implicitly modeled as directed in Cytoscape. Round-trip conversion of an undirected network in igraph via
+        ``createNetworkFromIgraph`` to Cytoscape and back to igraph will result in a directed network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        igraph: The new ``igraph`` object
+
+    Raises:
+        ValueError: if server response has no JSON
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_igraph_from_network()
+        1477
+    """
     suid = get_network_suid(network, base_url=base_url)
 
     # get dataframes
