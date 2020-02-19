@@ -410,6 +410,7 @@ class NetworkTests(unittest.TestCase):
         all_edges = get_all_edges()
 
         i = create_igraph_from_network()
+        print(i)
 
         # verify that all nodes are present
         self.assertEqual(len(i.vs), len(all_nodes))

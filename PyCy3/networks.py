@@ -741,13 +741,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
 
-def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe',
-                                    collection='My Dataframe Network Collection',
-                                    base_url=DEFAULT_BASE_URL,
-                                    *,
-                                    node_id_list='id', source_id_list='source',
-                                    target_id_list='target',
-                                    interaction_type_list='interaction'):
+def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
     """Create a network from data frames.
 
     Takes data frames for nodes and edges, as well as naming parameters to generate the JSON data format required by
@@ -922,7 +916,20 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> create_igraph_from_network()
-        1477
+        IGRAPH DN-- 330 359 --
+        + attr: AverageShortestPathLength (v), BetweennessCentrality (v), COMMON (v),
+          ClosenessCentrality (v), ClusteringCoefficient (v), Degree (v), Eccentricity
+          (v), IsSingleNode (v), NeighborhoodConnectivity (v), NumberOfDirectedEdges
+          (v), NumberOfUndirectedEdges (v), PartnerOfMultiEdgedNodePairs (v),
+          Radiality (v), SelfLoops (v), Stress (v), TopologicalCoefficient (v),
+          degree.layout (v), gal1RGexp (v), gal1RGsig (v), gal4RGexp (v), gal4RGsig
+          (v), gal80Rexp (v), gal80Rsig (v), isExcludedFromPaths (v), name (v),
+          selected (v), shared name (v), EdgeBetweenness (e), interaction (e), name
+          (e), selected (e), shared interaction (e), shared name (e), source (e),
+          target (e)
+        + edges (vertex names):
+        YML064C->YLR284C, YML064C->YHR198C, YKL074C->YGL035C, YDL081C->YLR340W,
+        ...
     """
     suid = get_network_suid(network, base_url=base_url)
 
