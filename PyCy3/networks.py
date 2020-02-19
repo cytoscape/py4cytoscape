@@ -750,7 +750,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     Notes:
         ``nodes`` should contain a column of character strings named: id. This name can be overridden by the arg:
-        ``node_id_list. Additional columns are loaded as node attributes. ``edges`` should contain columns of
+        ``node_id_list``. Additional columns are loaded as node attributes. ``edges`` should contain columns of
         character strings named: source, target and interaction. These names can be overridden by args:
         source_id_list, target_id_list, interaction_type_list. Additional columns are loaded as edge attributes.
         The ``intaraction`` list can contain a single value to apply to all rows; and if excluded altogether, the
@@ -857,6 +857,27 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
 
 def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
+    """Loads a network from specified file.
+
+    Args:
+        file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
+            If None, a demo network file in SIF format is loaded.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: The ```SUID``` of the new network
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> import_network_from_file() # import demo network
+        1477
+        >>> import_network_from_file('sampleData/yeastHighQuality.sif')
+        1477
+    """
     if file is None:
         file = 'extdata/galfiltered.sif'
     else:
