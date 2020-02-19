@@ -741,7 +741,13 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
 
-def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
+def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe',
+                                    collection='My Dataframe Network Collection',
+                                    base_url=DEFAULT_BASE_URL,
+                                    *,
+                                    node_id_list='id', source_id_list='source',
+                                    target_id_list='target',
+                                    interaction_type_list='interaction'):
     """Create a network from data frames.
 
     Takes data frames for nodes and edges, as well as naming parameters to generate the JSON data format required by
