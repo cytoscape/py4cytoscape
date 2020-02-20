@@ -200,6 +200,8 @@ class NetworkTests(unittest.TestCase):
         self.assertIsNone(get_first_neighbors([], as_nested_list=False))
         self.assertRaises(CyError, get_first_neighbors)
 
+        # TODO: test case of node_names being a single (str) node
+
     @skip
     @print_entry_exit
     def test_get_node_count(self):

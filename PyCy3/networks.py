@@ -100,9 +100,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     return commands.commands_post(cmd, base_url)
 
 def get_network_count(base_url=DEFAULT_BASE_URL):
-    """Get the number of Cytoscape networks.
-
-    Returns the number of Cytoscape networks in the current Cytoscape session
+    """Get the number of Cytoscape networks in the current Cytoscape session.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -110,7 +108,7 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: server JSON response
+        int: count of networks
 
     Raises:
         ValueError: if server response has no JSON
@@ -319,7 +317,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        str: None
+        str: ''
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -343,7 +341,7 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        str: None
+        str: ''
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
@@ -362,7 +360,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     """Returns a non-redundant list of first neighbors of the supplied list of nodes or current node selection.
 
     Args:
-        node_names (list or None): A ``list`` of node names from the ``name`` column of the ``node table``.
+        node_names (str or list or None): A ``list`` of node names from the ``name`` column of the ``node table``.
             Default is currently selected nodes.
         as_nested_list (bool): Whether to return lists of neighbors per query node.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -384,13 +382,16 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', ...]], ...]
         >>> get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
+        >>> get_first_neighbors('YBR020W', as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']
     """
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
         node_names = network_selection.get_selected_nodes(network=network, base_url=base_url)
-        if node_names is None: raise CyError('No nodes selected')
+    elif isinstance(node_names, str):
+        node_names = [node_names]
 
-    if (len(node_names) == 0): return None
+    if (node_names is None or len(node_names) == 0): return None
 
     net_suid = get_network_suid(network, base_url=base_url)
     neighbor_names = []
@@ -398,7 +399,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     for node_name in node_names:
         # get first neighbors for each node
         node_suid = node_name_to_node_suid([node_name], net_suid, base_url=base_url)[0]
-        # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar
+        # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar ... I think it will break ... should we except??
 
         first_neighbors_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/' + str(node_suid) + '/neighbors', base_url=base_url)
         first_neighbors_names = node_suid_to_node_name(first_neighbors_suids, net_suid, base_url=base_url)
@@ -538,6 +539,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     net_suid = get_network_suid(network, base_url=base_url)
 
     # Create list of all nodes in order presented
+    #TODO: Find out what should happen if node name maps to multiple nodes
     if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0], str) and isinstance(source_target_list[1], str):
         flat_source_target_list = source_target_list
     else:
@@ -677,7 +679,7 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        int: The ```SUID``` of the new network
+        int: The ``SUID`` of the new network
 
     Raises:
         ValueError: if server response has no JSON
@@ -709,7 +711,7 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        int: The ```SUID``` of the new subnetwork
+        int: The ``SUID`` of the new subnetwork
 
     Raises:
         ValueError: if server response has no JSON
@@ -766,7 +768,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
-
+        *
         node_id_list (str): Name of column in ``nodes`` containing node id
         source_id_list (str): Name of column in ``edges`` containing source node name
         target_id_list (str): Name of column in ``edges``  containing target node name
