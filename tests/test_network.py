@@ -131,10 +131,17 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_network_name('galFiltered.sif'), res)
         self.assertEqual(get_network_name(res), res)
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_network_list(self):
-        self.fail() # TODO: Implement this
+        # Initialization
+        self._load_test_network('galFiltered.cys')
+        self._load_test_network('yeastHighQuality.sif', make_current=False)
+
+        self.assertListEqual(get_network_list(), ['yeastHighQuality.sif', 'galFiltered.sif'])
+
+        delete_all_networks()
+        self.assertListEqual(get_network_list(), [])
 
     @skip
     @print_entry_exit

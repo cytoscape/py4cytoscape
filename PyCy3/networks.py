@@ -248,12 +248,11 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
         >>> get_network_list()
         ['galFiltered.sif', 'yeastHighQuality.sif']
     """
-    cy_network_names = []
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
-        for suid in cy_networks_suids:
-            res = commands.cyrest_get('networks/' + str(suid), base_url=base_url)
-            cy_network_names.append(res['data']['name'])
+        cy_network_names = [commands.cyrest_get('networks/' + str(suid), base_url=base_url)['data']['name']    for suid in cy_networks_suids]
+    else:
+        cy_network_names = []
 
     return cy_network_names
 
@@ -768,14 +767,14 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
-        *
+        * :
         node_id_list (str): Name of column in ``nodes`` containing node id
         source_id_list (str): Name of column in ``edges`` containing source node name
         target_id_list (str): Name of column in ``edges``  containing target node name
         interaction_type_list (str): Name of column in ``edges``  containing interaction name
 
     Returns:
-        int: The ```SUID``` of the new network
+        int: The ``SUID`` of the new network
 
     Raises:
         ValueError: if server response has no JSON
@@ -855,6 +854,8 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     print('Applying preferred layout')
     layouts.layoutNetwork(network=network_suid)
 
+    #TODO: Verify that attribute types are properly set in Cytoscape
+
     return network_suid
 
 
@@ -869,7 +870,7 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        int: The ```SUID``` of the new network
+        int: The ``SUID`` of the new network
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
