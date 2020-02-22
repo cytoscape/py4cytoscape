@@ -109,16 +109,15 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         col_val = [','.join(val) if isinstance(val, list) else val    for val in data_subset[col]]
         data_subset[col] = col_val
 
-
     # TODO: Find out whether "factors" are an issue in Python, and why factors could be troublesome in R
-
-    # convert whole data table to dictionary suitable for JSON encoding
-    data_list = data_subset.to_dict(orient='records')
     # TODO: Verify that this gives the right answer for list of str, int, etc
+
+    data_list = _df_to_attr_dict_list(data_subset) # convert DataFrame to dicts that are easy to convert to JSON
 
     tbl = namespace + table # calculate fully qualified table name
 
-    # if there are any columns that aren't in the Cytoscape table and they're going to be Int, add them explicitly now
+    # if there are any columns that aren't in the Cytoscape table and they're going to be Int, add them explicitly now so
+    # they don't default to float
     def create_col(x):
         return commands.cyrest_post('networks/' + str(net_suid) + '/tables/' + tbl + '/columns', body={'name':x, 'type':'Integer'}, require_json=False, base_url=base_url)
     existing_cols = get_table_column_names(table, namespace, net_suid, base_url=base_url)
@@ -128,3 +127,25 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl, body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list}, require_json=False, base_url=base_url)
 
     return 'Success: Data loaded in ' + tbl + ' table'
+
+# TODO: Check to see if this is needed in RCy3
+def _nan_to_none(original_df, attr_dict_list):
+    # convert missing numbers from 'nan' to None, which will cause the JSON converter to properly emit null
+    # First, determine whether any floating point values are missing
+    if original_df.isnull().any().any():
+        # yes ... find out which rows contain null values
+        data_subset_nans = original_df.isnull() # map out missing floating point in all cells
+        data_subset_nans_indexes = [True in set(data_subset_nans.loc[i,:])    for i in data_subset_nans.index] # find rows containing missing floating point
+        for has_missing, row_contents in zip(data_subset_nans_indexes, attr_dict_list):
+            # for each row in data_list, if it has missing values, find them and replace them with 'None'
+            # Note that this could not have been done with data_subset because it's a DataFrame, which only outputs 'nan'
+            if has_missing:
+                for key, value in row_contents.items():
+                    if type(value) is float and np.isnan(value): row_contents[key] = None
+    return attr_dict_list
+
+def _df_to_attr_dict_list(df):
+    # convert whole data table to dictionary suitable for JSON encoding
+    data_list = df.to_dict(orient='records')
+    return _nan_to_none(df, data_list)
+

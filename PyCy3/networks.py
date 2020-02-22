@@ -246,7 +246,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_network_list()
-        ['galFiltered.sif', 'yeastHighQuality.sif']
+        ['yeastHighQuality.sif', 'galFiltered.sif']
     """
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
@@ -737,7 +737,32 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     return res['data']['network']
 
 def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented') # TODO: implement create_network_from_igraph
+
+    def attrs_present(entity_collection):
+        attrs = set()
+        for entity in entity_collection:
+            attrs |= set(entity.attributes().keys())
+        return attrs
+
+    def copy_attrs_to_dataframe(entity_collection):
+        df = pd.DataFrame()
+        for col in attrs_present(entity_collection):
+            df[col] = entity_collection[col]
+        return df
+
+    node_df = copy_attrs_to_dataframe(igraph.vs)
+    edge_df = copy_attrs_to_dataframe(igraph.es)
+
+    # Make sure critical attributes are strings
+    node_df['name'] = node_df['name'].astype(str)
+    edge_df['source'] = edge_df['source'].astype(str)
+    edge_df['target'] = edge_df['target'].astype(str)
+    if 'interaction' in edge_df.columns: edge_df['interaction'] = edge_df['interaction'].astype(str)
+
+    if len(node_df.index) == 0: node_df = None
+    if len(edge_df.index) == 0: edge_df = None
+
+    return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection, base_url=base_url, node_id_list='name')
 
 def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
@@ -832,7 +857,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
 
     # load node attributes into Cytoscape network
-    if not set(nodes.columns) - set('id') is None:
+    if not set(nodes.columns) - {node_id_list} is None:
         tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid, base_url=base_url)
 
     if not edges is None:

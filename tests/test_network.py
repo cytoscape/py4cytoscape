@@ -131,7 +131,7 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_network_name('galFiltered.sif'), res)
         self.assertEqual(get_network_name(res), res)
 
-#    @skip
+    @skip
     @print_entry_exit
     def test_get_network_list(self):
         # Initialization
@@ -429,6 +429,21 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(len(i.es), len(all_edges))
         i_edges = [[x['source'], x['target']]   for x in i.es]
         self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges   for x in all_edges])
+
+#   @skip
+    @print_entry_exit
+    def test_create_network_from_igraph(self):
+        # Initialization
+        self._load_test_network('galFiltered.cys')
+        cur_igraph = create_igraph_from_network()
+
+        new_SUID = create_network_from_igraph(cur_igraph)
+        new_igraph = create_igraph_from_network(new_SUID)
+
+        print('cur_igraph: ' + str(cur_igraph))
+        print('new_igraph: ' + str(new_igraph))
+
+        # compare the new iGraph to cur_igraph ... watch out for null values
 
 
 
