@@ -779,10 +779,13 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         ``node_id_list``. Additional columns are loaded as node attributes. ``edges`` should contain columns of
         character strings named: source, target and interaction. These names can be overridden by args:
         source_id_list, target_id_list, interaction_type_list. Additional columns are loaded as edge attributes.
-        The ``intaraction`` list can contain a single value to apply to all rows; and if excluded altogether, the
+        The ``interaction`` list can contain a single value to apply to all rows; and if excluded altogether, the
         interaction type will be set to "interacts with". NOTE: attribute values of types (num) will be imported
         as (Double); (int) as (Integer); (chr) as (String); and (logical) as (Boolean). (Lists) will be imported as
         (Lists) in CyREST v3.9+.
+
+        Note that the extra ``id`` column is created in the node table because the ``id`` column is mandatory in the
+        cytoscape.js format, which is what is sent to Cytoscape.
 
     Args:
         nodes (DataFrame): see details and examples below; default NULL to derive nodes from edge sources and targets
@@ -837,6 +840,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
             return 'Create Network Failed: Must provide either nodes or edges'
 
     # create the JSON for a node list ... in cytoscape.js format
+    # TODO: Verify that we really do need this 'id' field ... or maybe we can kill it afterward?
     json_nodes = [{'data': {'id': node}}    for node in nodes[node_id_list]]
 
     # create the JSON for an edge list ... in cytoscape.js format

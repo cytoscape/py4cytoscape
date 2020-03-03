@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import math
 import pandas as df
 import igraph as ig
 
@@ -440,12 +441,29 @@ class NetworkTests(unittest.TestCase):
         new_SUID = create_network_from_igraph(cur_igraph)
         new_igraph = create_igraph_from_network(new_SUID)
 
-        print('cur_igraph: ' + str(cur_igraph))
-        print('new_igraph: ' + str(new_igraph))
+        self.assertEqual(get_network_name(new_SUID), 'From igraph')
+        self.assertTrue(cur_igraph.isomorphic(new_igraph))
 
-        # compare the new iGraph to cur_igraph ... watch out for null values
+        # Verify that all nodes in the new network are present along with their attributes. This doesn't test
+        # whether there are extra attributes on the nodes ... there well may be because of the extra ``id`` attribute
+        # added by ``create_network_from_igraph()``.
+        self._check_igraph_attributes(cur_igraph.vs, new_igraph.vs)
+
+        # Verify that all edges in the new network are present along with their attributes. This doesn't test
+        # whether there are extra attributes on the edges ... there well may be because of the extra ``data.key`` attribute
+        # added by ``create_network_from_igraph()``.
+        self._check_igraph_attributes(cur_igraph.es, new_igraph.es)
 
 
+    def _check_igraph_attributes(self, original_collection, new_collection):
+        def vals_eq(val1, val2):
+            return type(val1) is type(val2) and \
+                    ((val1 == val2) or \
+                     (type(val1) is float and math.isnan(val1) and math.isnan(val2)))
+
+        for orig in original_collection:
+            new = new_collection.find(name = orig['name'])
+            self.assertFalse(False in [vals_eq(orig[e_cur_key], new[e_cur_key])   for e_cur_key in orig.attributes().keys()])
 
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
         self.assertIsInstance(subnet_suid, int)
