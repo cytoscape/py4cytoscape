@@ -737,6 +737,54 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     return res['data']['network']
 
 def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
+    """Create a Cytoscape network from an igraph network.
+
+    Takes an igraph network and generates data frames for nodes and edges to
+    send to the createNetwork function. Returns the network.suid and applies the perferred
+    layout set in Cytoscape preferences.
+
+    Notes:
+        Vertices and edges from the igraph network will be translated into nodes and edges
+        in Cytoscape. Associated attributes will also be passed to Cytoscape as node and edge
+        table columns. Note: undirected networks will be implicitly modeled as directed
+        in Cytoscape. Conversion back via \code{createIgraphFromNetwork} will result in
+        a directed network. Also note: igraph attributes of type "other" denoted by "x"
+        are converted to "String" in Cytoscape.
+
+        Note that the extra ``id`` column is created in the node table because the ``id`` column is mandatory in the
+        cytoscape.js format, which is what is sent to Cytoscape.
+
+    Args:
+        igraph (igraph): igraph network object
+        title (str): network name
+        collection (str): network collection name
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: The ``SUID`` of the new network
+
+    Raises:
+        ValueError: if server response has no JSON
+        KeyError: igraph network doesn't contain required node or edge attributes
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> g = ig.Graph()
+        >>> g.add_vertices(3)
+        >>> g.vs['name'] = ['RAP1', 'HIS4', 'HIS3']
+        >>> g.add_edges([(0, 1), (1, 2)])
+        >>> g.es['source'] = [g.vs[0]['name'], g.vs[1]['name']]
+        >>> g.es['target'] = [g.vs[1]['name'], g.vs[2]['name']]
+        >>> g.es['interaction'] = ['enhances', 'inhibits']
+        >>> create_network_from_igraph(g, 'new graph', 'my collection')
+        138775
+    """
+    # TODO: Verify the type "other" behavior described above
+    # TODO: Verify the undeclared parameter behaviors claimed in the R documents
+    # TODO: Is this really faithful to the R implementation?
 
     def attrs_present(entity_collection):
         attrs = set()

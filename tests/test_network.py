@@ -420,7 +420,6 @@ class NetworkTests(unittest.TestCase):
         all_edges = get_all_edges()
 
         i = create_igraph_from_network()
-        print(i)
 
         # verify that all nodes are present
         self.assertEqual(len(i.vs), len(all_nodes))
@@ -436,6 +435,11 @@ class NetworkTests(unittest.TestCase):
     def test_create_network_from_igraph(self):
         # Initialization
         self._load_test_network('galFiltered.cys')
+
+        # This will fail but probably should not ... create_network_from_igraph requires nodes and edges, but shouldn't
+#        g = ig.Graph()
+#        create_network_from_igraph(g)
+
         cur_igraph = create_igraph_from_network()
 
         new_SUID = create_network_from_igraph(cur_igraph)
