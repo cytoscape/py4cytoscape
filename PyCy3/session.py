@@ -3,24 +3,12 @@
 """Functions for managing Cytoscape SESSIONS, including save, open and close.
 """
 
-# ==============================================================================
-# II. General network functions
-# ------------------------------------------------------------------------------
-
 import sys
 import re
 import os
-# import warnings
-# import pandas as pd
-# import igraph as ig
-#
+
 from . import commands
-# from . import tables
-# from . import network_selection
-# from . import layouts
 from .pycy3_utils import DEFAULT_BASE_URL
-# from .pycy3_utils import node_name_to_node_suid, node_suid_to_node_name, edge_name_to_edge_suid
-from .exceptions import CyError
 from .decorators import debug
 
 def __init__(self):
@@ -60,23 +48,33 @@ def close_session(save_before_closing, filename=None, base_url=DEFAULT_BASE_URL)
 
     return commands.commands_post('session new', base_url=base_url)
 
-
-# ' @title Open Session File or URL
-# '
-# ' @description Open a session file or URL. This will clear all networks, tables
-# ' and styles associated with current session. Be sure to \link{saveSession} first.
-# ' @param file.location File path or URL (with 'http' or 'https' prefix). Default
-# ' is a sample session file.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return None
-# ' @examples \donttest{
-# ' openSession('/fullpath/mySession.CYS')
-# ' }
-# ' @seealso saveSession
-# ' @export
 def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
+    """Open Session File or URL.
+
+    Open a session file or URL. This will clear all networks, tables and styles associated with current
+    session. Be sure to ``saveSession`` first.
+
+    Args:
+        file_location (str): File path or URL (with 'http' or 'https' prefix). Default is a sample session file.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {} empty
+
+    Raises:
+        CyError: if filename is invalid
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> open_session() # load session from sample Yeast Perturbation.cys file
+        {}
+        >>> open_session('data/Affinity Purification.cys') # load session from a file
+        {}
+        >>> open_session('https://github.com/bdemchak/PyCy3/blob/master/tests/data/Affinity%20Purification.cys')
+        {}
+    """
     type = 'file'
     if file_location is None:
         file_location = './sampleData/sessions/Yeast Perturbation.cys'
