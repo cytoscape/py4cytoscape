@@ -20,7 +20,6 @@ class SessionTests(unittest.TestCase):
     @skip
     @print_entry_exit
     def test_close_session(self):
-
         # See what happens when closing and no session is open
         self.assertDictEqual(close_session(False), {})
 
@@ -40,10 +39,9 @@ class SessionTests(unittest.TestCase):
         self._load_test_session()
         self.assertRaises(CyError, close_session, True, "totallybogusdir/bogusfile")
 
-    #    @skip
+    @skip
     @print_entry_exit
     def test_open_session(self):
-
         # Verify that the default network is loaded
         self.assertDictEqual(open_session(), {})
         self.assertEqual(get_network_count(), 1)
@@ -66,6 +64,38 @@ class SessionTests(unittest.TestCase):
         self.assertDictEqual(open_session('data/Affinity Purification.cys'), {})
         self.assertEqual(get_network_count(), 1)
         self.assertEqual(get_network_name(), 'HIV-human PPI')
+
+    @skip
+    @print_entry_exit
+    def test_save_session(self):
+        # Verify that the .cys suffix is added if it's not in the filename
+        OTHER_NAME = 'other'
+        OTHER_NAME_CYS = OTHER_NAME + '.cys'
+        self._clean_session_file(OTHER_NAME_CYS)
+        self._load_test_session()
+        save_session(OTHER_NAME)
+        self.assertTrue(os.path.isfile(OTHER_NAME_CYS))
+        self._clean_session_file(OTHER_NAME_CYS)
+
+        # Verify that the .cys suffix is not added if it's already in the filename
+        save_session(OTHER_NAME_CYS)
+        self.assertTrue(os.path.isfile(OTHER_NAME_CYS))
+
+        # Verify that a session file can be overwritten
+        orig_written = os.stat(OTHER_NAME_CYS).st_mtime
+        save_session(OTHER_NAME_CYS)
+        last_written = os.stat(OTHER_NAME_CYS).st_mtime
+        self.assertTrue(orig_written != last_written)
+
+        # Verify that if a session was loaded from a file, saving to an empty filename refreshes the file
+        open_session(OTHER_NAME_CYS)
+        self._clean_session_file(OTHER_NAME_CYS)
+        save_session()
+        self.assertTrue(os.path.isfile(OTHER_NAME_CYS))
+        self._clean_session_file(OTHER_NAME_CYS)
+
+        # Verify that an error is thrown if a crazy file name is used
+        self.assertRaises(CyError, save_session, "totallybogusdir/bogusfile")
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)

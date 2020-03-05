@@ -86,31 +86,35 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     sys.stderr.write('Opening ' + file_location + '...')
     return commands.commands_post('session open ' + type + '="' + file_location  + '"', base_url=base_url)
 
-# ------------------------------------------------------------------------------
-# ' @title Save Session to File
-# '
-# ' @description Saves the current Cytoscape session as a CYS file.
-# ' @details If no \code{filename} is provided, then it attempts to
-# ' save to an existing CYS file associated with the session. If
-# ' \code{filename} already exists, then it is overwritten.
-# ' @param filename Full path or path relavtive to current working directory,
-# ' in addition to the name of the file. The \code{.cys} extension is
-# ' automatically added. Leave blank to update previously saved session file.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return server response
-# ' @details Unlike most export functions in RCy3, Cytoscape will automatically
-# ' overwrite CYS session files with the same name. You will not be prompted to
-# ' confirm or reject overwrite. Use carefully!
-# ' @examples
-# ' \donttest{
-# ' saveSession('/fullpath/mySession')
-# ' saveSession()
-# ' }
-# ' @importFrom R.utils isAbsolutePath
-# ' @export
 def save_session(filename=None, base_url=DEFAULT_BASE_URL):
+    """Saves the current Cytoscape session as a CYS file.
+
+    If no ``filename`` is provided, then it attempts to save to an existing CYS file associated with the session. If
+    ``filename`` already exists, then it is overwritten.
+
+    Args:
+        filename (str): Full path or path relavtive to current working directory, in addition to the name
+            of the file. The ``.cys`` extension is automatically added. Leave blank to update previously
+            saved session file.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {} empty
+
+    Raises:
+        CyError: if filename is invalid
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> save_session('other') # Save current session as other.cys
+        {}
+        >>> save_session('other.cys') # Save current session as other.cys
+        {}
+        >>> save_session() # Save current session back to the same file it was loaded from
+        {}
+    """
     if filename is None:
         filename = commands.cyrest_get('session/name', base_url=base_url)
         if filename == '':
