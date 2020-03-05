@@ -17,7 +17,7 @@ Note:
 """
 
 # ==============================================================================
-# II. General network functions
+# I. General network functions
 # ------------------------------------------------------------------------------
 
 import sys
@@ -929,7 +929,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     commands.commands_post('vizmap apply styles="default"', base_url=base_url)
 
     print('Applying preferred layout')
-    layouts.layoutNetwork(network=network_suid)
+    layouts.layout_network(network=network_suid)
 
     #TODO: Verify that attribute types are properly set in Cytoscape
 
