@@ -87,3 +87,8 @@ class PyCy3Tests(unittest.TestCase):
         self.assertRaises(CyError, edge_name_to_edge_suid, suids_with_name)
         self.assertEqual(edge_name_to_edge_suid(suids), suids)
         self.assertRaises(CyError, edge_name_to_edge_suid, names_with_none)
+
+if __name__ == '__main__':
+    unittest.main()
+
+

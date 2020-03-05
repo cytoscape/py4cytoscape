@@ -31,3 +31,8 @@ class NetworkSelectionTests(unittest.TestCase):
 
         res = get_selected_nodes(True)
         print(res)
+
+if __name__ == '__main__':
+    unittest.main()
+
+

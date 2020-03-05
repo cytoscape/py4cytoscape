@@ -53,3 +53,6 @@ class TablesTests(unittest.TestCase):
         res = load_table_data(data, data_key_column='id', table='node', table_key_column='name')
         print(res)
 
+if __name__ == '__main__':
+    unittest.main()
+
