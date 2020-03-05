@@ -47,6 +47,14 @@ PyCy3.network\_selection module
     :undoc-members:
     :show-inheritance:
 
+PyCy3.session module
+---------------------
+
+.. automodule:: PyCy3.session
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 PyCy3.networks module
 ---------------------
 
