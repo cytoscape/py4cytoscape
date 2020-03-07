@@ -23,6 +23,7 @@ Note:
 import sys
 import re
 import os
+import time
 import warnings
 import pandas as pd
 import igraph as ig
@@ -65,7 +66,8 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     """
     suid = get_network_suid(network)
     cmd = 'network set current network=SUID:"' + str(suid) + '"'
-    return commands.commands_post(cmd, base_url=base_url)
+    res = commands.commands_post(cmd, base_url=base_url)
+    return res
 
 def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     """Sets a new name for a network.
@@ -963,6 +965,14 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     else:
         file = os.path.abspath(file)
     res = commands.commands_post('network load file file=' + file, base_url=base_url)
+
+    # should not be necessary, but is because "network load file" doesn't actually set the current network
+    # until after it's done. So, without the sleep(), setting the current network will be superceded by
+    # "network load file"'s own network. This is race condition that can be solved by "network load file"
+    # not returning until it's actually done.
+    # TODO: Fix this race condition
+    time.sleep(4)
+
     return res
 
 # ==============================================================================
