@@ -180,66 +180,90 @@ def get_layout_names(base_url=DEFAULT_BASE_URL):
     return res
 
 
-# ------------------------------------------------------------------------------
-# ' @title Get Layout Name Mapping
-# '
-# ' @description The Cytoscape 'Layout' menu lists many layout algorithms, but the names presented
-# ' there are different from the names by which these algorithms are known to layout method. This
-# ' method returns a named list in which the names are from the GUI, and the values identify the
-# ' names you must use to choose an algorithms in the programmatic interface.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return A named \code{list} of \code{character} strings
-# ' @author Alexander Pico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' getLayoutNameMapping()
-# ' # Degree Sorted Circle Layout    Group Attributes Layout    Edge-weighted Spring Embedded Layout
-# ' #              "degree-circle"       "attributes-layout"                          "kamada-kawai"
-# ' }
-# ' @export
 def get_layout_name_mapping(base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement get_layout_name_mapping
+    """Get Layout Name Mapping.
 
-# ------------------------------------------------------------------------------
-# ' @title Get Layout Property Names
-# '
-# ' @description Returns a list of the tunable properties for the specified layout.
-# ' @details Run \link{getLayoutNames} to list available layouts.
-# ' @param layout.name (\code{character}) Name of the layout
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return A \code{list} of \code{character} strings
-# ' @author Alexander Pico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' getLayoutPropertyNames('force-directed')
-# ' # [1] "numIterations"            "defaultSpringCoefficient" "defaultSpringLength"
-# ' # [4] "defaultNodeMass"          "isDeterministic"          "singlePartition"
-# ' }
-# ' @export
+    The Cytoscape 'Layout' menu lists many layout algorithms, but the names presented there are different
+    from the names by which these algorithms are known to ```layout_network``` method. This
+    method returns a named list in which the names are from the GUI, and the values identify the
+    names you must use to choose an algorithms in the programmatic interface.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {gui-layout-name: layout_name, ...}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_layout_name_mapping()
+        {'Attribute Circle Layout': 'attribute-circle', 'Stacked Node Layout': 'stacked-node-layout' ...}
+    """
+    layout_names = get_layout_names(base_url=base_url)
+    layout_mapping = {}
+
+    # get the full name of a layout and create {fullname:layoutname} in dictionary
+    for layout_name in layout_names:
+        res = commands.cyrest_get('apply/layouts/' + layout_name, base_url=base_url)
+        layout_mapping.update({res['longName']: layout_name})
+
+    return layout_mapping
+
 def get_layout_property_names(layout_name, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement get_layout_property_names
+    """Returns a list of the tunable properties for the specified layout.
 
-# ------------------------------------------------------------------------------
-# ' @title Get Layout Property Type
-# '
-# ' @description Returns the type of one of the tunable properties (property.name) for the specified layout.
-# ' @details Run \link{getLayoutNames} to list available layouts. Run \link{getLayoutPropertyNames} to list properties per layout.
-# ' @param layout.name (\code{character}) Name of the layout
-# ' @param property.name (\code{character}) Name of the property
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return A \code{character} string specifying the type
-# ' @author Alexander Pico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' getLayoutPropertyType('force-directed','defaultSpringLength')
-# ' # "double"
-# ' }
-# ' @export
+    Run ``getLayoutNames`` to list available layouts
+
+    Args:
+        layout_name (str): Name of the layout
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: strings naming layout parameters
+
+    Raises:
+        requests.exceptions.RequestException: if layout_name is invalid or can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_layout_property_names('force-directed')
+        ['numIterations', 'defaultSpringCoefficient', 'defaultSpringLength', 'defaultNodeMass', 'isDeterministic', 'singlePartition']
+    """
+    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    param_names = [param_def['name']    for param_def in res]
+    return param_names
+
 def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement get_layout_property_type
+    """Returns the type of one of the tunable properties (property_name) for the specified layout.
+
+    Run ``getLayoutNames`` to list available layouts. Run ``getLayoutPropertyNames`` to list properties per layout.
+
+    Args:
+        layout_name (str): Name of the layout
+        property_name (str): Name of the property
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: strings naming layout parameters
+
+    Raises:
+        KeyError: if property_name is invalid
+        requests.exceptions.RequestException: if layout_name is invalid or can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_layout_property_names('force-directed','defaultSpringLength')
+        "double"
+    """
+    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    param_types = {param['name']: param['type']   for param in res}
+    return param_types[property_name]
 
 # ------------------------------------------------------------------------------------------------------------------------
 # ' @title Get Layout Property Value
@@ -259,28 +283,69 @@ def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_U
 # ' }
 # ' @export
 def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement get_layout_property_value
+    """Returns the appropriately typed value of the specified tunable property for the specified layout.
+
+    Run ``getLayoutNames`` to list available layouts. Run ``getLayoutPropertyNames`` to list properties per layout.
+
+    Args:
+        layout_name (str): Name of the layout
+        property_name (str): Name of the property
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: strings naming layout parameters
+
+    Raises:
+        KeyError: if property_name is invalid
+        requests.exceptions.RequestException: if layout_name is invalid or can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> getLayoutPropertyValue('force-directed','defaultSpringLength')
+        50
+    """
+    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    param_values = {param['name']: param['value']   for param in res}
+    return param_values[property_name]
 
 # ==============================================================================
 # III. Set layout properties
 # ------------------------------------------------------------------------------------------------------------------------
-# ' @title Set Layout Properties
-# '
-# ' @description Sets the specified properties for the specified layout. Unmentioned properties are left unchanged.
-# ' @details Run \link{getLayoutNames} to list available layouts. Run \link{getLayoutPropertyNames} to list properties per layout.
-# ' @param layout.name (\code{character}) Name of the layout
-# ' @param properties.list (\code{list}) List of one or more \code{property=value} pairs
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return None
-# ' @author Alexander Pico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' setLayoutProperties('force-directed', list(defaultSpringLength=50, defaultSpringCoefficient=6E-04))
-# ' # Successfully updated the property 'defaultSpringLength'.
-# ' # Successfully updated the property 'defaultSpringCoefficient'.
-# ' }
-# ' @export
-def set_layout_properties(layout_name, properties_list, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement set_layout_properties
 
+def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_URL):
+    """Sets the specified properties for the specified layout.
+
+    Unmentioned properties are left unchanged.
+
+    Run ``getLayoutNames`` to list available layouts. Run ``getLayoutPropertyNames`` to list properties per layout.
+
+    Args:
+        layout_name (str): Name of the layout
+        properties_dict (dict): List of one or more ``property=value`` pairs
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: ''
+
+    Raises:
+        requests.exceptions.RequestException: if layout_name is invalid or can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_layout_properties('force-directed', {'defaultSpringLength': 50, 'defaultSpringCoefficient': 6E-01})
+        ''
+    """
+    all_possible_properties = get_layout_property_names(layout_name)
+
+    res = ''
+    for prop, value in properties_dict.items():
+        if not prop in all_possible_properties:
+            print(prop + ' is not a property in layout ' + layout_name)
+            # TODO: Consider throwning an exception here ... or just letting Cytoscape return the error
+        else:
+            each_property = [{'name': prop, 'value': value}]
+            res = commands.cyrest_put('apply/layouts/' + layout_name + '/parameters', body=each_property, base_url=base_url, require_json=False)
+
+    return res

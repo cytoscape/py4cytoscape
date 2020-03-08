@@ -18,7 +18,7 @@ class LayoutsTests(unittest.TestCase):
         pass
 
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_layout_network(self):
         # Initialize
@@ -39,7 +39,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertRaises(CyError, layout_network, 'bogus')
         self.assertEqual(get_network_suid(), cur_network_suid)
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_bundle_edges(self):
         # Initialize
@@ -56,7 +56,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertEqual(get_network_suid(), cur_network_suid)
         # To verify, operator should eyeball the network in Cytoscape
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_clear_edge_bends(self):
         # Initialize
@@ -75,7 +75,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertEqual(get_network_suid(), cur_network_suid)
         # To verify, operator should eyeball the network in Cytoscape
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_layout_copycat(self):
         # Initialize
@@ -102,6 +102,81 @@ class LayoutsTests(unittest.TestCase):
         required_layouts = set(['attribute-circle', 'stacked-node-layout', 'degree-circle', 'circular', 'attributes-layout', 'kamada-kawai', 'force-directed', 'cose', 'grid', 'hierarchical', 'fruchterman-rheingold', 'isom'])
         found_layouts = set(get_layout_names())
         self.assertTrue(found_layouts.issuperset(required_layouts))
+
+#    @skip
+    @print_entry_exit
+    def test_get_layout_name_mapping(self):
+        required_layouts = {'Attribute Circle Layout': 'attribute-circle', 'Stacked Node Layout': 'stacked-node-layout', 'Degree Sorted Circle Layout': 'degree-circle', 'Circular Layout': 'circular', 'Group Attributes Layout': 'attributes-layout', 'Edge-weighted Spring Embedded Layout': 'kamada-kawai', 'Prefuse Force Directed Layout': 'force-directed', 'Compound Spring Embedder (CoSE)': 'cose', 'Grid Layout': 'grid', 'Hierarchical Layout': 'hierarchical', 'Edge-weighted Force directed (BioLayout)': 'fruchterman-rheingold', 'Inverted Self-Organizing Map Layout': 'isom'}
+        required_keys = set(required_layouts.keys())
+
+        # Verify that all expected gui layout names are present, and that the layout names are what's expected
+        found_layouts = get_layout_name_mapping()
+        found_keys = set(found_layouts.keys())
+        self.assertTrue(found_keys.issuperset(required_keys))
+        self.assertFalse(False in [found_layouts[gui_layout_name] == required_layouts[gui_layout_name]    for gui_layout_name in required_layouts])
+
+#    @skip
+    @print_entry_exit
+    def test_get_layout_property_names(self):
+        layouts = {'force-directed': set(['numIterations', 'defaultSpringCoefficient', 'defaultSpringLength', 'defaultNodeMass', 'isDeterministic', 'singlePartition']),
+                   'attribute-circle': set(['spacing', 'singlePartition'])}
+
+        # Verify that the parameter names for some layouts return as expected
+        for layout, params in layouts.items():
+            found_params = set(get_layout_property_names(layout))
+            self.assertSetEqual(params, found_params)
+
+        self.assertRaises(requests.exceptions.RequestException, get_layout_property_names, 'boguslayout')
+
+#    @skip
+    @print_entry_exit
+    def test_get_layout_property_type(self):
+        layouts = {'force-directed': [('numIterations', 'int'), ('defaultSpringCoefficient', 'double'), ('defaultSpringLength', 'double'), ('defaultNodeMass', 'double'), ('isDeterministic', 'boolean'), ('singlePartition', 'boolean')],
+                   'attribute-circle': [('spacing', 'double'), ('singlePartition', 'boolean')]}
+
+        # Verify that the parameter types for some layouts return as expected
+        for layout, params in layouts.items():
+            for param_def in params:
+                self.assertEqual(get_layout_property_type(layout, param_def[0]), param_def[1])
+
+        self.assertRaises(requests.exceptions.RequestException, get_layout_property_type, 'boguslayout', 'bogusparam')
+        self.assertRaises(KeyError, get_layout_property_type, 'force-directed', 'bogusparam')
+
+#    @skip
+    @print_entry_exit
+    def test_get_layout_property_value(self):
+        layouts = {'force-directed': [('numIterations', '100'), ('defaultSpringCoefficient', '0.0001'), ('defaultSpringLength', '50.0'), ('defaultNodeMass', '3.0'), ('isDeterministic', 'False'), ('singlePartition', 'False')],
+                   'attribute-circle': [('spacing', '100.0'), ('singlePartition', 'False')]}
+
+        # Verify that the parameter values for some layouts return as expected
+        for layout, params in layouts.items():
+            for param_def in params:
+                self.assertEqual(str(get_layout_property_value(layout, param_def[0])), param_def[1])
+
+        self.assertRaises(requests.exceptions.RequestException, get_layout_property_value, 'boguslayout', 'bogusparam')
+        self.assertRaises(KeyError, get_layout_property_value, 'force-directed', 'bogusparam')
+
+#    @skip
+    @print_entry_exit
+    def test_set_layout_properties(self):
+        # This is tricky ... short of restarting Cytoscape, there doesn't appear to be a way of starting with fresh
+        # copies of layout properties. So, when testing, set layout properties to new values, but be sure to set
+        # them back to their originals.
+        orig_default_spring_length = get_layout_property_value('force-directed', 'defaultSpringLength')
+        NEW_DEFAULT_SPRING_LENGTH = 5
+        orig_default_spring_coefficient = get_layout_property_value('force-directed', 'defaultSpringCoefficient')
+        NEW_DEFAULT_SPRING_COEFFICIENT = 6E-01
+
+        self.assertEqual(set_layout_properties('force-directed', {'defaultSpringLength':NEW_DEFAULT_SPRING_LENGTH, 'defaultSpringCoefficient':NEW_DEFAULT_SPRING_COEFFICIENT}), '')
+        self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringLength'), NEW_DEFAULT_SPRING_LENGTH)
+        self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringCoefficient'), NEW_DEFAULT_SPRING_COEFFICIENT)
+
+        self.assertEqual(set_layout_properties('force-directed', {'defaultSpringLength':orig_default_spring_length, 'defaultSpringCoefficient':orig_default_spring_coefficient}), '')
+        self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringLength'), orig_default_spring_length)
+        self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringCoefficient'), orig_default_spring_coefficient)
+
+        self.assertRaises(requests.exceptions.RequestException, set_layout_properties, 'boguslayout', {})
+        self.assertEqual(set_layout_properties('force-directed', {'bogusparam':666}), '')
 
     def _load_test_session(self, session_filename=None):
             open_session(session_filename)
