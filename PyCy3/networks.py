@@ -497,8 +497,8 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-       >>> get_all_nodes()
-       ['YDL194W', 'YDR277C', 'YBR043C', ... ]
+        >>> get_all_nodes()
+        ['YDL194W', 'YDR277C', 'YBR043C', ... ]
     """
     net_suid = get_network_suid(network, base_url=base_url)
     n_count = get_node_count(net_suid, base_url=base_url)
