@@ -48,51 +48,40 @@ def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
 # ==============================================================================
 # II. Node selection functions
 # ------------------------------------------------------------------------------
-#' @title Select first neighbor nodes
-#'
-#' @description Select nodes directly connected to currently selected nodes. Can
-#' specify connection directionality using the direction param.
-#' @param direction direction of connections to neighbors to follow, e.g.,
-#' incoming, outgoing, undirected, or any (default)
-#' @param network (optional) Name or SUID of the network. Default is the
-#' "current" network active in Cytoscape.
-#' @param base.url (optional) Ignore unless you need to specify a custom domain,
-#' port or version to connect to the CyREST API. Default is http://localhost:1234
-#' and the latest version of the CyREST API supported by this version of RCy3.
-#' @return list of suids of selected nodes, including original selection
-#' @examples
-#' \donttest{
-#' selectFirstNeighbors()
-#' selectFirstNeighors('outgoing')
-#' selectFirstNeighors('incoming')
-#' }
-#' @export
+
 def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_URL):
+    """Select nodes directly connected to currently selected nodes.
+
+    Can specify connection directionality using the direction param.
+
+    Args:
+        direction (str): direction of connections to neighbors to follow, e.g., incoming, outgoing, undirected, or any (default)
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of newly selected nodes
+            and edge list is always empty
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_first_neighbors()
+        {'nodes': [107504, 107503, ...], 'edges': []}
+        >>> select_first_neighbors(direction='undirected')
+        {'nodes': [107514], 'edges': []}
+    """
     suid = networks.get_network_suid(network, base_url=base_url)
     cmd = 'network select firstNeighbors="' + direction + '" network=SUID:"' + str(suid) + '"'
     res = commands.commands_post(cmd, base_url=base_url)
     return res
 
-
-# ' @title Select Nodes
-# '
-# ' @description Select nodes in the network by SUID, name or other column values.
-# ' @param nodes List of node SUIDs, names or other column values
-# ' @param by.col Node table column to lookup up provide node values. Default is
-# ' 'SUID'.
-# ' @param preserve.current.selection \code{boolean} Whether to maintain
-# ' previously selected nodes.
-# ' @param network (optional) Name or SUID of the network. Default is the
-# ' "current" network active in Cytoscape.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return \code{list} of newly selected node SUIDs
-# ' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' selectNodes()
-# ' }
-# ' @export
+# TODO: Decide whether 'nodes' can be None ... the RCy3 documentation implies it can, but the code says no
 def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=None, base_url=DEFAULT_BASE_URL):
     """Select nodes in the network by SUID, name or other column values.
 

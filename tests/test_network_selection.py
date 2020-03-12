@@ -33,33 +33,34 @@ class NetworkSelectionTests(unittest.TestCase):
 
         clear_selection(network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_first_neigbors(self):
         # Initialization
         self._load_test_session()
+        df_all_nodes = tables.get_table_columns(columns='COMMON')
 
-        input('select a node')
-        select_first_neighbors()
+        def _test_first_neighbors(direction, expected_selection):
+            clear_selection()
+            select_nodes(['RAP1'], by_col='COMMON')
+            first_neighbor_nodes = select_first_neighbors(direction=direction)['nodes'] if direction else select_first_neighbors()['nodes']
+            first_names = set(df_all_nodes[df_all_nodes.index.isin(first_neighbor_nodes)]['COMMON'])
+            self.assertSetEqual(first_names, expected_selection)
 
-        input('select a node')
-        select_first_neighbors(direction='any')
+        # Verify that nodes around RAP1 are selected properly, depending on edge direction requested
+        _test_first_neighbors(None, {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors('any', {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors('incoming', {'RPS17A', 'RAP1'})
+        _test_first_neighbors('outgoing', {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors('undirected', {'RAP1'})
 
-        input('select a node')
-        select_first_neighbors(direction='incoming')
+        clear_selection()
+        select_nodes(['RAP1'], by_col='COMMON')
+        self.assertDictEqual(select_first_neighbors(direction='bogus'), {})
 
-        input('select a node')
-        select_first_neighbors(direction='outgoing')
+        self.assertRaises(CyError, select_first_neighbors, network='bogus')
 
-        input('select a node')
-        select_first_neighbors(direction='undirected')
-
-        input('select a node')
-        select_first_neighbors(direction='bogus')
-
-        select_first_neighbors(network='bogus')
-
-#    @skip
+    @skip
     @print_entry_exit
     def test_select_nodes(self):
         # Initialization
@@ -105,6 +106,8 @@ class NetworkSelectionTests(unittest.TestCase):
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
+
+
 
 """
     @skip
