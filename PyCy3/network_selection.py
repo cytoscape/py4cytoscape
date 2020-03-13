@@ -34,6 +34,31 @@ from PyCy3.decorators import debug
 # ' }
 # ' @export
 def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
+    """If any nodes are selected in the network, they will be unselected.
+
+    Args:
+        type (str): What kinds of objects to deselect: 'nodes', 'edges' or 'both' (default)
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: '' empty
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> clear_selection()
+        ''
+        >>> clear_selection(type='both')
+        ''
+        >>> clear_selection(type='nodes', network=52)
+        ''
+    """
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     if type in ['nodes', 'both']:

@@ -16,7 +16,7 @@ class NetworkSelectionTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_clear_selection(self):
         # Initialization
@@ -181,7 +181,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_selected_nodes, network='bogus')
 
-#    @skip
+    @skip
     @print_entry_exit
     def test_delete_selected_nodes(self):
         # Initialization
