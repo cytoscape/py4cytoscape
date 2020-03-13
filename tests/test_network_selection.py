@@ -33,7 +33,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         clear_selection(network='bogus')
 
-#    @skip
+    @skip
     @print_entry_exit
     def test_select_first_neigbors(self):
         # Initialization
@@ -102,7 +102,102 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertSetEqual(set(nodes_selected), all_suids)
         self.assertSetEqual(set(get_selected_nodes(node_suids=True)), all_suids)
 
+        # verify that bad nodes don't show up in the selected list
+        clear_selection()
+        nodes_selected = select_nodes(['RAP1x', 'GCR1'], by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_GCR1]))
+
         self.assertRaises(CyError, select_nodes, [], network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_select_all_nodes(self):
+        # Initialization
+        self._load_test_session()
+        all_suids = set(tables.get_table_columns().index)
+
+        # Verify that selector reports all nodes and that Cytoscape thinks all nodes are selected
+        self.assertTrue(set(select_all_nodes()), all_suids)
+        self.assertTrue(set(get_selected_nodes(node_suids=True)), all_suids)
+
+        self.assertRaises(CyError, select_all_nodes, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_get_selected_node_count(self):
+        # Initialization
+        self._load_test_session()
+        all_suids = set(tables.get_table_columns().index)
+
+        # Verify that zero selections is counted
+        node_count = get_selected_node_count()
+        self.assertEqual(node_count, 0)
+
+        # Verify that all selections is counted
+        select_all_nodes()
+        node_count = get_selected_node_count()
+        self.assertEqual(node_count, len(all_suids))
+
+        self.assertRaises(CyError, get_selected_node_count, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_get_selected_nodes(self):
+        # Initialization
+        self._load_test_session()
+
+        # Verify that no node selections is reported
+        self.assertEqual(get_selected_nodes(), None)
+
+        # Verify that nodes reported by SUID are correct
+        nodes_selected = select_nodes(['YNL216W', 'YPL075W'], by_col='name')['nodes']
+        nodes_reported = get_selected_nodes(node_suids=True)
+        self.assertSetEqual(set(nodes_selected), set(nodes_reported))
+
+        # Verify that nodes reported by name are correct
+        nodes_reported = get_selected_nodes(node_suids=False)
+        self.assertSetEqual({'YNL216W', 'YPL075W'}, set(nodes_reported))
+
+        self.assertRaises(CyError, get_selected_nodes, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_invert_node_selection(self):
+        # Initialization
+        self._load_test_session()
+        all_suids = set(tables.get_table_columns().index)
+
+        # Verify that inverting an unselected network reports all nodes selected
+        self.assertSetEqual(set(invert_node_selection()['nodes']), all_suids)
+
+        # Verify that selecting two nodes and inverting returns all nodes except the original two
+        nodes_selected = set(select_nodes(['YNL216W', 'YPL075W'], by_col='name', preserve_current_selection=False)['nodes'])
+        inverted_nodes = set(invert_node_selection()['nodes'])
+        self.assertSetEqual(all_suids.difference(nodes_selected), inverted_nodes)
+
+        # Verify that inverting again gives the original two nodes
+        original_nodes = set(invert_node_selection()['nodes'])
+        self.assertSetEqual(nodes_selected, original_nodes)
+
+        self.assertRaises(CyError, get_selected_nodes, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_delete_selected_nodes(self):
+        # Initialization
+        self._load_test_session()
+        all_node_suids = set(tables.get_table_columns().index)
+        # TODO: Get all edge SUIDs and make sure they're returned by delete_selected_nodes, too
+
+        # Verify that deleting no selected nodes actually deletes no nodes
+        self.assertDictEqual(delete_selected_nodes(), {})
+
+        # Verify that deleting all nodes deletes all nodes
+        invert_node_selection()
+        self.assertSetEqual(set(delete_selected_nodes()['nodes']), all_node_suids)
+        self.assertEqual(get_node_count(), 0)
+
+        self.assertRaises(CyError, get_selected_nodes, network='bogus')
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
