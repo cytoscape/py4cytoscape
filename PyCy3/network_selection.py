@@ -8,31 +8,17 @@ I. General selection functions
 II. Node selection functions
 III. Edge selection functions
 """
+import re
 
 from . import commands
 from . import networks
-from .pycy3_utils import DEFAULT_BASE_URL, node_suid_to_node_name
+from .pycy3_utils import DEFAULT_BASE_URL, node_suid_to_node_name, edge_name_to_edge_suid, edge_suid_to_edge_name
 from PyCy3.decorators import debug
 
 # ==============================================================================
 # I. General selection functions
 # ------------------------------------------------------------------------------
 
-# ' @title Clear Selection
-# '
-# ' @description If any nodes are selected in the network, they will be unselected.
-# ' @param type 'nodes', 'edges' or 'both' (default)
-# ' @param network (optional) Name or SUID of the network. Default is the
-# ' "current" network active in Cytoscape.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return None
-# ' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' clearSelection()
-# ' }
-# ' @export
 def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
     """If any nodes are selected in the network, they will be unselected.
 
@@ -312,3 +298,322 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network delete nodeList=selected network="' + title + '"', base_url=base_url)
     # TODO: Added double quotes to network title
     return res
+
+def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
+    """Take currently selected edges and extends the selection to connected nodes, regardless of directionality.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of selected nodes, and
+            edge list is the SUIDs of newly selected edges
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_nodes_connected_by_selected_edges()
+        {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
+        >>> select_nodes_connected_by_selected_edges(network='My Network')
+        {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
+        >>> select_nodes_connected_by_selected_edges(network=52)
+        {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
+    """
+    suid = networks.get_network_suid(network, base_url=base_url)
+    clear_selection(type = 'nodes', network=suid, base_url=base_url)
+    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"')
+    return res
+
+
+# ==============================================================================
+# II. Edge selection functions
+# ------------------------------------------------------------------------------
+
+def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=None, base_url=DEFAULT_BASE_URL):
+    """Select edges in the network by SUID, name or other column values.
+
+    Args:
+        edges (list): List of edge SUIDs, names or other column values
+        by.col (str): Edge table column to lookup up provide edge values. Default is 'SUID'.
+        preserve_current_selection (bool): Whether to maintain previously selected edges.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and
+            edge list is the SUIDs of newly selected edges
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_edges(None)
+        {'nodes': [], 'edges': [104432, 104431, ...]}
+        >>> select_edges([103332], preserve_current_selection=False, network='My Network')
+        {'nodes': [], 'edges': [108033, 108034]}
+        >>> select_edges(['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C'], by_col='name', preserve_current_selection=True, network=52)
+        {'nodes': [], 'edges': [108033, 108034, 108103]}
+    """
+    suid = networks.get_network_suid(network, base_url=base_url)
+
+    if not preserve_current_selection: clear_selection(type='edges', network=suid, base_url=base_url)
+
+    # TODO: See why R version works with empty nodes list (which should mean "all") or a node list (which is missing a close ")
+    # TODO: Should edges default to None?
+    if not edges or len(edges) == 0:
+        edge_list_str = 'all'
+    else:
+        # create list of COL:VALUE that includes all requested nodes
+        edge_list_str = by_col + ':' + str(edges[0])
+        for n in range(1, len(edges)):
+            edge_list_str += ',' + by_col + ':' + str(edges[n])
+    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"', base_url=base_url)
+    return res
+
+#' Select all edges
+#'
+#' @description Selects all edges in a Cytoscape Network
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return Selects all edges in a specified network.
+#' @author Alexander Pico, Julia Gustavsen
+#' @examples \dontrun{
+#' cw <- CytoscapeWindow('new.demo', new('graphNEL'))
+#' selectAllEdges(cw)
+#' }
+#' @export
+def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
+    suid = networks.get_network_suid(network, base_url=base_url)
+    all_edge_SUIDs = commands.cyrest_get('networks/' + str(suid) + '/edges', base_url=base_url)
+
+    res = select_edges(all_edge_SUIDs)
+    return res['edges']
+    # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
+
+#' @title Invert Edge Selection
+#'
+#' @description Select all edges that were not selected and deselect all edges
+#' that were selected.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return \code{list} of newly selected edge SUIDs
+#' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
+#' @examples \donttest{
+#' invertEdgeSelection()
+#' }
+#' @export
+def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
+    suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('network select invert=edges network=SUID:' + str(suid), base_url=base_url)
+    return res
+
+#' @title Delete Selected Edges
+#'
+#' @description Delete the currently selected edges in the network.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return \code{list} of deleted edge SUIDs
+#' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
+#' @examples \donttest{
+#' deleteSelectedEdges()
+#' }
+#' @export
+def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
+    title = networks.get_network_name(network, base_url=base_url)
+    res = commands.commands_post('network delete edgeList=selected network="' + title + '"', base_url=base_url)
+    # TODO: Added double quotes to network title
+    return res
+
+#' @title Get Selected Edge Count
+#'
+#' @description Returns the number of edges currently selected in the network.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return \code{numeric}
+#' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
+#' @examples \donttest{
+#' getSelectedEdgeCount()
+#' }
+#' @export
+def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
+    return len(res)
+
+#' @title Get Selected Edges
+#'
+#' @description Retrieve the names of all the edges selected in the network.
+#' @param edge.suids Whether to return edge SUIDs. Default is FALSE to return
+#' edge names.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return \code{list} of selected edge names
+#' @examples \donttest{
+#' getSelectedEdges()
+#' }
+#' @export
+def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+
+    if get_selected_edge_count(net_suid, base_url=base_url) == 0:
+        print('No edges selected.')
+        return None
+    else:
+        selected_edge_suids = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'})
+        if edge_suids:
+            return selected_edge_suids
+        else:
+            selected_edge_names = edge_suid_to_edge_name(selected_edge_suids, net_suid, base_url=base_url)
+            return selected_edge_names
+
+#' Select the edges connecting selected nodes in Cytoscape Network
+#'
+#' @description Selects edges in a Cytoscape Network connecting the selected
+#' nodes, including self loops connecting single nodes.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return Lists of SUIDs for selected nodes and edges
+#' @examples \dontrun{
+#' selectEdgesConnectingSelectedNodes()
+#' }
+#' @author Alexander Pico, Julia Gustavsen
+#' @export
+def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+
+    selected_nodes = get_selected_nodes(network=net_suid, base_url=base_url)
+    # TODO: In R version, NA test is after len() test ... shouldn't it be before?
+    if selected_nodes and len(selected_nodes) == 1: return None
+
+    all_edges = networks.get_all_edges(net_suid, base_url=base_url)
+
+    selected_sources = set()
+    selected_targets = set()
+    for n in selected_nodes:
+        source_filter = re.compile('^' + n)
+        target_filter = re.compile(n + '$')
+        new_list = set(filter(source_filter.search, all_edges))
+        selected_sources |= new_list
+        new_list = set(filter(target_filter.search, all_edges))
+        selected_targets |= new_list
+
+    selected_edges = list(selected_sources.intersection(selected_targets))
+
+    if len(selected_edges) == 0: return None
+    res = select_edges(selected_edges, by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
+    return res # ... like {'nodes': [74254, 74253], 'edges': [74600]}
+    # TODO: isn't the pattern match a bit cheesy ... shouldn't it be ^+n+' ('    and    ') '+n+$ ???
+
+
+#' @title Select Edges Adjacent To Selected Nodes
+#'
+#' @description Takes currently selected nodes and adds to the selection all edges
+#' connected to those nodes, regardless of directionality.
+#' @param network (optional) Name or SUID of the network. Default is the
+#' "current" network active in Cytoscape.
+#' @param base.url (optional) Ignore unless you need to specify a custom domain,
+#' port or version to connect to the CyREST API. Default is http://localhost:1234
+#' and the latest version of the CyREST API supported by this version of RCy3.
+#' @return Lists of SUIDs for selected nodes and edges
+#' @examples \donttest{
+#' selectEdgesAdjacentToSelectedNodes()
+#' }
+#' @export
+def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
+    suid = networks.get_network_suid(network=network, base_url=base_url)
+    clear_selection(type='edges', network=suid, base_url=base_url)
+    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"')
+    return res
+
+
+# ' @title Delete Duplicate Edges
+# '
+# ' @description Removes edges with duplicate names. Only considers cases with
+# ' identical source, target, interaction and directionality.
+# ' @details Duplicate edges are first selected and then deleted. Prior edge
+# ' selections will be lost; node selections will not be affected.
+# ' @param network (optional) Name or SUID of the network. Default is the
+# ' "current" network active in Cytoscape.
+# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
+# ' port or version to connect to the CyREST API. Default is http://localhost:1234
+# ' and the latest version of the CyREST API supported by this version of RCy3.
+# ' @return Lists of SUIDs for selected nodes and edges
+# ' @examples \donttest{
+# ' deleteDuplicateEdges()
+# ' }
+# ' @export
+def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    all_edges = networks.get_all_edges(net_suid, base_url=base_url)
+
+    # Find all edges that have exactly one duplicate, then create a list of all duplicates
+    edge_dict = dict.fromkeys(all_edges, 0)
+    dup_edge_suids = []
+    for edge in all_edges:
+        if edge_dict[edge] == 1:
+            edge_suids = edge_name_to_edge_suid(edge, network=net_suid, base_url=base_url)
+            dup_edge_suids.append(edge_suids[1:])
+        edge_dict[edge] += 1
+
+    select_edges(dup_edge_suids, by_col='SUID', preserve_current_selection=False, network=net_suid, base_url=base_url)
+    res = delete_selected_edges(network=net_suid, base_url=base_url)
+    return res
+
+
+# ' @title Delete Self Loops
+# '
+# ' @description Removes edges that connect to a single node as both source and
+# ' target.
+# ' @details Self loop edges are first selected and then deleted. Prior edge and
+# ' node selections will be lost.
+# ' @param network (optional) Name or SUID of the network. Default is the
+# ' "current" network active in Cytoscape.
+# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
+# ' port or version to connect to the CyREST API. Default is http://localhost:1234
+# ' and the latest version of the CyREST API supported by this version of RCy3.
+# ' @return Lists of SUIDs for selected nodes and edges
+# ' @examples \donttest{
+# ' deleteSelfLoops()
+# ' }
+# ' @export
+def delete_self_loops(network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+
+    clear_selection('both', net_suid, base_url=base_url)
+    all_nodes = networks.get_all_nodes(net_suid, base_url=base_url)
+
+    # For each node, select the node, then select each edge that connects it to itself, then zap the edge
+    for n in all_nodes:
+        select_nodes(n, by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
+        select_edges_connecting_selected_nodes(network=net_suid, base_url=base_url)
+        delete_selected_edges(network=net_suid, base_url=base_url)
+
+    clear_selection('both', network=net_suid, base_url=base_url)

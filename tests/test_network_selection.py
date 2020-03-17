@@ -16,22 +16,50 @@ class NetworkSelectionTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @skip
+    @skip
     @print_entry_exit
     def test_clear_selection(self):
         # Initialization
         self._load_test_session()
+        COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
+        SELECTED_NODES = ['YGL035C', 'YLR044C', 'YNL216W', 'YIL162W']
+        SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
 
-        input('select a bunch of nodes and edges')
+        # Select some nodes and edges, then verify that all selections are cleared
+        select_nodes(COMMON_NODES, by_col='COMMON')
+        selected_nodes = get_selected_nodes()
+        select_edges_connecting_selected_nodes()
+        selected_edges = get_selected_edges()
+        clear_selection()
+        self.assertSetEqual(set(selected_nodes), set(SELECTED_NODES))
+        self.assertSetEqual(set(selected_edges), set(SELECTED_EDGES))
+        self.assertEqual(get_selected_nodes(), None)
+        self.assertEqual(get_selected_edges(), None)
+
+        # Select some nodes and edges, then verify that only nodes are cleared
+        select_nodes(COMMON_NODES, by_col='COMMON')
+        selected_nodes = get_selected_nodes()
+        select_edges_connecting_selected_nodes()
+        selected_edges = get_selected_edges()
+        clear_selection('nodes')
+        self.assertSetEqual(set(selected_nodes), set(SELECTED_NODES))
+        self.assertSetEqual(set(selected_edges), set(SELECTED_EDGES))
+        self.assertEqual(get_selected_nodes(), None)
+        self.assertSetEqual(set(get_selected_edges()), set(selected_edges))
         clear_selection()
 
-        input('select a bunch of nodes and edges')
-        clear_selection('nodes')
-
-        input('select a bunch of nodes and edges')
+        # Select some nodes and edges, then verify that only edges are cleared
+        select_nodes(COMMON_NODES, by_col='COMMON')
+        selected_nodes = get_selected_nodes()
+        select_edges_connecting_selected_nodes()
+        selected_edges = get_selected_edges()
         clear_selection('edges')
+        self.assertSetEqual(set(selected_nodes), set(SELECTED_NODES))
+        self.assertSetEqual(set(selected_edges), set(SELECTED_EDGES))
+        self.assertSetEqual(set(get_selected_nodes()), set(selected_nodes))
+        self.assertEqual(get_selected_edges(), None)
 
-        clear_selection(network='bogus')
+        self.assertRaises(CyError, clear_selection, network='bogus')
 
     @skip
     @print_entry_exit
@@ -198,6 +226,55 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertEqual(get_node_count(), 0)
 
         self.assertRaises(CyError, get_selected_nodes, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_select_nodes_connected_by_selected_edges(self):
+        # Initialization
+        self._load_test_session()
+        COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
+        SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+
+        # Select some nodes and verify that the expected edges are selected
+        selected_nodes = select_nodes(COMMON_NODES, by_col='COMMON')['nodes']
+        selected_edges = edge_name_to_edge_suid(SELECTED_EDGES) # expected edges
+        selection = select_edges_connecting_selected_nodes()
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(selected_edges), set(selection['edges']))
+
+        self.assertRaises(CyError, select_nodes_connected_by_selected_edges, network='bogus')
+
+
+    @skip
+    @print_entry_exit
+    def test_select_edges(self):
+        # Initialization
+        self._load_test_session()
+        SINGLE_EDGE = ['YDR412W (pp) YPR119W']
+        single_edge_suid = edge_name_to_edge_suid(SINGLE_EDGE) # expected edges
+        EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+        edge_list_suids = edge_name_to_edge_suid(EDGE_LIST) # expected edges
+
+        # Try selecting all edges
+        selection = select_edges(None)
+        self.assertSetEqual(set(selection['edges']), set(edge_name_to_edge_suid(get_all_edges())))
+        self.assertListEqual(selection['nodes'], [])
+
+        selection = select_edges(single_edge_suid, preserve_current_selection=False)
+        self.assertSetEqual(set(single_edge_suid), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
+
+        selection = select_edges(EDGE_LIST, by_col='name', preserve_current_selection=True)
+        self.assertSetEqual(set(edge_list_suids), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
+        expected_edges = single_edge_suid.copy()
+        expected_edges.extend(edge_list_suids)
+        selected_edges = get_selected_edges(edge_suids=True)
+        self.assertSetEqual(set(expected_edges), set(selected_edges))
+
+        self.assertRaises(CyError, select_edges, None, network='bogus')
+
+
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)

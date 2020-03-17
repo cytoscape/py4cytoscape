@@ -22,6 +22,7 @@ def build_url(base_url=DEFAULT_BASE_URL, command=None):
 def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
     if node_suids is None: return None
     if isinstance(node_suids, str): node_suids = [node_suids]
+
     df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
     all_names = df['name'].values
 
@@ -75,3 +76,23 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     edge_suids = [x[0] if len(x) == 1 else x    for x in edge_suids]
 
     return edge_suids
+
+def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
+    if edge_suids is None: return None
+    if isinstance(edge_suids, str): edge_suids = [edge_suids]
+
+    df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
+    all_names = df['name'].values
+
+    test = [edge_suid in all_names    for edge_suid in edge_suids]
+    if not False in test: return edge_suids # the list already had valid names
+
+    all_suids_list = df.index.tolist()
+    try:
+        # map all SUIDS into column names ... all SUIDS *must* be actual SUIDS
+        edge_names = [all_names[all_suids_list.index(edge_suid)]    for edge_suid in edge_suids]
+        return edge_names
+    except Exception as e:
+        print("Invalid SUID in list: " + str(edge_suids))
+        raise CyError('Invalid SUID in list')
+
