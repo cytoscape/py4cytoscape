@@ -380,22 +380,31 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
     res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"', base_url=base_url)
     return res
 
-#' Select all edges
-#'
-#' @description Selects all edges in a Cytoscape Network
-#' @param network (optional) Name or SUID of the network. Default is the
-#' "current" network active in Cytoscape.
-#' @param base.url (optional) Ignore unless you need to specify a custom domain,
-#' port or version to connect to the CyREST API. Default is http://localhost:1234
-#' and the latest version of the CyREST API supported by this version of RCy3.
-#' @return Selects all edges in a specified network.
-#' @author Alexander Pico, Julia Gustavsen
-#' @examples \dontrun{
-#' cw <- CytoscapeWindow('new.demo', new('graphNEL'))
-#' selectAllEdges(cw)
-#' }
-#' @export
 def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
+    """Selects all edges in a Cytoscape Network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: list of SUIDs for edges selected
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_all_edges()
+        [104432, 104431, ...]
+        >>> select_all_edges(network='My Network')
+        [104432, 104431, ...]
+        >>> select_all_edges(network=52)
+        [104432, 104431, ...]
+    """
     suid = networks.get_network_suid(network, base_url=base_url)
     all_edge_SUIDs = commands.cyrest_get('networks/' + str(suid) + '/edges', base_url=base_url)
 
@@ -419,45 +428,91 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
 #' }
 #' @export
 def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
+    """Select all edges that were not selected and deselect all edges that were selected.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and
+            edge list is the SUIDs of selected edges -- dict is {} if no edges remain selected
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> invert_edge_selection()
+        {'nodes': [], 'edges': [104432, 104431, ...]}
+        >>> invert_edge_selection(network='My Network')
+        {}
+        >>> invert_edge_selection(network=52)
+        {'nodes': [], 'edges': [104432, 104431, ...]}
+    """
     suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post('network select invert=edges network=SUID:' + str(suid), base_url=base_url)
     return res
 
-#' @title Delete Selected Edges
-#'
-#' @description Delete the currently selected edges in the network.
-#' @param network (optional) Name or SUID of the network. Default is the
-#' "current" network active in Cytoscape.
-#' @param base.url (optional) Ignore unless you need to specify a custom domain,
-#' port or version to connect to the CyREST API. Default is http://localhost:1234
-#' and the latest version of the CyREST API supported by this version of RCy3.
-#' @return \code{list} of deleted edge SUIDs
-#' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-#' @examples \donttest{
-#' deleteSelectedEdges()
-#' }
-#' @export
 def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
+    """Delete the currently selected edges in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and
+            edge list is the SUIDs of deleted edges -- dict is {} if no edges were deleted
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_selected_edges()
+        {'nodes': [], 'edges': [104432, 104431, ...]}
+        >>> delete_selected_edges(network='My Network')
+        {}
+        >>> delete_selected_edges(network=52)
+        {'nodes': [], 'edges': [104432, 104431, ...]}
+    """
     title = networks.get_network_name(network, base_url=base_url)
     res = commands.commands_post('network delete edgeList=selected network="' + title + '"', base_url=base_url)
     # TODO: Added double quotes to network title
     return res
 
-#' @title Get Selected Edge Count
-#'
-#' @description Returns the number of edges currently selected in the network.
-#' @param network (optional) Name or SUID of the network. Default is the
-#' "current" network active in Cytoscape.
-#' @param base.url (optional) Ignore unless you need to specify a custom domain,
-#' port or version to connect to the CyREST API. Default is http://localhost:1234
-#' and the latest version of the CyREST API supported by this version of RCy3.
-#' @return \code{numeric}
-#' @author AlexanderPico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-#' @examples \donttest{
-#' getSelectedEdgeCount()
-#' }
-#' @export
 def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
+    """Return the number of edges currently selected in the network.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        int: count of edges selected in the network
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_selected_edge_count()
+        0
+        >>> get_selected_edge_count(network='My Network')
+        359
+        >>> get_selected_edge_count(network=52)
+        359
+    """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)

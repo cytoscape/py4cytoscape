@@ -255,15 +255,17 @@ class NetworkSelectionTests(unittest.TestCase):
         EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
         edge_list_suids = edge_name_to_edge_suid(EDGE_LIST) # expected edges
 
-        # Try selecting all edges
+        # Verify that selecting all edges works
         selection = select_edges(None)
         self.assertSetEqual(set(selection['edges']), set(edge_name_to_edge_suid(get_all_edges())))
         self.assertListEqual(selection['nodes'], [])
 
+        # Verify that selecting a single edge works
         selection = select_edges(single_edge_suid, preserve_current_selection=False)
         self.assertSetEqual(set(single_edge_suid), set(selection['edges']))
         self.assertListEqual(selection['nodes'], [])
 
+        # Verify that selecting multiple edge works, and that it adds to the previously selected edge
         selection = select_edges(EDGE_LIST, by_col='name', preserve_current_selection=True)
         self.assertSetEqual(set(edge_list_suids), set(selection['edges']))
         self.assertListEqual(selection['nodes'], [])
@@ -274,7 +276,69 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_edges, None, network='bogus')
 
+    @skip
+    @print_entry_exit
+    def test_select_all_edges(self):
+        # Initialization
+        self._load_test_session()
 
+        # TODO: I seem to be converting between edge IDs and edge names a lot. Is there a way to avoid the explicit conversion?
+        # Verify that all edges get selected
+        all_edge_suids = edge_name_to_edge_suid(get_all_edges())
+        self.assertSetEqual(set(all_edge_suids), set(select_all_edges()))
+
+        self.assertRaises(CyError, select_all_edges, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_invert_edge_selection(self):
+        # Initialization
+        self._load_test_session()
+        all_edge_suids = edge_name_to_edge_suid(get_all_edges())
+
+        # Verify that all edges get selected
+        self.assertSetEqual(set(all_edge_suids), set(invert_edge_selection()['edges']))
+
+        # Verify that all edges get deselected
+        self.assertDictEqual(invert_edge_selection(), {})
+
+        # Verify that all edges get selected
+        self.assertSetEqual(set(all_edge_suids), set(invert_edge_selection()['edges']))
+
+        self.assertRaises(CyError, invert_edge_selection, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_delete_selected_edges(self):
+        # Initialization
+        self._load_test_session()
+        all_edge_suids = edge_name_to_edge_suid(get_all_edges())
+
+        # Verify that no edges are returned when there are no edges to delete
+        self.assertDictEqual(delete_selected_edges(), {})
+
+        # Verify that all edges get selected and are deleted
+        self.assertSetEqual(set(all_edge_suids), set(invert_edge_selection()['edges']))
+        self.assertSetEqual(set(all_edge_suids), set(delete_selected_edges()['edges']))
+        self.assertIsNone(get_all_edges())
+
+        self.assertRaises(CyError, delete_selected_edges, network='bogus')
+
+    @skip
+    @print_entry_exit
+    def test_get_selected_edge_count(self):
+        # Initialization
+        self._load_test_session()
+        all_edge_suids = edge_name_to_edge_suid(get_all_edges())
+
+        # Verify that when no edges are selected, the count is 0
+        self.assertEqual(get_selected_edge_count(), 0)
+
+        # Verify that all edges get selected and are counted
+        self.assertSetEqual(set(all_edge_suids), set(invert_edge_selection()['edges']))
+        self.assertEqual(get_selected_edge_count(), len(all_edge_suids))
+
+        self.assertRaises(CyError, get_selected_edge_count, network='bogus')
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
