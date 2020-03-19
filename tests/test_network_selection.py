@@ -16,7 +16,7 @@ class NetworkSelectionTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_clear_selection(self):
         # Initialization
@@ -61,7 +61,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, clear_selection, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_first_neigbors(self):
         # Initialization
@@ -88,7 +88,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_first_neighbors, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_nodes(self):
         # Initialization
@@ -100,8 +100,11 @@ class NetworkSelectionTests(unittest.TestCase):
         suid_PDC1 = df_all_nodes[df_all_nodes['COMMON'] == 'PDC1'].index[0]
         suid_PEP12 = df_all_nodes[df_all_nodes['COMMON'] == 'PEP12'].index[0]
 
+        # Verify that selecting no nodes reports that no nodes were selected
+        self.assertDictEqual(select_nodes(None), {})
+
         # Verify that all nodes are reported as selected
-        all_selected = select_nodes(None)['nodes']
+        all_selected = select_nodes(list(all_suids))['nodes']
         self.assertSetEqual(all_suids, set(all_selected))
 
         # Verify that only RAP1 is reported selected
@@ -137,7 +140,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_nodes, [], network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_all_nodes(self):
         # Initialization
@@ -150,7 +153,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_all_nodes, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_selected_node_count(self):
         # Initialization
@@ -168,7 +171,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_selected_node_count, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_selected_nodes(self):
         # Initialization
@@ -188,7 +191,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_selected_nodes, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_invert_node_selection(self):
         # Initialization
@@ -209,7 +212,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_selected_nodes, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_delete_selected_nodes(self):
         # Initialization
@@ -227,7 +230,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_selected_nodes, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_nodes_connected_by_selected_edges(self):
         # Initialization
@@ -245,7 +248,7 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertRaises(CyError, select_nodes_connected_by_selected_edges, network='bogus')
 
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_edges(self):
         # Initialization
@@ -256,9 +259,7 @@ class NetworkSelectionTests(unittest.TestCase):
         edge_list_suids = edge_name_to_edge_suid(EDGE_LIST) # expected edges
 
         # Verify that selecting all edges works
-        selection = select_edges(None)
-        self.assertSetEqual(set(selection['edges']), set(edge_name_to_edge_suid(get_all_edges())))
-        self.assertListEqual(selection['nodes'], [])
+        self.assertDictEqual(select_edges(None), {})
 
         # Verify that selecting a single edge works
         selection = select_edges(single_edge_suid, preserve_current_selection=False)
@@ -276,7 +277,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_edges, None, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_select_all_edges(self):
         # Initialization
@@ -289,7 +290,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_all_edges, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_invert_edge_selection(self):
         # Initialization
@@ -307,7 +308,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, invert_edge_selection, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_delete_selected_edges(self):
         # Initialization
@@ -324,7 +325,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, delete_selected_edges, network='bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_selected_edge_count(self):
         # Initialization
@@ -339,6 +340,116 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertEqual(get_selected_edge_count(), len(all_edge_suids))
 
         self.assertRaises(CyError, get_selected_edge_count, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_get_selected_edges(self):
+        # Initialization
+        self._load_test_session()
+        EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+
+        # Verify that when no edges are selected, the selected edge list is null
+        self.assertIsNone(get_selected_edges())
+
+        # Verify that when some edges are selected, they're returned in the list
+        select_edges(EDGE_LIST, by_col='name')
+        self.assertSetEqual(set(get_selected_edges(edge_suids=False)), set(EDGE_LIST))
+        self.assertSetEqual(set(get_selected_edges(edge_suids=True)), set(edge_name_to_edge_suid(EDGE_LIST)))
+
+        self.assertRaises(CyError, get_selected_edges, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_select_edges_connecting_selected_nodes(self):
+        # Initialization
+        self._load_test_session()
+        COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2', 'PFK27', 'TAH18'] # PFK27 & TAH18 aren't connected to the other nodes
+        self_edge_PFK27 = add_cy_edges(['YOL136C', 'YOL136C'], edge_type='pp')
+        EXPECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C', 'YOL136C (pp) YOL136C']
+
+        # Verify that when no edges are selected, no edges get selected
+        self.assertIsNone(select_edges_connecting_selected_nodes())
+
+        # Verify that when some nodes are selected, they're returned in the list along with edges that connect them
+        selected_nodes = select_nodes(COMMON_NODES, by_col='COMMON')['nodes']
+        selection = select_edges_connecting_selected_nodes()
+        expected_edges = edge_name_to_edge_suid(EXPECTED_EDGES)  # expected edges
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(expected_edges), set(selection['edges']))
+
+        self.assertRaises(CyError, select_edges_connecting_selected_nodes, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_select_edges_adjacent_to_selected_nodes(self):
+        # Initialization
+        self._load_test_session()
+        COMMON_NODES = ['PDC1', 'TAH18']
+        EXPECTED_EDGES = ['YPR048W (pp) YDL215C', 'YER179W (pp) YLR044C', 'YGL035C (pd) YLR044C', 'YPR048W (pp) YOR355W', 'YNL216W (pd) YLR044C', 'YNL199C (pp) YPR048W']
+
+        # Verify that when no edges are selected, no edges get selected
+        self.assertDictEqual(select_edges_adjacent_to_selected_nodes(), {})
+
+        # Verify that when some nodes are selected, they're returned in the list along with edges that connect them
+        selected_nodes = select_nodes(COMMON_NODES, by_col='COMMON')['nodes']
+        expected_edges = edge_name_to_edge_suid(EXPECTED_EDGES)  # expected edges
+        selection = select_edges_adjacent_to_selected_nodes()
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(expected_edges), set(selection['edges']))
+
+        self.assertRaises(CyError, select_edges_connecting_selected_nodes, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_delete_duplicate_edges(self):
+        # Initialization
+        self._load_test_session()
+        original_edge_count = get_edge_count()
+        EDGE_TO_DUP = ['YNL216W (pd) YLR044C']
+        original_edge_suid = get_edge_info([EDGE_TO_DUP])[0]['SUID']
+
+        # Verify that when no edges are duplicated, no edges get deleted
+        self.assertDictEqual(delete_duplicate_edges(), {})
+        self.assertEqual(get_edge_count(), original_edge_count)
+
+        # Verify that duplicating an edge then deleting one of the same-name edges results in the original network
+        first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges()['edges']
+        self.assertEqual(len(edge_deleted_suids), 1)
+        self.assertTrue(set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid]))
+        self.assertEqual(get_edge_count(), original_edge_count)
+
+        # Verify that duplicating an edge twice then deleting one of the same-name edges results in the original network
+        first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        second_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges()['edges']
+        self.assertEqual(len(edge_deleted_suids), 2)
+        self.assertTrue(set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid, second_copy_edge_suid]))
+        self.assertEqual(get_edge_count(), original_edge_count)
+
+        self.assertRaises(CyError, delete_duplicate_edges, network='bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_delete_self_loops(self):
+        # Initialization
+        self._load_test_session()
+
+        # Verify that when there are no self-edges, none get deleted
+        original_edges = get_all_edges()
+        self.assertEqual(delete_self_loops(), '')
+        self.assertSetEqual(set(get_all_edges()), set(original_edges))
+
+        # Add a few self-edges and make sure they get deleted
+        self_edge_PFK27_1 = add_cy_edges(['YOL136C', 'YOL136C'], edge_type='pp')
+        self_edge_PFK27_2 = add_cy_edges(['YOL136C', 'YOL136C'], edge_type='pp')
+        self_edge_PDC1 = add_cy_edges(['YLR044C', 'YLR044C'], edge_type='pp')
+        self.assertEqual(delete_self_loops(), '')
+        self.assertSetEqual(set(get_all_edges()), set(original_edges))
+
+        self.assertRaises(CyError, delete_self_loops, network='bogus')
+
+
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
