@@ -48,16 +48,8 @@ PyCy3.commands module
     :undoc-members:
     :show-inheritance:
 
-PyCy3.decorators module
------------------------
-
-.. automodule:: PyCy3.decorators
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 PyCy3.exceptions module
------------------------
+=======================
 
 .. automodule:: PyCy3.exceptions
     :members:
@@ -65,7 +57,7 @@ PyCy3.exceptions module
     :show-inheritance:
 
 PyCy3.layouts module
---------------------
+====================
 
 .. automodule:: PyCy3.layouts
     :members:
@@ -73,7 +65,7 @@ PyCy3.layouts module
     :show-inheritance:
 
 PyCy3.network\_selection module
--------------------------------
+===============================
 
 .. automodule:: PyCy3.network_selection
     :members:
@@ -81,7 +73,7 @@ PyCy3.network\_selection module
     :show-inheritance:
 
 PyCy3.session module
----------------------
+====================
 
 .. automodule:: PyCy3.session
     :members:
@@ -89,9 +81,28 @@ PyCy3.session module
     :show-inheritance:
 
 PyCy3.networks module
----------------------
+=====================
 
 .. automodule:: PyCy3.networks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+PyCy3.tables module
+===================
+
+.. automodule:: PyCy3.tables
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+PyCy3 Internal Modules
+======================
+
+PyCy3.decorators module
+-----------------------
+
+.. automodule:: PyCy3.decorators
     :members:
     :undoc-members:
     :show-inheritance:
@@ -103,14 +114,5 @@ PyCy3.pycy3\_utils module
     :members:
     :undoc-members:
     :show-inheritance:
-
-PyCy3.tables module
--------------------
-
-.. automodule:: PyCy3.tables
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 
