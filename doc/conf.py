@@ -84,36 +84,22 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# Alabaster is the default, but is too white, so I commented out: html_theme = 'alabaster'
+# [BD] Alabaster is the default, but is too white, so I commented out: html_theme = 'alabaster'
 # Note that this means we can also comment out certain CSS (located in _static/css)
 import sphinx_rtd_theme
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# from http://stackoverflow.com/questions/32079200/how-do-i-set-up-custom-styles-for-restructuredtext-sphinx-readthedocs-etc/32079202#32079202
+# [BD] from http://stackoverflow.com/questions/32079200/how-do-i-set-up-custom-styles-for-restructuredtext-sphinx-readthedocs-etc/32079202#32079202
 html_logo = '_static/images/cytoscape3-icon-trans-128x128.png'
 html_favicon = '_static/images/cytoscape3-icon.ico'
-html_theme_options = {
-#    'canonical_url': '',
-#    'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
-#    'logo_only': False,
-#    'display_version': True,
-    'prev_next_buttons_location': 'top',
-#    'style_external_links': False,
-#    'vcs_pageview_mode': '',
-#    'style_nav_header_background': 'blue', # This controls the background for the logo in the upper left corner
-    # Toc options
-#    'collapse_navigation': True,
-#    'sticky_navigation': True,
-#    'navigation_depth': 4,
-#    'includehidden': True,
-#    'titles_only': True
-}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'prev_next_buttons_location': 'both',
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
