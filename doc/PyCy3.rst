@@ -2,6 +2,8 @@
 PyCy3 package
 =============
 
+.... Text that describes the PyCy3 package ...
+
 .. automodule:: PyCy3
     :members:
     :undoc-members:
