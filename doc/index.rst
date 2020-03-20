@@ -14,7 +14,7 @@ Copyright (c) 2020 The Cytoscape Consortium
 
 .. toctree::
    :maxdepth: 4
-   :collapse_navigation:True
+   :collapse_navigation: True
 
    intro
    PyCy3
