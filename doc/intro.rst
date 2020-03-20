@@ -1,5 +1,4 @@
-Getting Started with PyCy3
-==========================
+
 
 This section contains hints to help us authors in the editing process. Please skip this section for now.
 
