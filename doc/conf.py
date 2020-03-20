@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx_autodoc_typehints',
+    'sphinx_rtd_theme',
 ]
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::) in autodoc
@@ -91,6 +92,22 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # from http://stackoverflow.com/questions/32079200/how-do-i-set-up-custom-styles-for-restructuredtext-sphinx-readthedocs-etc/32079202#32079202
 html_logo = '_static/images/cytoscape3-icon-trans-128x128.png'
 html_favicon = '_static/images/cytoscape3-icon.ico'
+html_theme_options = {
+#    'canonical_url': '',
+#    'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
+#    'logo_only': False,
+#    'display_version': True,
+#    'prev_next_buttons_location': 'bottom',
+#    'style_external_links': False,
+#    'vcs_pageview_mode': '',
+#    'style_nav_header_background': 'white',
+    # Toc options
+#    'collapse_navigation': True,
+#    'sticky_navigation': True,
+#    'navigation_depth': 4,
+#    'includehidden': True,
+#    'titles_only': False
+}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
