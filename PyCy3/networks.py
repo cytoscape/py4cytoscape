@@ -906,6 +906,9 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # call Cytoscape to create this network and return the SUID
     network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection}, body=json_network, base_url=base_url)
+    # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
+    # "vizmap apply" command below fails for lack of a valid view.
+    time.sleep(2)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -926,6 +929,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         # if the edge list looks real, add the edge attributes (if any)
         if not set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column']) is None:
             tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID', network=network_suid, base_url=base_url)
+
 
     print('Applying default style...')
     commands.commands_post('vizmap apply styles="default"', base_url=base_url)
@@ -949,22 +953,24 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        int: The ``SUID`` of the new network
+        dict: {"networks": [network suid], "views": [suid for views]} where networks and views lists have length 1
 
     Raises:
+        CyError: if file cannot be found or loaded
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> import_network_from_file() # import demo network
-        1477
-        >>> import_network_from_file('sampleData/yeastHighQuality.sif')
-        1477
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_file('data/yeastHighQuality.sif')
+        {'networks': [131481], 'views': [131850]}
     """
     if file is None:
-        file = 'extdata/galfiltered.sif'
+        file = os.path.abspath('data/galFiltered.sif')
     else:
         file = os.path.abspath(file)
     res = commands.commands_post('network load file file=' + file, base_url=base_url)
+    # TODO: Fix R documentation to match what's really returned
 
     # should not be necessary, but is because "network load file" doesn't actually set the current network
     # until after it's done. So, without the sleep(), setting the current network will be superceded by
