@@ -6,12 +6,14 @@ PyCy3 package
 .... Text that describes the PyCy3 package ...
 
 .. contents:: Table of Contents
+   :depth: 2
 
 Getting Started with PyCy3
 ==========================
 This section contains hints to help us authors in the editing process. Please skip this section for now.
 
 Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
+Look here for a general discussion of directives: https://docutils.sourceforge.io/docs/ref/rst/directives.html
 
 
 .. code-block:: python
