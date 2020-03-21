@@ -1,5 +1,6 @@
+*************
 PyCy3 package
-=============
+*************
 
 .... Text that describes the PyCy3 package ...
 
@@ -29,16 +30,18 @@ Look here for a general discussion of directives: https://docutils.sourceforge.i
 |  That changed.
 |  More changed.
 
+************
 PyCy3 module
-============
+************
 
 .. automodule:: PyCy3
     :members:
     :undoc-members:
     :show-inheritance:
 
+*********************
 PyCy3.commands module
-=====================
+*********************
 
 .. automodule:: PyCy3.commands
     :members:
