@@ -17,6 +17,9 @@ Copyright (c) 2020 The Cytoscape Consortium
    :maxdepth: 4
 
    PyCy3
+.. Note that this sets up PyCy3 as a chapter, which means that all modules will be on the same
+   page. To get the Previous and Next buttons to move between modules, list each module here
+   instead of within PyCy3
 
 
 .. rubric:: Indices and tables
