@@ -19,8 +19,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    PyCy3
 
 
-Indices and tables
-------------------
+.. rubric:: Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
