@@ -749,7 +749,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
         Vertices and edges from the igraph network will be translated into nodes and edges
         in Cytoscape. Associated attributes will also be passed to Cytoscape as node and edge
         table columns. Note: undirected networks will be implicitly modeled as directed
-        in Cytoscape. Conversion back via \code{createIgraphFromNetwork} will result in
+        in Cytoscape. Conversion back via ``createIgraphFromNetwork`` will result in
         a directed network. Also note: igraph attributes of type "other" denoted by "x"
         are converted to "String" in Cytoscape.
 
@@ -774,7 +774,8 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     See Also:
-        create_network_from_data_frames
+        :meth:`create_network_from_data_frames`
+
         create_igraph_from_network
 
     Examples:
