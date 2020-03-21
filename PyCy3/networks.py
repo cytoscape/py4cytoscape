@@ -773,6 +773,10 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
         CyError: if network name or SUID doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
+    See Also:
+        create_network_from_data_frames
+        create_igraph_from_network
+
     Examples:
         >>> g = ig.Graph()
         >>> g.add_vertices(3)
