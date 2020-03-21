@@ -5,9 +5,6 @@ PyCy3 package
 
 .... Text that describes the PyCy3 package ...
 
-.. contents:: Table of Contents
-   :depth: 2
-
 Getting Started with PyCy3
 ==========================
 This section contains hints to help us authors in the editing process. Please skip this section for now.
