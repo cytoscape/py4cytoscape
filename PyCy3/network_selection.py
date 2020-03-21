@@ -162,6 +162,9 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
         [107504, 107503, ...]
         >>> select_all_nodes(52)
         [107504, 107503, ...]
+
+    See Also:
+        :meth:`select_nodes`
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     all_node_SUIDs = commands.cyrest_get('networks/' + str(suid) + '/nodes', base_url=base_url)

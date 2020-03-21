@@ -385,6 +385,9 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
         >>> get_first_neighbors('YBR020W', as_nested_list=False)
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']
+
+    See Also:
+        :meth:`select_nodes`, :meth:`select_first_neighbors`
     """
     #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
@@ -1029,6 +1032,9 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
         + edges (vertex names):
         YML064C->YLR284C, YML064C->YHR198C, YKL074C->YGL035C, YDL081C->YLR340W,
         ...
+
+    See Also:
+        :meth:`create_network_from_data_frames`, :meth:`create_network_from_igraph`
     """
     suid = get_network_suid(network, base_url=base_url)
 

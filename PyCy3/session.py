@@ -74,6 +74,9 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
         {}
         >>> open_session('https://github.com/bdemchak/PyCy3/blob/master/tests/data/Affinity%20Purification.cys')
         {}
+
+    See Also:
+        :meth:`save_session`
     """
     type = 'file'
     if file_location is None:
