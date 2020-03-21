@@ -775,8 +775,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 
     See Also:
         :meth:`create_network_from_data_frames`
-
-        create_igraph_from_network
+        :meth:`create_igraph_from_network`
 
     Examples:
         >>> g = ig.Graph()
