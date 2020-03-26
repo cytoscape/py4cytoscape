@@ -400,13 +400,15 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dataframe: contains map_from and map_to columns. Beware: if map_to is not unique, it will be suffixed with an
-            incrementing number in parentheses, e.g., if mapIdentifiers is repeated on the same network. However,
-            the original map_to column will be returned regardless.
+        dataframe: contains map_from and map_to columns.
+
+    Warnings:
+        If map_to is not unique, it will be suffixed with an incrementing number in parentheses, e.g.,
+        if mapIdentifiers is repeated on the same network. However, the original map_to column will be returned regardless.
 
     Raises:
         HTTPError: if table or namespace or table doesn't exist in network
-        CyError: if network name or SUID doesn't exist
+        CyError: if network name or SUID doesn't exist, or if mapping parameter is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
