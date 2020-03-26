@@ -2,7 +2,7 @@
 
 from . import commands
 from . import networks
-from .pycy3_utils import DEFAULT_BASE_URL
+from .pycy3_utils import *
 
 from .decorators import debug
 import pandas as pd
@@ -11,7 +11,93 @@ import numpy as np
 def __init__(self):
     pass
 
+def delete_table_column(column, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Delete a column from node, edge or network tables.
+
+    Args:
+        column (str): Name of the column to delete
+        table (str): Name of table, e.g., node (default), edge, network
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: ''
+
+    Note:
+        No error is returned if the column doesn't exist in the table
+
+    Raises:
+        HTTPError: if table or namespace doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_table_column('BetweennessCentrality')
+        ''
+        >>> delete_table_column('EdgeBetweenness', table='edge')
+        ''
+        >>> delete_table_column('BetweennessCentrality', network='My Network')
+       ''
+    """
+    # TODO: Fix R's documentation ... the return value is wrong
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.cyrest_delete('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns/'+ column, base_url=base_url, require_json=False)
+    return res
+
+
 def get_table_columns(table='node', columns=None, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve one or more columns of data from node, edge or network tables.
+
+    The 'SUID' column is always retrieved along with specified columns. The 'SUID' values are used as ``index`` in
+    the returned ``dataframe``.
+
+    Args:
+        table (str): Name of table, e.g., node (default), edge, network
+        columns (str or list or None): Names of columns to retrieve values from as list object or comma-separated list;
+            default is all columns
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dataframe: columns include SUID and each other requested column, and rows include the corresponding data
+            for each node/edge or network. For requested columns not present in the table, the column is still
+            returned but is full of ``nan`` values.
+
+    Raises:
+        HTTPError: if table or namespace doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_table_columns()
+              SUID shared name     name  ...   gal4RGsig   gal80Rsig isExcludedFromPaths
+        3072  3072     YDL081C  YDL081C  ...    0.048133  5.9631e-06               False
+        3073  3073     YGL166W  YGL166W  ...   0.0012181    0.032147               False
+        ...
+        >>> get_table_columns(columns=['gal1RGexp', 'Eccentricity', 'Stress'])
+            gal1RGexp Eccentricity  Stress
+        4608    -0.262           17       0
+        4609    -0.704           17    2092
+        ...
+        >>> get_table_columns(columns='Stress, NumberOfDirectedEdges')
+                Stress NumberOfDirectedEdges
+        4608       0                     1
+        4609    2092                     2
+        ...
+        >>> get_table_columns(columns='Stress, bogus')
+              Stress bogus
+        4608       0   NaN
+        4609    2092   NaN
+        ...
+    """
     suid = networks.get_network_suid(network, base_url)
 
     # column information (names and types)
@@ -22,7 +108,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     if columns is None:
         col_list = table_col_list
     elif isinstance(columns, str):
-        col_list = columns.split(',')
+        col_list = [col.strip()   for col in columns.split(',')]
     else:
         col_list = columns
 
@@ -35,6 +121,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     for col in col_list:
         if not col in table_col_list:
             print('Error: Column ' + col + ' not found in ' + table + ' table\n')
+            # TODO: Is this really the behavior we want?
             break
 
         # fetch all values for the column
@@ -65,14 +152,131 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
 
     return df
 
+def get_table_value(table, row_name, column, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the value from a specific row and column from node, edge or network tables.
+
+    Args:
+        table (str): Name of table, e.g., node (default), edge, network
+        row_name (str): Node, edge or network name, i.e., the value in the "name" column
+        column (str): Name of column to retrieve values from
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        obj: the value of the table cell, cast to float, int, bool or str depending on column type
+
+    Raises:
+        HTTPError: if table or namespace doesn't exist in network or if cell contains a numeric type but no number
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_table_value('node', 'YDL194W', 'COMMON')
+        'SNF3'
+        >>> get_table_value('edge', 'YLR197W (pp) YOR310C', 'EdgeBetweenness', network='My Network')
+        2.0
+        >>> get_table_value('node', 'YDL194W', 'IsSingleNode')
+        False
+        >>> get_table_columns(columns='Stress, bogus')
+    """
+    suid = networks.get_network_suid(network, base_url=base_url)
+
+    # column type
+    table_col_info = get_table_column_types(table, namespace, network, base_url=base_url)
+    table_col_type = table_col_info[column]
+
+    # which row
+    row_key = None
+    from .pycy3_utils import node_name_to_node_suid
+    from .pycy3_utils import edge_name_to_edge_suid
+    if table == 'node': row_key = node_name_to_node_suid(row_name, network, base_url=base_url)[0]
+    elif table == 'edge': row_key = edge_name_to_edge_suid(row_name, network, base_url=base_url)[0]
+    elif table == 'network': row_key = networks.get_network_suid(row_name, base_url=base_url) # TODO: R implementation looks wrong because of == and use of row_name
+    else: row_key = None
+
+    # get row/column value
+    res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/rows/' + str(row_key) + '/' + column, base_url=base_url, require_json=False)
+    if not res: return None
+    # TODO: This "not res" can't happen for numbers because CyREST returns HTTPError if a value doesn't exist ... is this what we want?
+    # TODO: For strings, a '' is returned ... do we want to return None for this?
+
+    if table_col_type == 'Double': f = lambda x: float(x)
+    elif table_col_type == 'Long': f = lambda x: int(x)
+    elif table_col_type == 'Integer': f = lambda x: int(x)
+    elif table_col_type == 'Boolean': f = lambda x: bool(x)
+    else: f = lambda x: str(x)
+
+    return f(res)
+
+
 def get_table_column_names(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the names of all columns in a table.
+
+    Args:
+        table (str): Name of table, e.g., node, edge, network; default is "node"
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: list of column names
+
+    Raises:
+        HTTPError: if table or namespace or table doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_table_column_names()
+        ['SUID', 'shared name', 'name', 'selected', 'AverageShortestPathLength', ... ]
+        >>> get_table_column_names('edge')
+        ['SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction', 'EdgeBetweenness']
+        >>> get_table_column_names('network', network='My Network')
+        ['SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication', 'Dataset Name', 'Dataset URL']
+    """
     suid = networks.get_network_suid(network, base_url=base_url)
     tbl = namespace + table
     res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + tbl + '/columns', base_url=base_url)
     col_names = [x['name']   for x in res]
     return col_names
 
+
+
 def get_table_column_types(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the types of all columns in a table.
+
+    Args:
+        table (str): Name of table, e.g., node, edge, network; default is "node"
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: where the column name is the key and the data type is the value
+
+    Raises:
+        HTTPError: if table or namespace or table doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_table_column_types()
+        {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', 'AverageShortestPathLength': 'Double', ...}
+        >>> get_table_column_types('edge')
+        {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', ... }
+        >>> get_table_column_types('network', network='My Network')
+        {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', '__Annotations': 'List', ...}
+    """
     suid = networks.get_network_suid(network, base_url=base_url)
     cmd = 'networks/' + str(suid) + '/tables/' + namespace + table + '/columns'
     res = commands.cyrest_get(cmd, base_url=base_url)
@@ -80,12 +284,52 @@ def get_table_column_types(table='node', namespace='default', network=None, base
 
     return col_types
 
+
 def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Loads data into Cytoscape tables keyed by row.
+
+    This function loads data into Cytoscape node/edge/network
+    tables provided a common key, e.g., name. Data.frame column names will be
+    used to set Cytoscape table column names.
+    Numeric values will be stored as Doubles in Cytoscape tables.
+    Integer values will be stored as Integers. Character or mixed values will be
+    stored as Strings. Logical values will be stored as Boolean. Lists are
+    stored as Lists by CyREST v3.9+. Existing columns with the same names will
+    keep original type but values will be overwritten.
+
+    Args:
+        data (dataframe): each row is a node and columns contain node attributes
+        data_key_column (str): name of data.frame column to use as key; ' default is "row.names"
+        table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: 'Success: Data loaded in <table name> table' or 'Failed to load data: <reason>'
+
+    Raises:
+        HTTPError: if table or namespace or table doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> data = df.DataFrame(data={'id':['New1','New2','New3'], 'newcol':[1,2,3]})
+        >>> load_table_data(data, data_key_column='id', table='node', table_key_column='name')
+        'Failed to load data: Provided key columns do not contain any matches'
+        >>> data = df.DataFrame(data={'id':['YDL194W','YDR277C','YBR043C'], 'newcol':[1,2,3]})
+        >>> load_table_data(data, data_key_column='id', table='node', table_key_column='name', network='galfiltered.sif')
+        'Success: Data loaded in defaultnode table'
+    """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     table_key_column_values = get_table_columns(table=table, columns=table_key_column, network=net_suid, base_url=base_url)
 
     if table_key_column_values.columns is None:
         return "Failed to load data: Please check table.key.column"
+    # TODO: Consider whether this this the best kind of return value
 
     if data_key_column == 'row.names':
         data['row.names'] = data.index

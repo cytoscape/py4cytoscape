@@ -8,10 +8,6 @@ from PyCy3 import tables
 from PyCy3.decorators import debug
 from .exceptions import CyError
 
-def __init__(self):
-    pass
-
-
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
     """ Append a command (if it exists) to a base URL """
     if command:

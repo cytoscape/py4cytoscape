@@ -5,7 +5,7 @@ import re
 import urllib.parse
 import json
 
-from .pycy3_utils import DEFAULT_BASE_URL, build_url
+from .pycy3_utils import *
 from .exceptions import CyError
 from PyCy3.decorators import debug
 

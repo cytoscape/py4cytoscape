@@ -10,7 +10,7 @@ III. Set layout properties
 from . import commands
 from . import networks
 from .exceptions import CyError
-from .pycy3_utils import DEFAULT_BASE_URL
+from .pycy3_utils import *
 
 # ==============================================================================
 # I. Perform layout functions

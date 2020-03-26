@@ -12,7 +12,7 @@ import re
 
 from . import commands
 from . import networks
-from .pycy3_utils import DEFAULT_BASE_URL, node_suid_to_node_name, edge_name_to_edge_suid, edge_suid_to_edge_name
+from .pycy3_utils import *
 from PyCy3.decorators import debug
 
 # ==============================================================================

@@ -8,7 +8,7 @@ import re
 import os
 
 from . import commands
-from .pycy3_utils import DEFAULT_BASE_URL
+from .pycy3_utils import *
 from .decorators import debug
 
 def __init__(self):
