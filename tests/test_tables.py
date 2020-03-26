@@ -183,6 +183,33 @@ class TablesTests(unittest.TestCase):
         self.assertRaises(HTTPError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', namespace='bogus')
         self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', network='bogus')
 
+    #    @skip
+    @print_entry_exit
+    def test_rename_table_column(self):
+        # Initialization
+        self._load_test_session()
+
+        # Verify that the rename reports OK and the column name is actually changed
+        orig_columns = set(get_table_column_names())
+        expected_columns = orig_columns.copy()
+        expected_columns.discard('AverageShortestPathLength')
+        expected_columns.add('xAveragex')
+        self.assertEqual(rename_table_column('AverageShortestPathLength', 'xAveragex'), '')
+        self.assertSetEqual(set(get_table_column_names()), expected_columns)
+
+        # Verify that invalid parameters raise exceptions
+        self.assertRaises(HTTPError, rename_table_column, 'bogus', 'xAveragex')
+        self.assertRaises(HTTPError, rename_table_column, '', 'xAveragex')
+        self.assertRaises(HTTPError, rename_table_column, None, 'xAveragex')
+        self.assertRaises(HTTPError, rename_table_column, 'xAveragex', '')
+        # self.assertRaises(HTTPError, rename_table_column, 'xAveragex', None) # This should fail, but doesn't
+        # TODO: CyREST shouldn't allow change of name to None ... it shows up as null in Cytoscape
+        self.assertRaises(HTTPError, rename_table_column, 'xAveragex', 'name')
+
+        self.assertRaises(CyError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', network='bogus')
+        self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', namespace='bogus')
+        self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', table='bogus')
+
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
 

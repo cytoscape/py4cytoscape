@@ -434,6 +434,40 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
     res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network, base_url=base_url)
     return res
 
+def rename_table_column(column, new_name, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Set a new name for a column.
+
+    Args:
+        column (str): Name of the column to rename
+        new_name (str): New name for the specified column
+        table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        str: ''
+
+    Raises:
+        HTTPError: if table or namespace or table doesn't exist in network, or if column doesn't exist in table, or new_name already exists
+        CyError: if network name or SUID doesn't exist, or if mapping parameter is invalid
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> rename_table_column('AverageShortestPathLength', 'xAveragex')
+        ''
+        >>> rename_table_column('AverageShortestPathLength', 'xAveragex', table='edge', namespace='default', network='My Network')
+        ''
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+
+    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns',
+          body={'oldName': column, 'newName': new_name},
+          base_url=base_url, require_json=False)
+    return res
 
 # TODO: Check to see if this is needed in RCy3
 def _nan_to_none(original_df, attr_dict_list):
