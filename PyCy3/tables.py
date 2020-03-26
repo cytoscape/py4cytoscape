@@ -3,6 +3,7 @@
 from . import commands
 from . import networks
 from .pycy3_utils import *
+from .exceptions import CyError
 
 from .decorators import debug
 import pandas as pd
@@ -41,7 +42,7 @@ def delete_table_column(column, table='node', namespace='default', network=None,
         >>> delete_table_column('EdgeBetweenness', table='edge')
         ''
         >>> delete_table_column('BetweennessCentrality', network='My Network')
-       ''
+        ''
     """
     # TODO: Fix R's documentation ... the return value is wrong
     net_suid = networks.get_network_suid(network, base_url=base_url)
@@ -325,7 +326,8 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         'Success: Data loaded in defaultnode table'
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    table_key_column_values = get_table_columns(table=table, columns=table_key_column, network=net_suid, base_url=base_url)
+    table_key_column_values = get_table_columns(table=table, namespace=namespace, columns=table_key_column, network=net_suid, base_url=base_url)
+    # TODO: Shouldn't namespace be in this parameter list? R doesn't have it ... I added it
 
     if table_key_column_values.columns is None:
         return "Failed to load data: Please check table.key.column"
@@ -371,6 +373,65 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl, body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list}, require_json=False, base_url=base_url)
 
     return 'Success: Data loaded in ' + tbl + ' table'
+
+def map_table_column(column, species, map_from, map_to, force_single=True, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Map Table Column.
+
+    Perform identifier mapping using an existing column of supported identifiers to populate a new column with
+    identifiers mapped to the originals.
+
+    Supported species: Human, Mouse, Rat, Frog, Zebrafish, Fruit fly, Mosquito, Worm, Arabidopsis thaliana, Yeast,
+    E. coli, Tuberculosis. Supported identifier types (depending on species): Ensembl, Entrez Gene, Uniprot-TrEMBL,
+    miRBase, UniGene,  HGNC (symbols), MGI, RGD, SGD, ZFIN, FlyBase, WormBase, TAIR.
+
+    Args:
+        column (str): Name of column containing identifiers of type specified by ``map.from``
+        species (str): Common name for species associated with identifiers, e.g., Human. See details.
+        map_from (str): Type of identifier found in specified ``column``. See details.
+        map.to (str): Type of identifier to populate in new column. See details.
+        force.single (bool): Whether to return only first result in cases of one-to-many mappings; otherwise
+            the new column will hold lists of identifiers. Default is TRUE.
+        table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
+        namespace (str): Namespace of table. Default is "default".
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dataframe: contains map_from and map_to columns. Beware: if map_to is not unique, it will be suffixed with an
+            incrementing number in parentheses, e.g., if mapIdentifiers is repeated on the same network. However,
+            the original map_to column will be returned regardless.
+
+    Raises:
+        HTTPError: if table or namespace or table doesn't exist in network
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> map_table_column('name','Yeast','Ensembl','SGD')
+                  name        SGD
+        17920  YER145C S000000947
+        17921  YMR058W S000004662
+        17922  YJL190C S000003726
+        ...
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    tbl = str(net_suid) + ' ' + namespace + ' ' + table
+
+    fs = 'true' if force_single else 'false'
+
+    all_cols = get_table_column_names(table, namespace, network, base_url=base_url)
+    if not column in all_cols: raise CyError('ERROR:mapIdentifiers, ' + column + ' does not exist')
+
+    res_map = commands.commands_post('idmapper map column columnName="' + column + '" forceSingle="' + fs + '" mapFrom="' + map_from + '" mapTo="' + map_to + '" species="' + species + '" table="' + tbl + '"') # {'new column': 'SGD '}
+    if res_map['new column'] == 'null ': raise CyError('Error:mapIdentifiers failed')
+    #TODO: Do we really mean to throw this result away?? R does ... if the 'new column' value returns null, something went wrong ... I added check
+
+    res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network, base_url=base_url)
+    return res
+
 
 # TODO: Check to see if this is needed in RCy3
 def _nan_to_none(original_df, attr_dict_list):

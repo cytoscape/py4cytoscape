@@ -135,8 +135,8 @@ class TablesTests(unittest.TestCase):
         column_names = get_table_column_names()
 
         # Verify that adding into rows that don't exist fails
-        data = df.DataFrame(data={'id':['New1','New2','New3'], 'newcol':[1,2,3]})
-        res = load_table_data(data, data_key_column='id', table='node', table_key_column='name')
+        unrelated_data = df.DataFrame(data={'id':['New1','New2','New3'], 'newcol':[1,2,3]})
+        res = load_table_data(unrelated_data, data_key_column='id', table='node', table_key_column='name')
         self.assertEqual(res, 'Failed to load data: Provided key columns do not contain any matches')
 
         # Verify that adding into rows that do exist succeeds
@@ -153,6 +153,35 @@ class TablesTests(unittest.TestCase):
         self.assertEqual(len(test_data.index), len(added_data.index))
         verify_each_newcol_value = [added_data[added_data['id'] == row['id']].iloc[0]['newcol'] == row['newcol']  for row_index, row in test_data.iterrows()]
         self.assertNotIn(False, verify_each_newcol_value)
+
+        self.assertRaises(HTTPError, load_table_data, data, table='bogus')
+        self.assertRaises(HTTPError, load_table_data, data, namespace='bogus')
+        self.assertRaises(CyError, load_table_data, data, network='bogus')
+
+    #    @skip
+    @print_entry_exit
+    def test_map_table_column(self):
+        # Initialization
+        self._load_test_session()
+
+        # Verify that mapping Yeast from Ensembl to SGD produces a complete (name, SGD) mapping and that exactly one symbol isn't mapped
+        df = map_table_column('name', 'Yeast', 'Ensembl', 'SGD')
+        self.assertSetEqual({'name', 'SGD'}, set(df.columns))
+        self.assertEqual(get_node_count(), len(df.index))
+        self.assertSetEqual(set(df['name']), set(get_table_columns('node', ['name'])['name']))
+        empty_mapping = df[df['SGD'].isnull()]
+        self.assertEqual(len(empty_mapping.index), 1)
+        self.assertEqual(empty_mapping.iloc[0]['name'], 'YER056CA')
+
+        # Verify that mapping a non-existent column and other bad parameters are caught
+        self.assertRaises(CyError, map_table_column, 'bogusname', 'Yeast', 'Ensembl', 'SGD')
+        self.assertRaises(CyError, map_table_column, 'name', 'bogus', 'Ensembl', 'SGD')
+        self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'bogus', 'SGD')
+        self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'bogus')
+
+        self.assertRaises(HTTPError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', table='bogus')
+        self.assertRaises(HTTPError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', namespace='bogus')
+        self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', network='bogus')
 
     def _load_test_session(self, session_filename=None):
         open_session(session_filename)
