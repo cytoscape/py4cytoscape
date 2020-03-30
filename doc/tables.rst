@@ -5,6 +5,5 @@ PyCy3.tables module
     :members:
     :undoc-members:
     :show-inheritance:
-
     .. autosummary::
 
