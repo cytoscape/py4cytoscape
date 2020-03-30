@@ -8,6 +8,6 @@ PyCy3.tables module
 
     .. rubric:: Methods
 
-    .. autosummary:: PyCy3.tables
+    .. autoautosummary:: PyCy3.tables
         :methods:
 

@@ -36,7 +36,3 @@ PyCy3 module
     :members:
     :undoc-members:
     :show-inheritance:
-
-
-
-
