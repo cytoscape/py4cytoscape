@@ -1,7 +1,7 @@
 PyCy3.tables module
 ===================
 
-.. autosummary:: PyCy3.tables
+.. autosummary::
 
 .. automodule:: PyCy3.tables
     :members:
