@@ -5,4 +5,3 @@ PyCy3.network\_selection module
     :members:
     :undoc-members:
     :show-inheritance:
-

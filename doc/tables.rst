@@ -6,8 +6,5 @@ PyCy3.tables module
     :undoc-members:
     :show-inheritance:
 
-    .. rubric:: Methods
-
-    .. autoautosummary:: PyCy3.tables
-        :methods:
+    .. autosummary::
 
