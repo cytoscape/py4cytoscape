@@ -1,7 +1,7 @@
-PyCy3.networks module
+PyCy3.commands module
 =====================
 
-.. automodule:: PyCy3.networks
+.. automodule:: PyCy3.commands
     :members:
     :undoc-members:
     :show-inheritance:
