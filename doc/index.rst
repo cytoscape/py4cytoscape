@@ -16,6 +16,9 @@ Copyright (c) 2020 The Cytoscape Consortium
 .. toctree::
    :maxdepth: 4
 
+.. autosummary::
+   :toctree: _autosummary
+
    PyCy3
    commands
    exceptions

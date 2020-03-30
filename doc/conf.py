@@ -51,6 +51,8 @@ extensions = [
 add_module_names = False
 # if True, gets function signatures added to docstring
 napoleon_use_param = True
+# If true, generates autosummaries
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
