@@ -13,8 +13,11 @@ Copyright (c) 2020 The Cytoscape Consortium
 
 .. rubric:: Table of Contents
 
-.. toctree::
+.. commented out .. toctree::
    :maxdepth: 4
+
+.. autosummary::
+   :toctree: _autosummary
 
    PyCy3
    commands
