@@ -3,8 +3,8 @@
 import unittest
 import pandas as df
 from requests import HTTPError
-from PyCy3 import *
-from PyCy3.decorators import *
+
+from test_utils import *
 
 class TablesTests(unittest.TestCase):
 
@@ -21,7 +21,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_table_column(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         def check_delete(table, column):
             columns = set(get_table_column_names(table=table))
@@ -41,7 +41,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_get_table_columns(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # Verify that an empty column list returns all columns, and all columns have at least one non-nan value
         df = get_table_columns()
@@ -81,7 +81,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_get_table_value(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         self.assertEqual(get_table_value('node', 'YDL194W', 'gal1RGexp'), 0.139)
         self.assertEqual(get_table_value('node', 'YDL194W', 'Degree'), 1)
@@ -105,7 +105,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_get_table_column_names(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         self.assertSetEqual(set(get_table_column_names()), {'SUID', 'shared name', 'name', 'selected', 'AverageShortestPathLength', 'BetweennessCentrality', 'ClosenessCentrality', 'ClusteringCoefficient', 'Degree', 'Eccentricity', 'IsSingleNode', 'NeighborhoodConnectivity', 'NumberOfDirectedEdges', 'NumberOfUndirectedEdges', 'PartnerOfMultiEdgedNodePairs', 'Radiality', 'SelfLoops', 'Stress', 'TopologicalCoefficient', 'degree.layout', 'COMMON', 'gal1RGexp', 'gal4RGexp', 'gal80Rexp', 'gal1RGsig', 'gal4RGsig', 'gal80Rsig', 'isExcludedFromPaths'})
         self.assertSetEqual(set(get_table_column_names('edge')), {'SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction', 'EdgeBetweenness'})
@@ -118,7 +118,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_get_table_column_types(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         self.assertDictEqual(get_table_column_types(), {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', 'AverageShortestPathLength': 'Double', 'BetweennessCentrality': 'Double', 'ClosenessCentrality': 'Double', 'ClusteringCoefficient': 'Double', 'Degree': 'Integer', 'Eccentricity': 'Integer', 'IsSingleNode': 'Boolean', 'NeighborhoodConnectivity': 'Double', 'NumberOfDirectedEdges': 'Integer', 'NumberOfUndirectedEdges': 'Integer', 'PartnerOfMultiEdgedNodePairs': 'Integer', 'Radiality': 'Double', 'SelfLoops': 'Integer', 'Stress': 'Long', 'TopologicalCoefficient': 'Double', 'degree.layout': 'Integer', 'COMMON': 'String', 'gal1RGexp': 'Double', 'gal4RGexp': 'Double', 'gal80Rexp': 'Double', 'gal1RGsig': 'Double', 'gal4RGsig': 'Double', 'gal80Rsig': 'Double', 'isExcludedFromPaths': 'Boolean'})
         self.assertDictEqual(get_table_column_types('edge'), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String', 'EdgeBetweenness': 'Double'})
@@ -131,7 +131,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_load_table_data(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         column_names = get_table_column_names()
 
         # Verify that adding into rows that don't exist fails
@@ -162,7 +162,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_map_table_column(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # Verify that mapping Yeast from Ensembl to SGD produces a complete (name, SGD) mapping and that exactly one symbol isn't mapped
         df = map_table_column('name', 'Yeast', 'Ensembl', 'SGD')
@@ -187,7 +187,7 @@ class TablesTests(unittest.TestCase):
     @print_entry_exit
     def test_rename_table_column(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # Verify that the rename reports OK and the column name is actually changed
         orig_columns = set(get_table_column_names())
@@ -209,10 +209,6 @@ class TablesTests(unittest.TestCase):
         self.assertRaises(CyError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', network='bogus')
         self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', namespace='bogus')
         self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', table='bogus')
-
-    def _load_test_session(self, session_filename=None):
-        open_session(session_filename)
-
 
 if __name__ == '__main__':
     unittest.main()

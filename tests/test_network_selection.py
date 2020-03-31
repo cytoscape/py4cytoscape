@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from PyCy3 import *
-from PyCy3.decorators import *
 
+from test_utils import *
 
 class NetworkSelectionTests(unittest.TestCase):
 
@@ -20,7 +19,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_clear_selection(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
         SELECTED_NODES = ['YGL035C', 'YLR044C', 'YNL216W', 'YIL162W']
         SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
@@ -65,7 +64,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_first_neigbors(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         df_all_nodes = tables.get_table_columns(columns='COMMON')
 
         def _test_first_neighbors(direction, expected_selection):
@@ -92,7 +91,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         df_all_nodes = tables.get_table_columns(columns='COMMON')
         all_suids = set(df_all_nodes.index)
         suid_RAP1 = df_all_nodes[df_all_nodes['COMMON'] == 'RAP1'].index[0]
@@ -144,7 +143,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_all_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_suids = set(tables.get_table_columns().index)
 
         # Verify that selector reports all nodes and that Cytoscape thinks all nodes are selected
@@ -157,7 +156,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_get_selected_node_count(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_suids = set(tables.get_table_columns().index)
 
         # Verify that zero selections is counted
@@ -175,7 +174,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_get_selected_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # Verify that no node selections is reported
         self.assertEqual(get_selected_nodes(), None)
@@ -195,7 +194,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_invert_node_selection(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_suids = set(tables.get_table_columns().index)
 
         # Verify that inverting an unselected network reports all nodes selected
@@ -216,7 +215,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_selected_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_node_suids = set(tables.get_table_columns().index)
         # TODO: Get all edge SUIDs and make sure they're returned by delete_selected_nodes, too
 
@@ -234,7 +233,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_nodes_connected_by_selected_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
         SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
 
@@ -252,7 +251,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         SINGLE_EDGE = ['YDR412W (pp) YPR119W']
         single_edge_suid = edge_name_to_edge_suid(SINGLE_EDGE) # expected edges
         EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
@@ -281,7 +280,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_all_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # TODO: I seem to be converting between edge IDs and edge names a lot. Is there a way to avoid the explicit conversion?
         # Verify that all edges get selected
@@ -294,7 +293,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_invert_edge_selection(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_edge_suids = edge_name_to_edge_suid(get_all_edges())
 
         # Verify that all edges get selected
@@ -312,7 +311,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_selected_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_edge_suids = edge_name_to_edge_suid(get_all_edges())
 
         # Verify that no edges are returned when there are no edges to delete
@@ -329,7 +328,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_get_selected_edge_count(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         all_edge_suids = edge_name_to_edge_suid(get_all_edges())
 
         # Verify that when no edges are selected, the count is 0
@@ -345,7 +344,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_get_selected_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
 
         # Verify that when no edges are selected, the selected edge list is null
@@ -362,7 +361,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_edges_connecting_selected_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2', 'PFK27', 'TAH18'] # PFK27 & TAH18 aren't connected to the other nodes
         self_edge_PFK27 = add_cy_edges(['YOL136C', 'YOL136C'], edge_type='pp')
         EXPECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C', 'YOL136C (pp) YOL136C']
@@ -383,7 +382,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_select_edges_adjacent_to_selected_nodes(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         COMMON_NODES = ['PDC1', 'TAH18']
         EXPECTED_EDGES = ['YPR048W (pp) YDL215C', 'YER179W (pp) YLR044C', 'YGL035C (pd) YLR044C', 'YPR048W (pp) YOR355W', 'YNL216W (pd) YLR044C', 'YNL199C (pp) YPR048W']
 
@@ -403,7 +402,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_duplicate_edges(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
         original_edge_count = get_edge_count()
         EDGE_TO_DUP = ['YNL216W (pd) YLR044C']
         original_edge_suid = get_edge_info([EDGE_TO_DUP])[0]['SUID']
@@ -433,7 +432,7 @@ class NetworkSelectionTests(unittest.TestCase):
     @print_entry_exit
     def test_delete_self_loops(self):
         # Initialization
-        self._load_test_session()
+        load_test_session()
 
         # Verify that when there are no self-edges, none get deleted
         original_edges = get_all_edges()
@@ -448,37 +447,6 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertSetEqual(set(get_all_edges()), set(original_edges))
 
         self.assertRaises(CyError, delete_self_loops, network='bogus')
-
-
-
-    def _load_test_session(self, session_filename=None):
-        open_session(session_filename)
-
-
-
-"""
-    @skip
-    @print_entry_exit
-    def test_get_selected_node_count(self):
-        # Initialization
-        input('Load galFiltered.sif')
-
-        res = get_selected_node_count()
-        print(res)
-
-    @skip
-    @print_entry_exit
-    def test_get_selected_nodes(self):
-        # Initialization
-        input('Load galFiltered.sif')
-
-        res = get_selected_nodes(False)
-        print(res)
-
-        res = get_selected_nodes(True)
-        print(res)
-"""
-
 
 if __name__ == '__main__':
     unittest.main()

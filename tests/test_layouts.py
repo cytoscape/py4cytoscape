@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import os
-import time
 
-from PyCy3 import *
-from PyCy3.decorators import *
+from test_utils import *
 
 class LayoutsTests(unittest.TestCase):
     def setUp(self):
@@ -22,8 +19,9 @@ class LayoutsTests(unittest.TestCase):
     @print_entry_exit
     def test_layout_network(self):
         # Initialize
-        self._load_test_session()
-        self._load_test_network('data/yeastHighQuality.sif', make_current=False)
+
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
         cur_network_suid = get_network_suid()
 
         # Execute default layout ... should happen on galFiltered.sif
@@ -43,8 +41,8 @@ class LayoutsTests(unittest.TestCase):
     @print_entry_exit
     def test_bundle_edges(self):
         # Initialize
-        self._load_test_session()
-        self._load_test_network('data/yeastHighQuality.sif', make_current=False)
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
         cur_network_suid = get_network_suid()
 
         # Bundle edges ... should happen on galFiltered.sif
@@ -60,8 +58,8 @@ class LayoutsTests(unittest.TestCase):
     @print_entry_exit
     def test_clear_edge_bends(self):
         # Initialize
-        self._load_test_session()
-        self._load_test_network('data/yeastHighQuality.sif', make_current=False)
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
         cur_network_suid = get_network_suid()
 
         # Bundle then unbundle edges ... should happen on galFiltered.sif
@@ -79,7 +77,7 @@ class LayoutsTests(unittest.TestCase):
     @print_entry_exit
     def test_layout_copycat(self):
         # Initialize
-        self._load_test_session()
+        load_test_session()
         orig_suid = get_network_suid()
         cloned_suid = clone_network()
 
@@ -177,22 +175,6 @@ class LayoutsTests(unittest.TestCase):
 
         self.assertRaises(requests.exceptions.RequestException, set_layout_properties, 'boguslayout', {})
         self.assertEqual(set_layout_properties('force-directed', {'bogusparam':666}), '')
-
-    def _load_test_session(self, session_filename=None):
-            open_session(session_filename)
-
-    def _load_test_network(self, network_name, make_current=True):
-        if make_current:
-            new_suid = import_network_from_file(network_name)
-            set_current_network(new_suid)
-        else:
-            try:
-                cur_suid = get_network_suid()
-            except:
-                cur_suid = None
-            import_network_from_file(network_name)
-            if cur_suid: set_current_network(cur_suid)
-
 
 if __name__ == '__main__':
     unittest.main()
