@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import re
 import urllib.parse
 import json
 
@@ -28,7 +27,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content)
+        content = json.loads(e.response.content) if e.response and e.response.content else ''
         print("In commands:cyrest_get(): " + str(e) + '\n' + str(content))
         raise
 

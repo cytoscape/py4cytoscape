@@ -13,14 +13,12 @@ Copyright (c) 2020 The Cytoscape Consortium
 
 .. rubric:: Table of Contents
 
-.. commented out .. toctree::
+.. toctree::
    :maxdepth: 4
-
-.. autosummary::
-   :toctree: _autosummary
 
    PyCy3
    commands
+   cytoscape_system
    exceptions
    layouts
    networks

@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-
 DEFAULT_BASE_URL: str = 'http://localhost:1234/v1'
 
 import urllib.parse
+import re
+import sys
+
 from PyCy3 import tables
+from PyCy3 import cytoscape_system
 from PyCy3.decorators import debug
 from .exceptions import CyError
 
@@ -92,3 +95,25 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
         print("Invalid SUID in list: " + str(edge_suids))
         raise CyError('Invalid SUID in list')
 
+# ------------------------------------------------------------------------------
+# Checks to see if min supported versions of api and cytoscape are running.
+# Extracts numerics from api and major cytoscape versions before making comparison.
+def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL):
+    v = cytoscape_system.cytoscape_version_info(base_url=base_url)
+    v_api_str = v['apiVersion']
+    v_cy_str = v['cytoscapeVersion']
+    v_api_num = int(re.match('v([0-9]+)$', v_api_str).group(1))
+    v_cy_num = float(re.match('([0-9]+\\.[0-9]+)\\..*$', v_cy_str).group(1))
+    nogo = False
+
+    if cyrest > v_api_num:
+        sys.stderr.write("CyREST API version %d or greater is required. You are currently working with version %d." %
+                         (cyrest, v_api_num))
+        nogo = True
+
+    if cytoscape > v_cy_num:
+        sys.stderr.write("Cytoscape version %0.2g or greater is required. You are currently working with version %0.2g." %
+                         (cytoscape, v_cy_num))
+        nogo = True
+
+    if nogo: raise CyError('Function not run due to unsupported version.')

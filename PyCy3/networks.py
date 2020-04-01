@@ -21,7 +21,6 @@ Note:
 # ------------------------------------------------------------------------------
 
 import sys
-import re
 import os
 import time
 import warnings

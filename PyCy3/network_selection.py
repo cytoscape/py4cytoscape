@@ -8,7 +8,6 @@ I. General selection functions
 II. Node selection functions
 III. Edge selection functions
 """
-import re
 
 from . import commands
 from . import networks
