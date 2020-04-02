@@ -49,15 +49,15 @@ class AppsTests(unittest.TestCase):
     def test_cytoscape_memory_status(self):
         status = cytoscape_memory_status()
         self.assertIsInstance(status, dict)
-        self.assertTrue(set(status).issubset({'usedMemory', 'freeMemory', 'totalMemory', 'maxMemory'}))
+        self.assertTrue(set(status).issuperset({'usedMemory', 'freeMemory', 'totalMemory', 'maxMemory'}))
         for mem in status:
             self.assertIsInstance(status[mem], int)
 
 #    @skip
     @print_entry_exit
     def test_cytoscape_free_memory(self):
-        x = cytoscape_free_memory()
-        self.assertEqual(x, 'Unused memory freed up.')
+        res = cytoscape_free_memory()
+        self.assertEqual(res, 'Unused memory freed up.')
 
 if __name__ == '__main__':
     unittest.main()

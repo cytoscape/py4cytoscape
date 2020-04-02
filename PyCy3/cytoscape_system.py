@@ -130,21 +130,6 @@ def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get(base_url=base_url)
     return res['memoryStatus']
 
-#------------------------------------------------------------------------------------------------------------------------
-#' Free Up Unused Memory for Cytoscape
-#'
-#' @description Manually call Java's garbage collection \code{System.gc()} to free up unused memory.
-#' This process happens automatically, but may be useful to call explicitly for testing or evaluation purposes.
-#' @param base.url (optional) Ignore unless you need to specify a custom domain,
-#' port or version to connect to the CyREST API. Default is http://localhost:1234
-#' and the latest version of the CyREST API supported by this version of RCy3.
-#' @return status message
-#' @author Alexander Pico
-#' @examples \donttest{
-#' cytoscapeFreeMemory()
-#' # [1] "Unused memory freed up."
-#' }
-#' @export
 def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
     """Manually call Java's garbage collection ``System.gc()`` to free up unused memory.
 

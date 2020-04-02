@@ -7,4 +7,5 @@ from .network_selection import *
 from .tables import *
 from .commands import *
 from .cytoscape_system import *
+from .apps import *
 from .decorators import *
