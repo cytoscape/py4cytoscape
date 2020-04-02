@@ -17,6 +17,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    :maxdepth: 4
 
    PyCy3
+   apps
    commands
    cytoscape_system
    exceptions
