@@ -12,13 +12,6 @@ class AppsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-    @skip
-    @print_entry_exit
-    def test_disable_app(self):
-        # Initialize
-        pass
-
     @skip
     @print_entry_exit
     def test_get_app_information(self):

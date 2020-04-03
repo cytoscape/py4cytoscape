@@ -18,6 +18,7 @@ Copyright (c) 2020 The Cytoscape Consortium
 
    PyCy3
    apps
+   collections
    commands
    cytoscape_system
    exceptions
