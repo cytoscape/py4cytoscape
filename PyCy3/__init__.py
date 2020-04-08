@@ -9,4 +9,5 @@ from .commands import *
 from .cytoscape_system import *
 from .apps import *
 from .collections import *
+from .filters import *
 from .decorators import *

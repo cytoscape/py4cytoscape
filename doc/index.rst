@@ -22,6 +22,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    commands
    cytoscape_system
    exceptions
+   filters
    layouts
    networks
    network_selection
