@@ -23,6 +23,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    cytoscape_system
    exceptions
    filters
+   groups
    layouts
    networks
    network_selection

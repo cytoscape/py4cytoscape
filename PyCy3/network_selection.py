@@ -107,7 +107,7 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
 
     Returns:
         dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of newly selected nodes
-            and edge list is always empty -- dict is {} if no edges were selected
+            and edge list is always empty -- dict is {} if no nodes were selected
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -556,7 +556,7 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-         dict: {'nodes': [node list], 'edges': [edge list]} where node list is list of all selected edges, and
+         dict: {'nodes': [node list], 'edges': [edge list]} where node list is list of all selected nodes, and
             edge list is the SUIDs of selected edges -- dict is None if no nodes were selected or there were no newly
             created edges
     Raises:

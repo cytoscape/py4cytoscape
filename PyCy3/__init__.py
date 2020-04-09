@@ -10,4 +10,5 @@ from .cytoscape_system import *
 from .apps import *
 from .collections import *
 from .filters import *
+from .groups import *
 from .decorators import *
