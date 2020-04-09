@@ -50,7 +50,12 @@ class GroupsTests(unittest.TestCase):
         # Create a group out of just 2 named nodes in a named column
         check_group('group 3', lambda x: create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'))
 
-    #    @skip
+        # Create a group with no name
+        check_group('', lambda x: create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'))
+
+        self.assertRaises(CyError, create_group, 'group 4', nodes='COMMON:GDS1,COMMON:PFK27', network='bogus')
+
+    @skip
     @print_entry_exit
     def test_add_to_group(self):
         # Initialization
@@ -104,6 +109,64 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that adding a column by COMMON produces right nodes, internal edges and external edges
         check_group('group 1', lambda x: add_to_group(x, nodes='COMMON:AHP1'), set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {selection_AHP1_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12}, set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
+
+        self.assertRaises(CyError, add_to_group, 'group x', nodes='COMMON:AHP1', network='Bogus')
+
+    @skip
+    @print_entry_exit
+    def test_list_groups(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that when there are no groups, no groups are returned
+        group_list = list_groups()
+        self.assertIsInstance(group_list, dict)
+        self.assertIsInstance(group_list['groups'], list)
+        self.assertSetEqual(set(list_groups()['groups']), set())
+
+        # Add a few groups and verify that they're in the list
+        group_1_suid = create_group('Group 1', nodes=['GDS1', 'PFK27'], nodes_by_col='COMMON')['group']
+        group_2_suid = create_group('Group 2', nodes=['PDC1', 'FBP1', 'CIN4'], nodes_by_col='COMMON')['group']
+        self.assertSetEqual(set(list_groups()['groups']), {group_1_suid, group_2_suid})
+
+        self.assertRaises(CyError, list_groups, network='Bogus')
+
+#    @skip
+    @print_entry_exit
+    def test_get_group_info(self):
+        # Initialization
+        load_test_session()
+        select_nodes(['GDS1', 'PFK27'], by_col='COMMON')
+        selection_GDS1_PFK27 = select_edges_adjacent_to_selected_nodes()
+        clear_selection()
+        select_nodes(['PDC1', 'FBP1', 'CIN4'], by_col='COMMON')
+        selection_PDC1_FBP1_CIN4 = select_edges_adjacent_to_selected_nodes()
+        clear_selection()
+        group_1_suid = create_group('Group 1', nodes=['GDS1', 'PFK27'], nodes_by_col='COMMON')['group']
+        group_2_suid = create_group('', nodes=['PDC1', 'FBP1', 'CIN4'], nodes_by_col='COMMON')['group']
+
+        def check_group_info(group, expected_name, expected_suid, expected_nodes, expected_internal_edges, expected_external_edges):
+            group_info = get_group_info(group)
+            self.assertIsInstance(group_info, dict)
+            self.assertEqual(group_info['group'], expected_suid)
+            self.assertEqual(group_info['name'], expected_name)
+            self.assertSetEqual(set(group_info['nodes']), expected_nodes)
+            self.assertSetEqual(set(group_info['internalEdges']), expected_internal_edges)
+            self.assertSetEqual(set(group_info['externalEdges']), expected_external_edges)
+            self.assertFalse(group_info['collapsed'])
+
+        # Verify that info for a real group accessed by group name is valid
+        check_group_info('Group 1', 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+
+        # Verify that info for a real group accessed by group name is valid
+        check_group_info(group_1_suid, 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+
+        # Verify that info for an unnamed group group is valid
+        check_group_info('', '', group_2_suid, set(selection_PDC1_FBP1_CIN4['nodes']), set(), set(selection_PDC1_FBP1_CIN4['edges']))
+
+        self.assertRaises(CyError, get_group_info, -1)
+        self.assertRaises(CyError, get_group_info, 'Bogus Group')
+        self.assertRaises(CyError, get_group_info, 'Group 1', network='Bogus')
 
 if __name__ == '__main__':
     unittest.main()

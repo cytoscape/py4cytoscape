@@ -79,11 +79,11 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
         >>> create_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON') # create group containing nodes by common name
         {'group': 95335}
         >>> create_group('Group 1') # create group containing all selected nodes
-        {}
+        {'group': 95335}
         >>> create_group('Group 1', []) # create group with no nodes
-        {}
+        {'group': 95335}
         >>> create_group('Group 1', nodes='unselected') # create group with all unselected nodes
-        {}
+        {'group': 95335}
     """
     # TODO: Determine whether group_name can be null ... Commands help says it can be optional
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
@@ -129,14 +129,20 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> get_group_info('Group 1')
+        >>> get_group_info('group 1')
         {'group': 95335,
          'name': 'group 1',
          'nodes': [94214, 94038, 94122],
          'internalEdges': [],
          'externalEdges': [94450, 94564, 94403, 94362, 94506, 94537],
          'collapsed': False}
-    """
+        >>> get_group_info(95335, network='My Network')
+        {'group': 95335,
+         'name': 'group 1',
+         'nodes': [94214, 94038, 94122],
+         'internalEdges': [],
+         'externalEdges': [94450, 94564, 94403, 94362, 94506, 94537],
+         'collapsed': False}    """
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     # group.suid <- .nodeNameToNodeSUID(group, network, base.url)
@@ -147,19 +153,6 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group get node="' + prefix + str(group) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
-# ------------------------------------------------------------------------------
-# ' @title List Groups
-# '
-# ' @description Retrieve a list of all group SUIDs in a network.
-# ' @param network (optional) Name or SUID of the network. Default is the "current" network active in Cytoscape.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return List of group SUIDs
-# ' @examples \donttest{
-# ' listGroups()
-# ' }
-# ' @export
 def list_groups(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve a list of all group SUIDs in a network.
 
@@ -171,7 +164,7 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-         list: list of SUIDs for group nodes
+         dict: {groups: [SUID list]} as list of SUIDs for group nodes
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -179,7 +172,7 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> list_groups()
-        [94214, 94038, 94122]
+        {'groups': [94214, 94038, 94122]}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post('group list network="SUID:' + str(net_suid) + '"', base_url=base_url)
