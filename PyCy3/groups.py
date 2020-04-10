@@ -54,6 +54,41 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
     res = commands.commands_post('group add groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Replace the representation of all of the nodes and edges in a group with a single node.
+
+    Args:
+        groups (list or str): List of group names or keywords: all, selected, unselected. Default is the currently selected group.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+         dict: {'groups': [List of SUIDs]} where SUID identifies the node corresponding to the group that was collapsed (even if it was already collapsed)
+
+    Raises:
+        CyError: if network name or SUID, or group name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> collapse_group() # collapse all selected groups
+        {'groups': [95335, 95336]}
+        >>> collapse_group('all') # collapse all groups
+        {'groups': [95335, 95336, 95337]}
+        >>> collapse_group(['Group 1', 'Group 2']) # collapse 2 groups
+        {'groups': [95335, 95336]}
+        >>> collapse_group('Group 1,Group 2') # collapse 2 groups
+        {'groups': [95335, 95336]}
+        >>> collapse_group(['SUID:95335', 'SUID:95336']) # collapse 2 groups
+        {'groups': [95335, 95336]}
+    """
+    group_list =_prep_post_query_lists(groups)
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('group collapse groupList="' + str(group_list) + '" network="SUID:' + str(net_suid), base_url=base_url)
+    return res
+
 def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
     """Create a group from the specified nodes.
 
@@ -93,22 +128,72 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + node_list + '" network="SUID:' + str(net_suid), base_url=base_url)
     return res
 
+def create_group_by_column(group_name, column=None, value=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Create a group of nodes defined by a column value.
 
-# ' @title Get Group Information
-# '
-# ' @description Retrieve information about a group by name or identifier.
-# ' @param group Group name or SUID.
-# ' @param network (optional) Name or SUID of the network. Default is the "current" network active in Cytoscape.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return Group information
-# ' @examples \donttest{
-# ' getGroupInfo('mygroup')
-# ' }
-# ' @export
+    Args:
+        group_name (str): The name used to identify and optionaly label the new group
+        column (str): The name or header of the Node Table column to use for selecting nodes to group
+        value (str or int or float or bool): The value in the column to use for selecting nodes to group
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+         dict: {'group': group SUID} where the SUID identifies new group
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_group_by_column('Group 1', 'Cluster', 'A')
+        {'group': 95336}
+    """
+    # TODO: The default column and value will make the call blow up ... are we sure we want these defaults?
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + column + '":"' + value + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    return res
+
+def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Replaces the group node with member nodes for a set of groups.
+
+    Args:
+        groups (list or str): List of group names or keywords: all, selected, unselected. Default is the currently selected group.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+         dict: {'groups': [List of SUIDs]} where SUID identifies the node corresponding to the group that was expanded (even if it was already expanded)
+
+    Raises:
+        CyError: if network name or SUID, or group name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> expand_group() # expand all selected groups
+        {'groups': [95335, 95336]}
+        >>> expand_group('all') # expand all groups
+        {'groups': [95335, 95336, 95337]}
+        >>> expand_group(['Group 1', 'Group 2']) # expand 2 groups
+        {'groups': [95335, 95336]}
+        >>> expand_group('Group 1,Group 2') # expand 2 groups
+        {'groups': [95335, 95336]}
+        >>> expand_group(['SUID:95335', 'SUID:95336']) # expand 2 groups
+        {'groups': [95335, 95336]}
+    """
+    group_list = _prep_post_query_lists(groups)
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('group expand groupList="' + str(group_list) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    return res
+
 def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
-    """Create a group from the specified nodes.
+    """Retrieve information about a group by name or identifier.
 
     Args:
         group_name (str or SUID): Group name or SUID.
@@ -142,7 +227,8 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
          'nodes': [94214, 94038, 94122],
          'internalEdges': [],
          'externalEdges': [94450, 94564, 94403, 94362, 94506, 94537],
-         'collapsed': False}    """
+         'collapsed': False}
+    """
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     # group.suid <- .nodeNameToNodeSUID(group, network, base.url)
@@ -178,6 +264,88 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group list network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
+    """Remove the specified nodes and edges from the specified group.
+
+    Args:
+        group_name (str): Specifies the name used to identify the group
+        nodes (list or str or None): List of node SUIDs, names, other column values, or keyword: selected,
+            unselected or all. Default is currently selected nodes.
+        nodes_by_col (str): name of node table column corresponding to provided nodes list. Default is 'SUID'.
+        edges (list or str or None): List of edge SUIDs, names, other column values, or keyword: selected,
+            unselected or all. Default is currently selected edges.
+        edges_by_col (str): name of edge table column corresponding to provided edges list. Default is 'SUID'.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+         dict: {}
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> remove_from_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON') # remove nodes by common name & all their edges
+        {}
+        >>> remove_from_group('Group 1') # remove all selected nodes and edges
+        {}
+        >>> remove_from_group('Group 1', nodes=[], edges=[78565, 79565]) # remove edges but not any nodes
+        {}
+        >>> remove_from_group('Group 1', nodes='unselected', edges='unselected') # remove all unselected nodes and edges
+        {}
+    """
+    if isinstance(nodes, str) and nodes in {'all', 'selected', 'unselected'}: nodes_by_col = None
+    node_list = _prep_post_query_lists(nodes, nodes_by_col)
+
+    if isinstance(edges, str) and edges in {'all', 'selected', 'unselected'}: edges_by_col = None
+    edge_list = _prep_post_query_lists(edges, edges_by_col)
+
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('group remove groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    return res
+
+def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
+    """Delete one or more groups, while leaving member nodes intact.
+
+    Args:
+        groups (list or str or None) List of group SUIDs, names, other column values or keywords: all, selected,
+            unselected. Default is the currently selected group.
+        groups_by_col (str): name of node table column corresponding to provided groups list. Default is 'SUID'.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+         dict: {'groups': [group SUIDs]} with the SUID for each deleted group in the list
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_group(['Group 1', 'Group 2'], groups_by_col='shared name') # delete groups by name
+        {groups:[7970, 7980]}
+        >>> delete_group([7970]) # delete groups by SUID
+        {groups:[7970]}
+        >>> delete_group() # delete all selected groups
+        {groups:[7970, 7980]}
+        >>> delete_group(groups='all') # delete all groups
+        {groups:[7970, 7980]}
+    """
+    if isinstance(groups, str) and groups in {'all', 'selected', 'unselected'}: groups_by_col = None
+    group_list = _prep_post_query_lists(groups, groups_by_col)
+
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('group ungroup nodeList="' + group_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    # TODO: The R implementation uses the groupList parameter, which conflicts with the command documentation
+    return res
+
 # ------------------------------------------------------------------------------
 # Parses all the possible list types and keywords accepted by Commands API.
 # If column designation is supported, simply provide a column name; otherwise
@@ -187,6 +355,8 @@ def _prep_post_query_lists(cmd_list=None, cmd_by_col=None):
         return "selected" # need something here for edge selections to work
     elif cmd_by_col and isinstance(cmd_list, list):
         return ','.join([cmd_by_col + ':' + str(cmd)   for cmd in cmd_list])
+    elif isinstance(cmd_list, list):
+        return ','.join(cmd_list)
     else:
         return cmd_list # Note that this supposes the string is already a comma-separated list of COL:NAME ... and cmd_by_col is safely ignored
 # TODO: Verify that this produces the same thing as R would for all cases ... particularly for [], which should select nothing
