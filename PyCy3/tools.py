@@ -240,9 +240,7 @@ def diffusion_basic(base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the
-            name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the
-            node table column containing the node's (0-based) rank
+        dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the node table column containing the node's (0-based) rank
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
@@ -274,9 +272,7 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the
-            name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the
-            node table column containing the node's (0-based) rank
+        dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the node table column containing the node's (0-based) rank
 
     Raises:
         CyError: if an invalid parameter is passed
