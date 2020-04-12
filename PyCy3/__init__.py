@@ -11,4 +11,5 @@ from .apps import *
 from .collections import *
 from .filters import *
 from .groups import *
+from .tools import *
 from .decorators import *

@@ -29,6 +29,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    network_selection
    session
    tables
+   tools
    internal
 
 

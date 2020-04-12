@@ -12,7 +12,7 @@ class AppsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_app_information(self):
         # Verify that a well-formed information record is returned for a known app
@@ -26,7 +26,7 @@ class AppsTests(unittest.TestCase):
         # Verify that an unknown app is caught
         self.assertRaises(CyError, get_app_information, 'bogus')
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_available_apps(self):
         # Verify that app list contains expected dicts and at least some of the expected apps
@@ -36,7 +36,7 @@ class AppsTests(unittest.TestCase):
         app_names = {app_info['appName']   for app_info in res}
         self.assertTrue(app_names.issuperset({'stringApp', 'BiNGO', 'CyPath2'}))
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_installed_apps(self):
         # Verify that app list contains expected dicts and at least some of the expected apps
@@ -46,7 +46,7 @@ class AppsTests(unittest.TestCase):
         app_names = {app_info['appName']   for app_info in res}
         self.assertTrue(app_names.issuperset({'PSICQUIC Web Service Client', 'JSON Support', 'Diffusion', "PSI-MI Reader", "CX Support", "Analyzer", "OpenCL Prefuse Layout", "Core Apps", "Merge", "cyREST", "copycatLayout", "CyCL", "cyChart", "SBML Reader", "BioPAX Reader", "Biomart Web Service Client", "cyBrowser", "ID Mapper", "CyNDEx-2"}))
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_list_disable_enable_apps(self):
         # Initialization
@@ -94,7 +94,7 @@ class AppsTests(unittest.TestCase):
         self.assertDictEqual(disable_app(EMPTY_APP_NAME), {'appName': EMPTY_APP_NAME})
         self.assertNotIn(EMPTY_APP_NAME, [app['appName'] for app in get_disabled_apps()])
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_install_uninstall_app(self):
         # Initialization
@@ -142,13 +142,13 @@ class AppsTests(unittest.TestCase):
         self.assertDictEqual(uninstall_app(EMPTY_APP_NAME), {'appName': EMPTY_APP_NAME})
         self.assertNotIn(EMPTY_APP_NAME, {app_info['appName']   for app_info in get_installed_apps()})
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_app_updates(self):
         # Testing this requires some pretty contrived app store setup, so we just go simple here
         self.assertIsInstance(get_app_updates(), list)
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_open_app_store(self):
         # Initialization
@@ -165,7 +165,7 @@ class AppsTests(unittest.TestCase):
         input('Verify that the app store main page is loaded')
 
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_get_app_status(self):
         # Initialization

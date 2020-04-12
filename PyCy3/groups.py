@@ -337,6 +337,9 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
         {groups:[7970, 7980]}
         >>> delete_group(groups='all') # delete all groups
         {groups:[7970, 7980]}
+
+    Note:
+        Group nodes are ungrouped but not deleted in Cytoscape 3.6.1
     """
     if isinstance(groups, str) and groups in {'all', 'selected', 'unselected'}: groups_by_col = None
     group_list = _prep_post_query_lists(groups, groups_by_col)

@@ -40,6 +40,9 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
         >>> apply_filter('degree filter 1x', hide=True, network='My Network')
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
+
+    See Also:
+        :meth:`unhide_all`
     """
     if not filter_name in get_filter_list(base_url=base_url):
         error = 'Filter "%s" does not exist.' % (filter_name)
