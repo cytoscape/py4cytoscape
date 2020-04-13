@@ -30,6 +30,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    session
    tables
    tools
+   user_interface
    internal
 
 

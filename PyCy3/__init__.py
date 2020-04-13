@@ -12,4 +12,5 @@ from .collections import *
 from .filters import *
 from .groups import *
 from .tools import *
+from .user_interface import *
 from .decorators import *

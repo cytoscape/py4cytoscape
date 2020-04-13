@@ -8,7 +8,10 @@ from test_utils import *
 
 class FiltersTests(unittest.TestCase):
     def setUp(self):
-        pass
+        try:
+            delete_all_networks()
+        except:
+            pass
 
     def tearDown(self):
         pass
