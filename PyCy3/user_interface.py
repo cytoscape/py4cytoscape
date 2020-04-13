@@ -16,11 +16,11 @@ def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Dock a panel back into the UI of Cytoscape.
 
     Args:
-        panel_name (str): Name of the panel. Multiple ways of referencing panels is supported:
-           * WEST, control panel, control, c |br|
-           * SOUTH, table panel, table, ta |br|
-           * SOUTH_WEST, tool panel, tool, to |br|
-           * EAST, results panel, results, r |br|
+        panel_name (str): Name of the panel. Multiple ways of referencing panels is supported: ::
+           * WEST, control panel, control, c
+           * SOUTH, table panel, table, ta
+           * SOUTH_WEST, tool panel, tool, to
+           * EAST, results panel, results, r
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
@@ -83,10 +83,10 @@ def hide_panel(panel_name, base_url=DEFAULT_BASE_URL):
 
     Args:
         panel_name (str): Name of the panel. Multiple ways of referencing panels is supported:
-           - WEST, control panel, control, c
-           - SOUTH, table panel, table, ta
-           - SOUTH_WEST, tool panel, tool, to
-           - EAST, results panel, results, r
+           WEST, control panel, control, c
+           SOUTH, table panel, table, ta
+           SOUTH_WEST, tool panel, tool, to
+           EAST, results panel, results, r
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of PyCy3.
