@@ -18,6 +18,7 @@ def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     Args:
         panel_name (str): Name of the panel. Multiple ways of referencing panels is supported:
            * WEST, control panel, control, c
+raw::html
            * SOUTH, table panel, table, ta
            * SOUTH_WEST, tool panel, tool, to
            * EAST, results panel, results, r
