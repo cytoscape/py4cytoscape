@@ -11,6 +11,10 @@ The PyCy3 Programmers Manual copyright is owned by The Cytoscape Consortium, and
 
 Copyright (c) 2020 The Cytoscape Consortium
 
+.. |br| raw:: html
+
+    <br>
+
 .. rubric:: Table of Contents
 
 .. toctree::
