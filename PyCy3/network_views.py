@@ -170,7 +170,7 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
 def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None, network=None, base_url=DEFAULT_BASE_URL):
     """ Save the current network view as an image file.
 
-    The image is cropped per the current view in Cytoscape. Consider applying :meth:`fitContent` prior to export.
+    The image is cropped per the current view in Cytoscape. Consider applying :meth:`fit_content` prior to export.
 
     Args:
         filename (str): Full path or path relavtive to current working directory, in addition to the name of the file.
@@ -180,9 +180,9 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600.
         units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
             The possible values are: pixels (default), inches.
-        height (float) The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
-        width (float) The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
-        zoom (float) The zoom value to proportionally scale the image. The default value is 100.0. Valid only for bitmap
+        height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
+        width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
+        zoom (float): The zoom value to proportionally scale the image. The default value is 100.0. Valid only for bitmap
             formats, such as PNG and JPEG
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
             If a network view SUID is provided, then it is validated and returned.
@@ -228,22 +228,31 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     res = commands.commands_post(cmd_string + ' OutputFile="' + filename + '"' + ' options="' + type.upper() + '"' + ' view=SUID:"' + str(view_SUID) + '"', base_url=base_url)
     return res
 
-# ------------------------------------------------------------------------------
-# ' @title Toggle Graphics Details
-# '
-# ' @description Regardless of the current zoom level and network size,
-# ' show (or hide) graphics details, e.g., node labels.
-# ' @details Displaying graphics details on a very large network will affect pan
-# ' and zoom performance, depending on your available RAM.
-# ' See \link{cytoscapeMemoryStatus}.
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return None
-# ' @examples \donttest{
-# ' showGraphicsDetails(TRUE)
-# ' }
-# ' @export
 def toggle_graphics_details(base_url=DEFAULT_BASE_URL):
+    """Toggle Graphics Details.
+
+    Regardless of the current zoom level and network size, show (or hide) graphics details, e.g., node labels.
+
+    Displaying graphics details on a very large network will affect pan and zoom performance, depending on your available RAM.
+    See :meth:`cytoscape_memory_status`.
+
+    Args:
+        network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
+            If a network view SUID is provided, then it is validated and returned.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {'message': 'Toggled Graphics level of details.'}
+
+    Raises:
+        CyError: if network or view doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> toggle_graphics_details()
+        {'message': 'Toggled Graphics level of details.'}
+    """
     res = commands.cyrest_put('ui/lod', base_url=base_url)
     return res
