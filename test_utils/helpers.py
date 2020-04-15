@@ -11,15 +11,16 @@ def load_test_session(session_filename=None):
 
 def load_test_network(network_name, make_current=True):
     if make_current:
-        new_suid = import_network_from_file(network_name)
-        set_current_network(new_suid)
+        imported = import_network_from_file(network_name)
+        set_current_network(imported['networks'][0])
     else:
         try:
             cur_suid = get_network_suid()
         except:
             cur_suid = None
-        import_network_from_file(network_name)
+        imported = import_network_from_file(network_name)
         if cur_suid: set_current_network(cur_suid)
+    return imported['networks'][0], imported['views'][0]
 
 def test_select_nodes(node_list):
     if len(node_list) == 0:

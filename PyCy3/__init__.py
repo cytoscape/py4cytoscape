@@ -13,4 +13,5 @@ from .filters import *
 from .groups import *
 from .tools import *
 from .user_interface import *
+from .network_views import *
 from .decorators import *

@@ -124,7 +124,8 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
             return
         return commands.commands_post('session save', base_url=base_url)
     else:
-        if re.search('cys$', filename) is None: filename += '.cys'
+# TODO: R uses '.cys$' here, but shouldn't the '.' be escaped??
+        if re.search('.cys$', filename) is None: filename += '.cys'
         filename = os.path.abspath(filename)
         if os.path.isfile(filename): print('This file has been overwritten.')
         return commands.commands_post('session save as file="' + filename + '"', base_url=base_url)
