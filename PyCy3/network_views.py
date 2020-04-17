@@ -40,6 +40,7 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get("networks/" + str(net_suid) + "/views", base_url=base_url)
+# TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
     return res
 
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):

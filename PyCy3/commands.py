@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
 
+# Functions for constructing any arbitrary CyREST API or Commands API method via
+# standard GET, PUT, POST and DELETE protocols. These functions handle marshalling
+# and unmarshalling of urls, parameters and returns so that higher-level functions
+# can work with Python-friendly arguments and returns.
+#
+# I. CyREST API functions
+# II. Commands API functions
+# III. Internal functions
+#
+# ==============================================================================
+# I. CyREST API functions
+# ------------------------------------------------------------------------------
+
+
 import requests
 import urllib.parse
 import json
@@ -15,10 +29,52 @@ def __init__(self):
 #TODO: Refactor functions to centralize HTTP handling and error handling
 
 def cyrest_api(base_url=DEFAULT_BASE_URL):
+    """Open Swagger docs for CyREST API.
+
+    Opens swagger docs in default browser for a live instance of CyREST operations.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        bool: True
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> cyrest_api() # loads Swagger CyREST API into browser
+        True
+    """
     res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/swagger.json#/', new=2, autoraise=True)
     return res
 
 def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
+    """Construct a query, make DELETE call and process the result.
+
+    Args:
+        operation (str): A string to be converted to the REST query namespace
+        parameters (dict): A named list of values to be converted to REST query parameters
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+        require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
+
+    Returns:
+        str or dict: a dict if result was JSON; otherwise a string
+
+    Raises:
+        ValueError: if JSON is expected and response is not JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> cyrest_delete('networks/51/views', require_json=False) # deletes views for network 51
+        ''
+        >>> cyrest_delete('session') # deletes the current session
+        {'message': 'New session created.'}
+    """
     try:
         url = build_url(base_url, operation)
         r = requests.delete(url, params=parameters)
@@ -31,12 +87,34 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content)
+        content = json.loads(e.response.content) if e.response and e.response.content else ''
         print("In commands:cyrest_delete(): " + str(e) + '\n' + str(content))
         raise
 
 def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
-    """ Perform HTTP GET and return a list object if JSON is returned; otherwise, just text """
+    """Construct a query, make GET call and process the result.
+
+    Args:
+        operation (str): A string to be converted to the REST query namespace
+        parameters (dict): A named list of values to be converted to REST query parameters
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+        require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
+
+    Returns:
+        str or dict: a dict if result was JSON; otherwise a string
+
+    Raises:
+        ValueError: if JSON is expected and response is not JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> cyrest_get('gc', require_json=False) # starts Cytoscape garbage collection
+        ''
+        >>> cyrest_get('version') # fetches CyREST version
+        {'apiVersion': 'v1', 'cytoscapeVersion': '3.8.0'}
+    """
     try:
         url = build_url(base_url, operation)
         r = requests.get(url, params=parameters)
@@ -55,7 +133,30 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
 
 
 def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
-    """ Perform HTTP POST and return a list object if JSON is returned; otherwise, just text """
+    """Construct a query and body, make POST call and process the result.
+
+    Args:
+        operation (str): A string to be converted to the REST query namespace
+        parameters (dict): A named list of values to be converted to REST query parameters
+        body (dict): A named list of values to be converted to JSON
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+        require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
+
+    Returns:
+        str or dict: a dict if result was JSON; otherwise a string
+
+    Raises:
+        ValueError: if JSON is expected and response is not JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> cyrest_post('networks/51/views') # Add a view to a network
+        {'networkViewSUID': '52'}
+        >>> cyrest_post('commands/command/echo', body={'message': 'Hi there'}) # echo a message
+        {'data': ['Hi there'], 'errors': '[]}
+    """
     try:
         url = build_url(base_url, operation)
         r = requests.post(url, params=parameters, json=body)
@@ -68,13 +169,34 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content)
+        content = json.loads(e.response.content) if e.response and e.response.content else ''
         print("In commands:cyrest_post(): " + str(e) + '\n' + str(content))
         raise
 
 
 def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
-    """ Perform HTTP PUT and return a list object if JSON is returned; otherwise, just text """
+    """Construct a query and body, make PUT call and process the result.
+
+    Args:
+        operation (str): A string to be converted to the REST query namespace
+        parameters (dict): A named list of values to be converted to REST query parameters
+        body (dict): A named list of values to be converted to JSON
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+        require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
+
+    Returns:
+        str or dict: a dict if result was JSON; otherwise a string
+
+    Raises:
+        ValueError: if JSON is expected and response is not JSON
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> cyrest_post('networks/views/currentNetworkView', body={'networkViewSUID': view}) # Make a view the current view
+        {'data': {}, 'errors': '[]}
+    """
     try:
         url = build_url(base_url, operation)
         r = requests.put(url, params=parameters, json=body)
@@ -87,11 +209,34 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content)
+        content = json.loads(e.response.content) if e.response and e.response.content else ''
         print("In commands:cyrest_put(): " + str(e) + '\n' + str(content))
         raise
 
+# ==============================================================================
+# II. Commands API functions
+# ------------------------------------------------------------------------------
+
 def commands_api(base_url=DEFAULT_BASE_URL):
+    """Open Swagger docs for CyREST Commands API.
+
+    Opens swagger docs in default browser for a live instance of Commands available via CyREST.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        bool: True
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> commands_api() # loads Swagger CyREST Commands API into browser
+        True
+    """
     res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/commands/swagger.json#/', new=2, autoraise=True)
     return res
 
@@ -107,7 +252,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
         res_list = [line   for line in res_list if line != 'Finished']
         return res_list
     except requests.exceptions.RequestException as e:
-        print("In commands:commands_get(): " + str(e) + '\n' + str(e.response.content))
+        print("In commands:commands_get(): " + str(e) + '\n' + str(e.response.content if e.response and e.response.content else ''))
         raise CyError(e.response.content)
 
 # TODO: Make sure this works the same as in R
@@ -123,7 +268,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
         res_list = [line.strip()   for line in res_list]
         return res_list
     except requests.exceptions.RequestException as e:
-        print("In commands:commands_help(): " + str(e) + '\n' + str(e.response.content))
+        print("In commands:commands_help(): " + str(e) + '\n' + str(e.response.content if e.response and e.response.content else ''))
         raise CyError(e.response.content)
 
 def commands_post(cmd, base_url=DEFAULT_BASE_URL, require_json=True):
@@ -135,7 +280,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL, require_json=True):
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content)
+        content = json.loads(e.response.content) if e.response and e.response.content else ''
         print("In commands:commands_post(): " + str(e) + '\n' + str(content))
 
         raise CyError(content['errors'][0]['message'])
