@@ -124,7 +124,7 @@ class LayoutsTests(unittest.TestCase):
             found_params = set(get_layout_property_names(layout))
             self.assertSetEqual(params, found_params)
 
-        self.assertRaises(requests.exceptions.RequestException, get_layout_property_names, 'boguslayout')
+        self.assertRaises(CyError, get_layout_property_names, 'boguslayout')
 
 #    @skip
     @print_entry_exit
@@ -137,7 +137,7 @@ class LayoutsTests(unittest.TestCase):
             for param_def in params:
                 self.assertEqual(get_layout_property_type(layout, param_def[0]), param_def[1])
 
-        self.assertRaises(requests.exceptions.RequestException, get_layout_property_type, 'boguslayout', 'bogusparam')
+        self.assertRaises(CyError, get_layout_property_type, 'boguslayout', 'bogusparam')
         self.assertRaises(KeyError, get_layout_property_type, 'force-directed', 'bogusparam')
 
 #    @skip
@@ -151,7 +151,7 @@ class LayoutsTests(unittest.TestCase):
             for param_def in params:
                 self.assertEqual(str(get_layout_property_value(layout, param_def[0])), param_def[1])
 
-        self.assertRaises(requests.exceptions.RequestException, get_layout_property_value, 'boguslayout', 'bogusparam')
+        self.assertRaises(CyError, get_layout_property_value, 'boguslayout', 'bogusparam')
         self.assertRaises(KeyError, get_layout_property_value, 'force-directed', 'bogusparam')
 
 #    @skip
@@ -173,7 +173,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringLength'), orig_default_spring_length)
         self.assertEqual(get_layout_property_value('force-directed', 'defaultSpringCoefficient'), orig_default_spring_coefficient)
 
-        self.assertRaises(requests.exceptions.RequestException, set_layout_properties, 'boguslayout', {})
+        self.assertRaises(CyError, set_layout_properties, 'boguslayout', {})
         self.assertEqual(set_layout_properties('force-directed', {'bogusparam':666}), '')
 
 if __name__ == '__main__':

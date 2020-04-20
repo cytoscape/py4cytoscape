@@ -67,7 +67,7 @@ class CollectionsTests(unittest.TestCase):
         # TODO: Can't test fetching other names because we don't have access to other collection SUIDs ... can we fix this?
 
         # Verify that bogus collection SUID returns nothing
-        self.assertRaises(HTTPError, get_collection_name, -1)
+        self.assertRaises(CyError, get_collection_name, -1)
 
 
 #    @skip
@@ -89,7 +89,7 @@ class CollectionsTests(unittest.TestCase):
         self.assertSetEqual(set(network_list), set(get_collection_networks(galFiltered_collection_suid)))
 
         # Verify that bogus collection SUID returns nothing
-        self.assertRaises(HTTPError, get_collection_networks, -1)
+        self.assertRaises(CyError, get_collection_networks, -1)
 
 
 if __name__ == '__main__':

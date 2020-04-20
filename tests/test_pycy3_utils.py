@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from test_utils import *
 from PyCy3 import *
 from PyCy3.pycy3_utils import DEFAULT_BASE_URL, build_url, node_suid_to_node_name, node_name_to_node_suid, edge_name_to_edge_suid
 from PyCy3.decorators import *
@@ -8,7 +9,10 @@ from PyCy3.decorators import *
 class PyCy3Tests(unittest.TestCase):
 
     def setUp(self):
-        input('Close all Cytoscape networks')
+        try:
+            delete_all_networks()
+        except:
+            pass
 
     def tearDown(self):
         pass
@@ -21,7 +25,8 @@ class PyCy3Tests(unittest.TestCase):
     @print_entry_exit
     def test_node_suid_to_node_name(self):
         # Initialization
-        input('Load galFiltered.sif')
+        load_test_session()
+
         suid_name_map = tables.get_table_columns().loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
@@ -42,7 +47,8 @@ class PyCy3Tests(unittest.TestCase):
     @print_entry_exit
     def test_node_name_to_node_suid(self):
         # Initialization
-        input('Load galFiltered.sif')
+        load_test_session()
+
         suid_name_map = tables.get_table_columns(table='node').loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
@@ -70,7 +76,8 @@ class PyCy3Tests(unittest.TestCase):
     @print_entry_exit
     def test_edge_name_to_edge_suid(self):
         # Initialization
-        input('Load galFiltered.sif')
+        load_test_session()
+
         suid_name_map = tables.get_table_columns(table='edge').loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)

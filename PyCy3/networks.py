@@ -694,7 +694,7 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
        1477
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"')
+    res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"', base_url=base_url)
     return res['network']
 
 def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):

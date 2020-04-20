@@ -329,7 +329,7 @@ def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     clear_selection(type = 'nodes', network=suid, base_url=base_url)
-    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"')
+    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"', base_url=base_url)
     return res
 
 
@@ -622,7 +622,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='edges', network=suid, base_url=base_url)
-    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"')
+    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"', base_url=base_url)
     return res
 
 def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):

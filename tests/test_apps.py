@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from requests import HTTPError
 
 from test_utils import *
 

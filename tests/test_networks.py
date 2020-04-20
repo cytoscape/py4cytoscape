@@ -520,14 +520,17 @@ class NetworkTests(unittest.TestCase):
 
 
     def _check_igraph_attributes(self, original_collection, new_collection):
-        def vals_eq(val1, val2):
-            return type(val1) is type(val2) and \
+        def vals_eq(name, e_cur_key, val1, val2):
+            eq = type(val1) is type(val2) and \
                     ((val1 == val2) or \
                      (type(val1) is float and math.isnan(val1) and math.isnan(val2)))
+            if not eq:
+                print('For ' + name + ', key ' + e_cur_key + ': ' + str(val1) + ' != ' + str(val2))
+            return eq
 
         for orig in original_collection:
             new = new_collection.find(name = orig['name'])
-            self.assertFalse(False in [vals_eq(orig[e_cur_key], new[e_cur_key])   for e_cur_key in orig.attributes().keys()])
+            self.assertFalse(False in [vals_eq(orig['name'], e_cur_key, orig[e_cur_key], new[e_cur_key])   for e_cur_key in orig.attributes().keys()])
 
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
         self.assertIsInstance(subnet_suid, int)
@@ -535,27 +538,6 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(get_node_count(subnet_suid), base_nodes)
         self.assertEqual(get_edge_count(subnet_suid), base_edges)
         self.assertIn(base_name, get_network_name(subnet_suid))
-
-    # def _load_test_network(self, network_name, make_current=True):
-    #     if make_current:
-    #         suid = import_network_from_file(network_name)
-    #         set_current_network(suid)
-    #     else:
-    #         try:
-    #             cur_suid = get_network_suid()
-    #         except:
-    #             cur_suid = None
-    #         import_network_from_file(network_name)
-    #         if cur_suid: set_current_network(cur_suid)
-    # 
-    # def _load_test_session(self, session_filename=None):
-    #     open_session(session_filename)
-
-    # def _select_nodes(self, node_list):
-    #     if len(node_list) == 0:
-    #         clear_selection(type='nodes')
-    #     else:
-    #         select_nodes(node_list, by_col='COMMON')
 
 if __name__ == '__main__':
     unittest.main()

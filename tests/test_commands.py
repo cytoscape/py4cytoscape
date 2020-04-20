@@ -2,7 +2,7 @@
 
 import unittest
 import json
-from requests import HTTPError
+from requests import RequestException
 
 from test_utils import *
 
@@ -21,7 +21,7 @@ class CommandsTests(unittest.TestCase):
     def test_cyrest_api(self):
         self.assertTrue(cyrest_api())
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_cyrest_delete(self):
         # Initialization
@@ -33,8 +33,9 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertRaises(HTTPError, get_network_views) # Behavior when there are no views
-        self.assertRaises(requests.exceptions.ConnectionError, cyrest_delete, 'session', base_url='http://totallybogus')
+        self.assertRaises(CyError, get_network_views) # Behavior when there are no views
+        self.assertRaises(RequestException, cyrest_delete, 'session', base_url='http://totallybogus') # test non-existent URL
+        self.assertRaises(RequestException, cyrest_delete, 'session', base_url='http://yahoo.com') # test real URL that doesn't have API
         load_test_session()
         self.assertRaises(ValueError, cyrest_delete, 'networks/' + str(get_network_suid()) + '/views', require_json=True)
 
@@ -43,7 +44,7 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'message': 'New session created.'})
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_cyrest_get(self):
 
@@ -53,7 +54,8 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that errors are caught
-        self.assertRaises(requests.exceptions.ConnectionError, cyrest_get, 'gc', base_url='http://totallybogus')
+        self.assertRaises(RequestException, cyrest_get, 'gc', base_url='http://totallybogus') # test non-existent URL
+        self.assertRaises(RequestException, cyrest_get, 'gc', base_url='http://yahoo.com') # test real URL that doesn't have API
         self.assertRaises(ValueError, cyrest_get, 'gc', require_json=True)
 
         # Verify that getting the CyREST version returns a valid JSON result
@@ -62,7 +64,7 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(res['apiVersion'], str)
         self.assertIsInstance(res['cytoscapeVersion'], str)
 
-    @skip
+#    @skip
     @print_entry_exit
     def test_cyrest_post(self):
         # Initialization
@@ -84,7 +86,8 @@ class CommandsTests(unittest.TestCase):
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(requests.exceptions.ConnectionError, cyrest_post, 'commands/command/echo', body={'message': 'Hi there'}, base_url='http://totallybogus')
+        self.assertRaises(RequestException, cyrest_post, 'commands/command/echo', body={'message': 'Hi there'}, base_url='http://totallybogus')
+        self.assertRaises(RequestException, cyrest_post, 'commands/command/echo', body={'message': 'Hi there'}, base_url='http://yahoo.com')
 
 #    @skip
     @print_entry_exit
@@ -102,46 +105,196 @@ class CommandsTests(unittest.TestCase):
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(requests.exceptions.ConnectionError, cyrest_post, 'networks/views/currentNetworkView', body={'networkViewSUID': view}, base_url='http://totallybogus')
+        self.assertRaises(RequestException, cyrest_post, 'networks/views/currentNetworkView', body={'networkViewSUID': view}, base_url='http://totallybogus')
+        self.assertRaises(RequestException, cyrest_post, 'networks/views/currentNetworkView', body={'networkViewSUID': view}, base_url='http://yahoo.com')
 
 #    @skip
     @print_entry_exit
     def test_commands_api(self):
         self.assertTrue(commands_api())
 
-    @skip
+#    @skip
     @print_entry_exit
-    def test_command_get(self):
-        x,y = commands._command_2_get_query('layout force-directed')
-        print((x, y))
-        x,y = commands._command_2_get_query('layout force-directed defaultNodeMass=1')
-        print((x, y))
-        x,y = commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"')
-        print((x, y))
-        x = command_sleep(5)
-        print(x)
-        x = command_quit()
-        print(x)
-        x = command_pause('hi there')
-        print(x)
-        x = command_open_dialog()
-        print(x)
-        x = command_echo('Hi there')
-        print(x)
-        x = commands_help('apps')
-        print(x)
-        x = commands_get('command sleep duration=5')
-        print(x)
-        x = commands_get('')
-        print(x)
-        x = commands_get('view')
-        print(x)
-        x = commands_get('apps list available')
-        print(x)
-        x = commands_get('apps status app="clusterMaker2"')
-        print(x)
-        x = commands_get('session open file="c:/file name"')
-        print(x)
+    def test_commands_get(self):
+        # Verify the expected return from common commands
+        self._check_cy_result(commands_get('command sleep duration=5'), [])
+        self._check_cy_result(commands_get(''), ['Available namespaces:', 'analyzer', 'apps', 'command', 'cybrowser', 'cychart', 'diffusion', 'edge', 'filter', 'group', 'idmapper', 'layout', 'network', 'node', 'session', 'table', 'view', 'vizmap'], allow_subset=True)
+        self._check_cy_result(commands_get('view'), ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content', 'fit selected', 'get current', 'list', 'set current', 'update'], allow_subset=True)
+        self._check_cy_result(commands_get('apps status app="Network Merge"'), ['app: Network Merge, status: Installed'])
+
+        # Verify that bad commands are caught
+        self.assertRaises(CyError, commands_get, 'apps status app="bogusjunk"')
+        self.assertRaises(CyError, commands_get, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, commands_get, '', base_url='http://totallybogus')
+        self.assertRaises(CyError, commands_get, '', base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_commands_help(self):
+        # Verify the expected return from common commands
+        self._check_cy_result(commands_help('apps'), ['disable', 'enable', 'information', 'install', 'list available', 'list disabled', 'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status', 'uninstall', 'update'], allow_subset=True)
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, commands_help, 'bogus_junk')
+        self.assertRaises(RequestException, commands_help, '', base_url='http://totallybogus')
+        self.assertRaises(CyError, commands_help, '', base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_commands_post(self):
+        # Verify the expected return from common commands
+        self._check_cy_result(commands_post('command sleep duration=5'), {})
+        self._check_cy_result(commands_post('apps status app="Network Merge"'), {'appName': 'Network Merge', 'status': 'Installed'})
+
+        # Verify that bad commands are caught
+        self.assertRaises(CyError, commands_post, 'apps status app="bogusjunk"')
+        self.assertRaises(CyError, commands_post, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, commands_post, '', base_url='http://totallybogus')
+        self.assertRaises(RequestException, commands_post, '', base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_commands_run(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that a command can execute
+        res = commands_run('session new destroyCurrentSession=true')
+        self.assertIsInstance(res, list)
+        self.assertListEqual(res, [])
+
+        # Verify that bad commands are caught
+        self.assertRaises(CyError, commands_run, 'total junk')
+        self.assertRaises(CyError, commands_run, 'apps status app="bogusjunk"')
+        self.assertRaises(CyError, commands_run, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, commands_run, '', base_url='http://totallybogus')
+        self.assertRaises(CyError, commands_run, '', base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_commands_echo(self):
+        # Verify that the command returns what's sent to it
+        res = command_echo('Hi there')
+        self.assertIsInstance(res, list)
+        self.assertListEqual(res, ['Hi there'])
+
+        # Verify that an empty message comes back as '*'
+        res = command_echo()
+        self.assertIsInstance(res, list)
+        self.assertListEqual(res, ['*'])
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, command_echo, 'Hi there', base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_echo, 'Hi there', base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_open_dialog(self):
+        # Verify that open dialog command fails ... it seems to be missing in the CyREST command set
+        self.assertRaises(CyError, command_open_dialog)
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, command_open_dialog, base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_open_dialog, base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_pause(self):
+        # Verify that pause returns nothing at all
+        input('Verify that the pause message appears next ...')
+        res = command_pause()
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+
+        input('Verify that the pause message appears next ...')
+        res = command_pause('Please click OK to continue.')
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, command_pause, base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_pause, base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_quit(self):
+        # Verify that pause returns nothing at all
+        res = command_quit()
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+        input('Verify that Cytoscape has terminated, then restart it ...')
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, command_quit, base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_quit, base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_run_file(self):
+        # Initialization
+        load_test_session()
+        CMD_FILE = 'data/CommandScript.txt'
+        self.assertIsInstance(get_network_suid(), int)
+
+        # Verify that script file returns nothing at all
+        res = command_run_file(CMD_FILE) # Execute cmd to create a new session (i.e., no network)
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+        self.assertRaises(CyError, get_network_suid) # Check for there being no network anymore
+
+        # Verify that bad commands are caught
+        self.assertRaises(CyError, command_run_file, 'nosuchfile')
+        self.assertRaises(RequestException, command_run_file, CMD_FILE, base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_run_file, CMD_FILE, base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_sleep(self):
+        # Verify that pause returns nothing at all
+        res = command_sleep()  # Try a no-duration sleep
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+
+        input('Ready to try a 10 second sleep ...')
+        res = command_sleep(10)  # Try a 10s sleep
+        self.assertIsInstance(res, dict)
+        self.assertDictEqual(res, {})
+
+        # Verify that bad commands are caught
+        self.assertRaises(RequestException, command_sleep, base_url='http://totallybogus')
+        self.assertRaises(RequestException, command_sleep, base_url='http://yahoo.com')
+
+#    @skip
+    @print_entry_exit
+    def test_command_2_get_query(self):
+
+        def check_cmd(query, expected_url, expected_args):
+            url = query[0]
+            args = query[1]
+            self.assertIsInstance(url, str)
+            self.assertEqual(url, expected_url)
+            if args or expected_args:
+                self.assertIsInstance(args, dict)
+                self.assertDictEqual(args, expected_args)
+
+        # Check for a URL with no parameters
+        check_cmd(commands._command_2_get_query('layout force-directed'), 'http://localhost:1234/v1/commands/layout/force-directed', None)
+
+        # Check for a URL with a single scalar parameter
+        check_cmd(commands._command_2_get_query('layout force-directed defaultNodeMass=1'), 'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
+
+        # Check for a URL with two parameters, one of which has an embedded blank
+        check_cmd(commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'), 'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1', 'file': 'C:\\file name'})
+
+    def _check_cy_result(self, actual_res, expected_res, allow_subset=False):
+        if type(expected_res) is dict:
+            self.assertDictEqual(actual_res, expected_res)
+        else:
+            self.assertIsInstance(actual_res, list)
+            if allow_subset:
+                self.assertTrue(set(actual_res).issubset(set(expected_res)))
+            else:
+                self.assertListEqual(actual_res, expected_res)
 
 
 if __name__ == '__main__':

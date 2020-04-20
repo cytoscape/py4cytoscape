@@ -18,6 +18,8 @@ import requests
 import urllib.parse
 import json
 import webbrowser
+import sys
+import os
 
 from .pycy3_utils import *
 from .exceptions import CyError
@@ -87,9 +89,8 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content) if e.response and e.response.content else ''
-        print("In commands:cyrest_delete(): " + str(e) + '\n' + str(content))
-        raise
+        _handle_error('commands:cyrest_delete()', e)
+
 
 def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query, make GET call and process the result.
@@ -127,10 +128,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content) if e.response and e.response.content else ''
-        print("In commands:cyrest_get(): " + str(e) + '\n' + str(content))
-        raise
-
+        _handle_error('commands:cyrest_get()', e)
 
 def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query and body, make POST call and process the result.
@@ -169,10 +167,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content) if e.response and e.response.content else ''
-        print("In commands:cyrest_post(): " + str(e) + '\n' + str(content))
-        raise
-
+        _handle_error('commands:cyrest_post()', e)
 
 def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query and body, make PUT call and process the result.
@@ -194,7 +189,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> cyrest_post('networks/views/currentNetworkView', body={'networkViewSUID': view}) # Make a view the current view
+        >>> cyrest_put('networks/views/currentNetworkView', body={'networkViewSUID': view}) # Make a view the current view
         {'data': {}, 'errors': '[]}
     """
     try:
@@ -209,9 +204,8 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content) if e.response and e.response.content else ''
-        print("In commands:cyrest_put(): " + str(e) + '\n' + str(content))
-        raise
+        _handle_error('commands:cyrest_put()', e)
+
 
 # ==============================================================================
 # II. Commands API functions
@@ -240,38 +234,113 @@ def commands_api(base_url=DEFAULT_BASE_URL):
     res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/commands/swagger.json#/', new=2, autoraise=True)
     return res
 
+
 # TODO: Make sure this works the same as in R
 def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
+    """Commands GET.
+
+    Using the same syntax as Cytoscape's Command Line Dialog, this function converts a command string into a
+    CyREST query URL, executes a GET request, and parses the result content into a list object.
+
+    Args:
+        cmd_string (str): command
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a list of lines in the command result (omitting the "Finished" line at the end)
+
+    Raises:
+        CyError: if command has an error
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> commands_get('command sleep duration=5')
+        []
+        >>> commands_get('apps status app="Network Merge"')
+        ['app: Network Merge, status: Installed']
+        >>> commands_get('view')
+        ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content', 'fit selected', ...]
+    """
     try:
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = requests.get(get_url, params=parameters)
+        r = requests.get(get_url, params=parameters, headers={'Accept': 'text/plain'})
         r.raise_for_status()
 
         # Break response into a list of lines and return it
         res_list = re.split('\n\\s*', r.text)
         res_list = [line   for line in res_list if line != 'Finished']
+        if len(res_list) and res_list[-1] == '': del res_list[-1] # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
-        print("In commands:commands_get(): " + str(e) + '\n' + str(e.response.content if e.response and e.response.content else ''))
-        raise CyError(e.response.content)
+        _handle_error('commands:commands_get()', e, force_cy_error=True)
 
 # TODO: Make sure this works the same as in R
 def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
+    """Commands Help.
+
+    Using the same syntax as Cytoscape's Command Line Dialog, this function returns a list of available commands or args.
+    Works with or without 'help' command prefix. Note that if you ask about a command that doesn't have any arguments,
+    this function will run the command!
+
+    Args:
+        cmd_string (str): command
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a list of lines in the command result (omitting the "Finished" line at the end)
+
+    Raises:
+        CyError: if command has an error
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> commands_help('apps')
+        ['disable', 'enable', 'information', 'install', 'list available', 'list disabled', ...]
+    """
     try:
         cmd_string = re.sub(r'help *', cmd_string, cmd_string) # remove 'help ' if it's already in the request
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = requests.get(get_url, params=parameters)
+        r = requests.get(get_url, params=parameters, headers={'Accept': 'text/plain'})
         r.raise_for_status()
 
         # Break response into a list of lines and return it
         res_list = re.split('\n\\s*', r.text)[1:] # create a list of command options, and leave off the header
         res_list = [line.strip()   for line in res_list]
+        if len(res_list) and res_list[-1] == '': del res_list[-1] # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
-        print("In commands:commands_help(): " + str(e) + '\n' + str(e.response.content if e.response and e.response.content else ''))
-        raise CyError(e.response.content)
+        _handle_error('commands:commands_help()', e, force_cy_error=True)
 
-def commands_post(cmd, base_url=DEFAULT_BASE_URL, require_json=True):
+def commands_post(cmd, base_url=DEFAULT_BASE_URL):
+    """Commands POST.
+
+    Using the same syntax as Cytoscape's Command Line Dialog, this function converts a command string into a CyREST
+    query URL, executes a POST request, and parses the result content into a dict object.
+
+    Args:
+        cmd_string (str): command
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict or list: a structured command reply
+
+    Raises:
+        CyError: if command has an error
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> commands_post('apps status app="Network Merge"')
+        {'appName': 'Network Merge', 'status': 'Installed'}
+        >>> commands_post('apps list available')
+        [{appName: 'CHAT', 'description': 'Identify contextually relevant hubs in biological networks', 'details': ''},
+         {'appName': 'AgilentLiteratureSearch', 'description': 'Mines scientific literature to ... ', 'details': ''} ...]
+    """
     try:
         post_url = _command_2_post_query_url(cmd, base_url=base_url)
         post_body = _command_2_post_query_body(cmd)
@@ -280,30 +349,152 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL, require_json=True):
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
-        content = json.loads(e.response.content) if e.response and e.response.content else ''
-        print("In commands:commands_post(): " + str(e) + '\n' + str(content))
-
-        raise CyError(content['errors'][0]['message'])
+        _handle_error('commands:commands_post()', e)
 
 def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
+    """Run a Command.
+
+    Using the same syntax as Cytoscape's Command Line Dialog, this function converts a command string into a CyREST
+    query URL, executes a GET request, and parses the result content into a list object. Same as commandsGET.
+
+    Args:
+        cmd_string (str): command
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a list of lines in the command result (omitting the "Finished" line at the end)
+
+    Raises:
+        CyError: if command has an error
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> commands_run('session new destroyCurrentSession=true')
+        []
+    """
     return commands_get(cmd_string, base_url=base_url)
 
-# TODO: Take another look at the R version ... it seems to be passing in the wrong parameter name
+# TODO: Take another look at the R version ... it seems to be passing in the wrong parameter name. Comments seem wrong.
 def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
+    """Command Echo.
+
+    The echo command will display the value of the variable specified by the variableName argument, or all
+    variables if variableName is not provided.
+
+    Args:
+        variable_name (str): The name of the variable to display. Default is to display all variable values using "*".
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        list: a list containing as single string containing the ``variable_name`` value
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_echo('Hi there')
+        ['Hi there']
+        >>> command_echo()
+        ['*']
+    """
     return commands_post('command echo message="' + variable_name + '"', base_url=base_url)
 
 # TODO: It doesn't look like the command space supports open ... does the R version work?
 def command_open_dialog(base_url=DEFAULT_BASE_URL):
+    """Command Open Dialog.
+
+    The command line dialog provides a field to enter commands and view results. It also provides the help command
+    to display namespaces, commands, and arguments
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        None
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_open_dialog()
+    """
     return commands_post('command open dialog', base_url=base_url)
 
 def command_pause(message='', base_url=DEFAULT_BASE_URL):
+    """Command Pause.
+
+    The pause command displays a dialog with the text provided in the message argument and waits for the user to click OK.
+
+    Args:
+        message (str): Text to display in pause dialog
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_pause()
+        {}
+    """
     return commands_post('command pause message="' + message + '"', base_url=base_url)
 
 def command_quit(base_url=DEFAULT_BASE_URL):
+    """Command Quit.
+
+    This command causes Cytoscape to exit. It is typically used at the end of a script file
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_quit()
+        {}
+    """
     return commands_post('command quit', base_url=base_url)
 
+# TODO: Consider whether absolute path should happen in R, too
 def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
+    """Command Run File.
+
+    The run command will execute a command script from the file pointed to by the file argument, which should contain
+    Cytoscape commands, one per line. Arguments to the script are provided by the args argument
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_run_file('data/CommandScript.txt')
+        {}
+    """
     args_str = ' args="' + args + '"' if args else ''
+    file = os.path.abspath(file)
 
     return commands_post('command run' + args_str + ' file="' + file + '"', base_url=base_url)
 
@@ -390,3 +581,18 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
         cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
 
     return cmd_list_ready
+
+def _handle_error(caller, e, force_cy_error=False):
+    if e.response is None or e.response.text is None or e.response.text == '':
+        print('In ' + caller + ': ' + str(e))
+        raise
+    else:
+        content = e.response.text
+        try:
+            content =  json.loads(content)['errors'][0]['message']
+            print('In ' + caller + ': ' + str(e) + '\n' + content)
+            e = CyError(content)
+        except:
+            print('In ' + caller + ': ' + str(e) + '\n' + content)
+            if force_cy_error: e = CyError(content)
+        raise e

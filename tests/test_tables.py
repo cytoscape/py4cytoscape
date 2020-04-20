@@ -33,7 +33,7 @@ class TablesTests(unittest.TestCase):
         check_delete('node', 'BetweennessCentrality')
         check_delete('edge', 'EdgeBetweenness')
         check_delete('node', 'boguscolumn')
-        self.assertRaises(HTTPError, delete_table_column, table='bogustable', column='boguscolumn')
+        self.assertRaises(CyError, delete_table_column, table='bogustable', column='boguscolumn')
 
         self.assertRaises(CyError, get_table_column_names, network='bogus')
 
@@ -73,7 +73,7 @@ class TablesTests(unittest.TestCase):
         self.assertSetEqual(set(df.columns), {'SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction', 'EdgeBetweenness'})
         self.assertEqual(len(df.index), get_edge_count())
 
-        self.assertRaises(HTTPError, get_table_columns, table='bogustable', columns='boguscolumn')
+        self.assertRaises(CyError, get_table_columns, table='bogustable', columns='boguscolumn')
         self.assertRaises(CyError, get_table_columns, network='bogus')
 
 
@@ -96,7 +96,7 @@ class TablesTests(unittest.TestCase):
 
         # TODO: Fetching a None number raises an error, but should really return a None ... can this be changed?
         # TODO: Find out if a null string in Cytoscape is the same thing as a None
-        self.assertRaises(HTTPError, get_table_value, 'node', 'YER056CA', 'gal1RGexp')
+        self.assertRaises(CyError, get_table_value, 'node', 'YER056CA', 'gal1RGexp')
         self.assertIsNone(get_table_value('node', 'YER056CA', 'COMMON'))
 
         self.assertRaises(CyError, get_table_value, 'node', 'YDL194W', 'gal1RGexp', network='bogus')
@@ -110,7 +110,7 @@ class TablesTests(unittest.TestCase):
         self.assertSetEqual(set(get_table_column_names()), {'SUID', 'shared name', 'name', 'selected', 'AverageShortestPathLength', 'BetweennessCentrality', 'ClosenessCentrality', 'ClusteringCoefficient', 'Degree', 'Eccentricity', 'IsSingleNode', 'NeighborhoodConnectivity', 'NumberOfDirectedEdges', 'NumberOfUndirectedEdges', 'PartnerOfMultiEdgedNodePairs', 'Radiality', 'SelfLoops', 'Stress', 'TopologicalCoefficient', 'degree.layout', 'COMMON', 'gal1RGexp', 'gal4RGexp', 'gal80Rexp', 'gal1RGsig', 'gal4RGsig', 'gal80Rsig', 'isExcludedFromPaths'})
         self.assertSetEqual(set(get_table_column_names('edge')), {'SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction', 'EdgeBetweenness'})
         self.assertSetEqual(set(get_table_column_names('network')), {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication', 'Dataset Name', 'Dataset URL'})
-        self.assertRaises(HTTPError, get_table_column_names, 'library')
+        self.assertRaises(CyError, get_table_column_names, 'library')
 
         self.assertRaises(CyError, get_table_column_names, network='bogus')
 
@@ -123,7 +123,7 @@ class TablesTests(unittest.TestCase):
         self.assertDictEqual(get_table_column_types(), {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', 'AverageShortestPathLength': 'Double', 'BetweennessCentrality': 'Double', 'ClosenessCentrality': 'Double', 'ClusteringCoefficient': 'Double', 'Degree': 'Integer', 'Eccentricity': 'Integer', 'IsSingleNode': 'Boolean', 'NeighborhoodConnectivity': 'Double', 'NumberOfDirectedEdges': 'Integer', 'NumberOfUndirectedEdges': 'Integer', 'PartnerOfMultiEdgedNodePairs': 'Integer', 'Radiality': 'Double', 'SelfLoops': 'Integer', 'Stress': 'Long', 'TopologicalCoefficient': 'Double', 'degree.layout': 'Integer', 'COMMON': 'String', 'gal1RGexp': 'Double', 'gal4RGexp': 'Double', 'gal80Rexp': 'Double', 'gal1RGsig': 'Double', 'gal4RGsig': 'Double', 'gal80Rsig': 'Double', 'isExcludedFromPaths': 'Boolean'})
         self.assertDictEqual(get_table_column_types('edge'), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String', 'EdgeBetweenness': 'Double'})
         self.assertDictEqual(get_table_column_types('network'), {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', '__Annotations': 'List', 'publication': 'String', 'Dataset Name': 'String', 'Dataset URL': 'String'})
-        self.assertRaises(HTTPError, get_table_column_types, 'library')
+        self.assertRaises(CyError, get_table_column_types, 'library')
 
         self.assertRaises(CyError, get_table_column_types, 'edge', network='bogus')
 
@@ -154,8 +154,8 @@ class TablesTests(unittest.TestCase):
         verify_each_newcol_value = [added_data[added_data['id'] == row['id']].iloc[0]['newcol'] == row['newcol']  for row_index, row in test_data.iterrows()]
         self.assertNotIn(False, verify_each_newcol_value)
 
-        self.assertRaises(HTTPError, load_table_data, data, table='bogus')
-        self.assertRaises(HTTPError, load_table_data, data, namespace='bogus')
+        self.assertRaises(CyError, load_table_data, data, table='bogus')
+        self.assertRaises(CyError, load_table_data, data, namespace='bogus')
         self.assertRaises(CyError, load_table_data, data, network='bogus')
 
     #    @skip
@@ -179,8 +179,8 @@ class TablesTests(unittest.TestCase):
         self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'bogus', 'SGD')
         self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'bogus')
 
-        self.assertRaises(HTTPError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', table='bogus')
-        self.assertRaises(HTTPError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', namespace='bogus')
+        self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', table='bogus')
+        self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', namespace='bogus')
         self.assertRaises(CyError, map_table_column, 'name', 'Yeast', 'Ensembl', 'SGD', network='bogus')
 
     #    @skip
@@ -198,17 +198,17 @@ class TablesTests(unittest.TestCase):
         self.assertSetEqual(set(get_table_column_names()), expected_columns)
 
         # Verify that invalid parameters raise exceptions
-        self.assertRaises(HTTPError, rename_table_column, 'bogus', 'xAveragex')
-        self.assertRaises(HTTPError, rename_table_column, '', 'xAveragex')
-        self.assertRaises(HTTPError, rename_table_column, None, 'xAveragex')
-        self.assertRaises(HTTPError, rename_table_column, 'xAveragex', '')
+        self.assertRaises(CyError, rename_table_column, 'bogus', 'xAveragex')
+        self.assertRaises(CyError, rename_table_column, '', 'xAveragex')
+        self.assertRaises(CyError, rename_table_column, None, 'xAveragex')
+        self.assertRaises(CyError, rename_table_column, 'xAveragex', '')
         # self.assertRaises(HTTPError, rename_table_column, 'xAveragex', None) # This should fail, but doesn't
         # TODO: CyREST shouldn't allow change of name to None ... it shows up as null in Cytoscape
-        self.assertRaises(HTTPError, rename_table_column, 'xAveragex', 'name')
+        self.assertRaises(CyError, rename_table_column, 'xAveragex', 'name')
 
         self.assertRaises(CyError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', network='bogus')
-        self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', namespace='bogus')
-        self.assertRaises(HTTPError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', table='bogus')
+        self.assertRaises(CyError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', namespace='bogus')
+        self.assertRaises(CyError, rename_table_column, 'AverageShortestPathLength', 'xAveragex', table='bogus')
 
 if __name__ == '__main__':
     unittest.main()
