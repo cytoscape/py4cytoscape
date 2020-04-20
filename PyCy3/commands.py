@@ -499,6 +499,27 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
     return commands_post('command run' + args_str + ' file="' + file + '"', base_url=base_url)
 
 def command_sleep(duration=None, base_url=DEFAULT_BASE_URL):
+    """Command Sleep.
+
+    The sleep command will pause processing for a period of time as specified by duration seconds. It is typically used
+    as part of a command script.
+
+    Args:
+        duration (float): The time in seconds to sleep
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of PyCy3.
+
+    Returns:
+        dict: {}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> command_sleep(6)
+        {}
+    """
     dur_str = ' duration="' + str(duration) + '"' if duration else ''
 
     return commands_post('command sleep' + dur_str, base_url=base_url)
