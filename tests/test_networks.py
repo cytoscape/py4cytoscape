@@ -16,15 +16,6 @@ class NetworkTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @skip
-    @print_entry_exit
-    def test_first_func(self):
-        res = first_func()
-        self.assertIn('allAppsStarted', res)
-        self.assertIn('apiVersion', res)
-        self.assertIn('numberOfCores', res)
-        self.assertIn('memoryStatus', res)
-
 #    @skip
     @print_entry_exit
     def test_set_current_network(self):

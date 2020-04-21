@@ -13,7 +13,9 @@ from . import commands
 from . import networks
 from .exceptions import CyError
 from .pycy3_utils import *
+from .pycy3_logger import *
 
+@cy_log
 def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve list of network view SUIDs.
 
@@ -43,6 +45,7 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
 # TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
     return res
 
+@cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the SUID of a network view.
 
@@ -101,6 +104,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
             print('Warning: This network has multiple views. Returning last.')
         return network_views[-1]
 
+@cy_log
 def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """Zoom and pan network view to maximize either height or width of current network window.
 
@@ -136,6 +140,7 @@ def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
         res = commands.commands_post('view fit content view=SUID:' + str(view_suid), base_url=base_url)
     return res
 
+@cy_log
 def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     """Set which network view is "current".
 
@@ -168,6 +173,7 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     return res
 
 # TODO: Need parameter to automatically overwrite file if it exists
+@cy_log
 def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None, network=None, base_url=DEFAULT_BASE_URL):
     """ Save the current network view as an image file.
 
@@ -229,6 +235,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     res = commands.commands_post(cmd_string + ' OutputFile="' + filename + '"' + ' options="' + type.upper() + '"' + ' view=SUID:"' + str(view_SUID) + '"', base_url=base_url)
     return res
 
+@cy_log
 def toggle_graphics_details(base_url=DEFAULT_BASE_URL):
     """Toggle Graphics Details.
 

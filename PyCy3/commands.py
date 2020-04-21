@@ -22,14 +22,15 @@ import sys
 import os
 
 from .pycy3_utils import *
+from .pycy3_logger import *
 from .exceptions import CyError
-from PyCy3.decorators import debug
 
 def __init__(self):
     pass
 
 #TODO: Refactor functions to centralize HTTP handling and error handling
 
+@cy_log
 def cyrest_api(base_url=DEFAULT_BASE_URL):
     """Open Swagger docs for CyREST API.
 
@@ -53,6 +54,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
     res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/swagger.json#/', new=2, autoraise=True)
     return res
 
+@cy_log
 def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query, make DELETE call and process the result.
 
@@ -91,7 +93,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_delete()', e)
 
-
+@cy_log
 def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query, make GET call and process the result.
 
@@ -130,6 +132,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_get()', e)
 
+@cy_log
 def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query and body, make POST call and process the result.
 
@@ -169,6 +172,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_post()', e)
 
+@cy_log
 def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query and body, make PUT call and process the result.
 
@@ -211,6 +215,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
 # II. Commands API functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def commands_api(base_url=DEFAULT_BASE_URL):
     """Open Swagger docs for CyREST Commands API.
 
@@ -236,6 +241,7 @@ def commands_api(base_url=DEFAULT_BASE_URL):
 
 
 # TODO: Make sure this works the same as in R
+@cy_log
 def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
     """Commands GET.
 
@@ -277,6 +283,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
         _handle_error('commands:commands_get()', e, force_cy_error=True)
 
 # TODO: Make sure this works the same as in R
+@cy_log
 def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
     """Commands Help.
 
@@ -315,6 +322,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_help()', e, force_cy_error=True)
 
+@cy_log
 def commands_post(cmd, base_url=DEFAULT_BASE_URL):
     """Commands POST.
 
@@ -341,6 +349,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         [{appName: 'CHAT', 'description': 'Identify contextually relevant hubs in biological networks', 'details': ''},
          {'appName': 'AgilentLiteratureSearch', 'description': 'Mines scientific literature to ... ', 'details': ''} ...]
     """
+
     try:
         post_url = _command_2_post_query_url(cmd, base_url=base_url)
         post_body = _command_2_post_query_body(cmd)
@@ -351,6 +360,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_post()', e)
 
+@cy_log
 def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
     """Run a Command.
 
@@ -377,6 +387,7 @@ def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
     return commands_get(cmd_string, base_url=base_url)
 
 # TODO: Take another look at the R version ... it seems to be passing in the wrong parameter name. Comments seem wrong.
+@cy_log
 def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
     """Command Echo.
 
@@ -404,6 +415,7 @@ def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
     return commands_post('command echo message="' + variable_name + '"', base_url=base_url)
 
 # TODO: It doesn't look like the command space supports open ... does the R version work?
+@cy_log
 def command_open_dialog(base_url=DEFAULT_BASE_URL):
     """Command Open Dialog.
 
@@ -426,6 +438,7 @@ def command_open_dialog(base_url=DEFAULT_BASE_URL):
     """
     return commands_post('command open dialog', base_url=base_url)
 
+@cy_log
 def command_pause(message='', base_url=DEFAULT_BASE_URL):
     """Command Pause.
 
@@ -449,6 +462,7 @@ def command_pause(message='', base_url=DEFAULT_BASE_URL):
     """
     return commands_post('command pause message="' + message + '"', base_url=base_url)
 
+@cy_log
 def command_quit(base_url=DEFAULT_BASE_URL):
     """Command Quit.
 
@@ -472,6 +486,7 @@ def command_quit(base_url=DEFAULT_BASE_URL):
     return commands_post('command quit', base_url=base_url)
 
 # TODO: Consider whether absolute path should happen in R, too
+@cy_log
 def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
     """Command Run File.
 
@@ -498,6 +513,7 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
 
     return commands_post('command run' + args_str + ' file="' + file + '"', base_url=base_url)
 
+@cy_log
 def command_sleep(duration=None, base_url=DEFAULT_BASE_URL):
     """Command Sleep.
 

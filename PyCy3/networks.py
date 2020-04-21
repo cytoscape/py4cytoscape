@@ -32,12 +32,13 @@ from . import tables
 from . import network_selection
 from . import layouts
 from .pycy3_utils import *
+from .pycy3_logger import *
 from .exceptions import CyError
-from .decorators import debug
 
 def __init__(self):
     pass
 
+@cy_log
 def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     """Selects the given network as "current".
 
@@ -68,6 +69,7 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post(cmd, base_url=base_url)
     return res
 
+@cy_log
 def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     """Sets a new name for a network.
 
@@ -100,6 +102,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
     return commands.commands_post(cmd, base_url)
 
+@cy_log
 def get_network_count(base_url=DEFAULT_BASE_URL):
     """Get the number of Cytoscape networks in the current Cytoscape session.
 
@@ -122,6 +125,7 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/count', base_url=base_url)
     return list(res.values())[0]
 
+@cy_log
 def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     """Get the name of a network.
 
@@ -173,6 +177,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=DEFAULT_BASE_URL)
     return res[0]['name']
 
+@cy_log
 def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
     """Get the SUID of a network.
 
@@ -230,6 +235,7 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
     response = commands.commands_post(cmd, base_url=base_url)
     return int(response[0]['SUID'])
 
+@cy_log
 def get_network_list(base_url=DEFAULT_BASE_URL):
     """Returns the list of Cytoscape network names in the current Cytoscape session.
 
@@ -257,6 +263,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
 
     return cy_network_names
 
+@cy_log
 def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
     """Export a network to one of mulitple file formats.
 
@@ -306,6 +313,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
 
     return commands.commands_post(cmd + ' OutputFile="' + filename + '"', base_url=base_url)
 
+@cy_log
 def delete_network(network=None, base_url=DEFAULT_BASE_URL):
     """Delete a network from the current Cytoscape session.
 
@@ -332,6 +340,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_delete('networks/' + str(suid), base_url=base_url, require_json=False)
     return res
 
+@cy_log
 def delete_all_networks(base_url=DEFAULT_BASE_URL):
     """Delete all networks from the current Cytoscape session.
 
@@ -356,6 +365,7 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
 # II. General node functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_first_neighbors(node_names=None, as_nested_list=False, network=None, base_url=DEFAULT_BASE_URL):
     """Returns a non-redundant list of first neighbors of the supplied list of nodes or current node selection.
 
@@ -416,6 +426,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     return neighbor_names
 
 
+@cy_log
 def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=DEFAULT_BASE_URL):
     """Add one or more nodes to a Cytoscape network.
 
@@ -450,6 +461,7 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
     res = commands.cyrest_post('networks/' + str(net_suid) + '/nodes', body=node_names, base_url=base_url)
     return res
 
+@cy_log
 def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
     """Reports the number of nodes in the network.
 
@@ -480,6 +492,7 @@ def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/count', base_url=base_url)
     return res['count']
 
+@cy_log
 def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all the nodes in the network.
 
@@ -513,6 +526,7 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
 # III. General edge functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None, base_url=DEFAULT_BASE_URL):
     """Add one or more edges to a Cytoscape network by listing source and target node pairs.
 
@@ -561,6 +575,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     res = commands.cyrest_post('networks/' + str(net_suid) + '/edges', body=edge_data, base_url=base_url)
     return res
 
+@cy_log
 def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     """Reports the number of the edges in the network.
 
@@ -591,6 +606,7 @@ def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/count', base_url=base_url)
     return res['count']
 
+@cy_log
 def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
     """Returns source, target and edge table row values.
 
@@ -638,6 +654,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Verify that it's always OK to return a list instead of a single dict ... this happens in many places
     return edge_info
 
+@cy_log
 def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all the edges in the network.
 
@@ -671,6 +688,7 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
 # IV. Network creation
 # ------------------------------------------------------------------------------
 
+@cy_log
 def clone_network(network=None, base_url=DEFAULT_BASE_URL):
     """Makes a copy of a Cytoscape Network with all of its edges and nodes.
 
@@ -697,6 +715,7 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"', base_url=base_url)
     return res['network']
 
+@cy_log
 def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Copies a subset of nodes and edges into a newly created subnetwork.
 
@@ -740,6 +759,7 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
     return res['data']['network']
 
+@cy_log
 def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
     """Create a Cytoscape network from an igraph network.
 
@@ -819,9 +839,11 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 
     return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection, base_url=base_url, node_id_list='name')
 
+@cy_log
 def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_network_from_graph
 
+@cy_log
 def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
     """Create a network from data frames.
 
@@ -947,6 +969,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     return network_suid
 
 
+@cy_log
 def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
@@ -990,6 +1013,7 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
 # V. Network extraction
 # ------------------------------------------------------------------------------
 
+@cy_log
 def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     """Create an igraph network from a Cytoscape network.
 
@@ -1066,6 +1090,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     return g
 
 
+@cy_log
 def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     raise CyError('Not implemented') # TODO: implement create_graph_from_network
 
@@ -1075,12 +1100,3 @@ def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # Dev Notes: Prefix internal functions with a '_'. Skip doc_strings for these
 # functions.
 # ------------------------------------------------------------------------------
-
-def first_func():
-    """ This is my first function """
-    print("Executing first_func()")
-
-    res = commands.cyrest_get()
-    print(res)
-
-    return res

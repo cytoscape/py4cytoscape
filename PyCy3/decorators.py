@@ -14,7 +14,7 @@ def debug(func):
         signature = ", ".join(args_repr + kwargs_repr)           # 3
         print(f"Calling {func.__name__}({signature})")
         value = func(*args, **kwargs)
-        print(f"{func.__name__!r} returned {value!r}")           # 4
+        print(f"Returning {func.__name__!r}: {value!r}")           # 4
         return value
 
     return wrapper_debug
@@ -22,7 +22,7 @@ def debug(func):
 def print_entry_exit(func):
     """Print the function signature and return value"""
     @functools.wraps(func)
-    def wrapper_debug(*args, **kwargs):
+    def wrapper_entry_exit(*args, **kwargs):
         print(f"Into {func.__name__}()")
         try:
             value = func(*args, **kwargs)
@@ -32,7 +32,7 @@ def print_entry_exit(func):
             print(f"{func.__name__!r} exception {e!r}")
             raise
 
-    return wrapper_debug
+    return wrapper_entry_exit
 
 def timer(func):
     """Print the runtime of the decorated function"""
@@ -46,6 +46,7 @@ def timer(func):
         return value
 
     return wrapper_timer
+
 
 def skip(func):
     """Skip execution of this function completely"""

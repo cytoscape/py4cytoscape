@@ -8,7 +8,9 @@ import sys
 from . import commands
 from .exceptions import CyError
 from .pycy3_utils import *
+from .pycy3_logger import *
 
+@cy_log
 def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     """Ping Cytoscape
 
@@ -35,7 +37,7 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     print('You are connected to Cytoscape!')
 # TODO: Is this the way this should be reported in Python? In R?
 
-
+@cy_log
 def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
     """Return the versions of the current Cytoscape and CyREST API.
 
@@ -65,6 +67,7 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
 
     return versions
 
+@cy_log
 def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
     """Get the list of available CyREST API versions.
 
@@ -88,6 +91,7 @@ def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
     available_api_versions = res['availableApiVersions']
     return available_api_versions
 
+@cy_log
 def cytoscape_number_of_cores(base_url=DEFAULT_BASE_URL):
     """Returns the processor resources of the server running Cytoscape.
 
@@ -109,6 +113,7 @@ def cytoscape_number_of_cores(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get(base_url=base_url)
     return res['numberOfCores']
 
+@cy_log
 def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     """Returns the memory resources of the server running Cytoscape.
 
@@ -130,6 +135,7 @@ def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get(base_url=base_url)
     return res['memoryStatus']
 
+@cy_log
 def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
     """Manually call Java's garbage collection ``System.gc()`` to free up unused memory.
 

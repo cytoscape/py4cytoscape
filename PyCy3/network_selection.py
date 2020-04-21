@@ -12,12 +12,13 @@ III. Edge selection functions
 from . import commands
 from . import networks
 from .pycy3_utils import *
-from PyCy3.decorators import debug
+from .pycy3_logger import *
 
 # ==============================================================================
 # I. General selection functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
     """If any nodes are selected in the network, they will be unselected.
 
@@ -59,6 +60,7 @@ def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
 # II. Node selection functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_URL):
     """Select nodes directly connected to currently selected nodes.
 
@@ -92,6 +94,7 @@ def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_
     return res
 
 # TODO: Decide whether 'nodes' can be None ... the RCy3 documentation implies it can, but the code says no
+@cy_log
 def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=None, base_url=DEFAULT_BASE_URL):
     """Select nodes in the network by SUID, name or other column values.
 
@@ -134,6 +137,7 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
     res = commands.commands_post('network select network=SUID:"' + str(suid) + '" nodeList="' + node_list_str + '"', base_url=base_url)
     return res
 
+@cy_log
 def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Selects all nodes in a Cytoscape Network.
 
@@ -172,6 +176,7 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     return res['nodes']
     # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
+@cy_log
 def get_selected_node_count(network=None, base_url=DEFAULT_BASE_URL):
     """Returns the number of nodes currently selected in the network.
 
@@ -201,6 +206,7 @@ def get_selected_node_count(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
 
+@cy_log
 def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all the nodes selected in the network.
 
@@ -240,6 +246,7 @@ def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL
             selected_node_names = node_suid_to_node_name(selected_node_suids, net_suid, base_url=base_url)
             return selected_node_names
 
+@cy_log
 def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
     """Select all nodes that were not selected and deselect all nodes that were selected.
 
@@ -270,6 +277,7 @@ def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network select invert=nodes network=SUID:' + str(suid), base_url=base_url)
     return res
 
+@cy_log
 def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Delete currently selected nodes from the network.
 
@@ -301,6 +309,7 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Added double quotes to network title
     return res
 
+@cy_log
 def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Take currently selected edges and extends the selection to connected nodes, regardless of directionality.
 
@@ -337,6 +346,7 @@ def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE
 # II. Edge selection functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=None, base_url=DEFAULT_BASE_URL):
     """Select edges in the network by SUID, name or other column values.
 
@@ -382,6 +392,7 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
     res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"', base_url=base_url)
     return res
 
+@cy_log
 def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Selects all edges in a Cytoscape Network.
 
@@ -414,6 +425,7 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     return res['edges']
     # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
+@cy_log
 def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
     """Select all edges that were not selected and deselect all edges that were selected.
 
@@ -444,6 +456,7 @@ def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network select invert=edges network=SUID:' + str(suid), base_url=base_url)
     return res
 
+@cy_log
 def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Delete the currently selected edges in the network.
 
@@ -475,6 +488,7 @@ def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Added double quotes to network title
     return res
 
+@cy_log
 def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     """Return the number of edges currently selected in the network.
 
@@ -504,6 +518,7 @@ def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
 
+@cy_log
 def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all the edges selected in the network.
 
@@ -543,6 +558,7 @@ def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL
             selected_edge_names = edge_suid_to_edge_name(selected_edge_suids, net_suid, base_url=base_url)
             return selected_edge_names
 
+@cy_log
 def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Select edges in a Cytoscape Network connecting the selected nodes, including self loops connecting single nodes.
 
@@ -592,6 +608,7 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
     return res
     # TODO: isn't the pattern match a bit cheesy ... shouldn't it be ^+n+' ('    and    ') '+n+$ ???
 
+@cy_log
 def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Take currently selected nodes and add to the selection all edges connected to those nodes, regardless of directionality.
 
@@ -625,6 +642,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
     res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Remove edges with duplicate names.
 
@@ -670,7 +688,7 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
     res = delete_selected_edges(network=net_suid, base_url=base_url)
     return res
 
-
+@cy_log
 def delete_self_loops(network=None, base_url=DEFAULT_BASE_URL):
     """Removes edges that connect to a single node as both source and target.
 

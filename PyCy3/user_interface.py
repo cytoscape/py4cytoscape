@@ -10,8 +10,9 @@ import sys
 from . import commands
 from .exceptions import CyError
 from .pycy3_utils import *
+from .pycy3_logger import *
 
-
+@cy_log
 def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Dock a panel back into the UI of Cytoscape.
 
@@ -40,6 +41,7 @@ def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
 
+@cy_log
 def float_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Pop out a panel from the UI of Cytoscape.
 
@@ -70,6 +72,7 @@ def float_panel(panel_name, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
 
+@cy_log
 def hide_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Hide a panel in the UI of Cytoscape.
 
@@ -100,7 +103,7 @@ def hide_panel(panel_name, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
 
-
+@cy_log
 def hide_all_panels(base_url=DEFAULT_BASE_URL):
     """Hide control, table, tool and results panels.
 

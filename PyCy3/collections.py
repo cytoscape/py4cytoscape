@@ -9,7 +9,9 @@ from . import commands
 from . import networks
 from .exceptions import CyError
 from .pycy3_utils import *
+from .pycy3_logger import *
 
+@cy_log
 def get_collection_list(base_url=DEFAULT_BASE_URL):
     """Get Collection List.
 
@@ -37,6 +39,7 @@ def get_collection_list(base_url=DEFAULT_BASE_URL):
 # TODO: It's hard to load a network into its own collection, so this is all hard to test.
 # TODO: This function returns collection names, but not SUIDs ... it's hard to get a collection SUID given a collection name
 
+@cy_log
 def get_collection_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Get Collection Suid.
 
@@ -67,6 +70,7 @@ def get_collection_suid(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('collections', parameters={'subsuid': net_suid}, base_url=base_url)
     return res[0]
 
+@cy_log
 def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
     """Get Collection Name.
 
@@ -93,7 +97,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('collections/' + str(collection_suid) + '/tables/default', base_url=base_url)
     return res['rows'][0]['name']
 
-
+@cy_log
 def get_collection_networks(collection_suid=None, base_url=DEFAULT_BASE_URL):
     """Get Collection Networks.
 

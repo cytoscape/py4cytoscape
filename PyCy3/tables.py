@@ -3,6 +3,7 @@
 from . import commands
 from . import networks
 from .pycy3_utils import *
+from .pycy3_logger import *
 from .exceptions import CyError
 
 from .decorators import debug
@@ -12,6 +13,7 @@ import numpy as np
 def __init__(self):
     pass
 
+@cy_log
 def delete_table_column(column, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Delete a column from node, edge or network tables.
 
@@ -49,7 +51,7 @@ def delete_table_column(column, table='node', namespace='default', network=None,
     res = commands.cyrest_delete('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns/'+ column, base_url=base_url, require_json=False)
     return res
 
-
+@cy_log
 def get_table_columns(table='node', columns=None, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve one or more columns of data from node, edge or network tables.
 
@@ -153,6 +155,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
 
     return df
 
+@cy_log
 def get_table_value(table, row_name, column, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the value from a specific row and column from node, edge or network tables.
 
@@ -213,7 +216,7 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
 
     return f(res)
 
-
+@cy_log
 def get_table_column_names(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all columns in a table.
 
@@ -248,8 +251,7 @@ def get_table_column_names(table='node', namespace='default', network=None, base
     col_names = [x['name']   for x in res]
     return col_names
 
-
-
+@cy_log
 def get_table_column_types(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the types of all columns in a table.
 
@@ -285,7 +287,7 @@ def get_table_column_types(table='node', namespace='default', network=None, base
 
     return col_types
 
-
+@cy_log
 def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Loads data into Cytoscape tables keyed by row.
 
@@ -374,6 +376,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
 
     return 'Success: Data loaded in ' + tbl + ' table'
 
+@cy_log
 def map_table_column(column, species, map_from, map_to, force_single=True, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map Table Column.
 
@@ -434,6 +437,7 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
     res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network, base_url=base_url)
     return res
 
+@cy_log
 def rename_table_column(column, new_name, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Set a new name for a column.
 

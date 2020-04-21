@@ -15,7 +15,9 @@ from .exceptions import CyError
 from . import networks
 from . import network_selection
 from .pycy3_utils import *
+from .pycy3_logger import *
 
+@cy_log
 def apply_filter(filter_name='Default filter', hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Run an existing filter by supplying the filter name.
 
@@ -57,6 +59,7 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
     return _check_selected(net_suid, base_url)
 
 
+@cy_log
 def create_column_filter(filter_name, column, criterion, predicate, caseSensitive=False, anyMatch=True, type='nodes', hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Create Column Filter.
 
@@ -149,11 +152,11 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
 
+@cy_log
 def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type='ANY', hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Create Degree Filter.
 
     Creates a filter to control node selection base on in/out degree.
-
 
     Args:
         filter_name (str): Name for new filter.
@@ -195,6 +198,7 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
 
+@cy_log
 def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Combine filters to control node and edge selection based on previously created filters.
 
@@ -245,6 +249,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
 
+@cy_log
 def get_filter_list(base_url=DEFAULT_BASE_URL):
     """Retrieve list of named filters in current session
 
@@ -266,6 +271,7 @@ def get_filter_list(base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('filter list', base_url=base_url)
     return res
 
+@cy_log
 def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
     """Saves filters to file in JSON format.
 
@@ -299,6 +305,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
 
     return res
 
+@cy_log
 def import_filters(filename, base_url=DEFAULT_BASE_URL):
     """Loads filters from a file in JSON format.
 

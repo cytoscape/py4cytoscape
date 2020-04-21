@@ -11,11 +11,13 @@ from . import commands
 from . import networks
 from .exceptions import CyError
 from .pycy3_utils import *
+from .pycy3_logger import *
 
 # ==============================================================================
 # I. Perform layout functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def bundle_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Apply edge bundling to the network specified.
 
@@ -44,7 +46,7 @@ def bundle_edges(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('apply/edgebundling/' + str(suid), base_url=base_url)
     return res
 
-
+@cy_log
 def clear_edge_bends(network=None, base_url=DEFAULT_BASE_URL):
     """Clear all edge bends created from edge bundling.
 
@@ -71,6 +73,7 @@ def clear_edge_bends(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('apply/clearalledgebends/' + str(suid), base_url=base_url)
     return res
 
+@cy_log
 def layout_network(layout_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Apply a layout to a network.
 
@@ -107,6 +110,7 @@ def layout_network(layout_name=None, network=None, base_url=DEFAULT_BASE_URL):
         res = commands.commands_post('layout ' + layout_name + ' network="SUID:' + str(suid) + '"', base_url=base_url)
         return res
 
+@cy_log
 def layout_copycat(source_network, target_network, source_column='name', target_column='name',
                    grid_unmapped=True, select_unmapped=True, base_url=DEFAULT_BASE_URL):
     """Copy a layout from one network to another.
@@ -156,6 +160,7 @@ def layout_copycat(source_network, target_network, source_column='name', target_
 # II. Get layout properties
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_layout_names(base_url=DEFAULT_BASE_URL):
     """Retrieve the names of the currently supported layout algorithms.
 
@@ -179,7 +184,7 @@ def get_layout_names(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('apply/layouts', base_url=base_url)
     return res
 
-
+@cy_log
 def get_layout_name_mapping(base_url=DEFAULT_BASE_URL):
     """Get Layout Name Mapping.
 
@@ -213,6 +218,7 @@ def get_layout_name_mapping(base_url=DEFAULT_BASE_URL):
 
     return layout_mapping
 
+@cy_log
 def get_layout_property_names(layout_name, base_url=DEFAULT_BASE_URL):
     """Returns a list of the tunable properties for the specified layout.
 
@@ -238,6 +244,7 @@ def get_layout_property_names(layout_name, base_url=DEFAULT_BASE_URL):
     param_names = [param_def['name']    for param_def in res]
     return param_names
 
+@cy_log
 def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_URL):
     """Returns the type of one of the tunable properties (property_name) for the specified layout.
 
@@ -265,23 +272,7 @@ def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_U
     param_types = {param['name']: param['type']   for param in res}
     return param_types[property_name]
 
-# ------------------------------------------------------------------------------------------------------------------------
-# ' @title Get Layout Property Value
-# '
-# ' @description Returns the appropriately typed value of the specified tunable property for the specified layout.
-# ' @details Run \link{getLayoutNames} to list available layouts. Run \link{getLayoutPropertyNames} to list properties per layout.
-# ' @param layout.name (\code{character}) Name of the layout
-# ' @param property.name (\code{character}) Name of the property
-# ' @param base.url (optional) Ignore unless you need to specify a custom domain,
-# ' port or version to connect to the CyREST API. Default is http://localhost:1234
-# ' and the latest version of the CyREST API supported by this version of RCy3.
-# ' @return The current value set for this layout property. Typically an \code{integer}, \code{numeric} or \code{character} string value.
-# ' @author Alexander Pico, Tanja Muetze, Georgi Kolishovski, Paul Shannon
-# ' @examples \donttest{
-# ' getLayoutPropertyValue('force-directed','defaultSpringLength')
-# ' # 80
-# ' }
-# ' @export
+@cy_log
 def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_URL):
     """Returns the appropriately typed value of the specified tunable property for the specified layout.
 
@@ -313,6 +304,7 @@ def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_
 # III. Set layout properties
 # ------------------------------------------------------------------------------------------------------------------------
 
+@cy_log
 def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_URL):
     """Sets the specified properties for the specified layout.
 

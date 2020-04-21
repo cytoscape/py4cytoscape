@@ -8,12 +8,12 @@ import os
 
 from . import commands
 from .pycy3_utils import *
-from .decorators import debug
+from .pycy3_logger import *
 
 def __init__(self):
     pass
 
-
+@cy_log
 def close_session(save_before_closing, filename=None, base_url=DEFAULT_BASE_URL):
     """Close the current session in Cytoscape, destroying all unsaved work.
 
@@ -47,6 +47,7 @@ def close_session(save_before_closing, filename=None, base_url=DEFAULT_BASE_URL)
 
     return commands.commands_post('session new', base_url=base_url)
 
+@cy_log
 def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     """Open Session File or URL.
 
@@ -88,6 +89,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     sys.stderr.write('Opening ' + file_location + '...')
     return commands.commands_post('session open ' + type + '="' + file_location  + '"', base_url=base_url)
 
+@cy_log
 def save_session(filename=None, base_url=DEFAULT_BASE_URL):
     """Saves the current Cytoscape session as a CYS file.
 

@@ -9,7 +9,9 @@ from . import commands
 from .exceptions import CyError
 from .pycy3_utils import *
 from . import networks
+from .pycy3_logger import *
 
+@cy_log
 def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
     """Add the specified nodes and edges to the specified group.
 
@@ -54,6 +56,7 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
     res = commands.commands_post('group add groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     """Replace the representation of all of the nodes and edges in a group with a single node.
 
@@ -89,6 +92,7 @@ def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group collapse groupList="' + str(group_list) + '" network="SUID:' + str(net_suid), base_url=base_url)
     return res
 
+@cy_log
 def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
     """Create a group from the specified nodes.
 
@@ -128,6 +132,7 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + node_list + '" network="SUID:' + str(net_suid), base_url=base_url)
     return res
 
+@cy_log
 def create_group_by_column(group_name, column=None, value=None, network=None, base_url=DEFAULT_BASE_URL):
     """Create a group of nodes defined by a column value.
 
@@ -157,6 +162,7 @@ def create_group_by_column(group_name, column=None, value=None, network=None, ba
     res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + column + '":"' + value + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     """Replaces the group node with member nodes for a set of groups.
 
@@ -192,6 +198,7 @@ def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group expand groupList="' + str(group_list) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve information about a group by name or identifier.
 
@@ -239,6 +246,7 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group get node="' + prefix + str(group) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def list_groups(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve a list of all group SUIDs in a network.
 
@@ -264,6 +272,7 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group list network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
     """Remove the specified nodes and edges from the specified group.
 
@@ -308,6 +317,7 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
     res = commands.commands_post('group remove groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+@cy_log
 def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
     """Delete one or more groups, while leaving member nodes intact.
 
