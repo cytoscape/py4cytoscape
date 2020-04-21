@@ -10,3 +10,19 @@ Over time, PyCy3 functionality should match RCy3 functionality. Once that occurs
 
 An overall scorecard comparing Py2Cytoscape, RCy3 and PyCy3 can be found [here](https://docs.google.com/spreadsheets/d/1uhBTbOMI4QMKUpLaOTuf6BP5wgqU6-pOzkj6BNmC4CY/edit?usp=sharing). Pay close attention to columns E and F, which show how much of RCy3 is reflected in PyCy3.
  
+## How to install
+
+```shell
+pip install python-igraph requests pandas networkx
+git clone git://github.com/bdemchak/PyCy3
+cd PyCy3
+python setup.py install # or python setup.py install --user
+```
+
+## How to use
+
+```python
+import PyCy3
+dir(PyCy3)
+PyCy3.import_network_from_file("galfiltered.sif") # Before running this, save galfiltered.sif in the current directory.
+```
