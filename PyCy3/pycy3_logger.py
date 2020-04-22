@@ -7,6 +7,9 @@ import os
 
 from . import pycy3_logger_settings
 
+#_log_base = os.path.join(pycy3_logger_settings._FILE_LOG_DIR, pycy3_logger_settings._FILE_LOG_NAME)
+#os.makedirs(pycy3_logger_settings._FILE_LOG_DIR)
+
 # Define the loggers for this library
 _logging_config = {
     'version': 1,
@@ -25,10 +28,11 @@ _logging_config = {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': pycy3_logger_settings._FILE_LOG_LEVEL,
             'formatter': 'standard',
-            'filename': pycy3_logger_settings._FILE_LOG_NAME,
+            'filename': os.path.join(pycy3_logger_settings._FILE_LOG_DIR, pycy3_logger_settings._FILE_LOG_NAME),
             'encoding': 'utf8',
             'backupCount': 10,
             'maxBytes': 1048576, # 1MB
+            'delay': True
         },
         'console_handler': {
             'class': 'logging.StreamHandler',
