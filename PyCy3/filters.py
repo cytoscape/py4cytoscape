@@ -235,8 +235,8 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         print(error)
         raise CyError(error)
 
-    fetch = lambda x: commands.commands_post('filter get name="' + x + '"', base_url=base_url)
-    extract = lambda y: y[0]['transformers'][0] if y else None
+    def fetch(x): return commands.commands_post('filter get name="' + x + '"', base_url=base_url)
+    def extract(y): return y[0]['transformers'][0] if y else None
     trans_list = [extract(fetch(filter))   for filter in filter_list]
 
     # TODO: Add this check in R

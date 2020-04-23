@@ -4,9 +4,7 @@ import unittest
 import time
 from requests import HTTPError
 
-
 from test_utils import *
-
 
 class ToolsTests(unittest.TestCase):
     def setUp(self):
@@ -153,20 +151,24 @@ class ToolsTests(unittest.TestCase):
         self._check_show(operation, ToolsTests.BROWSER_HELLO, skip_verify=True)
         self._check_show(operation, ToolsTests.BROWSER_HELLO, skip_verify=True)
         self._check_show(operation, ToolsTests.BROWSER_HELLO, skip_verify=True)
+        time.sleep(2) # wait for windowing system to catch up
         check_browser_list(cybrowser_list(),
                            [ToolsTests.BROWSER_HELLO, ToolsTests.CYTOSCAPE_HOME_PAGE, ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that hiding a browser removes it from the browser list, and bogus browser windows don't cause error
         self.assertDictEqual(cybrowser_hide(ToolsTests.BROWSER_HELLO['id']), {})
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
+        time.sleep(2) # wait for windowing system to catch up
         check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that closing a browser twice does no harm
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
+        time.sleep(2) # wait for windowing system to catch up
         check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that closing the last browser window results in a clean browser list
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_MANUAL['id']), {})
+        time.sleep(2) # wait for windowing system to catch up
         check_browser_list(cybrowser_list(), [])
 
     def _check_show(self, operation, window_def, skip_verify=False):

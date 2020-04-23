@@ -15,3 +15,9 @@ from .tools import *
 from .user_interface import *
 from .network_views import *
 from .decorators import *
+
+# TODO: Enforce documentation standards for modules and private functions per:
+# https://www.python.org/dev/peps/pep-0257/ and https://www.python.org/dev/peps/pep-0008/#comments
+
+# TODO: Remember to set __all__ to enumerate what modules are exported from this package. Do this at the module level, too, for functions ... consider using a decorator to fill the __all__ per https://stackoverflow.com/questions/44834/can-someone-explain-all-in-python
+# TODO: Add type hints per https://www.python.org/dev/peps/pep-0484/ for all functions

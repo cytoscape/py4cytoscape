@@ -137,13 +137,13 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         # https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
         table_col_type = table_col_info[col]
         if table_col_type in ['Double']:
-            f = lambda x: np.nan if (x is None) else float(x)
+            def f(x): return np.nan if x is None else float(x)
         elif table_col_type in ['Long', 'Integer']:
-            f = lambda x: np.nan if (x is None) else int(x)
+            def f(x): return np.nan if x is None else int(x)
         elif table_col_type in ['Boolean']:
-            f = lambda x: None if (x is None) else bool(x)
+            def f(x): return None if x is None else bool(x)
         else:
-            f = lambda x: x
+            def f(x): return x
         cvv = [f(x) for x in res_col['values']]
 
         if len(suid_list) != len(cvv):
@@ -208,13 +208,16 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
     # TODO: This "not res" can't happen for numbers because CyREST returns HTTPError if a value doesn't exist ... is this what we want?
     # TODO: For strings, a '' is returned ... do we want to return None for this?
 
-    if table_col_type == 'Double': f = lambda x: float(x)
-    elif table_col_type == 'Long': f = lambda x: int(x)
-    elif table_col_type == 'Integer': f = lambda x: int(x)
-    elif table_col_type == 'Boolean': f = lambda x: bool(x)
-    else: f = lambda x: str(x)
-
-    return f(res)
+    if table_col_type == 'Double':
+        return float(res)
+    elif table_col_type == 'Long':
+        return int(res)
+    elif table_col_type == 'Integer':
+        return int(res)
+    elif table_col_type == 'Boolean':
+        return bool(res)
+    else:
+        return str(res)
 
 @cy_log
 def get_table_column_names(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):

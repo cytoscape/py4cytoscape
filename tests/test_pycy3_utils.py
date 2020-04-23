@@ -2,7 +2,7 @@
 
 import unittest
 from test_utils import *
-from PyCy3 import *
+
 from PyCy3.pycy3_utils import DEFAULT_BASE_URL, build_url, node_suid_to_node_name, node_name_to_node_suid, edge_name_to_edge_suid
 from PyCy3.decorators import *
 

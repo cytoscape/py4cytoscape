@@ -19,10 +19,27 @@ cd PyCy3
 python setup.py install # or python setup.py install --user
 ```
 
-## How to use
+## How to use (from within a Python command shell)
 
 ```python
 import PyCy3
 dir(PyCy3)
 PyCy3.import_network_from_file("galfiltered.sif") # Before running this, save galfiltered.sif in the current directory.
+```
+
+## How to test (in Windows)
+```
+rem Assuming the current directory is the PyCy3 project directory
+cd tests 
+set PYTHONPATH=..
+
+rem To execute a single set of tests ...
+python -m unittest test_apps.py
+
+rem To execute two sets of tests ...
+python -m unittest test_apps.py test_filters.py
+
+rem To execute a single test out of a set ...
+python -m unittest test_apps.AppsTests.test_get_app_information
+
 ```

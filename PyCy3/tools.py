@@ -32,7 +32,7 @@ def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
         >>> cybrowser_close('CyGame')
         {}
     """
-    id_str = ' id="' + str(id) + '"' if id else ''
+    id_str = ' id="' + str(id) + '"' if id is not None else ''
 
     res = commands.commands_post('cybrowser close' + id_str, base_url=base_url)
     return res

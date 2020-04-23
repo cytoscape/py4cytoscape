@@ -13,7 +13,7 @@ from .exceptions import CyError
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
     """ Append a command (if it exists) to a base URL """
-    if command:
+    if command is not None:
         return base_url + "/" + urllib.parse.quote(command)
     else:
         return base_url
