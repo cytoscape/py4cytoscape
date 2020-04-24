@@ -14,6 +14,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     """Ping Cytoscape
@@ -39,6 +40,8 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     from .pycy3_utils import verify_supported_versions
     verify_supported_versions(1, 3.6, base_url=base_url)
     print('You are connected to Cytoscape!')
+
+
 # TODO: Is this the way this should be reported in Python? In R?
 
 @cy_log
@@ -63,13 +66,14 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
     """
     versions = commands.cyrest_get('version', base_url=base_url)
     if len(versions) == 0:
-# TODO: Figure out whether we really want to report this to stderr.
+        # TODO: Figure out whether we really want to report this to stderr.
         error = 'CyREST connection problem. PyCy3 can not continue!'
         sys.stderr.write(error)
         raise CyError(error)
-# TODO: R doesn't raise an exception ... perhaps it should?
+    # TODO: R doesn't raise an exception ... perhaps it should?
 
     return versions
+
 
 @cy_log
 def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
@@ -95,6 +99,7 @@ def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
     available_api_versions = res['availableApiVersions']
     return available_api_versions
 
+
 @cy_log
 def cytoscape_number_of_cores(base_url=DEFAULT_BASE_URL):
     """Returns the processor resources of the server running Cytoscape.
@@ -117,6 +122,7 @@ def cytoscape_number_of_cores(base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get(base_url=base_url)
     return res['numberOfCores']
 
+
 @cy_log
 def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     """Returns the memory resources of the server running Cytoscape.
@@ -138,6 +144,7 @@ def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     """
     res = commands.cyrest_get(base_url=base_url)
     return res['memoryStatus']
+
 
 @cy_log
 def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
@@ -165,7 +172,7 @@ def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
         res = commands.cyrest_get('gc', require_json=False)
         return 'Unused memory freed up.'  # TODO: Is this what we want to return?
     except:
-# TODO: Figure out whether we really want to report this to stderr.
+        # TODO: Figure out whether we really want to report this to stderr.
         error = 'CyREST connection problem. PyCy3 can not continue!'
         sys.stderr.write(error)
         raise CyError(error)

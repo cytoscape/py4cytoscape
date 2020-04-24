@@ -6,6 +6,7 @@ from requests import RequestException
 
 from test_utils import *
 
+
 class CommandsTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -16,12 +17,12 @@ class CommandsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_cyrest_api(self):
         self.assertTrue(PyCy3.cyrest_api())
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_cyrest_delete(self):
         # Initialization
@@ -33,18 +34,21 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_views) # Behavior when there are no views
-        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session', base_url='http://totallybogus') # test non-existent URL
-        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session', base_url='http://yahoo.com') # test real URL that doesn't have API
+        self.assertRaises(PyCy3.CyError, PyCy3.get_network_views)  # Behavior when there are no views
+        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session',
+                          base_url='http://totallybogus')  # test non-existent URL
+        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session',
+                          base_url='http://yahoo.com')  # test real URL that doesn't have API
         load_test_session()
-        self.assertRaises(ValueError, PyCy3.cyrest_delete, 'networks/' + str(PyCy3.get_network_suid()) + '/views', require_json=True)
+        self.assertRaises(ValueError, PyCy3.cyrest_delete, 'networks/' + str(PyCy3.get_network_suid()) + '/views',
+                          require_json=True)
 
         # Verify that getting rid of the session returns a valid JSON result
         res = PyCy3.cyrest_delete('session')
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'message': 'New session created.'})
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_cyrest_get(self):
 
@@ -54,8 +58,10 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc', base_url='http://totallybogus') # test non-existent URL
-        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc', base_url='http://yahoo.com') # test real URL that doesn't have API
+        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc',
+                          base_url='http://totallybogus')  # test non-existent URL
+        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc',
+                          base_url='http://yahoo.com')  # test real URL that doesn't have API
         self.assertRaises(ValueError, PyCy3.cyrest_get, 'gc', require_json=True)
 
         # Verify that getting the CyREST version returns a valid JSON result
@@ -64,7 +70,7 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(res['apiVersion'], str)
         self.assertIsInstance(res['cytoscapeVersion'], str)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_cyrest_post(self):
         # Initialization
@@ -73,7 +79,8 @@ class CommandsTests(unittest.TestCase):
         # We would test for a POST that doesn't return JSON, but CyREST doesn't have any
 
         # Verify that adding a view returns a valid JSON result
-        res = PyCy3.cyrest_delete('networks/' + str(PyCy3.get_network_suid()) + '/views', require_json=False) # Delete the existing view first
+        res = PyCy3.cyrest_delete('networks/' + str(PyCy3.get_network_suid()) + '/views',
+                                  require_json=False)  # Delete the existing view first
         self.assertEqual(res, '')
         res = PyCy3.cyrest_post('networks/' + str(PyCy3.get_network_suid()) + '/views')
         self.assertIsInstance(res, dict)
@@ -86,10 +93,12 @@ class CommandsTests(unittest.TestCase):
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'}, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'}, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
+                          base_url='http://totallybogus')
+        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
+                          base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_cyrest_put(self):
         # Initialization
@@ -105,22 +114,30 @@ class CommandsTests(unittest.TestCase):
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView', body={'networkViewSUID': view}, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView', body={'networkViewSUID': view}, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView',
+                          body={'networkViewSUID': view}, base_url='http://totallybogus')
+        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView',
+                          body={'networkViewSUID': view}, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_api(self):
         self.assertTrue(PyCy3.commands_api())
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_get(self):
         # Verify the expected return from common commands
         self._check_cy_result(PyCy3.commands_get('command sleep duration=5'), [])
-        self._check_cy_result(PyCy3.commands_get(''), ['Available namespaces:', 'analyzer', 'apps', 'command', 'cybrowser', 'cychart', 'diffusion', 'edge', 'filter', 'group', 'idmapper', 'layout', 'network', 'node', 'session', 'table', 'view', 'vizmap'], allow_subset=True)
-        self._check_cy_result(PyCy3.commands_get('view'), ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content', 'fit selected', 'get current', 'list', 'set current', 'update'], allow_subset=True)
-        self._check_cy_result(PyCy3.commands_get('apps status app="Network Merge"'), ['app: Network Merge, status: Installed'])
+        self._check_cy_result(PyCy3.commands_get(''),
+                              ['Available namespaces:', 'analyzer', 'apps', 'command', 'cybrowser', 'cychart',
+                               'diffusion', 'edge', 'filter', 'group', 'idmapper', 'layout', 'network', 'node',
+                               'session', 'table', 'view', 'vizmap'], allow_subset=True)
+        self._check_cy_result(PyCy3.commands_get('view'),
+                              ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content',
+                               'fit selected', 'get current', 'list', 'set current', 'update'], allow_subset=True)
+        self._check_cy_result(PyCy3.commands_get('apps status app="Network Merge"'),
+                              ['app: Network Merge, status: Installed'])
 
         # Verify that bad commands are caught
         self.assertRaises(PyCy3.CyError, PyCy3.commands_get, 'apps status app="bogusjunk"')
@@ -128,23 +145,27 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.commands_get, '', base_url='http://totallybogus')
         self.assertRaises(PyCy3.CyError, PyCy3.commands_get, '', base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_help(self):
         # Verify the expected return from common commands
-        self._check_cy_result(PyCy3.commands_help('apps'), ['disable', 'enable', 'information', 'install', 'list available', 'list disabled', 'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status', 'uninstall', 'update'], allow_subset=True)
+        self._check_cy_result(PyCy3.commands_help('apps'),
+                              ['disable', 'enable', 'information', 'install', 'list available', 'list disabled',
+                               'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status',
+                               'uninstall', 'update'], allow_subset=True)
 
         # Verify that bad commands are caught
         self.assertRaises(RequestException, PyCy3.commands_help, 'bogus_junk')
         self.assertRaises(RequestException, PyCy3.commands_help, '', base_url='http://totallybogus')
         self.assertRaises(PyCy3.CyError, PyCy3.commands_help, '', base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_post(self):
         # Verify the expected return from common commands
         self._check_cy_result(PyCy3.commands_post('command sleep duration=5'), {})
-        self._check_cy_result(PyCy3.commands_post('apps status app="Network Merge"'), {'appName': 'Network Merge', 'status': 'Installed'})
+        self._check_cy_result(PyCy3.commands_post('apps status app="Network Merge"'),
+                              {'appName': 'Network Merge', 'status': 'Installed'})
 
         # Verify that bad commands are caught
         self.assertRaises(PyCy3.CyError, PyCy3.commands_post, 'apps status app="bogusjunk"')
@@ -152,7 +173,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.commands_post, '', base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.commands_post, '', base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_run(self):
         # Initialization
@@ -170,7 +191,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.commands_run, '', base_url='http://totallybogus')
         self.assertRaises(PyCy3.CyError, PyCy3.commands_run, '', base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_commands_echo(self):
         # Verify that the command returns what's sent to it
@@ -187,7 +208,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.command_echo, 'Hi there', base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_echo, 'Hi there', base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_open_dialog(self):
         # Verify that open dialog command fails ... it seems to be missing in the CyREST command set
@@ -197,7 +218,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.command_open_dialog, base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_open_dialog, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_pause(self):
         # Verify that pause returns nothing at all
@@ -215,7 +236,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.command_pause, base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_pause, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_quit(self):
         # Verify that pause returns nothing at all
@@ -228,7 +249,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.command_quit, base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_quit, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_run_file(self):
         # Initialization
@@ -237,17 +258,17 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(PyCy3.get_network_suid(), int)
 
         # Verify that script file returns nothing at all
-        res = PyCy3.command_run_file(CMD_FILE) # Execute cmd to create a new session (i.e., no network)
+        res = PyCy3.command_run_file(CMD_FILE)  # Execute cmd to create a new session (i.e., no network)
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid) # Check for there being no network anymore
+        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid)  # Check for there being no network anymore
 
         # Verify that bad commands are caught
         self.assertRaises(PyCy3.CyError, PyCy3.command_run_file, 'nosuchfile')
         self.assertRaises(RequestException, PyCy3.command_run_file, CMD_FILE, base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_run_file, CMD_FILE, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_sleep(self):
         # Verify that pause returns nothing at all
@@ -264,7 +285,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, PyCy3.command_sleep, base_url='http://totallybogus')
         self.assertRaises(RequestException, PyCy3.command_sleep, base_url='http://yahoo.com')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_command_2_get_query(self):
 
@@ -278,13 +299,17 @@ class CommandsTests(unittest.TestCase):
                 self.assertDictEqual(args, expected_args)
 
         # Check for a URL with no parameters
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed'), 'http://localhost:1234/v1/commands/layout/force-directed', None)
+        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed'),
+                  'http://localhost:1234/v1/commands/layout/force-directed', None)
 
         # Check for a URL with a single scalar parameter
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1'), 'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
+        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1'),
+                  'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
 
         # Check for a URL with two parameters, one of which has an embedded blank
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'), 'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1', 'file': 'C:\\file name'})
+        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'),
+                  'http://localhost:1234/v1/commands/layout/force-directed',
+                  {'defaultNodeMass': '1', 'file': 'C:\\file name'})
 
     def _check_cy_result(self, actual_res, expected_res, allow_subset=False):
         if type(expected_res) is dict:

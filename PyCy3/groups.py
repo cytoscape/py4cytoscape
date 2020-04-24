@@ -15,8 +15,10 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
-def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
+def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None,
+                 base_url=DEFAULT_BASE_URL):
     """Add the specified nodes and edges to the specified group.
 
     Args:
@@ -57,8 +59,11 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
     edge_list = _prep_post_query_lists(edges, edges_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group add groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(
+        'group add groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(
+            net_suid) + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -91,10 +96,12 @@ def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
         >>> collapse_group(['SUID:95335', 'SUID:95336']) # collapse 2 groups
         {'groups': [95335, 95336]}
     """
-    group_list =_prep_post_query_lists(groups)
+    group_list = _prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group collapse groupList="' + str(group_list) + '" network="SUID:' + str(net_suid), base_url=base_url)
+    res = commands.commands_post('group collapse groupList="' + str(group_list) + '" network="SUID:' + str(net_suid),
+                                 base_url=base_url)
     return res
+
 
 @cy_log
 def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
@@ -131,10 +138,13 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     # TODO: Determine whether group_name can be null ... Commands help says it can be optional
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
 
-    node_list =_prep_post_query_lists(nodes, nodes_by_col)
+    node_list = _prep_post_query_lists(nodes, nodes_by_col)
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + node_list + '" network="SUID:' + str(net_suid), base_url=base_url)
+    res = commands.commands_post(
+        'group create groupName="' + group_name + '" nodeList="' + node_list + '" network="SUID:' + str(net_suid),
+        base_url=base_url)
     return res
+
 
 @cy_log
 def create_group_by_column(group_name, column=None, value=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -163,8 +173,11 @@ def create_group_by_column(group_name, column=None, value=None, network=None, ba
     """
     # TODO: The default column and value will make the call blow up ... are we sure we want these defaults?
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group create groupName="' + group_name + '" nodeList="' + column + '":"' + value + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(
+        'group create groupName="' + group_name + '" nodeList="' + column + '":"' + value + '" network="SUID:' + str(
+            net_suid) + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -199,8 +212,10 @@ def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     """
     group_list = _prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group expand groupList="' + str(group_list) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(
+        'group expand groupList="' + str(group_list) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
@@ -247,8 +262,10 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     ## so work with the user-provided group name or SUID directly instead
     prefix = 'SUID:' if isinstance(group, int) else ''
 
-    res = commands.commands_post('group get node="' + prefix + str(group) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post('group get node="' + prefix + str(group) + '" network="SUID:' + str(net_suid) + '"',
+                                 base_url=base_url)
     return res
+
 
 @cy_log
 def list_groups(network=None, base_url=DEFAULT_BASE_URL):
@@ -276,8 +293,10 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('group list network="SUID:' + str(net_suid) + '"', base_url=base_url)
     return res
 
+
 @cy_log
-def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
+def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', network=None,
+                      base_url=DEFAULT_BASE_URL):
     """Remove the specified nodes and edges from the specified group.
 
     Args:
@@ -318,8 +337,11 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
     edge_list = _prep_post_query_lists(edges, edges_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group remove groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(
+        'group remove groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(
+            net_suid) + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAULT_BASE_URL):
@@ -359,9 +381,11 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
     group_list = _prep_post_query_lists(groups, groups_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group ungroup nodeList="' + group_list + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post('group ungroup nodeList="' + group_list + '" network="SUID:' + str(net_suid) + '"',
+                                 base_url=base_url)
     # TODO: The R implementation uses the groupList parameter, which conflicts with the command documentation
     return res
+
 
 # ------------------------------------------------------------------------------
 # Parses all the possible list types and keywords accepted by Commands API.
@@ -369,11 +393,11 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
 # it is assumed to not be supported and returns a simple list.
 def _prep_post_query_lists(cmd_list=None, cmd_by_col=None):
     if cmd_list is None:
-        return "selected" # need something here for edge selections to work
+        return "selected"  # need something here for edge selections to work
     elif cmd_by_col and isinstance(cmd_list, list):
-        return ','.join([cmd_by_col + ':' + str(cmd)   for cmd in cmd_list])
+        return ','.join([cmd_by_col + ':' + str(cmd) for cmd in cmd_list])
     elif isinstance(cmd_list, list):
         return ','.join(cmd_list)
     else:
-        return cmd_list # Note that this supposes the string is already a comma-separated list of COL:NAME ... and cmd_by_col is safely ignored
+        return cmd_list  # Note that this supposes the string is already a comma-separated list of COL:NAME ... and cmd_by_col is safely ignored
 # TODO: Verify that this produces the same thing as R would for all cases ... particularly for [], which should select nothing

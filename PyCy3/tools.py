@@ -14,6 +14,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
     """Cybrowser Close.
@@ -40,6 +41,7 @@ def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
 
     res = commands.commands_post('cybrowser close' + id_str, base_url=base_url)
     return res
+
 
 @cy_log
 def cybrowser_dialog(id=None, text=None, title=None, url=None, base_url=DEFAULT_BASE_URL):
@@ -79,6 +81,7 @@ def cybrowser_dialog(id=None, text=None, title=None, url=None, base_url=DEFAULT_
     res = commands.commands_post('cybrowser dialog' + id_str + text_str + title_str + url_str, base_url=base_url)
     return res
 
+
 @cy_log
 def cybrowser_hide(id=None, base_url=DEFAULT_BASE_URL):
     """Cybrowser Hide.
@@ -109,6 +112,7 @@ def cybrowser_hide(id=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('cybrowser hide' + id_str, base_url=base_url)
     return res
 
+
 @cy_log
 def cybrowser_list(base_url=DEFAULT_BASE_URL):
     """Cybrowser List.
@@ -134,6 +138,7 @@ def cybrowser_list(base_url=DEFAULT_BASE_URL):
     """
     res = commands.commands_post('cybrowser list', base_url=base_url)
     return res
+
 
 @cy_log
 def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
@@ -171,6 +176,7 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
 
     res = commands.commands_post('cybrowser send' + id_str + ' script="' + script + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def cybrowser_show(id=None, text=None, title=None, url=None, base_url=DEFAULT_BASE_URL):
@@ -211,6 +217,7 @@ def cybrowser_show(id=None, text=None, title=None, url=None, base_url=DEFAULT_BA
     res = commands.commands_post('cybrowser show' + id_str + text_str + title_str + url_str, base_url=base_url)
     return res
 
+
 @cy_log
 def cybrowser_version(base_url=DEFAULT_BASE_URL):
     """Display the version of the CyBrowser app.
@@ -232,6 +239,7 @@ def cybrowser_version(base_url=DEFAULT_BASE_URL):
     """
     res = commands.commands_post('cybrowser version', base_url=base_url)
     return res
+
 
 @cy_log
 def diffusion_basic(base_url=DEFAULT_BASE_URL):
@@ -261,6 +269,7 @@ def diffusion_basic(base_url=DEFAULT_BASE_URL):
     """
     res = commands.commands_post('diffusion diffuse', base_url=base_url)
     return res
+
 
 @cy_log
 def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_URL):

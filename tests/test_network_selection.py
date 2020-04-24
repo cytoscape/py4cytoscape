@@ -4,6 +4,7 @@ import unittest
 
 from test_utils import *
 
+
 class NetworkSelectionTests(unittest.TestCase):
 
     def setUp(self):
@@ -15,7 +16,7 @@ class NetworkSelectionTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_clear_selection(self):
         # Initialization
@@ -60,7 +61,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.clear_selection, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_first_neigbors(self):
         # Initialization
@@ -70,15 +71,22 @@ class NetworkSelectionTests(unittest.TestCase):
         def _test_first_neighbors(direction, expected_selection):
             PyCy3.clear_selection()
             PyCy3.select_nodes(['RAP1'], by_col='COMMON')
-            first_neighbor_nodes = PyCy3.select_first_neighbors(direction=direction)['nodes'] if direction else PyCy3.select_first_neighbors()['nodes']
+            first_neighbor_nodes = PyCy3.select_first_neighbors(direction=direction)['nodes'] if direction else \
+            PyCy3.select_first_neighbors()['nodes']
             first_names = set(df_all_nodes[df_all_nodes.index.isin(first_neighbor_nodes)]['COMMON'])
             self.assertSetEqual(first_names, expected_selection)
 
         # Verify that nodes around RAP1 are selected properly, depending on edge direction requested
-        _test_first_neighbors(None, {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
-        _test_first_neighbors('any', {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors(None,
+                              {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19',
+                               'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors('any',
+                              {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19',
+                               'HSP42', 'PGK1', 'RPL25', 'RPS17A', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
         _test_first_neighbors('incoming', {'RPS17A', 'RAP1'})
-        _test_first_neighbors('outgoing', {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19', 'HSP42', 'PGK1', 'RPL25', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
+        _test_first_neighbors('outgoing',
+                              {'RPS24A', 'PDC1', 'RAP1', 'ADH1', 'HIS4', 'RPS24B', 'RPL18B', 'ENO2', 'TPI1', 'CDC19',
+                               'HSP42', 'PGK1', 'RPL25', 'PHO5', 'RPL16A', 'ENO1', 'RPL18A'})
         _test_first_neighbors('undirected', {'RAP1'})
 
         PyCy3.clear_selection()
@@ -87,7 +95,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_first_neighbors, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_nodes(self):
         # Initialization
@@ -139,7 +147,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_nodes, [], network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_all_nodes(self):
         # Initialization
@@ -152,7 +160,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_all_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_selected_node_count(self):
         # Initialization
@@ -170,7 +178,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_node_count, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_selected_nodes(self):
         # Initialization
@@ -190,7 +198,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_invert_node_selection(self):
         # Initialization
@@ -201,7 +209,8 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertSetEqual(set(PyCy3.invert_node_selection()['nodes']), all_suids)
 
         # Verify that selecting two nodes and inverting returns all nodes except the original two
-        nodes_selected = set(PyCy3.select_nodes(['YNL216W', 'YPL075W'], by_col='name', preserve_current_selection=False)['nodes'])
+        nodes_selected = set(
+            PyCy3.select_nodes(['YNL216W', 'YPL075W'], by_col='name', preserve_current_selection=False)['nodes'])
         inverted_nodes = set(PyCy3.invert_node_selection()['nodes'])
         self.assertSetEqual(all_suids.difference(nodes_selected), inverted_nodes)
 
@@ -211,7 +220,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_selected_nodes(self):
         # Initialization
@@ -229,7 +238,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_nodes_connected_by_selected_edges(self):
         # Initialization
@@ -239,23 +248,22 @@ class NetworkSelectionTests(unittest.TestCase):
 
         # Select some nodes and verify that the expected edges are selected
         selected_nodes = PyCy3.select_nodes(COMMON_NODES, by_col='COMMON')['nodes']
-        selected_edges = PyCy3.edge_name_to_edge_suid(SELECTED_EDGES) # expected edges
+        selected_edges = PyCy3.edge_name_to_edge_suid(SELECTED_EDGES)  # expected edges
         selection = PyCy3.select_edges_connecting_selected_nodes()
         self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
         self.assertSetEqual(set(selected_edges), set(selection['edges']))
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_nodes_connected_by_selected_edges, network='bogus')
 
-
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_edges(self):
         # Initialization
         load_test_session()
         SINGLE_EDGE = ['YDR412W (pp) YPR119W']
-        single_edge_suid = PyCy3.edge_name_to_edge_suid(SINGLE_EDGE) # expected edges
+        single_edge_suid = PyCy3.edge_name_to_edge_suid(SINGLE_EDGE)  # expected edges
         EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
-        edge_list_suids = PyCy3.edge_name_to_edge_suid(EDGE_LIST) # expected edges
+        edge_list_suids = PyCy3.edge_name_to_edge_suid(EDGE_LIST)  # expected edges
 
         # Verify that selecting all edges works
         self.assertDictEqual(PyCy3.select_edges(None), {})
@@ -276,7 +284,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_edges, None, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_all_edges(self):
         # Initialization
@@ -289,7 +297,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_all_edges, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_invert_edge_selection(self):
         # Initialization
@@ -307,7 +315,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.invert_edge_selection, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_selected_edges(self):
         # Initialization
@@ -324,7 +332,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.delete_selected_edges, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_selected_edge_count(self):
         # Initialization
@@ -340,7 +348,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_edge_count, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_selected_edges(self):
         # Initialization
@@ -353,18 +361,21 @@ class NetworkSelectionTests(unittest.TestCase):
         # Verify that when some edges are selected, they're returned in the list
         PyCy3.select_edges(EDGE_LIST, by_col='name')
         self.assertSetEqual(set(PyCy3.get_selected_edges(edge_suids=False)), set(EDGE_LIST))
-        self.assertSetEqual(set(PyCy3.get_selected_edges(edge_suids=True)), set(PyCy3.edge_name_to_edge_suid(EDGE_LIST)))
+        self.assertSetEqual(set(PyCy3.get_selected_edges(edge_suids=True)),
+                            set(PyCy3.edge_name_to_edge_suid(EDGE_LIST)))
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_selected_edges, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_edges_connecting_selected_nodes(self):
         # Initialization
         load_test_session()
-        COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2', 'PFK27', 'TAH18'] # PFK27 & TAH18 aren't connected to the other nodes
+        COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2', 'PFK27',
+                        'TAH18']  # PFK27 & TAH18 aren't connected to the other nodes
         self_edge_PFK27 = PyCy3.add_cy_edges(['YOL136C', 'YOL136C'], edge_type='pp')
-        EXPECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C', 'YOL136C (pp) YOL136C']
+        EXPECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C',
+                          'YOL136C (pp) YOL136C']
 
         # Verify that when no edges are selected, no edges get selected
         self.assertIsNone(PyCy3.select_edges_connecting_selected_nodes())
@@ -378,13 +389,14 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_edges_connecting_selected_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_select_edges_adjacent_to_selected_nodes(self):
         # Initialization
         load_test_session()
         COMMON_NODES = ['PDC1', 'TAH18']
-        EXPECTED_EDGES = ['YPR048W (pp) YDL215C', 'YER179W (pp) YLR044C', 'YGL035C (pd) YLR044C', 'YPR048W (pp) YOR355W', 'YNL216W (pd) YLR044C', 'YNL199C (pp) YPR048W']
+        EXPECTED_EDGES = ['YPR048W (pp) YDL215C', 'YER179W (pp) YLR044C', 'YGL035C (pd) YLR044C',
+                          'YPR048W (pp) YOR355W', 'YNL216W (pd) YLR044C', 'YNL199C (pp) YPR048W']
 
         # Verify that when no edges are selected, no edges get selected
         self.assertDictEqual(PyCy3.select_edges_adjacent_to_selected_nodes(), {})
@@ -398,7 +410,7 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.select_edges_connecting_selected_nodes, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_duplicate_edges(self):
         # Initialization
@@ -423,12 +435,13 @@ class NetworkSelectionTests(unittest.TestCase):
         second_copy_edge_suid = PyCy3.add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         edge_deleted_suids = PyCy3.delete_duplicate_edges()['edges']
         self.assertEqual(len(edge_deleted_suids), 2)
-        self.assertTrue(set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid, second_copy_edge_suid]))
+        self.assertTrue(
+            set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid, second_copy_edge_suid]))
         self.assertEqual(PyCy3.get_edge_count(), original_edge_count)
 
         self.assertRaises(PyCy3.CyError, PyCy3.delete_duplicate_edges, network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_self_loops(self):
         # Initialization
@@ -448,7 +461,6 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.delete_self_loops, network='bogus')
 
+
 if __name__ == '__main__':
     unittest.main()
-
-

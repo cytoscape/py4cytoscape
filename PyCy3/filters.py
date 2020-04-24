@@ -21,6 +21,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def apply_filter(filter_name='Default filter', hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Run an existing filter by supplying the filter name.
@@ -59,12 +60,15 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
     networks.set_current_network(net_suid, base_url=base_url)
 
     # TODO: It looks like R can't properly use filter_name with blank embedded, and doesn't wait for filter to be applied
-    res = commands.commands_post('filter apply container="filter" name="' + filter_name + '" network=SUID:"' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(
+        'filter apply container="filter" name="' + filter_name + '" network=SUID:"' + str(net_suid) + '"',
+        base_url=base_url)
     return _check_selected(net_suid, base_url)
 
 
 @cy_log
-def create_column_filter(filter_name, column, criterion, predicate, caseSensitive=False, anyMatch=True, type='nodes', hide=False, network=None, base_url=DEFAULT_BASE_URL):
+def create_column_filter(filter_name, column, criterion, predicate, caseSensitive=False, anyMatch=True, type='nodes',
+                         hide=False, network=None, base_url=DEFAULT_BASE_URL):
     """Create Column Filter.
 
     Create a filter to control node or edge selection. Works on columns of boolean, string, numeric
@@ -129,7 +133,7 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
             print(error)
             raise CyError(error)
     elif predicate in ['GREATER_THAN', 'GREATER_THAN_OR_EQUAL']:
-#        # manually feed max bound so that UI is also correct ... UI doesn't show these predicates directly ... it uses BETWEEN, and doesn't distinguish between > and >=
+        #        # manually feed max bound so that UI is also correct ... UI doesn't show these predicates directly ... it uses BETWEEN, and doesn't distinguish between > and >=
         # TODO: Recommend that this check be limited to GREATER_THAN_OR_EQUAL because that's what the UI supports
         col_vals = tables.get_table_columns(type[:4], column, base_url=base_url)
         crit_max = col_vals[column].max()
@@ -152,12 +156,16 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
             predicate = 'IS_NOT_BETWEEN'
 
     # Actually create the filter
-    cmd_json = {'id': 'ColumnFilter', 'parameters': {'criterion': criterion, 'columnName': column, 'predicate': predicate, 'caseSensitive': caseSensitive, 'anyMatch': anyMatch, 'type': type}}
+    cmd_json = {'id': 'ColumnFilter',
+                'parameters': {'criterion': criterion, 'columnName': column, 'predicate': predicate,
+                               'caseSensitive': caseSensitive, 'anyMatch': anyMatch, 'type': type}}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
 
+
 @cy_log
-def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type='ANY', hide=False, network=None, base_url=DEFAULT_BASE_URL):
+def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type='ANY', hide=False, network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Create Degree Filter.
 
     Creates a filter to control node selection base on in/out degree.
@@ -198,9 +206,11 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         print(error)
         raise CyError(error)
 
-    cmd_json = {'id': 'DegreeFilter', 'parameters': {'criterion': criterion, 'predicate': predicate, 'edgeType': edge_type}}
+    cmd_json = {'id': 'DegreeFilter',
+                'parameters': {'criterion': criterion, 'predicate': predicate, 'edgeType': edge_type}}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
+
 
 @cy_log
 def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, network=None, base_url=DEFAULT_BASE_URL):
@@ -239,9 +249,13 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         print(error)
         raise CyError(error)
 
-    def fetch(x): return commands.commands_post('filter get name="' + x + '"', base_url=base_url)
-    def extract(y): return y[0]['transformers'][0] if y else None
-    trans_list = [extract(fetch(filter))   for filter in filter_list]
+    def fetch(x):
+        return commands.commands_post('filter get name="' + x + '"', base_url=base_url)
+
+    def extract(y):
+        return y[0]['transformers'][0] if y else None
+
+    trans_list = [extract(fetch(filter)) for filter in filter_list]
 
     # TODO: Add this check in R
     if None in trans_list:
@@ -252,6 +266,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
     cmd_json = {'id': 'CompositeFilter', 'parameters': {'type': type}, 'transformers': trans_list}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
     return _create_filter_and_finish('commands/filter/create', cmd_body, network, base_url)
+
 
 @cy_log
 def get_filter_list(base_url=DEFAULT_BASE_URL):
@@ -274,6 +289,7 @@ def get_filter_list(base_url=DEFAULT_BASE_URL):
     """
     res = commands.commands_post('filter list', base_url=base_url)
     return res
+
 
 @cy_log
 def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
@@ -309,6 +325,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
 
     return res
 
+
 @cy_log
 def import_filters(filename, base_url=DEFAULT_BASE_URL):
     """Loads filters from a file in JSON format.
@@ -336,7 +353,7 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
     """
     filename = os.path.abspath(filename)
     res = commands.commands_post('filter import file="' + filename + '"', base_url=base_url)
-    time.sleep(5) # give the filters time to finish executing ... this race condition is a Cytoscape bug
+    time.sleep(5)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res
 
 
@@ -344,8 +361,9 @@ def _create_filter_and_finish(cmd, cmd_body, network, base_url):
     res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
     return _check_selected(network, base_url)
 
+
 def _check_selected(network, base_url):
-    time.sleep(1) # Yikes! Have to wait a second for selection to settle!
+    time.sleep(1)  # Yikes! Have to wait a second for selection to settle!
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
 
@@ -358,7 +376,6 @@ def _check_selected(network, base_url):
     # hideEdges(invertEdgeSelection(network, base.url)$edges)
     # }
     return {'nodes': sel_nodes, 'edges': sel_edges}
-
 
 # TODO: Need to add Topological filter, too.
 # TODO: Need to add rename/remove filter

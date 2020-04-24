@@ -18,6 +18,7 @@ from .exceptions import CyError
 def __init__(self):
     pass
 
+
 @cy_log
 def delete_table_column(column, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
     """Delete a column from node, edge or network tables.
@@ -53,8 +54,10 @@ def delete_table_column(column, table='node', namespace='default', network=None,
     """
     # TODO: Fix R's documentation ... the return value is wrong
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_delete('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns/'+ column, base_url=base_url, require_json=False)
+    res = commands.cyrest_delete('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns/' + column,
+                                 base_url=base_url, require_json=False)
     return res
+
 
 @cy_log
 def get_table_columns(table='node', columns=None, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
@@ -75,9 +78,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dataframe: columns include SUID and each other requested column, and rows include the corresponding data
-            for each node/edge or network. For requested columns not present in the table, the column is still
-            returned but is full of ``nan`` values.
+        dataframe: requested columns (including SUID), and rows for each node/edge or network.
 
     Raises:
         HTTPError: if table or namespace doesn't exist in network
@@ -105,6 +106,9 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         4608       0   NaN
         4609    2092   NaN
         ...
+
+    Note:
+        For requested columns not present in the table, the column is still returned but is full of ``nan`` values.
     """
     suid = networks.get_network_suid(network, base_url)
 
@@ -116,12 +120,13 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     if columns is None:
         col_list = table_col_list
     elif isinstance(columns, str):
-        col_list = [col.strip()   for col in columns.split(',')]
+        col_list = [col.strip() for col in columns.split(',')]
     else:
         col_list = columns
 
     # get suid column first and make a dataframe with SUID as index
-    res_names = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/SUID', base_url=base_url)
+    res_names = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/SUID',
+                                    base_url=base_url)
     suid_list = res_names['values']
     df = pd.DataFrame(index=suid_list, columns=col_list)
 
@@ -133,7 +138,8 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
             break
 
         # fetch all values for the column
-        res_col = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/' + col, base_url=base_url)
+        res_col = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/' + col,
+                                      base_url=base_url)
 
         # the R version of this function replaces missing values with the constant NA, which
         # doesn't exist in Python. Pandas authority discusses this situation, but doesn't
@@ -142,23 +148,29 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         # https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
         table_col_type = table_col_info[col]
         if table_col_type in ['Double']:
-            def f(x): return np.nan if x is None else float(x)
+            def f(x):
+                return np.nan if x is None else float(x)
         elif table_col_type in ['Long', 'Integer']:
-            def f(x): return np.nan if x is None else int(x)
+            def f(x):
+                return np.nan if x is None else int(x)
         elif table_col_type in ['Boolean']:
-            def f(x): return None if x is None else bool(x)
+            def f(x):
+                return None if x is None else bool(x)
         else:
-            def f(x): return x
+            def f(x):
+                return x
         cvv = [f(x) for x in res_col['values']]
 
         if len(suid_list) != len(cvv):
-            print('Error: Column ' + col + ' has only ' + str(len(cvv)) + ' elements, but should have ' + str(len(suid_list)))
+            print('Error: Column ' + col + ' has only ' + str(len(cvv)) + ' elements, but should have ' + str(
+                len(suid_list)))
             break
         # TODO: Consider assigning entire column all at once instead of iterating ... should be OK
         for val, suid_val in zip(cvv, suid_list):
             df.at[suid_val, col] = val
 
     return df
+
 
 @cy_log
 def get_table_value(table, row_name, column, namespace='default', network=None, base_url=DEFAULT_BASE_URL):
@@ -202,13 +214,20 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
     row_key = None
     from .pycy3_utils import node_name_to_node_suid
     from .pycy3_utils import edge_name_to_edge_suid
-    if table == 'node': row_key = node_name_to_node_suid(row_name, network, base_url=base_url)[0]
-    elif table == 'edge': row_key = edge_name_to_edge_suid(row_name, network, base_url=base_url)[0]
-    elif table == 'network': row_key = networks.get_network_suid(row_name, base_url=base_url) # TODO: R implementation looks wrong because of == and use of row_name
-    else: row_key = None
+    if table == 'node':
+        row_key = node_name_to_node_suid(row_name, network, base_url=base_url)[0]
+    elif table == 'edge':
+        row_key = edge_name_to_edge_suid(row_name, network, base_url=base_url)[0]
+    elif table == 'network':
+        row_key = networks.get_network_suid(row_name,
+                                            base_url=base_url)  # TODO: R implementation looks wrong because of == and use of row_name
+    else:
+        row_key = None
 
     # get row/column value
-    res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/rows/' + str(row_key) + '/' + column, base_url=base_url, require_json=False)
+    res = commands.cyrest_get(
+        'networks/' + str(suid) + '/tables/' + namespace + table + '/rows/' + str(row_key) + '/' + column,
+        base_url=base_url, require_json=False)
     if not res: return None
     # TODO: This "not res" can't happen for numbers because CyREST returns HTTPError if a value doesn't exist ... is this what we want?
     # TODO: For strings, a '' is returned ... do we want to return None for this?
@@ -223,6 +242,7 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
         return bool(res)
     else:
         return str(res)
+
 
 @cy_log
 def get_table_column_names(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
@@ -256,8 +276,9 @@ def get_table_column_names(table='node', namespace='default', network=None, base
     suid = networks.get_network_suid(network, base_url=base_url)
     tbl = namespace + table
     res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + tbl + '/columns', base_url=base_url)
-    col_names = [x['name']   for x in res]
+    col_names = [x['name'] for x in res]
     return col_names
+
 
 @cy_log
 def get_table_column_types(table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
@@ -295,8 +316,10 @@ def get_table_column_types(table='node', namespace='default', network=None, base
 
     return col_types
 
+
 @cy_log
-def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default',
+                    network=None, base_url=DEFAULT_BASE_URL):
     """Loads data into Cytoscape tables keyed by row.
 
     This function loads data into Cytoscape node/edge/network
@@ -336,7 +359,8 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         'Success: Data loaded in defaultnode table'
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    table_key_column_values = get_table_columns(table=table, namespace=namespace, columns=table_key_column, network=net_suid, base_url=base_url)
+    table_key_column_values = get_table_columns(table=table, namespace=namespace, columns=table_key_column,
+                                                network=net_suid, base_url=base_url)
     # TODO: Shouldn't namespace be in this parameter list? R doesn't have it ... I added it
 
     if table_key_column_values.columns is None:
@@ -351,7 +375,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
 
     # verify that there is at least one key in the Cytoscape table that matches a key in the data
     table_keys = table_key_column_values[table_key_column].values
-    filter = [key in table_keys    for key in data[data_key_column]]
+    filter = [key in table_keys for key in data[data_key_column]]
     if not True in filter:
         return "Failed to load data: Provided key columns do not contain any matches"
 
@@ -362,30 +386,37 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     # Note that CyREST doesn't accept lists or create columns of type list, but comma-separated strings is
     # the best we can do for the user at this time.
     for col in data_subset.columns:
-        col_val = [','.join(val) if isinstance(val, list) else val    for val in data_subset[col]]
+        col_val = [','.join(val) if isinstance(val, list) else val for val in data_subset[col]]
         data_subset[col] = col_val
 
     # TODO: Find out whether "factors" are an issue in Python, and why factors could be troublesome in R
     # TODO: Verify that this gives the right answer for list of str, int, etc
 
-    data_list = _df_to_attr_dict_list(data_subset) # convert DataFrame to dicts that are easy to convert to JSON
+    data_list = _df_to_attr_dict_list(data_subset)  # convert DataFrame to dicts that are easy to convert to JSON
 
-    tbl = namespace + table # calculate fully qualified table name
+    tbl = namespace + table  # calculate fully qualified table name
 
     # if there are any columns that aren't in the Cytoscape table and they're going to be Int, add them explicitly now so
     # they don't default to float
     def create_col(x):
-        return commands.cyrest_post('networks/' + str(net_suid) + '/tables/' + tbl + '/columns', body={'name':x, 'type':'Integer'}, require_json=False, base_url=base_url)
+        return commands.cyrest_post('networks/' + str(net_suid) + '/tables/' + tbl + '/columns',
+                                    body={'name': x, 'type': 'Integer'}, require_json=False, base_url=base_url)
+
     existing_cols = get_table_column_names(table, namespace, net_suid, base_url=base_url)
-    [create_col(x[0]) if x[1] == 'int64' and not x[0] in existing_cols else None     for x in data_subset.dtypes.iteritems()]
+    [create_col(x[0]) if x[1] == 'int64' and not x[0] in existing_cols else None for x in
+     data_subset.dtypes.iteritems()]
 
     # finally, add the values for whatever columns we have (and create new columns as needed)
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl, body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list}, require_json=False, base_url=base_url)
+    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl,
+                              body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list},
+                              require_json=False, base_url=base_url)
 
     return 'Success: Data loaded in ' + tbl + ' table'
 
+
 @cy_log
-def map_table_column(column, species, map_from, map_to, force_single=True, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
+def map_table_column(column, species, map_from, map_to, force_single=True, table='node', namespace='default',
+                     network=None, base_url=DEFAULT_BASE_URL):
     """Map Table Column.
 
     Perform identifier mapping using an existing column of supported identifiers to populate a new column with
@@ -438,12 +469,15 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
     all_cols = get_table_column_names(table, namespace, network, base_url=base_url)
     if not column in all_cols: raise CyError('ERROR:mapIdentifiers, ' + column + ' does not exist')
 
-    res_map = commands.commands_post('idmapper map column columnName="' + column + '" forceSingle="' + fs + '" mapFrom="' + map_from + '" mapTo="' + map_to + '" species="' + species + '" table="' + tbl + '"') # {'new column': 'SGD '}
+    res_map = commands.commands_post(
+        'idmapper map column columnName="' + column + '" forceSingle="' + fs + '" mapFrom="' + map_from + '" mapTo="' + map_to + '" species="' + species + '" table="' + tbl + '"')  # {'new column': 'SGD '}
     if res_map['new column'] == 'null ': raise CyError('Error:mapIdentifiers failed')
-    #TODO: Do we really mean to throw this result away?? R does ... if the 'new column' value returns null, something went wrong ... I added check
+    # TODO: Do we really mean to throw this result away?? R does ... if the 'new column' value returns null, something went wrong ... I added check
 
-    res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network, base_url=base_url)
+    res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network,
+                            base_url=base_url)
     return res
+
 
 @cy_log
 def rename_table_column(column, new_name, table='node', namespace='default', network=None, base_url=DEFAULT_BASE_URL):
@@ -477,9 +511,10 @@ def rename_table_column(column, new_name, table='node', namespace='default', net
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns',
-          body={'oldName': column, 'newName': new_name},
-          base_url=base_url, require_json=False)
+                              body={'oldName': column, 'newName': new_name},
+                              base_url=base_url, require_json=False)
     return res
+
 
 # TODO: Check to see if this is needed in RCy3
 def _nan_to_none(original_df, attr_dict_list):
@@ -487,8 +522,9 @@ def _nan_to_none(original_df, attr_dict_list):
     # First, determine whether any floating point values are missing
     if original_df.isnull().any().any():
         # yes ... find out which rows contain null values
-        data_subset_nans = original_df.isnull() # map out missing floating point in all cells
-        data_subset_nans_indexes = [True in set(data_subset_nans.loc[i,:])    for i in data_subset_nans.index] # find rows containing missing floating point
+        data_subset_nans = original_df.isnull()  # map out missing floating point in all cells
+        data_subset_nans_indexes = [True in set(data_subset_nans.loc[i, :]) for i in
+                                    data_subset_nans.index]  # find rows containing missing floating point
         for has_missing, row_contents in zip(data_subset_nans_indexes, attr_dict_list):
             # for each row in data_list, if it has missing values, find them and replace them with 'None'
             # Note that this could not have been done with data_subset because it's a DataFrame, which only outputs 'nan'
@@ -497,8 +533,8 @@ def _nan_to_none(original_df, attr_dict_list):
                     if type(value) is float and np.isnan(value): row_contents[key] = None
     return attr_dict_list
 
+
 def _df_to_attr_dict_list(df):
     # convert whole data table to dictionary suitable for JSON encoding
     data_list = df.to_dict(orient='records')
     return _nan_to_none(df, data_list)
-

@@ -4,6 +4,7 @@ import unittest
 
 from test_utils import *
 
+
 class SessionTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -14,8 +15,7 @@ class SessionTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_close_session(self):
         # See what happens when closing and no session is open
@@ -37,7 +37,7 @@ class SessionTests(unittest.TestCase):
         load_test_session()
         self.assertRaises(PyCy3.CyError, PyCy3.close_session, True, "totallybogusdir/bogusfile")
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_open_session(self):
         # Verify that the default network is loaded
@@ -63,7 +63,7 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_network_count(), 1)
         self.assertEqual(PyCy3.get_network_name(), 'HIV-human PPI')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_save_session(self):
         # Verify that the .cys suffix is added if it's not in the filename

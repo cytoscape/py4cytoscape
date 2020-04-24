@@ -5,6 +5,7 @@ from requests import HTTPError
 import time
 from test_utils import *
 
+
 class NetworkViewsTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -15,7 +16,7 @@ class NetworkViewsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_views(self):
         # Initialization
@@ -40,8 +41,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_views, 'bogus network')
 
-
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_view_suid(self):
         # Initialization
@@ -68,7 +68,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_view_suid, 'bogus network')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_fit_content(self):
         # Initialization
@@ -99,7 +99,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.fit_content, network='bogus network')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_set_current_view(self):
         # Initialization
@@ -123,7 +123,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, network='bogus network')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_export_image(self):
         # Initialization
@@ -136,20 +136,26 @@ class NetworkViewsTests(unittest.TestCase):
             self.assertIsInstance(export_res['file'], str)
             self.assertIsNotNone(export_res['file'])
 
-        check_export(PyCy3.export_image('output/test units-pixels height-1000 width-2000 zoom-500', type='JPEG', units='pixels', height=1000, width=2000, zoom=200, network=None))
+        check_export(
+            PyCy3.export_image('output/test units-pixels height-1000 width-2000 zoom-500', type='JPEG', units='pixels',
+                               height=1000, width=2000, zoom=200, network=None))
         check_export(PyCy3.export_image('output/test', type='PDF', network=None))
-        check_export(PyCy3.export_image('output/test res-600 units-inches height-1.7 width-3.5 zoom-500', type='PNG', resolution=600, units='inches', height=1.7, width=3.5, zoom=500, network=gal_filtered_view))
+        check_export(PyCy3.export_image('output/test res-600 units-inches height-1.7 width-3.5 zoom-500', type='PNG',
+                                        resolution=600, units='inches', height=1.7, width=3.5, zoom=500,
+                                        network=gal_filtered_view))
         check_export(PyCy3.export_image('output/test', type='SVG', network=gal_filtered_view))
         check_export(PyCy3.export_image('output/test', type='PS', network=gal_filtered_suid))
-        check_export(PyCy3.export_image('output/test alldefault', type='PNG', resolution=None, units=None, height=None, width=None, zoom=None, network=gal_filtered_suid))
+        check_export(PyCy3.export_image('output/test alldefault', type='PNG', resolution=None, units=None, height=None,
+                                        width=None, zoom=None, network=gal_filtered_suid))
 
         input('Verify the export output files in the ./output folder by sight')
 
         # Verify that an unknown network is caught
         self.assertRaises(PyCy3.CyError, PyCy3.export_image, network='bogus')
-        self.assertRaises(PyCy3.CyError, PyCy3.export_image, 'output/test', type='PNG', resolution=600, units='inches', height=10.7, width=3.5, zoom=500, network=gal_filtered_view)
+        self.assertRaises(PyCy3.CyError, PyCy3.export_image, 'output/test', type='PNG', resolution=600, units='inches',
+                          height=10.7, width=3.5, zoom=500, network=gal_filtered_view)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_export_image(self):
         # Initialization

@@ -5,6 +5,7 @@ from requests import HTTPError
 
 from test_utils import *
 
+
 class UserInterfaceTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -15,7 +16,7 @@ class UserInterfaceTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_dock_hide_float_panel(self):
         # Initialization
@@ -42,7 +43,7 @@ class UserInterfaceTests(unittest.TestCase):
         # Verify that an unknown panel is caught
         self.assertRaises(PyCy3.CyError, PyCy3.dock_panel, 'bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_dock_hide_float_panel(self):
         # Initialization
@@ -57,6 +58,7 @@ class UserInterfaceTests(unittest.TestCase):
         input('Verify that all four panels are floated')
         PyCy3.hide_all_panels()
         input('Verify that all four panels are hidden')
+
 
 if __name__ == '__main__':
     unittest.main()

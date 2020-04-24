@@ -19,6 +19,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve list of network view SUIDs.
@@ -46,8 +47,9 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get("networks/" + str(net_suid) + "/views", base_url=base_url)
-# TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
+    # TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
     return res
+
 
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
@@ -87,14 +89,14 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     elif isinstance(network, int):
         # suid provided, but is it a network or a view?
         net_suids = commands.cyrest_get('networks', base_url=base_url)
-        if network in net_suids: # network SUID, warn if multiple view
+        if network in net_suids:  # network SUID, warn if multiple view
             network_views = get_network_views(network, base_url=base_url)
             if len(network_views) > 1:
                 print('Warning: This network has multiple views. Returning last.')
             return network_views[-1]
         else:
-            view_suids = [get_network_views(x, base_url=base_url)[0]   for x in net_suids]
-            if network in view_suids: # view SUID, return it
+            view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
+            if network in view_suids:  # view SUID, return it
                 return network
             else:
                 raise CyError('Network view does not exist for: ' + str(network))
@@ -107,6 +109,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         if len(network_views) > 1:
             print('Warning: This network has multiple views. Returning last.')
         return network_views[-1]
+
 
 @cy_log
 def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
@@ -144,6 +147,7 @@ def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
         res = commands.commands_post('view fit content view=SUID:' + str(view_suid), base_url=base_url)
     return res
 
+
 @cy_log
 def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     """Set which network view is "current".
@@ -176,9 +180,11 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('view set current view=SUID:"' + str(view_suid) + '"', base_url=base_url)
     return res
 
+
 # TODO: Need parameter to automatically overwrite file if it exists
 @cy_log
-def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None, network=None, base_url=DEFAULT_BASE_URL):
+def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
+                 network=None, base_url=DEFAULT_BASE_URL):
     """ Save the current network view as an image file.
 
     The image is cropped per the current view in Cytoscape. Consider applying :meth:`fit_content` prior to export.
@@ -231,13 +237,17 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     if width: cmd_string += ' Width="' + str(width) + '"'
     if zoom: cmd_string += ' Zoom="' + str(zoom) + '"'
 
-# TODO: It looks like the '.' should be escaped ... true?
-# TODO: If a lower case comparison is going to be done, shouldn't filename also be lower-case?
+    # TODO: It looks like the '.' should be escaped ... true?
+    # TODO: If a lower case comparison is going to be done, shouldn't filename also be lower-case?
     if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
     filename = os.path.abspath(filename)
-    if os.path.isfile(filename): print('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
-    res = commands.commands_post(cmd_string + ' OutputFile="' + filename + '"' + ' options="' + type.upper() + '"' + ' view=SUID:"' + str(view_SUID) + '"', base_url=base_url)
+    if os.path.isfile(filename): print(
+        'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    res = commands.commands_post(
+        cmd_string + ' OutputFile="' + filename + '"' + ' options="' + type.upper() + '"' + ' view=SUID:"' + str(
+            view_SUID) + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def toggle_graphics_details(base_url=DEFAULT_BASE_URL):

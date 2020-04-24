@@ -6,7 +6,8 @@ import logging.config
 import functools
 import os
 
-from .pycy3_logger_settings import _FILE_LOG_DIR, _FILE_LOG_LEVEL, _FILE_LOG_NAME, _DISABLE_DEBUG_HTTP, _CONSOLE_LOG_LEVEL
+from .pycy3_logger_settings import _FILE_LOG_DIR, _FILE_LOG_LEVEL, _FILE_LOG_NAME, _DISABLE_DEBUG_HTTP, \
+    _CONSOLE_LOG_LEVEL
 
 _log_base = os.path.join(_FILE_LOG_DIR, _FILE_LOG_NAME)
 if not os.path.exists(_FILE_LOG_DIR): os.makedirs(_FILE_LOG_DIR)
@@ -32,7 +33,7 @@ _logging_config = {
             'filename': _log_base,
             'encoding': 'utf8',
             'backupCount': 10,
-            'maxBytes': 1048576, # 1MB
+            'maxBytes': 1048576,  # 1MB
             'delay': True
         },
         'console_handler': {
@@ -57,11 +58,13 @@ logging.config.dictConfig(_logging_config)
 logger = logging.getLogger('PyCy3')
 _logger_debug = 'DEBUG' in [_FILE_LOG_LEVEL, _CONSOLE_LOG_LEVEL]
 
+
 # Decorator so functions can get automatic logging
 
 # TODO: Consider indenting entries to indicate nesting
 def cy_log(func):
     """Log function call parameters and results"""
+
     @functools.wraps(func)
     def wrapper_log(*args, **kwargs):
         if _logger_debug:

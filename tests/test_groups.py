@@ -7,6 +7,7 @@ from requests import HTTPError
 
 from test_utils import *
 
+
 class GroupsTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -17,7 +18,7 @@ class GroupsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_group(self):
         # Initialization
@@ -31,7 +32,9 @@ class GroupsTests(unittest.TestCase):
         self._check_whole_group('group 1', lambda x: PyCy3.create_group(x), selection)
 
         # Create a group out of just 2 named nodes in a given column
-        self._check_whole_group('group 2', lambda x: PyCy3.create_group(x, nodes=['GDS1', 'PFK27'], nodes_by_col='COMMON'), selection)
+        self._check_whole_group('group 2',
+                                lambda x: PyCy3.create_group(x, nodes=['GDS1', 'PFK27'], nodes_by_col='COMMON'),
+                                selection)
 
         # Create a group out of just 2 named nodes in a named column
         self._check_whole_group('group 3', lambda x: PyCy3.create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'), selection)
@@ -39,9 +42,10 @@ class GroupsTests(unittest.TestCase):
         # Create a group with no name
         self._check_whole_group('', lambda x: PyCy3.create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'), selection)
 
-        self.assertRaises(PyCy3.CyError, PyCy3.create_group, 'group 4', nodes='COMMON:GDS1,COMMON:PFK27', network='bogus')
+        self.assertRaises(PyCy3.CyError, PyCy3.create_group, 'group 4', nodes='COMMON:GDS1,COMMON:PFK27',
+                          network='bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_add_to_group(self):
         # Initialization
@@ -64,11 +68,13 @@ class GroupsTests(unittest.TestCase):
 
         def check_group(group_name, group_add_func, expected_nodes, expected_internal_edges, expected_external_edges):
             self.assertDictEqual(group_add_func(group_name), {})
-            self._check_group_info(group_name, group_name, None, expected_nodes, expected_internal_edges, expected_external_edges)
+            self._check_group_info(group_name, group_name, None, expected_nodes, expected_internal_edges,
+                                   expected_external_edges)
 
         # Verify that all nodes and edges produces right nodes, internal edges and external edges
         group_0 = PyCy3.create_group('group 0')['group']
-        check_group('group 0', lambda x: PyCy3.add_to_group(x, nodes='all', edges='all'), set(all_nodes) | {group_0}, set(all_edges), set())
+        check_group('group 0', lambda x: PyCy3.add_to_group(x, nodes='all', edges='all'), set(all_nodes) | {group_0},
+                    set(all_edges), set())
 
         # Create a group out of just 2 selected nodes
         PyCy3.select_nodes(selection_2_nodes['nodes'])
@@ -76,28 +82,44 @@ class GroupsTests(unittest.TestCase):
         group_id = group['group']
 
         # Verify that adding a list of nodes by SUID produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: PyCy3.add_to_group(x, list(set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))), set(selection_3_nodes['nodes']), set(), set(selection_3_nodes['edges']))
+        check_group('group 1', lambda x: PyCy3.add_to_group(x, list(
+            set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))), set(selection_3_nodes['nodes']), set(),
+                    set(selection_3_nodes['edges']))
 
         # Verify that adding a list of edges by SUID produces right nodes, internal edges and external edges ... and doesn't allow selected nodes (PEP12) in
         edge_GDS1_PFK27 = PyCy3.add_cy_edges(['YOR355W', 'YOL136C'])[0]['SUID']
         edge_GDS1_PEP12 = PyCy3.add_cy_edges(['YOR355W', 'YOR036W'])[0]['SUID']
-        PyCy3.select_nodes(['PEP12'], by_col='COMMON') # should not end up in group 1 ... verify to be sure
-        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]), set(selection_3_nodes['nodes']), {edge_GDS1_PFK27}, set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
+        PyCy3.select_nodes(['PEP12'], by_col='COMMON')  # should not end up in group 1 ... verify to be sure
+        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]),
+                    set(selection_3_nodes['nodes']), {edge_GDS1_PFK27},
+                    set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
 
         # Verify that adding a selected node (PEP12) produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: PyCy3.add_to_group(x), set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12}, set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
+        check_group('group 1', lambda x: PyCy3.add_to_group(x),
+                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
+                    {edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
+                        selection_PEP12_node['edges']))
 
         # Verify that adding nothing at all produces right nodes, internal edges and external edges
         PyCy3.select_all_nodes()
         PyCy3.select_all_edges()
-        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes=[], edges=[]), set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12}, set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
+        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes=[], edges=[]),
+                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
+                    {edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
+                        selection_PEP12_node['edges']))
 
         # Verify that adding a column by COMMON produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes='COMMON:AHP1'), set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {selection_AHP1_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12}, set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
+        check_group('group 1', lambda x: PyCy3.add_to_group(x, nodes='COMMON:AHP1'),
+                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {
+                        selection_AHP1_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
+                        selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
 
         self.assertRaises(PyCy3.CyError, PyCy3.add_to_group, 'group x', nodes='COMMON:AHP1', network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_list_groups(self):
         # Initialization
@@ -116,7 +138,7 @@ class GroupsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.list_groups, network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_group_info(self):
         # Initialization
@@ -131,19 +153,22 @@ class GroupsTests(unittest.TestCase):
         group_2_suid = PyCy3.create_group('', nodes=['PDC1', 'FBP1', 'CIN4'], nodes_by_col='COMMON')['group']
 
         # Verify that info for a real group accessed by group name is valid
-        self._check_group_info('Group 1', 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+        self._check_group_info('Group 1', 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(),
+                               set(selection_GDS1_PFK27['edges']))
 
         # Verify that info for a real group accessed by group name is valid
-        self._check_group_info(group_1_suid, 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+        self._check_group_info(group_1_suid, 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(),
+                               set(selection_GDS1_PFK27['edges']))
 
         # Verify that info for an unnamed group group is valid
-        self._check_group_info('', '', group_2_suid, set(selection_PDC1_FBP1_CIN4['nodes']), set(), set(selection_PDC1_FBP1_CIN4['edges']))
+        self._check_group_info('', '', group_2_suid, set(selection_PDC1_FBP1_CIN4['nodes']), set(),
+                               set(selection_PDC1_FBP1_CIN4['edges']))
 
         self.assertRaises(PyCy3.CyError, PyCy3.get_group_info, -1)
         self.assertRaises(PyCy3.CyError, PyCy3.get_group_info, 'Bogus Group')
         self.assertRaises(PyCy3.CyError, PyCy3.get_group_info, 'Group 1', network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_collapse_expand_group(self):
         # Initialization
@@ -171,47 +196,62 @@ class GroupsTests(unittest.TestCase):
         check_group_info(group_1_suid, False)
         check_group_info(group_2_suid, False)
         check_group_info(group_3_suid, False)
-        verify(lambda: None, lambda: PyCy3.expand_group(), set(), [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group(), set(),
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing all selected groups if none are selected
-        verify(lambda: None, lambda: PyCy3.collapse_group(), set(), [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.collapse_group(), set(),
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing a selected group doesn't affect others
-        verify(lambda: PyCy3.select_nodes([group_2_suid]), lambda: PyCy3.collapse_group(), {group_2_suid}, [(group_1_suid, False), (group_2_suid, True), (group_3_suid, False)])
-        verify(lambda: PyCy3.select_nodes([group_3_suid]), lambda: PyCy3.collapse_group(), {group_2_suid, group_3_suid}, [(group_1_suid, False), (group_2_suid, True), (group_3_suid, True)])
+        verify(lambda: PyCy3.select_nodes([group_2_suid]), lambda: PyCy3.collapse_group(), {group_2_suid},
+               [(group_1_suid, False), (group_2_suid, True), (group_3_suid, False)])
+        verify(lambda: PyCy3.select_nodes([group_3_suid]), lambda: PyCy3.collapse_group(), {group_2_suid, group_3_suid},
+               [(group_1_suid, False), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify collapsing an unselected group doesn't affect others
-        verify(lambda: None, lambda: PyCy3.collapse_group('unselected'), {group_1_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
+        verify(lambda: None, lambda: PyCy3.collapse_group('unselected'), {group_1_suid},
+               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify that expanding selected groups doesn't affect others
-        verify(lambda: None, lambda: PyCy3.expand_group(), {group_2_suid, group_3_suid}, [(group_1_suid, True), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group(), {group_2_suid, group_3_suid},
+               [(group_1_suid, True), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify that expanding unselected groups doesn't affect others
-        verify(lambda: None, lambda: PyCy3.expand_group('unselected'), {group_1_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group('unselected'), {group_1_suid},
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.collapse_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.collapse_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid},
+               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.expand_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid},
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.collapse_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]), {group_1_suid, group_2_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.collapse_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               {group_1_suid, group_2_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.expand_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]), {group_1_suid, group_2_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               {group_1_suid, group_2_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.collapse_group('Group 1,Group 2'), {group_1_suid, group_2_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.collapse_group('Group 1,Group 2'), {group_1_suid, group_2_suid},
+               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.expand_group('Group 1,Group 2'), {group_1_suid, group_2_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group('Group 1,Group 2'), {group_1_suid, group_2_suid},
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing all groups works
-        verify(lambda: None, lambda: PyCy3.collapse_group('all'), {group_1_suid, group_2_suid, group_3_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
+        verify(lambda: None, lambda: PyCy3.collapse_group('all'), {group_1_suid, group_2_suid, group_3_suid},
+               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify expanding two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: PyCy3.expand_group('all'), {group_1_suid, group_2_suid, group_3_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(lambda: None, lambda: PyCy3.expand_group('all'), {group_1_suid, group_2_suid, group_3_suid},
+               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         self.assertRaises(PyCy3.CyError, PyCy3.collapse_group, -1)
         self.assertRaises(PyCy3.CyError, PyCy3.expand_group, -1)
@@ -220,19 +260,20 @@ class GroupsTests(unittest.TestCase):
         self.assertRaises(PyCy3.CyError, PyCy3.collapse_group, 'Group 1', network='Bogus')
         self.assertRaises(PyCy3.CyError, PyCy3.expand_group, 'Group 1', network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_group_by_column(self):
         # Initialization
         load_test_session()
         # Create Cluster column and assign nodes to cluster identifiers
         all_nodes = list(PyCy3.get_table_columns(columns=['name'])['name'])
-        all_nodes.sort() # A cheap way of getting a consistent ordering from run to run
-        test_data = df.DataFrame(data={'id':all_nodes, 'Cluster':'' * len(all_nodes)})
+        all_nodes.sort()  # A cheap way of getting a consistent ordering from run to run
+        test_data = df.DataFrame(data={'id': all_nodes, 'Cluster': '' * len(all_nodes)})
         res = PyCy3.load_table_data(test_data, data_key_column='id', table='node', table_key_column='name')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
         # TODO: Suggestion for new functionality ... create_column(colname, default_val, [(rowID, newVal)]) or similar
-        test_data = df.DataFrame(data={'id':['GDS1', 'PFK27', 'PDC1', 'FBP1', 'CIN4'], 'Cluster':['A', 'A', 'B', 'B', 'B']})
+        test_data = df.DataFrame(
+            data={'id': ['GDS1', 'PFK27', 'PDC1', 'FBP1', 'CIN4'], 'Cluster': ['A', 'A', 'B', 'B', 'B']})
         res = PyCy3.load_table_data(test_data, data_key_column='id', table='node', table_key_column='COMMON')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
         # For each cluster, figure out what the selected nodes and external edges should be
@@ -244,11 +285,13 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that cluster A goes into the right group
         group_a = PyCy3.create_group_by_column('Group A', 'Cluster', 'A')
-        self._check_group_info('Group A', 'Group A', group_a['group'], set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+        self._check_group_info('Group A', 'Group A', group_a['group'], set(selection_GDS1_PFK27['nodes']), set(),
+                               set(selection_GDS1_PFK27['edges']))
 
         # Verify that cluster B goes into the right group
         group_b = PyCy3.create_group_by_column('Group B', 'Cluster', 'B')
-        self._check_group_info('Group B', 'Group B', group_b['group'], set(selection_PDC1_FBP1_CIN4['nodes']), set(), set(selection_PDC1_FBP1_CIN4['edges']))
+        self._check_group_info('Group B', 'Group B', group_b['group'], set(selection_PDC1_FBP1_CIN4['nodes']), set(),
+                               set(selection_PDC1_FBP1_CIN4['edges']))
 
         # Verify that when the value ('C') doesn't exist, an empty group is created
         group_c = PyCy3.create_group_by_column('Group C', 'Cluster', 'C')
@@ -260,7 +303,7 @@ class GroupsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.create_group_by_column, 'Group 1', network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_remove_from_group(self):
         # Initialization
@@ -273,22 +316,27 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that test group has right nodes, internal edges and external edges
         group_0 = PyCy3.create_group('group 0', nodes=selection_GDS1_PFK27['nodes'])['group']
-        self._check_group_info('group 0', 'group 0', group_0, set(selection_GDS1_PFK27['nodes']), set(), set(selection_GDS1_PFK27['edges']))
+        self._check_group_info('group 0', 'group 0', group_0, set(selection_GDS1_PFK27['nodes']), set(),
+                               set(selection_GDS1_PFK27['edges']))
 
         # Verify that removing GDS1 and its edges results in only PFK27 and its edges
         self.assertDictEqual(PyCy3.remove_from_group('group 0', ['GDS1'], nodes_by_col='COMMON'), {})
-        self._check_group_info('group 0', 'group 0', group_0, set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(), set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))
+        self._check_group_info('group 0', 'group 0', group_0,
+                               set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(),
+                               set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))
 
         # Verify that removing the PFK27 edges leaves only the PFK27 node
-        self.assertDictEqual(PyCy3.remove_from_group('group 0', nodes=[], edges=list(set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))), {})
-        self._check_group_info('group 0', 'group 0', group_0, set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(), set())
+        self.assertDictEqual(PyCy3.remove_from_group('group 0', nodes=[], edges=list(
+            set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))), {})
+        self._check_group_info('group 0', 'group 0', group_0,
+                               set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(), set())
 
         # Verify that operating on an unknown group does nothing
         self.assertDictEqual(PyCy3.remove_from_group('bogus group'), {})
 
         self.assertRaises(PyCy3.CyError, PyCy3.remove_from_group, 'group x', network='Bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_group(self):
         # Initialization
@@ -305,7 +353,8 @@ class GroupsTests(unittest.TestCase):
         self.assertSetEqual(set(PyCy3.list_groups()['groups']), {group_1_suid, group_2_suid, group_3_suid})
 
         # Delete the first two groups (by name), leaving the third
-        self.assertSetEqual(set(PyCy3.delete_group(['Group 1', 'Group 2'], groups_by_col='shared name')['groups']), {group_1_suid, group_2_suid})
+        self.assertSetEqual(set(PyCy3.delete_group(['Group 1', 'Group 2'], groups_by_col='shared name')['groups']),
+                            {group_1_suid, group_2_suid})
         self.assertSetEqual(set(PyCy3.list_groups()['groups']), {group_3_suid})
 
         # Delete the last by SUID
@@ -344,17 +393,16 @@ class GroupsTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.delete_group, network='bogus')
 
-
-
     def _check_whole_group(self, group_name, group_create_func, selection):
         group = group_create_func(group_name)
         self.assertIsInstance(group, dict)
         self.assertIsInstance(group['group'], int)
         group_id = group['group']
-        return self._check_group_info(group_name, group_name, group_id, set(selection['nodes']), set(), set(selection['edges']))
+        return self._check_group_info(group_name, group_name, group_id, set(selection['nodes']), set(),
+                                      set(selection['edges']))
 
-
-    def _check_group_info(self, group, expected_name, expected_suid, expected_nodes, expected_internal_edges, expected_external_edges):
+    def _check_group_info(self, group, expected_name, expected_suid, expected_nodes, expected_internal_edges,
+                          expected_external_edges):
         group_info = PyCy3.get_group_info(group)
         self.assertIsInstance(group_info, dict)
         if expected_suid: self.assertEqual(group_info['group'], expected_suid)
@@ -364,6 +412,7 @@ class GroupsTests(unittest.TestCase):
         self.assertSetEqual(set(group_info['externalEdges']), expected_external_edges)
         self.assertFalse(group_info['collapsed'])
         return group_info['group']
+
 
 if __name__ == '__main__':
     unittest.main()

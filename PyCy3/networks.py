@@ -39,8 +39,10 @@ from .pycy3_utils import *
 from .pycy3_logger import cy_log
 from .exceptions import CyError
 
+
 def __init__(self):
     pass
+
 
 @cy_log
 def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
@@ -72,6 +74,7 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     cmd = 'network set current network=SUID:"' + str(suid) + '"'
     res = commands.commands_post(cmd, base_url=base_url)
     return res
+
 
 @cy_log
 def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
@@ -106,6 +109,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
     return commands.commands_post(cmd, base_url)
 
+
 @cy_log
 def get_network_count(base_url=DEFAULT_BASE_URL):
     """Get the number of Cytoscape networks in the current Cytoscape session.
@@ -128,6 +132,7 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
     """
     res = commands.cyrest_get('networks/count', base_url=base_url)
     return list(res.values())[0]
+
 
 @cy_log
 def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
@@ -180,6 +185,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
 
     res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=DEFAULT_BASE_URL)
     return res[0]['name']
+
 
 @cy_log
 def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
@@ -239,6 +245,7 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
     response = commands.commands_post(cmd, base_url=base_url)
     return int(response[0]['SUID'])
 
+
 @cy_log
 def get_network_list(base_url=DEFAULT_BASE_URL):
     """Returns the list of Cytoscape network names in the current Cytoscape session.
@@ -261,11 +268,13 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     """
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
-        cy_network_names = [commands.cyrest_get('networks/' + str(suid), base_url=base_url)['data']['name']    for suid in cy_networks_suids]
+        cy_network_names = [commands.cyrest_get('networks/' + str(suid), base_url=base_url)['data']['name'] for suid in
+                            cy_networks_suids]
     else:
         cy_network_names = []
 
     return cy_network_names
+
 
 @cy_log
 def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
@@ -304,7 +313,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     type = type.upper()
     if type == 'CYS':
         sys.stderr.write('Saving session as a CYS file...')
-        raise CyError("Implement this") # TODO: saveSession(filename=filename, base.url = base.url)
+        raise CyError("Implement this")  # TODO: saveSession(filename=filename, base.url = base.url)
     else:
         # e.g., CX, CYJS, GraphML, NNF, SIF, XGMML
         if type == 'GRAPHML': type = 'GraphML'
@@ -313,9 +322,11 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     ext = '.' + type.lower()
     if re.search(ext + '$', filename) is None: filename += ext
     filename = os.path.abspath(filename)
-    if os.path.exists(filename): warnings.warn('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    if os.path.exists(filename): warnings.warn(
+        'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
 
     return commands.commands_post(cmd + ' OutputFile="' + filename + '"', base_url=base_url)
+
 
 @cy_log
 def delete_network(network=None, base_url=DEFAULT_BASE_URL):
@@ -344,6 +355,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_delete('networks/' + str(suid), base_url=base_url, require_json=False)
     return res
 
+
 @cy_log
 def delete_all_networks(base_url=DEFAULT_BASE_URL):
     """Delete all networks from the current Cytoscape session.
@@ -364,6 +376,7 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
     """
     res = commands.cyrest_delete('networks', base_url=base_url, require_json=False)
     return res
+
 
 # ==============================================================================
 # II. General node functions
@@ -402,7 +415,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     See Also:
         :meth:`select_nodes`, :meth:`select_first_neighbors`
     """
-    #TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
+    # TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
         node_names = network_selection.get_selected_nodes(network=network, base_url=base_url)
     elif isinstance(node_names, str):
@@ -418,14 +431,15 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         node_suid = node_name_to_node_suid([node_name], net_suid, base_url=base_url)[0]
         # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar ... I think it will break ... should we except??
 
-        first_neighbors_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/' + str(node_suid) + '/neighbors', base_url=base_url)
+        first_neighbors_suids = commands.cyrest_get(
+            'networks/' + str(net_suid) + '/nodes/' + str(node_suid) + '/neighbors', base_url=base_url)
         first_neighbors_names = node_suid_to_node_name(first_neighbors_suids, net_suid, base_url=base_url)
 
         if as_nested_list:
             neighbor_names.append([node_name, first_neighbors_names])
         else:
             neighbor_names += first_neighbors_names
-            neighbor_names = list(dict.fromkeys(neighbor_names)) # dedup list
+            neighbor_names = list(dict.fromkeys(neighbor_names))  # dedup list
 
     return neighbor_names
 
@@ -465,6 +479,7 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
     res = commands.cyrest_post('networks/' + str(net_suid) + '/nodes', body=node_names, base_url=base_url)
     return res
 
+
 @cy_log
 def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
     """Reports the number of nodes in the network.
@@ -496,6 +511,7 @@ def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/count', base_url=base_url)
     return res['count']
 
+
 @cy_log
 def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the names of all the nodes in the network.
@@ -526,12 +542,14 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultnode/columns/name', base_url=base_url)
     return res['values']
 
+
 # ==============================================================================
 # III. General edge functions
 # ------------------------------------------------------------------------------
 
 @cy_log
-def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None, base_url=DEFAULT_BASE_URL):
+def add_cy_edges(source_target_list, edge_type='interacts with', directed=False, network=None,
+                 base_url=DEFAULT_BASE_URL):
     """Add one or more edges to a Cytoscape network by listing source and target node pairs.
 
     Args:
@@ -560,24 +578,28 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     net_suid = get_network_suid(network, base_url=base_url)
 
     # Create list of all nodes in order presented
-    #TODO: Find out what should happen if node name maps to multiple nodes
-    if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0], str) and isinstance(source_target_list[1], str):
+    # TODO: Find out what should happen if node name maps to multiple nodes
+    if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0],
+                                                                                            str) and isinstance(
+            source_target_list[1], str):
         flat_source_target_list = source_target_list
     else:
-        flat_source_target_list = [item    for sublist in source_target_list    for item in sublist]
+        flat_source_target_list = [item for sublist in source_target_list for item in sublist]
     edge_suid_list = node_name_to_node_suid(flat_source_target_list, net_suid, base_url=base_url)
 
     # Verify that
-    if True in [True if isinstance(x, list) else False    for x in edge_suid_list]:
+    if True in [True if isinstance(x, list) else False for x in edge_suid_list]:
         sys.stderr.write('add_cy_edges: more than one node found for a given source or target - no edges added')
         return None
         # TODO: Create consistent policy for logging to console and returning error values
 
     # Note: use str() for edge SUIDs in case the SUIDs exceed JSON's int encoding
-    edge_data = [{'source':str(edge_suid_list[x]), 'target':str(edge_suid_list[x+1]), 'directed':directed, 'interaction':edge_type}    for x in range(0, len(edge_suid_list) - 1, 2)]
+    edge_data = [{'source': str(edge_suid_list[x]), 'target': str(edge_suid_list[x + 1]), 'directed': directed,
+                  'interaction': edge_type} for x in range(0, len(edge_suid_list) - 1, 2)]
 
     res = commands.cyrest_post('networks/' + str(net_suid) + '/edges', body=edge_data, base_url=base_url)
     return res
+
 
 @cy_log
 def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
@@ -609,6 +631,7 @@ def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     net_suid = get_network_suid(network, base_url=base_url)
     res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/count', base_url=base_url)
     return res['count']
+
 
 @cy_log
 def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
@@ -654,9 +677,10 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
         res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/' + str(edge_suid[0]), base_url=base_url)
         return res['data']
 
-    edge_info = [convert_edge_name_to_edge_info(x)   for x in edges]
+    edge_info = [convert_edge_name_to_edge_info(x) for x in edges]
     # TODO: Verify that it's always OK to return a list instead of a single dict ... this happens in many places
     return edge_info
+
 
 @cy_log
 def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
@@ -687,6 +711,7 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
 
     res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultedge/columns/name', base_url=base_url)
     return res['values']
+
 
 # ==============================================================================
 # IV. Network creation
@@ -719,8 +744,10 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"', base_url=base_url)
     return res['network']
 
+
 @cy_log
-def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False, subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
+def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col='SUID', exclude_edges=False,
+                      subnetwork_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Copies a subset of nodes and edges into a newly created subnetwork.
 
     Args:
@@ -757,14 +784,18 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     exclude_edges = 'true' if exclude_edges else 'false'
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
     if isinstance(edges, str) and edges in ['all', 'selected', 'unselected']: edges_by_col = None
-    json_sub = {'source': 'SUID:' + str(title), 'excludeEdges': exclude_edges, 'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col), 'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
+    json_sub = {'source': 'SUID:' + str(title), 'excludeEdges': exclude_edges,
+                'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col),
+                'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
     if not subnetwork_name is None: json_sub['networkName'] = subnetwork_name
 
     res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
     return res['data']['network']
 
+
 @cy_log
-def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection', base_url=DEFAULT_BASE_URL):
+def create_network_from_igraph(igraph, title='From igraph', collection='My Igraph Network Collection',
+                               base_url=DEFAULT_BASE_URL):
     """Create a Cytoscape network from an igraph network.
 
     Takes an igraph network and generates data frames for nodes and edges to
@@ -813,6 +844,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
     See Also:
         :meth:`create_network_from_data_frames`, :meth:`create_igraph_from_network`
     """
+
     # TODO: Verify the type "other" behavior described above
     # TODO: Verify the undeclared parameter behaviors claimed in the R documents
     # TODO: Is this really faithful to the R implementation?
@@ -841,14 +873,21 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
     if len(node_df.index) == 0: node_df = None
     if len(edge_df.index) == 0: edge_df = None
 
-    return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection, base_url=base_url, node_id_list='name')
+    return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection,
+                                           base_url=base_url, node_id_list='name')
+
 
 @cy_log
-def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection', base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented') # TODO: implement create_network_from_graph
+def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection',
+                              base_url=DEFAULT_BASE_URL):
+    raise CyError('Not implemented')  # TODO: implement create_network_from_graph
+
 
 @cy_log
-def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe', collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *, node_id_list='id', source_id_list='source', target_id_list='target', interaction_type_list='interaction'):
+def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe',
+                                    collection='My Dataframe Network Collection', base_url=DEFAULT_BASE_URL, *,
+                                    node_id_list='id', source_id_list='source', target_id_list='target',
+                                    interaction_type_list='interaction'):
     """Create a network from data frames.
 
     Takes data frames for nodes and edges, as well as naming parameters to generate the JSON data format required by
@@ -904,6 +943,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         >>> create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
         1477
     """
+
     # TODO: Verify the above documentation
 
     def compute_edge_name(source, target, interaction):
@@ -922,21 +962,24 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # create the JSON for a node list ... in cytoscape.js format
     # TODO: Verify that we really do need this 'id' field ... or maybe we can kill it afterward?
-    json_nodes = [{'data': {'id': node}}    for node in nodes[node_id_list]]
+    json_nodes = [{'data': {'id': node}} for node in nodes[node_id_list]]
 
     # create the JSON for an edge list ... in cytoscape.js format
     json_edges = []
     if not edges is None:
         if not interaction_type_list in edges.columns: edges[interaction_type_list] = 'interacts with'
         edges_sub = edges[[source_id_list, target_id_list, interaction_type_list]]
-        json_edges = [{'data': {'name': compute_edge_name(source, target, interaction), 'source': source, 'target': target, 'interaction': interaction}}   for source, target, interaction in zip(edges_sub[source_id_list], edges_sub[target_id_list], edges_sub[interaction_type_list])]
+        json_edges = [{'data': {'name': compute_edge_name(source, target, interaction), 'source': source,
+                                'target': target, 'interaction': interaction}} for source, target, interaction in
+                      zip(edges_sub[source_id_list], edges_sub[target_id_list], edges_sub[interaction_type_list])]
 
     # create the full JSON for a cytoscape.js-style network ... see http://manual.cytoscape.org/en/stable/Supported_Network_File_Formats.html#cytoscape-js-json
     # Note that no node or edge attributes are included in this version of the network
     json_network = {'data': [{'name': title}], 'elements': {'nodes': json_nodes, 'edges': json_edges}}
 
     # call Cytoscape to create this network and return the SUID
-    network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection}, body=json_network, base_url=base_url)
+    network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection},
+                                        body=json_network, base_url=base_url)
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
     # "vizmap apply" command below fails for lack of a valid view.
     time.sleep(2)
@@ -946,21 +989,23 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # load node attributes into Cytoscape network
     if not set(nodes.columns) - {node_id_list} is None:
-        tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid, base_url=base_url)
+        tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid,
+                               base_url=base_url)
 
     if not edges is None:
         # get rid of SUID column if one is present
         edges = edges.drop(['SUID'], axis=1, errors='ignore')
         # create edge name out of source/interaction/target
-        edge_names = [compute_edge_name(source, target, interaction) for source, interaction, target in zip(edges[source_id_list], edges[interaction_type_list], edges[target_id_list])]
+        edge_names = [compute_edge_name(source, target, interaction) for source, interaction, target in
+                      zip(edges[source_id_list], edges[interaction_type_list], edges[target_id_list])]
         edges['name'] = edge_names
         # find out the SUID of each node so it can be used in a multigraph if needed
         edges['data.key.column'] = edge_name_to_edge_suid(edge_names, network_suid, base_url=base_url)
 
         # if the edge list looks real, add the edge attributes (if any)
         if not set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column']) is None:
-            tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID', network=network_suid, base_url=base_url)
-
+            tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID',
+                                   network=network_suid, base_url=base_url)
 
     print('Applying default style...')
     commands.commands_post('vizmap apply styles="default"', base_url=base_url)
@@ -968,7 +1013,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     print('Applying preferred layout')
     layouts.layout_network(network=network_suid)
 
-    #TODO: Verify that attribute types are properly set in Cytoscape
+    # TODO: Verify that attribute types are properly set in Cytoscape
 
     return network_suid
 
@@ -1012,6 +1057,7 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     time.sleep(4)
 
     return res
+
 
 # ==============================================================================
 # V. Network extraction
@@ -1096,7 +1142,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
 @cy_log
 def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented') # TODO: implement create_graph_from_network
+    raise CyError('Not implemented')  # TODO: implement create_graph_from_network
 
 # ==============================================================================
 # VI. Internal functions

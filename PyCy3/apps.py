@@ -14,6 +14,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def disable_app(app, base_url=DEFAULT_BASE_URL):
     """Disable App.
@@ -39,6 +40,7 @@ def disable_app(app, base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps disable app="' + app + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def enable_app(app, base_url=DEFAULT_BASE_URL):
@@ -66,6 +68,7 @@ def enable_app(app, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('apps enable app="' + app + '"', base_url=base_url)
     return res
 
+
 @cy_log
 def get_app_information(app, base_url=DEFAULT_BASE_URL):
     """Retrieve the name, brief description and version of a Cytoscape app.
@@ -92,6 +95,7 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
     # TODO: R uses commands_get ... PyCy3 uses commands_post ... Swagger recommends POST ... is R wrong for all of these calls?
     return res
 
+
 @cy_log
 def install_app(app, base_url=DEFAULT_BASE_URL):
     """Installs an app in Cytoscape
@@ -116,6 +120,7 @@ def install_app(app, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('apps install app="' + app + '"', base_url=base_url)
     return res
 
+
 @cy_log
 def get_available_apps(base_url=DEFAULT_BASE_URL):
     """Retrieve a list of apps available for installation in Cytoscape.
@@ -138,6 +143,7 @@ def get_available_apps(base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps list available', base_url=base_url)
     return res
+
 
 @cy_log
 def get_disabled_apps(base_url=DEFAULT_BASE_URL):
@@ -162,6 +168,7 @@ def get_disabled_apps(base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('apps list disabled', base_url=base_url)
     return res
 
+
 @cy_log
 def get_installed_apps(base_url=DEFAULT_BASE_URL):
     """Retrieve list of currently installed apps in Cytoscape.
@@ -184,6 +191,7 @@ def get_installed_apps(base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps list installed', base_url=base_url)
     return res
+
 
 @cy_log
 def get_uninstalled_apps(base_url=DEFAULT_BASE_URL):
@@ -208,6 +216,7 @@ def get_uninstalled_apps(base_url=DEFAULT_BASE_URL):
     res = commands.commands_post('apps list uninstalled', base_url=base_url)
     return res
 
+
 @cy_log
 def get_app_updates(base_url=DEFAULT_BASE_URL):
     """Retrieve list of currently installed Cytoscape apps with updates available.
@@ -230,6 +239,7 @@ def get_app_updates(base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps list updates', base_url=base_url)
     return res
+
 
 @cy_log
 def open_app_store(app, base_url=DEFAULT_BASE_URL):
@@ -254,6 +264,7 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps open appstore app="' + app + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def get_app_status(app, base_url=DEFAULT_BASE_URL):
@@ -304,6 +315,7 @@ def uninstall_app(app, base_url=DEFAULT_BASE_URL):
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps uninstall app="' + app + '"', base_url=base_url)
     return res
+
 
 @cy_log
 def update_app(app, base_url=DEFAULT_BASE_URL):

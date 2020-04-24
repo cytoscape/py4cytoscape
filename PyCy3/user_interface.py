@@ -16,6 +16,7 @@ from .exceptions import CyError
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 @cy_log
 def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Dock a panel back into the UI of Cytoscape.
@@ -44,6 +45,7 @@ def dock_panel(panel_name, base_url=DEFAULT_BASE_URL):
     panel_name_state = {'name': panel_name, 'state': 'DOCK'}
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
+
 
 @cy_log
 def float_panel(panel_name, base_url=DEFAULT_BASE_URL):
@@ -76,6 +78,7 @@ def float_panel(panel_name, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
 
+
 @cy_log
 def hide_panel(panel_name, base_url=DEFAULT_BASE_URL):
     """Hide a panel in the UI of Cytoscape.
@@ -106,6 +109,7 @@ def hide_panel(panel_name, base_url=DEFAULT_BASE_URL):
     panel_name_state = {'name': panel_name, 'state': 'HIDE'}
     res = commands.cyrest_put('ui/panels', body=[panel_name_state], base_url=base_url, require_json=False)
     return res
+
 
 @cy_log
 def hide_all_panels(base_url=DEFAULT_BASE_URL):
@@ -140,11 +144,16 @@ def hide_all_panels(base_url=DEFAULT_BASE_URL):
 # ------------------------------------------------------------------------------
 # internal utility function to validate and support references to panels by name
 def _check_panel_name(panel_name):
-    if panel_name.lower() in {'table panel', 'table', 'ta'}: panel_name = 'SOUTH'
-    elif panel_name.lower() in {'tool panel', 'tool', 'to'}: panel_name = 'SOUTH_WEST'
-    elif panel_name.lower() in {'control panel', 'control', 'c'}: panel_name = 'WEST'
-    elif panel_name.lower() in {'results panel', 'results', 'r'}: panel_name = 'EAST'
-    elif panel_name in {'WEST', 'EAST', 'SOUTH', 'SOUTH_WEST'}: pass
+    if panel_name.lower() in {'table panel', 'table', 'ta'}:
+        panel_name = 'SOUTH'
+    elif panel_name.lower() in {'tool panel', 'tool', 'to'}:
+        panel_name = 'SOUTH_WEST'
+    elif panel_name.lower() in {'control panel', 'control', 'c'}:
+        panel_name = 'WEST'
+    elif panel_name.lower() in {'results panel', 'results', 'r'}:
+        panel_name = 'EAST'
+    elif panel_name in {'WEST', 'EAST', 'SOUTH', 'SOUTH_WEST'}:
+        pass
     else:
         error = 'ERROR! Define a valid panel name.'
         sys.stderr.write(error)

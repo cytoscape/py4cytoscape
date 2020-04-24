@@ -26,10 +26,12 @@ from .pycy3_utils import *
 from .pycy3_logger import cy_log
 from .exceptions import CyError
 
+
 def __init__(self):
     pass
 
-#TODO: Refactor functions to centralize HTTP handling and error handling
+
+# TODO: Refactor functions to centralize HTTP handling and error handling
 
 @cy_log
 def cyrest_api(base_url=DEFAULT_BASE_URL):
@@ -52,8 +54,10 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
         >>> cyrest_api() # loads Swagger CyREST API into browser
         True
     """
-    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/swagger.json#/', new=2, autoraise=True)
+    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/swagger.json#/', new=2,
+                          autoraise=True)
     return res
+
 
 @cy_log
 def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
@@ -94,6 +98,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_delete()', e)
 
+
 @cy_log
 def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
     """Construct a query, make GET call and process the result.
@@ -132,6 +137,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
                 return r.text
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_get()', e)
+
 
 @cy_log
 def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
@@ -172,6 +178,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
                 return r.text
     except requests.exceptions.RequestException as e:
         _handle_error('commands:cyrest_post()', e)
+
 
 @cy_log
 def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE_URL, require_json=True):
@@ -237,7 +244,8 @@ def commands_api(base_url=DEFAULT_BASE_URL):
         >>> commands_api() # loads Swagger CyREST Commands API into browser
         True
     """
-    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/commands/swagger.json#/', new=2, autoraise=True)
+    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/commands/swagger.json#/',
+                          new=2, autoraise=True)
     return res
 
 
@@ -277,11 +285,13 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
 
         # Break response into a list of lines and return it
         res_list = re.split('\n\\s*', r.text)
-        res_list = [line   for line in res_list if line != 'Finished']
-        if len(res_list) and res_list[-1] == '': del res_list[-1] # deal with artifact of .split() leaving last line blank
+        res_list = [line for line in res_list if line != 'Finished']
+        if len(res_list) and res_list[-1] == '': del res_list[
+            -1]  # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_get()', e, force_cy_error=True)
+
 
 # TODO: Make sure this works the same as in R
 @cy_log
@@ -310,18 +320,20 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
         ['disable', 'enable', 'information', 'install', 'list available', 'list disabled', ...]
     """
     try:
-        cmd_string = re.sub(r'help *', cmd_string, cmd_string) # remove 'help ' if it's already in the request
+        cmd_string = re.sub(r'help *', cmd_string, cmd_string)  # remove 'help ' if it's already in the request
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
         r = requests.get(get_url, params=parameters, headers={'Accept': 'text/plain'})
         r.raise_for_status()
 
         # Break response into a list of lines and return it
-        res_list = re.split('\n\\s*', r.text)[1:] # create a list of command options, and leave off the header
-        res_list = [line.strip()   for line in res_list]
-        if len(res_list) and res_list[-1] == '': del res_list[-1] # deal with artifact of .split() leaving last line blank
+        res_list = re.split('\n\\s*', r.text)[1:]  # create a list of command options, and leave off the header
+        res_list = [line.strip() for line in res_list]
+        if len(res_list) and res_list[-1] == '': del res_list[
+            -1]  # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_help()', e, force_cy_error=True)
+
 
 @cy_log
 def commands_post(cmd, base_url=DEFAULT_BASE_URL):
@@ -361,6 +373,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_post()', e)
 
+
 @cy_log
 def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
     """Run a Command.
@@ -386,6 +399,7 @@ def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
         []
     """
     return commands_get(cmd_string, base_url=base_url)
+
 
 # TODO: Take another look at the R version ... it seems to be passing in the wrong parameter name. Comments seem wrong.
 @cy_log
@@ -415,6 +429,7 @@ def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
     """
     return commands_post('command echo message="' + variable_name + '"', base_url=base_url)
 
+
 # TODO: It doesn't look like the command space supports open ... does the R version work?
 @cy_log
 def command_open_dialog(base_url=DEFAULT_BASE_URL):
@@ -438,6 +453,7 @@ def command_open_dialog(base_url=DEFAULT_BASE_URL):
         >>> command_open_dialog()
     """
     return commands_post('command open dialog', base_url=base_url)
+
 
 @cy_log
 def command_pause(message='', base_url=DEFAULT_BASE_URL):
@@ -463,6 +479,7 @@ def command_pause(message='', base_url=DEFAULT_BASE_URL):
     """
     return commands_post('command pause message="' + message + '"', base_url=base_url)
 
+
 @cy_log
 def command_quit(base_url=DEFAULT_BASE_URL):
     """Command Quit.
@@ -485,6 +502,7 @@ def command_quit(base_url=DEFAULT_BASE_URL):
         {}
     """
     return commands_post('command quit', base_url=base_url)
+
 
 # TODO: Consider whether absolute path should happen in R, too
 @cy_log
@@ -513,6 +531,7 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
     file = os.path.abspath(file)
 
     return commands_post('command run' + args_str + ' file="' + file + '"', base_url=base_url)
+
 
 @cy_log
 def command_sleep(duration=None, base_url=DEFAULT_BASE_URL):
@@ -559,15 +578,18 @@ def _command_2_get_query(cmd_string, base_url=DEFAULT_BASE_URL):
     # Create a dict of parameter names/values
     args = ' '.join(split_cmd[1:])
     if args:
-        args = re.sub(r'"', '', args) # Get rid of all " (presumably surrounding command argument values)
+        args = re.sub(r'"', '', args)  # Get rid of all " (presumably surrounding command argument values)
         name_list = re.findall('[A-Za-z0-9_-]+=', args)  # Find all parameter names (e.g., 'abc=')
-        name_list = [re.sub(r'=', '', name)  for name in name_list] # Get rid of all '=' at the end of parameter names
-        val_list = re.split(' *[A-Za-z0-9_-]+=', args)[1:] # Find all parameter values (.e.g., the '123' part of 'abc=123')
-        arg_dict = {key: val   for key, val in zip(name_list, val_list)} # Create dictionary out of param names and values
+        name_list = [re.sub(r'=', '', name) for name in name_list]  # Get rid of all '=' at the end of parameter names
+        val_list = re.split(' *[A-Za-z0-9_-]+=', args)[
+                   1:]  # Find all parameter values (.e.g., the '123' part of 'abc=123')
+        arg_dict = {key: val for key, val in
+                    zip(name_list, val_list)}  # Create dictionary out of param names and values
     else:
         arg_dict = None
 
     return url, arg_dict
+
 
 def _command_2_post_query_url(cmd, base_url=DEFAULT_BASE_URL):
     """ Construct complete command URL from base URL and Cytoscape command """
@@ -586,6 +608,7 @@ def _command_2_post_query_url(cmd, base_url=DEFAULT_BASE_URL):
     url = base_url + urllib.parse.quote('/commands/' + re.sub(' ', '/', cy_cmd, count=1))
 
     return url
+
 
 def _command_2_post_query_body(cmd):
     """ Construct body of POST as JSON representing inline parameters """
@@ -609,16 +632,18 @@ def _command_2_post_query_body(cmd):
 
     return str.encode(json.dumps(param_dict))
 
+
 def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
     if cmd_list is None:
-         cmd_list_ready = 'selected'
+        cmd_list_ready = 'selected'
     elif not cmd_by_col is None:
-        cmd_list_col = [cmd_by_col + ':' + cmd    for cmd in cmd_list]
+        cmd_list_col = [cmd_by_col + ':' + cmd for cmd in cmd_list]
         cmd_list_ready = ','.join(cmd_list_col)
     else:
         cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
 
     return cmd_list_ready
+
 
 def _handle_error(caller, e, force_cy_error=False):
     if e.response is None or e.response.text is None or e.response.text == '':
@@ -627,7 +652,7 @@ def _handle_error(caller, e, force_cy_error=False):
     else:
         content = e.response.text
         try:
-            content =  json.loads(content)['errors'][0]['message']
+            content = json.loads(content)['errors'][0]['message']
             print('In ' + caller + ': ' + str(e) + '\n' + content)
             e = CyError(content)
         except:

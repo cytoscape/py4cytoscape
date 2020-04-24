@@ -5,6 +5,7 @@ from requests import HTTPError
 
 from test_utils import *
 
+
 class CollectionsTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -15,8 +16,7 @@ class CollectionsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_collection_list(self):
         # Verify that case of no collections is handled
@@ -30,7 +30,7 @@ class CollectionsTests(unittest.TestCase):
         load_test_session('data/Multiple Collections.cys')
         self.assertSetEqual(set(PyCy3.get_collection_list()), {'galFiltered.sif', 'BINDyeast.sif'})
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_collection_suid(self):
         # Verify that an error is raised when no collections exist
@@ -47,10 +47,10 @@ class CollectionsTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_collection_suid('galFiltered.sif'), galFiltered_collection_suid)
 
         # Verify that bogus network returns nothing
-        self.assertRaises(PyCy3.CyError, PyCy3.get_collection_suid,'bogus')
+        self.assertRaises(PyCy3.CyError, PyCy3.get_collection_suid, 'bogus')
         self.assertRaises(PyCy3.CyError, PyCy3.get_collection_suid, -1)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_collection_name(self):
         # Verify that an error is raised when no collections exist
@@ -69,8 +69,7 @@ class CollectionsTests(unittest.TestCase):
         # Verify that bogus collection SUID returns nothing
         self.assertRaises(PyCy3.CyError, PyCy3.get_collection_name, -1)
 
-
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_collection_networks(self):
         # Verify that an error is raised when no collections exist
@@ -83,7 +82,8 @@ class CollectionsTests(unittest.TestCase):
         # Verify that current collection returns four subnetworks
         network_list = PyCy3.get_collection_networks()
         self.assertIsInstance(network_list, list)
-        self.assertSetEqual({PyCy3.get_network_name(suid)   for suid in network_list}, {'galFiltered.sif', 'galFiltered.sif(1)', 'galFiltered.sif(2)', 'yeastHighQuality.sif'})
+        self.assertSetEqual({PyCy3.get_network_name(suid) for suid in network_list},
+                            {'galFiltered.sif', 'galFiltered.sif(1)', 'galFiltered.sif(2)', 'yeastHighQuality.sif'})
 
         # Verify that named collection returns the same subnetworks
         self.assertSetEqual(set(network_list), set(PyCy3.get_collection_networks(galFiltered_collection_suid)))

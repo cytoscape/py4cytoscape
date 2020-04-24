@@ -19,6 +19,7 @@ from . import networks
 from .pycy3_utils import *
 from .pycy3_logger import cy_log
 
+
 # ==============================================================================
 # I. General selection functions
 # ------------------------------------------------------------------------------
@@ -53,13 +54,16 @@ def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     if type in ['nodes', 'both']:
-        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultnode/columns/selected', parameters={'default': 'false'}, base_url=base_url, require_json=False)
+        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultnode/columns/selected',
+                                  parameters={'default': 'false'}, base_url=base_url, require_json=False)
         # TODO: this result will get lost if type=='both'
 
     if type in ['edges', 'both']:
-        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultedge/columns/selected', parameters={'default': 'false'}, base_url=base_url, require_json=False)
+        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultedge/columns/selected',
+                                  parameters={'default': 'false'}, base_url=base_url, require_json=False)
 
     return res
+
 
 # ==============================================================================
 # II. Node selection functions
@@ -80,8 +84,7 @@ def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of newly selected nodes
-            and edge list is always empty
+        dict: {'nodes': [node list], 'edges': [edge list]}
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -92,11 +95,15 @@ def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_
         {'nodes': [107504, 107503, ...], 'edges': []}
         >>> select_first_neighbors(direction='undirected')
         {'nodes': [107514], 'edges': []}
+
+    Notes:
+        In the return value, node list is the SUIDs of newly selected nodes and edge list is always empty
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     cmd = 'network select firstNeighbors="' + direction + '" network=SUID:"' + str(suid) + '"'
     res = commands.commands_post(cmd, base_url=base_url)
     return res
+
 
 # TODO: Decide whether 'nodes' can be None ... the RCy3 documentation implies it can, but the code says no
 @cy_log
@@ -114,8 +121,7 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of newly selected nodes
-            and edge list is always empty -- dict is {} if no nodes were selected
+        dict: {'nodes': [node list], 'edges': [edge list]}
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -126,6 +132,10 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         {}
         >>> select_nodes(['RAP1'], by_col='COMMON')
         {'nodes': [107514], 'edges': []}
+
+    Notes:
+        In the return value, node list is the SUIDs of newly selected nodes
+            and edge list is always empty -- dict is {} if no nodes were selected
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
@@ -139,8 +149,10 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         node_list_str = by_col + ':' + str(nodes[0])
         for n in range(1, len(nodes)):
             node_list_str += ',' + by_col + ':' + str(nodes[n])
-    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" nodeList="' + node_list_str + '"', base_url=base_url)
+    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" nodeList="' + node_list_str + '"',
+                                 base_url=base_url)
     return res
+
 
 @cy_log
 def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
@@ -181,6 +193,7 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     return res['nodes']
     # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
+
 @cy_log
 def get_selected_node_count(network=None, base_url=DEFAULT_BASE_URL):
     """Returns the number of nodes currently selected in the network.
@@ -208,8 +221,10 @@ def get_selected_node_count(network=None, base_url=DEFAULT_BASE_URL):
         330
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes',
+                              parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
+
 
 @cy_log
 def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL):
@@ -244,12 +259,14 @@ def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL
         print('No nodes selected.')
         return None
     else:
-        selected_node_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes', parameters={'column': 'selected', 'query': 'true'})
+        selected_node_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes',
+                                                  parameters={'column': 'selected', 'query': 'true'})
         if node_suids:
             return selected_node_suids
         else:
             selected_node_names = node_suid_to_node_name(selected_node_suids, net_suid, base_url=base_url)
             return selected_node_names
+
 
 @cy_log
 def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
@@ -263,8 +280,7 @@ def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of newly selected nodes
-            and edge list is always empty
+        dict: {'nodes': [node list], 'edges': [edge list]}
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -277,10 +293,14 @@ def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
         {'nodes': [107504, 107503, ...], 'edges': []}
         >>> invert_node_selection(network=52)
         {'nodes': [107504, 107503, ...], 'edges': []}
+
+    Notes:
+        In return value, node list is the SUIDs of newly selected nodes and edge list is always empty.
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post('network select invert=nodes network=SUID:' + str(suid), base_url=base_url)
     return res
+
 
 @cy_log
 def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
@@ -314,6 +334,7 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Added double quotes to network title
     return res
 
+
 @cy_log
 def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     """Take currently selected edges and extends the selection to connected nodes, regardless of directionality.
@@ -326,8 +347,7 @@ def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'nodes': [node list], 'edges': [edge list]} where node list is the SUIDs of selected nodes, and
-            edge list is the SUIDs of newly selected edges
+        dict: {'nodes': [node list], 'edges': [edge list]}
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -340,10 +360,15 @@ def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
         >>> select_nodes_connected_by_selected_edges(network=52)
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
+
+    Notes:
+        In the return value, node list is the SUIDs of selected nodes, and
+            edge list is the SUIDs of newly selected edges
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    clear_selection(type = 'nodes', network=suid, base_url=base_url)
-    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"', base_url=base_url)
+    clear_selection(type='nodes', network=suid, base_url=base_url)
+    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"',
+                                 base_url=base_url)
     return res
 
 
@@ -366,8 +391,7 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and
-            edge list is the SUIDs of newly selected edges -- dict is {} if no edges were selected
+        dict: {'nodes': [node list], 'edges': [edge list]}
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -380,6 +404,10 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
         {'nodes': [], 'edges': [108033, 108034]}
         >>> select_edges(['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C'], by_col='name', preserve_current_selection=True, network=52)
         {'nodes': [], 'edges': [108033, 108034, 108103]}
+
+    Notes:
+        In the return value, node list is always empty, and edge list is the SUIDs of newly selected edges
+            -- dict is {} if no edges were selected
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
@@ -394,8 +422,10 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
         edge_list_str = by_col + ':' + str(edges[0])
         for n in range(1, len(edges)):
             edge_list_str += ',' + by_col + ':' + str(edges[n])
-    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"', base_url=base_url)
+    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"',
+                                 base_url=base_url)
     return res
+
 
 @cy_log
 def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
@@ -430,6 +460,7 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     return res['edges']
     # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
+
 @cy_log
 def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
     """Select all edges that were not selected and deselect all edges that were selected.
@@ -460,6 +491,7 @@ def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
     suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post('network select invert=edges network=SUID:' + str(suid), base_url=base_url)
     return res
+
 
 @cy_log
 def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
@@ -493,6 +525,7 @@ def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Added double quotes to network title
     return res
 
+
 @cy_log
 def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
     """Return the number of edges currently selected in the network.
@@ -520,8 +553,10 @@ def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
         359
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
+    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges',
+                              parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
+
 
 @cy_log
 def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL):
@@ -556,12 +591,14 @@ def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL
         print('No edges selected.')
         return None
     else:
-        selected_edge_suids = commands.cyrest_get('networks/' + str(net_suid) + '/edges', parameters={'column': 'selected', 'query': 'true'})
+        selected_edge_suids = commands.cyrest_get('networks/' + str(net_suid) + '/edges',
+                                                  parameters={'column': 'selected', 'query': 'true'})
         if edge_suids:
             return selected_edge_suids
         else:
             selected_edge_names = edge_suid_to_edge_name(selected_edge_suids, net_suid, base_url=base_url)
             return selected_edge_names
+
 
 @cy_log
 def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
@@ -577,9 +614,7 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-         dict: {'nodes': [node list], 'edges': [edge list]} where node list is list of all selected nodes, and
-            edge list is the SUIDs of selected edges -- dict is None if no nodes were selected or there were no newly
-            created edges
+         dict: {'nodes': [node list], 'edges': [edge list]}
     Raises:
         CyError: if network name or SUID doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
@@ -591,6 +626,11 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
         {'nodes': [103990, 103991, ...], 'edges': [104432, 104431, ...]}
         >>> select_edges_connecting_selected_nodes(network=52)
         {'nodes': [103990, 103991, ...], 'edges': [104432, 104431, ...]}
+
+    Notes:
+        In the return value node list is list of all selected nodes, and
+            edge list is the SUIDs of selected edges -- dict is None if no nodes were selected or there were no newly
+            created edges
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
@@ -609,9 +649,11 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
     selected_edges = list(selected_sources.intersection(selected_targets))
 
     if len(selected_edges) == 0: return None
-    res = select_edges(selected_edges, by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
+    res = select_edges(selected_edges, by_col='name', preserve_current_selection=False, network=net_suid,
+                       base_url=base_url)
     return res
     # TODO: isn't the pattern match a bit cheesy ... shouldn't it be ^+n+' ('    and    ') '+n+$ ???
+
 
 @cy_log
 def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
@@ -627,9 +669,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-         dict: {'nodes': [node list], 'edges': [edge list]} where node list is list of all selected edges, and
-            edge list is the SUIDs of selected edges -- dict is {} if no nodes were selected or there were no newly
-            created edges
+         dict: {'nodes': [node list], 'edges': [edge list]}
     Raises:
         CyError: if network name or SUID doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
@@ -641,11 +681,17 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
         {'nodes': [103990, 103991, ...], 'edges': [104432, 104431, ...]}
         >>> select_edges_adjacent_to_selected_nodes(network=52)
         {'nodes': [103990, 103991, ...], 'edges': [104432, 104431, ...]}
+
+    Notes:
+        In the return value, node list is list of all selected edges, and edge list is the SUIDs of selected
+            edges -- dict is {} if no nodes were selected or there were no newly created edges
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='edges', network=suid, base_url=base_url)
-    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"', base_url=base_url)
+    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"',
+                                 base_url=base_url)
     return res
+
 
 @cy_log
 def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
@@ -693,6 +739,7 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
     res = delete_selected_edges(network=net_suid, base_url=base_url)
     return res
 
+
 @cy_log
 def delete_self_loops(network=None, base_url=DEFAULT_BASE_URL):
     """Removes edges that connect to a single node as both source and target.
@@ -729,10 +776,10 @@ def delete_self_loops(network=None, base_url=DEFAULT_BASE_URL):
 
     # TODO: This is the R implementation, and it's correct but horribly slow ....
     # For each node, select the node, then select each edge that connects it to itself, then zap the edge
-#    for n in all_nodes:
-#        select_nodes([n], by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
-#        select_edges_connecting_selected_nodes(network=net_suid, base_url=base_url)
-#        delete_selected_edges(network=net_suid, base_url=base_url)
+    #    for n in all_nodes:
+    #        select_nodes([n], by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
+    #        select_edges_connecting_selected_nodes(network=net_suid, base_url=base_url)
+    #        delete_selected_edges(network=net_suid, base_url=base_url)
 
     # TODO: Consider this for the actual implementation
     all_edges = networks.get_all_edges(net_suid, base_url=base_url)
@@ -743,6 +790,6 @@ def delete_self_loops(network=None, base_url=DEFAULT_BASE_URL):
         self_edges.extend(filter(r.search, all_edges))
 
     select_edges(self_edges, by_col='name', preserve_current_selection=False, network=net_suid, base_url=base_url)
-    delete_selected_edges(net_suid, base_url=base_url) # TODO: Would be better to return this value instead
+    delete_selected_edges(net_suid, base_url=base_url)  # TODO: Would be better to return this value instead
 
-    return clear_selection('both', network=net_suid, base_url=base_url) # shouldn't be necessary
+    return clear_selection('both', network=net_suid, base_url=base_url)  # shouldn't be necessary

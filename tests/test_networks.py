@@ -8,6 +8,7 @@ import re
 
 from test_utils import *
 
+
 class NetworkTests(unittest.TestCase):
     def setUp(self):
         try:
@@ -18,7 +19,7 @@ class NetworkTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_set_current_network(self):
         # Initialization
@@ -27,7 +28,7 @@ class NetworkTests(unittest.TestCase):
 
         # Verify that flavors of bad titles are caught
         self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, 'bad title')
-        self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, 500) # bad SUID
+        self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, 500)  # bad SUID
 
         def set_and_check(new_network_name, new_network_suid):
             res = PyCy3.set_current_network(new_network_name)
@@ -75,7 +76,7 @@ class NetworkTests(unittest.TestCase):
         # non-current network, but Cytoscape fails on this
         rename_and_check('newyeast', yeast_suid, 'yeastHighQuality.sif')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_count(self):
         def check(count):
@@ -89,7 +90,7 @@ class NetworkTests(unittest.TestCase):
         load_test_session()
         check(1)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_suid(self):
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, '')
@@ -99,7 +100,7 @@ class NetworkTests(unittest.TestCase):
 
         # Verify that various flavors of bad network titles are caught
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, 'bad title')
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, 500) # bad SUID
+        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, 500)  # bad SUID
 
         # Verify that aliases for the same network produce the same SUID
         res = PyCy3.get_network_suid()
@@ -109,7 +110,7 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_network_suid('galFiltered.sif'), res)
         self.assertEqual(PyCy3.get_network_suid(res), res)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_name(self):
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_name, '')
@@ -117,7 +118,7 @@ class NetworkTests(unittest.TestCase):
         # Initialization
         load_test_session()
         self.assertRaises(PyCy3.CyError, PyCy3.get_network_name, 'bad title')
-        self.assertRaises(IndexError, PyCy3.get_network_name, 500) # bad SUID
+        self.assertRaises(IndexError, PyCy3.get_network_name, 500)  # bad SUID
 
         res = PyCy3.get_network_name()
         self.assertIsInstance(res, str)
@@ -127,7 +128,7 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_network_name('galFiltered.sif'), res)
         self.assertEqual(PyCy3.get_network_name(res), res)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_network_list(self):
         # Initialization
@@ -141,7 +142,7 @@ class NetworkTests(unittest.TestCase):
         PyCy3.delete_all_networks()
         self.assertListEqual(PyCy3.get_network_list(), [])
 
-    @PyCy3.skip # OK to skip this for now because by the time this executes, a Cytoscape memory leak will make Cytoscape show an unreadable message box
+    @PyCy3.skip  # OK to skip this for now because by the time this executes, a Cytoscape memory leak will make Cytoscape show an unreadable message box
     @PyCy3.print_entry_exit
     def test_export_network(self):
         # Initialization
@@ -162,7 +163,7 @@ class NetworkTests(unittest.TestCase):
         input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(PyCy3.CyError, PyCy3.export_network)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_network(self):
         # Initialization
@@ -174,7 +175,7 @@ class NetworkTests(unittest.TestCase):
         self.assertListEqual(PyCy3.get_network_list(), ['galFiltered.sif'])
         self.assertRaises(PyCy3.CyError, PyCy3.delete_network, 'yeastHighQuality.sif')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_delete_all_networks(self):
         # Initialization
@@ -189,20 +190,27 @@ class NetworkTests(unittest.TestCase):
         # Verify that deleting no networks succeeds
         self.assertEqual(PyCy3.delete_all_networks(), '')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_first_neighbors(self):
         # Initialization
         load_test_session()
 
         test_select_nodes(['MIG1', 'GAL1'])
-        self.assertSetEqual(set(PyCy3.get_first_neighbors(node_names=None, as_nested_list=False)), set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+        self.assertSetEqual(set(PyCy3.get_first_neighbors(node_names=None, as_nested_list=False)), set(
+            ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
+             'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
 
         # Verify that the two nested lists are equivalent
-        nested_neighbor_list = PyCy3.get_first_neighbors(node_names = None, as_nested_list=True)
-        expected_list = [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YPL248C', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']]]
+        nested_neighbor_list = PyCy3.get_first_neighbors(node_names=None, as_nested_list=True)
+        expected_list = [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C',
+                                                                                     ['YLR044C', 'YLR377C', 'YIL162W',
+                                                                                      'YBR019C', 'YBR020W', 'YPL248C',
+                                                                                      'YKL109W', 'YKL074C', 'YDR009W',
+                                                                                      'YDR146C']]]
         for nested_list in nested_neighbor_list:
-            found = [nested_list[0] == expected[0] and set(nested_list[1]) == set(expected[1])  for expected in expected_list]
+            found = [nested_list[0] == expected[0] and set(nested_list[1]) == set(expected[1]) for expected in
+                     expected_list]
             self.assertIn(True, found)
 
         # Verify that when no nodes are passed in, the selected nodes are used
@@ -210,12 +218,14 @@ class NetworkTests(unittest.TestCase):
         self.assertIsNone(PyCy3.get_first_neighbors())
 
         # Verify that regardless of selection, when a node list is passed in, it's used
-        self.assertSetEqual(set(PyCy3.get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W', 'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+        self.assertSetEqual(set(PyCy3.get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(
+            ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
+             'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
         self.assertIsNone(PyCy3.get_first_neighbors([], as_nested_list=False))
 
         # TODO: test case of node_names being a single (str) node
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_node_count(self):
         # Initialization
@@ -224,16 +234,53 @@ class NetworkTests(unittest.TestCase):
         # Verify that the network reports expected node count
         self.assertEqual(PyCy3.get_node_count(), 330)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_all_nodes(self):
         # Initialization
         load_test_session()
 
         # Verif that the network reports expected nodes
-        self.assertSetEqual(set(PyCy3.get_all_nodes()), set(['YDL194W', 'YDR277C', 'YBR043C', 'YPR145W', 'YER054C', 'YBR045C', 'YBL079W', 'YLR345W', 'YIL052C', 'YER056CA', 'YNL069C', 'YDL075W', 'YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W', 'YGL202W', 'YLR197W', 'YDL088C', 'YOR215C', 'YPR010C', 'YMR117C', 'YML114C', 'YNL036W', 'YOR212W', 'YDR070C', 'YNL164C', 'YGR046W', 'YLR153C', 'YIL070C', 'YPR113W', 'YER081W', 'YGR088W', 'YDR395W', 'YGR085C', 'YER124C', 'YMR005W', 'YDL030W', 'YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W', 'YIL074C', 'YDR299W', 'YHR005C', 'YLR452C', 'YMR255W', 'YBR274W', 'YHR084W', 'YBL050W', 'YBL026W', 'YJL194W', 'YLR258W', 'YGL134W', 'YHR055C', 'YHR053C', 'YPR124W', 'YNL135C', 'YER052C', 'YLR284C', 'YHR198C', 'YPL240C', 'YPR102C', 'YLR075W', 'YKL161C', 'YAR007C', 'YIL160C', 'YDL078C', 'YDR142C', 'YDR244W', 'YLR432W', 'YDR167W', 'YLR175W', 'YNL117W', 'YOR089C', 'YPR167C', 'YNL214W', 'YBR135W', 'YML007W', 'YER110C', 'YGL153W', 'YLR191W', 'YOL149W', 'YMR044W', 'YOR362C', 'YER102W', 'YOL059W', 'YBR190W', 'YER103W', 'YPR110C', 'YNL113W', 'YDR354W', 'YER090W', 'YKL211C', 'YDR146C', 'YER111C', 'YOR039W', 'YML024W', 'YIL113W', 'YLL019C', 'YDR009W', 'YML051W', 'YHR071W', 'YPL031C', 'YML123C', 'YER145C', 'YMR058W', 'YJL190C', 'YML074C', 'YOR355W', 'YFL038C', 'YIL162W', 'YBR050C', 'YMR311C', 'YOR315W', 'YOR178C', 'YER133W', 'YOR290C', 'YFR037C', 'YFR034C', 'YAL040C', 'YPL222W', 'YGR048W', 'YMR291W', 'YGR009C', 'YMR183C', 'YDR100W', 'YGL161C', 'YPL131W', 'YDL063C', 'YNL167C', 'YHR115C', 'YEL041W', 'YDL113C', 'YJL036W', 'YBR109C', 'YOL016C', 'YKL001C', 'YNL311C', 'YLR319C', 'YPR062W', 'YPL111W', 'YDL236W', 'YNL189W', 'YBL069W', 'YGL073W', 'YBR072W', 'YLR321C', 'YPR048W', 'YNL199C', 'YPL075W', 'YHR179W', 'YCL040W', 'YFL039C', 'YDL130W', 'YDR382W', 'YJR066W', 'YKL204W', 'YNL154C', 'YNL047C', 'YNL116W', 'YHR135C', 'YML064C', 'YKL074C', 'YLR340W', 'YDL081C', 'YGL166W', 'YLL028W', 'YDR174W', 'YDR335W', 'YLR214W', 'YMR021C', 'YLR377C', 'YER065C', 'YJL089W', 'YHR030C', 'YPL089C', 'YGL208W', 'YGL115W', 'YLR310C', 'YNL098C', 'YGR019W', 'YPR035W', 'YER040W', 'YGL008C', 'YOR036W', 'YDR323C', 'YBL005W', 'YBR160W', 'YKL101W', 'YOL156W', 'YJL219W', 'YLL021W', 'YOL136C', 'YJL203W', 'YNR007C', 'YFL026W', 'YJL157C', 'YNL145W', 'YDR461W', 'YGR108W', 'YKR097W', 'YJL159W', 'YIL015W', 'YMR043W', 'YKL109W', 'YBR217W', 'YHR171W', 'YPL149W', 'YKL028W', 'YDR311W', 'YBL021C', 'YGL237C', 'YEL039C', 'YJR048W', 'YML054C', 'YLR256W', 'YOR303W', 'YJR109C', 'YGR058W', 'YLR229C', 'YDR309C', 'YOR264W', 'YLR116W', 'YNL312W', 'YML032C', 'YKL012W', 'YNL236W', 'YNL091W', 'YDR184C', 'YIL143C', 'YKR099W', 'YIR009W', 'YBR018C', 'YPL248C', 'YLR081W', 'YBR020W', 'YGL035C', 'YOL051W', 'YBR019C', 'YJR060W', 'YDR103W', 'YLR362W', 'YDR032C', 'YCL032W', 'YLR109W', 'YHR141C', 'YMR138W', 'YMR300C', 'YOL058W', 'YBR248C', 'YOR202W', 'YMR108W', 'YEL009C', 'YBR155W', 'YMR186W', 'YGL106W', 'YOR326W', 'YMR309C', 'YOR361C', 'YIL105C', 'YLR134W', 'YER179W', 'YOR310C', 'YDL014W', 'YPR119W', 'YLR117C', 'YGL013C', 'YCR086W', 'YDR412W', 'YPL201C', 'YER062C', 'YOR327C', 'YER143W', 'YAL030W', 'YOL086C', 'YDR050C', 'YOL127W', 'YIL069C', 'YER074W', 'YBR093C', 'YDR171W', 'YCL030C', 'YNL301C', 'YOL120C', 'YLR044C', 'YIL133C', 'YHR174W', 'YGR254W', 'YCR012W', 'YNL216W', 'YAL038W', 'YNL307C', 'YDL013W', 'YER116C', 'YNR053C', 'YLR264W', 'YEL015W', 'YNL050C', 'YNR050C', 'YJR022W', 'YOR167C', 'YER112W', 'YCL067C', 'YBR112C', 'YCR084C', 'YIL061C', 'YGR203W', 'YJL013C', 'YGL229C', 'YJL030W', 'YGR014W', 'YPL211W', 'YGL044C', 'YOL123W', 'YAL003W', 'YFL017C', 'YDR429C', 'YMR146C', 'YLR293C', 'YBR118W', 'YPR080W', 'YLR249W', 'YOR204W', 'YGL097W', 'YGR218W', 'YGL122C', 'YKR026C']))
+        self.assertSetEqual(set(PyCy3.get_all_nodes()), set(
+            ['YDL194W', 'YDR277C', 'YBR043C', 'YPR145W', 'YER054C', 'YBR045C', 'YBL079W', 'YLR345W', 'YIL052C',
+             'YER056CA', 'YNL069C', 'YDL075W', 'YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W', 'YGL202W',
+             'YLR197W', 'YDL088C', 'YOR215C', 'YPR010C', 'YMR117C', 'YML114C', 'YNL036W', 'YOR212W', 'YDR070C',
+             'YNL164C', 'YGR046W', 'YLR153C', 'YIL070C', 'YPR113W', 'YER081W', 'YGR088W', 'YDR395W', 'YGR085C',
+             'YER124C', 'YMR005W', 'YDL030W', 'YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W', 'YIL074C',
+             'YDR299W', 'YHR005C', 'YLR452C', 'YMR255W', 'YBR274W', 'YHR084W', 'YBL050W', 'YBL026W', 'YJL194W',
+             'YLR258W', 'YGL134W', 'YHR055C', 'YHR053C', 'YPR124W', 'YNL135C', 'YER052C', 'YLR284C', 'YHR198C',
+             'YPL240C', 'YPR102C', 'YLR075W', 'YKL161C', 'YAR007C', 'YIL160C', 'YDL078C', 'YDR142C', 'YDR244W',
+             'YLR432W', 'YDR167W', 'YLR175W', 'YNL117W', 'YOR089C', 'YPR167C', 'YNL214W', 'YBR135W', 'YML007W',
+             'YER110C', 'YGL153W', 'YLR191W', 'YOL149W', 'YMR044W', 'YOR362C', 'YER102W', 'YOL059W', 'YBR190W',
+             'YER103W', 'YPR110C', 'YNL113W', 'YDR354W', 'YER090W', 'YKL211C', 'YDR146C', 'YER111C', 'YOR039W',
+             'YML024W', 'YIL113W', 'YLL019C', 'YDR009W', 'YML051W', 'YHR071W', 'YPL031C', 'YML123C', 'YER145C',
+             'YMR058W', 'YJL190C', 'YML074C', 'YOR355W', 'YFL038C', 'YIL162W', 'YBR050C', 'YMR311C', 'YOR315W',
+             'YOR178C', 'YER133W', 'YOR290C', 'YFR037C', 'YFR034C', 'YAL040C', 'YPL222W', 'YGR048W', 'YMR291W',
+             'YGR009C', 'YMR183C', 'YDR100W', 'YGL161C', 'YPL131W', 'YDL063C', 'YNL167C', 'YHR115C', 'YEL041W',
+             'YDL113C', 'YJL036W', 'YBR109C', 'YOL016C', 'YKL001C', 'YNL311C', 'YLR319C', 'YPR062W', 'YPL111W',
+             'YDL236W', 'YNL189W', 'YBL069W', 'YGL073W', 'YBR072W', 'YLR321C', 'YPR048W', 'YNL199C', 'YPL075W',
+             'YHR179W', 'YCL040W', 'YFL039C', 'YDL130W', 'YDR382W', 'YJR066W', 'YKL204W', 'YNL154C', 'YNL047C',
+             'YNL116W', 'YHR135C', 'YML064C', 'YKL074C', 'YLR340W', 'YDL081C', 'YGL166W', 'YLL028W', 'YDR174W',
+             'YDR335W', 'YLR214W', 'YMR021C', 'YLR377C', 'YER065C', 'YJL089W', 'YHR030C', 'YPL089C', 'YGL208W',
+             'YGL115W', 'YLR310C', 'YNL098C', 'YGR019W', 'YPR035W', 'YER040W', 'YGL008C', 'YOR036W', 'YDR323C',
+             'YBL005W', 'YBR160W', 'YKL101W', 'YOL156W', 'YJL219W', 'YLL021W', 'YOL136C', 'YJL203W', 'YNR007C',
+             'YFL026W', 'YJL157C', 'YNL145W', 'YDR461W', 'YGR108W', 'YKR097W', 'YJL159W', 'YIL015W', 'YMR043W',
+             'YKL109W', 'YBR217W', 'YHR171W', 'YPL149W', 'YKL028W', 'YDR311W', 'YBL021C', 'YGL237C', 'YEL039C',
+             'YJR048W', 'YML054C', 'YLR256W', 'YOR303W', 'YJR109C', 'YGR058W', 'YLR229C', 'YDR309C', 'YOR264W',
+             'YLR116W', 'YNL312W', 'YML032C', 'YKL012W', 'YNL236W', 'YNL091W', 'YDR184C', 'YIL143C', 'YKR099W',
+             'YIR009W', 'YBR018C', 'YPL248C', 'YLR081W', 'YBR020W', 'YGL035C', 'YOL051W', 'YBR019C', 'YJR060W',
+             'YDR103W', 'YLR362W', 'YDR032C', 'YCL032W', 'YLR109W', 'YHR141C', 'YMR138W', 'YMR300C', 'YOL058W',
+             'YBR248C', 'YOR202W', 'YMR108W', 'YEL009C', 'YBR155W', 'YMR186W', 'YGL106W', 'YOR326W', 'YMR309C',
+             'YOR361C', 'YIL105C', 'YLR134W', 'YER179W', 'YOR310C', 'YDL014W', 'YPR119W', 'YLR117C', 'YGL013C',
+             'YCR086W', 'YDR412W', 'YPL201C', 'YER062C', 'YOR327C', 'YER143W', 'YAL030W', 'YOL086C', 'YDR050C',
+             'YOL127W', 'YIL069C', 'YER074W', 'YBR093C', 'YDR171W', 'YCL030C', 'YNL301C', 'YOL120C', 'YLR044C',
+             'YIL133C', 'YHR174W', 'YGR254W', 'YCR012W', 'YNL216W', 'YAL038W', 'YNL307C', 'YDL013W', 'YER116C',
+             'YNR053C', 'YLR264W', 'YEL015W', 'YNL050C', 'YNR050C', 'YJR022W', 'YOR167C', 'YER112W', 'YCL067C',
+             'YBR112C', 'YCR084C', 'YIL061C', 'YGR203W', 'YJL013C', 'YGL229C', 'YJL030W', 'YGR014W', 'YPL211W',
+             'YGL044C', 'YOL123W', 'YAL003W', 'YFL017C', 'YDR429C', 'YMR146C', 'YLR293C', 'YBR118W', 'YPR080W',
+             'YLR249W', 'YOR204W', 'YGL097W', 'YGR218W', 'YGL122C', 'YKR026C']))
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_add_cy_nodes(self):
         # Initialization
@@ -258,7 +305,7 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(len(res23x), 0)
         self.assertEqual(PyCy3.get_node_count(), start_node_count + 3)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_add_cy_edges(self):
         # Initialization
@@ -290,7 +337,7 @@ class NetworkTests(unittest.TestCase):
         check_edge(res[2], 'YGR046W', 'YLR452C')
         self.assertEqual(PyCy3.get_edge_count(), start_edge_count + 4)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_edge_count(self):
         # Initialization
@@ -299,7 +346,7 @@ class NetworkTests(unittest.TestCase):
         # Verify the expected edge count
         self.assertEqual(PyCy3.get_edge_count(), 359)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_edge_info(self):
         # Initialization
@@ -342,7 +389,7 @@ class NetworkTests(unittest.TestCase):
         # Verify the error when a bad edge is requested
         self.assertRaises(PyCy3.CyError, PyCy3.get_edge_info, 'junk')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_get_all_edges(self):
         # Initialization
@@ -353,7 +400,7 @@ class NetworkTests(unittest.TestCase):
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 359)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_clone_network(self):
         # Initialization
@@ -361,9 +408,10 @@ class NetworkTests(unittest.TestCase):
         start_suid = PyCy3.get_network_suid()
 
         # Verify that a network clone is plausible
-        self._check_cloned_network(PyCy3.clone_network(), start_suid, PyCy3.get_network_name(start_suid), PyCy3.get_node_count(start_suid), PyCy3.get_edge_count(start_suid))
+        self._check_cloned_network(PyCy3.clone_network(), start_suid, PyCy3.get_network_name(start_suid),
+                                   PyCy3.get_node_count(start_suid), PyCy3.get_edge_count(start_suid))
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_subnet(self):
         # Initialization
@@ -372,22 +420,25 @@ class NetworkTests(unittest.TestCase):
         base_name = PyCy3.get_network_name(base_suid)
 
         # Verify that a creating a subnet containing all nodes produces a plausible copy
-        self._check_cloned_network(PyCy3.create_subnetwork(nodes='all', network=base_suid), base_suid, base_name, PyCy3.get_node_count(base_suid), PyCy3.get_edge_count(base_suid))
+        self._check_cloned_network(PyCy3.create_subnetwork(nodes='all', network=base_suid), base_suid, base_name,
+                                   PyCy3.get_node_count(base_suid), PyCy3.get_edge_count(base_suid))
 
         # Verify that creating a subset subnet produces a plausible copy
-        self._check_cloned_network(PyCy3.create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx', network=base_suid), base_suid, base_name, 4, 3)
+        self._check_cloned_network(
+            PyCy3.create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON',
+                                    subnetwork_name=base_name + 'xx', network=base_suid), base_suid, base_name, 4, 3)
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_network_from_data_frames(self):
-        node_data = {'id':["node 0","node 1","node 2","node 3"],
-                     'group':["A","A","B","B"],
-                     'score':[20,10,15,5]}
+        node_data = {'id': ["node 0", "node 1", "node 2", "node 3"],
+                     'group': ["A", "A", "B", "B"],
+                     'score': [20, 10, 15, 5]}
         nodes = df.DataFrame(data=node_data, columns=['id', 'group', 'score'])
-        edge_data = {'source':["node 0","node 0","node 0","node 2"],
-                     'target':["node 1","node 2","node 3","node 3"],
-                     'interaction':["inhibits","interacts","activates","interacts"],
-                     'weight':[5.1,3.0,5.2,9.9]}
+        edge_data = {'source': ["node 0", "node 0", "node 0", "node 2"],
+                     'target': ["node 1", "node 2", "node 3", "node 3"],
+                     'interaction': ["inhibits", "interacts", "activates", "interacts"],
+                     'weight': [5.1, 3.0, 5.2, 9.9]}
         edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
 
         # Verify that a network can be created containing dataframe encoding both nodes and edges
@@ -397,40 +448,68 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_node_count(suid_1), 4)
         self.assertEqual(PyCy3.get_edge_count(suid_1), 4)
         self.assertSetEqual(set(PyCy3.get_all_nodes(suid_1)), set(['node 0', 'node 1', 'node 2', 'node 3']))
-        self.assertSetEqual(set(PyCy3.get_all_edges(suid_1)), set(['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_1)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_1)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_1), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_1), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+        self.assertSetEqual(set(PyCy3.get_all_edges(suid_1)), set(
+            ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3',
+             'node 2 (interacts) node 3']))
+        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_1)),
+                            set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
+        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_1)), set(
+            ['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name',
+             'selected', 'interaction']))
+        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_1),
+                             {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer',
+                              'group': 'String', 'name': 'String', 'selected': 'Boolean'})
+        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_1),
+                             {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String',
+                              'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double',
+                              'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a network can be created from a dataframe containing just edges
-        res = PyCy3.create_network_from_data_frames(edges=edges, collection='Another collection', title='From just edge dataframe')
+        res = PyCy3.create_network_from_data_frames(edges=edges, collection='Another collection',
+                                                    title='From just edge dataframe')
         suid_2 = res['networkSUID']
         self.assertEqual(PyCy3.get_network_name(suid_2), 'From just edge dataframe')
         self.assertEqual(PyCy3.get_node_count(suid_2), 4)
         self.assertEqual(PyCy3.get_edge_count(suid_2), 4)
         self.assertSetEqual(set(PyCy3.get_all_nodes(suid_2)), set(['node 0', 'node 1', 'node 2', 'node 3']))
-        self.assertSetEqual(set(PyCy3.get_all_edges(suid_2)), set(['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3', 'node 2 (interacts) node 3']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_2)), set(['SUID', 'shared name', 'id', 'name', 'selected']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_2)), set(['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name', 'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_2), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'name': 'String', 'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_2), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+        self.assertSetEqual(set(PyCy3.get_all_edges(suid_2)), set(
+            ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3',
+             'node 2 (interacts) node 3']))
+        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_2)),
+                            set(['SUID', 'shared name', 'id', 'name', 'selected']))
+        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_2)), set(
+            ['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name',
+             'selected', 'interaction']))
+        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_2),
+                             {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'name': 'String',
+                              'selected': 'Boolean'})
+        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_2),
+                             {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String',
+                              'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double',
+                              'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a disconnected network can be created from a dataframe containing just nodes
-        res = PyCy3.create_network_from_data_frames(nodes=nodes, collection='A third collection', title='From just nodes dataframe')
+        res = PyCy3.create_network_from_data_frames(nodes=nodes, collection='A third collection',
+                                                    title='From just nodes dataframe')
         suid_3 = res['networkSUID']
         self.assertEqual(PyCy3.get_network_name(suid_3), 'From just nodes dataframe')
         self.assertEqual(PyCy3.get_node_count(suid_3), 4)
         self.assertEqual(PyCy3.get_edge_count(suid_3), 0)
         self.assertSetEqual(set(PyCy3.get_all_nodes(suid_3)), set(['node 0', 'node 1', 'node 2', 'node 3']))
         self.assertIsNone(PyCy3.get_all_edges(suid_3))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_3)), set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
+        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_3)),
+                            set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
         # TODO: Verify that this list of edge columns should be created ... why not source, target?
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_3)), set(['SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer', 'group': 'String', 'name': 'String', 'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_3), {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_3)),
+                            set(['SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction']))
+        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_3),
+                             {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer',
+                              'group': 'String', 'name': 'String', 'selected': 'Boolean'})
+        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_3),
+                             {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String',
+                              'selected': 'Boolean', 'interaction': 'String'})
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_import_network_from_file(self):
 
@@ -450,7 +529,7 @@ class NetworkTests(unittest.TestCase):
 
         self.assertRaises(PyCy3.CyError, PyCy3.import_network_from_file, 'bogus')
 
-#    @PyCy3.skip
+    #    @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_igraph_from_network(self):
         # Initialization
@@ -462,14 +541,14 @@ class NetworkTests(unittest.TestCase):
 
         # verify that all nodes are present
         self.assertEqual(len(i.vs), len(all_nodes))
-        self.assertNotIn(False, [v['name'] in all_nodes  for v in i.vs])
+        self.assertNotIn(False, [v['name'] in all_nodes for v in i.vs])
 
         # verify that all edges are present
         self.assertEqual(len(i.es), len(all_edges))
-        i_edges = [[x['source'], x['target']]   for x in i.es]
-        self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges   for x in all_edges])
+        i_edges = [[x['source'], x['target']] for x in i.es]
+        self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges for x in all_edges])
 
-#   @PyCy3.skip
+    #   @PyCy3.skip
     @PyCy3.print_entry_exit
     def test_create_network_from_igraph(self):
         # Initialization
@@ -477,8 +556,8 @@ class NetworkTests(unittest.TestCase):
 
         # TODO: Consider allowing creation of a network from an empty igraph
         # This will fail but probably should not ... create_network_from_igraph requires nodes and edges, but shouldn't
-#        g = ig.Graph()
-#        create_network_from_igraph(g)
+        #        g = ig.Graph()
+        #        create_network_from_igraph(g)
 
         cur_igraph = PyCy3.create_igraph_from_network()
 
@@ -508,22 +587,24 @@ class NetworkTests(unittest.TestCase):
             PyCy3.close_session(False)
             closed_time = time.clock()
             PyCy3.open_session()
-            print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (trial, (closed_time - start), (time.clock() - closed_time)))
+            print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (
+            trial, (closed_time - start), (time.clock() - closed_time)))
             trial += 1
-
 
     def _check_igraph_attributes(self, original_collection, new_collection):
         def vals_eq(name, e_cur_key, val1, val2):
             eq = type(val1) is type(val2) and \
-                    ((val1 == val2) or \
-                     (type(val1) is float and math.isnan(val1) and math.isnan(val2)))
+                 ((val1 == val2) or \
+                  (type(val1) is float and math.isnan(val1) and math.isnan(val2)))
             if not eq:
                 print('For ' + name + ', key ' + e_cur_key + ': ' + str(val1) + ' != ' + str(val2))
             return eq
 
         for orig in original_collection:
-            new = new_collection.find(name = orig['name'])
-            self.assertFalse(False in [vals_eq(orig['name'], e_cur_key, orig[e_cur_key], new[e_cur_key])   for e_cur_key in orig.attributes().keys()])
+            new = new_collection.find(name=orig['name'])
+            self.assertFalse(
+                False in [vals_eq(orig['name'], e_cur_key, orig[e_cur_key], new[e_cur_key]) for e_cur_key in
+                          orig.attributes().keys()])
 
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
         self.assertIsInstance(subnet_suid, int)
@@ -532,7 +613,6 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(PyCy3.get_edge_count(subnet_suid), base_edges)
         self.assertIn(base_name, PyCy3.get_network_name(subnet_suid))
 
+
 if __name__ == '__main__':
     unittest.main()
-
-
