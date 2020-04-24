@@ -3,12 +3,16 @@
 """Functions for managing Cytoscape SESSIONS, including save, open and close.
 """
 
+# External library imports
 import sys
 import os
 
+# Internal module imports
 from . import commands
+
+# Internal module convenience imports
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 def __init__(self):
     pass

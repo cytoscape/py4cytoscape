@@ -2,13 +2,16 @@
 
 DEFAULT_BASE_URL: str = 'http://localhost:1234/v1'
 
+# External library imports
 import urllib.parse
 import re
 import sys
 
-from PyCy3 import tables
-from PyCy3 import cytoscape_system
-from PyCy3.decorators import debug
+# Internal module imports
+from . import tables
+from . import cytoscape_system
+
+# Internal module convenience imports
 from .exceptions import CyError
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):

@@ -6,14 +6,18 @@ Dev Notes: refer to StyleValues.R, StyleDefaults.R and StyleBypasses.R for
 getting/setting node, edge and network visual properties via VIEW operations.
 """
 
+# External library imports
 import sys
 import os
 
+# Internal module imports
 from . import commands
 from . import networks
+
+# Internal module convenience imports
 from .exceptions import CyError
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 @cy_log
 def get_network_views(network=None, base_url=DEFAULT_BASE_URL):

@@ -5,17 +5,21 @@ networks, including operations to import and export filters. In the Cytoscape
 user interface, filters are managed in the Select tab of the Control Panel.
 """
 
+# Internal module convenience imports
 import os
 import time
 import json
 import warnings
 
+# Internal module imports
 from . import commands
-from .exceptions import CyError
 from . import networks
 from . import network_selection
+
+# External library imports
+from .exceptions import CyError
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 @cy_log
 def apply_filter(filter_name='Default filter', hide=False, network=None, base_url=DEFAULT_BASE_URL):

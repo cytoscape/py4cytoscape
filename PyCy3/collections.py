@@ -3,13 +3,17 @@
 """Functions for getting information about network COLLECTIONS.
 """
 
+# External library imports
 import sys
 
+# Internal module imports
 from . import commands
 from . import networks
+
+# Internal module convenience imports
 from .exceptions import CyError
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 @cy_log
 def get_collection_list(base_url=DEFAULT_BASE_URL):

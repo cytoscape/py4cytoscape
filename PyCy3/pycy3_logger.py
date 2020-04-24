@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
+# External library imports
 import logging
 import logging.config
 import functools
 import os
 
-from . import pycy3_logger_settings
+from .pycy3_logger_settings import _FILE_LOG_DIR, _FILE_LOG_LEVEL, _FILE_LOG_NAME, _DISABLE_DEBUG_HTTP, _CONSOLE_LOG_LEVEL
 
-_log_base = os.path.join(pycy3_logger_settings._FILE_LOG_DIR, pycy3_logger_settings._FILE_LOG_NAME)
-if not os.path.exists(pycy3_logger_settings._FILE_LOG_DIR): os.makedirs(pycy3_logger_settings._FILE_LOG_DIR)
+_log_base = os.path.join(_FILE_LOG_DIR, _FILE_LOG_NAME)
+if not os.path.exists(_FILE_LOG_DIR): os.makedirs(_FILE_LOG_DIR)
 
 # Define the loggers for this library
 _logging_config = {
     'version': 1,
-    'disable_existing_loggers': pycy3_logger_settings._DISABLE_DEBUG_HTTP,
+    'disable_existing_loggers': _DISABLE_DEBUG_HTTP,
     'formatters': {
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
@@ -26,7 +27,7 @@ _logging_config = {
     'handlers': {
         'default_handler': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'level': pycy3_logger_settings._FILE_LOG_LEVEL,
+            'level': _FILE_LOG_LEVEL,
             'formatter': 'standard',
             'filename': _log_base,
             'encoding': 'utf8',
@@ -36,7 +37,7 @@ _logging_config = {
         },
         'console_handler': {
             'class': 'logging.StreamHandler',
-            'level': pycy3_logger_settings._CONSOLE_LOG_LEVEL,
+            'level': _CONSOLE_LOG_LEVEL,
             'formatter': 'console',
         },
     },
@@ -54,7 +55,7 @@ logging.config.dictConfig(_logging_config)
 
 # Create the logger this library will use
 logger = logging.getLogger('PyCy3')
-_logger_debug = 'DEBUG' in [pycy3_logger_settings._FILE_LOG_LEVEL, pycy3_logger_settings._CONSOLE_LOG_LEVEL]
+_logger_debug = 'DEBUG' in [_FILE_LOG_LEVEL, _CONSOLE_LOG_LEVEL]
 
 # Decorator so functions can get automatic logging
 

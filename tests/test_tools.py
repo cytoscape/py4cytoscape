@@ -10,8 +10,8 @@ class ToolsTests(unittest.TestCase):
     def setUp(self):
         # Close all browser windows if possible
         try:
-            for browser in cybrowser_list():
-                cybrowser_close(browser['id'])
+            for browser in PyCy3.cybrowser_list():
+                PyCy3.cybrowser_close(browser['id'])
         except:
             pass
 
@@ -19,111 +19,111 @@ class ToolsTests(unittest.TestCase):
         pass
 
     BROWSER_HELLO = {'id': 'Browser Hello ID',
-                     'show': {'func': lambda x, y: cybrowser_show(id=x, title=y,
+                     'show': {'func': lambda x, y: PyCy3.cybrowser_show(id=x, title=y,
                                                                   text='<HTML><HEAD><TITLE>Hello</TITLE></HEAD><BODY>Hello, world!</BODY></HTML>'),
                               'title': 'Browser Hello Page'},
-                     'dialog': {'func': lambda x, y: cybrowser_dialog(id=x, title=y,
+                     'dialog': {'func': lambda x, y: PyCy3.cybrowser_dialog(id=x, title=y,
                                                                       text='<HTML><HEAD><TITLE>Hello</TITLE></HEAD><BODY>Hello, world!</BODY></HTML>'),
                                 'title': 'Hello'}}
     CYTOSCAPE_HOME_PAGE = {'id': 'Cytoscape Home Page ID',
                            'show': {
-                               'func': lambda x, y: cybrowser_show(id=x, title=y, url='http://www.cytoscape.org'),
+                               'func': lambda x, y: PyCy3.cybrowser_show(id=x, title=y, url='http://www.cytoscape.org'),
                                'title': 'Cytoscape Home Page'},
                            'dialog': {
-                               'func': lambda x, y: cybrowser_dialog(id=x, title=y, url='http://www.cytoscape.org'),
+                               'func': lambda x, y: PyCy3.cybrowser_dialog(id=x, title=y, url='http://www.cytoscape.org'),
                                'title': 'Cytoscape: An Open Source Platform for Complex Network Analysis and Visualization'}}
     CYTOSCAPE_MANUAL = {'id': 'Cytoscape Manual ID',
-                        'show': {'func': lambda x, y: cybrowser_show(id=x, title=y, url='http://manual.cytoscape.org/en/3.7.2/'),
+                        'show': {'func': lambda x, y: PyCy3.cybrowser_show(id=x, title=y, url='http://manual.cytoscape.org/en/3.7.2/'),
                                  'title': 'Cytoscape Manual Page'},
                         'dialog': {
-                            'func': lambda x, y: cybrowser_dialog(id=x, title=y, url='http://manual.cytoscape.org/en/3.7.2/'),
+                            'func': lambda x, y: PyCy3.cybrowser_dialog(id=x, title=y, url='http://manual.cytoscape.org/en/3.7.2/'),
                             'title': 'Cytoscape 3.7.2 User Manual â€” Cytoscape User Manual 3.7.2 documentation'}}
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_cybrowser_version(self):
         # Verify that a version is reported
-        version = cybrowser_version()
+        version = PyCy3.cybrowser_version()
         self.assertIsInstance(version, dict)
         self.assertIsInstance(version['version'], str)
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_cybrowser_show_list_hide(self):
         self.cybrowser_windows('show')
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_cybrowser_dialog_list_hide(self):
         self.cybrowser_windows('dialog')
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_cybrowser_send(self):
         self._check_show('dialog', ToolsTests.CYTOSCAPE_HOME_PAGE)
         window_id = ToolsTests.CYTOSCAPE_HOME_PAGE['id']
 
         # Verify that the user agent variable can be fetched
-        res = cybrowser_send(window_id, 'navigator.userAgent')
+        res = PyCy3.cybrowser_send(window_id, 'navigator.userAgent')
         self.assertIsInstance(res, dict)
         self.assertEqual(res['browserId'], window_id)
         self.assertIsInstance(res['result'], str)
 
         # Verify that the window can be moved to a different URL
-        res = cybrowser_send(window_id, "window.location='http://google.com'")
+        res = PyCy3.cybrowser_send(window_id, "window.location='http://google.com'")
         self.assertEqual(res['browserId'], window_id)
         self.assertEqual(res['result'], 'http://google.com')
 
-        self.assertRaises(CyError, cybrowser_send, 'bogus window', 'navigator.userAgent')
+        self.assertRaises(PyCy3.CyError, PyCy3.cybrowser_send, 'bogus window', 'navigator.userAgent')
 
-        self.assertDictEqual(cybrowser_send(window_id, 'bogus_statement'), {})
+        self.assertDictEqual(PyCy3.cybrowser_send(window_id, 'bogus_statement'), {})
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_diffusion_basic(self):
         # Initialization
         load_test_session()
 
         # Verify that selecting a node and calling diffusion returns a bunch of nodes
-        select_nodes(['RAP1'], by_col='COMMON')
-        res = diffusion_basic()
+        PyCy3.select_nodes(['RAP1'], by_col='COMMON')
+        res = PyCy3.diffusion_basic()
         self.assertIsInstance(res, dict)
         self.assertEqual(res['heatColumn'], 'diffusion_output_heat')
         self.assertEqual(res['rankColumn'], 'diffusion_output_rank')
-        self.assertTrue(len(get_selected_nodes()) > 0)
+        self.assertTrue(len(PyCy3.get_selected_nodes()) > 0)
 
         # Verify that diffusion returns nodes even when nothing is selected
-        clear_selection()
-        res = diffusion_basic()
+        PyCy3.clear_selection()
+        res = PyCy3.diffusion_basic()
         self.assertIsInstance(res, dict)
         self.assertEqual(res['heatColumn'], 'diffusion_output_1_heat')
         self.assertEqual(res['rankColumn'], 'diffusion_output_1_rank')
-        self.assertTrue(len(get_selected_nodes()) > 0)
+        self.assertTrue(len(PyCy3.get_selected_nodes()) > 0)
 
-#    @skip
-    @print_entry_exit
+#    @PyCy3.skip
+    @PyCy3.print_entry_exit
     def test_diffusion_advanced(self):
         # Initialization
         load_test_session()
 
         # Verify that selecting a node and calling diffusion returns a bunch of nodes
-        select_nodes(['RAP1'], by_col='COMMON')
-        res = diffusion_advanced(heat_column_name='', time=0.1)
+        PyCy3.select_nodes(['RAP1'], by_col='COMMON')
+        res = PyCy3.diffusion_advanced(heat_column_name='', time=0.1)
         self.assertIsInstance(res, dict)
         self.assertEqual(res['heatColumn'], 'diffusion_output_heat')
         self.assertEqual(res['rankColumn'], 'diffusion_output_rank')
-        self.assertTrue(len(get_selected_nodes()) > 0)
+        self.assertTrue(len(PyCy3.get_selected_nodes()) > 0)
 
         # Verify that diffusion returns nodes even when nothing is selected
-        clear_selection()
-        res = diffusion_advanced(heat_column_name='diffusion_output_heat', time=0.2)
+        PyCy3.clear_selection()
+        res = PyCy3.diffusion_advanced(heat_column_name='diffusion_output_heat', time=0.2)
         self.assertIsInstance(res, dict)
         self.assertEqual(res['heatColumn'], 'diffusion_output_1_heat')
         self.assertEqual(res['rankColumn'], 'diffusion_output_1_rank')
-        self.assertTrue(len(get_selected_nodes()) > 0)
+        self.assertTrue(len(PyCy3.get_selected_nodes()) > 0)
 
         # Verify that a bad parameter causes an exception
-        self.assertRaises(CyError, diffusion_advanced, heat_column_name='diffusion_output_heat', time='x')
+        self.assertRaises(PyCy3.CyError, PyCy3.diffusion_advanced, heat_column_name='diffusion_output_heat', time='x')
 
     def cybrowser_windows(self, operation='show'):
 
@@ -136,7 +136,7 @@ class ToolsTests(unittest.TestCase):
                 self.assertEqual(val['title'], expected[id][operation]['title'])
 
         # Verify that the browser list starts out empty ... no browser windows displayed
-        check_browser_list(cybrowser_list(), [])
+        check_browser_list(PyCy3.cybrowser_list(), [])
 
         # Verify that a browser can be launched with all of its options
         self._check_show(operation, ToolsTests.BROWSER_HELLO)
@@ -144,7 +144,7 @@ class ToolsTests(unittest.TestCase):
         self._check_show(operation, ToolsTests.CYTOSCAPE_MANUAL)
 
         # Verify that the browser list contains all of the new pages
-        check_browser_list(cybrowser_list(),
+        check_browser_list(PyCy3.cybrowser_list(),
                            [ToolsTests.BROWSER_HELLO, ToolsTests.CYTOSCAPE_HOME_PAGE, ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that adding the same pages doesn't change the browser list
@@ -152,24 +152,24 @@ class ToolsTests(unittest.TestCase):
         self._check_show(operation, ToolsTests.BROWSER_HELLO, skip_verify=True)
         self._check_show(operation, ToolsTests.BROWSER_HELLO, skip_verify=True)
         time.sleep(2) # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(),
+        check_browser_list(PyCy3.cybrowser_list(),
                            [ToolsTests.BROWSER_HELLO, ToolsTests.CYTOSCAPE_HOME_PAGE, ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that hiding a browser removes it from the browser list, and bogus browser windows don't cause error
-        self.assertDictEqual(cybrowser_hide(ToolsTests.BROWSER_HELLO['id']), {})
-        self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
+        self.assertDictEqual(PyCy3.cybrowser_hide(ToolsTests.BROWSER_HELLO['id']), {})
+        self.assertDictEqual(PyCy3.cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
         time.sleep(2) # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
+        check_browser_list(PyCy3.cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that closing a browser twice does no harm
-        self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
+        self.assertDictEqual(PyCy3.cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
         time.sleep(2) # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
+        check_browser_list(PyCy3.cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
 
         # Verify that closing the last browser window results in a clean browser list
-        self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_MANUAL['id']), {})
+        self.assertDictEqual(PyCy3.cybrowser_close(ToolsTests.CYTOSCAPE_MANUAL['id']), {})
         time.sleep(2) # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(), [])
+        check_browser_list(PyCy3.cybrowser_list(), [])
 
     def _check_show(self, operation, window_def, skip_verify=False):
         show_result = window_def[operation]['func'](window_def['id'], window_def[operation]['title'])

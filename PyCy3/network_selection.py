@@ -9,10 +9,15 @@ II. Node selection functions
 III. Edge selection functions
 """
 
+# External library imports
+
+# Internal module imports
 from . import commands
 from . import networks
+
+# Internal module convenience imports
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 # ==============================================================================
 # I. General selection functions

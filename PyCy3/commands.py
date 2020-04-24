@@ -13,7 +13,7 @@
 # I. CyREST API functions
 # ------------------------------------------------------------------------------
 
-
+# External library imports
 import requests
 import urllib.parse
 import json
@@ -21,8 +21,9 @@ import webbrowser
 import sys
 import os
 
+# Internal module convenience imports
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 from .exceptions import CyError
 
 def __init__(self):

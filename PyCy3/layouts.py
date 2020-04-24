@@ -7,11 +7,16 @@ II. Get layout properties
 III. Set layout properties
 """
 
+# External library imports
+
+# Internal module imports
 from . import commands
 from . import networks
+
+# Internal module convenience imports
 from .exceptions import CyError
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 
 # ==============================================================================
 # I. Perform layout functions

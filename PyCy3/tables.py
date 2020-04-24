@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from . import commands
-from . import networks
-from .pycy3_utils import *
-from .pycy3_logger import *
-from .exceptions import CyError
 
-from .decorators import debug
+# External library imports
 import pandas as pd
 import numpy as np
+
+# Internal module imports
+from . import commands
+from . import networks
+
+# Internal module convenience imports
+from .pycy3_utils import *
+from .pycy3_logger import cy_log
+from .exceptions import CyError
+
 
 def __init__(self):
     pass

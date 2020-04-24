@@ -20,6 +20,7 @@ Note:
 # I. General network functions
 # ------------------------------------------------------------------------------
 
+# External library imports
 import sys
 import os
 import time
@@ -27,12 +28,15 @@ import warnings
 import pandas as pd
 import igraph as ig
 
+# Internal module imports
 from . import commands
 from . import tables
 from . import network_selection
 from . import layouts
+
+# Internal module convenience imports
 from .pycy3_utils import *
-from .pycy3_logger import *
+from .pycy3_logger import cy_log
 from .exceptions import CyError
 
 def __init__(self):
