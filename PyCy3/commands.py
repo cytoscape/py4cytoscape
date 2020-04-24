@@ -1,17 +1,30 @@
 # -*- coding: utf-8 -*-
 
-# Functions for constructing any arbitrary CyREST API or Commands API method via
-# standard GET, PUT, POST and DELETE protocols. These functions handle marshalling
-# and unmarshalling of urls, parameters and returns so that higher-level functions
-# can work with Python-friendly arguments and returns.
-#
-# I. CyREST API functions
-# II. Commands API functions
-# III. Internal functions
-#
-# ==============================================================================
-# I. CyREST API functions
-# ------------------------------------------------------------------------------
+"""Functions for constructing any arbitrary CyREST API or Commands API method via
+standard GET, PUT, POST and DELETE protocols. These functions handle marshalling
+and unmarshalling of urls, parameters and returns so that higher-level functions
+can work with Python-friendly arguments and returns.
+
+I. CyREST API functions
+II. Commands API functions
+III. Internal functions
+
+Copyright 2020 The Cytoscape Consortium
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
 
 # External library imports
 import requests
@@ -32,6 +45,10 @@ def __init__(self):
 
 
 # TODO: Refactor functions to centralize HTTP handling and error handling
+
+# ==============================================================================
+# I. CyREST API functions
+# ------------------------------------------------------------------------------
 
 @cy_log
 def cyrest_api(base_url=DEFAULT_BASE_URL):
