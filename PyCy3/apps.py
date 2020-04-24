@@ -2,6 +2,7 @@
 
 """Functions for inspecting and managing apps for Cytoscape.
 
+License:
     Copyright 2020 The Cytoscape Consortium
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
