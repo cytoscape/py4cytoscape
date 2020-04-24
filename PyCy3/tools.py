@@ -125,9 +125,7 @@ def cybrowser_list(base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        list: [{'id': id, 'title': title, 'url': current url}] where there is a dict for each browser window,
-            and the ``id`` and ``title`` were provided in the ``cybrowser_show()`` call, and the ``url`` is for the page currently
-            loaded in the browser window
+        list: [{'id': id, 'title': title, 'url': current url}]
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
@@ -135,6 +133,11 @@ def cybrowser_list(base_url=DEFAULT_BASE_URL):
     Examples:
         >>> cybrowser_list()
         [{'id': 'CytoManual ID', 'title': 'CytoManual Page', 'url': 'http://manual.cytoscape.org/en/stable/'}, {'id': ...} ...]
+
+    Note:
+        In the return value, there is a dict for each browser window,
+        and the ``id`` and ``title`` were provided in the ``cybrowser_show()`` call, and the ``url`` is for the page currently
+        loaded in the browser window
     """
     res = commands.commands_post('cybrowser list', base_url=base_url)
     return res
@@ -156,8 +159,7 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of PyCy3.
 
     Returns:
-        dict: {'browserId': id, 'result': result} where ``id`` is the one provided as a parameter to this function and
-            ``result`` is the string returned as a result of executing the script
+        dict: {'browserId': id, 'result': result}
 
     Raises:
         CyError: if the browser could not execute the command
@@ -168,6 +170,10 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
         {'browserId': 'Test Window', 'result': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/608.1 (KHTML, like Gecko) JavaFX/13 Safari/608.1 CyBrowser/1.2.0'}
         >>> cybrowser_send(id='CytoWindow', script="window.location='http://google.com'")
         {'browserId': 'CytoWindow', 'result': 'http://google.com'}
+
+    Note:
+        In the return result, ``id`` is the one provided as a parameter to this function and
+        ``result`` is the string returned as a result of executing the script
 
     See Also:
         :meth:`cybrowser_show`, :meth:`cybrowser_hide`, :meth:`cybrowser_dialog`
