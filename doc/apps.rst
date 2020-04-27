@@ -1,5 +1,5 @@
-py4cytoscape.apps module
-========================
+...apps module
+==============
 
 .. automodule:: py4cytoscape.apps
     :members:
