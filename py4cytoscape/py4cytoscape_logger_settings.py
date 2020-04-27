@@ -23,6 +23,6 @@ License:
 
 _FILE_LOG_LEVEL = 'DEBUG'
 _FILE_LOG_DIR = 'logs'
-_FILE_LOG_NAME = 'pycy3.log'
+_FILE_LOG_NAME = 'py4cytoscape.log'
 _CONSOLE_LOG_LEVEL = 'INFO'
 _DISABLE_DEBUG_HTTP = False

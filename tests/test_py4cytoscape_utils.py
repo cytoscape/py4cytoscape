@@ -27,7 +27,7 @@ from py4cytoscape.py4cytoscape_utils import DEFAULT_BASE_URL, build_url, node_su
 from py4cytoscape.decorators import *
 
 
-class PyCy3Tests(unittest.TestCase):
+class Py4cytoscapeTests(unittest.TestCase):
 
     def setUp(self):
         try:

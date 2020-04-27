@@ -29,7 +29,7 @@ py4cytoscape.import_network_from_file("galfiltered.sif") # Before running this, 
 
 ## How to test (in Windows)
 ```
-rem Assuming the current directory is the PyCy3 project directory
+rem Assuming the current directory is the py4cytoscape project directory
 cd tests 
 set PYTHONPATH=..
 

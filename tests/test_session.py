@@ -72,7 +72,7 @@ class SessionTests(unittest.TestCase):
 
         # Verify that file opens if direct URL is used
         # This should work, but doesn't at the CyREST level ... so, I'm commenting it out for now
-        # self.assertDictEqual(open_session('https://github.com/bdemchak/PyCy3/blob/master/tests/data/Affinity%20Purification.cys'), {})
+        # self.assertDictEqual(open_session('https://github.com/bdemchak/py4cytoscape/blob/master/tests/data/Affinity%20Purification.cys'), {})
         # self.assertEqual(get_network_count(), 1)
         # self.assertEqual(get_network_name(), 'HIV-human PPI')
         # close_session()

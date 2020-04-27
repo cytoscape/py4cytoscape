@@ -13,7 +13,7 @@ setuptools.setup(
     description="Cytoscape Automation API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/bdemchak/PyCy3",
+    url="https://github.com/bdemchak/py4cytoscape",
     license='MIT License',
     keywords=['data visualization', 'visualization', 'cytoscape',
               'bioinformatics', 'graph', 'network'],
