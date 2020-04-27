@@ -1,7 +1,7 @@
-PyCy3.exceptions module
-=======================
+py4cytoscape.exceptions module
+==============================
 
-.. automodule:: PyCy3.exceptions
+.. automodule:: py4cytoscape.exceptions
     :members:
     :undoc-members:
     :show-inheritance:

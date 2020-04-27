@@ -1,7 +1,7 @@
-PyCy3.cytoscape\_system module
-==============================
+py4cytoscape.cytoscape\_system module
+=====================================
 
-.. automodule:: PyCy3.cytoscape_system
+.. automodule:: py4cytoscape.cytoscape_system
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
-PyCy3.user_interface module
-===========================
+py4cytoscape.user_interface module
+==================================
 
-.. automodule:: PyCy3.user_interface
+.. automodule:: py4cytoscape.user_interface
     :members:
     :undoc-members:
     :show-inheritance:

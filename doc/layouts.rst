@@ -1,7 +1,7 @@
-PyCy3.layouts module
-====================
+py4cytoscape.layouts module
+===========================
 
-.. automodule:: PyCy3.layouts
+.. automodule:: py4cytoscape.layouts
     :members:
     :undoc-members:
     :show-inheritance:

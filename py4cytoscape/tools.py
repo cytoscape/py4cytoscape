@@ -27,8 +27,8 @@ from . import commands
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -41,7 +41,7 @@ def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
         id (str): The identifier for the browser window to close
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}
@@ -72,7 +72,7 @@ def cybrowser_dialog(id=None, text=None, title=None, url=None, base_url=DEFAULT_
         url (str): The URL the browser should load
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'id': id} where ``id`` is the one provided as a parameter to this function
@@ -108,7 +108,7 @@ def cybrowser_hide(id=None, base_url=DEFAULT_BASE_URL):
         id (str): The identifier for the browser window to hide
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}
@@ -138,7 +138,7 @@ def cybrowser_list(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: [{'id': id, 'title': title, 'url': current url}]
@@ -172,7 +172,7 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
             Note that only string results are returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'browserId': id, 'result': result}
@@ -214,7 +214,7 @@ def cybrowser_show(id=None, text=None, title=None, url=None, base_url=DEFAULT_BA
         url (str): The URL the browser should load
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'id': id} where ``id`` is the one provided as a parameter to this function
@@ -247,7 +247,7 @@ def cybrowser_version(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'version': app version} where app version is the CyBrowser app version
@@ -277,7 +277,7 @@ def diffusion_basic(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the node table column containing the node's (0-based) rank
@@ -311,7 +311,7 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
         time (str): The extent of spread over the network. This corresponds to t in the diffusion equation.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'heatColumn': 'diffusion_output_heat', 'rankColumn': 'diffusion_output_rank'} where ``heatColumn`` is the name of the node table column containing each node's calculated heat and ``rankColumn`` is the name of the node table column containing the node's (0-based) rank

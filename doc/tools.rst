@@ -1,7 +1,7 @@
-PyCy3.tools module
-==================
+py4cytoscape.tools module
+=========================
 
-.. automodule:: PyCy3.tools
+.. automodule:: py4cytoscape.tools
     :members:
     :undoc-members:
     :show-inheritance:

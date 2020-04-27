@@ -29,8 +29,8 @@ from . import commands
 from . import networks
 
 # Internal module convenience imports
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 from .exceptions import CyError
 
 
@@ -50,7 +50,7 @@ def delete_table_column(column, table='node', namespace='default', network=None,
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: ''
@@ -94,7 +94,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dataframe: requested columns (including SUID), and rows for each node/edge or network.
@@ -204,7 +204,7 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         obj: the value of the table cell, cast to float, int, bool or str depending on column type
@@ -231,8 +231,8 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
 
     # which row
     row_key = None
-    from .pycy3_utils import node_name_to_node_suid
-    from .pycy3_utils import edge_name_to_edge_suid
+    from .py4cytoscape_utils import node_name_to_node_suid
+    from .py4cytoscape_utils import edge_name_to_edge_suid
     if table == 'node':
         row_key = node_name_to_node_suid(row_name, network, base_url=base_url)[0]
     elif table == 'edge':
@@ -274,7 +274,7 @@ def get_table_column_names(table='node', namespace='default', network=None, base
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of column names
@@ -310,7 +310,7 @@ def get_table_column_types(table='node', namespace='default', network=None, base
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: where the column name is the key and the data type is the value
@@ -359,7 +359,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: 'Success: Data loaded in <table name> table' or 'Failed to load data: <reason>'
@@ -458,7 +458,7 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dataframe: contains map_from and map_to columns.
@@ -511,7 +511,7 @@ def rename_table_column(column, new_name, table='node', namespace='default', net
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: ''

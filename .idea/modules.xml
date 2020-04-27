@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PyCy3.iml" filepath="$PROJECT_DIR$/.idea/PyCy3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/py4cytoscape.iml" filepath="$PROJECT_DIR$/.idea/py4cytoscape.iml" />
     </modules>
   </component>
 </project>

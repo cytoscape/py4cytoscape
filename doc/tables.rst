@@ -1,7 +1,7 @@
-PyCy3.tables module
-===================
+py4cytoscape.tables module
+==========================
 
-.. automodule:: PyCy3.tables
+.. automodule:: py4cytoscape.tables
     :members:
     :undoc-members:
     :show-inheritance:

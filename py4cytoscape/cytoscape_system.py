@@ -27,8 +27,8 @@ from . import commands
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -40,7 +40,7 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         None
@@ -53,7 +53,7 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
         >>> cytoscape_ping()
         You are connected to Cytoscape!
     """
-    from .pycy3_utils import verify_supported_versions
+    from .py4cytoscape_utils import verify_supported_versions
     verify_supported_versions(1, 3.6, base_url=base_url)
     print('You are connected to Cytoscape!')
 
@@ -67,7 +67,7 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'apiVersion': <version>, 'cytoscapeVersion': <version>}
@@ -83,7 +83,7 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
     versions = commands.cyrest_get('version', base_url=base_url)
     if len(versions) == 0:
         # TODO: Figure out whether we really want to report this to stderr.
-        error = 'CyREST connection problem. PyCy3 can not continue!'
+        error = 'CyREST connection problem. py4cytoscape can not continue!'
         sys.stderr.write(error)
         raise CyError(error)
     # TODO: R doesn't raise an exception ... perhaps it should?
@@ -98,7 +98,7 @@ def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of available API versions
@@ -123,7 +123,7 @@ def cytoscape_number_of_cores(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         int: count of available CPUs
@@ -146,7 +146,7 @@ def cytoscape_memory_status(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'usedMemory': <mem>, 'freeMemory': <mem>, 'totalMemory': <mem>, 'maxMemory': <mem>} where <mem> is a count of megabytes
@@ -171,7 +171,7 @@ def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: 'Unused memory freed up.'
@@ -189,7 +189,7 @@ def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
         return 'Unused memory freed up.'  # TODO: Is this what we want to return?
     except:
         # TODO: Figure out whether we really want to report this to stderr.
-        error = 'CyREST connection problem. PyCy3 can not continue!'
+        error = 'CyREST connection problem. py4cytoscape can not continue!'
         sys.stderr.write(error)
         raise CyError(error)
 # TODO: R doesn't raise an exception ... perhaps it should?

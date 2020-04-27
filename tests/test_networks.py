@@ -31,62 +31,62 @@ from test_utils import *
 class NetworkTests(unittest.TestCase):
     def setUp(self):
         try:
-            PyCy3.delete_all_networks()
+            py4cytoscape.delete_all_networks()
         except:
             pass
 
     def tearDown(self):
         pass
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_set_current_network(self):
         # Initialization
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         # Verify that flavors of bad titles are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, 'bad title')
-        self.assertRaises(PyCy3.CyError, PyCy3.set_current_network, 500)  # bad SUID
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.set_current_network, 'bad title')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.set_current_network, 500)  # bad SUID
 
         def set_and_check(new_network_name, new_network_suid):
-            res = PyCy3.set_current_network(new_network_name)
+            res = py4cytoscape.set_current_network(new_network_name)
             self.assertSequenceEqual(res, {})
-            self.assertEqual(PyCy3.get_network_suid(), new_network_suid)
-            res = PyCy3.set_current_network()
+            self.assertEqual(py4cytoscape.get_network_suid(), new_network_suid)
+            res = py4cytoscape.set_current_network()
             self.assertSequenceEqual(res, {})
-            self.assertEqual(PyCy3.get_network_suid(), new_network_suid)
+            self.assertEqual(py4cytoscape.get_network_suid(), new_network_suid)
 
         # Assume there are two networks: galFiltered.sif and BINDhuman.sif
-        gal_suid = PyCy3.get_network_suid('galFiltered.sif')
-        yeast_suid = PyCy3.get_network_suid('yeastHighQuality.sif')
+        gal_suid = py4cytoscape.get_network_suid('galFiltered.sif')
+        yeast_suid = py4cytoscape.get_network_suid('yeastHighQuality.sif')
 
         # Verify that different networks can be selected
         set_and_check('yeastHighQuality.sif', yeast_suid)
         set_and_check('galFiltered.sif', gal_suid)
 
     @unittest.skip('test_rename_network: Renaming non-current network needs fixing in Cytoscape')
-    @PyCy3.print_entry_exit
+    @py4cytoscape.print_entry_exit
     def test_rename_network(self):
         # Initialization
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         def rename_and_check(new_title, network_suid, network=None):
-            res = PyCy3.rename_network(new_title, network)
+            res = py4cytoscape.rename_network(new_title, network)
             self.assertEqual(res['network'], network_suid)
             self.assertEqual(res['title'], new_title)
 
-            new_suid = PyCy3.get_network_suid(new_title)
+            new_suid = py4cytoscape.get_network_suid(new_title)
             self.assertEqual(new_suid, network_suid)
 
-        self.assertRaises(PyCy3.CyError, PyCy3.rename_network, 'junk', 'doesnt exist')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.rename_network, 'junk', 'doesnt exist')
 
-        yeast_suid = PyCy3.get_network_suid('yeastHighQuality.sif')
-        gal_suid = PyCy3.get_network_suid('galFiltered.sif')
+        yeast_suid = py4cytoscape.get_network_suid('yeastHighQuality.sif')
+        gal_suid = py4cytoscape.get_network_suid('galFiltered.sif')
 
         # Verify that networks are properly renamed
-        PyCy3.set_current_network('galFiltered.sif')
+        py4cytoscape.set_current_network('galFiltered.sif')
         rename_and_check('newcurrent', gal_suid)
         rename_and_check('newcurrent1', gal_suid, 'newcurrent')
         rename_and_check('newsuid', gal_suid, gal_suid)
@@ -95,11 +95,11 @@ class NetworkTests(unittest.TestCase):
         # non-current network, but Cytoscape fails on this
         rename_and_check('newyeast', yeast_suid, 'yeastHighQuality.sif')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_network_count(self):
         def check(count):
-            res = PyCy3.get_network_count()
+            res = py4cytoscape.get_network_count()
             self.assertIsInstance(res, int)
             self.assertEqual(res, count)
 
@@ -109,60 +109,60 @@ class NetworkTests(unittest.TestCase):
         load_test_session()
         check(1)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_network_suid(self):
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, '')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_suid, '')
 
         # Initialization
         load_test_session()
 
         # Verify that various flavors of bad network titles are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, 'bad title')
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid, 500)  # bad SUID
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_suid, 'bad title')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_suid, 500)  # bad SUID
 
         # Verify that aliases for the same network produce the same SUID
-        res = PyCy3.get_network_suid()
+        res = py4cytoscape.get_network_suid()
         self.assertIsInstance(res, int)
 
-        self.assertEqual(PyCy3.get_network_suid('current'), res)
-        self.assertEqual(PyCy3.get_network_suid('galFiltered.sif'), res)
-        self.assertEqual(PyCy3.get_network_suid(res), res)
+        self.assertEqual(py4cytoscape.get_network_suid('current'), res)
+        self.assertEqual(py4cytoscape.get_network_suid('galFiltered.sif'), res)
+        self.assertEqual(py4cytoscape.get_network_suid(res), res)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_network_name(self):
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_name, '')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_name, '')
 
         # Initialization
         load_test_session()
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_name, 'bad title')
-        self.assertRaises(IndexError, PyCy3.get_network_name, 500)  # bad SUID
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_name, 'bad title')
+        self.assertRaises(IndexError, py4cytoscape.get_network_name, 500)  # bad SUID
 
-        res = PyCy3.get_network_name()
+        res = py4cytoscape.get_network_name()
         self.assertIsInstance(res, str)
 
         # Verify that aliases for the same network produce the same name
-        self.assertEqual(PyCy3.get_network_name('current'), res)
-        self.assertEqual(PyCy3.get_network_name('galFiltered.sif'), res)
-        self.assertEqual(PyCy3.get_network_name(res), res)
+        self.assertEqual(py4cytoscape.get_network_name('current'), res)
+        self.assertEqual(py4cytoscape.get_network_name('galFiltered.sif'), res)
+        self.assertEqual(py4cytoscape.get_network_name(res), res)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_network_list(self):
         # Initialization
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         # Verify that all networks are present (in any order)
-        self.assertSetEqual(set(PyCy3.get_network_list()), set(['yeastHighQuality.sif', 'galFiltered.sif']))
+        self.assertSetEqual(set(py4cytoscape.get_network_list()), set(['yeastHighQuality.sif', 'galFiltered.sif']))
 
         # Verify that when there are no networks, no networks are returned
-        PyCy3.delete_all_networks()
-        self.assertListEqual(PyCy3.get_network_list(), [])
+        py4cytoscape.delete_all_networks()
+        self.assertListEqual(py4cytoscape.get_network_list(), [])
 
-    @PyCy3.skip  # OK to skip this for now because by the time this executes, a Cytoscape memory leak will make Cytoscape show an unreadable message box
-    @PyCy3.print_entry_exit
+    @py4cytoscape.skip  # OK to skip this for now because by the time this executes, a Cytoscape memory leak will make Cytoscape show an unreadable message box
+    @py4cytoscape.print_entry_exit
     def test_export_network(self):
         # Initialization
         load_test_session()
@@ -173,55 +173,55 @@ class NetworkTests(unittest.TestCase):
 
         # For these tests, always answer Cytoscape verification message to allow overwrite
         input('On the following tests, allow Cytoscape to overwrite network')
-        check(PyCy3.export_network())
-        check(PyCy3.export_network(filename='test', network='yeastHighQuality.sif', type='sif'))
+        check(py4cytoscape.export_network())
+        check(py4cytoscape.export_network(filename='test', network='yeastHighQuality.sif', type='sif'))
 
-        self.assertRaises(PyCy3.CyError, PyCy3.export_network, filename='test', network='totallybogus', type='sif')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.export_network, filename='test', network='totallybogus', type='sif')
 
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
         input('On on the following test, DISALLOW network overwrite')
-        self.assertRaises(PyCy3.CyError, PyCy3.export_network)
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.export_network)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_delete_network(self):
         # Initialization
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         # Verify that deleting a network actually deletes it
-        self.assertEqual(PyCy3.delete_network('yeastHighQuality.sif'), '')
-        self.assertListEqual(PyCy3.get_network_list(), ['galFiltered.sif'])
-        self.assertRaises(PyCy3.CyError, PyCy3.delete_network, 'yeastHighQuality.sif')
+        self.assertEqual(py4cytoscape.delete_network('yeastHighQuality.sif'), '')
+        self.assertListEqual(py4cytoscape.get_network_list(), ['galFiltered.sif'])
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.delete_network, 'yeastHighQuality.sif')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_delete_all_networks(self):
         # Initialization
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         # Verify that when all networks are deleted, there are none left
-        self.assertEqual(PyCy3.get_network_count(), 2)
-        self.assertEqual(PyCy3.delete_all_networks(), '')
-        self.assertEqual(PyCy3.get_network_count(), 0)
+        self.assertEqual(py4cytoscape.get_network_count(), 2)
+        self.assertEqual(py4cytoscape.delete_all_networks(), '')
+        self.assertEqual(py4cytoscape.get_network_count(), 0)
 
         # Verify that deleting no networks succeeds
-        self.assertEqual(PyCy3.delete_all_networks(), '')
+        self.assertEqual(py4cytoscape.delete_all_networks(), '')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_first_neighbors(self):
         # Initialization
         load_test_session()
 
         test_select_nodes(['MIG1', 'GAL1'])
-        self.assertSetEqual(set(PyCy3.get_first_neighbors(node_names=None, as_nested_list=False)), set(
+        self.assertSetEqual(set(py4cytoscape.get_first_neighbors(node_names=None, as_nested_list=False)), set(
             ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
              'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
 
         # Verify that the two nested lists are equivalent
-        nested_neighbor_list = PyCy3.get_first_neighbors(node_names=None, as_nested_list=True)
+        nested_neighbor_list = py4cytoscape.get_first_neighbors(node_names=None, as_nested_list=True)
         expected_list = [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C',
                                                                                      ['YLR044C', 'YLR377C', 'YIL162W',
                                                                                       'YBR019C', 'YBR020W', 'YPL248C',
@@ -234,33 +234,33 @@ class NetworkTests(unittest.TestCase):
 
         # Verify that when no nodes are passed in, the selected nodes are used
         test_select_nodes([])
-        self.assertIsNone(PyCy3.get_first_neighbors())
+        self.assertIsNone(py4cytoscape.get_first_neighbors())
 
         # Verify that regardless of selection, when a node list is passed in, it's used
-        self.assertSetEqual(set(PyCy3.get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(
+        self.assertSetEqual(set(py4cytoscape.get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(
             ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
              'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
-        self.assertIsNone(PyCy3.get_first_neighbors([], as_nested_list=False))
+        self.assertIsNone(py4cytoscape.get_first_neighbors([], as_nested_list=False))
 
         # TODO: test case of node_names being a single (str) node
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_node_count(self):
         # Initialization
         load_test_session()
 
         # Verify that the network reports expected node count
-        self.assertEqual(PyCy3.get_node_count(), 330)
+        self.assertEqual(py4cytoscape.get_node_count(), 330)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_all_nodes(self):
         # Initialization
         load_test_session()
 
         # Verif that the network reports expected nodes
-        self.assertSetEqual(set(PyCy3.get_all_nodes()), set(
+        self.assertSetEqual(set(py4cytoscape.get_all_nodes()), set(
             ['YDL194W', 'YDR277C', 'YBR043C', 'YPR145W', 'YER054C', 'YBR045C', 'YBL079W', 'YLR345W', 'YIL052C',
              'YER056CA', 'YNL069C', 'YDL075W', 'YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W', 'YGL202W',
              'YLR197W', 'YDL088C', 'YOR215C', 'YPR010C', 'YMR117C', 'YML114C', 'YNL036W', 'YOR212W', 'YDR070C',
@@ -299,38 +299,38 @@ class NetworkTests(unittest.TestCase):
              'YGL044C', 'YOL123W', 'YAL003W', 'YFL017C', 'YDR429C', 'YMR146C', 'YLR293C', 'YBR118W', 'YPR080W',
              'YLR249W', 'YOR204W', 'YGL097W', 'YGR218W', 'YGL122C', 'YKR026C']))
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_add_cy_nodes(self):
         # Initialization
         load_test_session()
-        start_node_count = PyCy3.get_node_count()
+        start_node_count = py4cytoscape.get_node_count()
 
         # Verify that two nodes are actually added
-        res12 = PyCy3.add_cy_nodes(['newnode1', 'newnode2'], skip_duplicate_names=False)
+        res12 = py4cytoscape.add_cy_nodes(['newnode1', 'newnode2'], skip_duplicate_names=False)
         self.assertEqual(len(res12), 2)
         self.assertEqual(res12[0]['name'], 'newnode1')
         self.assertEqual(res12[1]['name'], 'newnode2')
-        self.assertEqual(PyCy3.get_node_count(), start_node_count + 2)
+        self.assertEqual(py4cytoscape.get_node_count(), start_node_count + 2)
 
         # Verify that adding a duplicate node is ignored, but adding a new node works
-        res23 = PyCy3.add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
+        res23 = py4cytoscape.add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
         self.assertEqual(len(res23), 1)
         self.assertEqual(res23[0]['name'], 'newnode3')
-        self.assertEqual(PyCy3.get_node_count(), start_node_count + 3)
+        self.assertEqual(py4cytoscape.get_node_count(), start_node_count + 3)
 
         # Verify that adding only duplicate nodes is ignored, too
-        res23x = PyCy3.add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
+        res23x = py4cytoscape.add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
         self.assertEqual(len(res23x), 0)
-        self.assertEqual(PyCy3.get_node_count(), start_node_count + 3)
+        self.assertEqual(py4cytoscape.get_node_count(), start_node_count + 3)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_add_cy_edges(self):
         # Initialization
         load_test_session()
-        start_edge_count = PyCy3.get_edge_count()
-        df = PyCy3.get_table_columns('node', ['name'], 'default')
+        start_edge_count = py4cytoscape.get_edge_count()
+        df = py4cytoscape.get_table_columns('node', ['name'], 'default')
 
         def check_edge(edge, source_name, target_name):
             self.assertIsInstance(edge, dict)
@@ -341,40 +341,40 @@ class NetworkTests(unittest.TestCase):
             self.assertIsNotNone(edge['SUID'])
 
         # Verify that a single edge is added
-        res = PyCy3.add_cy_edges(['YLR075W', 'YKL028W'])
+        res = py4cytoscape.add_cy_edges(['YLR075W', 'YKL028W'])
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         check_edge(res[0], 'YLR075W', 'YKL028W')
-        self.assertEqual(PyCy3.get_edge_count(), start_edge_count + 1)
+        self.assertEqual(py4cytoscape.get_edge_count(), start_edge_count + 1)
 
         # Verify that three more edges are added
-        res = PyCy3.add_cy_edges([['YKL028W', 'YJR066W'], ['YJR066W', 'YLR452C'], ['YGR046W', 'YLR452C']])
+        res = py4cytoscape.add_cy_edges([['YKL028W', 'YJR066W'], ['YJR066W', 'YLR452C'], ['YGR046W', 'YLR452C']])
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 3)
         check_edge(res[0], 'YKL028W', 'YJR066W')
         check_edge(res[1], 'YJR066W', 'YLR452C')
         check_edge(res[2], 'YGR046W', 'YLR452C')
-        self.assertEqual(PyCy3.get_edge_count(), start_edge_count + 4)
+        self.assertEqual(py4cytoscape.get_edge_count(), start_edge_count + 4)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_edge_count(self):
         # Initialization
         load_test_session()
 
         # Verify the expected edge count
-        self.assertEqual(PyCy3.get_edge_count(), 359)
+        self.assertEqual(py4cytoscape.get_edge_count(), 359)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_edge_info(self):
         # Initialization
         load_test_session()
 
         def check_edge_info(edge_info, source_name, target_name, edge_name, betweenness):
-            source_suid = PyCy3.node_name_to_node_suid(source_name)[0]
-            target_suid = PyCy3.node_name_to_node_suid(target_name)[0]
-            edge_suid = PyCy3.edge_name_to_edge_suid(edge_name)[0]
+            source_suid = py4cytoscape.node_name_to_node_suid(source_name)[0]
+            target_suid = py4cytoscape.node_name_to_node_suid(target_name)[0]
+            edge_suid = py4cytoscape.edge_name_to_edge_suid(edge_name)[0]
             self.assertIsInstance(edge_info, dict)
             self.assertEqual(edge_info['source'], source_suid)
             self.assertEqual(edge_info['target'], target_suid)
@@ -387,68 +387,68 @@ class NetworkTests(unittest.TestCase):
             self.assertEqual(edge_info['EdgeBetweenness'], betweenness)
 
         # Verify that a string containing an edge returns valid edge information
-        res = PyCy3.get_edge_info('YDR277C (pp) YDL194W')
+        res = py4cytoscape.get_edge_info('YDR277C (pp) YDL194W')
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
 
         # Verify that a list containing an edge returns valid edge information
-        res = PyCy3.get_edge_info(['YDR277C (pp) YDL194W'])
+        res = py4cytoscape.get_edge_info(['YDR277C (pp) YDL194W'])
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
 
         # Verify that a list containing multiple edges returns valid edge information
-        res = PyCy3.get_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'])
+        res = py4cytoscape.get_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'])
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 2)
         check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
         check_edge_info(res[1], 'YDR277C', 'YJR022W', 'YDR277C (pp) YJR022W', 988.0)
 
         # Verify the error when a bad edge is requested
-        self.assertRaises(PyCy3.CyError, PyCy3.get_edge_info, 'junk')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_edge_info, 'junk')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_get_all_edges(self):
         # Initialization
         load_test_session()
 
         # Verify that the expected number of edges is returned
-        res = PyCy3.get_all_edges()
+        res = py4cytoscape.get_all_edges()
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 359)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_clone_network(self):
         # Initialization
         load_test_session()
-        start_suid = PyCy3.get_network_suid()
+        start_suid = py4cytoscape.get_network_suid()
 
         # Verify that a network clone is plausible
-        self._check_cloned_network(PyCy3.clone_network(), start_suid, PyCy3.get_network_name(start_suid),
-                                   PyCy3.get_node_count(start_suid), PyCy3.get_edge_count(start_suid))
+        self._check_cloned_network(py4cytoscape.clone_network(), start_suid, py4cytoscape.get_network_name(start_suid),
+                                   py4cytoscape.get_node_count(start_suid), py4cytoscape.get_edge_count(start_suid))
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_create_subnet(self):
         # Initialization
         load_test_session()
-        base_suid = PyCy3.get_network_suid()
-        base_name = PyCy3.get_network_name(base_suid)
+        base_suid = py4cytoscape.get_network_suid()
+        base_name = py4cytoscape.get_network_name(base_suid)
 
         # Verify that a creating a subnet containing all nodes produces a plausible copy
-        self._check_cloned_network(PyCy3.create_subnetwork(nodes='all', network=base_suid), base_suid, base_name,
-                                   PyCy3.get_node_count(base_suid), PyCy3.get_edge_count(base_suid))
+        self._check_cloned_network(py4cytoscape.create_subnetwork(nodes='all', network=base_suid), base_suid, base_name,
+                                   py4cytoscape.get_node_count(base_suid), py4cytoscape.get_edge_count(base_suid))
 
         # Verify that creating a subset subnet produces a plausible copy
         self._check_cloned_network(
-            PyCy3.create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON',
-                                    subnetwork_name=base_name + 'xx', network=base_suid), base_suid, base_name, 4, 3)
+            py4cytoscape.create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON',
+                                           subnetwork_name=base_name + 'xx', network=base_suid), base_suid, base_name, 4, 3)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_create_network_from_data_frames(self):
         node_data = {'id': ["node 0", "node 1", "node 2", "node 3"],
                      'group': ["A", "A", "B", "B"],
@@ -461,102 +461,102 @@ class NetworkTests(unittest.TestCase):
         edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
 
         # Verify that a network can be created containing dataframe encoding both nodes and edges
-        res = PyCy3.create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
+        res = py4cytoscape.create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
         suid_1 = res['networkSUID']
-        self.assertEqual(PyCy3.get_network_name(suid_1), 'From node & edge dataframe')
-        self.assertEqual(PyCy3.get_node_count(suid_1), 4)
-        self.assertEqual(PyCy3.get_edge_count(suid_1), 4)
-        self.assertSetEqual(set(PyCy3.get_all_nodes(suid_1)), set(['node 0', 'node 1', 'node 2', 'node 3']))
-        self.assertSetEqual(set(PyCy3.get_all_edges(suid_1)), set(
+        self.assertEqual(py4cytoscape.get_network_name(suid_1), 'From node & edge dataframe')
+        self.assertEqual(py4cytoscape.get_node_count(suid_1), 4)
+        self.assertEqual(py4cytoscape.get_edge_count(suid_1), 4)
+        self.assertSetEqual(set(py4cytoscape.get_all_nodes(suid_1)), set(['node 0', 'node 1', 'node 2', 'node 3']))
+        self.assertSetEqual(set(py4cytoscape.get_all_edges(suid_1)), set(
             ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3',
              'node 2 (interacts) node 3']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_1)),
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('node', network=suid_1)),
                             set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_1)), set(
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('edge', network=suid_1)), set(
             ['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name',
              'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_1),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('node', network=suid_1),
                              {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer',
                               'group': 'String', 'name': 'String', 'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_1),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('edge', network=suid_1),
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String',
                               'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double',
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a network can be created from a dataframe containing just edges
-        res = PyCy3.create_network_from_data_frames(edges=edges, collection='Another collection',
-                                                    title='From just edge dataframe')
+        res = py4cytoscape.create_network_from_data_frames(edges=edges, collection='Another collection',
+                                                           title='From just edge dataframe')
         suid_2 = res['networkSUID']
-        self.assertEqual(PyCy3.get_network_name(suid_2), 'From just edge dataframe')
-        self.assertEqual(PyCy3.get_node_count(suid_2), 4)
-        self.assertEqual(PyCy3.get_edge_count(suid_2), 4)
-        self.assertSetEqual(set(PyCy3.get_all_nodes(suid_2)), set(['node 0', 'node 1', 'node 2', 'node 3']))
-        self.assertSetEqual(set(PyCy3.get_all_edges(suid_2)), set(
+        self.assertEqual(py4cytoscape.get_network_name(suid_2), 'From just edge dataframe')
+        self.assertEqual(py4cytoscape.get_node_count(suid_2), 4)
+        self.assertEqual(py4cytoscape.get_edge_count(suid_2), 4)
+        self.assertSetEqual(set(py4cytoscape.get_all_nodes(suid_2)), set(['node 0', 'node 1', 'node 2', 'node 3']))
+        self.assertSetEqual(set(py4cytoscape.get_all_edges(suid_2)), set(
             ['node 0 (inhibits) node 1', 'node 0 (interacts) node 2', 'node 0 (activates) node 3',
              'node 2 (interacts) node 3']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_2)),
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('node', network=suid_2)),
                             set(['SUID', 'shared name', 'id', 'name', 'selected']))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_2)), set(
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('edge', network=suid_2)), set(
             ['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name',
              'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_2),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('node', network=suid_2),
                              {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'name': 'String',
                               'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_2),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('edge', network=suid_2),
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String',
                               'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double',
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a disconnected network can be created from a dataframe containing just nodes
-        res = PyCy3.create_network_from_data_frames(nodes=nodes, collection='A third collection',
-                                                    title='From just nodes dataframe')
+        res = py4cytoscape.create_network_from_data_frames(nodes=nodes, collection='A third collection',
+                                                           title='From just nodes dataframe')
         suid_3 = res['networkSUID']
-        self.assertEqual(PyCy3.get_network_name(suid_3), 'From just nodes dataframe')
-        self.assertEqual(PyCy3.get_node_count(suid_3), 4)
-        self.assertEqual(PyCy3.get_edge_count(suid_3), 0)
-        self.assertSetEqual(set(PyCy3.get_all_nodes(suid_3)), set(['node 0', 'node 1', 'node 2', 'node 3']))
-        self.assertIsNone(PyCy3.get_all_edges(suid_3))
-        self.assertSetEqual(set(PyCy3.get_table_column_names('node', network=suid_3)),
+        self.assertEqual(py4cytoscape.get_network_name(suid_3), 'From just nodes dataframe')
+        self.assertEqual(py4cytoscape.get_node_count(suid_3), 4)
+        self.assertEqual(py4cytoscape.get_edge_count(suid_3), 0)
+        self.assertSetEqual(set(py4cytoscape.get_all_nodes(suid_3)), set(['node 0', 'node 1', 'node 2', 'node 3']))
+        self.assertIsNone(py4cytoscape.get_all_edges(suid_3))
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('node', network=suid_3)),
                             set(['SUID', 'shared name', 'id', 'score', 'group', 'name', 'selected']))
         # TODO: Verify that this list of edge columns should be created ... why not source, target?
-        self.assertSetEqual(set(PyCy3.get_table_column_names('edge', network=suid_3)),
+        self.assertSetEqual(set(py4cytoscape.get_table_column_names('edge', network=suid_3)),
                             set(['SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction']))
-        self.assertDictEqual(PyCy3.get_table_column_types('node', network=suid_3),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('node', network=suid_3),
                              {'SUID': 'Long', 'shared name': 'String', 'id': 'String', 'score': 'Integer',
                               'group': 'String', 'name': 'String', 'selected': 'Boolean'})
-        self.assertDictEqual(PyCy3.get_table_column_types('edge', network=suid_3),
+        self.assertDictEqual(py4cytoscape.get_table_column_types('edge', network=suid_3),
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String',
                               'selected': 'Boolean', 'interaction': 'String'})
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_import_network_from_file(self):
 
         # Verify that test network loads from test data directory
-        res = PyCy3.import_network_from_file('data/galFiltered.sif')
+        res = py4cytoscape.import_network_from_file('data/galFiltered.sif')
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)
         self.assertEqual(len(res['views']), 1)
 
         # Verify that default network loads
-        res = PyCy3.import_network_from_file()
+        res = py4cytoscape.import_network_from_file()
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)
         self.assertEqual(len(res['views']), 1)
 
-        self.assertRaises(PyCy3.CyError, PyCy3.import_network_from_file, 'bogus')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.import_network_from_file, 'bogus')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_create_igraph_from_network(self):
         # Initialization
         load_test_session()
-        all_nodes = PyCy3.get_all_nodes()
-        all_edges = PyCy3.get_all_edges()
+        all_nodes = py4cytoscape.get_all_nodes()
+        all_edges = py4cytoscape.get_all_edges()
 
-        i = PyCy3.create_igraph_from_network()
+        i = py4cytoscape.create_igraph_from_network()
 
         # verify that all nodes are present
         self.assertEqual(len(i.vs), len(all_nodes))
@@ -567,8 +567,8 @@ class NetworkTests(unittest.TestCase):
         i_edges = [[x['source'], x['target']] for x in i.es]
         self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges for x in all_edges])
 
-    #   @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #   @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_create_network_from_igraph(self):
         # Initialization
         load_test_session()
@@ -578,12 +578,12 @@ class NetworkTests(unittest.TestCase):
         #        g = ig.Graph()
         #        create_network_from_igraph(g)
 
-        cur_igraph = PyCy3.create_igraph_from_network()
+        cur_igraph = py4cytoscape.create_igraph_from_network()
 
-        new_SUID = PyCy3.create_network_from_igraph(cur_igraph)
-        new_igraph = PyCy3.create_igraph_from_network(new_SUID)
+        new_SUID = py4cytoscape.create_network_from_igraph(cur_igraph)
+        new_igraph = py4cytoscape.create_igraph_from_network(new_SUID)
 
-        self.assertEqual(PyCy3.get_network_name(new_SUID), 'From igraph')
+        self.assertEqual(py4cytoscape.get_network_name(new_SUID), 'From igraph')
         self.assertTrue(cur_igraph.isomorphic(new_igraph))
 
         # Verify that all nodes in the new network are present along with their attributes. This doesn't test
@@ -596,16 +596,16 @@ class NetworkTests(unittest.TestCase):
         # added by ``create_network_from_igraph()``.
         self._check_igraph_attributes(cur_igraph.es, new_igraph.es)
 
-    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_choke_memory(self):
         # This is to show whether a memory leak occurs ... not part of the API tests
         trial = 1
         while True:
             start = time.clock()
-            PyCy3.close_session(False)
+            py4cytoscape.close_session(False)
             closed_time = time.clock()
-            PyCy3.open_session()
+            py4cytoscape.open_session()
             print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (
             trial, (closed_time - start), (time.clock() - closed_time)))
             trial += 1
@@ -628,9 +628,9 @@ class NetworkTests(unittest.TestCase):
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
         self.assertIsInstance(subnet_suid, int)
         self.assertNotEqual(base_suid, subnet_suid)
-        self.assertEqual(PyCy3.get_node_count(subnet_suid), base_nodes)
-        self.assertEqual(PyCy3.get_edge_count(subnet_suid), base_edges)
-        self.assertIn(base_name, PyCy3.get_network_name(subnet_suid))
+        self.assertEqual(py4cytoscape.get_node_count(subnet_suid), base_nodes)
+        self.assertEqual(py4cytoscape.get_edge_count(subnet_suid), base_edges)
+        self.assertIn(base_name, py4cytoscape.get_network_name(subnet_suid))
 
 
 if __name__ == '__main__':

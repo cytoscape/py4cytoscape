@@ -30,7 +30,7 @@ import logging.config
 import functools
 import os
 
-from .pycy3_logger_settings import _FILE_LOG_DIR, _FILE_LOG_LEVEL, _FILE_LOG_NAME, _DISABLE_DEBUG_HTTP, \
+from .py4cytoscape_logger_settings import _FILE_LOG_DIR, _FILE_LOG_LEVEL, _FILE_LOG_NAME, _DISABLE_DEBUG_HTTP, \
     _CONSOLE_LOG_LEVEL
 
 _log_base = os.path.join(_FILE_LOG_DIR, _FILE_LOG_NAME)
@@ -79,7 +79,7 @@ _logging_config = {
 logging.config.dictConfig(_logging_config)
 
 # Create the logger this library will use
-logger = logging.getLogger('PyCy3')
+logger = logging.getLogger('py4cytoscape')
 _logger_debug = 'DEBUG' in [_FILE_LOG_LEVEL, _CONSOLE_LOG_LEVEL]
 
 

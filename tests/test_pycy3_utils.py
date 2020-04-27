@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" Test functions in pycy3_utils.py.
+""" Test functions in py4cytoscape_utils.py.
 
 License:
     Copyright 2020 The Cytoscape Consortium
@@ -22,33 +22,33 @@ License:
 import unittest
 from test_utils import *
 
-from PyCy3.pycy3_utils import DEFAULT_BASE_URL, build_url, node_suid_to_node_name, node_name_to_node_suid, \
+from py4cytoscape.py4cytoscape_utils import DEFAULT_BASE_URL, build_url, node_suid_to_node_name, node_name_to_node_suid, \
     edge_name_to_edge_suid
-from PyCy3.decorators import *
+from py4cytoscape.decorators import *
 
 
 class PyCy3Tests(unittest.TestCase):
 
     def setUp(self):
         try:
-            PyCy3.delete_all_networks()
+            py4cytoscape.delete_all_networks()
         except:
             pass
 
     def tearDown(self):
         pass
 
-    @PyCy3.print_entry_exit
+    @py4cytoscape.print_entry_exit
     def test_build_url(self):
         self.assertEqual(build_url(DEFAULT_BASE_URL), DEFAULT_BASE_URL)
         self.assertEqual(build_url(DEFAULT_BASE_URL, 'command test'), DEFAULT_BASE_URL + '/command%20test')
 
-    @PyCy3.print_entry_exit
+    @py4cytoscape.print_entry_exit
     def test_node_suid_to_node_name(self):
         # Initialization
         load_test_session()
 
-        suid_name_map = PyCy3.get_table_columns().loc[:, 'name']
+        suid_name_map = py4cytoscape.get_table_columns().loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
         node_names = ['YBR043C', 'YPR145W', 'YDR277C']
@@ -60,17 +60,17 @@ class PyCy3Tests(unittest.TestCase):
 
         self.assertEqual(node_suid_to_node_name(None), None)
         self.assertEqual(node_suid_to_node_name(node_names), node_names)
-        self.assertRaises(PyCy3.CyError, node_suid_to_node_name, ['YBR043C', 'junk', 'YDR277C'])
-        self.assertRaises(PyCy3.CyError, node_suid_to_node_name, suids_with_name)
+        self.assertRaises(py4cytoscape.CyError, node_suid_to_node_name, ['YBR043C', 'junk', 'YDR277C'])
+        self.assertRaises(py4cytoscape.CyError, node_suid_to_node_name, suids_with_name)
         self.assertEqual(node_suid_to_node_name(suids), node_names)
-        self.assertRaises(PyCy3.CyError, node_suid_to_node_name, suids_with_none)
+        self.assertRaises(py4cytoscape.CyError, node_suid_to_node_name, suids_with_none)
 
-    @PyCy3.print_entry_exit
+    @py4cytoscape.print_entry_exit
     def test_node_name_to_node_suid(self):
         # Initialization
         load_test_session()
 
-        suid_name_map = PyCy3.get_table_columns(table='node').loc[:, 'name']
+        suid_name_map = py4cytoscape.get_table_columns(table='node').loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
         node_names = ['YBR043C', 'YPR145W', 'YDR277C']
@@ -82,24 +82,24 @@ class PyCy3Tests(unittest.TestCase):
 
         self.assertEqual(node_name_to_node_suid(None), None)
         self.assertEqual(node_name_to_node_suid(node_names), suids)
-        self.assertRaises(PyCy3.CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C'])
-        self.assertRaises(PyCy3.CyError, node_name_to_node_suid, suids_with_name)
+        self.assertRaises(py4cytoscape.CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C'])
+        self.assertRaises(py4cytoscape.CyError, node_name_to_node_suid, suids_with_name)
         self.assertEqual(node_name_to_node_suid(suids), suids)
-        self.assertRaises(PyCy3.CyError, node_name_to_node_suid, names_with_none)
+        self.assertRaises(py4cytoscape.CyError, node_name_to_node_suid, names_with_none)
 
-        suid_dup = PyCy3.add_cy_nodes(['YGR009C'], skip_duplicate_names=False)  # SUID 188
+        suid_dup = py4cytoscape.add_cy_nodes(['YGR009C'], skip_duplicate_names=False)  # SUID 188
         res = node_name_to_node_suid(['YGR009C'])
         self.assertIsInstance(res[0], list)
         self.assertEqual(len(res), 1)
         self.assertGreaterEqual(len(res[0]), 2)
         self.assertIn(suid_dup[0]['SUID'], res[0])
 
-    @PyCy3.print_entry_exit
+    @py4cytoscape.print_entry_exit
     def test_edge_name_to_edge_suid(self):
         # Initialization
         load_test_session()
 
-        suid_name_map = PyCy3.get_table_columns(table='edge').loc[:, 'name']
+        suid_name_map = py4cytoscape.get_table_columns(table='edge').loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
         edge_names = ['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W', 'YPR145W (pp) YMR117C']
@@ -111,11 +111,11 @@ class PyCy3Tests(unittest.TestCase):
 
         self.assertEqual(edge_name_to_edge_suid(None), None)
         self.assertEqual(edge_name_to_edge_suid(edge_names), suids)
-        self.assertRaises(PyCy3.CyError, edge_name_to_edge_suid,
+        self.assertRaises(py4cytoscape.CyError, edge_name_to_edge_suid,
                           ['YDR277C (pp) YDL194W', 'junk', 'YPR145W (pp) YMR117C'])
-        self.assertRaises(PyCy3.CyError, edge_name_to_edge_suid, suids_with_name)
+        self.assertRaises(py4cytoscape.CyError, edge_name_to_edge_suid, suids_with_name)
         self.assertEqual(edge_name_to_edge_suid(suids), suids)
-        self.assertRaises(PyCy3.CyError, edge_name_to_edge_suid, names_with_none)
+        self.assertRaises(py4cytoscape.CyError, edge_name_to_edge_suid, names_with_none)
 
 
 if __name__ == '__main__':

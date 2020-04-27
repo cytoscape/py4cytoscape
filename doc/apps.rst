@@ -1,7 +1,7 @@
-PyCy3.apps module
-=================
+py4cytoscape.apps module
+========================
 
-.. automodule:: PyCy3.apps
+.. automodule:: py4cytoscape.apps
     :members:
     :undoc-members:
     :show-inheritance:

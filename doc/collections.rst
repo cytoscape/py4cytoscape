@@ -1,7 +1,7 @@
-PyCy3.collections module
-========================
+py4cytoscape.collections module
+===============================
 
-.. automodule:: PyCy3.collections
+.. automodule:: py4cytoscape.collections
     :members:
     :undoc-members:
     :show-inheritance:

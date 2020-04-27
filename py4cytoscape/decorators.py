@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Decorators useful for composing aspects onto PyCy3 functions.
+"""Decorators useful for composing aspects onto py4cytoscape functions.
 
 License:
     Copyright 2020 The Cytoscape Consortium

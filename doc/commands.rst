@@ -1,7 +1,7 @@
-PyCy3.commands module
-=====================
+py4cytoscape.commands module
+============================
 
-.. automodule:: PyCy3.commands
+.. automodule:: py4cytoscape.commands
     :members:
     :undoc-members:
     :show-inheritance:

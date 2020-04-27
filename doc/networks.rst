@@ -1,7 +1,7 @@
-PyCy3.networks module
-=====================
+py4cytoscape.networks module
+============================
 
-.. automodule:: PyCy3.networks
+.. automodule:: py4cytoscape.networks
     :members:
     :undoc-members:
     :show-inheritance:

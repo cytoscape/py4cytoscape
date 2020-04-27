@@ -28,8 +28,8 @@ from . import networks
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -39,7 +39,7 @@ def get_collection_list(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of collection names, one for each collection
@@ -69,7 +69,7 @@ def get_collection_suid(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Network name or SUID of a network in the collection
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         int: the SUID of the collection containing the network
@@ -101,7 +101,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
         collection_suid (SUID or None): SUID of a collection (or None for "current" collection)
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: the name of the collection associated with SUID
@@ -129,7 +129,7 @@ def get_collection_networks(collection_suid=None, base_url=DEFAULT_BASE_URL):
         collection_suid (SUID or None): SUID of a collection (or None for "current" collection)
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of SUIDs for networks within the collection

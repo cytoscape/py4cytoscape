@@ -1,18 +1,18 @@
-PyCy3 Internal Modules
-======================
+py4cytoscape Internal Modules
+=============================
 
-PyCy3.decorators module
------------------------
+py4cytoscape.decorators module
+------------------------------
 
-.. automodule:: PyCy3.decorators
+.. automodule:: py4cytoscape.decorators
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyCy3.pycy3\_utils module
--------------------------
+py4cytoscape.py4cytoscape\_utils module
+--------------------------
 
-.. automodule:: PyCy3.pycy3_utils
+.. automodule:: py4cytoscape.py4cytoscape_utils
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,7 +1,7 @@
-PyCy3.network_views module
-==========================
+py4cytoscape.network_views module
+=================================
 
-.. automodule:: PyCy3.network_views
+.. automodule:: py4cytoscape.network_views
     :members:
     :undoc-members:
     :show-inheritance:

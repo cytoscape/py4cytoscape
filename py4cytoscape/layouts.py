@@ -31,8 +31,8 @@ from . import networks
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 # ==============================================================================
@@ -49,7 +49,7 @@ def bundle_edges(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of the network; default is "current" network.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'message': 'Edge bundling success.'}
@@ -77,7 +77,7 @@ def clear_edge_bends(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of the network; default is "current" network.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'message': 'Clear all edge bends success.'}
@@ -109,7 +109,7 @@ def layout_network(layout_name=None, network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of the network; default is "current" network.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} empty
@@ -159,7 +159,7 @@ def layout_copycat(source_network, target_network, source_column='name', target_
             to a node in the source network will be selected in the target network; default is True
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'mappedNodeCount': 330, 'unmappedNodeCount': 0} containing count of nodes coordinates modified
@@ -197,7 +197,7 @@ def get_layout_names(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: a list of layout names as strings
@@ -225,7 +225,7 @@ def get_layout_name_mapping(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {gui-layout-name: layout_name, ...}
@@ -258,7 +258,7 @@ def get_layout_property_names(layout_name, base_url=DEFAULT_BASE_URL):
         layout_name (str): Name of the layout
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: strings naming layout parameters
@@ -286,7 +286,7 @@ def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_U
         property_name (str): Name of the property
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: strings naming layout parameters
@@ -315,7 +315,7 @@ def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_
         property_name (str): Name of the property
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: strings naming layout parameters
@@ -350,7 +350,7 @@ def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_UR
         properties_dict (dict): List of one or more ``property=value`` pairs
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: ''

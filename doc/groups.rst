@@ -1,7 +1,7 @@
-PyCy3.groups module
-====================
+py4cytoscape.groups module
+==========================
 
-.. automodule:: PyCy3.groups
+.. automodule:: py4cytoscape.groups
     :members:
     :undoc-members:
     :show-inheritance:

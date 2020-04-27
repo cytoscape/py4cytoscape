@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+py4cytoscape package
+====================
 
-"""Error classes for PyCy3.
+.... Text that describes the py4cytoscape package ...
 
 License:
     Copyright 2020 The Cytoscape Consortium
@@ -17,7 +18,37 @@ License:
     WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
     OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
     OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-"""
 
-class CyError(Exception):
-    pass
+Getting Started with py4cytoscape
+---------------------------------
+This section contains hints to help us authors in the editing process. Please skip this section for now.
+
+Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
+Look here for a general discussion of directives: https://docutils.sourceforge.io/docs/ref/rst/directives.html
+
+
+.. code-block:: python
+
+   def some_function():
+     print("ho")
+
+.. warning::
+
+  This is a warning
+
+.. note::
+
+  This is a note
+
+.. versionchanged:: 1.1
+|  This changed.
+|  That changed.
+|  More changed.
+
+py4cytoscape module
+===================
+
+.. automodule:: py4cytoscape
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('./..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'PyCy3'
+project = 'py4cytoscape'
 copyright = '2020, The Cytoscape Consortium'
 author = 'Barry Demchak'
 
@@ -122,7 +122,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PyCy3doc'
+htmlhelp_basename = 'py4cytoscapedoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -149,7 +149,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PyCy3.tex', 'PyCy3 Documentation',
+    (master_doc, 'py4cytoscape.tex', 'py4cytoscape Documentation',
      'The Cytoscape Consortium', 'manual'),
 ]
 
@@ -159,7 +159,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pycy3', 'PyCy3 Documentation',
+    (master_doc, 'py4cytoscape', 'py4cytoscape Documentation',
      [author], 1)
 ]
 
@@ -170,8 +170,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PyCy3', 'PyCy3 Documentation',
-     author, 'PyCy3', 'Python interface to Cytoscape CyREST',
+    (master_doc, 'py4cytoscape', 'py4cytoscape Documentation',
+     author, 'py4cytoscape', 'Python interface to Cytoscape CyREST',
      'Miscellaneous'),
 ]
 

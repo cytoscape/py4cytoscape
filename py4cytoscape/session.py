@@ -27,8 +27,8 @@ import os
 from . import commands
 
 # Internal module convenience imports
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 def __init__(self):
@@ -48,7 +48,7 @@ def close_session(save_before_closing, filename=None, base_url=DEFAULT_BASE_URL)
             then the path and name of the session file to save should be provided.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} empty
@@ -81,7 +81,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
         file_location (str): File path or URL (with 'http' or 'https' prefix). Default is a sample session file.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} empty
@@ -126,7 +126,7 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
             saved session file.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} empty

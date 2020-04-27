@@ -1,7 +1,7 @@
-PyCy3.filters module
-====================
+py4cytoscape.filters module
+===========================
 
-.. automodule:: PyCy3.filters
+.. automodule:: py4cytoscape.filters
     :members:
     :undoc-members:
     :show-inheritance:

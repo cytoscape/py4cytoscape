@@ -1,7 +1,7 @@
-PyCy3.session module
-====================
+py4cytoscape.session module
+===========================
 
-.. automodule:: PyCy3.session
+.. automodule:: py4cytoscape.session
     :members:
     :undoc-members:
     :show-inheritance:

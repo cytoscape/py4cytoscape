@@ -34,8 +34,8 @@ from . import network_selection
 
 # External library imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -49,7 +49,7 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
         network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -111,7 +111,7 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
         network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -196,7 +196,7 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -241,7 +241,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -291,7 +291,7 @@ def get_filter_list(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: returns list of available filter names
@@ -315,7 +315,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
         filename (str): Full path or path relavtive to current working directory, in addition to the name of the file. Default is "filters.json".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}
@@ -353,7 +353,7 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
         filename (str): Path and name of the filters file to load.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}

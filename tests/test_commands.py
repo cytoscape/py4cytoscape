@@ -29,68 +29,68 @@ from test_utils import *
 class CommandsTests(unittest.TestCase):
     def setUp(self):
         try:
-            PyCy3.delete_all_networks()
+            py4cytoscape.delete_all_networks()
         except:
             pass
 
     def tearDown(self):
         pass
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_cyrest_api(self):
-        self.assertTrue(PyCy3.cyrest_api())
+        self.assertTrue(py4cytoscape.cyrest_api())
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_cyrest_delete(self):
         # Initialization
         load_test_session()
 
         # Verify that deleting a view returns a non-JSON result
-        self.assertEqual(len(PyCy3.get_network_views()), 1)
-        res = PyCy3.cyrest_delete('networks/' + str(PyCy3.get_network_suid()) + '/views', require_json=False)
+        self.assertEqual(len(py4cytoscape.get_network_views()), 1)
+        res = py4cytoscape.cyrest_delete('networks/' + str(py4cytoscape.get_network_suid()) + '/views', require_json=False)
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_views)  # Behavior when there are no views
-        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session',
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_views)  # Behavior when there are no views
+        self.assertRaises(RequestException, py4cytoscape.cyrest_delete, 'session',
                           base_url='http://totallybogus')  # test non-existent URL
-        self.assertRaises(RequestException, PyCy3.cyrest_delete, 'session',
+        self.assertRaises(RequestException, py4cytoscape.cyrest_delete, 'session',
                           base_url='http://yahoo.com')  # test real URL that doesn't have API
         load_test_session()
-        self.assertRaises(ValueError, PyCy3.cyrest_delete, 'networks/' + str(PyCy3.get_network_suid()) + '/views',
+        self.assertRaises(ValueError, py4cytoscape.cyrest_delete, 'networks/' + str(py4cytoscape.get_network_suid()) + '/views',
                           require_json=True)
 
         # Verify that getting rid of the session returns a valid JSON result
-        res = PyCy3.cyrest_delete('session')
+        res = py4cytoscape.cyrest_delete('session')
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'message': 'New session created.'})
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_cyrest_get(self):
 
         # Verify that starting a garbage collection returns a non-JSON result
-        res = PyCy3.cyrest_get('gc', require_json=False)
+        res = py4cytoscape.cyrest_get('gc', require_json=False)
         self.assertIsInstance(res, str)
         self.assertEqual(res, '')
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc',
+        self.assertRaises(RequestException, py4cytoscape.cyrest_get, 'gc',
                           base_url='http://totallybogus')  # test non-existent URL
-        self.assertRaises(RequestException, PyCy3.cyrest_get, 'gc',
+        self.assertRaises(RequestException, py4cytoscape.cyrest_get, 'gc',
                           base_url='http://yahoo.com')  # test real URL that doesn't have API
-        self.assertRaises(ValueError, PyCy3.cyrest_get, 'gc', require_json=True)
+        self.assertRaises(ValueError, py4cytoscape.cyrest_get, 'gc', require_json=True)
 
         # Verify that getting the CyREST version returns a valid JSON result
-        res = PyCy3.cyrest_get('version')
+        res = py4cytoscape.cyrest_get('version')
         self.assertIsInstance(res, dict)
         self.assertIsInstance(res['apiVersion'], str)
         self.assertIsInstance(res['cytoscapeVersion'], str)
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_cyrest_post(self):
         # Initialization
         load_test_session()
@@ -98,27 +98,27 @@ class CommandsTests(unittest.TestCase):
         # We would test for a POST that doesn't return JSON, but CyREST doesn't have any
 
         # Verify that adding a view returns a valid JSON result
-        res = PyCy3.cyrest_delete('networks/' + str(PyCy3.get_network_suid()) + '/views',
-                                  require_json=False)  # Delete the existing view first
+        res = py4cytoscape.cyrest_delete('networks/' + str(py4cytoscape.get_network_suid()) + '/views',
+                                         require_json=False)  # Delete the existing view first
         self.assertEqual(res, '')
-        res = PyCy3.cyrest_post('networks/' + str(PyCy3.get_network_suid()) + '/views')
+        res = py4cytoscape.cyrest_post('networks/' + str(py4cytoscape.get_network_suid()) + '/views')
         self.assertIsInstance(res, dict)
         self.assertIsInstance(res['networkViewSUID'], int)
 
         # Verify that passing a body works properly
-        res = PyCy3.cyrest_post('commands/command/echo', body={'message': 'Hi there'})
+        res = py4cytoscape.cyrest_post('commands/command/echo', body={'message': 'Hi there'})
         self.assertIsInstance(res, dict)
         self.assertListEqual(res['data'], ['Hi there'])
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
+        self.assertRaises(RequestException, py4cytoscape.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
                           base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
+        self.assertRaises(RequestException, py4cytoscape.cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
                           base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_cyrest_put(self):
         # Initialization
         load_test_session()
@@ -126,186 +126,186 @@ class CommandsTests(unittest.TestCase):
         # We would test for a PUT that doesn't return JSON, but CyREST doesn't have any
 
         # Verify that setting a view returns a valid JSON result
-        view = PyCy3.get_network_views()[0]
-        res = PyCy3.cyrest_put('networks/views/currentNetworkView', body={'networkViewSUID': view})
+        view = py4cytoscape.get_network_views()[0]
+        res = py4cytoscape.cyrest_put('networks/views/currentNetworkView', body={'networkViewSUID': view})
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res['data'], {})
         self.assertListEqual(res['errors'], [])
 
         # Verify that errors are caught
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView',
+        self.assertRaises(RequestException, py4cytoscape.cyrest_post, 'networks/views/currentNetworkView',
                           body={'networkViewSUID': view}, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.cyrest_post, 'networks/views/currentNetworkView',
+        self.assertRaises(RequestException, py4cytoscape.cyrest_post, 'networks/views/currentNetworkView',
                           body={'networkViewSUID': view}, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_api(self):
-        self.assertTrue(PyCy3.commands_api())
+        self.assertTrue(py4cytoscape.commands_api())
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_get(self):
         # Verify the expected return from common commands
-        self._check_cy_result(PyCy3.commands_get('command sleep duration=5'), [])
-        self._check_cy_result(PyCy3.commands_get(''),
+        self._check_cy_result(py4cytoscape.commands_get('command sleep duration=5'), [])
+        self._check_cy_result(py4cytoscape.commands_get(''),
                               ['Available namespaces:', 'analyzer', 'apps', 'command', 'cybrowser', 'cychart',
                                'diffusion', 'edge', 'filter', 'group', 'idmapper', 'layout', 'network', 'node',
                                'session', 'table', 'view', 'vizmap'], allow_subset=True)
-        self._check_cy_result(PyCy3.commands_get('view'),
+        self._check_cy_result(py4cytoscape.commands_get('view'),
                               ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content',
                                'fit selected', 'get current', 'list', 'set current', 'update'], allow_subset=True)
-        self._check_cy_result(PyCy3.commands_get('apps status app="Network Merge"'),
+        self._check_cy_result(py4cytoscape.commands_get('apps status app="Network Merge"'),
                               ['app: Network Merge, status: Installed'])
 
         # Verify that bad commands are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_get, 'apps status app="bogusjunk"')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_get, 'session open file="c:/file name"')
-        self.assertRaises(RequestException, PyCy3.commands_get, '', base_url='http://totallybogus')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_get, '', base_url='http://yahoo.com')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_get, 'apps status app="bogusjunk"')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_get, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, py4cytoscape.commands_get, '', base_url='http://totallybogus')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_get, '', base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_help(self):
         # Verify the expected return from common commands
-        self._check_cy_result(PyCy3.commands_help('apps'),
+        self._check_cy_result(py4cytoscape.commands_help('apps'),
                               ['disable', 'enable', 'information', 'install', 'list available', 'list disabled',
                                'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status',
                                'uninstall', 'update'], allow_subset=True)
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.commands_help, 'bogus_junk')
-        self.assertRaises(RequestException, PyCy3.commands_help, '', base_url='http://totallybogus')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_help, '', base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.commands_help, 'bogus_junk')
+        self.assertRaises(RequestException, py4cytoscape.commands_help, '', base_url='http://totallybogus')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_help, '', base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_post(self):
         # Verify the expected return from common commands
-        self._check_cy_result(PyCy3.commands_post('command sleep duration=5'), {})
-        self._check_cy_result(PyCy3.commands_post('apps status app="Network Merge"'),
+        self._check_cy_result(py4cytoscape.commands_post('command sleep duration=5'), {})
+        self._check_cy_result(py4cytoscape.commands_post('apps status app="Network Merge"'),
                               {'appName': 'Network Merge', 'status': 'Installed'})
 
         # Verify that bad commands are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_post, 'apps status app="bogusjunk"')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_post, 'session open file="c:/file name"')
-        self.assertRaises(RequestException, PyCy3.commands_post, '', base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.commands_post, '', base_url='http://yahoo.com')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_post, 'apps status app="bogusjunk"')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_post, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, py4cytoscape.commands_post, '', base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.commands_post, '', base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_run(self):
         # Initialization
         load_test_session()
 
         # Verify that a command can execute
-        res = PyCy3.commands_run('session new destroyCurrentSession=true')
+        res = py4cytoscape.commands_run('session new destroyCurrentSession=true')
         self.assertIsInstance(res, list)
         self.assertListEqual(res, [])
 
         # Verify that bad commands are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_run, 'total junk')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_run, 'apps status app="bogusjunk"')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_run, 'session open file="c:/file name"')
-        self.assertRaises(RequestException, PyCy3.commands_run, '', base_url='http://totallybogus')
-        self.assertRaises(PyCy3.CyError, PyCy3.commands_run, '', base_url='http://yahoo.com')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_run, 'total junk')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_run, 'apps status app="bogusjunk"')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_run, 'session open file="c:/file name"')
+        self.assertRaises(RequestException, py4cytoscape.commands_run, '', base_url='http://totallybogus')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.commands_run, '', base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_commands_echo(self):
         # Verify that the command returns what's sent to it
-        res = PyCy3.command_echo('Hi there')
+        res = py4cytoscape.command_echo('Hi there')
         self.assertIsInstance(res, list)
         self.assertListEqual(res, ['Hi there'])
 
         # Verify that an empty message comes back as '*'
-        res = PyCy3.command_echo()
+        res = py4cytoscape.command_echo()
         self.assertIsInstance(res, list)
         self.assertListEqual(res, ['*'])
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.command_echo, 'Hi there', base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_echo, 'Hi there', base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.command_echo, 'Hi there', base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_echo, 'Hi there', base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_open_dialog(self):
         # Verify that open dialog command fails ... it seems to be missing in the CyREST command set
-        self.assertRaises(PyCy3.CyError, PyCy3.command_open_dialog)
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.command_open_dialog)
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.command_open_dialog, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_open_dialog, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.command_open_dialog, base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_open_dialog, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_pause(self):
         # Verify that pause returns nothing at all
         input('Verify that the pause message appears next ...')
-        res = PyCy3.command_pause()
+        res = py4cytoscape.command_pause()
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
 
         input('Verify that the pause message appears next ...')
-        res = PyCy3.command_pause('Please click OK to continue.')
+        res = py4cytoscape.command_pause('Please click OK to continue.')
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.command_pause, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_pause, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.command_pause, base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_pause, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_quit(self):
         # Verify that pause returns nothing at all
-        res = PyCy3.command_quit()
+        res = py4cytoscape.command_quit()
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
         input('Verify that Cytoscape has terminated, then restart it ...')
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.command_quit, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_quit, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.command_quit, base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_quit, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_run_file(self):
         # Initialization
         load_test_session()
         CMD_FILE = 'data/CommandScript.txt'
-        self.assertIsInstance(PyCy3.get_network_suid(), int)
+        self.assertIsInstance(py4cytoscape.get_network_suid(), int)
 
         # Verify that script file returns nothing at all
-        res = PyCy3.command_run_file(CMD_FILE)  # Execute cmd to create a new session (i.e., no network)
+        res = py4cytoscape.command_run_file(CMD_FILE)  # Execute cmd to create a new session (i.e., no network)
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
-        self.assertRaises(PyCy3.CyError, PyCy3.get_network_suid)  # Check for there being no network anymore
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.get_network_suid)  # Check for there being no network anymore
 
         # Verify that bad commands are caught
-        self.assertRaises(PyCy3.CyError, PyCy3.command_run_file, 'nosuchfile')
-        self.assertRaises(RequestException, PyCy3.command_run_file, CMD_FILE, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_run_file, CMD_FILE, base_url='http://yahoo.com')
+        self.assertRaises(py4cytoscape.CyError, py4cytoscape.command_run_file, 'nosuchfile')
+        self.assertRaises(RequestException, py4cytoscape.command_run_file, CMD_FILE, base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_run_file, CMD_FILE, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_sleep(self):
         # Verify that pause returns nothing at all
-        res = PyCy3.command_sleep()  # Try a no-duration sleep
+        res = py4cytoscape.command_sleep()  # Try a no-duration sleep
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
 
         input('Ready to try a 10 second sleep ...')
-        res = PyCy3.command_sleep(10)  # Try a 10s sleep
+        res = py4cytoscape.command_sleep(10)  # Try a 10s sleep
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, PyCy3.command_sleep, base_url='http://totallybogus')
-        self.assertRaises(RequestException, PyCy3.command_sleep, base_url='http://yahoo.com')
+        self.assertRaises(RequestException, py4cytoscape.command_sleep, base_url='http://totallybogus')
+        self.assertRaises(RequestException, py4cytoscape.command_sleep, base_url='http://yahoo.com')
 
-    #    @PyCy3.skip
-    @PyCy3.print_entry_exit
+    #    @py4cytoscape.skip
+    @py4cytoscape.print_entry_exit
     def test_command_2_get_query(self):
 
         def check_cmd(query, expected_url, expected_args):
@@ -318,15 +318,15 @@ class CommandsTests(unittest.TestCase):
                 self.assertDictEqual(args, expected_args)
 
         # Check for a URL with no parameters
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed'),
+        check_cmd(py4cytoscape.commands._command_2_get_query('layout force-directed'),
                   'http://localhost:1234/v1/commands/layout/force-directed', None)
 
         # Check for a URL with a single scalar parameter
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1'),
+        check_cmd(py4cytoscape.commands._command_2_get_query('layout force-directed defaultNodeMass=1'),
                   'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
 
         # Check for a URL with two parameters, one of which has an embedded blank
-        check_cmd(PyCy3.commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'),
+        check_cmd(py4cytoscape.commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'),
                   'http://localhost:1234/v1/commands/layout/force-directed',
                   {'defaultNodeMass': '1', 'file': 'C:\\file name'})
 

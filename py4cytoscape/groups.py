@@ -28,8 +28,8 @@ from . import networks
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -49,7 +49,7 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {}
@@ -91,7 +91,7 @@ def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'groups': [List of SUIDs]} where SUID identifies the node corresponding to the group that was collapsed (even if it was already collapsed)
@@ -132,7 +132,7 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'group': SUID} where SUID identifies the node corresponding to the group
@@ -174,7 +174,7 @@ def create_group_by_column(group_name, column=None, value=None, network=None, ba
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'group': group SUID} where the SUID identifies new group
@@ -205,7 +205,7 @@ def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'groups': [List of SUIDs]} where SUID identifies the node corresponding to the group that was expanded (even if it was already expanded)
@@ -243,7 +243,7 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'group': SUID, 'name': name, 'nodes': [node SUIDs], 'internalEdges': [edge SUIDs], 'externalEdges': [edge SUIDs], 'collapsed': bool}
@@ -292,7 +292,7 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {groups: [SUID list]} as list of SUIDs for group nodes
@@ -327,7 +327,7 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {}
@@ -371,7 +371,7 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
          dict: {'groups': [group SUIDs]} with the SUID for each deleted group in the list

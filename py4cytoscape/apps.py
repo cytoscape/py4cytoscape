@@ -27,8 +27,8 @@ from . import commands
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -41,7 +41,7 @@ def disable_app(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'appName': <name of app>}, and is returned whether or not app exists
@@ -68,7 +68,7 @@ def enable_app(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'appName': <name of app>}, and is returned whether or not app exists
@@ -93,7 +93,7 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         str: 'Unused memory freed up.'
@@ -108,7 +108,7 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post('apps information app="' + app + '"', base_url=base_url)
-    # TODO: R uses commands_get ... PyCy3 uses commands_post ... Swagger recommends POST ... is R wrong for all of these calls?
+    # TODO: R uses commands_get ... py4cytoscape uses commands_post ... Swagger recommends POST ... is R wrong for all of these calls?
     return res
 
 
@@ -120,7 +120,7 @@ def install_app(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} always empty, whether app exists or not
@@ -144,7 +144,7 @@ def get_available_apps(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of dicts, one for each app {'appName': <appname>, 'description': <description>, 'details': <details>}
@@ -168,7 +168,7 @@ def get_disabled_apps(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of dicts, one for each app {'appName': <appname>, 'version': <version>, 'description': <description>, 'status': <status>} where <status> is always 'Disabled'
@@ -192,7 +192,7 @@ def get_installed_apps(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of dicts, one for each app {'appName': <appname>, 'version': <version>, 'description': <description>, 'status': <status>} where status may be 'Installed', 'Disabled', 'Uninstalled'
@@ -216,7 +216,7 @@ def get_uninstalled_apps(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of dicts, one for each app {'appName': <appname>, 'version': <version>, 'description': <description>, 'status': <status>} where status may be 'Installed', 'Disabled', 'Uninstalled'
@@ -240,7 +240,7 @@ def get_app_updates(base_url=DEFAULT_BASE_URL):
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: list of dicts, one for each app {'appName': <appname>, 'version': <version>, 'information': <information>}
@@ -265,7 +265,7 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app ('' for main App Store page)
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {} whether page for app exists or not
@@ -290,7 +290,7 @@ def get_app_status(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'appName': <appname>, 'status': <status>} where <status> is Installed, Disabled or Uninstalled
@@ -316,7 +316,7 @@ def uninstall_app(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'appName': <name of app>} whether app exists or not
@@ -341,7 +341,7 @@ def update_app(app, base_url=DEFAULT_BASE_URL):
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: [] whether or not app exists

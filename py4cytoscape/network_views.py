@@ -32,8 +32,8 @@ from . import networks
 
 # Internal module convenience imports
 from .exceptions import CyError
-from .pycy3_utils import *
-from .pycy3_logger import cy_log
+from .py4cytoscape_utils import *
+from .py4cytoscape_logger import cy_log
 
 
 @cy_log
@@ -44,7 +44,7 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
         network (str or SUID or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         list: [list of SUIDs of views] where the list has length 1
@@ -76,7 +76,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         int: SUID of the view for the network. The first (presummably only) view associated a network is returned.
@@ -139,7 +139,7 @@ def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}
@@ -175,7 +175,7 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {}
@@ -221,7 +221,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict:  {'file': name of file} contains absolute path to file that was written
@@ -279,7 +279,7 @@ def toggle_graphics_details(base_url=DEFAULT_BASE_URL):
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
-            and the latest version of the CyREST API supported by this version of PyCy3.
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         dict: {'message': 'Toggled Graphics level of details.'}
