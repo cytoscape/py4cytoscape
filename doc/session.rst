@@ -1,5 +1,5 @@
-py4cytoscape.session module
-===========================
+py4...session module
+====================
 
 .. automodule:: py4cytoscape.session
     :members:

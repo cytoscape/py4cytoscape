@@ -1,5 +1,5 @@
-py4cytoscape.network\_selection module
-======================================
+py4...network\_selection module
+===============================
 
 .. automodule:: py4cytoscape.network_selection
     :members:

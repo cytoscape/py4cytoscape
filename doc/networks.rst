@@ -1,5 +1,5 @@
-py4cytoscape.networks module
-============================
+py4...networks module
+=====================
 
 .. automodule:: py4cytoscape.networks
     :members:

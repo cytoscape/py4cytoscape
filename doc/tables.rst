@@ -1,5 +1,5 @@
-py4cytoscape.tables module
-==========================
+py4...tables module
+===================
 
 .. automodule:: py4cytoscape.tables
     :members:
