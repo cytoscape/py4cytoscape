@@ -29,6 +29,8 @@ Copyright (c) 2020 The Cytoscape Consortium
    network_selection
    network_views
    session
+   styles
+   style_mappings
    tables
    tools
    user_interface

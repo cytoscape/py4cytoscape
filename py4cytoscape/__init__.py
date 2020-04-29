@@ -14,6 +14,8 @@ from .groups import *
 from .tools import *
 from .user_interface import *
 from .network_views import *
+from .styles import *
+from .style_mappings import *
 from .decorators import *
 
 # TODO: Enforce documentation standards for modules and private functions per:

@@ -81,6 +81,8 @@ logging.config.dictConfig(_logging_config)
 # Create the logger this library will use
 logger = logging.getLogger('py4cytoscape')
 _logger_debug = 'DEBUG' in [_FILE_LOG_LEVEL, _CONSOLE_LOG_LEVEL]
+_NESTING_SPACER = '\u01c0' # Use latin dental click character to represent spacing = nesting
+_FUNCTION_SPACER = '-' * 20
 
 
 # Decorator so functions can get automatic logging
@@ -93,7 +95,7 @@ def cy_log(func):
         # Set up to show logged calls within logged calls so the appear nested in the log
         global _logger_nesting
         _logger_nesting += 1
-        nesting_spacer = '\u01c0' * _logger_nesting # Use latin dental click character to represent spacing = nesting
+        nesting_spacer = _NESTING_SPACER * _logger_nesting
 
         if _logger_debug:
             # Show function name and all positional and named arguments
@@ -118,7 +120,7 @@ def cy_log(func):
         finally:
             _logger_nesting -= 1
             if _logger_nesting == -1:
-                if _logger_debug: logger.debug('-' * 20)
-                logger.info('-' * 20)
+                if _logger_debug: logger.debug(_FUNCTION_SPACER)
+                logger.info(_FUNCTION_SPACER)
 
     return wrapper_log
