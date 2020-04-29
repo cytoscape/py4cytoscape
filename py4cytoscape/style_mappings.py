@@ -75,11 +75,11 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058], ['#0066CC', '#FFFFFF','#FFFF00'])
+        >>> map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058], ['#0066CC', '#FFFFFF','#FFFF00'])
         {'mappingType': 'continuous', 'mappingColumn': 'gal1RGexp', 'mappingColumnType': 'Double', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -2.426, 'lesser': '#0066CC', 'equal': '#0066CC', 'greater': '#0066CC'}, {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'}, {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}]}
-        >>>map_visual_property('node shape', 'degree.layout', 'd', [1, 2], ['ellipse', 'rectangle'])
+        >>> map_visual_property('node shape', 'degree.layout', 'd', [1, 2], ['ellipse', 'rectangle'])
         {'mappingType': 'discrete', 'mappingColumn': 'degree.layout', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': 1, 'value': 'ellipse'}, {'key': 2, 'value': 'rectangle'}]}
-        >>>map_visual_property('node label', 'COMMON', 'p')
+        >>> map_visual_property('node label', 'COMMON', 'p')
         {'mappingType': 'passthrough', 'mappingColumn': 'COMMON', 'mappingColumnType': 'String', 'visualProperty': 'NODE_LABEL'}
 
     Note:
@@ -174,7 +174,7 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>update_style_mapping('galFiltered Style', map_visual_property('node label', 'name', 'p'))
+        >>> update_style_mapping('galFiltered Style', map_visual_property('node label', 'name', 'p'))
         ''
 
     See Also:
@@ -214,7 +214,7 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>delete_style_mapping('galFiltered Style', 'node label')
+        >>> delete_style_mapping('galFiltered Style', 'node label')
         ''
     """
     # check if vp exists already
@@ -251,7 +251,7 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>get_style_mapping('galFiltered Style', 'node label')
+        >>> get_style_mapping('galFiltered Style', 'node label')
         {"mappingType": "passthrough", "mappingColumn": "COMMON", "mappingColumnType": "String", "visualProperty": "NODE_LABEL"}
 
     See Also:
@@ -285,7 +285,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>get_style_all_mappings('galFiltered Style')
+        >>> get_style_all_mappings('galFiltered Style')
         [{"mappingType": "passthrough", "mappingColumn": "name", "mappingColumnType": "String", "visualProperty": "NODE_LABEL"},
          {"mappingType": "passthrough", "mappingColumn": "interaction", "mappingColumnType": "String", "visualProperty": "EDGE_LABEL"}]
 
