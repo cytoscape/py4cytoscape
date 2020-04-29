@@ -182,7 +182,5 @@ class StyleMappingsTests(unittest.TestCase):
         else:
             self.assertEqual(len(cy_property), 4) # passthrough or unknown
 
-
-
 if __name__ == '__main__':
     unittest.main()

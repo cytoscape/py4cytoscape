@@ -41,6 +41,26 @@ from .py4cytoscape_logger import cy_log
 
 @cy_log
 def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
+    """Create a new visual style by copying a specified style.
+
+    Args:
+        from_style (str): Name of visual style to copy
+        to_style (str): Name of new visual style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if style doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> copy_visual_style('Solid', 'SolidCopy')
+        ''
+    """
     current_names = get_visual_style_names(base_url=base_url)
     if from_style not in current_names:
         raise CyError('Cannot copy from a non-existent visual style ( + ' + from_style + ')')
@@ -61,6 +81,40 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
 
 @cy_log
 def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAULT_BASE_URL):
+    """Create a style from defaults and predefined mappings.
+
+    Requires visual property mappings to be previously created, see ``map_visual_property``.
+
+    Args:
+        style_name (str): name for style
+        defaults (list): key-value pairs for default mappings.
+        mappings (list): visual property mappings, see ``map_visual_property``
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'title': new style name}
+
+    Raises:
+        CyError: if mappings or defaults contain invalid values
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> defaults = {'NODE_SHAPE': 'diamond', 'NODE_SIZE': 30, 'EDGE_TRANSPARENCY': 120, 'NODE_LABEL_POSITION': 'W,E,c,0.00,0.00'}
+        >>> node_labels = map_visual_property('node label', 'COMMON', 'p')
+        >>> node_fills = map_visual_property('node fill color', 'Degree', 'd', ['1', '2'], ['#FF9900', '#66AAAA'])
+        >>> arrow_shapes = map_visual_property('Edge Target Arrow Shape', 'interaction', 'd', ['pp', 'pd'], ['Arrow', 'T'])
+        >>> edge_width = map_visual_property('edge width', 'EdgeBetweenness', 'p')
+        >>> create_visual_style('NewStyle', defaults=defaults, mappings=[node_labels, node_fills, arrow_shapes, edge_width])
+        {'title': 'NewStyle'}
+
+    Note:
+        To apply the style to a network, first create the network and then call ``set_visual_style``
+
+    See Also:
+        :meth:`map_visual_property`, :meth:`set_visual_style`
+    """
     if mappings is None: mappings = []
     style_def = []
     if defaults is not None:
