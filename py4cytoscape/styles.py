@@ -25,9 +25,12 @@ License:
 
 # External library imports
 import sys
+import os
+import warnings
 
 # Internal module imports
 from . import commands
+from . import networks
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -124,9 +127,175 @@ def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAU
     return res
 
 @cy_log
+def delete_visual_style(style_name, base_url=DEFAULT_BASE_URL):
+    """Delete the specified visual style from current session.
+
+    Args:
+        style_name (str): name of style to delete
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if the style doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_visual_style('NewStyle')
+        ''
+    """
+    res = commands.cyrest_delete('styles/' + style_name, base_url=base_url, require_json=False)
+    return res
+
+@cy_log
+def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAULT_BASE_URL):
+    """Save one or more visual styles to file.
+
+    Args:
+        filename (str): Full path or path relavtive to current working directory, in addition to
+            the name of the file. Extension is automatically added based on the ``type`` argument.
+            Default is "styles.xml"
+        type (str): Type of data file to export, e.g., XML, JSON (case sensitive).
+            Default is XML. Note: Only XML can be read by ``import_visual_styles()``.
+        styles (str) The styles to be exported, listed as a comma-separated string. If no styles are
+            specified, only the current one is exported.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'file': name of file written}
+
+    Raises:
+        CyError: if the output file can't be created
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> export_visual_styles() # export the current style to styles.xml in the current directory
+        {'file': 'C:\\Users\\CyDeveloper\\styles.xml'}
+        >>> export_visual_styles('curstyle') # export the current style to curstyle.xml in the current directory
+        {'file': 'C:\\Users\\CyDeveloper\\curstyle.xml'}
+        >>> export_visual_styles('curstyle', type='json') # export the current style in cytoscape.js format
+        {'file': 'C:\\Users\\CyDeveloper\\curstyle.json'}
+
+    See Also:
+        :meth:`import_visual_styles`
+    """
+    cmd_string = 'vizmap export'  # minmum command
+    if styles is not None: cmd_string += ' styles="' + styles + '"'
+    cmd_string += ' options="' + type + '"'
+
+    if filename is None: filename = 'styles'
+    ext = '.' + type.lower() + '$'
+    if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
+    filename = os.path.abspath(filename)
+    if os.path.exists(filename): warnings.warn('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    cmd_string += ' OutputFile="' + filename + '"'
+    # TODO: Can't we create a parameter to delete the file first?
+
+    res = commands.commands_post(cmd_string, base_url=base_url)
+    return res
+
+@cy_log
+def import_visual_styles(filename="styles.xml", base_url=DEFAULT_BASE_URL):
+    """Load styles from an XML file and returns the names of the loaded styles.
+
+    Args:
+        filename (str): Name of the style file to load. Only reads XML files. Default is "styles.xml".
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: [names of styles loaded]
+
+    Raises:
+        CyError: if the input file can't be read
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> import_visual_styles() # export styles.xml in the current directory
+        ['galFiltered Style']
+        >>> import_visual_styles('curstyle.xml') # export curstyle.xml in the current directory
+        ['galFiltered Style']
+
+    See Also:
+        :meth:`export_visual_styles`
+    """
+    filename = os.path.abspath(filename)
+
+    res = commands.commands_post('vizmap load file file="' + filename + '"', base_url=base_url)
+    return res
+
+@cy_log
 def get_visual_style_names(base_url=DEFAULT_BASE_URL):
+    """Retrieve a list of all visual style names.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: [names of styles in session]
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> visual_style_names()
+        ['Universe', 'Marquee', 'Big Labels', 'BioPAX_SIF', 'Ripple', 'Metallic', 'default black', ...]
+    """
     res = commands.cyrest_get('apply/styles', base_url=base_url)
     return res
+
+
+@cy_log
+def set_visual_style(style_name, network=None, base_url=DEFAULT_BASE_URL):
+    """Apply a visual style to a network.
+
+    Args:
+        style_name (str): Name of a visual style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'message': 'Visual Style applied.'}
+
+    Raises:
+        CyError: if style doesn't exist or network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_visual_style('default')
+        {'message': 'Visual Style applied.'}
+        >>> set_visual_style('galFiltered Style', network=51)
+        {'message': 'Visual Style applied.'}
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    current_names = get_visual_style_names(base_url=base_url)
+
+    # inform user if they want to set style that does not exist
+    if style_name not in current_names:
+        error = 'Cannot call set_visual_style() on a non-existent visual style (' + style_name + ')'
+        sys.stderr.write(error)
+        raise CyError(error)
+
+    res = commands.cyrest_get('apply/styles/' + style_name + '/' + str(net_suid), base_url=base_url)
+    return res
+
+
+
+
+
+
+
+
+
 
 @cy_log
 def get_visual_property_names(base_url=DEFAULT_BASE_URL):

@@ -265,7 +265,7 @@ class FiltersTests(unittest.TestCase):
         # Initialization
         load_test_session()
         FILTER_FILE = 'test'
-        FILTER_SUFFIX = ".json"
+        FILTER_SUFFIX = '.json'
 
         # Create two independent filters
         self.check_result('degree filter 1x', lambda x: py4cytoscape.create_degree_filter(x, [9, 11], 'BETWEEN'),
