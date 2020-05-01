@@ -21,8 +21,11 @@ License:
 
 # Log level choices are here: https://docs.python.org/3/howto/logging.html#logging-levels
 
-_FILE_LOG_LEVEL = 'DEBUG'
-_FILE_LOG_DIR = 'logs'
-_FILE_LOG_NAME = 'py4cytoscape.log'
-_CONSOLE_LOG_LEVEL = 'INFO'
-_DISABLE_DEBUG_HTTP = False
+_SUMMARY_LOG_LEVEL = 'DEBUG'
+_SUMMARY_ENABLE_HTTP = True
+
+_DETAIL_LOG_LEVEL = 'DEBUG'
+_DETAIL_ENABLE_HTTP = True
+_DETAIL_LOG_DIR = 'logs'
+_DETAIL_LOG_NAME = 'py4cytoscape.log'
+

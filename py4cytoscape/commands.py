@@ -37,7 +37,7 @@ import os
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, log_http_result, log_http_request
 from .exceptions import CyError
 
 
@@ -104,7 +104,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
     """
     try:
         url = build_url(base_url, operation)
-        r = requests.delete(url, params=parameters)
+        r = _do_request('DELETE', url, params=parameters)
         r.raise_for_status()
         try:
             return r.json()
@@ -144,7 +144,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
     """
     try:
         url = build_url(base_url, operation)
-        r = requests.get(url, params=parameters)
+        r = _do_request('GET', url, params=parameters)
         r.raise_for_status()
         try:
             return r.json()
@@ -185,7 +185,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
     """
     try:
         url = build_url(base_url, operation)
-        r = requests.post(url, params=parameters, json=body)
+        r = _do_request('POST', url, params=parameters, json=body)
         r.raise_for_status()
         try:
             return r.json()
@@ -224,7 +224,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
     """
     try:
         url = build_url(base_url, operation)
-        r = requests.put(url, params=parameters, json=body)
+        r = _do_request('PUT', url, params=parameters, json=body)
         r.raise_for_status()
         try:
             return r.json()
@@ -298,7 +298,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
     """
     try:
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = requests.get(get_url, params=parameters, headers={'Accept': 'text/plain'})
+        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'})
         r.raise_for_status()
 
         # Break response into a list of lines and return it
@@ -340,14 +340,14 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
     try:
         cmd_string = re.sub(r'help *', cmd_string, cmd_string)  # remove 'help ' if it's already in the request
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = requests.get(get_url, params=parameters, headers={'Accept': 'text/plain'})
+        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'})
         r.raise_for_status()
 
         # Break response into a list of lines and return it
         res_list = re.split('\n\\s*', r.text)[1:]  # create a list of command options, and leave off the header
         res_list = [line.strip() for line in res_list]
-        if len(res_list) and res_list[-1] == '': del res_list[
-            -1]  # deal with artifact of .split() leaving last line blank
+        if len(res_list) and res_list[-1] == '':
+            del res_list[-1]  # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
         _handle_error('commands:commands_help()', e, force_cy_error=True)
@@ -385,7 +385,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         post_url = _command_2_post_query_url(cmd, base_url=base_url)
         post_body = _command_2_post_query_body(cmd)
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        r = requests.post(post_url, data=post_body, headers=headers)
+        r = _do_request('POST', post_url, data=post_body, headers=headers)
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
@@ -662,6 +662,11 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
 
     return cmd_list_ready
 
+def _do_request(method, url, **kwargs):
+    log_http_request(method, url, **kwargs)
+    r = requests.request(method, url, **kwargs)
+    log_http_result(r)
+    return r
 
 def _handle_error(caller, e, force_cy_error=False):
     if e.response is None or e.response.text is None or e.response.text == '':
