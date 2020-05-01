@@ -289,16 +289,103 @@ def set_visual_style(style_name, network=None, base_url=DEFAULT_BASE_URL):
     return res
 
 
+@cy_log
+def get_arrow_shapes(base_url=DEFAULT_BASE_URL):
+    """Get Arrow Shapes.
+
+    Retrieve the names of the currently supported 'arrows' -- the decorations can (optionally) appear at
+    the ends of edges, adjacent to the nodes they connect, and conveying information about the nature of
+    the nodes' relationship.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: [arrow shape names]
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_arrow_shapes()
+        ['OPEN_CIRCLE', 'SQUARE', 'CIRCLE', 'DELTA_SHORT_2', 'DELTA', 'DIAMOND_SHORT_2', ...]
+    """
+    res = commands.cyrest_get('styles/visualproperties/EDGE_TARGET_ARROW_SHAPE/values', base_url=base_url)
+    return res['values']
 
 
+@cy_log
+def get_line_styles(base_url=DEFAULT_BASE_URL):
+    """Get Line Styles.
 
+    Retrieve the names of the currently supported line types -- values which can be used to render edges, and thus
+    can be used in calls to ``set_edge_line_style_rule()``.
 
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
+    Returns:
+        list: [line style names]
 
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_line_styles()
+        ['MARQUEE_DASH_DOT', 'SOLID', 'BACKWARD_SLASH', 'EQUAL_DASH', 'CONTIGUOUS_ARROW', ...]
+    """
+    res = commands.cyrest_get('styles/visualproperties/EDGE_LINE_TYPE/values', base_url=base_url)
+    return res['values']
+
+@cy_log
+def get_node_shapes(base_url=DEFAULT_BASE_URL):
+    """Get Node Shapes.
+
+    Retrieve the names of the currently supported node shapes, which can then be used in calls to
+    ``set_node_shape_rule()`` and ``set_default_viz_map_value()``.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: [node shape names]
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_node_shapes()
+        ['ROUND_RECTANGLE', 'VEE', 'TRIANGLE', 'HEXAGON', 'PARALLELOGRAM', 'ELLIPSE', 'OCTAGON', ...]
+    """
+    res = commands.cyrest_get('styles/visualproperties/NODE_SHAPE/values', base_url=base_url)
+    return res['values']
 
 
 @cy_log
 def get_visual_property_names(base_url=DEFAULT_BASE_URL):
+    """Retrieve the names of all possible visual properties.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: [visual property names]
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_visual_property_names()
+        ['COMPOUND_NODE_PADDING', 'COMPOUND_NODE_SHAPE', 'DING_RENDERING_ENGINE_ROOT', 'EDGE', ...]
+    """
     res = commands.cyrest_get('styles/default/defaults', base_url=base_url)
     visual_properties = [prop['visualProperty']     for prop in res['defaults']]
     return visual_properties

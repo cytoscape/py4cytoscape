@@ -31,20 +31,20 @@ from logging.handlers import RotatingFileHandler
 import functools
 import os
 
-from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _DETAIL_LOG_NAME, _DETAIL_ENABLE_HTTP, _SUMMARY_LOG_LEVEL, _SUMMARY_ENABLE_HTTP
+from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _DETAIL_LOG_NAME, _DETAIL_ENABLE_HTTP_CALLS, _SUMMARY_LOG_LEVEL, _SUMMARY_ENABLE_HTTP_CALLS, _DETAIL_ENABLE_HTTP_CONTENT, _SUMMARY_ENABLE_HTTP_CONTENT
 
 _detail_log_base = os.path.join(_DETAIL_LOG_DIR, _DETAIL_LOG_NAME)
 if not os.path.exists(_DETAIL_LOG_DIR): os.makedirs(_DETAIL_LOG_DIR)
 
 # Set up detail logger
-detail_logger = logging.getLogger('py4cytoscape')
+detail_logger = logging.getLogger('py4...')
 detail_handler = RotatingFileHandler(_detail_log_base, maxBytes=1048576, backupCount=10, encoding='utf8')
 detail_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s'))
 detail_logger.setLevel(_DETAIL_LOG_LEVEL)
 detail_logger.addHandler(detail_handler)
 
 # Set up summary logger
-summary_logger = logging.getLogger('py4cytoscapeS')
+summary_logger = logging.getLogger('py4...S')
 summary_handler = logging.StreamHandler()
 summary_handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(message)s'))
 summary_logger.setLevel(_SUMMARY_LOG_LEVEL)
@@ -119,8 +119,8 @@ def cy_log(func):
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):
-    if (_DETAIL_ENABLE_HTTP and detail_logger.isEnabledFor(logging.DEBUG)) or \
-        (_SUMMARY_ENABLE_HTTP and summary_logger.isEnabledFor(logging.DEBUG)):
+    if (_DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG)) or \
+        (_SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG)):
         params = kwargs.get('params')
         params = '' if params is None else ', params: ' + str(params)
         json = kwargs.get('json')
@@ -128,16 +128,18 @@ def log_http_request(method, url, **kwargs):
         data = kwargs.get('data')
         data = '' if data is None else ', data: ' + str(data)
 
-        if _DETAIL_ENABLE_HTTP and detail_logger.isEnabledFor(logging.DEBUG):
+        if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
             detail_logger.debug(_logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
-        if _SUMMARY_ENABLE_HTTP and summary_logger.isEnabledFor(logging.DEBUG):
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG):
             summary_logger.debug(_logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
 
 def log_http_result(r):
-    if (_DETAIL_ENABLE_HTTP and detail_logger.isEnabledFor(logging.DEBUG)) or \
-        (_SUMMARY_ENABLE_HTTP and summary_logger.isEnabledFor(logging.DEBUG)):
-        if _DETAIL_ENABLE_HTTP and detail_logger.isEnabledFor(logging.DEBUG):
-            detail_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + '], content: ' + r.text)
-        if _SUMMARY_ENABLE_HTTP and summary_logger.isEnabledFor(logging.DEBUG):
-            summary_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + '], content: ' + r.text)
+    if (_DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG)) or \
+        (_SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG)):
+        if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
+            content = ', content: ' + r.text if _DETAIL_ENABLE_HTTP_CONTENT else ''
+            detail_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG):
+            content = ', content: ' + r.text if _SUMMARY_ENABLE_HTTP_CONTENT else ''
+            summary_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 

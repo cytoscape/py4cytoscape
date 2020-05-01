@@ -36,7 +36,6 @@ class StylesTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
     @print_entry_exit
     def test_copy_visual_style(self):
         # Initialization
@@ -59,7 +58,6 @@ class StylesTests(unittest.TestCase):
         self.assertRaises(CyError, copy_visual_style, 'bogusStyle', 'bogusStyleCopy')
         self.assertRaises(RequestException, copy_visual_style, 'Solid', '')
 
-    
     @print_entry_exit
     def test_create_visual_style(self):
         # Initialization
@@ -82,12 +80,12 @@ class StylesTests(unittest.TestCase):
                     'NODE_LABEL_POSITION': 'W,E,c,0.00,0.00'}
         node_labels = map_visual_property('node label', 'COMMON', 'p')
         node_fills = map_visual_property('node fill color', 'Degree', 'd', ['1', '2'],
-                                                      ['#FF9900', '#66AAAA'])
+                                         ['#FF9900', '#66AAAA'])
         arrow_shapes = map_visual_property('Edge Target Arrow Shape', 'interaction', 'd', ['pp', 'pd'],
-                                                        ['Arrow', 'T'])
+                                           ['Arrow', 'T'])
         edge_width = map_visual_property('edge width', 'EdgeBetweenness', 'p')
         res = create_visual_style('NewStyle', defaults=defaults,
-                                               mappings=[node_labels, node_fills, arrow_shapes, edge_width])
+                                  mappings=[node_labels, node_fills, arrow_shapes, edge_width])
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'title': 'NewStyle'})
 
@@ -96,14 +94,14 @@ class StylesTests(unittest.TestCase):
 
         # Verify that creating the same style again gives the same results, except a different name
         res = create_visual_style('NewStyle', defaults=defaults,
-                                               mappings=[node_labels, node_fills, arrow_shapes, edge_width])
+                                  mappings=[node_labels, node_fills, arrow_shapes, edge_width])
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'title': 'NewStyle_0'})
         check_new_style('NewStyle_0')
 
         # Create another style that has no defaults
         res = create_visual_style('NewStyleNoDefaults',
-                                               mappings=[node_labels, node_fills, arrow_shapes, edge_width])
+                                  mappings=[node_labels, node_fills, arrow_shapes, edge_width])
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'title': 'NewStyleNoDefaults'})
         check_new_style('NewStyleNoDefaults')
@@ -119,7 +117,6 @@ class StylesTests(unittest.TestCase):
         self.assertRaises(CyError, create_visual_style, 'BogusStyle', defaults=defaults,
                           mappings=[node_labels, node_fills, arrow_shapes, edge_width])
 
-    
     @print_entry_exit
     def test_delete_visual_style(self):
         # Initialization
@@ -137,7 +134,6 @@ class StylesTests(unittest.TestCase):
         # Verify that trying to delete a non-existent style fails
         self.assertRaises(CyError, delete_visual_style, 'SolidCopy')
 
-    
     @print_entry_exit
     def test_export_import_visual_styles(self):
         # Initialization
@@ -197,7 +193,6 @@ class StylesTests(unittest.TestCase):
         self.assertRaises(CyError, export_visual_styles, '\\impos:*sible\\path\\bogus')
         self.assertRaises(CyError, import_visual_styles, '\\impos:*sible\\path\\bogus')
 
-    
     @print_entry_exit
     def test_get_visual_style_names(self):
         # Initialization
@@ -208,7 +203,6 @@ class StylesTests(unittest.TestCase):
                              'galFiltered Style', 'Nested Network Style', 'Minimal', 'BioPAX', 'Solid', 'default',
                              'Custom Graphics Style', 'Directed', 'Sample1', 'Box'})
 
-    
     @print_entry_exit
     def test_set_visual_style(self):
         # Initialization
@@ -223,6 +217,69 @@ class StylesTests(unittest.TestCase):
 
         self.assertRaises(CyError, set_visual_style, 'default', network='bogus network')
 
+    @print_entry_exit
+    def test_get_arrow_shapes(self):
+        res = get_arrow_shapes()
+        self.assertIsInstance(res, list)
+        self.assertTrue(set(res) >= {'OPEN_CIRCLE', 'SQUARE', 'CIRCLE', 'DELTA_SHORT_2', 'DELTA', 'DIAMOND_SHORT_2',
+                                     'OPEN_HALF_CIRCLE', 'OPEN_DIAMOND', 'HALF_CIRCLE', 'CROSS_DELTA',
+                                     'DIAMOND_SHORT_1', 'ARROW', 'T', 'CROSS_OPEN_DELTA', 'DELTA_SHORT_1', 'DIAMOND',
+                                     'HALF_TOP', 'ARROW_SHORT', 'OPEN_DELTA', 'NONE', 'HALF_BOTTOM', 'OPEN_SQUARE'})
+
+    @print_entry_exit
+    def test_get_line_styles(self):
+        res = get_line_styles()
+        self.assertIsInstance(res, list)
+        self.assertTrue(set(res) >= {'MARQUEE_DASH_DOT', 'SOLID', 'BACKWARD_SLASH', 'EQUAL_DASH', 'CONTIGUOUS_ARROW',
+                                     'FORWARD_SLASH', 'SEPARATE_ARROW', 'LONG_DASH', 'VERTICAL_SLASH', 'ZIGZAG',
+                                     'PARALLEL_LINES', 'MARQUEE_EQUAL', 'DASH_DOT', 'DOT', 'MARQUEE_DASH', 'SINEWAVE'})
+
+    @print_entry_exit
+    def test_get_node_shapes(self):
+        res = get_node_shapes()
+        self.assertIsInstance(res, list)
+        self.assertTrue(
+            set(res) >= {'ROUND_RECTANGLE', 'VEE', 'TRIANGLE', 'HEXAGON', 'PARALLELOGRAM', 'ELLIPSE', 'OCTAGON',
+                         'RECTANGLE', 'DIAMOND'})
+
+    @print_entry_exit
+    def test_get_visual_property_names(self):
+        res = get_visual_property_names()
+        self.assertIsInstance(res, list)
+        self.assertTrue(
+            set(res) >= {'COMPOUND_NODE_PADDING', 'COMPOUND_NODE_SHAPE', 'DING_RENDERING_ENGINE_ROOT', 'EDGE',
+                         'EDGE_BEND', 'EDGE_CURVED', 'EDGE_LABEL', 'EDGE_LABEL_COLOR', 'EDGE_LABEL_FONT_FACE',
+                         'EDGE_LABEL_FONT_SIZE', 'EDGE_LABEL_TRANSPARENCY', 'EDGE_LABEL_WIDTH', 'EDGE_LINE_TYPE',
+                         'EDGE_PAINT', 'EDGE_SELECTED', 'EDGE_SELECTED_PAINT', 'EDGE_SOURCE_ARROW_SELECTED_PAINT',
+                         'EDGE_SOURCE_ARROW_SHAPE', 'EDGE_SOURCE_ARROW_SIZE', 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT',
+                         'EDGE_STROKE_SELECTED_PAINT', 'EDGE_STROKE_UNSELECTED_PAINT',
+                         'EDGE_TARGET_ARROW_SELECTED_PAINT', 'EDGE_TARGET_ARROW_SHAPE', 'EDGE_TARGET_ARROW_SIZE',
+                         'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'EDGE_TOOLTIP', 'EDGE_TRANSPARENCY',
+                         'EDGE_UNSELECTED_PAINT', 'EDGE_VISIBLE', 'EDGE_WIDTH', 'NETWORK',
+                         'NETWORK_ANNOTATION_SELECTION', 'NETWORK_BACKGROUND_PAINT', 'NETWORK_CENTER_X_LOCATION',
+                         'NETWORK_CENTER_Y_LOCATION', 'NETWORK_CENTER_Z_LOCATION', 'NETWORK_DEPTH',
+                         'NETWORK_EDGE_SELECTION', 'NETWORK_FORCE_HIGH_DETAIL', 'NETWORK_HEIGHT',
+                         'NETWORK_NODE_LABEL_SELECTION', 'NETWORK_NODE_SELECTION', 'NETWORK_SCALE_FACTOR',
+                         'NETWORK_SIZE', 'NETWORK_TITLE', 'NETWORK_WIDTH', 'NODE', 'NODE_BORDER_PAINT',
+                         'NODE_BORDER_STROKE', 'NODE_BORDER_TRANSPARENCY', 'NODE_BORDER_WIDTH', 'NODE_CUSTOMGRAPHICS_1',
+                         'NODE_CUSTOMGRAPHICS_2', 'NODE_CUSTOMGRAPHICS_3', 'NODE_CUSTOMGRAPHICS_4',
+                         'NODE_CUSTOMGRAPHICS_5', 'NODE_CUSTOMGRAPHICS_6', 'NODE_CUSTOMGRAPHICS_7',
+                         'NODE_CUSTOMGRAPHICS_8', 'NODE_CUSTOMGRAPHICS_9', 'NODE_CUSTOMGRAPHICS_POSITION_1',
+                         'NODE_CUSTOMGRAPHICS_POSITION_2', 'NODE_CUSTOMGRAPHICS_POSITION_3',
+                         'NODE_CUSTOMGRAPHICS_POSITION_4', 'NODE_CUSTOMGRAPHICS_POSITION_5',
+                         'NODE_CUSTOMGRAPHICS_POSITION_6', 'NODE_CUSTOMGRAPHICS_POSITION_7',
+                         'NODE_CUSTOMGRAPHICS_POSITION_8', 'NODE_CUSTOMGRAPHICS_POSITION_9',
+                         'NODE_CUSTOMGRAPHICS_SIZE_1', 'NODE_CUSTOMGRAPHICS_SIZE_2', 'NODE_CUSTOMGRAPHICS_SIZE_3',
+                         'NODE_CUSTOMGRAPHICS_SIZE_4', 'NODE_CUSTOMGRAPHICS_SIZE_5', 'NODE_CUSTOMGRAPHICS_SIZE_6',
+                         'NODE_CUSTOMGRAPHICS_SIZE_7', 'NODE_CUSTOMGRAPHICS_SIZE_8', 'NODE_CUSTOMGRAPHICS_SIZE_9',
+                         'NODE_CUSTOMPAINT_1', 'NODE_CUSTOMPAINT_2', 'NODE_CUSTOMPAINT_3', 'NODE_CUSTOMPAINT_4',
+                         'NODE_CUSTOMPAINT_5', 'NODE_CUSTOMPAINT_6', 'NODE_CUSTOMPAINT_7', 'NODE_CUSTOMPAINT_8',
+                         'NODE_CUSTOMPAINT_9', 'NODE_DEPTH', 'NODE_FILL_COLOR', 'NODE_HEIGHT', 'NODE_LABEL',
+                         'NODE_LABEL_COLOR', 'NODE_LABEL_FONT_FACE', 'NODE_LABEL_FONT_SIZE', 'NODE_LABEL_POSITION',
+                         'NODE_LABEL_TRANSPARENCY', 'NODE_LABEL_WIDTH', 'NODE_NESTED_NETWORK_IMAGE_VISIBLE',
+                         'NODE_PAINT', 'NODE_SELECTED', 'NODE_SELECTED_PAINT', 'NODE_SHAPE', 'NODE_SIZE',
+                         'NODE_TOOLTIP', 'NODE_TRANSPARENCY', 'NODE_VISIBLE', 'NODE_WIDTH', 'NODE_X_LOCATION',
+                         'NODE_Y_LOCATION', 'NODE_Z_LOCATION'})
 
     def _check_property(self, cy_property, expected_property, expected_column, expected_column_type, expected_type,
                         expected_cargo=None):
