@@ -122,6 +122,16 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
         print("Invalid SUID in list: " + str(edge_suids))
         raise CyError('Invalid SUID in list')
 
+# ------------------------------------------------------------------------------
+# Checks to see if a particular column name exists in the specific table. Returns
+# TRUE or FALSE.
+# TODO: R had netowrk=network, which looks like a typo
+def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE_URL):
+    if table_column not in tables.get_table_column_names(table, network=network, base_url=base_url):
+        sys.stderr.write('Column ' + table_column + ' does not exist in the ' + table + ' table.')
+        # TODO: Is this a good idea ... writing the error out?
+        return False
+    return True
 
 # ------------------------------------------------------------------------------
 # Checks to see if min supported versions of api and cytoscape are running.
@@ -146,3 +156,13 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
         nogo = True
 
     if nogo: raise CyError('Function not run due to unsupported version.')
+
+# ------------------------------------------------------------------------------
+# Validate and provide user feedback when hex color codes are required input.
+def is_not_hex_color(color):
+    if color.startswith('#') and len(color) == 7:
+        return False
+    else:
+        # TODO: Do we want to report this way?
+        sys.stderr.write('Error. ' + color + ' is not a valid hexadecimal color (has to begin with # and be 7 characters long).')
+        return True

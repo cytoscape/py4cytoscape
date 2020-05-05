@@ -24,16 +24,19 @@ License:
 
 # External library imports
 import sys
+import time
 
 # Internal module imports
 from . import networks
 from . import commands
 from . import styles
+from . import style_defaults
 
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
 
 
 # ==============================================================================
@@ -191,6 +194,7 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
         res = commands.cyrest_put('styles/' + style_name + '/mappings/' + visual_prop_name, body=[mapping], base_url=base_url, require_json=False)
     else:
         res = commands.cyrest_post('styles/' + style_name + '/mappings', body=[mapping], base_url=base_url, require_json=False)
+    time.sleep(MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [Cytoscape BUG]
     return res
 
 
@@ -293,4 +297,213 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
         :meth:`map_visual_property`
     """
     res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
+    return res
+
+# ==============================================================================
+# II. Specific Functions
+# ==============================================================================
+# II.a. Node Properties
+# Pattern: (1) prepare map_visual_property, (2) call update_style_mapping()
+# ------------------------------------------------------------------------------
+
+# TODO: R documented colors list incorrectly
+@cy_log
+def set_node_border_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Map table column values to colors to set the node border color.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        colors (list): list of hex colors
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_color_mapping('AverageShortestPathLength', [1.0, 16.36], ['#FBE723', '#440256'], style_name='galFiltered Style')
+        ''
+        >>> set_node_border_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
+        ''
+        >>> set_node_border_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
+        ''
+    """
+    for color in colors or []:
+        if is_not_hex_color(color):
+            return None # TODO: Should we be throwing an exception?
+
+    # set default
+    if default_color is not None:
+        style_defaults.set_node_border_color_default(default_color, style_name, base_url=base_url)
+# TODO: An error here will be missed ... shouldn't this throw an exception?
+
+    return _update_style_mapping('NODE_BORDER_PAINT', table_column, table_column_values, colors, mapping_type, style_name, network, base_url)
+
+
+def set_node_border_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Set opacity for node border only.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        opacities (list): int values between 0 and 255; 0 is invisible
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_opacity (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_opacity_mapping('AverageShortestPathLength', table_column_values=[1.0, 16.36], opacities=[50, 100], style_name='galFiltered Style')
+        ''
+        >>> set_node_border_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
+        ''
+        >>> set_node_border_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
+        ''
+    """
+    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+        raise CyError('Table column does not exist. Please try again.')
+
+    if opacities is not None:
+        for o in opacities:
+            if o < 0 or o > 255:
+                sys.stderr.write('Error: opacities must be between 0 and 255.')
+                return None
+
+    if default_opacity is not None:
+        if default_opacity < 0 or default_opacity > 255:
+            sys.stderr.write('Error: opacity must be between 0 and 255.')
+            return None
+        style_defaults.set_visual_property_default({'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+
+    return _update_style_mapping('NODE_BORDER_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url)
+
+
+def set_node_border_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c', default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Map table column values to widths to set the node border width.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        widths (list): List of width values to map to ``table_column_values``
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_width (int): Width value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_width_mapping('AverageShortestPathLength', table_column_values=[1.0, 16.36], widths=[5, 10], style_name='galFiltered Style')
+        ''
+        >>> set_node_border_width_mapping('Degree', table_column_values=['1', '2'], widths=[5, 10], mapping_type='d', style_name='galFiltered Style')
+        ''
+        >>> set_node_border_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
+        ''
+    """
+    # set default
+    if default_width is not None:
+        style_defaults.set_node_border_width_default(default_width, style_name, base_url=base_url)
+
+    return _update_style_mapping('NODE_BORDER_WIDTH', table_column, table_column_values, widths, mapping_type, style_name, network, base_url)
+
+
+def set_node_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Map table column values to colors to set the node fill color.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        colors (list): list of hex colors to map to ``table_column_values``
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_color_mapping('AverageShortestPathLength', [1.0, 16.36], ['#FBE723', '#440256'], style_name='galFiltered Style')
+        ''
+        >>> set_node_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
+        ''
+        >>> set_node_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
+        ''
+    """
+    # check if colors are formatted correctly
+    for color in colors or []:
+        if is_not_hex_color(color):
+            return None  # TODO: Should we be throwing an exception?
+
+    # set default
+    if default_color is not None:
+        style_defaults.set_node_color_default(default_color, style_name, base_url=base_url)
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
+
+    return _update_style_mapping('NODE_FILL_COLOR', table_column, table_column_values, colors, mapping_type,
+                                 style_name, network, base_url)
+
+
+
+
+
+def _update_style_mapping(visual_prop_name, table_column, table_column_values, range_map, mapping_type, style_name, network, base_url):
+    if range_map is not None: range_map = [str(x) for x in range_map] # CyREST requires strings
+
+    # perform mapping
+    if mapping_type in ['continuous', 'c', 'interpolate']:
+        mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
+                                  network=network,
+                                  base_url=base_url)
+    elif mapping_type in ['discrete', 'd', 'lookup']:
+        mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
+                                  network=network,
+                                  base_url=base_url)
+    elif mapping_type in ['passthrough', 'p']:
+        mvp = map_visual_property(visual_prop_name, table_column, 'p', network=network, base_url=base_url)
+    else:
+        # TODO: Do we want to report this way?
+        sys.stderr.write('mapping_type not recognized.')
+        return None
+
+    res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res

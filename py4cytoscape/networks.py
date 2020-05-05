@@ -53,6 +53,7 @@ from . import layouts
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS
 from .exceptions import CyError
 
 
@@ -998,7 +999,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                         body=json_network, base_url=base_url)
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
     # "vizmap apply" command below fails for lack of a valid view.
-    time.sleep(2)
+    time.sleep(MODEL_PROPAGATION_SECS)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1070,7 +1071,7 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     # "network load file"'s own network. This is race condition that can be solved by "network load file"
     # not returning until it's actually done.
     # TODO: Fix this race condition
-    time.sleep(4)
+    time.sleep(CATCHUP_NETWORK_SECS)
 
     return res
 

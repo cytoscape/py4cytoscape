@@ -36,6 +36,7 @@ from . import network_selection
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_tuning import CATCHUP_FILTER_SECS, MODEL_PROPAGATION_SECS
 
 
 @cy_log
@@ -369,7 +370,7 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
     """
     filename = os.path.abspath(filename)
     res = commands.commands_post('filter import file="' + filename + '"', base_url=base_url)
-    time.sleep(5)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
+    time.sleep(CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res
 
 
@@ -379,7 +380,7 @@ def _create_filter_and_finish(cmd, cmd_body, network, base_url):
 
 
 def _check_selected(network, base_url):
-    time.sleep(1)  # Yikes! Have to wait a second for selection to settle!
+    time.sleep(MODEL_PROPAGATION_SECS)  # Yikes! Have to wait a second for selection to settle!
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
 
