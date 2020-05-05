@@ -248,6 +248,21 @@ class StyleMappingsTests(unittest.TestCase):
                                   'pass_test_params': {'default_color': _NEW_DEFAULT},
                                   })
 
+    @print_entry_exit
+    def test_set_node_combo_opacity_mapping(self):
+        _NEW_DEFAULT = 225
+        _PASSTHRU_VAL = 250
+        self._check_set_property({'prop_func': set_node_combo_opacity_mapping,
+                                  'prop_name': ['NODE_TRANSPARENCY', 'NODE_BORDER_TRANSPARENCY', 'NODE_LABEL_TRANSPARENCY'],
+                                  'new_default': _NEW_DEFAULT,
+                                  'passthru_val': _PASSTHRU_VAL,
+                                  'cont_test_params': {'opacities': [50, 100]},
+                                  'cont_bad_map_params': {'opacities': [550, 100]},
+                                  'cont_short_map_params': {'opacities': [50]},
+                                  'disc_test_params': {'opacities': [50, 100]},
+                                  'pass_test_params': {'default_opacity': _NEW_DEFAULT},
+                                  })
+
 
 
 
@@ -270,32 +285,37 @@ class StyleMappingsTests(unittest.TestCase):
         _TEST_NODE = 'YML007W'
         _NOT_TEST_NODE = 'YGL035C'
         _TEST_STYLE = 'galFiltered Style'
+        prop_name_list = profile['prop_name'] if isinstance(profile['prop_name'], list) else [profile['prop_name']]
 
         # Verify that applying a continuous mapping functions
-        orig_value = get_node_property(node_names=[_TEST_NODE], visual_property=profile['prop_name'])[
-            _TEST_NODE]
+        orig_value_list = [get_node_property(node_names=[_TEST_NODE], visual_property=prop_name)[_TEST_NODE]
+                           for prop_name in prop_name_list]
         self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='AverageShortestPathLength',
                                               table_column_values=[1.0, 16.36], **profile['cont_test_params']), '')
-        cont_value = get_node_property(visual_property=profile['prop_name'])[_TEST_NODE]
-        self.assertNotEqual(cont_value, orig_value)
+        cont_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]     for prop_name in prop_name_list]
+        for cont_value, orig_value in zip(cont_value_list, orig_value_list):
+            self.assertNotEqual(cont_value, orig_value)
 
         # Verify that applying a discrete mapping functions
         self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='Degree', mapping_type='d',
                                               table_column_values=['1', '2'],
                                               **profile['disc_test_params']), '')
-        disc_value = get_node_property(visual_property=profile['prop_name'])[_TEST_NODE]
-        self.assertNotEqual(disc_value, orig_value)
-        self.assertNotEqual(disc_value, cont_value)
+        disc_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]    for prop_name in prop_name_list]
+        for disc_value, cont_value, orig_value in zip(disc_value_list, cont_value_list, orig_value_list):
+            self.assertNotEqual(disc_value, orig_value)
+            self.assertNotEqual(disc_value, cont_value)
 
         # Create a column containing values, then verify that a passthru mapping causes a new value and new default value
         data = df.DataFrame(data={'id': [_TEST_NODE], 'PassthruCol': [profile['passthru_val']]})
         load_table_data(data, data_key_column='id', table='node', table_key_column='name')
         self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol', mapping_type='p',
                                               **profile['pass_test_params']), '')
-        pass_value = get_node_property(visual_property=profile['prop_name'])[_TEST_NODE]
-        self.assertEqual(pass_value, profile['passthru_val'])
-        def_value = get_node_property(visual_property=profile['prop_name'])[_NOT_TEST_NODE]
-        self.assertEqual(def_value, profile['new_default'])
+        pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]    for prop_name in prop_name_list]
+        for pass_value in pass_value_list:
+            self.assertEqual(pass_value, profile['passthru_val'])
+        def_value_list = [get_node_property(visual_property=prop_name)[_NOT_TEST_NODE]     for prop_name in prop_name_list]
+        for def_value in def_value_list:
+            self.assertEqual(def_value, profile['new_default'])
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:

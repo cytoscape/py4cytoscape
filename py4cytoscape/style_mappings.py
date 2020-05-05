@@ -385,11 +385,10 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
     if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
         raise CyError('Table column does not exist. Please try again.')
 
-    if opacities is not None:
-        for o in opacities:
-            if o < 0 or o > 255:
-                sys.stderr.write('Error: opacities must be between 0 and 255.')
-                return None
+    for o in opacities or []:
+        if o < 0 or o > 255:
+            sys.stderr.write('Error: opacities must be between 0 and 255.')
+            return None
 
     if default_opacity is not None:
         if default_opacity < 0 or default_opacity > 255:
@@ -481,6 +480,73 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
 
     return _update_style_mapping('NODE_FILL_COLOR', table_column, table_column_values, colors, mapping_type,
                                  style_name, network, base_url)
+
+
+def set_node_combo_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+    """Set opacity for node fill, border and label all together.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        opacities (list): int values between 0 and 255; 0 is invisible
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_opacity (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_combo_opacity_mapping('AverageShortestPathLength', table_column_values=[1.0, 16.36], opacities=[50, 100], style_name='galFiltered Style')
+        ''
+        >>> set_node_combo_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
+        ''
+        >>> set_node_combo_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
+        ''
+    """
+    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+        raise CyError('Table column does not exist. Please try again.')
+        # TODO: This check wasn't in the R version, but probably should be
+
+    for o in opacities or []:
+        if o < 0 or o > 255:
+            sys.stderr.write('Error: opacities must be between 0 and 255.')
+            return None
+
+    if default_opacity is not None:
+        if default_opacity < 0 or default_opacity > 255:
+            sys.stderr.write('Error: opacity must be between 0 and 255.')
+            return None
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
+            base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
+            base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
+            base_url=base_url)
+
+    # TODO: function results are ignored ... shouldn't we be capturing them?
+    _update_style_mapping('NODE_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
+                          style_name, network, base_url)
+    _update_style_mapping('NODE_BORDER_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
+                          style_name, network, base_url)
+    res = _update_style_mapping('NODE_LABEL_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
+                          style_name, network, base_url)
+    return res
+
+
+
 
 
 
