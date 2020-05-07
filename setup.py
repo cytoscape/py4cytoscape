@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="bdemchak",
+    name="py4cytoscape",
     version="0.0.1",
     author="Barry Demchak",
     author_email="bdemchak@ucsd.edu",
