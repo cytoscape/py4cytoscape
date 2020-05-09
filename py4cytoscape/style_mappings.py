@@ -50,7 +50,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
                         visual_prop_values=[], network=None, base_url=DEFAULT_BASE_URL):
     """Creates a mapping between an attribute and a visual property.
 
-    Generates the appropriate data structure for the "mapping" parameter in ``update_style_mapping``.
+    Generates the appropriate data structure for the "mapping" parameter in ``update_style_mapping()``.
 
     The paired list of values must be of the same length or mapping will fail. For gradient mapping,
     you may include two additional ``visual_prop_values`` in the first and last positions to map respectively
@@ -160,11 +160,11 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
     """Update a visual property mapping in a style.
 
     Updates the visual property mapping, overriding any prior mapping. Creates a visual property mapping if it doesn't
-    already exist in the style. Requires visual property mappings to be previously created, see ``map_visual_property``.
+    already exist in the style. Requires visual property mappings to be previously created, see ``map_visual_property()``.
 
     Args:
         style_name (str): name for style
-        mapping (dict): a single visual property mapping, see ``map_visual_property``
+        mapping (dict): a single visual property mapping, see ``map_visual_property()`` and :meth:`get_visual_property_names`
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -239,7 +239,7 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
 def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
     """Fetch a visual property mapping in a style.
 
-    The property mapping is the same as a dict created by ``map_visual_property``.
+    The property mapping is the same as a dict created by ``map_visual_property()``.
 
     Args:
         style_name (str): name for style
@@ -249,7 +249,7 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: see ``map_visual_property``
+        dict: see ``map_visual_property()``
 
     Raises:
         CyError: if style or property name doesn't exist
@@ -274,7 +274,7 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
 def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
     """Fetch all visual property mapping in a style.
 
-    The property mappings are the same as a dict created by ``map_visual_property``.
+    The property mappings are the same as a dict created by ``map_visual_property()``.
 
     Args:
         style_name (str): name for style
@@ -283,7 +283,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        list: list of dicts of the type created by ``map_visual_property``
+        list: list of dicts of the type created by ``map_visual_property()``
 
     Raises:
         CyError: if style or property name doesn't exist
@@ -852,9 +852,9 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
     Args:
         table_column (str): Name of Cytoscape table column to map values from
         table_column_values (list): List of values from Cytoscape table to be used in mapping
-        shapes (list): List of shapes to map to ``table_column_values``. See ``get_node_shapes``
+        shapes (list): List of shapes to map to ``table_column_values``. See ``get_node_shapes()``
         mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
-        default_opacity (int): Shape to set as default. See ``get_node_shapes``
+        default_opacity (int): Shape to set as default. See ``get_node_shapes()``
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
@@ -1224,8 +1224,8 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
     Args:
         table_column (str): Name of Cytoscape table column to map values from
         table_column_values (list): List of values from Cytoscape table to be used in mapping
-        line_styles (list): List of styles to map to ``table_column_values``. See ``get_line_styles``
-        default_line_style (str): Style to set as default. See ``get_line_styles``
+        line_styles (list): List of styles to map to ``table_column_values``. See ``get_line_styles()``
+        default_line_style (str): Style to set as default. See ``get_line_styles()``
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
@@ -1344,8 +1344,8 @@ def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes
     Args:
         table_column (str): Name of Cytoscape table column to map values from
         table_column_values (list): List of values from Cytoscape table to be used in mapping
-        shapes (list): List of shapes to map to ``table_column_values``. See ``get_arrow_shapes``
-        default_shape (str): Style to set as default. See ``get_arrow_shapes``
+        shapes (list): List of shapes to map to ``table_column_values``. See ``get_arrow_shapes()``
+        default_shape (str): Style to set as default. See ``get_arrow_shapes()``
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
@@ -1379,8 +1379,8 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
     Args:
         table_column (str): Name of Cytoscape table column to map values from
         table_column_values (list): List of values from Cytoscape table to be used in mapping
-        shapes (list): List of shapes to map to ``table_column_values``. See ``get_arrow_shapes``
-        default_shape (str): Style to set as default. See ``get_arrow_shapes``
+        shapes (list): List of shapes to map to ``table_column_values``. See ``get_arrow_shapes()``
+        default_shape (str): Style to set as default. See ``get_arrow_shapes()``
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
