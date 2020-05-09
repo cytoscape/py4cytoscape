@@ -33,14 +33,52 @@ from . import cytoscape_system
 # Internal module convenience imports
 from .exceptions import CyError
 
+# ==============================================================================
+# I. Package Utility Functions
+# ------------------------------------------------------------------------------
+# Supply a set of colors from Brewer palettes (without requiring rColorBrewer)
+def cyPalette(name='set1'):
+    PALETTES = {
+        'set1': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF', '#999999'],
+        'set2': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'],
+        'set3': ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9',
+                 '#BC80BD', '#CCEBC5', '#FFED6F'],
+        'reds': ['#FFF5F0', '#FEE0D2', '#FCBBA1', '#FC9272', '#FB6A4A', '#EF3B2C', '#CB181D', '#A50F15', '#67000D'],
+        'rdbu': ['#67001F', '#B2182B', '#D6604D', '#F4A582', '#FDDBC7', '#F7F7F7', '#D1E5F0', '#92C5DE', '#4393C3',
+                 '#2166AC', '#053061'],
+        'burd': ['#053061', '#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7', '#FDDBC7', '#F4A582', '#D6604D',
+                 '#B2182B', '#67001F']
+    }
+    return PALETTES[name]
 
-def build_url(base_url=DEFAULT_BASE_URL, command=None):
-    """ Append a command (if it exists) to a base URL """
-    if command is not None:
-        return base_url + "/" + urllib.parse.quote(command)
+# ------------------------------------------------------------------------------
+# Validate and provide user feedback when hex color codes are required input.
+def is_not_hex_color(color):
+    if color.startswith('#') and len(color) == 7:
+        return False
     else:
-        return base_url
+        # TODO: Do we want to report this way?
+        sys.stderr.write('Error. ' + color + ' is not a valid hexadecimal color (has to begin with # and be 7 characters long).')
+        return True
 
+def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
+    if node_names is None: return None
+    if isinstance(node_names, str): node_names = [node_names]
+    df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
+
+    all_suids = df.index
+    test_present = [x in all_suids for x in node_names]
+    if not False in test_present:
+        return node_names
+
+    # map all node names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
+    node_suids = [list(df[df.name.eq(node_name)].index.values) for node_name in node_names]
+    if True in [True if len(x) == 0 else False for x in node_suids]:
+        print("Invalid name in list: " + str(node_names))
+        raise CyError('Invalid name in list')
+    node_suids = [x[0] if len(x) == 1 else x for x in node_suids]
+
+    return node_suids
 
 def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
     if node_suids is None: return None
@@ -61,26 +99,6 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
     except Exception as e:
         print("Invalid SUID in list: " + str(node_suids))
         raise CyError('Invalid SUID in list')
-
-
-def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
-    if node_names is None: return None
-    if isinstance(node_names, str): node_names = [node_names]
-    df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
-
-    all_suids = df.index
-    test_present = [x in all_suids for x in node_names]
-    if not False in test_present:
-        return node_names
-
-    # map all node names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
-    node_suids = [list(df[df.name.eq(node_name)].index.values) for node_name in node_names]
-    if True in [True if len(x) == 0 else False for x in node_suids]:
-        print("Invalid name in list: " + str(node_names))
-        raise CyError('Invalid name in list')
-    node_suids = [x[0] if len(x) == 1 else x for x in node_suids]
-
-    return node_suids
 
 
 def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
@@ -157,12 +175,21 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
 
     if nogo: raise CyError('Function not run due to unsupported version.')
 
-# ------------------------------------------------------------------------------
-# Validate and provide user feedback when hex color codes are required input.
-def is_not_hex_color(color):
-    if color.startswith('#') and len(color) == 7:
-        return False
+def build_url(base_url=DEFAULT_BASE_URL, command=None):
+    """ Append a command (if it exists) to a base URL """
+    if command is not None:
+        return base_url + "/" + urllib.parse.quote(command)
     else:
-        # TODO: Do we want to report this way?
-        sys.stderr.write('Error. ' + color + ' is not a valid hexadecimal color (has to begin with # and be 7 characters long).')
-        return True
+        return base_url
+
+
+
+
+
+
+
+
+
+
+
+

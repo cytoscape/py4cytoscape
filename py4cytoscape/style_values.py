@@ -59,3 +59,23 @@ def get_node_property(node_names=None, visual_property='', network=None, base_ur
             base_url=base_url)['value']
                       for node_suid, node_name in zip(node_suids, node_names)}
         return node_props
+
+def get_edge_property(edge_names=None, visual_property='', network=None, base_url=DEFAULT_BASE_URL):
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
+
+    if edge_names is None:
+        res = commands.cyrest_get('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges',
+                                  {'visualProperty': visual_property}, base_url=base_url)
+        edge_suids = [edge['SUID'] for edge in res]
+        edge_names = edge_suid_to_edge_name(edge_suids, network=network, base_url=base_url)
+        edge_props = {name: edge['view'][0]['value'] for edge, name in zip(res, edge_names)}
+        return edge_props
+    else:
+        edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url)
+        edge_props = {edge_name: commands.cyrest_get(
+            'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges/' + str(
+                edge_suid) + '/' + visual_property,
+            base_url=base_url)['value']
+                      for edge_suid, edge_name in zip(edge_suids, edge_names)}
+        return edge_props

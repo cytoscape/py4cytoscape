@@ -31,6 +31,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    session
    styles
    style_defaults
+   style_dependencies
    style_mappings
    style_values
    tables

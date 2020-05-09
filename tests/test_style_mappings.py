@@ -21,12 +21,11 @@ License:
 
 import unittest
 import pandas as df
-
+import time
 
 from requests import RequestException
 
 from test_utils import *
-
 
 
 class StyleMappingsTests(unittest.TestCase):
@@ -180,6 +179,7 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertRaises(CyError, get_style_mapping, self._GAL_FILTERED_STYLE, 'NODE_LABEL')
         # WARNING: This update often fails silently, which causes the get_style_mapping to fail [Cytoscape BUG]
         self.assertEqual(update_style_mapping(self._GAL_FILTERED_STYLE, existing_prop), '')
+### Failed ... NODE_LABEL doesn't seem to exist ... maybe because of a timing race condition??
         readded_prop = get_style_mapping(self._GAL_FILTERED_STYLE, 'NODE_LABEL')
         self._check_property(readded_prop, existing_prop['visualProperty'], existing_prop['mappingColumn'],
                              existing_prop['mappingColumnType'], existing_prop['mappingType'])
@@ -192,123 +192,801 @@ class StyleMappingsTests(unittest.TestCase):
     def test_set_node_border_color_mapping(self):
         _NEW_DEFAULT = '#654321'
         _PASSTHRU_VAL = '#123456'
-        self._check_set_property({'prop_func': set_node_border_color_mapping,
-                                  'prop_name': 'NODE_BORDER_PAINT',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'colors': ['#FBE723', '#440256']},
-                                  'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
-                                  'cont_short_map_params': {'colors': ['#440256']},
-                                  'disc_test_params': {'colors': ['#FFFF00', '#00FF00']},
-                                  'pass_test_params': {'default_color': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_border_color_mapping,
+                                       'prop_name': 'NODE_BORDER_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_border_opacity_mapping(self):
         _NEW_DEFAULT = 225
         _PASSTHRU_VAL = 250
-        self._check_set_property({'prop_func': set_node_border_opacity_mapping,
-                                  'prop_name': 'NODE_BORDER_TRANSPARENCY',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'opacities': [50, 100]},
-                                  'cont_bad_map_params': {'opacities': [550, 100]},
-                                  'cont_short_map_params': {'opacities': [50]},
-                                  'disc_test_params': {'opacities': [50, 100]},
-                                  'pass_test_params': {'default_opacity': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_border_opacity_mapping,
+                                       'prop_name': 'NODE_BORDER_TRANSPARENCY',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [50, 100], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_border_width_mapping(self):
         _NEW_DEFAULT = 4
         _PASSTHRU_VAL = 3
-        self._check_set_property({'prop_func': set_node_border_width_mapping,
-                                  'prop_name': 'NODE_BORDER_WIDTH',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'widths': [5, 10]},
-                                  # 'cont_bad_map_params': {'width': [550, 100]}, ... no bounds checking for this property
-                                  'cont_short_map_params': {'widths': [5]},
-                                  'disc_test_params': {'widths': [5, 10]},
-                                  'pass_test_params': {'default_width': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_border_width_mapping,
+                                       'prop_name': 'NODE_BORDER_WIDTH',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'widths': [5, 10]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'width': [550, 100]}, ... no bounds checking for this property
+                                       'cont_short_map_params': {'widths': [5]},
+                                       'disc_test_params': {'widths': [5, 10], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_width': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_color_mapping(self):
         _NEW_DEFAULT = '#654321'
         _PASSTHRU_VAL = '#123456'
-        self._check_set_property({'prop_func': set_node_color_mapping,
-                                  'prop_name': 'NODE_FILL_COLOR',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'colors': ['#FBE723', '#440256']},
-                                  'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
-                                  'cont_short_map_params': {'colors': ['#440256']},
-                                  'disc_test_params': {'colors': ['#FFFF00', '#00FF00']},
-                                  'pass_test_params': {'default_color': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_color_mapping,
+                                       'prop_name': 'NODE_FILL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_combo_opacity_mapping(self):
         _NEW_DEFAULT = 225
         _PASSTHRU_VAL = 250
-        self._check_set_property({'prop_func': set_node_combo_opacity_mapping,
-                                  'prop_name': ['NODE_TRANSPARENCY', 'NODE_BORDER_TRANSPARENCY', 'NODE_LABEL_TRANSPARENCY'],
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'opacities': [50, 100]},
-                                  'cont_bad_map_params': {'opacities': [550, 100]},
-                                  'cont_short_map_params': {'opacities': [50]},
-                                  'disc_test_params': {'opacities': [50, 100]},
-                                  'pass_test_params': {'default_opacity': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_combo_opacity_mapping,
+                                       'prop_name': ['NODE_TRANSPARENCY', 'NODE_BORDER_TRANSPARENCY',
+                                                     'NODE_LABEL_TRANSPARENCY'],
+                                       'new_default': _NEW_DEFAULT,
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'set_default': 'p',
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [50, 100], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_fill_opacity_mapping(self):
         _NEW_DEFAULT = 225
         _PASSTHRU_VAL = 250
-        self._check_set_property({'prop_func': set_node_fill_opacity_mapping,
-                                  'prop_name': 'NODE_TRANSPARENCY',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  'cont_test_params': {'opacities': [50, 100]},
-                                  'cont_bad_map_params': {'opacities': [550, 100]},
-                                  'cont_short_map_params': {'opacities': [50]},
-                                  'disc_test_params': {'opacities': [50, 100]},
-                                  'pass_test_params': {'default_opacity': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_fill_opacity_mapping,
+                                       'prop_name': 'NODE_TRANSPARENCY',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [50, 100], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
     @print_entry_exit
     def test_set_node_font_face_mapping(self):
         _NEW_DEFAULT = 'Dialog.bold,bold,12'
         _PASSTHRU_VAL = 'Dialog.italic,plain,12'
-        self._check_set_property({'prop_func': set_node_font_face_mapping,
-                                  'prop_name': 'NODE_LABEL_FONT_FACE',
-                                  'new_default': _NEW_DEFAULT,
-                                  'passthru_val': _PASSTHRU_VAL,
-                                  # 'cont_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12']},
-                                  # 'cont_bad_map_params': {'fonts': ['Arial bogus,plain,12', 'Arial Bold,bold,12']},
-                                  # 'cont_short_map_params': {'fonts': ['Arial,plain,12']},
-                                  'disc_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12']},
-                                  'pass_test_params': {'default_font': _NEW_DEFAULT},
-                                  })
+        self._check_set_node_property({'prop_func': set_node_font_face_mapping,
+                                       'prop_name': 'NODE_LABEL_FONT_FACE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12']},
+                                       'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'fonts': ['Arial bogus,plain,12', 'Arial Bold,bold,12']},
+                                       # 'cont_short_map_params': {'fonts': ['Arial,plain,12']},
+                                       'disc_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12'],
+                                                            'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_font': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_font_size_mapping(self):
+        _NEW_DEFAULT = 20
+        _PASSTHRU_VAL = 40
+        self._check_set_node_property({'prop_func': set_node_font_size_mapping,
+                                       'prop_name': 'NODE_LABEL_FONT_SIZE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'sizes': [20, 80]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'sizes': [20, 80]},
+                                       'cont_short_map_params': {'sizes': [20]},
+                                       'disc_test_params': {'sizes': [40, 90], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_size': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_height_mapping(self):
+        _NEW_DEFAULT = 120
+        _PASSTHRU_VAL = 140
+        self._check_set_node_property({'prop_func': set_node_height_mapping,
+                                       'prop_name': 'NODE_HEIGHT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       'compare_tolerance_percent': 2,
+                                       'cont_test_params': {'heights': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'heights': [120, 180]},
+                                       'cont_short_map_params': {'heights': [120]},
+                                       'disc_test_params': {'heights': [140, 190], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_height': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_label_mapping(self):
+        # _NEW_DEFAULT = 'Test'
+        _PASSTHRU_VAL = 'name'
+        self._check_set_node_property({'prop_func': set_node_label_mapping,
+                                       'prop_name': 'NODE_LABEL',
+                                       # 'new_default': _NEW_DEFAULT,
+                                       # 'set_default' : 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'heights': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'heights': [120, 180]},
+                                       # 'cont_short_map_params': {'heights': [120]},
+                                       # 'disc_test_params': {'heights': [140, 190]},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_label_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_node_property({'prop_func': set_node_label_color_mapping,
+                                       'prop_name': 'NODE_LABEL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_label_opacity_mapping(self):
+        _NEW_DEFAULT = 225
+        _PASSTHRU_VAL = 250
+        self._check_set_node_property({'prop_func': set_node_label_opacity_mapping,
+                                       'prop_name': 'NODE_LABEL_TRANSPARENCY',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [50, 100], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_shape_mapping(self):
+        _NEW_DEFAULT = 'PARALLELOGRAM'
+        # _PASSTHRU_VAL = 250
+        self._check_set_node_property({'prop_func': set_node_shape_mapping,
+                                       'prop_name': 'NODE_SHAPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'shapes': ['OCTAGON', 'TRIANGLE'],
+                                                            'default_shape': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
 
+### Failed
+    # TODO: This fails because fetching NODE_SIZE always returns the default node size instead of the current node size
+    @print_entry_exit
+    def test_set_node_size_mapping(self):
+        _NEW_DEFAULT = 80
+        _PASSTHRU_VAL = 20
+        self._check_set_node_property({'prop_func': set_node_size_mapping,
+                                       'prop_name': 'NODE_SIZE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'sizes': [60, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'sizes': [120, 180]},
+                                       'cont_short_map_params': {'sizes': [120]},
+                                       'disc_test_params': {'sizes': [60, 80], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_size': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_tooltip_mapping(self):
+        # _NEW_DEFAULT = 'Test'
+        _PASSTHRU_VAL = 'tooltip text'
+        # TODO: This fails because of a race condition when reading the tooltip immediately after setting it
+        self._check_set_node_property({'prop_func': set_node_tooltip_mapping,
+                                       'prop_name': 'NODE_TOOLTIP',
+                                       # 'new_default': _NEW_DEFAULT,
+                                       # 'set_default' : 'p',
+                                       # 'compare_tolerance_percent': 0,
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'heights': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'heights': [120, 180]},
+                                       # 'cont_short_map_params': {'heights': [120]},
+                                       # 'disc_test_params': {'heights': [140, 190]},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
 
+    @print_entry_exit
+    def test_set_node_width_mapping(self):
+        _NEW_DEFAULT = 120
+        _PASSTHRU_VAL = 140
+        self._check_set_node_property({'prop_func': set_node_width_mapping,
+                                       'prop_name': 'NODE_WIDTH',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'c',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       'compare_tolerance_percent': 20,
+                                       'cont_test_params': {'widths': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'widths': [120, 180]},
+                                       'cont_short_map_params': {'widths': [120]},
+                                       'disc_test_params': {'widths': [140, 190], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_width': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+### Failed
+    @print_entry_exit
+    def test_set_edge_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_edge_property({'prop_func': set_edge_color_mapping,
+                                       'prop_name': ['EDGE_UNSELECTED_PAINT', 'EDGE_STROKE_UNSELECTED_PAINT'],
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # TODO: This fails because of some interaction between the two properties and the "Edge color to arrows" check box ... what's going on?
 
+    @print_entry_exit
+    def test_set_edge_font_face_mapping(self):
+        _NEW_DEFAULT = 'Dialog.bold,bold,12'
+        _PASSTHRU_VAL = 'Dialog.italic,plain,12'
+        self._check_set_edge_property({'prop_func': set_edge_font_face_mapping,
+                                       'prop_name': 'EDGE_LABEL_FONT_FACE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12']},
+                                       'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'fonts': ['Arial bogus,plain,12', 'Arial Bold,bold,12']},
+                                       # 'cont_short_map_params': {'fonts': ['Arial,plain,12']},
+                                       'disc_test_params': {'fonts': ['Arial,plain,12', 'Arial Bold,bold,12'],
+                                                            'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_font': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_edge_font_size_mapping(self):
+        _NEW_DEFAULT = 20
+        _PASSTHRU_VAL = 40
+        self._check_set_edge_property({'prop_func': set_edge_font_size_mapping,
+                                       'prop_name': 'EDGE_LABEL_FONT_SIZE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'sizes': [20, 80]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'sizes': [20, 80]},
+                                       'cont_short_map_params': {'sizes': [20]},
+                                       'disc_test_params': {'sizes': [40, 90], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_size': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_edge_label_mapping(self):
+        # _NEW_DEFAULT = 'Test'
+        _PASSTHRU_VAL = 'name'
+        self._check_set_edge_property({'prop_func': set_edge_label_mapping,
+                                       'prop_name': 'EDGE_LABEL',
+                                       # 'new_default': _NEW_DEFAULT,
+                                       # 'set_default' : 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'heights': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'heights': [120, 180]},
+                                       # 'cont_short_map_params': {'heights': [120]},
+                                       # 'disc_test_params': {'heights': [140, 190]},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
 
+    @print_entry_exit
+    def test_set_edge_label_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_edge_property({'prop_func': set_edge_label_color_mapping,
+                                       'prop_name': 'EDGE_LABEL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
+    @print_entry_exit
+    def test_set_edge_label_opacity_mapping(self):
+        _NEW_DEFAULT = 225
+        _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_label_opacity_mapping,
+                                       'prop_name': 'EDGE_LABEL_TRANSPARENCY',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [150, 200], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
 
-    def _check_set_property(self, profile):
+    @print_entry_exit
+    def test_set_edge_line_style_mapping(self):
+        _NEW_DEFAULT = 'EQUAL_DASH'
+        # _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_line_style_mapping,
+                                       'prop_name': 'EDGE_LINE_TYPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'line_styles': ['ZIGZAG', 'SINEWAVE'],
+                                                            'default_line_style': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_line_width_mapping(self):
+        _NEW_DEFAULT = 20
+        _PASSTHRU_VAL = 40
+        self._check_set_edge_property({'prop_func': set_edge_line_width_mapping,
+                                       'prop_name': 'EDGE_WIDTH',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'widths': [5, 10]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'width': [550, 100]}, ... no bounds checking for this property
+                                       'cont_short_map_params': {'widths': [5]},
+                                       'disc_test_params': {'widths': [5, 10], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_width': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_opacity_mapping(self):
+        _NEW_DEFAULT = 225
+        _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_opacity_mapping,
+                                       'prop_name': 'EDGE_TRANSPARENCY',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'opacities': [550, 100]},
+                                       'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'opacities': [75, 100], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_target_arrow_mapping(self):
+        _NEW_DEFAULT = 'CIRCLE'
+        # _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_mapping,
+                                       'prop_name': 'EDGE_TARGET_ARROW_SHAPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'shapes': ['DIAMOND', 'CIRCLE'],
+                                                            'default_shape': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_source_arrow_mapping(self):
+        _NEW_DEFAULT = 'CIRCLE'
+        # _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_source_arrow_mapping,
+                                       'prop_name': 'EDGE_SOURCE_ARROW_SHAPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'shapes': ['DIAMOND', 'CIRCLE'],
+                                                            'default_shape': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_target_arrow_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_color_mapping,
+                                       'prop_name': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_source_arrow_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_edge_property({'prop_func': set_edge_source_arrow_color_mapping,
+                                       'prop_name': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_target_arrow_color_mapping(self):
+        _NEW_DEFAULT = '#654321'
+        _PASSTHRU_VAL = '#123456'
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_color_mapping,
+                                       'prop_name': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
+                                       'cont_short_map_params': {'colors': ['#440256']},
+                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_tooltip_mapping(self):
+        # _NEW_DEFAULT = 'Test'
+        _PASSTHRU_VAL = 'tooltip text'
+        # TODO: This fails because of a race condition when reading the tooltip immediately after setting it
+        self._check_set_edge_property({'prop_func': set_edge_tooltip_mapping,
+                                       'prop_name': 'EDGE_TOOLTIP',
+                                       # 'new_default': _NEW_DEFAULT,
+                                       # 'set_default' : 'p',
+                                       # 'compare_tolerance_percent': 0,
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'heights': [120, 180]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'heights': [120, 180]},
+                                       # 'cont_short_map_params': {'heights': [120]},
+                                       # 'disc_test_params': {'heights': [140, 190]},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+    def _check_set_edge_property(self, profile):
+        # Initialization
+        load_test_session()
+        _TEST_EDGE = 'YER110C (pp) YML007W'
+        _NOT_TEST_EDGE = 'YPR113W (pd) YMR043W'
+        _TEST_STYLE = 'galFiltered Style'
+        prop_name_list = profile['prop_name'] if isinstance(profile['prop_name'], list) else [profile['prop_name']]
+        orig_value_list = [get_edge_property(edge_names=[_TEST_EDGE], visual_property=prop_name)[_TEST_EDGE]
+                           for prop_name in prop_name_list]
+
+        def assert_equal(def_value, expected_value, msg):
+            if 'compare_tolerance_percent' in profile:
+                tolerance = float(profile['compare_tolerance_percent']) / 100
+                self.assertGreaterEqual(def_value, expected_value * (1 - tolerance), msg=msg)
+                self.assertLessEqual(def_value, expected_value * (1 + tolerance), msg=msg)
+            else:
+                self.assertEqual(def_value, expected_value, msg=msg)
+
+        def check_default():
+            def_value_list = [get_edge_property(visual_property=prop_name)[_NOT_TEST_EDGE] for prop_name in
+                              prop_name_list]
+            for def_value in def_value_list:
+                assert_equal(def_value, profile['new_default'], msg='Check edge property equals default')
+
+        # Verify that applying a continuous mapping functions
+        if 'cont_test_params' in profile:
+            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+                                                  table_column_values=[2.0, 20000.00], **profile['cont_test_params']),
+                             '', msg='Check continuous mapping succeeded')
+            cont_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
+            for cont_value, orig_value in zip(cont_value_list, orig_value_list):
+                self.assertNotEqual(cont_value, orig_value,
+                                    msg='Check continuous mapping not equal to original mapping')
+            if 'set_default' in profile and profile['set_default'] == 'c': check_default()
+        else:
+            cont_value_list = []
+            if 'cont_no_map_params' in profile:
+                self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+                                  **profile['cont_no_map_params'])
+
+        # Verify that applying a discrete mapping functions
+        if 'disc_test_params' in profile:
+            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='interaction',
+                                                  table_column_values=['pp', 'px'],
+                                                  **profile['disc_test_params']), '',
+                             msg='Check discrete mapping succeeded')
+            disc_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
+            for disc_value, orig_value in zip(disc_value_list, orig_value_list):
+                self.assertNotEqual(disc_value, orig_value, msg='Check discrete mapping not equal to original mapping')
+            for disc_value, cont_value in zip(disc_value_list, cont_value_list):
+                self.assertNotEqual(disc_value, cont_value,
+                                    msg='Check discrete mapping not equal to continuous mapping')
+            if 'set_default' in profile and profile['set_default'] == 'd': check_default()
+        elif 'disc_no_map_params' in profile:
+            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='interaction',
+                              **profile['disc_no_map_params'])
+
+        # Create a column containing values, then verify that a passthru mapping causes a new value and new default value
+        if 'pass_test_params' in profile:
+            data = df.DataFrame(data={'id': [_TEST_EDGE], 'PassthruCol': [profile['passthru_val']]})
+            load_table_data(data, data_key_column='id', table='edge', table_key_column='name')
+            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
+                                                  **profile['pass_test_params']), '',
+                             msg='Check passthru mapping succeeded')
+            pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
+            for pass_value in pass_value_list:
+                self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
+            if 'set_default' in profile and profile['set_default'] == 'p': check_default()
+        elif 'pass_no_map_params' in profile:
+            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+                              **profile['pass_no_map_params'])
+
+        # Verify that a bad value is caught
+        if 'cont_bad_map_params' in profile:
+            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+                                                   table_column_values=[2.0, 20000.00],
+                                                   **profile['cont_bad_map_params']), msg='Check bad continuous value')
+
+        # Verify that a bad mapping type is caught
+        if 'invalid_map_params' in profile:
+            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
+                                                   **profile['invalid_map_params']), msg='Check bad mapping type')
+
+        # Verify that a bad column name is caught
+        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Bogus Col',
+                          **profile['exception_check_params'])
+
+        # Verify that a bad style name is caught
+        self.assertRaises(CyError, profile['prop_func'], style_name='Bogus Style', table_column='PassthruCol',
+                          **profile['exception_check_params'])
+
+        # Verify that that a short mapping is caught
+        if 'cont_short_map_params' in profile:
+            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
+                              table_column='EdgeBetweenness', table_column_values=[2.0, 20000.00],
+                              **profile['cont_short_map_params'])
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='PassthruCol',
+                          **profile['exception_check_params'], network='bogus network')
+
+    def _check_set_node_property(self, profile):
         # Initialization
         load_test_session()
         _TEST_NODE = 'YML007W'
@@ -318,60 +996,85 @@ class StyleMappingsTests(unittest.TestCase):
         orig_value_list = [get_node_property(node_names=[_TEST_NODE], visual_property=prop_name)[_TEST_NODE]
                            for prop_name in prop_name_list]
 
+        def assert_equal(def_value, expected_value, msg):
+            if 'compare_tolerance_percent' in profile:
+                tolerance = float(profile['compare_tolerance_percent']) / 100
+                self.assertGreaterEqual(def_value, expected_value * (1 - tolerance), msg=msg)
+                self.assertLessEqual(def_value, expected_value * (1 + tolerance), msg=msg)
+            else:
+                self.assertEqual(def_value, expected_value, msg=msg)
+
+        def check_default():
+            def_value_list = [get_node_property(visual_property=prop_name)[_NOT_TEST_NODE] for prop_name in
+                              prop_name_list]
+            for def_value in def_value_list:
+                assert_equal(def_value, profile['new_default'], msg='Check node property equals default')
+
         # Verify that applying a continuous mapping functions
         if 'cont_test_params' in profile:
             self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='AverageShortestPathLength',
-                                                  table_column_values=[1.0, 16.36], **profile['cont_test_params']), '')
-            cont_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]     for prop_name in prop_name_list]
+                                                  table_column_values=[1.0, 16.36], **profile['cont_test_params']), '',
+                             msg='Check continuous mapping succeeded')
+            cont_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for cont_value, orig_value in zip(cont_value_list, orig_value_list):
-                self.assertNotEqual(cont_value, orig_value)
+                self.assertNotEqual(cont_value, orig_value,
+                                    msg='Check continuous mapping not equal to original mapping')
+            if 'set_default' in profile and profile['set_default'] == 'c': check_default()
         else:
             cont_value_list = []
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='AverageShortestPathLength', mapping_type='c')
+            if 'cont_no_map_params' in profile:
+                self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
+                                  table_column='AverageShortestPathLength', **profile['cont_no_map_params'])
 
         # Verify that applying a discrete mapping functions
         if 'disc_test_params' in profile:
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='Degree', mapping_type='d',
-                                                  table_column_values=['1', '2'],
-                                                  **profile['disc_test_params']), '')
-            disc_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]    for prop_name in prop_name_list]
+            self.assertEqual(
+                profile['prop_func'](style_name=_TEST_STYLE, table_column='Degree', table_column_values=['1', '2'],
+                                     **profile['disc_test_params']), '', msg='Check discrete mapping succeeded')
+            disc_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for disc_value, orig_value in zip(disc_value_list, orig_value_list):
-                self.assertNotEqual(disc_value, orig_value)
+                self.assertNotEqual(disc_value, orig_value, msg='Check discrete mapping not equal to original mapping')
             for disc_value, cont_value in zip(disc_value_list, cont_value_list):
-                self.assertNotEqual(disc_value, cont_value)
-        else:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Degree', mapping_type='d')
+                self.assertNotEqual(disc_value, cont_value,
+                                    msg='Check discrete mapping not equal to continuous mapping')
+            if 'set_default' in profile and profile['set_default'] == 'd': check_default()
+        elif 'disc_no_map_params' in profile:
+            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Degree',
+                              **profile['disc_no_map_params'])
 
         # Create a column containing values, then verify that a passthru mapping causes a new value and new default value
-        data = df.DataFrame(data={'id': [_TEST_NODE], 'PassthruCol': [profile['passthru_val']]})
-        load_table_data(data, data_key_column='id', table='node', table_key_column='name')
         if 'pass_test_params' in profile:
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol', mapping_type='p',
-                                                  **profile['pass_test_params']), '')
-            pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE]    for prop_name in prop_name_list]
+            data = df.DataFrame(data={'id': [_TEST_NODE], 'PassthruCol': [profile['passthru_val']]})
+            load_table_data(data, data_key_column='id', table='node', table_key_column='name')
+            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
+                                                  **profile['pass_test_params']), '',
+                             msg='Check passthru mapping succeeded')
+            pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
-                self.assertEqual(pass_value, profile['passthru_val'])
-            def_value_list = [get_node_property(visual_property=prop_name)[_NOT_TEST_NODE]     for prop_name in prop_name_list]
-            for def_value in def_value_list:
-                self.assertEqual(def_value, profile['new_default'])
-        else:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='PassthruCol', mapping_type='p')
+                self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
+            if 'set_default' in profile and profile['set_default'] == 'p': check_default()
+        elif 'pass_no_map_params' in profile:
+            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
+                              table_column='AverageShortestPathLength', **profile['pass_no_map_params'])
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:
             self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='AverageShortestPathLength',
-                                                   table_column_values=[1.0, 16.36], **profile['cont_bad_map_params']))
+                                                   table_column_values=[1.0, 16.36], **profile['cont_bad_map_params']),
+                              msg='Check bad continuous value')
 
         # Verify that a bad mapping type is caught
-        self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol', mapping_type='X'))
+        if 'invalid_map_params' in profile:
+            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
+                                                   **profile['invalid_map_params']), msg='Check bad mapping type')
 
         # Verify that a bad column name is caught
         self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Bogus Col',
-                          mapping_type='p')
+                          **profile['exception_check_params'])
 
         # Verify that a bad style name is caught
         self.assertRaises(CyError, profile['prop_func'], style_name='Bogus Style', table_column='PassthruCol',
-                          mapping_type='p')
+                          **profile['exception_check_params'])
 
         # Verify that that a short mapping is caught
         if 'cont_short_map_params' in profile:
@@ -381,7 +1084,7 @@ class StyleMappingsTests(unittest.TestCase):
 
         # Verify that a bad network is caught
         self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='PassthruCol',
-                          mapping_type='p', network='bogus network')
+                          **profile['exception_check_params'], network='bogus network')
 
     def _check_property(self, cy_property, expected_property, expected_column, expected_column_type, expected_type,
                         expected_cargo=None):
