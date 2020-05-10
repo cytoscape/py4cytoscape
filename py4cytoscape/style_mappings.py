@@ -132,20 +132,23 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     visual_prop_map = {'mappingType': mapping_type_name, 'mappingColumn': table_column,
                        'mappingColumnType': table_column_type, 'visualProperty': visual_prop_name}
     if mapping_type_name == 'discrete':
-        visual_prop_map['map'] = [{'key': col_val, 'value': prop_val}    for col_val, prop_val in zip(table_column_values, visual_prop_values)]
+        visual_prop_map['map'] = [{'key': col_val, 'value': prop_val} for col_val, prop_val in
+                                  zip(table_column_values, visual_prop_values)]
     elif mapping_type_name == 'continuous':
         # check for extra lesser and greater values
         prop_val_count = len(visual_prop_values)
         col_val_count = len(table_column_values)
         if prop_val_count - col_val_count == 2:
             matched_visual_prop_values = visual_prop_values[1:]
-            points = [{'value': col_val, 'lesser': prop_val, 'equal': prop_val, 'greater': prop_val}    for col_val, prop_val in zip(table_column_values, matched_visual_prop_values)]
+            points = [{'value': col_val, 'lesser': prop_val, 'equal': prop_val, 'greater': prop_val} for
+                      col_val, prop_val in zip(table_column_values, matched_visual_prop_values)]
 
             # then correct extreme values
             points[0]['lesser'] = visual_prop_values[0]
             points[col_val_count - 1]['greater'] = visual_prop_values[-1]
         elif prop_val_count - col_val_count == 0:
-            points = [{'value': col_val, 'lesser': prop_val, 'equal': prop_val, 'greater': prop_val}    for col_val, prop_val in zip(table_column_values, visual_prop_values)]
+            points = [{'value': col_val, 'lesser': prop_val, 'equal': prop_val, 'greater': prop_val} for
+                      col_val, prop_val in zip(table_column_values, visual_prop_values)]
         else:
             error = 'Error: table.column.values and visual.prop.values don\'t match up.'
             sys.stderr.write(error)
@@ -154,6 +157,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
         visual_prop_map['points'] = points
 
     return visual_prop_map
+
 
 @cy_log
 def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
@@ -164,7 +168,7 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
 
     Args:
         style_name (str): name for style
-        mapping (dict): a single visual property mapping, see ``map_visual_property()`` and :meth:`get_visual_property_names`
+        mapping (dict): a single visual property mapping, see ``map_visual_property()``
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -188,14 +192,17 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
 
     # check if vp exists already
     res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
-    vp_list = [prop['visualProperty']   for prop in res]
+    vp_list = [prop['visualProperty'] for prop in res]
     exists = visual_prop_name in vp_list
 
     if exists:
-        res = commands.cyrest_put('styles/' + style_name + '/mappings/' + visual_prop_name, body=[mapping], base_url=base_url, require_json=False)
+        res = commands.cyrest_put('styles/' + style_name + '/mappings/' + visual_prop_name, body=[mapping],
+                                  base_url=base_url, require_json=False)
     else:
-        res = commands.cyrest_post('styles/' + style_name + '/mappings', body=[mapping], base_url=base_url, require_json=False)
-    time.sleep(MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [Cytoscape BUG]
+        res = commands.cyrest_post('styles/' + style_name + '/mappings', body=[mapping], base_url=base_url,
+                                   require_json=False)
+    time.sleep(
+        MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [Cytoscape BUG]
     return res
 
 
@@ -224,14 +231,17 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
     """
     # check if vp exists already
     res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
-    vp_list = [prop['visualProperty']   for prop in res]
+    vp_list = [prop['visualProperty'] for prop in res]
     exists = visual_prop in vp_list
 
     if exists:
-        res = commands.cyrest_delete('styles/' + style_name + '/mappings/' + visual_prop, base_url=base_url, require_json=False)
+        res = commands.cyrest_delete('styles/' + style_name + '/mappings/' + visual_prop,
+                                     base_url=base_url, require_json=False)
     else:
         res = None
     return res
+
+
 # TODO: Verify that it's OK to return None if the style doesn't exist ... maybe should be a CyError?
 
 # TODO: Are we missing a get_style_mapping here?? ... probably ... I'm adding one to help with testing ...
@@ -269,6 +279,7 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
             return prop
     raise CyError('Property "' + visual_prop + '" does not exist in style "' + style_name + '"')
 
+
 # TODO: Are we missing a get_style_all_mappings here?? ... probably ... I'm adding one to help with testing ...
 @cy_log
 def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
@@ -300,6 +311,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
     return res
 
+
 # ==============================================================================
 # II. Specific Functions
 # ==============================================================================
@@ -309,7 +321,8 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
 
 # TODO: R documented colors list incorrectly
 @cy_log
-def set_node_border_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_node_border_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
+                                  default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node border color.
 
     Args:
@@ -342,17 +355,22 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
     """
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_node_border_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('NODE_BORDER_PAINT', table_column, table_column_values, colors, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_BORDER_PAINT', table_column, table_column_values=table_column_values,
+                                   range_map=colors, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url)
 
 
-def set_node_border_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_border_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                                    default_opacity=None, style_name='default', network=None,
+                                    base_url=DEFAULT_BASE_URL):
     """Set opacity for node border only.
 
     Args:
@@ -384,8 +402,8 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
         ''
     """
     # TODO: Moved check to _update_style_mapping
-#    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     for o in opacities or []:
         if o < 0 or o > 255:
@@ -397,12 +415,18 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
         if default_opacity < 0 or default_opacity > 255:
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
-        style_defaults.set_visual_property_default({'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_BORDER_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_BORDER_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                   range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                   network=network, base_url=base_url)
 
 
-def set_node_border_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c', default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_border_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c',
+                                  default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to widths to set the node border width.
 
     Args:
@@ -437,10 +461,14 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
     if default_width is not None:
         style_defaults.set_node_border_width_default(default_width, style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_BORDER_WIDTH', table_column, table_column_values, widths, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_BORDER_WIDTH', table_column, table_column_values=table_column_values,
+                                   range_map=widths, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url)
 
 
-def set_node_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
+                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node fill color.
 
     Args:
@@ -472,8 +500,8 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
     """
     # TODO: Moved to _update_style_mapping
-#    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     # check if colors are formatted correctly
     for color in colors or []:
@@ -485,11 +513,14 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
         style_defaults.set_node_color_default(default_color, style_name, base_url=base_url)
     # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('NODE_FILL_COLOR', table_column, table_column_values, colors, mapping_type,
-                                 style_name, network, base_url)
+    return _update_visual_property('NODE_FILL_COLOR', table_column, table_column_values=table_column_values,
+                                   range_map=colors, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url)
 
 
-def set_node_combo_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_combo_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Set opacity for node fill, border and label all together.
 
     Args:
@@ -530,25 +561,31 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
-            base_url=base_url)
+            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
-            base_url=base_url)
+            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name,
-            base_url=base_url)
+            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
     # TODO: function results are ignored ... shouldn't we be capturing them?
-    _update_style_mapping('NODE_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
-                          style_name, network, base_url)
-    _update_style_mapping('NODE_BORDER_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
-                          style_name, network, base_url)
-    res = _update_style_mapping('NODE_LABEL_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type,
-                          style_name, network, base_url)
+    _update_visual_property('NODE_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                            range_map=opacities, mapping_type=mapping_type, style_name=style_name, network=network,
+                            base_url=base_url)
+    _update_visual_property('NODE_BORDER_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                            range_map=opacities, mapping_type=mapping_type, style_name=style_name, network=network,
+                            base_url=base_url)
+    res = _update_visual_property('NODE_LABEL_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                  range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                  network=network, base_url=base_url)
     return res
 
-def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                                  default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Set opacity for node fill only.
 
     Args:
@@ -580,8 +617,8 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
         ''
     """
     # TODO: Moved to _update_style_mapping
-#    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     for o in opacities or []:
         if o < 0 or o > 255:
@@ -593,11 +630,18 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
         if default_opacity < 0 or default_opacity > 255:
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
-        style_defaults.set_visual_property_default({'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                   range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                   network=network, base_url=base_url)
 
-def set_node_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_node_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None,
+                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Sets font face for node labels.
 
     Args:
@@ -628,16 +672,19 @@ def set_node_font_face_mapping(table_column, table_column_values=None, fonts=Non
     """
     # TODO: moved to _update_style_mapping
     # TODO: R documentation examples look wrong ... check this out
-#    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     if default_font is not None:
         style_defaults.set_node_font_face_default(default_font, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_LABEL_FONT_FACE', table_column, table_column_values, fonts, mapping_type, style_name, network, base_url, supported_mappings=['d', 'p'])
+    return _update_visual_property('NODE_LABEL_FONT_FACE', table_column, table_column_values=table_column_values,
+                                   range_map=fonts, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url, supported_mappings=['d', 'p'])
 
 
-def set_node_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_node_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
+                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to sizes to set the node size.
 
     Args:
@@ -671,9 +718,12 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
     if default_size is not None:
         style_defaults.set_node_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_LABEL_FONT_SIZE', table_column, table_column_values, sizes, mapping_type, style_name,
-                                 network, base_url)
+    return _update_visual_property('NODE_LABEL_FONT_SIZE', table_column, table_column_values=table_column_values,
+                                   range_map=sizes, mapping_type=mapping_type,
+                                   style_name=style_name, network=network, base_url=base_url)
 
+
+@cy_log
 def set_node_height_mapping(table_column, table_column_values=None, heights=None, mapping_type='c', default_height=None,
                             style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to the node heights.
@@ -712,10 +762,12 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
     # TODO: Added this because otherwise, could not set mapping ... the PUT failed silently. Shouldn't we be restoring to its original setting? Same with set_default_node_height?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_HEIGHT', table_column, table_column_values, heights, mapping_type,
-                                 style_name, network, base_url)
+    return _update_visual_property('NODE_HEIGHT', table_column, table_column_values=table_column_values,
+                                   range_map=heights, mapping_type=mapping_type,
+                                   style_name=style_name, network=network, base_url=base_url)
 
 
+@cy_log
 def set_node_label_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as node labels.
 
@@ -753,7 +805,9 @@ def set_node_label_mapping(table_column, style_name='default', network=None, bas
     return res
 
 
-def set_node_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
+                                 default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node border color.
 
     Args:
@@ -786,17 +840,21 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
     """
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_node_label_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('NODE_LABEL_COLOR', table_column, table_column_values, colors, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_LABEL_COLOR', table_column, table_column_values=table_column_values,
+                                   range_map=colors, mapping_type=mapping_type,
+                                   style_name=style_name, network=network, base_url=base_url)
 
 
-def set_node_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Sets opacity for node label only.
 
     Args:
@@ -828,8 +886,8 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
     """
     # TODO: Moved check to _update_style_mapping
-#    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     for o in opacities or []:
         if o < 0 or o > 255:
@@ -841,12 +899,18 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
         if default_opacity < 0 or default_opacity > 255:
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
-        style_defaults.set_visual_property_default({'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_LABEL_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_LABEL_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                   range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                   network=network, base_url=base_url)
 
 
-def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, default_shape=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, default_shape=None,
+                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the node shape.
 
     Args:
@@ -876,10 +940,15 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
     if default_shape is not None:
         style_defaults.set_node_shape_default(default_shape, style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_SHAPE', table_column, table_column_values, shapes, 'd', style_name, network, base_url, supported_mappings=['d'])
+    return _update_visual_property('NODE_SHAPE', table_column, table_column_values=table_column_values,
+                                   range_map=shapes, mapping_type='d', style_name=style_name, network=network,
+                                   base_url=base_url, supported_mappings=['d'])
+
 
 # TODO: R documentation claims this is about font sizes
-def set_node_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_node_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
+                          style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to node sizes.
 
     Args:
@@ -917,8 +986,11 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
     # TODO: Added this because otherwise, could not set mapping ... the PUT failed silently. Shouldn't we be restoring to its original setting? Same with set_default_node_height?
     style_dependencies.lock_node_dimensions(True, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_SIZE', table_column, table_column_values, sizes, mapping_type, style_name, network, base_url)
+    return _update_visual_property('NODE_SIZE', table_column, table_column_values=table_column_values, range_map=sizes,
+                                   mapping_type=mapping_type, style_name=style_name, network=network, base_url=base_url)
 
+
+@cy_log
 def set_node_tooltip_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as node tooltips.
 
@@ -953,6 +1025,8 @@ def set_node_tooltip_mapping(table_column, style_name='default', network=None, b
     res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res
 
+
+@cy_log
 def set_node_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c', default_width=None,
                            style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to the node widths.
@@ -991,8 +1065,10 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
     # TODO: Added this because otherwise, could not set mapping ... the PUT failed silently. Shouldn't we be restoring to its original setting? Same with set_default_node_height?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('NODE_WIDTH', table_column, table_column_values, widths, mapping_type,
-                                 style_name, network, base_url)
+    return _update_visual_property('NODE_WIDTH', table_column, table_column_values=table_column_values,
+                                   range_map=widths, mapping_type=mapping_type,
+                                   style_name=style_name, network=network, base_url=base_url)
+
 
 # ==============================================================================
 # II.b. Edge Properties
@@ -1000,26 +1076,34 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
 # ------------------------------------------------------------------------------
 
 # TODO: Come back to this once we figure out what it should be doing
-def set_edge_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+@cy_log
+def set_edge_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
+                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_edge_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
     # perform mapping for COLOR (i.e., when arrowColorMatchesEdge=T)
     # TODO: This code checks table_column, but the R code does not
-    res = _update_style_mapping('EDGE_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type, style_name, network, base_url, table='edge')
+    res = _update_visual_property('EDGE_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type,
+                                  style_name, network, base_url, table='edge')
     if res is not None:
         # perform mapping for STROKE (i.e., when arrowColorMatchesEdge=F)
-        res = _update_style_mapping('EDGE_STROKE_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type,
-                                    style_name, network, base_url, table='edge')
+        res = _update_visual_property('EDGE_STROKE_UNSELECTED_PAINT', table_column,
+                                      table_column_values=table_column_values, range_map=colors,
+                                      mapping_type=mapping_type, style_name=style_name, network=network,
+                                      base_url=base_url, table='edge')
     return res
 
-def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None,
+                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Sets font face for edge labels.
 
     Args:
@@ -1049,12 +1133,19 @@ def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=Non
         ''
     """
     if default_font is not None:
-        style_defaults.set_visual_property_default({'visualProperty': 'EDGE_LABEL_FONT_FACE', 'value': default_font}, style_name=style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+        style_defaults.set_visual_property_default({'visualProperty': 'EDGE_LABEL_FONT_FACE', 'value': default_font},
+                                                   style_name=style_name, base_url=base_url)
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('EDGE_LABEL_FONT_FACE', table_column, table_column_values, fonts, mapping_type, style_name, network, base_url, supported_mappings=['d', 'p'], table='edge')
+    return _update_visual_property('EDGE_LABEL_FONT_FACE', table_column, table_column_values=table_column_values,
+                                   range_map=fonts, mapping_type=mapping_type,
+                                   style_name=style_name, network=network, base_url=base_url,
+                                   supported_mappings=['d', 'p'], table='edge')
 
-def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
+                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to sizes to set the edge size.
 
     Args:
@@ -1088,9 +1179,12 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
     if default_size is not None:
         style_defaults.set_edge_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('EDGE_LABEL_FONT_SIZE', table_column, table_column_values, sizes, mapping_type, style_name,
-                                 network, base_url, table='edge')
+    return _update_visual_property('EDGE_LABEL_FONT_SIZE', table_column, table_column_values=table_column_values,
+                                   range_map=sizes, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url, table='edge')
 
+
+@cy_log
 def set_edge_label_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as edge labels.
 
@@ -1127,7 +1221,10 @@ def set_edge_label_mapping(table_column, style_name='default', network=None, bas
     res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res
 
-def set_edge_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
+                                 default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the edge border color.
 
     Args:
@@ -1160,16 +1257,21 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
     """
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_edge_label_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('EDGE_LABEL_COLOR', table_column, table_column_values, colors, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_LABEL_COLOR', table_column, table_column_values=table_column_values,
+                                   range_map=colors, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url, table='edge')
 
-def set_edge_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Sets opacity for edge label only.
 
     Args:
@@ -1201,8 +1303,8 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
     """
     # TODO: Moved check to _update_style_mapping
-#    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
-#        raise CyError('Table column does not exist. Please try again.')
+    #    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
+    #        raise CyError('Table column does not exist. Please try again.')
 
     for o in opacities or []:
         if o < 0 or o > 255:
@@ -1214,11 +1316,18 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
         if default_opacity < 0 or default_opacity > 255:
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
-        style_defaults.set_visual_property_default({'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('EDGE_LABEL_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_LABEL_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                   range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                   network=network, base_url=base_url, table='edge')
 
-def set_edge_line_style_mapping(table_column, table_column_values=None, line_styles=None, default_line_style='SOLID', style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_line_style_mapping(table_column, table_column_values=None, line_styles=None, default_line_style='SOLID',
+                                style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to styles to set the edge style.
 
     Args:
@@ -1249,9 +1358,14 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
         style_defaults.set_edge_line_style_default(default_line_style, style_name=style_name, base_url=base_url)
         # TODO: If this fails, flow continues anyway
 
-    return _update_style_mapping('EDGE_LINE_TYPE', table_column, table_column_values, line_styles, 'd', style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_LINE_TYPE', table_column, table_column_values=table_column_values,
+                                   range_map=line_styles, mapping_type='d', style_name=style_name, network=network,
+                                   base_url=base_url, table='edge')
 
-def set_edge_line_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c', default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_line_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c',
+                                default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to widths to set the node border width.
 
     Args:
@@ -1288,9 +1402,14 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
         style_defaults.set_edge_line_width_default(default_width, style_name=style_name, base_url=base_url)
         # TODO: If this fails, flow continues anyway
 
-    return _update_style_mapping('EDGE_WIDTH', table_column, table_column_values, widths, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_WIDTH', table_column, table_column_values=table_column_values,
+                                   range_map=widths, mapping_type=mapping_type, style_name=style_name, network=network,
+                                   base_url=base_url, table='edge')
 
-def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c', default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
+                             default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to opacities to set the edge opacity.
 
     Args:
@@ -1333,12 +1452,20 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
         if default_opacity < 0 or default_opacity > 255:
             sys.stderr.write('Error: opacity must be between 0 and 255.')
             return None
-        style_defaults.set_visual_property_default({'visualProperty': 'EDGE_TRANSPARENCY', 'value': str(default_opacity)}, style_name=style_name, base_url=base_url)
+        style_defaults.set_visual_property_default(
+            {'visualProperty': 'EDGE_TRANSPARENCY', 'value': str(default_opacity)},
+            style_name=style_name, base_url=base_url)
 
-    return _update_style_mapping('EDGE_TRANSPARENCY', table_column, table_column_values, opacities, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_TRANSPARENCY', table_column, table_column_values=table_column_values,
+                                   range_map=opacities, mapping_type=mapping_type, style_name=style_name,
+                                   network=network, base_url=base_url, table='edge')
+
 
 # TODO: R spelled 'Mapping' as 'Maping'
-def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW', style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+# TODO: This is the same as set_edge_target_arrow_shape_mapping???
+@cy_log
+def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
+                                  style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the target arrow shape.
 
     Args:
@@ -1371,9 +1498,15 @@ def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes
         style_defaults.set_edge_target_arrow_shape_default(default_shape, style_name=style_name, base_url=base_url)
         # TODO: If this fails, flow continues anyway
 
-    return _update_style_mapping('EDGE_TARGET_ARROW_SHAPE', table_column, table_column_values, shapes, 'd', style_name, network, base_url, table='edge', supported_mappings=['d'])
+    return _update_visual_property('EDGE_TARGET_ARROW_SHAPE', table_column, table_column_values=table_column_values,
+                                   range_map=shapes, mapping_type='d', style_name=style_name, network=network,
+                                   base_url=base_url, table='edge', supported_mappings=['d'])
 
-def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW', style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+# TODO: This is the same as set_edge_source_arrow_shape_mapping???
+@cy_log
+def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
+                                  style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the source arrow shape.
 
     Args:
@@ -1406,9 +1539,15 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
         style_defaults.set_edge_source_arrow_shape_default(default_shape, style_name=style_name, base_url=base_url)
         # TODO: If this fails, flow continues anyway
 
-    return _update_style_mapping('EDGE_SOURCE_ARROW_SHAPE', table_column, table_column_values, shapes, 'd', style_name, network, base_url, table='edge', supported_mappings=['d'])
+    return _update_visual_property('EDGE_SOURCE_ARROW_SHAPE', table_column, table_column_values=table_column_values,
+                                   range_map=shapes, mapping_type='d', style_name=style_name, network=network,
+                                   base_url=base_url, table='edge', supported_mappings=['d'])
 
-def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
+                                        default_color=None, style_name='default', network=None,
+                                        base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the target arrow color.
 
     Args:
@@ -1441,16 +1580,23 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
     """
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_edge_target_arrow_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('EDGE_TARGET_ARROW_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_TARGET_ARROW_UNSELECTED_PAINT', table_column,
+                                   table_column_values=table_column_values, range_map=colors,
+                                   mapping_type=mapping_type, style_name=style_name, network=network, base_url=base_url,
+                                   table='edge')
 
-def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+
+@cy_log
+def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
+                                        default_color=None, style_name='default', network=None,
+                                        base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the source arrow color.
 
     Args:
@@ -1483,15 +1629,98 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
     """
     for color in colors or []:
         if is_not_hex_color(color):
-            return None # TODO: Should we be throwing an exception?
+            return None  # TODO: Should we be throwing an exception?
 
     # set default
     if default_color is not None:
         style_defaults.set_edge_source_arrow_color_default(default_color, style_name, base_url=base_url)
-# TODO: An error here will be missed ... shouldn't this throw an exception?
+    # TODO: An error here will be missed ... shouldn't this throw an exception?
 
-    return _update_style_mapping('EDGE_SOURCE_ARROW_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type, style_name, network, base_url, table='edge')
+    return _update_visual_property('EDGE_SOURCE_ARROW_UNSELECTED_PAINT', table_column,
+                                   table_column_values=table_column_values, range_map=colors,
+                                   mapping_type=mapping_type, style_name=style_name, network=network, base_url=base_url,
+                                   table='edge')
 
+@cy_log
+def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, shapes=None,
+                                        default_shape=None, style_name='default', network=None,
+                                        base_url=DEFAULT_BASE_URL):
+    """Map table column values to colors to set the target arrow color.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        shapes (list): List of arrow shapes to map to ``table_column_values``. See ``get_arrow_shapes()``
+        default_shape (str): Shape to set as default. See ``get_arrow_shapes()``
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_edge_source_arrow_target_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
+        ''
+
+    Note:
+        This is the same function as ``set_edge_target_arrow_mapping()``
+
+    See also:
+        :meth:`set_edge_target_arrow_mapping`
+    """
+    return set_edge_target_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
+                                         default_shape=default_shape, style_name=style_name, network=network,
+                                         base_url=base_url)
+
+
+@cy_log
+def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, shapes=None,
+                                        default_shape=None, style_name='default', network=None,
+                                        base_url=DEFAULT_BASE_URL):
+    """Map table column values to colors to set the source arrow color.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        shapes (list): List of arrow shapes to map to ``table_column_values``. See ``get_arrow_shapes()``
+        default_shape (str): Shape to set as default. See ``get_arrow_shapes()``
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str or None: '' if successful or None if error
+
+    Raises:
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_edge_source_arrow_shape_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
+        ''
+
+    Note:
+        This is the same function as ``set_edge_source_arrow_mapping()``
+
+    See also:
+        :meth:`set_edge_source_arrow_mapping`
+    """
+    return set_edge_source_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
+                                        default_shape=default_shape, style_name=style_name, network=network,
+                                        base_url=base_url)
+
+@cy_log
 def set_edge_tooltip_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as edge tooltips.
 
@@ -1516,19 +1745,16 @@ def set_edge_tooltip_mapping(table_column, style_name='default', network=None, b
         ''
     """
     # TODO: Won't this miss setting the default tooltip?
-    return _update_style_mapping('EDGE_TOOLTIP', table_column, None, None, 'p', style_name, network, base_url, table='edge', supported_mappings='p')
+    return _update_visual_property('EDGE_TOOLTIP', table_column, mapping_type='p', style_name=style_name,
+                                   network=network, base_url=base_url, table='edge', supported_mappings=['p'])
 
 
-
-
-
-
-
-
-
+# Check table column, create the visual property map, and update Cytoscape's copy of the visual property
 # TODO: Clean up this function signature so it doesn't require table_column_values and range_map (if only 'p' is supported)
-def _update_style_mapping(visual_prop_name, table_column, table_column_values, range_map, mapping_type, style_name, network, base_url, supported_mappings=['c', 'd', 'p'], table='node'):
-    if range_map is not None: range_map = [str(x) for x in range_map] # CyREST requires strings
+def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
+                            style_name='default', network=None, base_url=DEFAULT_BASE_URL,
+                            supported_mappings=['c', 'd', 'p'], table='node'):
+    if range_map is not None: range_map = [str(x) for x in range_map]  # CyREST requires strings
 
     # TODO: Added because all mappings need to do this. R code should probably adopt this, too
     if not table_column_exists(table_column, table, network=network, base_url=base_url):
@@ -1538,15 +1764,13 @@ def _update_style_mapping(visual_prop_name, table_column, table_column_values, r
     if mapping_type in ['continuous', 'c', 'interpolate']:
         if 'c' in supported_mappings:
             mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
-                                      network=network,
-                                      base_url=base_url)
+                                      network=network, base_url=base_url)
         else:
             raise CyError('Continuous mapping of ' + visual_prop_name + ' values is not supported.')
     elif mapping_type in ['discrete', 'd', 'lookup']:
         if 'd' in supported_mappings:
             mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
-                                      network=network,
-                                      base_url=base_url)
+                                      network=network, base_url=base_url)
         else:
             raise CyError('Discrete mapping of ' + visual_prop_name + ' values is not supported.')
     elif mapping_type in ['passthrough', 'p']:

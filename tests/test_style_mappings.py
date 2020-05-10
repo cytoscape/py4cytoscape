@@ -179,7 +179,9 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertRaises(CyError, get_style_mapping, self._GAL_FILTERED_STYLE, 'NODE_LABEL')
         # WARNING: This update often fails silently, which causes the get_style_mapping to fail [Cytoscape BUG]
         self.assertEqual(update_style_mapping(self._GAL_FILTERED_STYLE, existing_prop), '')
-### Failed ... NODE_LABEL doesn't seem to exist ... maybe because of a timing race condition??
+
+        ### Failed ... NODE_LABEL doesn't seem to exist ... maybe because of a timing race condition??
+
         readded_prop = get_style_mapping(self._GAL_FILTERED_STYLE, 'NODE_LABEL')
         self._check_property(readded_prop, existing_prop['visualProperty'], existing_prop['mappingColumn'],
                              existing_prop['mappingColumnType'], existing_prop['mappingType'])
@@ -265,7 +267,7 @@ class StyleMappingsTests(unittest.TestCase):
                                        'passthru_val': _PASSTHRU_VAL,
                                        # 'compare_tolerance_percent': 0,
                                        'cont_test_params': {'colors': ['#FBE723', '#440256']},
-                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
                                        'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
                                        'cont_short_map_params': {'colors': ['#440256']},
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
@@ -477,7 +479,7 @@ class StyleMappingsTests(unittest.TestCase):
                                        'exception_check_params': {},
                                        })
 
-### Failed
+    ### Failed
     # TODO: This fails because fetching NODE_SIZE always returns the default node size instead of the current node size
     @print_entry_exit
     def test_set_node_size_mapping(self):
@@ -547,7 +549,7 @@ class StyleMappingsTests(unittest.TestCase):
                                        'exception_check_params': {'mapping_type': 'p'},
                                        })
 
-### Failed
+    ### Failed
     @print_entry_exit
     def test_set_edge_color_mapping(self):
         _NEW_DEFAULT = '#654321'
@@ -885,35 +887,86 @@ class StyleMappingsTests(unittest.TestCase):
                                        'exception_check_params': {},
                                        })
 
+    @print_entry_exit
+    def test_set_edge_target_arrow_shape_mapping(self):
+        _NEW_DEFAULT = 'CIRCLE'
+        # _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_shape_mapping,
+                                       'prop_name': 'EDGE_TARGET_ARROW_SHAPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'shapes': ['DIAMOND', 'CIRCLE'],
+                                                            'default_shape': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+    @print_entry_exit
+    def test_set_edge_source_arrow_shape_mapping(self):
+        _NEW_DEFAULT = 'CIRCLE'
+        # _PASSTHRU_VAL = 250
+        self._check_set_edge_property({'prop_func': set_edge_source_arrow_shape_mapping,
+                                       'prop_name': 'EDGE_SOURCE_ARROW_SHAPE',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'd',
+                                       # 'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       # 'cont_test_params': {'opacities': [50, 100]},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       # 'cont_bad_map_params': {'opacities': [550, 100]},
+                                       # 'cont_short_map_params': {'opacities': [50]},
+                                       'disc_test_params': {'shapes': ['DIAMOND', 'CIRCLE'],
+                                                            'default_shape': _NEW_DEFAULT},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       # 'pass_test_params': {'default_opacity': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       # 'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {},
+                                       })
+
+
+    # Verify that current and default versions of visual property for a node can be set, and that the expected
+    # errors are returned
+    #
+    # For explanation of 'profile' parameter, see _check_node_set_property()
+    #
     def _check_set_edge_property(self, profile):
         # Initialization
         load_test_session()
         _TEST_EDGE = 'YER110C (pp) YML007W'
         _NOT_TEST_EDGE = 'YPR113W (pd) YMR043W'
         _TEST_STYLE = 'galFiltered Style'
+        _CONT_COL = 'EdgeBetweenness'  # Guaranteed to exist
+        _CONT_VAL_RANGE = [2.0, 20000.00]
+        _DESC_COL = 'interaction'  # Guaranteed to exist
+        _DESC_VAL_RANGE = ['pp', 'px']
+        _PASS_COL = 'PassthruCol'  # Created for passthru test
+
+        prop_func = profile['prop_func']
         prop_name_list = profile['prop_name'] if isinstance(profile['prop_name'], list) else [profile['prop_name']]
         orig_value_list = [get_edge_property(edge_names=[_TEST_EDGE], visual_property=prop_name)[_TEST_EDGE]
                            for prop_name in prop_name_list]
-
-        def assert_equal(def_value, expected_value, msg):
-            if 'compare_tolerance_percent' in profile:
-                tolerance = float(profile['compare_tolerance_percent']) / 100
-                self.assertGreaterEqual(def_value, expected_value * (1 - tolerance), msg=msg)
-                self.assertLessEqual(def_value, expected_value * (1 + tolerance), msg=msg)
-            else:
-                self.assertEqual(def_value, expected_value, msg=msg)
 
         def check_default():
             def_value_list = [get_edge_property(visual_property=prop_name)[_NOT_TEST_EDGE] for prop_name in
                               prop_name_list]
             for def_value in def_value_list:
-                assert_equal(def_value, profile['new_default'], msg='Check edge property equals default')
+                self._assert_equal(profile, def_value, profile['new_default'], msg='Check edge property equals default')
 
         # Verify that applying a continuous mapping functions
         if 'cont_test_params' in profile:
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='EdgeBetweenness',
-                                                  table_column_values=[2.0, 20000.00], **profile['cont_test_params']),
-                             '', msg='Check continuous mapping succeeded')
+            self.assertEqual(
+                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_test_params']), '', msg='Check continuous mapping succeeded')
             cont_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
             for cont_value, orig_value in zip(cont_value_list, orig_value_list):
                 self.assertNotEqual(cont_value, orig_value,
@@ -922,15 +975,14 @@ class StyleMappingsTests(unittest.TestCase):
         else:
             cont_value_list = []
             if 'cont_no_map_params' in profile:
-                self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+                self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
                                   **profile['cont_no_map_params'])
 
         # Verify that applying a discrete mapping functions
         if 'disc_test_params' in profile:
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='interaction',
-                                                  table_column_values=['pp', 'px'],
-                                                  **profile['disc_test_params']), '',
-                             msg='Check discrete mapping succeeded')
+            self.assertEqual(
+                prop_func(style_name=_TEST_STYLE, table_column=_DESC_COL, table_column_values=_DESC_VAL_RANGE,
+                          **profile['disc_test_params']), '', msg='Check discrete mapping succeeded')
             disc_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
             for disc_value, orig_value in zip(disc_value_list, orig_value_list):
                 self.assertNotEqual(disc_value, orig_value, msg='Check discrete mapping not equal to original mapping')
@@ -939,82 +991,112 @@ class StyleMappingsTests(unittest.TestCase):
                                     msg='Check discrete mapping not equal to continuous mapping')
             if 'set_default' in profile and profile['set_default'] == 'd': check_default()
         elif 'disc_no_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='interaction',
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_DESC_COL,
                               **profile['disc_no_map_params'])
 
         # Create a column containing values, then verify that a passthru mapping causes a new value and new default value
         if 'pass_test_params' in profile:
-            data = df.DataFrame(data={'id': [_TEST_EDGE], 'PassthruCol': [profile['passthru_val']]})
+            data = df.DataFrame(data={'id': [_TEST_EDGE], _PASS_COL: [profile['passthru_val']]})
             load_table_data(data, data_key_column='id', table='edge', table_key_column='name')
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
-                                                  **profile['pass_test_params']), '',
-                             msg='Check passthru mapping succeeded')
+            self.assertEqual(prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['pass_test_params']),
+                             '', msg='Check passthru mapping succeeded')
             pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
                 self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='EdgeBetweenness',
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
                               **profile['pass_no_map_params'])
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:
-            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='EdgeBetweenness',
-                                                   table_column_values=[2.0, 20000.00],
-                                                   **profile['cont_bad_map_params']), msg='Check bad continuous value')
+            self.assertIsNone(
+                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_bad_map_params']), msg='Check bad continuous value')
 
         # Verify that a bad mapping type is caught
         if 'invalid_map_params' in profile:
-            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
-                                                   **profile['invalid_map_params']), msg='Check bad mapping type')
+            self.assertIsNone(
+                prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params']),
+                msg='Check bad mapping type')
 
         # Verify that a bad column name is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Bogus Col',
+        self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column='Bogus Col',
                           **profile['exception_check_params'])
 
         # Verify that a bad style name is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name='Bogus Style', table_column='PassthruCol',
+        self.assertRaises(CyError, prop_func, style_name='Bogus Style', table_column=_PASS_COL,
                           **profile['exception_check_params'])
 
         # Verify that that a short mapping is caught
         if 'cont_short_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
-                              table_column='EdgeBetweenness', table_column_values=[2.0, 20000.00],
-                              **profile['cont_short_map_params'])
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
+                              table_column_values=_CONT_VAL_RANGE, **profile['cont_short_map_params'])
 
         # Verify that a bad network is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='PassthruCol',
+        self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_PASS_COL,
                           **profile['exception_check_params'], network='bogus network')
 
+    # Verify that current and default versions of visual property for a node can be set, and that the expected
+    # errors are returned
+    #
+    # profile is a dict that drives the test. Field values:
+    # {
+    # 'prop_func': name of function that sets node visual property
+    # 'prop_name': name of visual property to set
+    # 'new_default': value to set as new default ... type matches visual property
+    # 'set_default': type of mapping to use for testing that default is set properly (e.g., 'c', 'd', or 'p)
+    # 'passthru_val': for a passthru mapping, the value to put into the passthru column ... type matches property
+    # 'compare_tolerance_percent': for numeric properties that Cytoscape calculates,
+    #       tolerance for Cytoscape's value matching expected 'new_default'
+    # 'cont_test_params': parameter to pass for a 'c' mapping when 'c' is available ... usually includes the range
+    #       of mapped values. e.g., {'colors': ['#FBE723', '#440256']}
+    # 'cont_no_map_params': parameter to pass for verifying that 'c' is unavailable and trying to map 'c' should
+    #       result in an error. e.g., {'mapping_type': 'c'}
+    # 'cont_bad_map_params': parameter to pass for verifying that parameter values are checked when 'c' is available.
+    #       Should result in an error. e.g., {'colors': ['#FBE72', '#440256']},
+    # 'cont_short_map_params': parameter to pass for verifying that parameter values are checked when 'c' is available.
+    #       Should result in an error. e.g., {'colors': ['#440256']} when two table_column_values are provided.
+    # 'disc_test_params': parameter to pass for a 'd' mapping when 'd' is available ... usually includes the list
+    #       of mapped values. e.g., {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
+    # 'disc_no_map_params': parameter to pass for verifying that 'd' is unavailable and trying to map 'd' should
+    #       result in an error. e.g., {'mapping_type': 'd'},
+    # 'pass_test_params': parameter to pass for a 'p' mapping when 'p' is available ... usually includes the default
+    #       value when the default can be set. e.g., {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+    # 'pass_no_map_params': parameter to pass for verifying that 'p' is unavailable and trying to map 'p' should
+    #       result in an error. e.g., {'mapping_type': 'p'},
+    # 'invalid_map_params': parameter to pass to verify that an invalid mapping is caught. e.g., {'mapping_type': 'X'},
+    # 'exception_check_params': parameter to pass when checking for various kinds of exceptions. e.g., {'mapping_type': 'p'},
+    # }
     def _check_set_node_property(self, profile):
         # Initialization
         load_test_session()
         _TEST_NODE = 'YML007W'
         _NOT_TEST_NODE = 'YGL035C'
         _TEST_STYLE = 'galFiltered Style'
+        _CONT_COL = 'AverageShortestPathLength'  # Guaranteed to exist
+        _CONT_VAL_RANGE = [1.0, 16.36]
+        _DESC_COL = 'Degree'  # Guaranteed to exist
+        _DESC_VAL_RANGE = ['1', '2']
+        _PASS_COL = 'PassthruCol'  # Created for passthru test
+
+        prop_func = profile['prop_func']
         prop_name_list = profile['prop_name'] if isinstance(profile['prop_name'], list) else [profile['prop_name']]
         orig_value_list = [get_node_property(node_names=[_TEST_NODE], visual_property=prop_name)[_TEST_NODE]
                            for prop_name in prop_name_list]
-
-        def assert_equal(def_value, expected_value, msg):
-            if 'compare_tolerance_percent' in profile:
-                tolerance = float(profile['compare_tolerance_percent']) / 100
-                self.assertGreaterEqual(def_value, expected_value * (1 - tolerance), msg=msg)
-                self.assertLessEqual(def_value, expected_value * (1 + tolerance), msg=msg)
-            else:
-                self.assertEqual(def_value, expected_value, msg=msg)
 
         def check_default():
             def_value_list = [get_node_property(visual_property=prop_name)[_NOT_TEST_NODE] for prop_name in
                               prop_name_list]
             for def_value in def_value_list:
-                assert_equal(def_value, profile['new_default'], msg='Check node property equals default')
+                self._assert_equal(profile, def_value, profile['new_default'], msg='Check node property equals default')
 
         # Verify that applying a continuous mapping functions
         if 'cont_test_params' in profile:
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='AverageShortestPathLength',
-                                                  table_column_values=[1.0, 16.36], **profile['cont_test_params']), '',
-                             msg='Check continuous mapping succeeded')
+            self.assertEqual(
+                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_test_params']), '',
+                msg='Check continuous mapping succeeded')
             cont_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for cont_value, orig_value in zip(cont_value_list, orig_value_list):
                 self.assertNotEqual(cont_value, orig_value,
@@ -1023,14 +1105,14 @@ class StyleMappingsTests(unittest.TestCase):
         else:
             cont_value_list = []
             if 'cont_no_map_params' in profile:
-                self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
-                                  table_column='AverageShortestPathLength', **profile['cont_no_map_params'])
+                self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
+                                  **profile['cont_no_map_params'])
 
         # Verify that applying a discrete mapping functions
         if 'disc_test_params' in profile:
             self.assertEqual(
-                profile['prop_func'](style_name=_TEST_STYLE, table_column='Degree', table_column_values=['1', '2'],
-                                     **profile['disc_test_params']), '', msg='Check discrete mapping succeeded')
+                prop_func(style_name=_TEST_STYLE, table_column=_DESC_COL, table_column_values=_DESC_VAL_RANGE,
+                          **profile['disc_test_params']), '', msg='Check discrete mapping succeeded')
             disc_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for disc_value, orig_value in zip(disc_value_list, orig_value_list):
                 self.assertNotEqual(disc_value, orig_value, msg='Check discrete mapping not equal to original mapping')
@@ -1039,53 +1121,63 @@ class StyleMappingsTests(unittest.TestCase):
                                     msg='Check discrete mapping not equal to continuous mapping')
             if 'set_default' in profile and profile['set_default'] == 'd': check_default()
         elif 'disc_no_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Degree',
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_DESC_COL,
                               **profile['disc_no_map_params'])
 
         # Create a column containing values, then verify that a passthru mapping causes a new value and new default value
         if 'pass_test_params' in profile:
-            data = df.DataFrame(data={'id': [_TEST_NODE], 'PassthruCol': [profile['passthru_val']]})
+            data = df.DataFrame(data={'id': [_TEST_NODE], _PASS_COL: [profile['passthru_val']]})
             load_table_data(data, data_key_column='id', table='node', table_key_column='name')
-            self.assertEqual(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
-                                                  **profile['pass_test_params']), '',
+            self.assertEqual(prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['pass_test_params']),
+                             '',
                              msg='Check passthru mapping succeeded')
             pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
                 self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
-                              table_column='AverageShortestPathLength', **profile['pass_no_map_params'])
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
+                              **profile['pass_no_map_params'])
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:
-            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='AverageShortestPathLength',
-                                                   table_column_values=[1.0, 16.36], **profile['cont_bad_map_params']),
-                              msg='Check bad continuous value')
+            self.assertIsNone(
+                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_bad_map_params']),
+                msg='Check bad continuous value')
 
         # Verify that a bad mapping type is caught
         if 'invalid_map_params' in profile:
-            self.assertIsNone(profile['prop_func'](style_name=_TEST_STYLE, table_column='PassthruCol',
-                                                   **profile['invalid_map_params']), msg='Check bad mapping type')
+            self.assertIsNone(
+                prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params']),
+                msg='Check bad mapping type')
 
         # Verify that a bad column name is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='Bogus Col',
+        self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column='Bogus Col',
                           **profile['exception_check_params'])
 
         # Verify that a bad style name is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name='Bogus Style', table_column='PassthruCol',
+        self.assertRaises(CyError, prop_func, style_name='Bogus Style', table_column=_PASS_COL,
                           **profile['exception_check_params'])
 
         # Verify that that a short mapping is caught
         if 'cont_short_map_params' in profile:
-            self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE,
-                              table_column='AverageShortestPathLength', table_column_values=[1.0, 16.36],
-                              **profile['cont_short_map_params'])
+            self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
+                              table_column_values=_CONT_VAL_RANGE, **profile['cont_short_map_params'])
 
         # Verify that a bad network is caught
-        self.assertRaises(CyError, profile['prop_func'], style_name=_TEST_STYLE, table_column='PassthruCol',
+        self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_PASS_COL,
                           **profile['exception_check_params'], network='bogus network')
 
+    def _assert_equal(self, profile, def_value, expected_value, msg):
+        if 'compare_tolerance_percent' in profile:
+            tolerance = float(profile['compare_tolerance_percent']) / 100
+            self.assertGreaterEqual(def_value, expected_value * (1 - tolerance), msg=msg)
+            self.assertLessEqual(def_value, expected_value * (1 + tolerance), msg=msg)
+        else:
+            self.assertEqual(def_value, expected_value, msg=msg)
+
+    # Verify that a visual property map is constructed as expected.
     def _check_property(self, cy_property, expected_property, expected_column, expected_column_type, expected_type,
                         expected_cargo=None):
         self.assertIsInstance(cy_property, dict)
