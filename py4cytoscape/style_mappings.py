@@ -48,7 +48,7 @@ from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
 @cy_log
 def map_visual_property(visual_prop, table_column, mapping_type, table_column_values=[],
                         visual_prop_values=[], network=None, base_url=DEFAULT_BASE_URL):
-    """Creates a mapping between an attribute and a visual property.
+    """Create a mapping between an attribute and a visual property.
 
     Generates the appropriate data structure for the "mapping" parameter in ``update_style_mapping()``.
 
@@ -107,7 +107,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     # process mapping type
     mapping_type_name = MAPPING_TYPES[mapping_type] if mapping_type in MAPPING_TYPES else mapping_type
 
-    # processs visual property, including common alternatives for vp names :)
+    # process visual property, including common alternatives for vp names :)
     visual_prop_name = re.sub('\\s+', '_', visual_prop).upper()
     if visual_prop_name in PROPERTY_NAMES: visual_prop_name = PROPERTY_NAMES[visual_prop_name]
 
@@ -1461,10 +1461,10 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
                                    network=network, base_url=base_url, table='edge')
 
 
-# TODO: R spelled 'Mapping' as 'Maping'
+# TODO: R spelled 'Mapping' as 'Maping' ... how to fix this??
 # TODO: This is the same as set_edge_target_arrow_shape_mapping???
 @cy_log
-def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
+def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
                                   style_name='default', network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the target arrow shape.
 
@@ -1488,7 +1488,7 @@ def set_edge_target_arrow_mapping(table_column, table_column_values=None, shapes
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_edge_target_arrow_mapping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
+        >>> set_edge_target_arrow_maping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
     """
     # TODO: Isn't this the same as set_edge_target_arrow_shape_mapping? ... shouldn't this be renamed?

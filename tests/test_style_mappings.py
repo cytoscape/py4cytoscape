@@ -755,7 +755,7 @@ class StyleMappingsTests(unittest.TestCase):
     def test_set_edge_target_arrow_mapping(self):
         _NEW_DEFAULT = 'CIRCLE'
         # _PASSTHRU_VAL = 250
-        self._check_set_edge_property({'prop_func': set_edge_target_arrow_mapping,
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_maping,
                                        'prop_name': 'EDGE_TARGET_ARROW_SHAPE',
                                        'new_default': _NEW_DEFAULT,
                                        'set_default': 'd',
