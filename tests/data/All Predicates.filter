@@ -1,0 +1,146 @@
+[ {
+  "name" : "All Predicates",
+  "transformers" : [ {
+    "id" : "org.cytoscape.CompositeFilter",
+    "parameters" : {
+      "type" : "ALL"
+    },
+    "transformers" : [ {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "CONTAINS",
+        "criterion" : "vCommon",
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "COMMON"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "DOES_NOT_CONTAIN",
+        "criterion" : "vDoesntContain",
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "COMMON"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "IS",
+        "criterion" : "vIs",
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "COMMON"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "IS_NOT",
+        "criterion" : "vIsNot",
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "COMMON"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "REGEX",
+        "criterion" : "vMatchesRegex",
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "COMMON"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "BETWEEN",
+        "criterion" : [ 1.0, 16.35887097 ],
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "AverageShortestPathLength"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "IS_NOT_BETWEEN",
+        "criterion" : [ 1.0, 16.35887097 ],
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "AverageShortestPathLength"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "IS",
+        "criterion" : true,
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "IsSingleNode"
+      }
+    }, {
+      "id" : "org.cytoscape.ColumnFilter",
+      "parameters" : {
+        "predicate" : "IS",
+        "criterion" : false,
+        "caseSensitive" : false,
+        "type" : "nodes",
+        "anyMatch" : true,
+        "columnName" : "IsSingleNode"
+      }
+    }, {
+      "id" : "org.cytoscape.DegreeFilter",
+      "parameters" : {
+        "predicate" : "BETWEEN",
+        "criterion" : [ 1, 2 ],
+        "edgeType" : "ANY"
+      }
+    }, {
+      "id" : "org.cytoscape.DegreeFilter",
+      "parameters" : {
+        "predicate" : "BETWEEN",
+        "criterion" : [ 3, 4 ],
+        "edgeType" : "INCOMING"
+      }
+    }, {
+      "id" : "org.cytoscape.DegreeFilter",
+      "parameters" : {
+        "predicate" : "BETWEEN",
+        "criterion" : [ 5, 6 ],
+        "edgeType" : "OUTGOING"
+      }
+    }, {
+      "id" : "org.cytoscape.DegreeFilter",
+      "parameters" : {
+        "predicate" : "IS_NOT_BETWEEN",
+        "criterion" : [ 7, 8 ],
+        "edgeType" : "ANY"
+      }
+    }, {
+      "id" : "org.cytoscape.TopologyFilter",
+      "parameters" : {
+        "predicate" : "GREATER_THAN_OR_EQUAL",
+        "distance" : 2,
+        "threshold" : 1,
+        "type" : "ALL"
+      },
+      "transformers" : [ ]
+    }, {
+      "id" : "org.cytoscape.TopologyFilter",
+      "parameters" : {
+        "predicate" : "LESS_THAN",
+        "distance" : 4,
+        "threshold" : 3,
+        "type" : "ALL"
+      },
+      "transformers" : [ ]
+    } ]
+  } ]
+} ]

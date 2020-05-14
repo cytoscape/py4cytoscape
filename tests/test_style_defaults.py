@@ -21,6 +21,7 @@ License:
 
 import unittest
 import re
+import json
 from requests import RequestException
 
 from test_utils import *
@@ -37,7 +38,6 @@ class StyleDefaultsTests(unittest.TestCase):
         pass
 
     _TEST_STYLE = 'galFiltered Style'
-
 
     @print_entry_exit
     def test_update_style_defaults(self):
@@ -80,11 +80,17 @@ class StyleDefaultsTests(unittest.TestCase):
         orig_edge_target_arrow = get_visual_property_default('EDGE_TARGET_ARROW_SHAPE', style_name=self._TEST_STYLE)
         orig_edge_line_style = get_visual_property_default('EDGE_LINE_TYPE', style_name=self._TEST_STYLE)
 
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_WIDTH', 'value': '50.0'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'NODE_SHAPE', 'value': 'OCTAGON'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'value': 'CIRCLE'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_LINE_TYPE', 'value': 'ZIGZAG'}, style_name=self._TEST_STYLE), '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'},
+                                                     style_name=self._TEST_STYLE), '')
+        self.assertEqual(
+            set_visual_property_default({'visualProperty': 'EDGE_WIDTH', 'value': '50.0'}, style_name=self._TEST_STYLE),
+            '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'NODE_SHAPE', 'value': 'OCTAGON'},
+                                                     style_name=self._TEST_STYLE), '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'value': 'CIRCLE'},
+                                                     style_name=self._TEST_STYLE), '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_LINE_TYPE', 'value': 'ZIGZAG'},
+                                                     style_name=self._TEST_STYLE), '')
 
         self._check_getter_value_default('EDGE_UNSELECTED_PAINT', orig_edge_unselected_paint, '#654321')
         self._check_getter_value_default('EDGE_WIDTH', orig_edge_width, 50.0)
@@ -94,10 +100,13 @@ class StyleDefaultsTests(unittest.TestCase):
 
         # Verify that an invalid style name is caught
         self.assertRaises(CyError, get_visual_property_default, 'EDGE_UNSELECTED_PAINT', style_name='bogusStyle')
-        self.assertRaises(CyError, set_visual_property_default, {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'}, style_name='bogusStyle')
+        self.assertRaises(CyError, set_visual_property_default,
+                          {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'}, style_name='bogusStyle')
         self.assertRaises(CyError, get_visual_property_default, 'bogusProperty', style_name=self._TEST_STYLE)
-        self.assertEqual(set_visual_property_default({'visualProperty': 'bogusProperty', 'value': '#654321'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': 'bogusValue'}, style_name=self._TEST_STYLE), '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'bogusProperty', 'value': '#654321'},
+                                                     style_name=self._TEST_STYLE), '')
+        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': 'bogusValue'},
+                                                     style_name=self._TEST_STYLE), '')
         # TODO: Do we want a silent failure for bogus properties?
 
     @print_entry_exit
@@ -116,52 +125,412 @@ class StyleDefaultsTests(unittest.TestCase):
     def test_set_node_color_default(self):
         self._check_setter_default(set_node_color_default, 'NODE_FILL_COLOR', '#FF00FF', 'bogusColor')
 
-# FAIL
     @print_entry_exit
     def test_set_node_custom_bar_chart(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
+        chart_profile = {}
 
-# FAIL
+        # Verify that specifying no columns results in no properties
+        self.assertEqual(set_node_custom_bar_chart([], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {})
+
+        # Verify that specifying valid columns results in valid default properties
+        self.assertEqual(set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                                   style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_range': [0.0, 16.35887097],
+                                                                'cy_showRangeAxis': False,
+                                                                'cy_axisLabelFontSize': 1,
+                                                                'cy_colorScheme': 'CUSTOM',
+                                                                'cy_showRangeZeroBaseline': False,
+                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                              '#984EA3',
+                                                                              '#FF7F00', '#FFFF33', '#A65628',
+                                                                              '#F781BF',
+                                                                              '#999999', '#E41A1C', '#377EB8',
+                                                                              '#4DAF4A',
+                                                                              '#984EA3', '#FF7F00', '#FFFF33',
+                                                                              '#A65628',
+                                                                              '#F781BF', '#999999'],
+                                                                'cy_showDomainAxis': False,
+                                                                'cy_axisColor': '#000000',
+                                                                'cy_axisWidth': 0.25,
+                                                                'cy_orientation': 'VERTICAL',
+                                                                'cy_type': 'GROUPED',
+                                                                'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                   'BetweennessCentrality'],
+                                                                'cy_separation': 0.0})
+
+        # Verify that specifying a valid type results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_type': 'GROUPED'})
+
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='STACKED',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_type': 'STACKED'})
+
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='HEAT_STRIPS',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_type': 'HEAT_STRIPS',
+                                                                'cy_colors': ["#B2182B", "#F7F7F7", "#2166AC"]})
+
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='UP_DOWN',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile,
+                                                {'cy_type': 'UP_DOWN', 'cy_colors': ["#B2182B", "#2166AC"]})
+
+        # Verify that specifying display colors results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile,
+                                                {'cy_colors': ['#FF00FF', '#00FF00'], 'cy_type': 'GROUPED'})
+
+        # Verify that specifying an axis range results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_range': [0.0, 50.0]})
+
+        # Verify that specifying an orientation results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_orientation': 'HORIZONTAL'})
+
+        # Verify that enabling a domain axis results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_showDomainAxis': True})
+
+        # Verify that enabling a domain axis results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_showRangeAxis': True})
+
+        # Verify that enabling a baseline axis results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_showRangeZeroBaseline': True})
+
+        # Verify that specifying an axis width results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, axis_width=0.50,
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisWidth': 0.5})
+
+        # Verify that specifying an axis color results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, axis_width=0.50,
+                                      axis_color='#FFFFFF',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisColor': '#FFFFFF'})
+
+        # Verify that specifying an axis font size results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, axis_width=0.50,
+                                      axis_color='#FFFFFF', axis_font_size=5,
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisLabelFontSize': 5})
+
+        # Verify that specifying a bar separation results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, axis_width=0.50,
+                                      axis_color='#FFFFFF', axis_font_size=5, separation=0.5,
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_separation': 0.5})
+
+        # Verify that specifying a different slot results in valid properties
+        self.assertEqual(
+            set_node_custom_bar_chart(['AverageShortestPathLength', 'BetweennessCentrality'], type='GROUPED',
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      col_axis=True, range_axis=True, zero_line=True, axis_width=0.50,
+                                      axis_color='#FFFFFF', axis_font_size=5, separation=0.5,
+                                      style_name=self._TEST_STYLE, slot=9), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {}, slot=9)
+
+        # Verify that error is thrown when type is invalid
+        self.assertRaises(CyError,
+                          set_node_custom_bar_chart, ['AverageShortestPathLength', 'BetweennessCentrality'],
+                          type='BogusType', colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                          col_axis=True, range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                          axis_font_size=5, separation=0.5, style_name=self._TEST_STYLE, slot=1)
+
+        # Verify that error is thrown when slot is invalid
+        self.assertRaises(CyError,
+                          set_node_custom_bar_chart, ['AverageShortestPathLength', 'BetweennessCentrality'],
+                          type='UP_DOWN', colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                          col_axis=True, range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                          axis_font_size=5, separation=0.5, style_name=self._TEST_STYLE, slot=10)
+        self.assertRaises(CyError,
+                          set_node_custom_bar_chart, ['AverageShortestPathLength', 'BetweennessCentrality'],
+                          type='UP_DOWN', colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                          col_axis=True, range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                          axis_font_size=5, separation=0.5, style_name=self._TEST_STYLE, slot=0)
+
     @print_entry_exit
     def test_set_node_custom_box_chart(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
+        chart_params = {'style_name': self._TEST_STYLE}
+        chart_profile = {}
+        chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
-# FAIL
+        # Verify that specifying no columns results in no properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, [], chart_params, {},
+                                                               chart_profile, {})
+
+        # Verify that specifying valid columns results in valid default properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
+                                                               {}, chart_profile,
+                                                               {'cy_axisWidth': 0.25,
+                                                                'cy_range': [0.0, 16.35887097],
+                                                                'cy_showRangeAxis': False,
+                                                                'cy_orientation': 'VERTICAL',
+                                                                'cy_axisLabelFontSize': 1,
+                                                                'cy_colorScheme': 'CUSTOM',
+                                                                'cy_showRangeZeroBaseline': False,
+                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                              '#984EA3', '#FF7F00', '#FFFF33',
+                                                                              '#A65628', '#F781BF', '#999999',
+                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                              '#984EA3', '#FF7F00', '#FFFF33',
+                                                                              '#A65628', '#F781BF', '#999999'],
+                                                                'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                   'BetweennessCentrality'],
+                                                                'cy_axisColor': '#000000'})
+
+
+        # Initialization
+        load_test_session()
+        chart_profile = {}
+
+        # Verify that specifying no columns results in no properties
+        self.assertEqual(set_node_custom_box_chart([], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {})
+
+        # Verify that specifying valid columns results in valid default properties
+        self.assertEqual(set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                                   style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisWidth': 0.25,
+                                                                'cy_range': [0.0, 16.35887097],
+                                                                'cy_showRangeAxis': False,
+                                                                'cy_orientation': 'VERTICAL',
+                                                                'cy_axisLabelFontSize': 1,
+                                                                'cy_colorScheme': 'CUSTOM',
+                                                                'cy_showRangeZeroBaseline': False,
+                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                              '#984EA3', '#FF7F00', '#FFFF33',
+                                                                              '#A65628', '#F781BF', '#999999',
+                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                              '#984EA3', '#FF7F00', '#FFFF33',
+                                                                              '#A65628', '#F781BF', '#999999'],
+                                                                'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                   'BetweennessCentrality'],
+                                                                'cy_axisColor': '#000000'})
+
+        # Verify that specifying display colors results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_colors': ['#FF00FF', '#00FF00']})
+
+        # Verify that specifying an axis range results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_range': [0.0, 50.0]})
+
+        # Verify that specifying an orientation results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_orientation': 'HORIZONTAL'})
+
+        # Verify that enabling a domain axis results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_showRangeAxis': True})
+
+        # Verify that enabling a baseline axis results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, zero_line=True, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_showRangeZeroBaseline': True})
+
+        # Verify that specifying an axis width results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, zero_line=True, axis_width=0.50, style_name=self._TEST_STYLE),
+            '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisWidth': 0.5})
+
+        # Verify that specifying an axis color results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                                      style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisColor': '#FFFFFF'})
+
+        # Verify that specifying an axis font size results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                                      axis_font_size=5, style_name=self._TEST_STYLE), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {'cy_axisLabelFontSize': 5})
+
+        # Verify that specifying a different slot results in valid properties
+        self.assertEqual(
+            set_node_custom_box_chart(['AverageShortestPathLength', 'BetweennessCentrality'],
+                                      colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL',
+                                      range_axis=True, zero_line=True, axis_width=0.50, axis_color='#FFFFFF',
+                                      axis_font_size=5, style_name=self._TEST_STYLE, slot=9), '')
+        chart_profile = self._check_chart_attrs(chart_profile, {}, slot=9)
+
+        # Verify that error is thrown when slot is invalid
+        self.assertRaises(CyError, set_node_custom_box_chart, ['AverageShortestPathLength', 'BetweennessCentrality'],
+                          colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL', range_axis=True,
+                          zero_line=True, axis_width=0.50, axis_color='#FFFFFF', axis_font_size=5,
+                          style_name=self._TEST_STYLE, slot=10)
+        self.assertRaises(CyError, set_node_custom_box_chart, ['AverageShortestPathLength', 'BetweennessCentrality'],
+                          colors=['#FF00FF', '#00FF00'], range=[0, 50], orientation='HORIZONTAL', range_axis=True,
+                          zero_line=True, axis_width=0.50, axis_color='#FFFFFF', axis_font_size=5,
+                          style_name=self._TEST_STYLE, slot=0)
+
     @print_entry_exit
     def test_set_node_custom_heat_map_chart(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
+        chart_params = {'style_name': self._TEST_STYLE}
+        chart_profile = {}
+        chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
-# FAIL
+        # Verify that specifying no columns results in no properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, [], chart_params, {},
+                                                               chart_profile, {})
+
+        # Verify that specifying valid columns results in valid default properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {}, chart_profile,
+                                                               {'cy_axisWidth': 0.25, 'cy_range': [0.0, 16.35887097],
+                                                                'cy_showRangeAxis': False,
+                                                                'cy_orientation': 'HORIZONTAL',
+                                                                'cy_axisLabelFontSize': 1, 'cy_colorScheme': 'CUSTOM',
+                                                                'cy_showRangeZeroBaseline': False,
+                                                                'cy_colors': ['#D6604D', '#D1E5F0', '#053061',
+                                                                              '#888888'],
+                                                                'cy_dataColumns': ['BetweennessCentrality',
+                                                                                   'AverageShortestPathLength'],
+                                                                'cy_axisColor': '#000000'})
+
+        # Verify that specifying display colors results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'colors': ['#123456', '#654321', '#112233', '#888888']},
+                                                               chart_profile,
+                                                               {'cy_colors': ['#123456', '#654321', '#112233',
+                                                                              '#888888']})
+
+        # Verify that specifying an axis range results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'range': [0, 50]}, chart_profile,
+                                                               {'cy_range': [0.0, 50.0]})
+
+        # Verify that specifying an orientation results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'orientation': 'VERTICAL'}, chart_profile,
+                                                               {'cy_orientation': 'VERTICAL'})
+
+        # Verify that enabling a domain axis results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'range_axis': True}, chart_profile,
+                                                               {'cy_showRangeAxis': True})
+
+        # Verify that enabling a baseline axis results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'zero_line': True}, chart_profile,
+                                                               {'cy_showRangeZeroBaseline': True})
+
+        # Verify that specifying an axis width results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'axis_width': 0.50}, chart_profile,
+                                                               {'cy_axisWidth': 0.5})
+
+        # Verify that specifying an axis color results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'axis_color': '#FFFFFF'}, chart_profile,
+                                                               {'cy_axisColor': '#FFFFFF'})
+
+        # Verify that specifying an axis font size results in valid properties
+        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                               {'axis_font_size': 5}, chart_profile,
+                                                               {'cy_axisLabelFontSize': 5})
+
+        # Verify that specifying a different slot results in valid properties
+        self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
+                                 {})
+
+        # Verify that error is thrown when slot is invalid
+        self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, slot=10, **chart_params)
+        self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, slot=0, **chart_params)
+
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_line_chart(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_pie_chart(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_ring_chart(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_linear_gradient(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_radial_gradient(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_set_node_custom_position(self):
         raise CyError('Not implemented')
 
-# FAIL
+    # FAIL
     @print_entry_exit
     def test_remove_node_custom_graphics(self):
         raise CyError('Not implemented')
@@ -200,6 +569,9 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_get_node_selection_color_default(self):
+        # Initialization
+        load_test_session()
+
         self._check_getter_default(get_node_selection_color_default, 'NODE_SELECTED_PAINT', '#654321')
 
     @print_entry_exit
@@ -237,7 +609,8 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_edge_label_color_default(self):
-        self._check_setter_default(set_edge_label_color_default, 'EDGE_LABEL_COLOR', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_label_color_default, 'EDGE_LABEL_COLOR', '#FF00FF', 'bogusColor',
+                                   exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_label_opacity_default(self):
@@ -255,31 +628,46 @@ class StyleDefaultsTests(unittest.TestCase):
     def test_set_edge_opacity_default(self):
         self._check_setter_default(set_edge_opacity_default, 'EDGE_TRANSPARENCY', 150, 350)
 
-# FAIL
     @print_entry_exit
     def test_get_edge_selection_color_default(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
+
+        self._check_getter_default(get_edge_selection_color_default, 'EDGE_STROKE_SELECTED_PAINT', '#FF00FF')
+
+        # Initialization
+        load_test_session()
+
+        style_dependencies.set_style_dependencies(style_name=self._TEST_STYLE,
+                                                  dependencies={'arrowColorMatchesEdge': True})
+        self._check_getter_default(get_edge_selection_color_default, 'EDGE_SELECTED_PAINT', '#FFFF00')
 
     @print_entry_exit
     def test_set_edge_selection_color_default(self):
-        self._check_setter_default(set_edge_selection_color_default, 'EDGE_SELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
-        self._check_setter_default(set_edge_selection_color_default, 'EDGE_STROKE_SELECTED_PAINT', '#FFFF00', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_selection_color_default, 'EDGE_SELECTED_PAINT', '#FF00FF', 'bogusColor',
+                                   exception_scenario='exception')
+        self._check_setter_default(set_edge_selection_color_default, 'EDGE_STROKE_SELECTED_PAINT', '#FFFF00',
+                                   'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_source_arrow_color_default(self):
-        self._check_setter_default(set_edge_source_arrow_color_default, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_source_arrow_color_default, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', '#FF00FF',
+                                   'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_target_arrow_color_default(self):
-        self._check_setter_default(set_edge_target_arrow_color_default, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_target_arrow_color_default, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', '#FF00FF',
+                                   'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_source_arrow_shape_default(self):
-        self._check_setter_default(set_edge_source_arrow_shape_default, 'EDGE_SOURCE_ARROW_SHAPE', 'CIRCLE', 'BogusShape', exception_scenario='no effect')
+        self._check_setter_default(set_edge_source_arrow_shape_default, 'EDGE_SOURCE_ARROW_SHAPE', 'CIRCLE',
+                                   'BogusShape', exception_scenario='no effect')
 
     @print_entry_exit
     def test_set_edge_target_arrow_shape_default(self):
-        self._check_setter_default(set_edge_target_arrow_shape_default, 'EDGE_TARGET_ARROW_SHAPE', 'CIRCLE', 'BogusShape', exception_scenario='no effect')
+        self._check_setter_default(set_edge_target_arrow_shape_default, 'EDGE_TARGET_ARROW_SHAPE', 'CIRCLE',
+                                   'BogusShape', exception_scenario='no effect')
 
     @print_entry_exit
     def test_set_edge_tooltip_default(self):
@@ -287,25 +675,27 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_get_background_color_default(self):
+        # Initialization
+        load_test_session()
+
         self._check_getter_default(get_background_color_default, 'NETWORK_BACKGROUND_PAINT', '#654321')
 
     @print_entry_exit
     def test_set_background_color_default(self):
         self._check_setter_default(set_background_color_default, 'NETWORK_BACKGROUND_PAINT', '#FF00FF', 'bogusColor')
 
-
     def _check_getter_default(self, getter_func, prop_name, new_value):
-        # Initialization
-        load_test_session()
-
         # Verify that the node selection color can be fetched and looks different after it's set
         orig_default = get_visual_property_default(prop_name, style_name=self._TEST_STYLE)
-        self.assertEqual(set_visual_property_default({'visualProperty': prop_name, 'value': new_value}, style_name=self._TEST_STYLE), '')
+        self.assertEqual(
+            set_visual_property_default({'visualProperty': prop_name, 'value': new_value}, style_name=self._TEST_STYLE),
+            '')
         self._check_getter_value_default(prop_name, orig_default, new_value)
         self.assertEqual(getter_func(style_name=self._TEST_STYLE), new_value)
 
         # Verify that an invalid style name is caught
-        self.assertRaises(CyError, getter_func, style_name='bogusStyle')
+        self.assertRaises(TypeError, getter_func,
+                          style_name='bogusStyle')  # TODO: Really should be CyError, but for get_style_dependencies() returning null instead of CyError
 
     def _check_getter_value_default(self, prop_name, orig_val, expected_val):
         self.assertNotEqual(orig_val, expected_val)
@@ -333,6 +723,29 @@ class StyleDefaultsTests(unittest.TestCase):
         self.assertEqual(setter_func(good_value, style_name=self._TEST_STYLE), '')
         self.assertEqual(get_visual_property_default(prop_name, style_name=self._TEST_STYLE), good_value)
         self.assertNotEqual(get_visual_property_default(prop_name), good_value)
+
+    def _check_chart_attrs(self, base_attrs, new_attrs, slot=1):
+        expected_attrs = base_attrs.copy()
+        expected_attrs.update(new_attrs)
+        whole_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot), style_name=self._TEST_STYLE)
+        chart_dict = json.loads(re.split(':', whole_prop, 1)[1])
+        self.assertDictEqual(chart_dict, expected_attrs)
+        return expected_attrs
+
+    def _check_chart_attrs1(self, chart_func, col_list, base_params, new_params, base_attrs, new_attrs, slot=1):
+        # Call the chart function with updated parameters
+        chart_params = base_params.copy()
+        chart_params.update(new_params)
+        self.assertEqual(chart_func(col_list, **chart_params), '')
+
+        # Verify the new property value
+        expected_attrs = base_attrs.copy()
+        expected_attrs.update(new_attrs)
+        whole_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot), style_name=self._TEST_STYLE)
+        chart_dict = json.loads(re.split(':', whole_prop, 1)[1])
+        self.assertDictEqual(chart_dict, expected_attrs)
+        return chart_params, expected_attrs
+
 
 if __name__ == '__main__':
     unittest.main()

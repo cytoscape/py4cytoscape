@@ -26,6 +26,7 @@ License:
 import sys
 import time
 import re
+import json
 
 # Internal module imports
 from . import commands
@@ -85,9 +86,10 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
         return visual_prop_name
 
     # process visual property, including common alternatives for vp names :)
-    def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val}     for prop, val in defaults.items()]
+    def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
 
-    res = commands.cyrest_put('styles/' + style_name + '/defaults', body=def_list, base_url=base_url, require_json=False)
+    res = commands.cyrest_put('styles/' + style_name + '/defaults', body=def_list, base_url=base_url,
+                              require_json=False)
     return res
 
 
@@ -118,6 +120,7 @@ def get_visual_property_default(property, style_name='default', base_url=DEFAULT
     res = commands.cyrest_get('styles/' + style_name + '/defaults/' + property, base_url=base_url)
     return res['value']
 
+
 def set_visual_property_default(style_string, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default value for a visual property.
 
@@ -147,6 +150,7 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
     time.sleep(
         MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [BUG]
     return res
+
 
 # ==============================================================================
 # II. Specific Functions
@@ -214,6 +218,7 @@ def set_node_border_width_default(new_width, style_name='default', base_url=DEFA
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_border_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set defaults opacity value for all unmapped node borders.
 
@@ -246,6 +251,7 @@ def set_node_border_opacity_default(new_opacity, style_name='default', base_url=
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node color.
 
@@ -270,7 +276,7 @@ def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         ''
     """
     if is_not_hex_color(new_color):
-        return None # TODO: Shouldn't this be an exception?
+        return None  # TODO: Shouldn't this be an exception?
 
     style = {'visualProperty': 'NODE_FILL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -284,17 +290,18 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
     if type not in ['GROUPED', 'STACKED', 'HEAT_STRIPS', 'UP_DOWN']:
         raise CyError('type must be one of the following: GROUPED, STACKED, HEAT_STRIPS, or UP_DOWN')
 
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
-        if type in ['GROUPED', 'STACKED']: colors = cyPalette('set1') * len(columns)
+        if type in ['GROUPED', 'STACKED']:
+            colors = cyPalette('set1') * len(columns)
         elif type == 'HEAT_STRIPS':
             palette = cyPalette('rdbu')
-            colors = [palette[index]   for index in [1,5,9]]
+            colors = [palette[index] for index in [1, 5, 9]]
         else:
             palette = cyPalette('rdbu')
-            colors = [palette[index]   for index in [1,9]]
+            colors = [palette[index] for index in [1, 9]]
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -302,14 +309,14 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         max = cols[columns].max().max()
         range = [min, max]
 
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
-             'cy_orientation': orientation, 'cy_showRangeAxis': range_axis, 'cy_showRangeZeroBaseline': zero_line,
-             'cy_axisWidth': axis_width, 'cy_axisColor': axis_color, 'cy_axisLabelFontSize': axis_font_size,
-             'cy_range': str(range),
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns, 'cy_type': type,
+             'cy_orientation': orientation, 'cy_showDomainAxis': col_axis, 'cy_showRangeAxis': range_axis,
+             'cy_showRangeZeroBaseline': zero_line, 'cy_axisWidth': axis_width, 'cy_axisColor': axis_color,
+             'cy_axisLabelFontSize': axis_font_size, 'cy_separation': separation, 'cy_range': range,
              }
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.BarChart:' + str(chart)}
+                    'value': 'org.cytoscape.BarChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -318,11 +325,11 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
 def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VERTICAL', range_axis=False,
                               zero_line=False, axis_width=0.25, axis_color='#000000', axis_font_size=1,
                               slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
-        colors = cyPalette('set1') * len(columns)
+        colors = cyPalette('rdbu') * len(columns)
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -330,14 +337,14 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
         max = cols[columns].max().max()
         range = [min, max]
 
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_orientation': orientation, 'cy_showRangeAxis': range_axis, 'cy_showRangeZeroBaseline': zero_line,
              'cy_axisWidth': axis_width, 'cy_axisColor': axis_color, 'cy_axisLabelFontSize': axis_font_size,
-             'cy_range': str(range),
+             'cy_range': range,
              }
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.BoxChart:' + str(chart)}
+                    'value': 'org.cytoscape.BoxChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -346,11 +353,13 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
 def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation='HORIZONTAL', range_axis=False,
                                    zero_line=False, axis_width=0.25, axis_color='#000000', axis_font_size=1,
                                    slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
-        colors = cyPalette('set1') * len(columns)
+        palette = cyPalette('rdbu')
+        colors = [palette[index] for index in [2, 6, 10]]
+        colors.append('#888888')
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -358,14 +367,14 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
         max = cols[columns].max().max()
         range = [min, max]
 
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns[::-1],
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns[::-1],
              'cy_orientation': orientation, 'cy_showRangeAxis': range_axis, 'cy_showRangeZeroBaseline': zero_line,
              'cy_axisWidth': axis_width, 'cy_axisColor': axis_color, 'cy_axisLabelFontSize': axis_font_size,
-             'cy_range': str(range),
+             'cy_range': range,
              }
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.HeatMapChart:' + str(chart)}
+                    'value': 'org.cytoscape.HeatMapChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -374,7 +383,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
 def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0, range_axis=False, zero_line=False,
                                axis_width=0.25, axis_color='#000000', axis_font_size=1,
                                slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
@@ -386,14 +395,14 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
         max = cols[columns].max().max()
         range = [min, max]
 
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_lineWidth': line_width, 'cy_showRangeAxis': range_axis, 'cy_showRangeZeroBaseline': zero_line,
              'cy_axisWidth': axis_width, 'cy_axisColor': axis_color, 'cy_axisLabelFontSize': axis_font_size,
-             'cy_range': str(range),
+             'cy_range': range,
              }
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.LineChart:' + str(chart)}
+                    'value': 'org.cytoscape.LineChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -401,16 +410,16 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
 
 def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
                               slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle}
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.PieChart:' + str(chart)}
+                    'value': 'org.cytoscape.PieChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -418,16 +427,16 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
 
 def set_node_custom_ring_chart(columns, colors: None, start_angle=0.0, hole_size=0.5,
                                slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
-    chart = {'cy_colors': str(colors), 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
+    chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle, 'cy_holeSize': hole_size}
 
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.RingChart:' + str(chart)}
+                    'value': 'org.cytoscape.RingChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -435,12 +444,12 @@ def set_node_custom_ring_chart(columns, colors: None, start_angle=0.0, hole_size
 
 def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0, 1.0], angle=0.0,
                                     slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     chart = {'cy_angle': angle, 'cy_gradientColors': colors, 'cy_gradientFractions': anchors}
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.LinearGradient:' + str(chart)}
+                    'value': 'org.cytoscape.LinearGradient:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -454,7 +463,7 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
 
     chart = {'cy_gradientColors': colors, 'cy_gradientFractions': anchors, 'cy_center': {'x': x_center, 'y': y_center}}
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': 'org.cytoscape.RadialGradient:' + str(chart)}
+                    'value': 'org.cytoscape.RadialGradient:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -462,7 +471,7 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
 
 def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification='C', x_offset=0.0, y_offset=0.0, slot=1,
                              style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
     style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
                     'value': "'" + node_anchor + ',' + graphic_anchor + ',' + justification + ',' + x_offset + ',' + y_offset + "'"}
@@ -472,7 +481,7 @@ def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification=
 
 
 def remove_node_custom_graphics(slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     res = set_visual_property_default({'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot), 'value': None}, style_name,
@@ -512,6 +521,7 @@ def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DE
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_font_face_default(new_font, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node font.
 
@@ -539,6 +549,7 @@ def set_node_font_face_default(new_font, style_name='default', base_url=DEFAULT_
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node font size.
 
@@ -565,6 +576,7 @@ def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_
     style = {'visualProperty': 'NODE_LABEL_FONT_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node height.
@@ -596,6 +608,7 @@ def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_B
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_label_default(new_label, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node label.
 
@@ -622,6 +635,7 @@ def set_node_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
     style = {'visualProperty': 'NODE_LABEL', 'value': new_label}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_node_label_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node label color.
@@ -652,6 +666,7 @@ def set_node_label_color_default(new_color, style_name='default', base_url=DEFAU
     style = {'visualProperty': 'NODE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_node_label_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped node labels.
@@ -685,6 +700,7 @@ def set_node_label_opacity_default(new_opacity, style_name='default', base_url=D
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def get_node_selection_color_default(style_name='default', base_url=DEFAULT_BASE_URL):
     """Retrieve the default selection node color.
 
@@ -709,6 +725,7 @@ def get_node_selection_color_default(style_name='default', base_url=DEFAULT_BASE
     """
     res = get_visual_property_default('NODE_SELECTED_PAINT', style_name=style_name, base_url=base_url)
     return res
+
 
 def set_node_selection_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node border color.
@@ -739,6 +756,7 @@ def set_node_selection_color_default(new_color, style_name='default', base_url=D
     style = {'visualProperty': 'NODE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node shape.
@@ -772,6 +790,7 @@ def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BAS
         sys.stderr.write(new_shape + ' is not a valid shape. Use get_node_shapes() to find valid values.')
         return None  # TODO: Is this the best thing to return?? ... probably should be an exception
 
+
 def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node font size.
 
@@ -801,6 +820,7 @@ def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_
     style = {'visualProperty': 'NODE_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node width.
@@ -832,6 +852,7 @@ def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BAS
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_node_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default node tooltip.
 
@@ -858,6 +879,7 @@ def set_node_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
     style = {'visualProperty': 'NODE_TOOLTIP', 'value': new_tooltip}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 # ==============================================================================
 # II.b. Edge Properties
@@ -889,7 +911,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         ''
     """
     if is_not_hex_color(new_color):
-        return None # TODO: Shouldn't this be an exception?
+        return None  # TODO: Shouldn't this be an exception?
 
     style = {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -898,6 +920,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
     style = {'visualProperty': 'EDGE_STROKE_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_font_face_default(new_font, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge font.
@@ -926,6 +949,7 @@ def set_edge_font_face_default(new_font, style_name='default', base_url=DEFAULT_
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge font size.
 
@@ -953,6 +977,7 @@ def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_label_default(new_label, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge label.
 
@@ -979,6 +1004,7 @@ def set_edge_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
     style = {'visualProperty': 'EDGE_LABEL', 'value': new_label}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge label color.
@@ -1009,6 +1035,7 @@ def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAU
     style = {'visualProperty': 'EDGE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped edges.
@@ -1042,6 +1069,7 @@ def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=D
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge width.
 
@@ -1069,6 +1097,7 @@ def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAUL
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_line_style_default(new_line_style, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge style.
 
@@ -1095,6 +1124,7 @@ def set_edge_line_style_default(new_line_style, style_name='default', base_url=D
     style = {'visualProperty': 'EDGE_LINE_TYPE', 'value': new_line_style}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped edges.
@@ -1128,6 +1158,7 @@ def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def get_edge_selection_color_default(style_name='default', base_url=DEFAULT_BASE_URL):
     """Retrieve the default selected edge color.
 
@@ -1150,10 +1181,11 @@ def get_edge_selection_color_default(style_name='default', base_url=DEFAULT_BASE
         >>> get_edge_selection_color_default()
         ''
     """
-    if 'arrowColorMatchesEdge' in style_dependencies.get_style_dependencies():
+    if style_dependencies.get_style_dependencies(style_name=style_name)['arrowColorMatchesEdge']:
         return get_visual_property_default('EDGE_SELECTED_PAINT', style_name=style_name, base_url=base_url)
     else:
         return get_visual_property_default('EDGE_STROKE_SELECTED_PAINT', style_name=style_name, base_url=base_url)
+
 
 def set_edge_selection_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default selected edge color.
@@ -1190,6 +1222,7 @@ def set_edge_selection_color_default(new_color, style_name='default', base_url=D
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_source_arrow_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge source arrow color.
 
@@ -1219,6 +1252,7 @@ def set_edge_source_arrow_color_default(new_color, style_name='default', base_ur
     style = {'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_target_arrow_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge target arrow color.
@@ -1250,6 +1284,7 @@ def set_edge_target_arrow_color_default(new_color, style_name='default', base_ur
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_source_arrow_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge source arrow shape.
 
@@ -1276,6 +1311,7 @@ def set_edge_source_arrow_shape_default(new_shape, style_name='default', base_ur
     style = {'visualProperty': 'EDGE_SOURCE_ARROW_SHAPE', 'value': new_shape}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 def set_edge_target_arrow_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge target arrow shape.
@@ -1304,6 +1340,7 @@ def set_edge_target_arrow_shape_default(new_shape, style_name='default', base_ur
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
 def set_edge_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default edge tooltip.
 
@@ -1330,6 +1367,7 @@ def set_edge_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
     style = {'visualProperty': 'EDGE_TOOLTIP', 'value': new_tooltip}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
 
 # ==============================================================================
 # II.c. Network Properties
@@ -1362,6 +1400,7 @@ def get_background_color_default(style_name='default', base_url=DEFAULT_BASE_URL
     res = get_visual_property_default('NETWORK_BACKGROUND_PAINT', style_name=style_name, base_url=base_url)
     return res
 
+
 def set_background_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
     """Set the default background color.
 
@@ -1386,7 +1425,7 @@ def set_background_color_default(new_color, style_name='default', base_url=DEFAU
         ''
     """
     if is_not_hex_color(new_color):
-        return None # TODO: Shouldn't this return an exception?
+        return None  # TODO: Shouldn't this return an exception?
 
     style = {'visualProperty': 'NETWORK_BACKGROUND_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
