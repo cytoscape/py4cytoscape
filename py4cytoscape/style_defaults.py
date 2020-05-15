@@ -473,8 +473,8 @@ def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification=
                              style_name='default', base_url=DEFAULT_BASE_URL):
     if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
-                    'value': "'" + node_anchor + ',' + graphic_anchor + ',' + justification + ',' + x_offset + ',' + y_offset + "'"}
+    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_POSITION_' + str(slot),
+                    'value': node_anchor + ',' + graphic_anchor + ',' + justification + ',' + str(x_offset) + ',' + str(y_offset)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res

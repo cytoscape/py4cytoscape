@@ -134,101 +134,101 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in no properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, [], chart_params, {},
-                                                               chart_profile, {})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, [], chart_params, {},
+                                                              chart_profile, {})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_range': [0.0, 16.35887097],
-                                                                'cy_showRangeAxis': False, 'cy_axisLabelFontSize': 1,
-                                                                'cy_colorScheme': 'CUSTOM',
-                                                                'cy_showRangeZeroBaseline': False,
-                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999',
-                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999'],
-                                                                'cy_showDomainAxis': False, 'cy_axisColor': '#000000',
-                                                                'cy_axisWidth': 0.25, 'cy_orientation': 'VERTICAL',
-                                                                'cy_type': 'GROUPED',
-                                                                'cy_dataColumns': ['AverageShortestPathLength',
-                                                                                   'BetweennessCentrality'],
-                                                                'cy_separation': 0.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_range': [0.0, 16.35887097],
+                                                               'cy_showRangeAxis': False, 'cy_axisLabelFontSize': 1,
+                                                               'cy_colorScheme': 'CUSTOM',
+                                                               'cy_showRangeZeroBaseline': False,
+                                                               'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999',
+                                                                             '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999'],
+                                                               'cy_showDomainAxis': False, 'cy_axisColor': '#000000',
+                                                               'cy_axisWidth': 0.25, 'cy_orientation': 'VERTICAL',
+                                                               'cy_type': 'GROUPED',
+                                                               'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                  'BetweennessCentrality'],
+                                                               'cy_separation': 0.0})
 
         # Verify that specifying a valid type results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'type': 'GROUPED'}, chart_profile,
-                                                               {'cy_type': 'GROUPED'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'GROUPED'}, chart_profile,
+                                                              {'cy_type': 'GROUPED'})
 
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'type': 'STACKED'}, chart_profile,
-                                                               {'cy_type': 'STACKED'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'STACKED'}, chart_profile,
+                                                              {'cy_type': 'STACKED'})
 
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'type': 'HEAT_STRIPS'}, chart_profile,
-                                                               {'cy_type': 'HEAT_STRIPS',
-                                                                'cy_colors': ["#B2182B", "#F7F7F7", "#2166AC"]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'HEAT_STRIPS'}, chart_profile,
+                                                              {'cy_type': 'HEAT_STRIPS',
+                                                               'cy_colors': ["#B2182B", "#F7F7F7", "#2166AC"]})
 
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'type': 'UP_DOWN'}, chart_profile,
-                                                               {'cy_type': 'UP_DOWN',
-                                                                'cy_colors': ["#B2182B", "#2166AC"]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'UP_DOWN'}, chart_profile,
+                                                              {'cy_type': 'UP_DOWN',
+                                                               'cy_colors': ["#B2182B", "#2166AC"]})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'type': 'GROUPED', 'colors': ['#FF00FF', '#00FF00']},
-                                                               chart_profile, {'cy_type': 'GROUPED',
-                                                                               'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'GROUPED', 'colors': ['#FF00FF', '#00FF00']},
+                                                              chart_profile, {'cy_type': 'GROUPED',
+                                                                              'cy_colors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying an axis range results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'range': [0, 50]}, chart_profile,
-                                                               {'cy_range': [0.0, 50.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'range': [0, 50]}, chart_profile,
+                                                              {'cy_range': [0.0, 50.0]})
 
         # Verify that specifying an orientation results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'orientation': 'HORIZONTAL'}, chart_profile,
-                                                               {'cy_orientation': 'HORIZONTAL'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'orientation': 'HORIZONTAL'}, chart_profile,
+                                                              {'cy_orientation': 'HORIZONTAL'})
 
         # Verify that enabling a domain axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'col_axis': True}, chart_profile,
-                                                               {'cy_showDomainAxis': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'col_axis': True}, chart_profile,
+                                                              {'cy_showDomainAxis': True})
 
         # Verify that enabling a domain axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'range_axis': True}, chart_profile,
-                                                               {'cy_showRangeAxis': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'range_axis': True}, chart_profile,
+                                                              {'cy_showRangeAxis': True})
 
         # Verify that enabling a baseline axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'zero_line': True}, chart_profile,
-                                                               {'cy_showRangeZeroBaseline': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'zero_line': True}, chart_profile,
+                                                              {'cy_showRangeZeroBaseline': True})
 
         # Verify that specifying an axis width results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'axis_width': 0.50}, chart_profile,
-                                                               {'cy_axisWidth': 0.5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'axis_width': 0.50}, chart_profile,
+                                                              {'cy_axisWidth': 0.5})
 
         # # Verify that specifying an axis color results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'axis_color': '#FFFFFF'}, chart_profile,
-                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'axis_color': '#FFFFFF'}, chart_profile,
+                                                              {'cy_axisColor': '#FFFFFF'})
 
         # Verify that specifying an axis font size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'axis_font_size': 5}, chart_profile,
-                                                               {'cy_axisLabelFontSize': 5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'axis_font_size': 5}, chart_profile,
+                                                              {'cy_axisLabelFontSize': 5})
 
         # Verify that specifying a bar separation results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params,
-                                                               {'separation': 0.5}, chart_profile,
-                                                               {'cy_separation': 0.5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'separation': 0.5}, chart_profile,
+                                                              {'cy_separation': 0.5})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_bar_chart, chart_cols, chart_params, {'slot': 9}, chart_profile, {})
+        self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params, {'slot': 9}, chart_profile, {})
 
         # Verify that error is thrown when type is invalid
         self.assertRaises(CyError, set_node_custom_bar_chart, chart_cols, type='BogusType')
@@ -246,70 +246,70 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in no properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, [], chart_params, {},
-                                                               chart_profile, {})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, [], chart_params, {},
+                                                              chart_profile, {})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_axisWidth': 0.25, 'cy_range': [0.0, 16.35887097],
-                                                                'cy_showRangeAxis': False, 'cy_orientation': 'VERTICAL',
-                                                                'cy_axisLabelFontSize': 1, 'cy_colorScheme': 'CUSTOM',
-                                                                'cy_showRangeZeroBaseline': False,
-                                                                'cy_colors': ['#67001F', '#B2182B', '#D6604D',
-                                                                              '#F4A582', '#FDDBC7', '#F7F7F7',
-                                                                              '#D1E5F0', '#92C5DE', '#4393C3',
-                                                                              '#2166AC', '#053061', '#67001F',
-                                                                              '#B2182B', '#D6604D', '#F4A582',
-                                                                              '#FDDBC7', '#F7F7F7', '#D1E5F0',
-                                                                              '#92C5DE', '#4393C3', '#2166AC',
-                                                                              '#053061'],
-                                                                'cy_dataColumns': ['AverageShortestPathLength',
-                                                                                   'BetweennessCentrality'],
-                                                                'cy_axisColor': '#000000'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_axisWidth': 0.25, 'cy_range': [0.0, 16.35887097],
+                                                               'cy_showRangeAxis': False, 'cy_orientation': 'VERTICAL',
+                                                               'cy_axisLabelFontSize': 1, 'cy_colorScheme': 'CUSTOM',
+                                                               'cy_showRangeZeroBaseline': False,
+                                                               'cy_colors': ['#67001F', '#B2182B', '#D6604D',
+                                                                             '#F4A582', '#FDDBC7', '#F7F7F7',
+                                                                             '#D1E5F0', '#92C5DE', '#4393C3',
+                                                                             '#2166AC', '#053061', '#67001F',
+                                                                             '#B2182B', '#D6604D', '#F4A582',
+                                                                             '#FDDBC7', '#F7F7F7', '#D1E5F0',
+                                                                             '#92C5DE', '#4393C3', '#2166AC',
+                                                                             '#053061'],
+                                                               'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                  'BetweennessCentrality'],
+                                                               'cy_axisColor': '#000000'})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_colors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying an axis range results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'range': [0, 50]}, chart_profile,
-                                                               {'cy_range': [0.0, 50.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'range': [0, 50]}, chart_profile,
+                                                              {'cy_range': [0.0, 50.0]})
 
         # Verify that specifying an orientation results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'orientation': 'HORIZONTAL'}, chart_profile,
-                                                               {'cy_orientation': 'HORIZONTAL'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'orientation': 'HORIZONTAL'}, chart_profile,
+                                                              {'cy_orientation': 'HORIZONTAL'})
 
         # Verify that enabling a domain axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'range_axis': True}, chart_profile,
-                                                               {'cy_showRangeAxis': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'range_axis': True}, chart_profile,
+                                                              {'cy_showRangeAxis': True})
 
         # Verify that enabling a baseline axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'zero_line': True}, chart_profile,
-                                                               {'cy_showRangeZeroBaseline': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'zero_line': True}, chart_profile,
+                                                              {'cy_showRangeZeroBaseline': True})
 
         # Verify that specifying an axis width results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'axis_width': 0.50}, chart_profile,
-                                                               {'cy_axisWidth': 0.5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'axis_width': 0.50}, chart_profile,
+                                                              {'cy_axisWidth': 0.5})
 
         # Verify that specifying an axis color results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'axis_color': '#FFFFFF'}, chart_profile,
-                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'axis_color': '#FFFFFF'}, chart_profile,
+                                                              {'cy_axisColor': '#FFFFFF'})
 
         # Verify that specifying an axis font size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params,
-                                                               {'axis_font_size': 5}, chart_profile,
-                                                               {'cy_axisLabelFontSize': 5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'axis_font_size': 5}, chart_profile,
+                                                              {'cy_axisLabelFontSize': 5})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_box_chart, chart_cols, chart_params, {'slot': 9}, chart_profile, {})
+        self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params, {'slot': 9}, chart_profile, {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_box_chart, chart_cols, slot=10, **chart_params)
@@ -324,68 +324,68 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in no properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, [], chart_params, {},
-                                                               chart_profile, {})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, [], chart_params, {},
+                                                              chart_profile, {})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_axisWidth': 0.25, 'cy_range': [0.0, 16.35887097],
-                                                                'cy_showRangeAxis': False,
-                                                                'cy_orientation': 'HORIZONTAL',
-                                                                'cy_axisLabelFontSize': 1, 'cy_colorScheme': 'CUSTOM',
-                                                                'cy_showRangeZeroBaseline': False,
-                                                                'cy_colors': ['#D6604D', '#D1E5F0', '#053061',
-                                                                              '#888888'],
-                                                                'cy_dataColumns': ['BetweennessCentrality',
-                                                                                   'AverageShortestPathLength'],
-                                                                'cy_axisColor': '#000000'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_axisWidth': 0.25, 'cy_range': [0.0, 16.35887097],
+                                                               'cy_showRangeAxis': False,
+                                                               'cy_orientation': 'HORIZONTAL',
+                                                               'cy_axisLabelFontSize': 1, 'cy_colorScheme': 'CUSTOM',
+                                                               'cy_showRangeZeroBaseline': False,
+                                                               'cy_colors': ['#D6604D', '#D1E5F0', '#053061',
+                                                                             '#888888'],
+                                                               'cy_dataColumns': ['BetweennessCentrality',
+                                                                                  'AverageShortestPathLength'],
+                                                               'cy_axisColor': '#000000'})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'colors': ['#123456', '#654321', '#112233', '#888888']},
-                                                               chart_profile,
-                                                               {'cy_colors': ['#123456', '#654321', '#112233',
-                                                                              '#888888']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'colors': ['#123456', '#654321', '#112233', '#888888']},
+                                                              chart_profile,
+                                                              {'cy_colors': ['#123456', '#654321', '#112233',
+                                                                             '#888888']})
 
         # Verify that specifying an axis range results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'range': [0, 50]}, chart_profile,
-                                                               {'cy_range': [0.0, 50.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'range': [0, 50]}, chart_profile,
+                                                              {'cy_range': [0.0, 50.0]})
 
         # Verify that specifying an orientation results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'orientation': 'VERTICAL'}, chart_profile,
-                                                               {'cy_orientation': 'VERTICAL'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'orientation': 'VERTICAL'}, chart_profile,
+                                                              {'cy_orientation': 'VERTICAL'})
 
         # Verify that enabling a domain axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'range_axis': True}, chart_profile,
-                                                               {'cy_showRangeAxis': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'range_axis': True}, chart_profile,
+                                                              {'cy_showRangeAxis': True})
 
         # Verify that enabling a baseline axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'zero_line': True}, chart_profile,
-                                                               {'cy_showRangeZeroBaseline': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'zero_line': True}, chart_profile,
+                                                              {'cy_showRangeZeroBaseline': True})
 
         # Verify that specifying an axis width results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'axis_width': 0.50}, chart_profile,
-                                                               {'cy_axisWidth': 0.5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'axis_width': 0.50}, chart_profile,
+                                                              {'cy_axisWidth': 0.5})
 
         # Verify that specifying an axis color results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'axis_color': '#FFFFFF'}, chart_profile,
-                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'axis_color': '#FFFFFF'}, chart_profile,
+                                                              {'cy_axisColor': '#FFFFFF'})
 
         # Verify that specifying an axis font size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params,
-                                                               {'axis_font_size': 5}, chart_profile,
-                                                               {'cy_axisLabelFontSize': 5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'axis_font_size': 5}, chart_profile,
+                                                              {'cy_axisLabelFontSize': 5})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_heat_map_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, slot=10, **chart_params)
@@ -400,70 +400,70 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in no properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, [], chart_params, {},
-                                                               chart_profile, {})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, [], chart_params, {},
+                                                              chart_profile, {})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_lineWidth': 1.0, 'cy_axisWidth': 0.25,
-                                                                'cy_range': [0.0, 16.35887097],
-                                                                'cy_showRangeAxis': False, 'cy_axisLabelFontSize': 1,
-                                                                'cy_colorScheme': 'CUSTOM',
-                                                                'cy_showRangeZeroBaseline': False,
-                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999',
-                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999'],
-                                                                'cy_dataColumns': ['AverageShortestPathLength',
-                                                                                   'BetweennessCentrality'],
-                                                                'cy_axisColor': '#000000'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_lineWidth': 1.0, 'cy_axisWidth': 0.25,
+                                                               'cy_range': [0.0, 16.35887097],
+                                                               'cy_showRangeAxis': False, 'cy_axisLabelFontSize': 1,
+                                                               'cy_colorScheme': 'CUSTOM',
+                                                               'cy_showRangeZeroBaseline': False,
+                                                               'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999',
+                                                                             '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999'],
+                                                               'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                  'BetweennessCentrality'],
+                                                               'cy_axisColor': '#000000'})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_colors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying an axis range results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'range': [0, 50]}, chart_profile,
-                                                               {'cy_range': [0.0, 50.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'range': [0, 50]}, chart_profile,
+                                                              {'cy_range': [0.0, 50.0]})
 
         # Verify that specifying an orientation results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'line_width': 5.0}, chart_profile,
-                                                               {'cy_lineWidth': 5.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'line_width': 5.0}, chart_profile,
+                                                              {'cy_lineWidth': 5.0})
 
         # Verify that enabling a domain axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'range_axis': True}, chart_profile,
-                                                               {'cy_showRangeAxis': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'range_axis': True}, chart_profile,
+                                                              {'cy_showRangeAxis': True})
 
         # Verify that enabling a baseline axis results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'zero_line': True}, chart_profile,
-                                                               {'cy_showRangeZeroBaseline': True})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'zero_line': True}, chart_profile,
+                                                              {'cy_showRangeZeroBaseline': True})
 
         # Verify that specifying an axis width results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'axis_width': 0.50}, chart_profile,
-                                                               {'cy_axisWidth': 0.5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'axis_width': 0.50}, chart_profile,
+                                                              {'cy_axisWidth': 0.5})
 
         # Verify that specifying an axis color results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'axis_color': '#FFFFFF'}, chart_profile,
-                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'axis_color': '#FFFFFF'}, chart_profile,
+                                                              {'cy_axisColor': '#FFFFFF'})
 
         # Verify that specifying an axis font size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params,
-                                                               {'axis_font_size': 5}, chart_profile,
-                                                               {'cy_axisLabelFontSize': 5})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'axis_font_size': 5}, chart_profile,
+                                                              {'cy_axisLabelFontSize': 5})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_line_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_line_chart, chart_cols, slot=10, **chart_params)
@@ -478,37 +478,37 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_pie_chart, [], chart_params, {},
-                                                               chart_profile,
-                                                               {'cy_colorScheme': 'CUSTOM', 'cy_startAngle': 0.0,
-                                                                'cy_colors': [], 'cy_dataColumns': []})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, [], chart_params, {},
+                                                              chart_profile,
+                                                              {'cy_colorScheme': 'CUSTOM', 'cy_startAngle': 0.0,
+                                                               'cy_colors': [], 'cy_dataColumns': []})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_pie_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_colorScheme': 'CUSTOM', 'cy_startAngle': 0.0,
-                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999',
-                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999'],
-                                                                'cy_dataColumns': ['AverageShortestPathLength',
-                                                                                   'BetweennessCentrality']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_colorScheme': 'CUSTOM', 'cy_startAngle': 0.0,
+                                                               'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999',
+                                                                             '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999'],
+                                                               'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                  'BetweennessCentrality']})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_pie_chart, chart_cols, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_colors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying start angle results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_pie_chart, chart_cols, chart_params,
-                                                               {'start_angle': 90.0}, chart_profile,
-                                                               {'cy_startAngle': 90.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
+                                                              {'start_angle': 90.0}, chart_profile,
+                                                              {'cy_startAngle': 90.0})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_pie_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_pie_chart, chart_cols, slot=10, **chart_params)
@@ -523,44 +523,44 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_cols = ['AverageShortestPathLength', 'BetweennessCentrality']
 
         # Verify that specifying no columns results in default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_ring_chart, [], chart_params, {},
-                                                               chart_profile,
-                                                               {'cy_holeSize': 0.5, 'cy_colorScheme': 'CUSTOM',
-                                                                'cy_startAngle': 0.0, 'cy_colors': [],
-                                                                'cy_dataColumns': []})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, [], chart_params, {},
+                                                              chart_profile,
+                                                              {'cy_holeSize': 0.5, 'cy_colorScheme': 'CUSTOM',
+                                                               'cy_startAngle': 0.0, 'cy_colors': [],
+                                                               'cy_dataColumns': []})
 
         # Verify that specifying valid columns results in valid default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_ring_chart, chart_cols, chart_params,
-                                                               {}, chart_profile,
-                                                               {'cy_holeSize': 0.5, 'cy_colorScheme': 'CUSTOM',
-                                                                'cy_startAngle': 0.0,
-                                                                'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999',
-                                                                              '#E41A1C', '#377EB8', '#4DAF4A',
-                                                                              '#984EA3', '#FF7F00', '#FFFF33',
-                                                                              '#A65628', '#F781BF', '#999999'],
-                                                                'cy_dataColumns': ['AverageShortestPathLength',
-                                                                                   'BetweennessCentrality']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
+                                                              {}, chart_profile,
+                                                              {'cy_holeSize': 0.5, 'cy_colorScheme': 'CUSTOM',
+                                                               'cy_startAngle': 0.0,
+                                                               'cy_colors': ['#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999',
+                                                                             '#E41A1C', '#377EB8', '#4DAF4A',
+                                                                             '#984EA3', '#FF7F00', '#FFFF33',
+                                                                             '#A65628', '#F781BF', '#999999'],
+                                                               'cy_dataColumns': ['AverageShortestPathLength',
+                                                                                  'BetweennessCentrality']})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_ring_chart, chart_cols, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_colors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying start angle results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_ring_chart, chart_cols, chart_params,
-                                                               {'start_angle': 90.0}, chart_profile,
-                                                               {'cy_startAngle': 90.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
+                                                              {'start_angle': 90.0}, chart_profile,
+                                                              {'cy_startAngle': 90.0})
 
         # Verify that specifying hole size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_ring_chart, chart_cols, chart_params,
-                                                               {'hole_size': 2.0}, chart_profile,
-                                                               {'cy_holeSize': 2.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
+                                                              {'hole_size': 2.0}, chart_profile,
+                                                              {'cy_holeSize': 2.0})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_ring_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_ring_chart, chart_cols, slot=10, **chart_params)
@@ -574,29 +574,29 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_profile = {}
 
         # Verify that specifying no columns results in default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_linear_gradient, None, chart_params, {},
-                                                               chart_profile,
-                                                               {'cy_angle': 0.0, 'cy_gradientFractions': [0.0, 1.0],
-                                                                'cy_gradientColors': ['#DDDDDD', '#888888']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params, {},
+                                                              chart_profile,
+                                                              {'cy_angle': 0.0, 'cy_gradientFractions': [0.0, 1.0],
+                                                               'cy_gradientColors': ['#DDDDDD', '#888888']})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_linear_gradient, None, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_gradientColors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_gradientColors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying anchor colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_linear_gradient, None, chart_params,
-                                                               {'anchors': [1.0, 2.0]}, chart_profile,
-                                                               {'cy_gradientFractions': [1.0, 2.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
+                                                              {'anchors': [1.0, 2.0]}, chart_profile,
+                                                              {'cy_gradientFractions': [1.0, 2.0]})
 
         # Verify that specifying hole size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_linear_gradient, None, chart_params,
-                                                               {'angle': 90.0}, chart_profile,
-                                                               {'cy_angle': 90.0})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
+                                                              {'angle': 90.0}, chart_profile,
+                                                              {'cy_angle': 90.0})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_linear_gradient, None, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_linear_gradient, slot=10, **chart_params)
@@ -610,44 +610,90 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_profile = {}
 
         # Verify that specifying no columns results in default properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_radial_gradient, None, chart_params, {},
-                                                               chart_profile,
-                                                               {'cy_gradientFractions': [0.0, 1.0],
-                                                                'cy_gradientColors': ['#DDDDDD', '#888888'],
-                                                                'cy_center': {'x': 0.5, 'y': 0.5}})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params, {},
+                                                              chart_profile,
+                                                              {'cy_gradientFractions': [0.0, 1.0],
+                                                               'cy_gradientColors': ['#DDDDDD', '#888888'],
+                                                               'cy_center': {'x': 0.5, 'y': 0.5}})
 
         # Verify that specifying display colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_radial_gradient, None, chart_params,
-                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
-                                                               {'cy_gradientColors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
+                                                              {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
+                                                              {'cy_gradientColors': ['#FF00FF', '#00FF00']})
 
         # Verify that specifying anchor colors results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_radial_gradient, None, chart_params,
-                                                               {'anchors': [1.0, 2.0]}, chart_profile,
-                                                               {'cy_gradientFractions': [1.0, 2.0]})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
+                                                              {'anchors': [1.0, 2.0]}, chart_profile,
+                                                              {'cy_gradientFractions': [1.0, 2.0]})
 
         # Verify that specifying hole size results in valid properties
-        chart_params, chart_profile = self._check_chart_attrs1(set_node_custom_radial_gradient, None, chart_params,
-                                                               {'x_center': 1.0, 'y_center': 1.5}, chart_profile,
-                                                               {'cy_center': {'x': 1.0, 'y': 1.5}})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
+                                                              {'x_center': 1.0, 'y_center': 1.5}, chart_profile,
+                                                              {'cy_center': {'x': 1.0, 'y': 1.5}})
 
         # Verify that specifying a different slot results in valid properties
-        self._check_chart_attrs1(set_node_custom_radial_gradient, None, chart_params, {'slot': 9}, chart_profile,
-                                 {})
+        self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params, {'slot': 9}, chart_profile,
+                                {})
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_radial_gradient, slot=10, **chart_params)
         self.assertRaises(CyError, set_node_custom_radial_gradient, slot=0, **chart_params)
 
-    # FAIL
     @print_entry_exit
     def test_set_node_custom_position(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
 
-    # FAIL
+        def check_custom_position(slot):
+            # Verify that setting default parameters results in getting default parameters back
+            orig_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_POSITION_' + str(slot),
+                                                    style_name=self._TEST_STYLE)
+            self.assertEqual(set_node_custom_position(style_name=self._TEST_STYLE, slot=slot), '')
+            self.assertEqual(
+                get_visual_property_default('NODE_CUSTOMGRAPHICS_POSITION_' + str(slot), style_name=self._TEST_STYLE),
+                orig_prop)
+
+            # Verify that setting new parameters results in getting new parameters back
+            self.assertEqual(
+                set_node_custom_position(node_anchor='W', graphic_anchor='E', justification='l', x_offset=-10.0,
+                                         y_offset=15.0, style_name=self._TEST_STYLE, slot=slot), '')
+            self.assertEqual(
+                get_visual_property_default('NODE_CUSTOMGRAPHICS_POSITION_' + str(slot), style_name=self._TEST_STYLE),
+                'W,E,l,-10.00,15.00')
+
+        # Verify that valid parameters in valid slots work properly
+        check_custom_position(1)
+        check_custom_position(9)
+
+        # Verify that error is thrown when slot is invalid
+        self.assertRaises(CyError, set_node_custom_position, slot=10)
+        self.assertRaises(CyError, set_node_custom_position, slot=0)
+
     @print_entry_exit
     def test_remove_node_custom_graphics(self):
-        raise CyError('Not implemented')
+        # Initialization
+        load_test_session()
+
+        def check_remove_graphics(slot):
+            # Verify that setting default parameters results in getting default parameters back
+            orig_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot),
+                                                    style_name=self._TEST_STYLE)
+            self.assertEqual(set_node_custom_linear_gradient(colors=['#FF00FF', '#00FF00'], anchors=[-2.0, 2.0], angle=90.0, slot=slot, style_name=self._TEST_STYLE), '')
+            gradient_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot),
+                                                    style_name=self._TEST_STYLE)
+            self.assertEqual(remove_node_custom_graphics(slot=slot, style_name=self._TEST_STYLE), '')
+            removed_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot),
+                                                    style_name=self._TEST_STYLE)
+            self.assertEqual(orig_prop, removed_prop)
+
+        # Verify that valid parameters in valid slots work properly
+        check_remove_graphics(1)
+        check_remove_graphics(9)
+
+        # Verify that error is thrown when slot is invalid
+        self.assertRaises(CyError, remove_node_custom_graphics, slot=10)
+        self.assertRaises(CyError, remove_node_custom_graphics, slot=0)
+
 
     @print_entry_exit
     def test_set_node_fill_opacity_default(self):
@@ -838,15 +884,7 @@ class StyleDefaultsTests(unittest.TestCase):
         self.assertEqual(get_visual_property_default(prop_name, style_name=self._TEST_STYLE), good_value)
         self.assertNotEqual(get_visual_property_default(prop_name), good_value)
 
-    def _check_chart_attrs(self, base_attrs, new_attrs, slot=1):
-        expected_attrs = base_attrs.copy()
-        expected_attrs.update(new_attrs)
-        whole_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot), style_name=self._TEST_STYLE)
-        chart_dict = json.loads(re.split(':', whole_prop, 1)[1])
-        self.assertDictEqual(chart_dict, expected_attrs)
-        return expected_attrs
-
-    def _check_chart_attrs1(self, chart_func, col_list, base_params, new_params, base_attrs, new_attrs, slot=1):
+    def _check_chart_attrs(self, chart_func, col_list, base_params, new_params, base_attrs, new_attrs, slot=1):
         # Call the chart function with updated parameters
         chart_params = base_params.copy()
         chart_params.update(new_params)
