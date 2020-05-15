@@ -190,8 +190,8 @@ class StylesTests(unittest.TestCase):
         os.remove(all_file_name)
 
         # Verify that bogus files generate an exception
-        self.assertRaises(CyError, export_visual_styles, '\\impos:*sible\\path\\bogus')
-        self.assertRaises(CyError, import_visual_styles, '\\impos:*sible\\path\\bogus')
+        self.assertRaises(CyError, export_visual_styles, '\\im/pos:*sible\\path\\bogus')
+        self.assertRaises(CyError, import_visual_styles, '\\im/pos:*sible\\path\\bogus')
 
     @print_entry_exit
     def test_get_visual_style_names(self):

@@ -854,7 +854,7 @@ class StyleDefaultsTests(unittest.TestCase):
         self.assertEqual(getter_func(style_name=self._TEST_STYLE), new_value)
 
         # Verify that an invalid style name is caught
-        self.assertRaises(TypeError, getter_func,
+        self.assertRaises(CyError, getter_func,
                           style_name='bogusStyle')  # TODO: Really should be CyError, but for get_style_dependencies() returning null instead of CyError
 
     def _check_getter_value_default(self, prop_name, orig_val, expected_val):

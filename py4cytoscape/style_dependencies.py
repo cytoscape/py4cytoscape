@@ -63,7 +63,9 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
         error = 'Error in py4cytoscape:get_style_dependencies. No visual style named "' + style_name + '"'
         # TODO: R version of this error has the wrong text
         sys.stderr.write(error)
-        return None # TODO: Is this what we want to return here?
+        raise CyError(error)
+#        return None
+        # TODO: Is this what we want to return here?
 
     res = commands.cyrest_get('styles/' + style_name + '/dependencies', base_url=base_url)
 
