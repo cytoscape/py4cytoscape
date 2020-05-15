@@ -425,7 +425,7 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
     return res
 
 
-def set_node_custom_ring_chart(columns, colors: None, start_angle=0.0, hole_size=0.5,
+def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=0.5,
                                slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
     if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
@@ -458,7 +458,7 @@ def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
 def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0, 1.0], x_center=0.5, y_center=0.5,
                                     slot=1,
                                     style_name='default', base_url=DEFAULT_BASE_URL):
-    if slot not in range(1, 9):
+    if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
     chart = {'cy_gradientColors': colors, 'cy_gradientFractions': anchors, 'cy_center': {'x': x_center, 'y': y_center}}
