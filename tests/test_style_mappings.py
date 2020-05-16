@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" Test functions in styles.py.
+""" Test functions in style_mappings.py.
 
 License:
     Copyright 2020 The Cytoscape Consortium

@@ -18,6 +18,7 @@ from .styles import *
 from .style_mappings import *
 from .style_defaults import *
 from .style_values import *
+from .style_dependencies import *
 from .decorators import *
 
 # TODO: Enforce documentation standards for modules and private functions per:

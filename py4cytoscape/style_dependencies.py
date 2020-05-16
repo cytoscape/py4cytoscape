@@ -42,13 +42,81 @@ from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
 # I. General Functions
 # ------------------------------------------------------------------------------
 
+def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
+    """Get the values of dependencies in a style.
+
+    Args:
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: contains all dependencies and their current boolean value
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_style_dependencies(style_name='galFiltered Style')
+        {'arrowColorMatchesEdge': False, 'nodeCustomGraphicsSizeSync': True, 'nodeSizeLocked': True}
+        >>> get_style_dependencies()
+        {'arrowColorMatchesEdge': False, 'nodeCustomGraphicsSizeSync': True, 'nodeSizeLocked': False}
+    """
+    # launch error if visual style name is missing
+    if style_name not in styles.get_visual_style_names(base_url=base_url):
+        error = 'Error in py4cytoscape:get_style_dependencies. No visual style named "' + style_name + '"'
+        # TODO: R version of this error has the wrong text
+        sys.stderr.write(error)
+        raise CyError(error)
+    #        return None
+    # TODO: Is this what we want to return here?
+
+    res = commands.cyrest_get('styles/' + style_name + '/dependencies', base_url=base_url)
+
+    # make it a dict
+    dep_list = {dep['visualPropertyDependency']: dep['enabled'] for dep in res}
+    return dep_list
+
+
 def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAULT_BASE_URL):
+    """Set the values of dependencies in a style, overriding any prior setting.
+
+    Args:
+        style_name (str): Name of style; default is "default" style
+        dependencies (dict): A ``list`` of style dependencies, see Available Dependencies below. Note: each dependency
+            is set by a boolean, True or False
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: contains the ``views`` property with a value of the current view's SUID (e.g., {'views': [275240]})
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_style_dependencies(dependencies={'arrowColorMatchesEdge': True}, style_name='galFiltered Style')
+        {'views': [275240]}
+        >>> get_style_dependencies(dependencies={'arrowColorMatchesEdge': True, 'nodeCustomGraphicsSizeSync': False})
+        {'views': [275240]}
+
+    Available Dependencies:
+        arrowColorMatchesEdge
+        nodeCustomGraphicsSizeSync
+        nodeSizeLocked
+    """
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
         error = 'Error in py4cytoscape:set_style_dependencies. No visual style named "' + style_name + '"'
         # TODO: R version of this error has the wrong text
         sys.stderr.write(error)
-        return None # TODO: Is this what we want to return here?
+        raise CyError(error)
+        # return None
+        # TODO: Is this what we want to return here?
 
     dep_list = [{'visualPropertyDependency': dep, 'enabled': val}    for dep, val in dependencies.items()]
 
@@ -57,21 +125,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
     # TODO: Do we really want to lose the first res value?
     return res
 
-def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
-    # launch error if visual style name is missing
-    if style_name not in styles.get_visual_style_names(base_url=base_url):
-        error = 'Error in py4cytoscape:get_style_dependencies. No visual style named "' + style_name + '"'
-        # TODO: R version of this error has the wrong text
-        sys.stderr.write(error)
-        raise CyError(error)
-#        return None
-        # TODO: Is this what we want to return here?
 
-    res = commands.cyrest_get('styles/' + style_name + '/dependencies', base_url=base_url)
-
-    # make it a dict
-    dep_list = {dep['visualPropertyDependency']: dep['enabled']  for dep in res}
-    return dep_list
 
 
 def lock_node_dimensions(new_state, style_name='default', base_url=DEFAULT_BASE_URL):

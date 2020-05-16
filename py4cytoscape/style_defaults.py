@@ -65,7 +65,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -109,7 +109,7 @@ def get_visual_property_default(property, style_name='default', base_url=DEFAULT
         str: ''
 
     Raises:
-        CyError: if network name, property or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -138,7 +138,7 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
         str: ''
 
     Raises:
-        CyError: if network name, property or style doesn't exist
+        CyError: if property or style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -178,7 +178,7 @@ def set_node_border_color_default(new_color, style_name='default', base_url=DEFA
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -210,7 +210,7 @@ def set_node_border_width_default(new_width, style_name='default', base_url=DEFA
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -239,7 +239,7 @@ def set_node_border_opacity_default(new_opacity, style_name='default', base_url=
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -273,7 +273,7 @@ def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -853,7 +853,7 @@ def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DE
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -887,7 +887,7 @@ def set_node_font_face_default(new_font, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -916,7 +916,7 @@ def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -945,7 +945,7 @@ def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_B
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -977,7 +977,7 @@ def set_node_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1006,7 +1006,7 @@ def set_node_label_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1038,7 +1038,7 @@ def set_node_label_opacity_default(new_opacity, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1071,7 +1071,7 @@ def get_node_selection_color_default(style_name='default', base_url=DEFAULT_BASE
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1099,7 +1099,7 @@ def set_node_selection_color_default(new_color, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1131,7 +1131,7 @@ def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1165,7 +1165,7 @@ def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1197,7 +1197,7 @@ def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1229,7 +1229,7 @@ def set_node_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1264,7 +1264,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1300,7 +1300,7 @@ def set_edge_font_face_default(new_font, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1329,7 +1329,7 @@ def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1358,7 +1358,7 @@ def set_edge_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1387,7 +1387,7 @@ def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1419,7 +1419,7 @@ def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1453,7 +1453,7 @@ def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAUL
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1482,7 +1482,7 @@ def set_edge_line_style_default(new_line_style, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1511,7 +1511,7 @@ def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1544,7 +1544,7 @@ def get_edge_selection_color_default(style_name='default', base_url=DEFAULT_BASE
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1574,7 +1574,7 @@ def set_edge_selection_color_default(new_color, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1611,7 +1611,7 @@ def set_edge_source_arrow_color_default(new_color, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1643,7 +1643,7 @@ def set_edge_target_arrow_color_default(new_color, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1675,7 +1675,7 @@ def set_edge_source_arrow_shape_default(new_shape, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1704,7 +1704,7 @@ def set_edge_target_arrow_shape_default(new_shape, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1733,7 +1733,7 @@ def set_edge_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1767,7 +1767,7 @@ def get_background_color_default(style_name='default', base_url=DEFAULT_BASE_URL
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1795,7 +1795,7 @@ def set_background_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if network name or style doesn't exist
+        CyError: if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
