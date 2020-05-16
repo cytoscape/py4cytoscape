@@ -1,5 +1,7 @@
-py4cytoscape Internal Modules
+py4...Internal Modules
 =============================
+
+Add some text that describes what the internal functions are about and whether they can be used.
 
 py4...decorators module
 -----------------------
