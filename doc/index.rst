@@ -29,14 +29,10 @@ Copyright (c) 2020 The Cytoscape Consortium
    network_selection
    network_views
    session
-   styles
-   style_defaults
-   style_dependencies
-   style_mappings
-   style_values
    tables
    tools
    user_interface
+   vizmap
    internal
 
 
