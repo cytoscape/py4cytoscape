@@ -52,9 +52,7 @@ class StyleDependenciesTests(unittest.TestCase):
 
         # Verify that setting a default style returns expected dict and sets expected properties
         set_res = set_style_dependencies(dependencies={'arrowColorMatchesEdge': True, 'nodeCustomGraphicsSizeSync': False})
-        self.assertIsInstance(set_res, dict)
-        self.assertEqual(len(set_res), 1)
-        self.assertIn('views', set_res)
+        self._check_set_dependency(set_res)
         self.assertDictEqual(get_style_dependencies(),
                              {'arrowColorMatchesEdge': True, 'nodeCustomGraphicsSizeSync': False,
                               'nodeSizeLocked': False})
@@ -80,12 +78,55 @@ class StyleDependenciesTests(unittest.TestCase):
         self.assertRaises(CyError, get_style_dependencies, style_name='bogusStyle')
         self.assertRaises(CyError, set_style_dependencies, style_name='bogusStyle')
 
+    @print_entry_exit
+    def test_match_arrow_color_to_edge(self):
+        self._check_dependency(match_arrow_color_to_edge, 'arrowColorMatchesEdge')
+
+    @print_entry_exit
+    def test_lock_node_dimensions(self):
+        self._check_dependency(lock_node_dimensions, 'nodeSizeLocked')
+
+    @print_entry_exit
+    def test_sync_node_custom_graphics_size(self):
+        self._check_dependency(sync_node_custom_graphics_size, 'nodeCustomGraphicsSizeSync')
 
 
+    def _check_dependency(self, setter_func, prop_name):
+        # Initialization
+        load_test_session()
+        orig_state = get_style_dependencies(style_name=self._TEST_STYLE)[prop_name]
 
+        # Verify that setting the same value on the same style doesn't change the property
+        set_res = setter_func(orig_state, style_name=self._TEST_STYLE)
+        self._check_set_dependency(set_res)
+        self.assertEqual(get_style_dependencies(style_name=self._TEST_STYLE)[prop_name], orig_state)
 
+        # Verify that setting the opposite value on the same style properly changes the property
+        set_res = setter_func(not orig_state, style_name=self._TEST_STYLE)
+        self._check_set_dependency(set_res)
+        self.assertEqual(get_style_dependencies(style_name=self._TEST_STYLE)[prop_name], not orig_state)
 
+        # Verify that setting the original value on the same style changes the property back
+        set_res = setter_func(orig_state, style_name=self._TEST_STYLE)
+        self._check_set_dependency(set_res)
+        self.assertEqual(get_style_dependencies(style_name=self._TEST_STYLE)[prop_name], orig_state)
 
+        # Verify that setting the opposite value on a different style doesn't change the original style's property
+        set_res = setter_func(not orig_state)
+        self._check_set_dependency(set_res)
+        self.assertEqual(get_style_dependencies(style_name=self._TEST_STYLE)[prop_name], orig_state)
+        self.assertEqual(get_style_dependencies()[prop_name], not orig_state)
+
+        # Verify that addressing a bogus style is caught
+        self.assertRaises(CyError, setter_func, True, style_name='bogusStyle')
+
+    def _check_set_dependency(self, set_res):
+        self.assertIsInstance(set_res, dict)
+        self.assertEqual(len(set_res), 1)
+        self.assertIn('views', set_res)
+        self.assertIsInstance(set_res['views'], list)
+        self.assertIsInstance(set_res['views'][0], int)
+        return set_res
 
 if __name__ == '__main__':
     unittest.main()

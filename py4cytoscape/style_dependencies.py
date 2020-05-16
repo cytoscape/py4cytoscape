@@ -36,12 +36,11 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
 
-
-
 # ==============================================================================
 # I. General Functions
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     """Get the values of dependencies in a style.
 
@@ -79,7 +78,7 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     dep_list = {dep['visualPropertyDependency']: dep['enabled'] for dep in res}
     return dep_list
 
-
+@cy_log
 def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAULT_BASE_URL):
     """Set the values of dependencies in a style, overriding any prior setting.
 
@@ -105,9 +104,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
         {'views': [275240]}
 
     Available Dependencies:
-        arrowColorMatchesEdge
-        nodeCustomGraphicsSizeSync
-        nodeSizeLocked
+        arrowColorMatchesEdge, nodeCustomGraphicsSizeSync, nodeSizeLocked
     """
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
@@ -126,11 +123,97 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
     return res
 
 
+# ==============================================================================
+# II. Specific Functions
+# Pattern: (1) Call setStyleDependencies()
+# ------------------------------------------------------------------------------
 
+@cy_log
+def match_arrow_color_to_edge(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+    """Set a boolean value to have arrow shapes share the same color as the edge.
 
+    Args:
+        new_state (bool): Whether to match arrow color to edge.
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: contains the ``views`` property with a value of the current view's SUID (e.g., {'views': [275240]})
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> match_arrow_color_to_edge(True, style_name='galFiltered Style')
+        {'views': [275240]}
+        >>> match_arrow_color_to_edge(False)
+        {'views': [275240]}
+    """
+    toggle = 'true' if new_state else 'false'
+
+    res = set_style_dependencies(style_name=style_name, dependencies={'arrowColorMatchesEdge': toggle}, base_url=base_url)
+
+    return res
+
+@cy_log
 def lock_node_dimensions(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+    """Set a boolean value to have node width and height fixed to a single size value.
+
+    Args:
+        new_state (bool): Whether to lock node width and height
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: contains the ``views`` property with a value of the current view's SUID (e.g., {'views': [275240]})
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> lock_node_dimensions(True, style_name='galFiltered Style')
+        {'views': [275240]}
+        >>> lock_node_dimensions(False)
+        {'views': [275240]}
+    """
     toggle = 'true' if new_state else 'false'
 
     res = set_style_dependencies(style_name=style_name, dependencies={'nodeSizeLocked': toggle}, base_url=base_url)
+
+    return res
+
+@cy_log
+def sync_node_custom_graphics_size(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+    """Set a boolean value to have the size of custom graphics match that of the node.
+
+    Args:
+        new_state (bool): Whether to sync node custom graphics size
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: contains the ``views`` property with a value of the current view's SUID (e.g., {'views': [275240]})
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> sync_node_custom_graphics_size(True, style_name='galFiltered Style')
+        {'views': [275240]}
+        >>> sync_node_custom_graphics_size(False)
+        {'views': [275240]}
+    """
+    toggle = 'true' if new_state else 'false'
+
+    res = set_style_dependencies(style_name=style_name, dependencies={'nodeCustomGraphicsSizeSync': toggle}, base_url=base_url)
 
     return res
