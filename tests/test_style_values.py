@@ -59,10 +59,7 @@ class StyleValuesTests(unittest.TestCase):
         load_test_session()
 
         scale_prop = get_network_property('NETWORK_SCALE_FACTOR')
-        self.assertIsInstance(scale_prop, dict)
-        self.assertEqual(len(scale_prop), 2)
-        self.assertEqual(scale_prop['visualProperty'], 'NETWORK_SCALE_FACTOR')
-        self.assertIsInstance(scale_prop['value'], float)
+        self.assertIsInstance(scale_prop, float)
 
         self.assertRaises(CyError, get_network_property, None)
         self.assertRaises(CyError, get_network_property, 'BogusProperty')
@@ -95,6 +92,91 @@ class StyleValuesTests(unittest.TestCase):
         load_test_session()
 
         self._check_get_property(get_node_height, 'node_names', 'node', None, None, 'YER112W', 46.470588235294116)
+
+    @print_entry_exit
+    def test_get_node_position(self):
+        # Initialization
+        load_test_session()
+        all_node_names = get_table_columns(columns=['name'])
+
+        def check_position_table(position_df, node_id_set):
+            # Verify that all nodes are present
+            self.assertSetEqual(set(position_df.index), node_id_set)
+            # Verify that the table has exactly the 'x' and 'y' columns
+            self.assertSetEqual(set(position_df), {'x', 'y'})
+
+       # Verify that getting positions for all nodes works
+        check_position_table(get_node_position(), set(all_node_names['name']))
+
+        # Verify that getting positions for all nodes works when nodes are named
+        check_position_table(get_node_position(list(all_node_names['name'])), set(all_node_names['name']))
+
+        # Verify that getting positions for all nodes works when identified by SUIDs
+        check_position_table(get_node_position(list(all_node_names.index)), set(all_node_names.index))
+
+        # Verify that getting positions for all nodes works when identified by SUIDs
+        check_position_table(get_node_position('YER112W'), {'YER112W'})
+
+        # Verify that bad property, node/edge name or network is caught
+        self.assertRaises(CyError, get_node_position, ['bogusName'])
+        self.assertRaises(CyError, get_node_position, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_get_edge_line_width(self):
+        # Initialization
+        load_test_session()
+
+        self._check_get_property(get_edge_line_width, 'edge_names', 'edge', None, None, 'YOR355W (pp) YNL091W', 2.0)
+
+    @print_entry_exit
+    def test_get_edge_color(self):
+        # Initialization
+        load_test_session()
+
+        self._check_get_property(get_edge_color, 'edge_names', 'edge', None, None, 'YOR355W (pp) YNL091W', '#808080')
+
+    @print_entry_exit
+    def test_get_edge_line_style(self):
+        # Initialization
+        load_test_session()
+
+        self._check_get_property(get_edge_line_style, 'edge_names', 'edge', None, None, 'YOR355W (pp) YNL091W', 'SOLID')
+
+    @print_entry_exit
+    def test_get_edge_target_arrow(self):
+        # Initialization
+        load_test_session()
+
+        self._check_get_property(get_edge_target_arrow_shape, 'edge_names', 'edge', None, None, 'YOR355W (pp) YNL091W', 'NONE')
+
+    @print_entry_exit
+    def test_get_network_center(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that the proper dict is returned
+        res = get_network_center()
+        self.assertIsInstance(res, dict)
+        self.assertEqual(len(res), 2)
+        self.assertIn('x', res)
+        self.assertIsInstance(res['x'], float)
+        self.assertIn('y', res)
+        self.assertIsInstance(res['y'], float)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, get_network_center, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_get_network_zoom(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that the proper type is returned
+        res = get_network_zoom()
+        self.assertIsInstance(res, float)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, get_network_zoom, network='BogusNetwork')
 
     def _check_get_property(self, getter_func, names_param, table, visual_property, data_column, single_name, single_value):
         if data_column is None:
