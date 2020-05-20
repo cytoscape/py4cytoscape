@@ -59,8 +59,42 @@ class StyleBypassesTests(unittest.TestCase):
 
         self._clear_property_bypass(clear_edge_property_bypass, set_edge_property_bypass, get_edge_property, 'edge', 'EDGE_UNSELECTED_PAINT')
 
+    @print_entry_exit
+    def test_set_network_property_bypass(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that a valid property can be set properly
+        orig_scale = get_network_property('NETWORK_SCALE_FACTOR')
+        self.assertEqual(set_network_property_bypass(orig_scale / 2, 'NETWORK_SCALE_FACTOR'), '')
+        self.assertEqual(get_network_property('NETWORK_SCALE_FACTOR'), orig_scale / 2)
+
+        # Verify that bad property name is caught
+        self.assertRaises(CyError, set_network_property_bypass, 1, None)
+        self.assertEqual(set_network_property_bypass(1, 'BogusProperty'), '')
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, set_network_property_bypass, 1, 'NETWORK_SCALE_FACTOR', network='BogusNetwork')
 
 
+    @print_entry_exit
+    def test_clear_network_property_bypass(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that a valid property can be set properly and then cleared
+        orig_scale = get_network_property('NETWORK_SCALE_FACTOR')
+        self.assertEqual(set_network_property_bypass(orig_scale / 2, 'NETWORK_SCALE_FACTOR'), '')
+        self.assertEqual(get_network_property('NETWORK_SCALE_FACTOR'), orig_scale / 2)
+        self.assertDictEqual(clear_network_property_bypass('NETWORK_SCALE_FACTOR'), {'data': {}, 'errors': []})
+        self.assertEqual(get_network_property('NETWORK_SCALE_FACTOR'), orig_scale)
+
+        # Verify that bad property name is caught
+        self.assertRaises(CyError, clear_network_property_bypass, None)
+        self.assertRaises(CyError, clear_network_property_bypass, 'BogusProperty')
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, clear_network_property_bypass, 'NETWORK_SCALE_FACTOR', network='BogusNetwork')
 
     def _set_property_bypass(self, bypass_func, getter_func, table, visual_property):
         # Initialization

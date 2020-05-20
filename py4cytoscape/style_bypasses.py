@@ -102,7 +102,7 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     if not isinstance(new_values, list): new_values = [new_values]
     if len(new_values) == 1: new_values = new_values * len(node_suids)
 
-    if visual_property is None: # TODO: Added this ... but what about an invalid property?
+    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
         raise CyError('Invalid visual property')
 
     if len(new_values) != len(node_suids):
@@ -112,11 +112,13 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
         sys.stderr.write(error)
         return None  # TODO: Is this what we want to return here?
 
-    body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]}   for suid, val in zip(node_suids, new_values)]
+    body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
+                 zip(node_suids, new_values)]
 
     res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes',
                               parameters={'bypass': bypass}, body=body_list, base_url=base_url, require_json=False)
     return res
+
 
 def clear_node_property_bypass(node_names, visual_property, network=None, base_url=DEFAULT_BASE_URL):
     """Clear Node Property Bypass.
@@ -166,10 +168,12 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
     node_suids = node_name_to_node_suid(node_names, network=net_suid, base_url=base_url)
 
     for suid in node_suids:
-        res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes/' + str(suid) + '/' + visual_property + '/bypass', base_url=base_url)
+        res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes/' + str(
+            suid) + '/' + visual_property + '/bypass', base_url=base_url)
 
     return res
     # TODO: OK to miss res values during the loop?
+
 
 # ==============================================================================
 # I.b. Edge Properties
@@ -179,7 +183,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
                              base_url=DEFAULT_BASE_URL):
     """Set Edge Property Bypass.
 
-    Set bypass values for any edge property of the specified nodes, overriding default values and mappings defined by
+    Set bypass values for any edge property of the specified edges, overriding default values and mappings defined by
     any visual style.
 
     This method permanently overrides any default values or mappings defined for the visual properties of the edge
@@ -227,7 +231,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     if not isinstance(new_values, list): new_values = [new_values]
     if len(new_values) == 1: new_values = new_values * len(edge_suids)
 
-    if visual_property is None: # TODO: Added this ... but what about an invalid property?
+    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
         raise CyError('Invalid visual property')
 
     if len(new_values) != len(edge_suids):
@@ -237,16 +241,18 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
         sys.stderr.write(error)
         return None  # TODO: Is this what we want to return here?
 
-    body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]}   for suid, val in zip(edge_suids, new_values)]
+    body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
+                 zip(edge_suids, new_values)]
 
     res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges',
                               parameters={'bypass': bypass}, body=body_list, base_url=base_url, require_json=False)
     return res
 
+
 def clear_edge_property_bypass(edge_names, visual_property, network=None, base_url=DEFAULT_BASE_URL):
     """Clear Edge Property Bypass.
 
-    Clear bypass values for any edge property of the specified nodes, effectively restoring any previously defined
+    Clear bypass values for any edge property of the specified edges, effectively restoring any previously defined
     style defaults or mappings.
 
     Args:
@@ -291,7 +297,95 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
     edge_suids = edge_name_to_edge_suid(edge_names, network=net_suid, base_url=base_url)
 
     for suid in edge_suids:
-        res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges/' + str(suid) + '/' + visual_property + '/bypass', base_url=base_url)
+        res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges/' + str(
+            suid) + '/' + visual_property + '/bypass', base_url=base_url)
 
     return res
     # TODO: OK to miss res values during the loop?
+
+
+def set_network_property_bypass(new_value, visual_property, bypass=True, network=None, base_url=DEFAULT_BASE_URL):
+    """Set Network Property Bypass.
+
+    Set bypass values for any network property, overriding default values defined by any visual style.
+
+    This method permanently overrides any default values or mappings defined for the visual properties of the network
+    specified. To restore defaults and mappings, use ``clear_network_property_bypass()``.
+
+    Args:
+        new_value (any): Value to set
+        visual_property (str): Name of a visual property. See ``get_visual_property_names``.
+        bypass (bool): Whether to set permanent bypass value. Default is True
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if visual property or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_network_property_bypass(0.5, 'NETWORK_SCALE_FACTOR')
+        >>> ''
+        >>> set_network_property_bypass(0.5, 'NETWORK_SCALE_FACTOR', network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`clear_network_property_bypass`
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
+
+    res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network',
+                              parameters={'bypass': bypass},
+                              body=[{'visualProperty': visual_property, 'value': new_value}], base_url=base_url,
+                              require_json=False)
+    return res
+
+
+def clear_network_property_bypass(visual_property, network=None, base_url=DEFAULT_BASE_URL):
+    """Clear Network Property Bypass.
+
+    Clear bypass values for any network property, effectively restoring any previously defined style defaults
+    or mappings.
+
+    Args:
+        visual_property (str): Name of a visual property. See ``get_visual_property_names``.
+        bypass (bool): Whether to set permanent bypass value. Default is True
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'data': {}, 'errors': []}
+
+    Raises:
+        CyError: if visual property or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> clear_network_property_bypass('NETWORK_SCALE_FACTOR')
+        >>> ''
+        >>> clear_network_property_bypass('NETWORK_SCALE_FACTOR', network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_network_property_bypass`
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
+
+    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
+        raise CyError('Invalid visual property')
+
+    res = commands.cyrest_delete(
+        'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network/' + visual_property + '/bypass',
+        base_url=base_url)
+    return res
