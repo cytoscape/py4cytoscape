@@ -43,6 +43,7 @@ class StyleValuesTests(unittest.TestCase):
     def test_get_node_property(self):
         # Initialization
         load_test_session()
+
         self._check_get_property(get_node_property, 'node_names', 'node', 'NODE_LABEL', 'COMMON', 'YER112W', 'LSM4')
 
     @print_entry_exit

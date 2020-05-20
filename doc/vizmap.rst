@@ -11,6 +11,14 @@ py4...styles module
     :undoc-members:
     :show-inheritance:
 
+py4...style\_bypasses module
+---------------------------
+
+.. automodule:: py4cytoscape.style_bypasses
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 py4...style\_defaults module
 ---------------------------
 

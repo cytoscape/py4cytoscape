@@ -196,6 +196,7 @@ def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_UR
 # Pattern: call getNodeProperty()
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual fill color of specified nodes.
 
@@ -227,6 +228,7 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_FILL_COLOR", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual size of specified nodes.
 
@@ -258,6 +260,7 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_SIZE", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual width of specified nodes.
 
@@ -289,6 +292,7 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_WIDTH", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual height of specified nodes.
 
@@ -320,6 +324,7 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_HEIGHT", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual x,y position of specified nodes.
 
@@ -383,6 +388,7 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 # Pattern: call getEdgeProperty()
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual line width of specified edge.
 
@@ -414,6 +420,7 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     res = get_edge_property(edge_names, "EDGE_WIDTH", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual line color of specified edges.
 
@@ -445,6 +452,7 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_edge_property(edge_names, "EDGE_PAINT", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual line style of specified edges.
 
@@ -476,6 +484,7 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     res = get_edge_property(edge_names, "EDGE_LINE_TYPE", network=network, base_url=base_url)
     return res
 
+@cy_log
 def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual target arrow shape of specified edges.
 
@@ -512,6 +521,7 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
 # Pattern: call getNetworkProperty()
 # ------------------------------------------------------------------------------
 
+@cy_log
 def get_network_center(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the center of specified network.
 
@@ -540,6 +550,7 @@ def get_network_center(network=None, base_url=DEFAULT_BASE_URL):
 
     return {'x': x_coordinate, 'y': y_coordinate}
 
+@cy_log
 def get_network_zoom(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the scale factor of specified network.
 

@@ -110,6 +110,11 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         3072  3072     YDL081C  YDL081C  ...    0.048133  5.9631e-06               False
         3073  3073     YGL166W  YGL166W  ...   0.0012181    0.032147               False
         ...
+        >>> get_table_columns(columns='name')
+              SUID shared name     name  ...   gal4RGsig   gal80Rsig isExcludedFromPaths
+        3072  3072     YDL081C  YDL081C  ...    0.048133  5.9631e-06               False
+        3073  3073     YGL166W  YGL166W  ...   0.0012181    0.032147               False
+        ...
         >>> get_table_columns(columns=['gal1RGexp', 'Eccentricity', 'Stress'])
             gal1RGexp Eccentricity  Stress
         4608    -0.262           17       0

@@ -65,7 +65,7 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
     if node_names is None: return None
     # TODO: Should this be a simple conversion, or a split(',')??
     if isinstance(node_names, str): node_names = [node_names]
-    df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
+    df = tables.get_table_columns('node', ['name'], 'default', network=network, base_url=base_url)
 
     all_suids = df.index
     test_present = [x in all_suids for x in node_names]
