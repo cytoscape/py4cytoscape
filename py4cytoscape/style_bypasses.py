@@ -36,6 +36,8 @@ import json
 from . import commands
 from . import networks
 from . import network_views
+from . import style_dependencies
+from . import styles
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -388,4 +390,788 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
     res = commands.cyrest_delete(
         'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network/' + visual_property + '/bypass',
         base_url=base_url)
+    return res
+
+
+# ==============================================================================
+# II. Specific Functions
+# ------------------------------------------------------------------------------
+
+def unhide_all(network=None, base_url=DEFAULT_BASE_URL):
+    """Unhide all previously hidden nodes and edges, by clearing the Visible property bypass value.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> unhide_all()
+        >>> ''
+        >>> unhide_all(network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`clear_edge_property_bypass`, :meth:`unhide_nodes`, :meth:`unhide_edges`
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = None
+
+    node_names = networks.get_all_nodes(net_suid, base_url=base_url)
+    if len(node_names) > 0:
+        res = set_node_property_bypass(node_names, new_values='true', visual_property='NODE_VISIBLE', network=network,
+                                       base_url=base_url)
+
+    edge_names = networks.get_all_edges(net_suid, base_url=base_url)
+    if len(edge_names) > 0:
+        res = set_edge_property_bypass(edge_names, new_values='true', visual_property='EDGE_VISIBLE', network=network,
+                                       base_url=base_url)
+
+    return res
+    # TODO: res is ambiguous ... unclear what it really should be
+
+
+# ==============================================================================
+# II.a. Node Properties
+# Pattern: (1) validate input value, (2) call setNodePropertyBypass()
+# ------------------------------------------------------------------------------
+
+def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
+    """Set the bypass value for fill color for the specified node or nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_colors (str or list): list of hex colors or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid color is found in new_colors)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_color_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if isinstance(new_colors, str): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
+    for color in new_colors:
+        if is_not_hex_color(color):
+            return None  # TODO: Shouldn't this be an exception?
+
+    res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
+    return res
+
+
+def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
+    """Set Node Size Bypass.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_sizes (int or float or list): list of size values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid size is found in new_sizes)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_size_bypass(get_node_names(), 50)
+        >>> ''
+        >>> set_node_size_bypass(['YDL194W', 'YBR043C'], [150.5, 90.5], network='galFiltered.sif')
+        >>> ''
+
+    Note:
+        Sets the bypass value of node size for one or more nodes. Only applicable if node dimensions are locked.
+        See ``lockNodeDimensions()``.
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    for size in new_sizes:
+        if not isinstance(size, float) and not isinstance(size, int):
+            error = 'illegal size string ' + str(size) + ' in set_node_size_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
+    return res
+
+def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFAULT_BASE_URL):
+    """Sets a bypass tooltip for one or more nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_tooltip (str or list): list of size values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_tooltip_bypass(get_node_names(), 'Some Tooltip')
+        >>> ''
+        >>> set_node_tooltip_bypass(['YDL194W', 'YBR043C'], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    res = set_node_property_bypass(node_names, new_tooltip, 'NODE_TOOLTIP', network=network, base_url=base_url)
+    return res
+
+def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the width for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_widths (int or float or list): list of width values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if width is invalid)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_width_bypass(get_node_names(), 80)
+        >>> ''
+        >>> set_node_width_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    style_dependencies.lock_node_dimensions(False)
+
+    if not isinstance(new_widths, list): new_widths = [new_widths]  # TODO: It looks like this should be happening everywhere?
+    for width in new_widths:
+        if not isinstance(width, float) and not isinstance(width, int):
+            error = 'illegal node width ' + str(width) + ' in set_node_width_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
+    return res
+
+def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the height for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_heights (int or float or list): list of height values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if height is invalid)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_height_bypass(get_node_names(), 80)
+        >>> ''
+        >>> set_node_height_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    style_dependencies.lock_node_dimensions(False)
+
+    if not isinstance(new_heights, list): new_heights = [new_heights]  # TODO: It looks like this should be happening everywhere?
+    for height in new_heights:
+        if not isinstance(height, float) and not isinstance(height, int):
+            error = 'illegal node height ' + str(height) + ' in set_node_height_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
+    return res
+
+def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the label for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_labels (str or list): list of label values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_label_bypass(get_node_names(), 'test label')
+        >>> ''
+        >>> set_node_label_bypass(['YDL194W', 'YBR043C'], ['A', 'B'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    res = set_node_property_bypass(node_names, new_labels, 'NODE_LABEL', network=network, base_url=base_url)
+    return res
+
+def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the font face for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_fonts (str or list): list of font values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_font_face_bypass(get_node_names(), 'Dialog.italic,plain,20')
+        >>> ''
+        >>> set_node_font_face_bypass(['YDL194W', 'YBR043C'], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    res = set_node_property_bypass(node_names, new_fonts, 'NODE_LABEL_FONT_FACE', network=network, base_url=base_url)
+    return res
+
+def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the font size for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_sizes (int or float or list): list of font sizes or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_font_size_bypass(get_node_names(), 20)
+        >>> ''
+        >>> set_node_font_size_bypass(['YDL194W', 'YBR043C'], [50, 100], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    size_type_errors = 0
+    for size in new_sizes:
+        if not isinstance(size, float) and not isinstance(size, int):
+            error = 'illegal font size ' + str(size) + ' in set_node_font size_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            size_type_errors += 1  # TODO: Why are we doing this when no other function does it? ... return None OK??
+
+    if size_type_errors == 0:
+        res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network, base_url=base_url)
+    else:
+        res = None
+
+    return res
+
+def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the label color for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_colors (str or list):  list of hex colors, or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid color)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_label_color_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_label_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_colors, list): new_colors = [new_colors]  # TODO: It looks like this should be happening everywhere?
+    for color in new_colors:
+        if is_not_hex_color(color):
+            return None  # TODO: Shouldn't this be an exception?
+
+    res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
+
+    return res
+
+def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the shape for particular nodes
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_shapes (str or list):  List of shapes, or single value. See ``get_node_shapes()``.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid shape)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_shape_bypass(get_node_names(), 'ROUND_RECTANGLE')
+        >>> ''
+        >>> set_node_shape_bypass(['YDL194W', 'YBR043C'], ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_shapes, list): new_shapes = [new_shapes]  # TODO: It looks like this should be happening everywhere?
+
+    if len(node_names) != len(new_shapes) and len(new_shapes) != 1:
+        error = 'error in set_node_shape_bypass().  new_shapes count ' + str(len(new_shapes)) + ' is neither 1 nor same as node_names count ' + str(len(node_names))
+        sys.stderr.write(error)
+        return None # Should this be an exception?
+
+    # convert old to new node shapes
+    # TODO: Why isn't this done on other shape functions?
+    new_shapes = ['ROUND_RECTANGLE' if shape == 'round_rect' else shape    for shape in new_shapes]
+    new_shapes = ['RECTANGLE' if shape == 'rect' else shape.upper()    for shape in new_shapes]
+
+    # ensure valid node shapes
+    valid_shapes = styles.get_node_shapes(base_url=base_url)
+    for shape in new_shapes:
+        if not shape in valid_shapes:
+            error = 'ERROR in set_node_shape_bypass(). ' + shape + ' is not a valid shape. Please note that some older shapes are no longer available. For valid ones check get_node_shapes().'
+            sys.stderr.write(error)
+            return None  # Should this be an exception?
+
+    res = set_node_property_bypass(node_names, new_shapes, 'NODE_SHAPE', network=network, base_url=base_url)
+
+    return res
+
+def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the border width for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_sizes (int or float or list): list of size values or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if size is invalid)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_width_bypass(get_node_names(), 10)
+        >>> ''
+        >>> set_node_border_width_bypass(['YDL194W', 'YBR043C'], [10, 20.5], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    for size in new_sizes:
+        if not isinstance(size, float) and not isinstance(size, int):
+            error = 'illegal width string ' + str(size) + ' in set_node_border_width_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_sizes, 'NODE_BORDER_WIDTH', network=network, base_url=base_url)
+    return res
+
+def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the border color for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_colors (str or list): list of hex colors or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid color is found in new_colors)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_color_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_border_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if isinstance(new_colors, str): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
+    for color in new_colors:
+        if is_not_hex_color(color):
+            return None  # TODO: Shouldn't this be an exception?
+
+    res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
+    return res
+
+def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
+    """Set the bypass value for node fill, label and border opacity for the specified node or nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_values (int or float or list): list of values to set, or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid opacity is found in new_values)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    for value in new_values:
+        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
+            error = 'illegal opacity ' + str(value) + ' in set_node_opacity_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    # TODO: Concerned about losing intermediate res results
+    res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    return res
+
+def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_URL):
+    """Clear Node Opacity Bypass.
+
+    Clear the bypass value for node fill, label and border opacity for the specified node or nodes, effectively
+    restoring any previously defined style defaults or mappings.
+
+    Args:
+        node_names (list): list of node names
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'data': {}, 'errors': []}
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> clear_node_opacity_bypass(get_node_names())
+        >>> ''
+        >>> clear_node_opacity_bypass(['YDL194W', 'YBR043C'], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_opacity_bypass`
+    """
+    res = clear_node_property_bypass(node_names, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
+    res = clear_node_property_bypass(node_names, 'NODE_BORDER_TRANSPARENCY', network=network, base_url=base_url)
+    res = clear_node_property_bypass(node_names, 'NODE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    return res
+    # TODO: What kind of return result should there be, and what about losing intermediate return results?
+
+def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the fill opacity for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_values (int or float or list): list of values to set, or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid opacity is found in new_values)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_fill_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_fill_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    for value in new_values:
+        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
+            error = 'illegal opacity ' + str(value) + ' in set_node_fill_opacity_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
+    return res
+
+def set_node_border_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the border opacity for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_values (int or float or list): list of values to set, or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid opacity is found in new_values)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_border_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_border_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    for value in new_values:
+        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
+            error = 'illegal opacity ' + str(value) + ' in set_node_border_opacity_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network, base_url=base_url)
+    return res
+
+def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the label opacity for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (list): list of node names
+        new_values (int or float or list): list of values to set, or single value
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: '' (None if invalid opacity is found in new_values)
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_label_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> ''
+        >>> set_node_label_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        >>> ''
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
+    """
+    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    for value in new_values:
+        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
+            error = 'illegal opacity ' + str(value) + ' in set_node_label_opacity_bypass(). It needs to be a number.'
+            sys.stderr.write(error)
+            return None  # TODO: Is this what we want to return here?
+
+    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
     return res

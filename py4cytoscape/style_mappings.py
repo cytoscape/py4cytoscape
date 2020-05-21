@@ -917,8 +917,7 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
         table_column (str): Name of Cytoscape table column to map values from
         table_column_values (list): List of values from Cytoscape table to be used in mapping
         shapes (list): List of shapes to map to ``table_column_values``. See ``get_node_shapes()``
-        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
-        default_opacity (int): Shape to set as default. See ``get_node_shapes()``
+        default_shape (str): Shape to set as default. See ``get_node_shapes()``
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.

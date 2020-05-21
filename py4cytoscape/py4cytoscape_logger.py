@@ -130,8 +130,8 @@ def log_http_request(method, url, **kwargs):
 
         if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
             detail_logger.debug(_logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
-        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG):
-            summary_logger.debug(_logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO):
+            summary_logger.info(' ' + _logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
 
 def log_http_result(r):
     if (_DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG)) or \
@@ -139,7 +139,7 @@ def log_http_result(r):
         if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
             content = ', content: ' + r.text if _DETAIL_ENABLE_HTTP_CONTENT else ''
             detail_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
-        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG):
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO):
             content = ', content: ' + r.text if _SUMMARY_ENABLE_HTTP_CONTENT else ''
-            summary_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
+            summary_logger.info(' ' + _logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 
