@@ -219,21 +219,14 @@ class StyleBypassesTests(unittest.TestCase):
         load_test_session()
         nodes = get_all_nodes()[0:2] # Get 2 nodes
 
-        def dict_changed(new_dict, base_dict):
-            self.assertIsInstance(new_dict, dict)
-            self.assertEqual(len(new_dict), 2)
-            self.assertIsInstance(base_dict, dict)
-            self.assertEqual(len(base_dict), 2)
-            self.assertFalse(True in [new_dict[node] == base_dict[node]    for node in nodes])
-
         # Verify that setting a bypass and then clearing it reverts to the original opacity value
         orig_node_transparency = get_node_property(nodes, 'NODE_TRANSPARENCY')
         orig_node_border_transparency = get_node_property(nodes, 'NODE_BORDER_TRANSPARENCY')
         orig_node_label_transparency = get_node_property(nodes, 'NODE_LABEL_TRANSPARENCY')
         self.assertEqual(set_node_opacity_bypass(nodes, [127, 200]), '')
-        dict_changed(get_node_property(nodes, 'NODE_TRANSPARENCY'), orig_node_transparency)
-        dict_changed(get_node_property(nodes, 'NODE_BORDER_TRANSPARENCY'), orig_node_border_transparency)
-        dict_changed(get_node_property(nodes, 'NODE_LABEL_TRANSPARENCY'), orig_node_label_transparency)
+        self._dict_changed(get_node_property(nodes, 'NODE_TRANSPARENCY'), orig_node_transparency)
+        self._dict_changed(get_node_property(nodes, 'NODE_BORDER_TRANSPARENCY'), orig_node_border_transparency)
+        self._dict_changed(get_node_property(nodes, 'NODE_LABEL_TRANSPARENCY'), orig_node_label_transparency)
 
         self.assertDictEqual(clear_node_opacity_bypass(nodes), {'data': {}, 'errors': []})
         self.assertDictEqual(get_node_property(nodes, 'NODE_TRANSPARENCY'), orig_node_transparency)
@@ -258,6 +251,217 @@ class StyleBypassesTests(unittest.TestCase):
 
         self._check_node_bypass(set_node_label_opacity_bypass, 128, 200, 300, 'NODE_LABEL_TRANSPARENCY')
 
+    @print_entry_exit
+    def test_hide_selected_nodes(self):
+        # Initialization
+        load_test_session()
+        nodes = get_all_nodes()[0:2] # Get 2 nodes
+
+        # Verify that nodes that are selected and hidden are actually hidden
+        select_nodes(nodes, by_col='name')
+        orig_visible = get_node_property(nodes, 'NODE_VISIBLE')
+        self.assertEqual(hide_selected_nodes(), '')
+        new_visible = get_node_property(nodes, 'NODE_VISIBLE')
+        self._dict_changed(orig_visible, new_visible)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, hide_selected_nodes, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_hide_nodes(self):
+        # Initialization
+        load_test_session()
+        # TODO: Organize documentation better ... I didn't realize they exist even though I coded them myself!
+        test_node_names = get_all_nodes()[0:2]
+
+        self._check_hide(hide_nodes, get_node_property, 'NODE_VISIBLE', test_node_names)
+
+    @print_entry_exit
+    def test_unhide_nodes(self):
+        # Initialization
+        load_test_session()
+        # TODO: Organize documentation better ... I didn't realize they exist even though I coded them myself!
+        test_node_names = get_all_nodes()[0:2]
+
+        self._check_unhide(unhide_nodes, hide_nodes, get_node_property, 'NODE_VISIBLE', test_node_names)
+
+    @print_entry_exit
+    def test_set_edge_opacity_bypass(self):
+
+        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_LABEL_TRANSPARENCY')
+        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_TRANSPARENCY')
+
+    @print_entry_exit
+    def test_set_edge_color_bypass(self):
+
+        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_STROKE_UNSELECTED_PAINT')
+        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_UNSELECTED_PAINT')
+
+    @print_entry_exit
+    def test_set_edge_label_bypass(self):
+
+        self._check_edge_bypass(set_edge_label_bypass, 'label 1', 'label 2', None, None, 'EDGE_LABEL')
+
+    @print_entry_exit
+    def test_set_edge_font_face_bypass(self):
+
+        self._check_edge_bypass(set_edge_font_face_bypass, 'Dialog.italic,plain,20', 'Dialog.bold,bold,10', None, None, 'EDGE_LABEL_FONT_FACE')
+
+    @print_entry_exit
+    def test_set_edge_font_size_bypass(self):
+
+        self._check_edge_bypass(set_edge_font_size_bypass, 50, 100, 'BogusSize', None, 'EDGE_LABEL_FONT_SIZE')
+
+    @print_entry_exit
+    def test_set_edge_label_color_bypass(self):
+
+        self._check_edge_bypass(set_edge_label_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_LABEL_COLOR')
+
+    @print_entry_exit
+    def test_set_edge_tooltip_bypass(self):
+
+        self._check_edge_bypass(set_edge_tooltip_bypass, 'testtip 1', 'testtip 2', None, None, 'EDGE_TOOLTIP')
+
+    @print_entry_exit
+    def test_set_edge_line_width_bypass(self):
+
+        self._check_edge_bypass(set_edge_line_width_bypass, 80, 125.5, 'BogusWidth', None, 'EDGE_WIDTH')
+
+    @print_entry_exit
+    def test_set_edge_line_style_bypass(self):
+
+        self._check_edge_bypass(set_edge_line_style_bypass, 'SINEWAVE', 'ZIGZAG', 'BogusStyle', False, 'EDGE_LINE_TYPE')
+
+    @print_entry_exit
+    def test_set_edge_source_arrow_shape_bypass(self):
+
+        self._check_edge_bypass(set_edge_source_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_SOURCE_ARROW_SHAPE')
+
+    @print_entry_exit
+    def test_set_edge_target_arrow_shape_bypass(self):
+
+        self._check_edge_bypass(set_edge_target_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_TARGET_ARROW_SHAPE')
+
+    @print_entry_exit
+    def test_set_edge_source_arrow_color_bypass(self):
+
+        self._check_edge_bypass(set_edge_source_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT')
+
+    @print_entry_exit
+    def test_set_edge_target_arrow_color_bypass(self):
+
+        self._check_edge_bypass(set_edge_target_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT')
+
+    @print_entry_exit
+    def test_set_edge_label_opacity_bypass(self):
+
+        self._check_edge_bypass(set_edge_label_opacity_bypass, 128, 200, 300, False, 'EDGE_LABEL_TRANSPARENCY')
+
+    @print_entry_exit
+    def test_hide_selected_edges(self):
+        # Initialization
+        load_test_session()
+        edges = get_all_edges()[0:2] # Get 2 edges
+
+        # Verify that edges that are selected and hidden are actually hidden
+        select_edges(edges, by_col='name')
+        orig_visible = get_edge_property(edges, 'EDGE_VISIBLE')
+        self.assertEqual(hide_selected_edges(), '')
+        new_visible = get_edge_property(edges, 'EDGE_VISIBLE')
+        self._dict_changed(orig_visible, new_visible)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, hide_selected_edges, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_hide_edges(self):
+        # Initialization
+        load_test_session()
+        # TODO: Organize documentation better ... I didn't realize they exist even though I coded them myself!
+        test_edge_names = get_all_edges()[0:2]
+
+        self._check_hide(hide_edges, get_edge_property, 'EDGE_VISIBLE', test_edge_names)
+
+    @print_entry_exit
+    def test_unhide_edges(self):
+        # Initialization
+        load_test_session()
+        # TODO: Organize documentation better ... I didn't realize they exist even though I coded them myself!
+        test_edge_names = get_all_edges()[0:2]
+
+        self._check_unhide(unhide_edges, hide_edges, get_edge_property, 'EDGE_VISIBLE', test_edge_names)
+
+    @print_entry_exit
+    def test_set_clear_network_zoom_bypass(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that a valid property can be set properly and then cleared
+        orig_scale = get_network_zoom()
+        self.assertEqual(set_network_zoom_bypass(orig_scale / 2, bypass=True), '')
+        self.assertEqual(get_network_zoom(), orig_scale / 2)
+        self.assertDictEqual(clear_network_zoom_bypass(), {'data': {}, 'errors': []})
+
+        self.assertEqual(get_network_zoom(), orig_scale)
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, clear_network_zoom_bypass, network='BogusNetwork')
+        self.assertRaises(CyError, set_network_zoom_bypass, orig_scale, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_set_clear_network_center_bypass(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that a valid property can be set properly and then cleared
+        orig_center = get_network_center()
+        self.assertEqual(set_network_center_bypass(orig_center['x'] / 2, orig_center['y'] / 2, bypass=True), '')
+        self.assertDictEqual(get_network_center(), {'x': orig_center['x'] / 2, 'y': orig_center['y'] / 2})
+        self.assertDictEqual(clear_network_center_bypass(), {'data': {}, 'errors': []})
+
+        self.assertDictEqual(get_network_center(), orig_center)
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, clear_network_center_bypass, network='BogusNetwork')
+        self.assertRaises(CyError, set_network_center_bypass, 1, 1, network='BogusNetwork')
+
+    def _check_hide(self, hide_func, getter_func, visual_property, names):
+        # Verify that nodes/edges start as visible, and when they're hidden, they're actually invisible
+        orig_visible = getter_func(names, visual_property=visual_property)
+        self.assertEqual(len(orig_visible), len(names))
+        self.assertFalse(False in [orig_visible[name]    for name in names])
+        self.assertEqual(hide_func(names), '')
+        invisible = getter_func(names, visual_property=visual_property)
+        self.assertEqual(len(invisible), len(names))
+        self.assertFalse(True in [invisible[name]    for name in orig_visible])
+
+        # Verify that hiding no nodes actually does nothing
+        cur_visible_nodes = getter_func(visual_property=visual_property)
+        self.assertEqual(hide_func([]), '')
+        self.assertDictEqual(getter_func(visual_property=visual_property), cur_visible_nodes)
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, hide_nodes, names, network='BogusNetwork')
+
+    def _check_unhide(self, unhide_func, hide_func, getter_func, visual_property, names):
+        # Verify that nodes/edges start as hidden, and when they're unhidden, they're actually visible
+        self.assertEqual(hide_func(names), '')
+        orig_hidden = getter_func(names, visual_property=visual_property)
+        self.assertEqual(len(orig_hidden), len(names))
+        self.assertFalse(True in [orig_hidden[name]    for name in names])
+        self.assertDictEqual(unhide_func(names), {'data': {}, 'errors': []})
+        visible = getter_func(names, visual_property=visual_property)
+        self.assertEqual(len(visible), len(names))
+        self.assertFalse(False in [visible[name]    for name in orig_hidden])
+
+        # Verify that unhiding no nodes actually does nothing
+        cur_visible_nodes = getter_func(visual_property=visual_property)
+        self.assertDictEqual(unhide_func([]), {'data': {}, 'errors': []})
+        self.assertDictEqual(getter_func(visual_property=visual_property), cur_visible_nodes)
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, unhide_nodes, names, network='BogusNetwork')
+
 
     def _check_node_bypass(self, node_func, bypass_1, bypass_2, bogus_bypass, visual_property):
         # Initialization
@@ -281,6 +485,27 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertRaises(CyError, node_func, ['BogusNode'], bypass_1)
         self.assertRaises(CyError, node_func, all_node_names, bypass_1, network='BogusNetwork')
 
+    def _check_edge_bypass(self, edge_func, bypass_1, bypass_2, bogus_bypass, bogus_return, visual_property):
+        # Initialization
+        load_test_session()
+        all_edge_names = get_all_edges()
+
+        # Verify that all edges get the bypass value when it's passed as a scalar
+        self.assertEqual(edge_func(all_edge_names, bypass_1), '')
+        new_vals = get_edge_property(edge_names=all_edge_names, visual_property=visual_property)
+        self.assertFalse(False in [new_vals[node] == bypass_1 for node in all_edge_names])
+
+        # Verify that all nodes get the bypass value when it's passed as a list
+        load_test_session()
+        self.assertEqual(edge_func(all_edge_names[0:2], [bypass_1, bypass_2]), '')
+        new_vals = get_edge_property(edge_names=all_edge_names[0:2], visual_property=visual_property)
+        self.assertFalse(False in [new_vals[node] == val for node, val in zip(all_edge_names[0:2], [bypass_1, bypass_2])])
+
+        # Verify that bad values, bad node lists and bad networks are caught
+        if bogus_bypass is not None: self.assertEqual(edge_func(all_edge_names, bogus_bypass), bogus_return)
+        #        self.assertIsNone(set_edge_color_bypass(None, bypass_1)) # TODO: In many functions, a null column list means all columns
+        self.assertRaises(CyError, edge_func, ['BogusEdge'], bypass_1)
+        self.assertRaises(CyError, edge_func, all_edge_names, bypass_1, network='BogusNetwork')
 
     def _set_property_bypass(self, bypass_func, getter_func, table, visual_property):
         # Initialization
@@ -349,10 +574,13 @@ class StyleBypassesTests(unittest.TestCase):
         check_bypass(res, '#FF00CC')
         self.assertDictEqual(clear_func(list(all_names.index), visual_property),
                              {'data': {}, 'errors': []})
-        reset_colors = getter_func(visual_property=visual_property)
-        self.assertDictEqual(reset_colors, orig_colors)
+        self.assertDictEqual(getter_func(visual_property=visual_property), orig_colors)
 
-        # Verify that supplying an empty node list is caught
+        # Verify that nothing happens when an empty list is passed in
+        self.assertDictEqual(clear_func([], visual_property), {'data': {}, 'errors': []})
+        self.assertDictEqual(getter_func(visual_property=visual_property), orig_colors)
+
+        # Verify that supplying a null node list is caught
         self.assertRaises(TypeError, clear_func, None, visual_property)
 
         # Verify that bad node list is caught
@@ -365,6 +593,13 @@ class StyleBypassesTests(unittest.TestCase):
 
         # Verify that invalid network is caught
         self.assertRaises(CyError, clear_func, list(all_names['name']), visual_property, network='BogusNetwork')
+
+    def _dict_changed(self, new_dict, base_dict):
+        self.assertIsInstance(new_dict, dict)
+        self.assertEqual(len(new_dict), 2)
+        self.assertIsInstance(base_dict, dict)
+        self.assertEqual(len(base_dict), 2)
+        self.assertFalse(True in [new_dict[node] == base_dict[node] for node in base_dict])
 
 
 if __name__ == '__main__':
