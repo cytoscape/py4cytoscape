@@ -21,6 +21,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    collections
    commands
    cytoscape_system
+   cy_ndex
    exceptions
    filters
    groups
