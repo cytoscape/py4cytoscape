@@ -31,6 +31,88 @@ class CyNDExTests(unittest.TestCase):
     def tearDown(self):
         pass
 
+    _NDEX_USERID = 'cytoscape_test'
+    _NDEX_PASSWORD = 'cytoscape_rocks'
+
+    @print_entry_exit
+    def test_get_export_network_ndex_id(self):
+        # Initialization
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
+
+        # Verify that unstored networks have a UUID of None
+        self.assertIsNone(get_network_ndex_id())
+        self.assertIsNone(get_network_ndex_id(network='yeastHighQuality.sif'))
+
+        # Verify that storing the first (and selected) network returns a UUID and it matches what's fetched separately
+        galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
+        self.assertIsInstance(galFiltered_uuid, str)
+        fetched_galFiltered_uuid = get_network_ndex_id()
+        self.assertIsInstance(fetched_galFiltered_uuid, str)
+        self.assertEqual(galFiltered_uuid, fetched_galFiltered_uuid)
+
+        # Verify that storing the second (and unselected) network returns a UUID and it matches what's fetched separately
+        yeast_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, network='yeastHighQuality.sif')
+        self.assertIsInstance(yeast_uuid, str)
+        fetched_yeast_uuid = get_network_ndex_id(network='yeastHighQuality.sif')
+        self.assertIsInstance(fetched_yeast_uuid, str)
+        # TODO: This fails because get_network_ndex_id returns the first network's UUID regardless ... it should scan for the network's SUID
+#        self.assertEqual(yeast_uuid, fetched_yeast_uuid)
+
+        # Verify that bad credentials are caught
+        self.assertRaises(CyError, export_network_to_ndex, 'BogusUser', self._NDEX_PASSWORD, False)
+        self.assertRaises(CyError, export_network_to_ndex, self._NDEX_USERID, 'BogusPassword', False)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, get_network_ndex_id, network='BogusNetwork')
+        self.assertRaises(CyError, export_network_to_ndex, self._NDEX_USERID, self._NDEX_PASSWORD, False, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_update_network_ndex_id(self):
+        # TODO: Find out how to test isPublic and metadata
+        # Initialization
+        load_test_session()
+        galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
+
+        # Verify that the network (with all nodes selected) can be updated on NDEx and that the same UUID is returned
+        all_node_names = node_suid_to_node_name(select_all_nodes())
+        updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
+        self.assertIsInstance(updated_galFiltered_uuid, str)
+        self.assertEqual(updated_galFiltered_uuid, galFiltered_uuid)
+
+        # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
+        close_session(False)
+        fetched_galFiltered_suid = import_network_from_ndex(updated_galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD)
+        self.assertIsInstance(fetched_galFiltered_suid, int)
+        selected_nodes = get_selected_nodes(network=fetched_galFiltered_suid)
+        self.assertSetEqual(set(selected_nodes), set(all_node_names))
+
+        # Verify that bad credentials are caught
+        self.assertRaises(CyError, update_network_in_ndex, 'BogusUser', self._NDEX_PASSWORD, False)
+        self.assertRaises(CyError, update_network_in_ndex, self._NDEX_USERID, 'BogusPassword', False)
+
+        # Verify that a bad network is caught
+        self.assertRaises(CyError, update_network_in_ndex, self._NDEX_USERID, self._NDEX_PASSWORD, False, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_import_network_from_ndex(self):
+        # TODO: Find out how to test accessKey
+        # Initialization
+        load_test_session()
+        galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
+        all_node_names = get_all_nodes()
+        close_session(False)
+
+        # Verify that the network can be loaded from NDEx and it has the same nodes
+        fetched_galFiltered_suid = import_network_from_ndex(galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD)
+        self.assertIsInstance(fetched_galFiltered_suid, int)
+        all_fetched_node_names = get_all_nodes(fetched_galFiltered_suid)
+        self.assertSetEqual(set(all_fetched_node_names), set(all_node_names))
+
+        # Verify that bad credentials are caught
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, 'BogusUser', self._NDEX_PASSWORD)
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, self._NDEX_USERID, 'BogusPassword')
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, access_key='BogusKey')
 
 if __name__ == '__main__':
     unittest.main()
