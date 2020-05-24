@@ -20,6 +20,7 @@ from .style_defaults import *
 from .style_values import *
 from .style_dependencies import *
 from .style_bypasses import *
+from .py4cytoscape_utils import *
 from .cy_ndex import *
 from .decorators import *
 

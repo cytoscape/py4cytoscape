@@ -57,7 +57,7 @@ class CyNDExTests(unittest.TestCase):
         fetched_yeast_uuid = get_network_ndex_id(network='yeastHighQuality.sif')
         self.assertIsInstance(fetched_yeast_uuid, str)
         # TODO: This fails because get_network_ndex_id returns the first network's UUID regardless ... it should scan for the network's SUID
-#        self.assertEqual(yeast_uuid, fetched_yeast_uuid)
+        self.assertEqual(yeast_uuid, fetched_yeast_uuid)
 
         # Verify that bad credentials are caught
         self.assertRaises(CyError, export_network_to_ndex, 'BogusUser', self._NDEX_PASSWORD, False)

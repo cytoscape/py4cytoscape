@@ -29,12 +29,17 @@ Copyright (c) 2020 The Cytoscape Consortium
    networks
    network_selection
    network_views
+   py4cytoscape_utils
    session
+   styles
+   style_bypasses
+   style_defaults
+   style_dependencies
+   style_mappings
+   style_values
    tables
    tools
    user_interface
-   vizmap
-   internal
 
 
 .. rubric:: Indices and tables
