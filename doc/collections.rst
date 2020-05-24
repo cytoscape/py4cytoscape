@@ -1,5 +1,5 @@
-py4...collections module
-========================
+Collections Module
+==================
 
 .. automodule:: py4cytoscape.collections
     :members:
