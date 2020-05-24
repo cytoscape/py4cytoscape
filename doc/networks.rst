@@ -3,8 +3,6 @@ Networks
 
 ... about networks ...
 
-Networks
---------
 
 .. automodule:: py4cytoscape.networks
     :members:

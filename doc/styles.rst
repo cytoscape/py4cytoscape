@@ -3,8 +3,6 @@ Styles
 
 ... about styles ...
 
-Styles
-------
 
 .. automodule:: py4cytoscape.styles
     :members:
