@@ -102,7 +102,6 @@ html_favicon = '_static/images/cytoscape3-icon.ico'
 html_theme_options = {
     'prev_next_buttons_location': 'both',
     'style_external_links': True,
-    'style_nav_header_background': '#CCCCCC'
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
