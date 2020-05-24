@@ -1,5 +1,5 @@
-py4...filters module
-====================
+Filters Module
+==============
 
 .. automodule:: py4cytoscape.filters
     :members:

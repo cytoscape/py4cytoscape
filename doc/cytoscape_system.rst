@@ -1,5 +1,5 @@
-py4...cytoscape\_system module
-==============================
+Cytoscape System Module
+=======================
 
 .. automodule:: py4cytoscape.cytoscape_system
     :members:

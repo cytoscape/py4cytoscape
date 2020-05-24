@@ -1,5 +1,5 @@
-py4...commands module
-=====================
+Commands Module
+===============
 
 .. automodule:: py4cytoscape.commands
     :members:

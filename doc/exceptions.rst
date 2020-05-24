@@ -1,5 +1,5 @@
-py4...exceptions module
-=======================
+Exceptions Module
+=================
 
 .. automodule:: py4cytoscape.exceptions
     :members:

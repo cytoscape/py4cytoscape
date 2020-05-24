@@ -1,26 +1,26 @@
-py4...Networks section
-====================
+Networks Section
+================
 
 ... about networks ...
 
-py4...networks module
----------------------
+Networks Module
+---------------
 
 .. automodule:: py4cytoscape.networks
     :members:
     :undoc-members:
     :show-inheritance:
 
-py4...network\_selection module
-------------------------------
+NetworkSelection Module
+-----------------------
 
 .. automodule:: py4cytoscape.network_selection
     :members:
     :undoc-members:
     :show-inheritance:
 
-py4...network\_views module
---------------------------
+NetworkViews Module
+-------------------
 
 .. automodule:: py4cytoscape.network_views
     :members:

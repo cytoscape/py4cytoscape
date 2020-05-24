@@ -1,5 +1,5 @@
-py4...tools module
-==================
+Tools Module
+============
 
 .. automodule:: py4cytoscape.tools
     :members:
