@@ -27,8 +27,6 @@ Copyright (c) 2020 The Cytoscape Consortium
    groups
    layouts
    networks
-   network_selection
-   network_views
    py4cytoscape_utils
    session
    styles
