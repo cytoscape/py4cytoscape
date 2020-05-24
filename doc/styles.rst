@@ -1,50 +1,50 @@
-Styles Section
-==============
+Styles
+======
 
 ... about styles ...
 
-Styles Module
--------------
+Styles
+------
 
 .. automodule:: py4cytoscape.styles
     :members:
     :undoc-members:
     :show-inheritance:
 
-StyleBypasses Module
---------------------
+Style Bypasses
+--------------
 
 .. automodule:: py4cytoscape.style_bypasses
     :members:
     :undoc-members:
     :show-inheritance:
 
-StyleDefaults Module
---------------------
+Style Defaults
+--------------
 
 .. automodule:: py4cytoscape.style_defaults
     :members:
     :undoc-members:
     :show-inheritance:
 
-StyleDependencies Module
-------------------------
+Style Dependencies
+------------------
 
 .. automodule:: py4cytoscape.style_dependencies
     :members:
     :undoc-members:
     :show-inheritance:
 
-StyleMappings Module
---------------------
+Style Mappings
+--------------
 
 .. automodule:: py4cytoscape.style_mappings
     :members:
     :undoc-members:
     :show-inheritance:
 
-StyleValues Module
-------------------
+Style Values
+------------
 
 .. automodule:: py4cytoscape.style_values
     :members:

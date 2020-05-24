@@ -1,5 +1,5 @@
-CyNDEx Module
-=============
+CyNDEx
+======
 
 .. automodule:: py4cytoscape.cy_ndex
     :members:

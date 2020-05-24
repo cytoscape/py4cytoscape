@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """ Test functions in network_views.py.
+"""
 
-License:
+"""License:
     Copyright 2020 The Cytoscape Consortium
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

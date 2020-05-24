@@ -1,5 +1,5 @@
-Groups Module
-=============
+Groups
+======
 
 .. automodule:: py4cytoscape.groups
     :members:

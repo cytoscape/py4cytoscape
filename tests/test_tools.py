@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """ Test functions in tools.py.
+"""
 
-License:
+"""License:
     Copyright 2020 The Cytoscape Consortium
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated

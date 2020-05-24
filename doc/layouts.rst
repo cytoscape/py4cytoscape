@@ -1,5 +1,5 @@
-Layouts Module
-==============
+Layouts
+=======
 
 .. automodule:: py4cytoscape.layouts
     :members:

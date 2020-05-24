@@ -1,5 +1,5 @@
-Tables Module
-=============
+Tables
+======
 
 .. automodule:: py4cytoscape.tables
     :members:

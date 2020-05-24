@@ -1,5 +1,5 @@
-UserInterface Module
-====================
+User Interface
+==============
 
 .. automodule:: py4cytoscape.user_interface
     :members:

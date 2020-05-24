@@ -1,5 +1,5 @@
-Utils Module
-------------
+Utils
+-----
 
 .. automodule:: py4cytoscape.py4cytoscape_utils
     :members:
