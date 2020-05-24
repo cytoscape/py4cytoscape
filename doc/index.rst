@@ -17,7 +17,7 @@ Copyright (c) 2020 The Cytoscape Consortium
    :maxdepth: 4
 
    py4cytoscape_package
-   py4cytoscape
+
    apps
    collections
    commands
