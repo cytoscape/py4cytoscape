@@ -27,13 +27,13 @@ Copyright (c) 2020 The Cytoscape Consortium
    groups
    layouts
    networks
-   py4cytoscape_utils
    session
    styles
    tables
    tools
    user_interface
-
+   py4cytoscape_utils
+   ../LICENSE
 
 .. rubric:: Indices and tables
 
