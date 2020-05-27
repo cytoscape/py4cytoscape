@@ -5,3 +5,5 @@ Filters
     :members:
     :undoc-members:
     :show-inheritance:
+
+.. autosummary::
