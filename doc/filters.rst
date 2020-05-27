@@ -7,3 +7,4 @@ Filters
     :show-inheritance:
 
 .. autosummary::
+    :toctree: generated/
