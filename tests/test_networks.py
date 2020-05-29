@@ -568,6 +568,32 @@ class NetworkTests(unittest.TestCase):
         i_edges = [[x['source'], x['target']] for x in i.es]
         self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges for x in all_edges])
 
+    @print_entry_exit
+    def test_create_networkx_from_network(self):
+        # Initialization
+        load_test_session()
+        cyedge_table = tables.get_table_columns('edge')
+        cynode_table = tables.get_table_columns('node')
+        cynode_table.set_index('name', inplace=True) # Index by 'name' instead of SUID ... drop 'name' from attributes
+
+        # Verify that the networkx returns the right number of rows and columns
+        netx = create_networkx_from_network()
+        print(netx)
+        print(nx.info(netx))
+        self.assertEqual(netx.number_of_nodes(), len(cynode_table.index))
+        self.assertEqual(netx.number_of_edges(), len(cyedge_table.index))
+
+        # Verify that all edges are present, and all of their attributes are correct
+        netx_out_edges = netx.out_edges(data=True, keys=True)
+        for src_node, targ_node, edge_suid, edge_attrs in netx_out_edges:
+            self.assertDictEqual(edge_attrs, dict(cyedge_table.loc[edge_suid]))
+
+        # Verify that all nodes are present, and all attributes are correct. Note that node YER056CA has 'nan' values,
+        # so this verifies that nan is carried into the networkx.
+        netx_nodes = netx.nodes(data=True)
+        for node_name, node_attrs in netx_nodes:
+            self.assertDictEqual(node_attrs, dict(cynode_table.loc[node_name]))
+
     #   @skip
     @print_entry_exit
     def test_create_network_from_igraph(self):

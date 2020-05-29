@@ -6,5 +6,3 @@ Filters
     :undoc-members:
     :show-inheritance:
 
-.. autosummary::
-    :toctree: generated/

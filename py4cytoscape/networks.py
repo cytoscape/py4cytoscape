@@ -43,6 +43,7 @@ import time
 import warnings
 import pandas as pd
 import igraph as ig
+import networkx as nx
 
 # Internal module imports
 from . import commands
@@ -598,7 +599,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     # TODO: Find out what should happen if node name maps to multiple nodes
     if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0],
                                                                                             str) and isinstance(
-            source_target_list[1], str):
+        source_target_list[1], str):
         flat_source_target_list = source_target_list
     else:
         flat_source_target_list = [item for sublist in source_target_list for item in sublist]
@@ -1133,7 +1134,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     cynodes = tables.get_table_columns('node', network=suid, base_url=base_url)
 
     # check for source and target columns ... if they're not present, dig them out of the full name
-    if not ['source', 'target'] in list(cyedges.columns):
+    if not {'source', 'target'} <= set(cyedges.columns):
         src_trg = [re.split("\ \\(.*\\)\ ", x) for x in cyedges['name']]
         cyedges['source'] = [x[0] for x in src_trg]
         cyedges['target'] = [x[1] for x in src_trg]
@@ -1150,6 +1151,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
     # add all edges and their nodes
     g.add_edges([(src, trg) for src, trg in zip(cyedges['source'], cyedges['target'])])
+    # TODO: Find out why this rename happens ... is this an iGraph thing? ... how does the roundtrip work?
     cyedges.rename({'source': 'from', 'target': 'to'})
     for col in cyedges.columns:
         if not col in ['SUID']: g.es[col] = list(cyedges[col])
@@ -1158,8 +1160,67 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def create_graph_from_network(network=None, base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement create_graph_from_network
+def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Return the Cytoscape network as a networkx multi-di-graph.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        MultiDiGraph: The new ``networkx`` object
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> n = create_networkx_from_network(network='galFiltered.sif')
+        >>> print(nx.info(n))
+        Name:
+        Type: MultiDiGraph
+        Number of nodes: 330
+        Number of edges: 359
+        Average in degree:   1.0879
+        Average out degree:   1.0879
+
+    See Also:
+        :meth:`create_network_from_networkx`
+    """
+    suid = get_network_suid(network, base_url=base_url)
+
+    # get dataframes
+    cyedges = tables.get_table_columns('edge', network=suid, base_url=base_url)
+    cynodes = tables.get_table_columns('node', network=suid, base_url=base_url)
+
+    # check for source and target columns ... if they're not present, dig them out of the full name
+    if not {'source', 'target'} <= set(cyedges.columns):
+        src_trg = [re.split("\ \\(.*\\)\ ", x) for x in cyedges['name']]
+        cyedges['source'] = [x[0] for x in src_trg]
+        cyedges['target'] = [x[1] for x in src_trg]
+
+    # Create a list of edges as tuples (src, targ, suid, attrs) with 'source' & 'target' removed from attrs
+    edges_dict = cyedges.to_dict(orient='record')
+    e_bunch = [(row['source'],
+                row['target'],
+                row['SUID'],
+                {k: row[k]     for k in row if k not in {'source', 'target'}}
+                ) for row in edges_dict]
+
+    # Create a list of nodes as tuples (name, attrs) with 'name' removed from attrs
+    nodes_dict = cynodes.to_dict(orient='record')
+    n_bunch = [(row['name'], {k: row[k]     for k in row if k not in {'name'}}) for row in nodes_dict]
+
+    # Create the networkx graph modeled as directed edges with ability to have multiple edges connecting two nodes
+    md_graph = nx.MultiDiGraph()
+    md_graph.add_edges_from(e_bunch)
+    md_graph.add_nodes_from(n_bunch)
+
+    return md_graph
+
 
 # ==============================================================================
 # VI. Internal functions
