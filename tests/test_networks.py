@@ -578,12 +578,11 @@ class NetworkTests(unittest.TestCase):
 
         # Verify that the networkx returns the right number of rows and columns
         netx = create_networkx_from_network()
-        print(netx)
-        print(nx.info(netx))
         self.assertEqual(netx.number_of_nodes(), len(cynode_table.index))
         self.assertEqual(netx.number_of_edges(), len(cyedge_table.index))
 
         # Verify that all edges are present, and all of their attributes are correct
+        # Note that edge SUIDs are carried to distinguish multiple edges that connect the same nodes
         netx_out_edges = netx.out_edges(data=True, keys=True)
         for src_node, targ_node, edge_suid, edge_attrs in netx_out_edges:
             self.assertDictEqual(edge_attrs, dict(cyedge_table.loc[edge_suid]))
@@ -593,6 +592,45 @@ class NetworkTests(unittest.TestCase):
         netx_nodes = netx.nodes(data=True)
         for node_name, node_attrs in netx_nodes:
             self.assertDictEqual(node_attrs, dict(cynode_table.loc[node_name]))
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, create_networkx_from_network, network='BogusNetwork')
+
+    @print_entry_exit
+    def test_create_network_from_networkx(self):
+        # Initialization
+        load_test_session()
+        cyedge_table = tables.get_table_columns('edge')
+        cyedge_table.set_index('name', inplace=True) # Index by 'name' instead of SUID ... drop 'name' from attributes
+        cyedge_table.sort_index(inplace=True)
+        cynode_table = tables.get_table_columns('node')
+        cynode_table.set_index('name', inplace=True) # Index by 'name' instead of SUID ... drop 'name' from attributes
+        cynode_table.sort_index(inplace=True)
+
+        def compare_table(orig_table, table_name, network):
+            # Compare nodes in new Cytoscape network created from NetworkX to those in the original Cytoscape network
+            # Start by lining up the dataframe rows for each
+            netx_table = tables.get_table_columns(table_name, network=network)
+            netx_table.set_index('name', inplace=True)  # Index by 'name' to match up with orig_table
+            netx_table.sort_index(inplace=True)
+
+            # Verify that the new network has at least the columns of the original. There may be a few more if they were
+            # created for reference.
+            orig_table_cols = set(orig_table.columns)
+            netx_table_cols = set(netx_table.columns)
+            self.assertTrue(orig_table_cols <= netx_table_cols)
+
+            # Create a vector showing which new columns are the same as the original columns. Use .equals() to compare 'nan' properly.
+            s = [orig_table[col].equals(netx_table[col]) for col in orig_table_cols - {'SUID'}]
+            self.assertFalse(False in s)
+
+        # Get the NetworkX for a known good network galFiltered.sif and send it to Cytoscape as a new network
+        netx = create_networkx_from_network()
+        netx_suid = create_network_from_networkx(netx)['networkSUID']
+        self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
+
+        compare_table(cynode_table, 'node', netx)
+        compare_table(cyedge_table, 'edge', netx)
 
     #   @skip
     @print_entry_exit

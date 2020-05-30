@@ -896,10 +896,54 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 
 
 @cy_log
-def create_network_from_graph(graph, title='From graph', collection='My GraphNEL Network Collection',
+def create_network_from_networkx(netx, title='From networkx', collection='My NetworkX Network Collection',
                               base_url=DEFAULT_BASE_URL):
-    raise CyError('Not implemented')  # TODO: implement create_network_from_graph
+    """Create a Cytoscape network from a NetworkX graph.
 
+    Args:
+        netx (MultiDiGraph): networkx MultiDiGraph object
+        title (str): network name
+        collection (str): network collection name
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        Dict: {'networkSUID': 31766}
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> n = create_network_from_networkx(netx)
+        {'networkSUID': 31766}
+        >>> n = create_network_from_networkx(netx, 'Cool Networkx', 'Collection of Cool Networks')
+        {'networkSUID': 31766}
+
+    See Also:
+        :meth:`create_networkx_from_network`
+    """
+    netx_nodes = netx.nodes(data=True) # returns list of tuples (name, attrs)
+    netx_node_list = [{**attrs, 'name': name}    for name, attrs in netx_nodes]
+    node_df = pd.DataFrame.from_records(netx_node_list)
+
+    netx_edges = netx.out_edges(data=True, keys=True) # returns list of tuples (src, targ, suid, attrs)
+    netx_edge_list = [{**attrs, 'source': src, 'target': targ}    for src, targ, suid, attrs in netx_edges]
+    edge_df = pd.DataFrame.from_records(netx_edge_list)
+
+    # TODO: This will blow if there are no edges or no nodes ... so will create_network_from_igraph() ... will R blow, too?
+
+    # Make sure critical attributes are strings
+    node_df['name'] = node_df['name'].astype(str)
+    edge_df['source'] = edge_df['source'].astype(str)
+    edge_df['target'] = edge_df['target'].astype(str)
+    if 'interaction' in edge_df.columns: edge_df['interaction'] = edge_df['interaction'].astype(str)
+
+    if len(node_df.index) == 0: node_df = None
+    if len(edge_df.index) == 0: edge_df = None
+
+    return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection,
+                                           base_url=base_url, node_id_list='name')
 
 @cy_log
 def create_network_from_data_frames(nodes=None, edges=None, title='From dataframe',
