@@ -50,6 +50,13 @@ summary_handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(mess
 summary_logger.setLevel(_SUMMARY_LOG_LEVEL)
 summary_logger.addHandler(summary_handler)
 
+_summary_logger_enable = os.environ.get('py4cytoscape_summary_logger', True)
+def set_summary_logger(enable):
+    global _summary_logger_enable
+    orig_enable = _summary_logger_enable
+    _summary_logger_enable = enable
+    return orig_enable
+
 _NESTING_SPACER = '\u01c0' # Use latin dental click character to represent spacing = nesting
 _FUNCTION_SPACER = '-' * 20
 
@@ -63,6 +70,7 @@ def cy_log(func):
     def log_incoming(func, *args, **kwargs):
         global _logger_nesting
         global _logger_nesting_spacer
+        global _summary_logger_enable
 
         _logger_nesting += 1
         _logger_nesting_spacer = _NESTING_SPACER * _logger_nesting
@@ -74,13 +82,16 @@ def cy_log(func):
             signature = ", ".join(args_repr + kwargs_repr)
             detail_logger.debug(f"{_logger_nesting_spacer}Calling {func.__name__}({signature})")
 
-        summary_logger.debug(f"{_logger_nesting_spacer}Into {func.__name__}()")
+        if _summary_logger_enable:
+            summary_logger.debug(f"{_logger_nesting_spacer}Into {func.__name__}()")
 
     def log_return(func, value):
         global _logger_nesting
         global _logger_nesting_spacer
+        global _summary_logger_enable
 
-        summary_logger.debug(f"{_logger_nesting_spacer}Out of {func.__name__!r}")
+        if _summary_logger_enable:
+            summary_logger.debug(f"{_logger_nesting_spacer}Out of {func.__name__!r}")
         if detail_logger.isEnabledFor(logging.DEBUG): detail_logger.debug(
             f"{_logger_nesting_spacer}Returning {func.__name__!r}: {value!r}")
         return value
@@ -88,8 +99,10 @@ def cy_log(func):
     def log_exception(func, e):
         global _logger_nesting
         global _logger_nesting_spacer
+        global _summary_logger_enable
 
-        summary_logger.debug(f"{_logger_nesting_spacer}Exception from {func.__name__!r}")
+        if _summary_logger_enable:
+            summary_logger.debug(f"{_logger_nesting_spacer}Exception from {func.__name__!r}")
         if detail_logger.isEnabledFor(logging.DEBUG): detail_logger.debug(
             f"{_logger_nesting_spacer}{func.__name__!r} exception {e!r}")
         raise
@@ -97,12 +110,13 @@ def cy_log(func):
     def log_finally():
         global _logger_nesting
         global _logger_nesting_spacer
+        global _summary_logger_enable
 
         _logger_nesting -= 1
         _logger_nesting_spacer = _NESTING_SPACER * _logger_nesting
         if _logger_nesting == -1:
             if detail_logger.isEnabledFor(logging.DEBUG): detail_logger.debug(_FUNCTION_SPACER)
-            summary_logger.debug(_FUNCTION_SPACER)
+            if _summary_logger_enable: summary_logger.debug(_FUNCTION_SPACER)
 
     @functools.wraps(func)
     def wrapper_log(*args, **kwargs):
@@ -130,7 +144,7 @@ def log_http_request(method, url, **kwargs):
 
         if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
             detail_logger.debug(_logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
-        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO):
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO) and _summary_logger_enable:
             summary_logger.info(' ' + _logger_nesting_spacer + 'HTTP ' + method + '(' + url + ')' + params + json + data)
 
 def log_http_result(r):
@@ -139,7 +153,7 @@ def log_http_result(r):
         if _DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG):
             content = ', content: ' + r.text if _DETAIL_ENABLE_HTTP_CONTENT else ''
             detail_logger.debug(_logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
-        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO):
+        if _SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.INFO) and _summary_logger_enable:
             content = ', content: ' + r.text if _SUMMARY_ENABLE_HTTP_CONTENT else ''
             summary_logger.info(' ' + _logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 
