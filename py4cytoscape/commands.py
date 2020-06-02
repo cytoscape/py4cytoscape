@@ -45,9 +45,6 @@ from .exceptions import CyError
 def __init__(self):
     pass
 
-
-# TODO: Refactor functions to centralize HTTP handling and error handling
-
 # ==============================================================================
 # I. CyREST API functions
 # ------------------------------------------------------------------------------

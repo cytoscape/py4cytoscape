@@ -226,7 +226,6 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
         2.0
         >>> get_table_value('node', 'YDL194W', 'IsSingleNode')
         False
-        >>> get_table_columns(columns='Stress, bogus')
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 

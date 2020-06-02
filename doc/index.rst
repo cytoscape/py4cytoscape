@@ -7,7 +7,7 @@
 py4cytoscape |version| Programmers Manual
 *****************************************
 
-The py4cytoscape Programmers Manual copyright is owned by The Cytoscape Consortium, and is made available under the same GPL license as Cytoscape itself: LGPL 2.1, the GNU Lesser General Public License, version 2.1, February 1999 available in text at http://www.gnu.org/licenses/lgpl-2.1.html.
+The py4cytoscape Programmers Manual copyright is owned by The Cytoscape Consortium, and is made available under the MIT License below.
 
 Copyright (c) 2020 The Cytoscape Consortium
 

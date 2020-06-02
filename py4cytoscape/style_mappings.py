@@ -1749,7 +1749,6 @@ def set_edge_tooltip_mapping(table_column, style_name='default', network=None, b
 
 
 # Check table column, create the visual property map, and update Cytoscape's copy of the visual property
-# TODO: Clean up this function signature so it doesn't require table_column_values and range_map (if only 'p' is supported)
 def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
                             style_name='default', network=None, base_url=DEFAULT_BASE_URL,
                             supported_mappings=['c', 'd', 'p'], table='node'):

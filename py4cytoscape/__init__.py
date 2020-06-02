@@ -44,7 +44,7 @@ from .cy_ndex import *
 from .decorators import *
 from .py4cytoscape_logger import set_summary_logger
 
-# TODO: Enforce documentation standards for modules and private functions per:
+# Note that we have tried to enforce documentation standards for modules and private functions per:
 # https://www.python.org/dev/peps/pep-0257/ and https://www.python.org/dev/peps/pep-0008/#comments
 # https://google.github.io/styleguide/pyguide.html
 
