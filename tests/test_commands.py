@@ -175,7 +175,7 @@ class CommandsTests(unittest.TestCase):
                                'uninstall', 'update'], allow_subset=True)
 
         # Verify that bad commands are caught
-        self.assertRaises(RequestException, commands_help, 'bogus_junk')
+        self.assertRaises(CyError, commands_help, 'bogus_junk')
         self.assertRaises(RequestException, commands_help, '', base_url='http://totallybogus')
         self.assertRaises(CyError, commands_help, '', base_url='http://yahoo.com')
 

@@ -191,15 +191,15 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
     visual_prop_name = mapping['visualProperty']
 
     # check if vp exists already
-    res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     vp_list = [prop['visualProperty'] for prop in res]
     exists = visual_prop_name in vp_list
 
     if exists:
-        res = commands.cyrest_put('styles/' + style_name + '/mappings/' + visual_prop_name, body=[mapping],
+        res = commands.cyrest_put(f'styles/{style_name}/mappings/{visual_prop_name}', body=[mapping],
                                   base_url=base_url, require_json=False)
     else:
-        res = commands.cyrest_post('styles/' + style_name + '/mappings', body=[mapping], base_url=base_url,
+        res = commands.cyrest_post(f'styles/{style_name}/mappings', body=[mapping], base_url=base_url,
                                    require_json=False)
     time.sleep(
         MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [Cytoscape BUG]
@@ -235,7 +235,7 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
     exists = visual_prop in vp_list
 
     if exists:
-        res = commands.cyrest_delete('styles/' + style_name + '/mappings/' + visual_prop,
+        res = commands.cyrest_delete(f'styles/{style_name}/mappings/{visual_prop}',
                                      base_url=base_url, require_json=False)
     else:
         res = None
@@ -273,11 +273,11 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         :meth:`map_visual_property`
     """
     # check if vp exists already
-    res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     for prop in res:
         if prop['visualProperty'] == visual_prop:
             return prop
-    raise CyError('Property "' + visual_prop + '" does not exist in style "' + style_name + '"')
+    raise CyError(f'Property "{visual_prop}" does not exist in style "{style_name}"')
 
 
 # TODO: Are we missing a get_style_all_mappings here?? ... probably ... I'm adding one to help with testing ...
@@ -308,7 +308,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`map_visual_property`
     """
-    res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     return res
 
 
@@ -1675,7 +1675,7 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
     See also:
         :meth:`set_edge_target_arrow_mapping`
     """
-    return set_edge_target_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
+    return set_edge_target_arrow_maping(table_column, table_column_values=table_column_values, shapes=shapes,
                                          default_shape=default_shape, style_name=style_name, network=network,
                                          base_url=base_url)
 

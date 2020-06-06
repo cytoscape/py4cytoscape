@@ -117,7 +117,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
         'galFiltered.sif'
     """
     if collection_suid is None: collection_suid = get_collection_suid(base_url=base_url)
-    res = commands.cyrest_get('collections/' + str(collection_suid) + '/tables/default', base_url=base_url)
+    res = commands.cyrest_get(f'collections/{collection_suid}/tables/default', base_url=base_url)
     return res['rows'][0]['name']
 
 
@@ -145,5 +145,5 @@ def get_collection_networks(collection_suid=None, base_url=DEFAULT_BASE_URL):
         'galFiltered.sif'
     """
     if collection_suid is None: collection_suid = get_collection_suid(base_url=base_url)
-    res = commands.cyrest_get('collections/' + str(collection_suid) + '/subnetworks', base_url=base_url)
+    res = commands.cyrest_get(f'collections/{collection_suid}/subnetworks', base_url=base_url)
     return res

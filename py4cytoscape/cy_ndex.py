@@ -34,6 +34,7 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_tuning import NDEX_DELAY_SECS
 from .py4cytoscape_logger import cy_log
 
+
 def import_network_from_ndex(ndex_id, username=None, password=None, access_key=None, base_url=DEFAULT_BASE_URL):
     """Import a network from the NDEx database into Cytoscape.
 
@@ -68,6 +69,7 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
     time.sleep(NDEX_DELAY_SECS)
     return res['data']['suid']
 
+
 def export_network_to_ndex(username, password, is_public, network=None, metadata=None, base_url=DEFAULT_BASE_URL):
     """Send a copy of a Cytoscape network to NDEx as a new submission.
 
@@ -96,11 +98,11 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_post('networks/' + str(suid), body={'serverUrl': 'http://ndexbio.org/v2',
-                                                              'username': username,
-                                                              'password': password,
-                                                              'metadata': metadata,
-                                                              'isPublic': is_public},
+    res = commands.cyrest_post(f'networks/{suid}', body={'serverUrl': 'http://ndexbio.org/v2',
+                                                         'username': username,
+                                                         'password': password,
+                                                         'metadata': metadata,
+                                                         'isPublic': is_public},
                                base_url=_cy_ndex_base_url(base_url))
     time.sleep(NDEX_DELAY_SECS)
     return res['data']['uuid']
@@ -138,11 +140,11 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
-    res = commands.cyrest_put('networks/' + str(suid), body={'serverUrl': 'http://ndexbio.org/v2',
-                                                             'username': username,
-                                                             'password': password,
-                                                             'metadata': metadata,
-                                                             'isPublic': is_public},
+    res = commands.cyrest_put(f'networks/{suid}', body={'serverUrl': 'http://ndexbio.org/v2',
+                                                        'username': username,
+                                                        'password': password,
+                                                        'metadata': metadata,
+                                                        'isPublic': is_public},
                               base_url=_cy_ndex_base_url(base_url)
                               )
     time.sleep(NDEX_DELAY_SECS)
@@ -181,7 +183,7 @@ def get_network_ndex_id(network=None, base_url=DEFAULT_BASE_URL):
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
-    res = commands.cyrest_get('networks/' + str(suid), base_url=_cy_ndex_base_url(base_url))
+    res = commands.cyrest_get(f'networks/{suid}', base_url=_cy_ndex_base_url(base_url))
     return res['data']['members'][0].get('uuid', None)
 
 

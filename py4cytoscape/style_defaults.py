@@ -89,7 +89,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
     # process visual property, including common alternatives for vp names :)
     def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
 
-    res = commands.cyrest_put('styles/' + style_name + '/defaults', body=def_list, base_url=base_url,
+    res = commands.cyrest_put(f'styles/{style_name}/defaults', body=def_list, base_url=base_url,
                               require_json=False)
     return res
 
@@ -119,7 +119,7 @@ def get_visual_property_default(property, style_name='default', base_url=DEFAULT
         ''
     """
     # TODO: Should the property name be mapped like in update_style_defaults?
-    res = commands.cyrest_get('styles/' + style_name + '/defaults/' + property, base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/defaults/{property}', base_url=base_url)
     return res['value']
 
 
@@ -148,7 +148,7 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
         ''
     """
     # TODO: Should the property name be mapped like in update_style_defaults?
-    res = commands.cyrest_put('styles/' + style_name + '/defaults', body=[style_string], base_url=base_url,
+    res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,
                               require_json=False)
     time.sleep(
         MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [BUG]
@@ -364,7 +364,7 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
              'cy_axisLabelFontSize': axis_font_size, 'cy_separation': separation, 'cy_range': range,
              }
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.BarChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -432,7 +432,7 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
              'cy_range': range,
              }
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.BoxChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -501,7 +501,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
              'cy_range': range,
              }
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.HeatMapChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -568,7 +568,7 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
              'cy_range': range,
              }
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.LineChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -618,7 +618,7 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
     chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle}
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.PieChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -668,7 +668,7 @@ def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=
     chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle, 'cy_holeSize': hole_size}
 
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.RingChart:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -710,7 +710,7 @@ def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
         raise CyError('slot must be an integer between 1 and 9')
 
     chart = {'cy_angle': angle, 'cy_gradientColors': colors, 'cy_gradientFractions': anchors}
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.LinearGradient:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -754,7 +754,7 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
         raise CyError('slot must be an integer between 1 and 9')
 
     chart = {'cy_gradientColors': colors, 'cy_gradientFractions': anchors, 'cy_center': {'x': x_center, 'y': y_center}}
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot),
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
                     'value': 'org.cytoscape.RadialGradient:' + json.dumps(chart)}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
@@ -796,8 +796,8 @@ def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification=
     """
     if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
-    style_string = {'visualProperty': 'NODE_CUSTOMGRAPHICS_POSITION_' + str(slot),
-                    'value': node_anchor + ',' + graphic_anchor + ',' + justification + ',' + str(x_offset) + ',' + str(y_offset)}
+    style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_POSITION_{slot}',
+                    'value': f'{node_anchor},{graphic_anchor},{justification},{x_offset},{y_offset}'}
 
     res = set_visual_property_default(style_string, style_name, base_url=base_url)
     return res
@@ -833,7 +833,7 @@ def remove_node_custom_graphics(slot=1, style_name='default', base_url=DEFAULT_B
     if slot < 1 or slot > 9:
         raise CyError('slot must be an integer between 1 and 9')
 
-    res = set_visual_property_default({'visualProperty': 'NODE_CUSTOMGRAPHICS_' + str(slot), 'value': None}, style_name,
+    res = set_visual_property_default({'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}', 'value': None}, style_name,
                                       base_url=base_url)
     return res
 

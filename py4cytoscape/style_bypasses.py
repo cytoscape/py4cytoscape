@@ -119,7 +119,7 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
                  zip(node_suids, new_values)]
 
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes',
+    res = commands.cyrest_put(f'networks/{net_suid}/views/{view_suid}/nodes',
                               parameters={'bypass': bypass}, body=body_list, base_url=base_url, require_json=False)
     return res
 
@@ -176,8 +176,8 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
         res = {'data': {}, 'errors': []}
     else:
         for suid in node_suids:
-            res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes/' + str(
-                suid) + '/' + visual_property + '/bypass', base_url=base_url)
+            res = commands.cyrest_delete(f'networks/{net_suid}/views/{view_suid}/nodes/{suid}/{visual_property}/bypass',
+                                         base_url=base_url)
 
     return res
     # TODO: OK to miss res values during the loop?
@@ -253,7 +253,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
                  zip(edge_suids, new_values)]
 
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges',
+    res = commands.cyrest_put(f'networks/{net_suid}/views/{view_suid}/edges',
                               parameters={'bypass': bypass}, body=body_list, base_url=base_url, require_json=False)
     return res
 
@@ -310,8 +310,8 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
         res = {'data': {}, 'errors': []}
     else:
         for suid in edge_suids:
-            res = commands.cyrest_delete('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges/' + str(
-                suid) + '/' + visual_property + '/bypass', base_url=base_url)
+            res = commands.cyrest_delete(f'networks/{net_suid}/views/{view_suid}/edges/{suid}/{visual_property}/bypass',
+                                         base_url=base_url)
 
     return res
     # TODO: OK to miss res values during the loop?
@@ -355,7 +355,7 @@ def set_network_property_bypass(new_value, visual_property, bypass=True, network
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network',
+    res = commands.cyrest_put(f'networks/{net_suid}/views/{view_suid}/network',
                               parameters={'bypass': bypass},
                               body=[{'visualProperty': visual_property, 'value': new_value}], base_url=base_url,
                               require_json=False)
@@ -400,9 +400,8 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
         raise CyError('Invalid visual property')
 
-    res = commands.cyrest_delete(
-        'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network/' + visual_property + '/bypass',
-        base_url=base_url)
+    res = commands.cyrest_delete(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}/bypass',
+                                 base_url=base_url)
     return res
 
 
@@ -502,6 +501,7 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
     res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
     """Set Node Size Bypass.
@@ -540,7 +540,8 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [
+        new_sizes]  # TODO: It looks like this should be happening everywhere?
     for size in new_sizes:
         if not isinstance(size, float) and not isinstance(size, int):
             error = 'illegal size string ' + str(size) + ' in set_node_size_bypass(). It needs to be a number.'
@@ -549,6 +550,7 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFAULT_BASE_URL):
@@ -587,6 +589,7 @@ def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFA
     res = set_node_property_bypass(node_names, new_tooltip, 'NODE_TOOLTIP', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT_BASE_URL):
     """Override the width for particular nodes.
@@ -623,7 +626,8 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
     """
     style_dependencies.lock_node_dimensions(False)
 
-    if not isinstance(new_widths, list): new_widths = [new_widths]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_widths, list): new_widths = [
+        new_widths]  # TODO: It looks like this should be happening everywhere?
     for width in new_widths:
         if not isinstance(width, float) and not isinstance(width, int):
             error = 'illegal node width ' + str(width) + ' in set_node_width_bypass(). It needs to be a number.'
@@ -632,6 +636,7 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
 
     res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAULT_BASE_URL):
@@ -669,7 +674,8 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
     """
     style_dependencies.lock_node_dimensions(False)
 
-    if not isinstance(new_heights, list): new_heights = [new_heights]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_heights, list): new_heights = [
+        new_heights]  # TODO: It looks like this should be happening everywhere?
     for height in new_heights:
         if not isinstance(height, float) and not isinstance(height, int):
             error = 'illegal node height ' + str(height) + ' in set_node_height_bypass(). It needs to be a number.'
@@ -678,6 +684,7 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
 
     res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT_BASE_URL):
@@ -716,6 +723,7 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
     res = set_node_property_bypass(node_names, new_labels, 'NODE_LABEL', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFAULT_BASE_URL):
     """Override the font face for particular nodes.
@@ -753,6 +761,7 @@ def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFA
     res = set_node_property_bypass(node_names, new_fonts, 'NODE_LABEL_FONT_FACE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
     """Override the font size for particular nodes.
@@ -787,7 +796,8 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [
+        new_sizes]  # TODO: It looks like this should be happening everywhere?
     size_type_errors = 0
     for size in new_sizes:
         if not isinstance(size, float) and not isinstance(size, int):
@@ -796,11 +806,13 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
             size_type_errors += 1  # TODO: Why are we doing this when no other function does it? ... return None OK??
 
     if size_type_errors == 0:
-        res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network, base_url=base_url)
+        res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network,
+                                       base_url=base_url)
     else:
         res = None
 
     return res
+
 
 @cy_log
 def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -836,7 +848,8 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
     for color in new_colors:
         if is_not_hex_color(color):
             return None  # TODO: Shouldn't this be an exception?
@@ -844,6 +857,7 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT_BASE_URL):
@@ -879,17 +893,19 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [
+        new_shapes]  # TODO: It looks like this should be happening everywhere?
 
     if len(node_names) != len(new_shapes) and len(new_shapes) != 1:
-        error = 'error in set_node_shape_bypass().  new_shapes count ' + str(len(new_shapes)) + ' is neither 1 nor same as node_names count ' + str(len(node_names))
+        error = 'error in set_node_shape_bypass().  new_shapes count ' + str(
+            len(new_shapes)) + ' is neither 1 nor same as node_names count ' + str(len(node_names))
         sys.stderr.write(error)
-        return None # Should this be an exception?
+        return None  # Should this be an exception?
 
     # convert old to new node shapes
     # TODO: Why isn't this done on other shape functions?
-    new_shapes = ['ROUND_RECTANGLE' if shape == 'round_rect' else shape    for shape in new_shapes]
-    new_shapes = ['RECTANGLE' if shape == 'rect' else shape.upper()    for shape in new_shapes]
+    new_shapes = ['ROUND_RECTANGLE' if shape == 'round_rect' else shape for shape in new_shapes]
+    new_shapes = ['RECTANGLE' if shape == 'rect' else shape.upper() for shape in new_shapes]
 
     # ensure valid node shapes
     valid_shapes = styles.get_node_shapes(base_url=base_url)
@@ -902,6 +918,7 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
     res = set_node_property_bypass(node_names, new_shapes, 'NODE_SHAPE', network=network, base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
@@ -937,7 +954,8 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [
+        new_sizes]  # TODO: It looks like this should be happening everywhere?
     for size in new_sizes:
         if not isinstance(size, float) and not isinstance(size, int):
             error = 'illegal width string ' + str(size) + ' in set_node_border_width_bypass(). It needs to be a number.'
@@ -946,6 +964,7 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_BORDER_WIDTH', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -990,6 +1009,7 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
     res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
     """Set the bypass value for node fill, label and border opacity for the specified node or nodes.
@@ -1024,7 +1044,8 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_node_opacity_bypass(). It needs to be a number.'
@@ -1033,9 +1054,12 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
 
     # TODO: Concerned about losing intermediate res results
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
-    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network, base_url=base_url)
-    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
+                                   base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network,
+                                   base_url=base_url)
     return res
+
 
 @cy_log
 def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_URL):
@@ -1074,6 +1098,7 @@ def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_UR
     return res
     # TODO: What kind of return result should there be, and what about losing intermediate return results?
 
+
 @cy_log
 def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
     """Override the fill opacity for particular nodes.
@@ -1108,7 +1133,8 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_node_fill_opacity_bypass(). It needs to be a number.'
@@ -1117,6 +1143,7 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_border_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
@@ -1152,15 +1179,18 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_node_border_opacity_bypass(). It needs to be a number.'
             sys.stderr.write(error)
             return None  # TODO: Is this what we want to return here?
 
-    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
+                                   base_url=base_url)
     return res
+
 
 @cy_log
 def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
@@ -1196,15 +1226,18 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_node_label_opacity_bypass(). It needs to be a number.'
             sys.stderr.write(error)
             return None  # TODO: Is this what we want to return here?
 
-    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network,
+                                   base_url=base_url)
     return res
+
 
 @cy_log
 def hide_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
@@ -1243,6 +1276,7 @@ def hide_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
     res = set_node_property_bypass(node_names, False, 'NODE_VISIBLE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     """Hide Nodes.
@@ -1280,6 +1314,7 @@ def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     res = set_node_property_bypass(node_names, False, 'NODE_VISIBLE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     """Unhide Nodes.
@@ -1315,6 +1350,7 @@ def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     """
     res = clear_node_property_bypass(node_names, 'NODE_VISIBLE', network=network, base_url=base_url)
     return res
+
 
 # ==============================================================================
 # II.b. Edge Properties
@@ -1355,7 +1391,8 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_edge_opacity_bypass(). It needs to be a number.'
@@ -1363,9 +1400,11 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
             return None  # TODO: Is this what we want to return here?
 
     # TODO: Concerned about losing intermediate res results
-    res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
+                                   base_url=base_url)
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_TRANSPARENCY', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -1408,9 +1447,11 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
             return None  # TODO: Shouldn't this be an exception?
 
     # TODO: What to do about lost res?
-    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_STROKE_UNSELECTED_PAINT', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_STROKE_UNSELECTED_PAINT', network=network,
+                                   base_url=base_url)
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_UNSELECTED_PAINT', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT_BASE_URL):
@@ -1449,6 +1490,7 @@ def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT
     res = set_edge_property_bypass(edge_names, new_labels, 'EDGE_LABEL', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFAULT_BASE_URL):
     """Override the font face for particular edges.
@@ -1486,6 +1528,7 @@ def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFA
     res = set_edge_property_bypass(edge_names, new_fonts, 'EDGE_LABEL_FONT_FACE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFAULT_BASE_URL):
     """Override the font size for particular edges.
@@ -1520,7 +1563,8 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [
+        new_sizes]  # TODO: It looks like this should be happening everywhere?
     size_type_errors = 0
     for size in new_sizes:
         if not isinstance(size, float) and not isinstance(size, int):
@@ -1529,11 +1573,13 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
             size_type_errors += 1  # TODO: Why are we doing this when no other function does it? ... return None OK??
 
     if size_type_errors == 0:
-        res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network, base_url=base_url)
+        res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network,
+                                       base_url=base_url)
     else:
         res = None
 
     return res
+
 
 @cy_log
 def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -1569,7 +1615,8 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
     for color in new_colors:
         if is_not_hex_color(color):
             return None  # TODO: Shouldn't this be an exception?
@@ -1577,6 +1624,7 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_LABEL_COLOR', network=network, base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFAULT_BASE_URL):
@@ -1615,6 +1663,7 @@ def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFA
     res = set_edge_property_bypass(edge_names, new_tooltip, 'EDGE_TOOLTIP', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DEFAULT_BASE_URL):
     """Override the width for particular edges.
@@ -1650,7 +1699,8 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
 
-    if not isinstance(new_widths, list): new_widths = [new_widths]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_widths, list): new_widths = [
+        new_widths]  # TODO: It looks like this should be happening everywhere?
     for width in new_widths:
         if not isinstance(width, float) and not isinstance(width, int):
             error = 'illegal edge width ' + str(width) + ' in set_edge_line_width_bypass(). It needs to be a number.'
@@ -1659,6 +1709,7 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
 
     res = set_edge_property_bypass(edge_names, new_widths, 'EDGE_WIDTH', network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DEFAULT_BASE_URL):
@@ -1694,17 +1745,19 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_styles, list): new_styles = [new_styles]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_styles, list): new_styles = [
+        new_styles]  # TODO: It looks like this should be happening everywhere?
 
     for style in new_styles:
         if style not in styles.get_line_styles(base_url=base_url):
             error = 'error in set_edge_line_style_bypass().  INVALID line style value ' + style
             sys.stderr.write(error)
-            return False # Should this be an exception?
+            return False  # Should this be an exception?
 
     res = set_edge_property_bypass(edge_names, new_styles, 'EDGE_LINE_TYPE', network=network, base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, base_url=DEFAULT_BASE_URL):
@@ -1740,17 +1793,20 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [
+        new_shapes]  # TODO: It looks like this should be happening everywhere?
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
             error = 'error in set_edge_source_arrow_shape_bypass().  INVALID arrow shape value ' + style
             sys.stderr.write(error)
-            return False # Should this be an exception?
+            return False  # Should this be an exception?
 
-    res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_SOURCE_ARROW_SHAPE', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_SOURCE_ARROW_SHAPE', network=network,
+                                   base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, base_url=DEFAULT_BASE_URL):
@@ -1786,17 +1842,20 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [
+        new_shapes]  # TODO: It looks like this should be happening everywhere?
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
             error = 'error in set_edge_target_arrow_shape_bypass().  INVALID arrow shape value ' + style
             sys.stderr.write(error)
-            return False # Should this be an exception?
+            return False  # Should this be an exception?
 
-    res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_TARGET_ARROW_SHAPE', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_TARGET_ARROW_SHAPE', network=network,
+                                   base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -1832,14 +1891,17 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
     for color in new_colors:
         if is_not_hex_color(color):
             return None  # TODO: Shouldn't this be an exception?
 
-    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network,
+                                   base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT_BASE_URL):
@@ -1875,14 +1937,17 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [
+        new_colors]  # TODO: It looks like this should be happening everywhere?
     for color in new_colors:
         if is_not_hex_color(color):
             return None  # TODO: Shouldn't this be an exception?
 
-    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network,
+                                   base_url=base_url)
 
     return res
+
 
 @cy_log
 def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAULT_BASE_URL):
@@ -1918,15 +1983,18 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [
+        new_values]  # TODO: It looks like this should be happening everywhere?
     for value in new_values:
         if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
             error = 'illegal opacity ' + str(value) + ' in set_edge_label_opacity_bypass(). It needs to be a number.'
             sys.stderr.write(error)
             return False  # TODO: Is this what we want to return here?
 
-    res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network, base_url=base_url)
+    res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
+                                   base_url=base_url)
     return res
+
 
 @cy_log
 def hide_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
@@ -1965,6 +2033,7 @@ def hide_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
     res = set_edge_property_bypass(edge_names, False, 'EDGE_VISIBLE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     """Hide Edges.
@@ -2002,6 +2071,7 @@ def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     res = set_edge_property_bypass(edge_names, False, 'EDGE_VISIBLE', network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     """Unhide Edges.
@@ -2037,6 +2107,7 @@ def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     """
     res = clear_edge_property_bypass(edge_names, 'EDGE_VISIBLE', network=network, base_url=base_url)
     return res
+
 
 # ==============================================================================
 # II.c. Network Properties
@@ -2078,8 +2149,10 @@ def set_network_zoom_bypass(new_value, bypass=False, network=None, base_url=DEFA
         :meth:`set_network_property_bypass`, :meth:`clear_netowrk_property_bypass`
     """
     # TODO: Find out what bypass= is supposed to do
-    res = set_network_property_bypass(new_value, 'NETWORK_SCALE_FACTOR', bypass=bypass, network=network, base_url=base_url)
+    res = set_network_property_bypass(new_value, 'NETWORK_SCALE_FACTOR', bypass=bypass, network=network,
+                                      base_url=base_url)
     return res
+
 
 @cy_log
 def clear_network_zoom_bypass(network=None, base_url=DEFAULT_BASE_URL):
@@ -2156,6 +2229,7 @@ def set_network_center_bypass(x, y, bypass=False, network=None, base_url=DEFAULT
     res = set_network_property_bypass(x, 'NETWORK_CENTER_X_LOCATION', bypass=bypass, network=network, base_url=base_url)
     res = set_network_property_bypass(y, 'NETWORK_CENTER_Y_LOCATION', bypass=bypass, network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def clear_network_center_bypass(network=None, base_url=DEFAULT_BASE_URL):

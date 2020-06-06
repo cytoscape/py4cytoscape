@@ -73,7 +73,7 @@ def delete_table_column(column, table='node', namespace='default', network=None,
     """
     # TODO: Fix R's documentation ... the return value is wrong
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_delete('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns/' + column,
+    res = commands.cyrest_delete(f'networks/{net_suid}/tables/{namespace}{table}/columns/{column}',
                                  base_url=base_url, require_json=False)
     return res
 
@@ -149,8 +149,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         col_list = columns
 
     # get suid column first and make a dataframe with SUID as index
-    res_names = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/SUID',
-                                    base_url=base_url)
+    res_names = commands.cyrest_get(f'networks/{suid}/tables/{namespace}{table}/columns/SUID', base_url=base_url)
     suid_list = res_names['values']
     df = pd.DataFrame(index=suid_list, columns=col_list)
 
@@ -162,8 +161,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
             break
 
         # fetch all values for the column
-        res_col = commands.cyrest_get('networks/' + str(suid) + '/tables/' + namespace + table + '/columns/' + col,
-                                      base_url=base_url)
+        res_col = commands.cyrest_get(f'networks/{suid}/tables/{namespace}{table}/columns/{col}', base_url=base_url)
 
         # the R version of this function replaces missing values with the constant NA, which
         # doesn't exist in Python. Pandas authority discusses this situation, but doesn't
@@ -188,7 +186,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         if len(suid_list) != len(cvv):
             print('Error: Column ' + col + ' has only ' + str(len(cvv)) + ' elements, but should have ' + str(
                 len(suid_list)))
-            break
+            break  # TODO: Is this the right response?
         # TODO: Consider assigning entire column all at once instead of iterating ... should be OK
         for val, suid_val in zip(cvv, suid_list):
             df.at[suid_val, col] = val
@@ -248,9 +246,8 @@ def get_table_value(table, row_name, column, namespace='default', network=None, 
         row_key = None
 
     # get row/column value
-    res = commands.cyrest_get(
-        'networks/' + str(suid) + '/tables/' + namespace + table + '/rows/' + str(row_key) + '/' + column,
-        base_url=base_url, require_json=False)
+    res = commands.cyrest_get(f'networks/{suid}/tables/{namespace}{table}/rows/{row_key}/{column}', base_url=base_url,
+                              require_json=False)
     if not res: return None
     # TODO: This "not res" can't happen for numbers because CyREST returns HTTPError if a value doesn't exist ... is this what we want?
     # TODO: For strings, a '' is returned ... do we want to return None for this?
@@ -298,7 +295,7 @@ def get_table_column_names(table='node', namespace='default', network=None, base
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     tbl = namespace + table
-    res = commands.cyrest_get('networks/' + str(suid) + '/tables/' + tbl + '/columns', base_url=base_url)
+    res = commands.cyrest_get(f'networks/{suid}/tables/{tbl}/columns', base_url=base_url)
     col_names = [x['name'] for x in res]
     return col_names
 
@@ -333,7 +330,7 @@ def get_table_column_types(table='node', namespace='default', network=None, base
         {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean', '__Annotations': 'List', ...}
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    cmd = 'networks/' + str(suid) + '/tables/' + namespace + table + '/columns'
+    cmd = f'networks/{suid}/tables/{namespace}{table}/columns'
     res = commands.cyrest_get(cmd, base_url=base_url)
     col_types = {x['name']: x['type'] for x in res}
 
@@ -422,7 +419,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     # if there are any columns that aren't in the Cytoscape table and they're going to be Int, add them explicitly now so
     # they don't default to float
     def create_col(x):
-        return commands.cyrest_post('networks/' + str(net_suid) + '/tables/' + tbl + '/columns',
+        return commands.cyrest_post(f'networks/{net_suid}/tables/{tbl}/columns',
                                     body={'name': x, 'type': 'Integer'}, require_json=False, base_url=base_url)
 
     existing_cols = get_table_column_names(table, namespace, net_suid, base_url=base_url)
@@ -430,7 +427,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
      data_subset.dtypes.iteritems()]
 
     # finally, add the values for whatever columns we have (and create new columns as needed)
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + tbl,
+    res = commands.cyrest_put(f'networks/{net_suid}/tables/{tbl}',
                               body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list},
                               require_json=False, base_url=base_url)
 
@@ -493,7 +490,8 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
     if not column in all_cols: raise CyError('ERROR:mapIdentifiers, ' + column + ' does not exist')
 
     res_map = commands.commands_post(
-        'idmapper map column columnName="' + column + '" forceSingle="' + fs + '" mapFrom="' + map_from + '" mapTo="' + map_to + '" species="' + species + '" table="' + tbl + '"')  # {'new column': 'SGD '}
+        f'idmapper map column columnName="{column}" forceSingle="{fs}" mapFrom="{map_from}" mapTo="{map_to}" species="{species}" table="{tbl}"',
+        base_url=base_url)
     if res_map['new column'] == 'null ': raise CyError('Error:mapIdentifiers failed')
     # TODO: Do we really mean to throw this result away?? R does ... if the 'new column' value returns null, something went wrong ... I added check
 
@@ -533,7 +531,7 @@ def rename_table_column(column, new_name, table='node', namespace='default', net
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
-    res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/' + namespace + table + '/columns',
+    res = commands.cyrest_put(f'networks/{net_suid}/tables/{namespace}{table}/columns',
                               body={'oldName': column, 'newName': new_name},
                               base_url=base_url, require_json=False)
     return res

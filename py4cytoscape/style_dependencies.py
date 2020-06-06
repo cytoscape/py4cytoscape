@@ -72,7 +72,7 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     #        return None
     # TODO: Is this what we want to return here?
 
-    res = commands.cyrest_get('styles/' + style_name + '/dependencies', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/dependencies', base_url=base_url)
 
     # make it a dict
     dep_list = {dep['visualPropertyDependency']: dep['enabled'] for dep in res}
@@ -117,8 +117,8 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
 
     dep_list = [{'visualPropertyDependency': dep, 'enabled': val}    for dep, val in dependencies.items()]
 
-    res = commands.cyrest_put('styles/' + style_name + '/dependencies', body=dep_list, base_url=base_url, require_json=False)
-    res = commands.commands_post('vizmap apply styles="' + style_name + '"')
+    res = commands.cyrest_put(f'styles/{style_name}/dependencies', body=dep_list, base_url=base_url, require_json=False)
+    res = commands.commands_post(f'vizmap apply styles="{style_name}"')
     # TODO: Do we really want to lose the first res value?
     return res
 

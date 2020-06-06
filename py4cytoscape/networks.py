@@ -89,8 +89,9 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
         {}
     """
     suid = get_network_suid(network)
-    cmd = 'network set current network=SUID:"' + str(suid) + '"'
+    cmd = f'network set current network="SUID:{suid}"'
     res = commands.commands_post(cmd, base_url=base_url)
+    # TODO: Put double quotes around SUID
     return res
 
 
@@ -124,7 +125,8 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
         {'network': 1502, 'title': 'renamed network'}
     """
     old_suid = get_network_suid(network, base_url=base_url)
-    cmd = 'network rename name="' + title + '" sourceNetwork=SUID:"' + str(old_suid) + '"'
+    cmd = f'network rename name="{title}" sourceNetwork="SUID:{old_suid}"'
+    # TODO: Put double quotes around SUID
     return commands.commands_post(cmd, base_url)
 
 
@@ -259,7 +261,7 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
         network_title = 'current'
 
     # Make requested network current and return its SUID
-    cmd = 'network get attribute network="' + network_title + '" namespace="default" columnList="SUID"'
+    cmd = f'network get attribute network="{network_title}" namespace="default" columnList="SUID"'
     response = commands.commands_post(cmd, base_url=base_url)
     return int(response[0]['SUID'])
 
@@ -286,7 +288,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     """
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
-        cy_network_names = [commands.cyrest_get('networks/' + str(suid), base_url=base_url)['data']['name'] for suid in
+        cy_network_names = [commands.cyrest_get(f'networks/{suid}', base_url=base_url)['data']['name'] for suid in
                             cy_networks_suids]
     else:
         cy_network_names = []
@@ -343,7 +345,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     if os.path.exists(filename): warnings.warn(
         'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
 
-    return commands.commands_post(cmd + ' OutputFile="' + filename + '"', base_url=base_url)
+    return commands.commands_post(f'{cmd} OutputFile="{filename}"', base_url=base_url)
 
 
 @cy_log
@@ -370,7 +372,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
         >>> delete_network('galFiltered.sif') # delete network having name
     """
     suid = get_network_suid(network)
-    res = commands.cyrest_delete('networks/' + str(suid), base_url=base_url, require_json=False)
+    res = commands.cyrest_delete(f'networks/{suid}', base_url=base_url, require_json=False)
     return res
 
 
@@ -450,7 +452,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar ... I think it will break ... should we except??
 
         first_neighbors_suids = commands.cyrest_get(
-            'networks/' + str(net_suid) + '/nodes/' + str(node_suid) + '/neighbors', base_url=base_url)
+            f'networks/{net_suid}/nodes/{node_suid}/neighbors', base_url=base_url)
         first_neighbors_names = node_suid_to_node_name(first_neighbors_suids, net_suid, base_url=base_url)
 
         if as_nested_list:
@@ -494,7 +496,7 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
         all_nodes_list = get_all_nodes(net_suid, base_url=base_url)
         node_names = list(set(node_names) - set(all_nodes_list))
 
-    res = commands.cyrest_post('networks/' + str(net_suid) + '/nodes', body=node_names, base_url=base_url)
+    res = commands.cyrest_post(f'networks/{net_suid}/nodes', body=node_names, base_url=base_url)
     return res
 
 
@@ -526,7 +528,7 @@ def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
         6
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes/count', base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/nodes/count', base_url=base_url)
     return res['count']
 
 
@@ -557,7 +559,7 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     n_count = get_node_count(net_suid, base_url=base_url)
     if n_count == 0: return None
 
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultnode/columns/name', base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/tables/defaultnode/columns/name', base_url=base_url)
     return res['values']
 
 
@@ -615,7 +617,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
     edge_data = [{'source': str(edge_suid_list[x]), 'target': str(edge_suid_list[x + 1]), 'directed': directed,
                   'interaction': edge_type} for x in range(0, len(edge_suid_list) - 1, 2)]
 
-    res = commands.cyrest_post('networks/' + str(net_suid) + '/edges', body=edge_data, base_url=base_url)
+    res = commands.cyrest_post(f'networks/{net_suid}/edges', body=edge_data, base_url=base_url)
     return res
 
 
@@ -647,7 +649,7 @@ def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
         6
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/count', base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/edges/count', base_url=base_url)
     return res['count']
 
 
@@ -692,7 +694,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
 
     def convert_edge_name_to_edge_info(edge_name):
         edge_suid = edge_name_to_edge_suid(edge_name, network, base_url=base_url)
-        res = commands.cyrest_get('networks/' + str(net_suid) + '/edges/' + str(edge_suid[0]), base_url=base_url)
+        res = commands.cyrest_get('networks/%s/edges/%s' % (net_suid, edge_suid[0]), base_url=base_url)
         return res['data']
 
     edge_info = [convert_edge_name_to_edge_info(x) for x in edges]
@@ -727,7 +729,7 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     e_count = get_edge_count(network, base_url=base_url)
     if e_count == 0: return None
 
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/tables/defaultedge/columns/name', base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/tables/defaultedge/columns/name', base_url=base_url)
     return res['values']
 
 
@@ -759,7 +761,9 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
        1477
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('network clone network=SUID:"' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(f'network clone network="SUID:{net_suid}"', base_url=base_url)
+
+    # TODO: Put double quotes around SUID
     return res['network']
 
 
@@ -1108,8 +1112,9 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         file = os.path.abspath('data/galFiltered.sif')
     else:
         file = os.path.abspath(file)
-    res = commands.commands_post('network load file file=' + file, base_url=base_url)
+    res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
     # TODO: Fix R documentation to match what's really returned
+    # TODO: Put double quotes around file
 
     # should not be necessary, but is because "network load file" doesn't actually set the current network
     # until after it's done. So, without the sleep(), setting the current network will be superceded by

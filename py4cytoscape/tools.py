@@ -53,9 +53,9 @@ def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
         >>> cybrowser_close('CyGame')
         {}
     """
-    id_str = ' id="' + str(id) + '"' if id is not None else ''
+    id_str = f' id="{id}"' if id is not None else ''
 
-    res = commands.commands_post('cybrowser close' + id_str, base_url=base_url)
+    res = commands.commands_post(f'cybrowser close{id_str}', base_url=base_url)
     return res
 
 
@@ -89,12 +89,12 @@ def cybrowser_dialog(id=None, text=None, title=None, url=None, base_url=DEFAULT_
     See Also:
         :meth:`cybrowser_show`, :meth:`cybrowser_hide`
     """
-    id_str = ' id="' + str(id) + '"' if id else ''
-    text_str = ' text="' + str(text) + '"' if text else ''
-    title_str = ' title="' + str(title) + '"' if title else ''
-    url_str = ' url="' + str(url) + '"' if url else ''
+    id_str = f' id="{id}"' if id else ''
+    text_str = f' text="{text}"' if text else ''
+    title_str = f' title="{title}"' if title else ''
+    url_str = f' url="{url}"' if url else ''
 
-    res = commands.commands_post('cybrowser dialog' + id_str + text_str + title_str + url_str, base_url=base_url)
+    res = commands.commands_post(f'cybrowser dialog{id_str}{text_str}{title_str}{url_str}', base_url=base_url)
     return res
 
 
@@ -123,9 +123,9 @@ def cybrowser_hide(id=None, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`cybrowser_show`, :meth:`cybrowser_dialog`
     """
-    id_str = ' id="' + str(id) + '"' if id else ''
+    id_str = f' id="{id}"' if id else ''
 
-    res = commands.commands_post('cybrowser hide' + id_str, base_url=base_url)
+    res = commands.commands_post(f'cybrowser hide{id_str}', base_url=base_url)
     return res
 
 
@@ -194,9 +194,9 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`cybrowser_show`, :meth:`cybrowser_hide`, :meth:`cybrowser_dialog`
     """
-    id_str = ' id="' + str(id) + '"' if id else ''
+    id_str = f' id="{id}"' if id else ''
 
-    res = commands.commands_post('cybrowser send' + id_str + ' script="' + script + '"', base_url=base_url)
+    res = commands.commands_post(f'cybrowser send{id_str} script="{script}"', base_url=base_url)
     return res
 
 
@@ -231,12 +231,12 @@ def cybrowser_show(id=None, text=None, title=None, url=None, base_url=DEFAULT_BA
     See Also:
         :meth:`cybrowser_dialog`, :meth:`cybrowser_hide`
     """
-    id_str = ' id="' + str(id) + '"' if id else ''
-    text_str = ' text="' + str(text) + '"' if text else ''
-    title_str = ' title="' + str(title) + '"' if title else ''
-    url_str = ' url="' + str(url) + '"' if url else ''
+    id_str = f' id="{id}"' if id else ''
+    text_str = f' text="{text}"' if text else ''
+    title_str = f' title="{title}"' if title else ''
+    url_str = f' url="{url}"' if url else ''
 
-    res = commands.commands_post('cybrowser show' + id_str + text_str + title_str + url_str, base_url=base_url)
+    res = commands.commands_post(f'cybrowser show{id_str}{text_str}{title_str}{url_str}', base_url=base_url)
     return res
 
 
@@ -324,8 +324,8 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
         >>> diffusion_advanced(heat_column_name='diffusion_output_heat', time=0.1)
         {'heatColumn': 'diffusion_output_1_heat', 'rankColumn': 'diffusion_output_1_rank'}
     """
-    heat_str = ' heatColumnName="' + str(heat_column_name) + '"' if heat_column_name else ''
-    time_str = ' time="' + str(time) + '"' if time else ''
+    heat_str = f' heatColumnName="{heat_column_name}"' if heat_column_name else ''
+    time_str = f' time="{time}"' if time else ''
 
-    res = commands.commands_post('diffusion diffuse_advanced' + heat_str + time_str, base_url=base_url)
+    res = commands.commands_post(f'diffusion diffuse_advanced{heat_str}{time_str}', base_url=base_url)
     return res

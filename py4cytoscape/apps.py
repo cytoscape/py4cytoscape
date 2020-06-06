@@ -54,7 +54,7 @@ def disable_app(app, base_url=DEFAULT_BASE_URL):
         {'appName': 'stringApp'}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps disable app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps disable app="{app}"', base_url=base_url)
     return res
 
 
@@ -81,7 +81,7 @@ def enable_app(app, base_url=DEFAULT_BASE_URL):
         {'appName': 'stringApp'}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps enable app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps enable app="{app}"', base_url=base_url)
     return res
 
 
@@ -107,7 +107,7 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
         {'app': 'stringApp', 'descriptionName': 'Import and augment Cytoscape networks from STRING', 'version': '1.5.1'}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps information app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps information app="{app}"', base_url=base_url)
     # TODO: R uses commands_get ... py4cytoscape uses commands_post ... Swagger recommends POST ... is R wrong for all of these calls?
     return res
 
@@ -133,7 +133,7 @@ def install_app(app, base_url=DEFAULT_BASE_URL):
         {}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps install app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps install app="{app}"', base_url=base_url)
     return res
 
 
@@ -278,7 +278,7 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
         {}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps open appstore app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps open appstore app="{app}"', base_url=base_url)
     return res
 
 
@@ -304,7 +304,7 @@ def get_app_status(app, base_url=DEFAULT_BASE_URL):
         {'appName': 'stringApp', 'status': 'Installed'}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps status app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps status app="{app}"', base_url=base_url)
     return res
 
 
@@ -329,7 +329,7 @@ def uninstall_app(app, base_url=DEFAULT_BASE_URL):
         {'appName': 'stringApp'}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps uninstall app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps uninstall app="{app}"', base_url=base_url)
     return res
 
 
@@ -354,5 +354,5 @@ def update_app(app, base_url=DEFAULT_BASE_URL):
         []
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post('apps update app="' + app + '"', base_url=base_url)
+    res = commands.commands_post(f'apps update app="{app}"', base_url=base_url)
     return res

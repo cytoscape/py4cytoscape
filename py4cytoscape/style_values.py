@@ -89,11 +89,10 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
         # TODO: Should this be a split(',')
         node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url)
         node_props = {node_name: commands.cyrest_get(
-            'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes/' + str(
-                node_suid) + '/' + visual_property,
-            base_url=base_url)['value']
+            f'networks/{net_suid}/views/{view_suid}/nodes/{node_suid}/{visual_property}', base_url=base_url)['value']
                       for node_suid, node_name in zip(node_suids, node_names)}
         return node_props
+
 
 @cy_log
 def get_edge_property(edge_names=None, visual_property=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -135,7 +134,7 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         raise CyError('Invalid visual property')
 
     if edge_names is None:
-        res = commands.cyrest_get('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges',
+        res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/edges',
                                   {'visualProperty': visual_property}, base_url=base_url)
         edge_suids = [edge['SUID'] for edge in res]
         edge_names = edge_suid_to_edge_name(edge_suids, network=network, base_url=base_url)
@@ -146,11 +145,10 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         # TODO: Should this be a split(',')
         edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url)
         edge_props = {edge_name: commands.cyrest_get(
-            'networks/' + str(net_suid) + '/views/' + str(view_suid) + '/edges/' + str(
-                edge_suid) + '/' + visual_property,
-            base_url=base_url)['value']
+            f'networks/{net_suid}/views/{view_suid}/edges/{edge_suid}/{visual_property}', base_url=base_url)['value']
                       for edge_suid, edge_name in zip(edge_suids, edge_names)}
         return edge_props
+
 
 @cy_log
 def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_URL):
@@ -186,8 +184,9 @@ def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_UR
     if visual_property is None:
         raise CyError('Invalid visual property')
 
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/network/' + visual_property, base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}', base_url=base_url)
     return res['value']
+
 
 # ==============================================================================
 # II. Specific Functions
@@ -228,6 +227,7 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_FILL_COLOR", network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual size of specified nodes.
@@ -259,6 +259,7 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """
     res = get_node_property(node_names, "NODE_SIZE", network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -292,6 +293,7 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     res = get_node_property(node_names, "NODE_WIDTH", network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual height of specified nodes.
@@ -323,6 +325,7 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """
     res = get_node_property(node_names, "NODE_HEIGHT", network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -365,16 +368,16 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         >>> YER112W  2151.8481399429043 2326.677814454767
     """
     x_location = get_node_property(node_names, "NODE_X_LOCATION", network=network, base_url=base_url)
-    x_values = [x_location[node_name]   for node_name in x_location]
-    x_names = [node_name  for node_name in x_location]
+    x_values = [x_location[node_name] for node_name in x_location]
+    x_names = [node_name for node_name in x_location]
 
     y_location = get_node_property(node_names, "NODE_Y_LOCATION", network=network, base_url=base_url)
-    y_values = [y_location[node_name]   for node_name in y_location]
-    y_names = [node_name  for node_name in y_location]
+    y_values = [y_location[node_name] for node_name in y_location]
+    y_names = [node_name for node_name in y_location]
 
     # Verify that both property calls return locations for the same set of nodes ... necessary because
     # two calls are not atomic. (This stands virtually no chance of failing, but non-atomic call must be checked.)
-    name_skew = [[x_name, y_name]  for x_name, y_name in zip(x_names, y_names) if x_name != y_name]
+    name_skew = [[x_name, y_name] for x_name, y_name in zip(x_names, y_names) if x_name != y_name]
     if name_skew != []:
         raise CyError('Inconsistent node sets returned: ' + str(name_skew))
 
@@ -382,6 +385,7 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     # TODO: Verify that this is what R returns, too
 
     return data
+
 
 # ==============================================================================
 # II.b. Edge Properties
@@ -420,6 +424,7 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     res = get_edge_property(edge_names, "EDGE_WIDTH", network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual line color of specified edges.
@@ -451,6 +456,7 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """
     res = get_edge_property(edge_names, "EDGE_PAINT", network=network, base_url=base_url)
     return res
+
 
 @cy_log
 def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -484,6 +490,7 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     res = get_edge_property(edge_names, "EDGE_LINE_TYPE", network=network, base_url=base_url)
     return res
 
+
 @cy_log
 def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual target arrow shape of specified edges.
@@ -515,6 +522,7 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
     """
     res = get_edge_property(edge_names, "EDGE_TARGET_ARROW_SHAPE", network=network, base_url=base_url)
     return res
+
 
 # ==============================================================================
 # II.c. Network Properties
@@ -549,6 +557,7 @@ def get_network_center(network=None, base_url=DEFAULT_BASE_URL):
     y_coordinate = get_network_property('NETWORK_CENTER_Y_LOCATION', network=network, base_url=base_url)
 
     return {'x': x_coordinate, 'y': y_coordinate}
+
 
 @cy_log
 def get_network_zoom(network=None, base_url=DEFAULT_BASE_URL):

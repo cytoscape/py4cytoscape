@@ -76,8 +76,8 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
-        'group add groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(
-            net_suid) + '"', base_url=base_url)
+        f'group add groupName="{group_name}" nodeList="{node_list}" edgeList="{edge_list}" network="SUID:{net_suid}"',
+        base_url=base_url)
     return res
 
 
@@ -114,7 +114,7 @@ def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     """
     group_list = _prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group collapse groupList="' + str(group_list) + '" network="SUID:' + str(net_suid),
+    res = commands.commands_post(f'group collapse groupList="{group_list}" network="SUID:{net_suid}"',
                                  base_url=base_url)
     return res
 
@@ -157,7 +157,7 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     node_list = _prep_post_query_lists(nodes, nodes_by_col)
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
-        'group create groupName="' + group_name + '" nodeList="' + node_list + '" network="SUID:' + str(net_suid),
+        f'group create groupName="{group_name}" nodeList="{node_list}" network="SUID:{net_suid}"',
         base_url=base_url)
     return res
 
@@ -190,8 +190,8 @@ def create_group_by_column(group_name, column=None, value=None, network=None, ba
     # TODO: The default column and value will make the call blow up ... are we sure we want these defaults?
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
-        'group create groupName="' + group_name + '" nodeList="' + column + '":"' + value + '" network="SUID:' + str(
-            net_suid) + '"', base_url=base_url)
+        f'group create groupName="{group_name}" nodeList="{column}":"{value}" network="SUID:{net_suid}"',
+        base_url=base_url)
     return res
 
 
@@ -229,7 +229,7 @@ def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
     group_list = _prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
-        'group expand groupList="' + str(group_list) + '" network="SUID:' + str(net_suid) + '"', base_url=base_url)
+        f'group expand groupList="{group_list}" network="SUID:{net_suid}"', base_url=base_url)
     return res
 
 
@@ -278,7 +278,7 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     ## so work with the user-provided group name or SUID directly instead
     prefix = 'SUID:' if isinstance(group, int) else ''
 
-    res = commands.commands_post('group get node="' + prefix + str(group) + '" network="SUID:' + str(net_suid) + '"',
+    res = commands.commands_post(f'group get node="{prefix}{group}" network="SUID:{net_suid}"',
                                  base_url=base_url)
     return res
 
@@ -306,7 +306,7 @@ def list_groups(network=None, base_url=DEFAULT_BASE_URL):
         {'groups': [94214, 94038, 94122]}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group list network="SUID:' + str(net_suid) + '"', base_url=base_url)
+    res = commands.commands_post(f'group list network="SUID:{net_suid}"', base_url=base_url)
     return res
 
 
@@ -354,8 +354,8 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
-        'group remove groupName="' + group_name + '" nodeList="' + node_list + '" edgeList="' + edge_list + '" network="SUID:' + str(
-            net_suid) + '"', base_url=base_url)
+        f'group remove groupName="{group_name}" nodeList="{node_list}" edgeList="{edge_list}" network="SUID:{net_suid}"',
+        base_url=base_url)
     return res
 
 
@@ -397,8 +397,7 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
     group_list = _prep_post_query_lists(groups, groups_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('group ungroup nodeList="' + group_list + '" network="SUID:' + str(net_suid) + '"',
-                                 base_url=base_url)
+    res = commands.commands_post(f'group ungroup nodeList="{group_list}" network="SUID:{net_suid}"', base_url=base_url)
     # TODO: The R implementation uses the groupList parameter, which conflicts with the command documentation
     return res
 

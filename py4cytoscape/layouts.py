@@ -65,7 +65,7 @@ def bundle_edges(network=None, base_url=DEFAULT_BASE_URL):
         {'message': 'Edge bundling success.'}
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('apply/edgebundling/' + str(suid), base_url=base_url)
+    res = commands.cyrest_get(f'apply/edgebundling/{suid}', base_url=base_url)
     return res
 
 
@@ -93,7 +93,7 @@ def clear_edge_bends(network=None, base_url=DEFAULT_BASE_URL):
         {'message': 'Edge bundling success.'}
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('apply/clearalledgebends/' + str(suid), base_url=base_url)
+    res = commands.cyrest_get(f'apply/clearalledgebends/{suid}', base_url=base_url)
     return res
 
 
@@ -132,7 +132,7 @@ def layout_network(layout_name=None, network=None, base_url=DEFAULT_BASE_URL):
                                      base_url=base_url)
         return res
     else:
-        res = commands.commands_post('layout ' + layout_name + ' network="SUID:' + str(suid) + '"', base_url=base_url)
+        res = commands.commands_post(f'layout {layout_name} network="SUID:{suid}"', base_url=base_url)
         return res
 
 
@@ -177,9 +177,7 @@ def layout_copycat(source_network, target_network, source_column='name', target_
     source_network = networks.get_network_name(source_network)
     target_network = networks.get_network_name(target_network)
     res = commands.commands_post(
-        'layout copycat sourceNetwork="' + source_network + '" targetNetwork="' + target_network +
-        '" sourceColumn="' + source_column + '" targetColumn="' + target_column +
-        '" gridUnmapped="' + str(grid_unmapped) + '" selectUnmapped="' + str(select_unmapped),
+        f'layout copycat sourceNetwork="{source_network}" targetNetwork="{target_network}" sourceColumn="{source_column}" targetColumn="{target_column}" gridUnmapped="{grid_unmapped}" selectUnmapped="{select_unmapped}"',
         base_url=base_url)
     return res
 
@@ -242,7 +240,7 @@ def get_layout_name_mapping(base_url=DEFAULT_BASE_URL):
 
     # get the full name of a layout and create {fullname:layoutname} in dictionary
     for layout_name in layout_names:
-        res = commands.cyrest_get('apply/layouts/' + layout_name, base_url=base_url)
+        res = commands.cyrest_get(f'apply/layouts/{layout_name}', base_url=base_url)
         layout_mapping.update({res['longName']: layout_name})
 
     return layout_mapping
@@ -270,7 +268,7 @@ def get_layout_property_names(layout_name, base_url=DEFAULT_BASE_URL):
         >>> get_layout_property_names('force-directed')
         ['numIterations', 'defaultSpringCoefficient', 'defaultSpringLength', 'defaultNodeMass', 'isDeterministic', 'singlePartition']
     """
-    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    res = commands.cyrest_get(f'apply/layouts/{layout_name}/parameters', base_url=base_url)
     param_names = [param_def['name'] for param_def in res]
     return param_names
 
@@ -299,7 +297,7 @@ def get_layout_property_type(layout_name, property_name, base_url=DEFAULT_BASE_U
         >>> get_layout_property_names('force-directed','defaultSpringLength')
         "double"
     """
-    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    res = commands.cyrest_get(f'apply/layouts/{layout_name}/parameters', base_url=base_url)
     param_types = {param['name']: param['type'] for param in res}
     return param_types[property_name]
 
@@ -328,7 +326,7 @@ def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_
         >>> getLayoutPropertyValue('force-directed','defaultSpringLength')
         50
     """
-    res = commands.cyrest_get('apply/layouts/' + layout_name + '/parameters', base_url=base_url)
+    res = commands.cyrest_get(f'apply/layouts/{layout_name}/parameters', base_url=base_url)
     param_values = {param['name']: param['value'] for param in res}
     return param_values[property_name]
 
@@ -371,7 +369,7 @@ def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_UR
             # TODO: Consider throwning an exception here ... or just letting Cytoscape return the error
         else:
             each_property = [{'name': prop, 'value': value}]
-            res = commands.cyrest_put('apply/layouts/' + layout_name + '/parameters', body=each_property,
+            res = commands.cyrest_put(f'apply/layouts/{layout_name}/parameters', body=each_property,
                                       base_url=base_url, require_json=False)
 
     return res

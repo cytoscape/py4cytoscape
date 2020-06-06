@@ -69,12 +69,12 @@ def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     if type in ['nodes', 'both']:
-        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultnode/columns/selected',
+        res = commands.cyrest_put(f'networks/{net_suid}/tables/defaultnode/columns/selected',
                                   parameters={'default': 'false'}, base_url=base_url, require_json=False)
         # TODO: this result will get lost if type=='both'
 
     if type in ['edges', 'both']:
-        res = commands.cyrest_put('networks/' + str(net_suid) + '/tables/defaultedge/columns/selected',
+        res = commands.cyrest_put(f'networks/{net_suid}/tables/defaultedge/columns/selected',
                                   parameters={'default': 'false'}, base_url=base_url, require_json=False)
 
     return res
@@ -115,7 +115,7 @@ def select_first_neighbors(direction='any', network=None, base_url=DEFAULT_BASE_
         In the return value, node list is the SUIDs of newly selected nodes and edge list is always empty
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    cmd = 'network select firstNeighbors="' + direction + '" network=SUID:"' + str(suid) + '"'
+    cmd = f'network select firstNeighbors="{direction}" network=SUID:"{suid}"'
     res = commands.commands_post(cmd, base_url=base_url)
     return res
 
@@ -164,8 +164,7 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         node_list_str = by_col + ':' + str(nodes[0])
         for n in range(1, len(nodes)):
             node_list_str += ',' + by_col + ':' + str(nodes[n])
-    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" nodeList="' + node_list_str + '"',
-                                 base_url=base_url)
+    res = commands.commands_post(f'network select network=SUID:"{suid}" nodeList="{node_list_str}"', base_url=base_url)
     return res
 
 
@@ -202,7 +201,7 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
         :meth:`select_nodes`
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    all_node_SUIDs = commands.cyrest_get('networks/' + str(suid) + '/nodes', base_url=base_url)
+    all_node_SUIDs = commands.cyrest_get(f'networks/{suid}/nodes', base_url=base_url)
 
     res = select_nodes(all_node_SUIDs)
     return res['nodes']
@@ -236,7 +235,7 @@ def get_selected_node_count(network=None, base_url=DEFAULT_BASE_URL):
         330
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/nodes',
+    res = commands.cyrest_get(f'networks/{net_suid}/nodes',
                               parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
 
@@ -274,7 +273,7 @@ def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL
         print('No nodes selected.')
         return None
     else:
-        selected_node_suids = commands.cyrest_get('networks/' + str(net_suid) + '/nodes',
+        selected_node_suids = commands.cyrest_get(f'networks/{net_suid}/nodes',
                                                   parameters={'column': 'selected', 'query': 'true'})
         if node_suids:
             return selected_node_suids
@@ -313,7 +312,8 @@ def invert_node_selection(network=None, base_url=DEFAULT_BASE_URL):
         In return value, node list is the SUIDs of newly selected nodes and edge list is always empty.
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('network select invert=nodes network=SUID:' + str(suid), base_url=base_url)
+    res = commands.commands_post(f'network select invert=nodes network="SUID:{suid}"', base_url=base_url)
+    # TODO: Added double quotes to SUID
     return res
 
 
@@ -345,7 +345,7 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
     """
     title = networks.get_network_name(network, base_url=base_url)
-    res = commands.commands_post('network delete nodeList=selected network="' + title + '"', base_url=base_url)
+    res = commands.commands_post(f'network delete nodeList=selected network="{title}"', base_url=base_url)
     # TODO: Added double quotes to network title
     return res
 
@@ -382,7 +382,7 @@ def select_nodes_connected_by_selected_edges(network=None, base_url=DEFAULT_BASE
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     clear_selection(type='nodes', network=suid, base_url=base_url)
-    res = commands.commands_post('network select extendEdges="true" edgeList="selected network="' + str(suid) + '"',
+    res = commands.commands_post(f'network select extendEdges="true" edgeList="selected network="{suid}"',
                                  base_url=base_url)
     return res
 
@@ -437,7 +437,7 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
         edge_list_str = by_col + ':' + str(edges[0])
         for n in range(1, len(edges)):
             edge_list_str += ',' + by_col + ':' + str(edges[n])
-    res = commands.commands_post('network select network=SUID:"' + str(suid) + '" edgeList="' + edge_list_str + '"',
+    res = commands.commands_post(f'network select network=SUID:"{suid}" edgeList="{edge_list_str}"',
                                  base_url=base_url)
     return res
 
@@ -469,7 +469,7 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
         [104432, 104431, ...]
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    all_edge_SUIDs = commands.cyrest_get('networks/' + str(suid) + '/edges', base_url=base_url)
+    all_edge_SUIDs = commands.cyrest_get(f'networks/{suid}/edges', base_url=base_url)
 
     res = select_edges(all_edge_SUIDs)
     return res['edges']
@@ -507,7 +507,8 @@ def invert_edge_selection(network=None, base_url=DEFAULT_BASE_URL):
         edge list is the SUIDs of selected edges -- dict is {} if no edges remain selected
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('network select invert=edges network=SUID:' + str(suid), base_url=base_url)
+    res = commands.commands_post(f'network select invert=edges network="SUID:{suid}"', base_url=base_url)
+    # TODO: Added double quotes for SUID
     return res
 
 
@@ -539,7 +540,7 @@ def delete_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
         {'nodes': [], 'edges': [104432, 104431, ...]}
     """
     title = networks.get_network_name(network, base_url=base_url)
-    res = commands.commands_post('network delete edgeList=selected network="' + title + '"', base_url=base_url)
+    res = commands.commands_post(f'network delete edgeList=selected network="{title}"', base_url=base_url)
     # TODO: Added double quotes to network title
     return res
 
@@ -571,7 +572,7 @@ def get_selected_edge_count(network=None, base_url=DEFAULT_BASE_URL):
         359
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get('networks/' + str(net_suid) + '/edges',
+    res = commands.cyrest_get(f'networks/{net_suid}/edges',
                               parameters={'column': 'selected', 'query': 'true'}, base_url=base_url)
     return len(res)
 
@@ -609,7 +610,7 @@ def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL
         print('No edges selected.')
         return None
     else:
-        selected_edge_suids = commands.cyrest_get('networks/' + str(net_suid) + '/edges',
+        selected_edge_suids = commands.cyrest_get(f'networks/{net_suid}/edges',
                                                   parameters={'column': 'selected', 'query': 'true'})
         if edge_suids:
             return selected_edge_suids
@@ -706,7 +707,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='edges', network=suid, base_url=base_url)
-    res = commands.commands_post('network select adjacentEdges="true" nodeList="selected network="' + str(suid) + '"',
+    res = commands.commands_post(f'network select adjacentEdges="true" nodeList="selected network="{suid}"',
                                  base_url=base_url)
     return res
 

@@ -31,6 +31,7 @@ import warnings
 from . import commands
 from . import networks
 from . import network_selection
+from . import tables
 
 # External library imports
 from .exceptions import CyError
@@ -77,9 +78,8 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
     networks.set_current_network(net_suid, base_url=base_url)
 
     # TODO: It looks like R can't properly use filter_name with blank embedded, and doesn't wait for filter to be applied
-    res = commands.commands_post(
-        'filter apply container="filter" name="' + filter_name + '" network=SUID:"' + str(net_suid) + '"',
-        base_url=base_url)
+    res = commands.commands_post(f'filter apply container="filter" name="{filter_name}" network=SUID:"{net_suid}"',
+                                 base_url=base_url)
     return _check_selected(net_suid, base_url)
 
 
@@ -338,7 +338,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
     filename = os.path.abspath(filename)
     if os.path.exists(filename): warnings.warn('This file has been overwritten.')
 
-    res = commands.commands_post('filter export file="' + filename + '"', base_url=base_url)
+    res = commands.commands_post(f'filter export file="{filename}"', base_url=base_url)
 
     return res
 
@@ -369,8 +369,9 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
         {}
     """
     filename = os.path.abspath(filename)
-    res = commands.commands_post('filter import file="' + filename + '"', base_url=base_url)
-    time.sleep(CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
+    res = commands.commands_post(f'filter import file="{filename}"', base_url=base_url)
+    time.sleep(
+        CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res
 
 

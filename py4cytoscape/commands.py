@@ -70,7 +70,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
         >>> cyrest_api() # loads Swagger CyREST API into browser
         True
     """
-    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/swagger.json#/', new=2,
+    res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/', new=2,
                           autoraise=True)
     return res
 
@@ -260,7 +260,7 @@ def commands_api(base_url=DEFAULT_BASE_URL):
         >>> commands_api() # loads Swagger CyREST Commands API into browser
         True
     """
-    res = webbrowser.open(base_url + '/swaggerUI/swagger-ui/index.html?url=' + base_url + '/commands/swagger.json#/',
+    res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/',
                           new=2, autoraise=True)
     return res
 
@@ -443,7 +443,7 @@ def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
         >>> command_echo()
         ['*']
     """
-    return commands_post('command echo message="' + variable_name + '"', base_url=base_url)
+    return commands_post(f'command echo message="{variable_name}"', base_url=base_url)
 
 
 # TODO: It doesn't look like the command space supports open ... does the R version work?
@@ -493,7 +493,7 @@ def command_pause(message='', base_url=DEFAULT_BASE_URL):
         >>> command_pause()
         {}
     """
-    return commands_post('command pause message="' + message + '"', base_url=base_url)
+    return commands_post(f'command pause message="{message}"', base_url=base_url)
 
 
 @cy_log
@@ -543,10 +543,10 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
         >>> command_run_file('data/CommandScript.txt')
         {}
     """
-    args_str = ' args="' + args + '"' if args else ''
+    args_str = f' args="{args}"' if args else ''
     file = os.path.abspath(file)
 
-    return commands_post('command run' + args_str + ' file="' + file + '"', base_url=base_url)
+    return commands_post(f'command run{args_str} file="{file}"', base_url=base_url)
 
 
 @cy_log
@@ -572,9 +572,9 @@ def command_sleep(duration=None, base_url=DEFAULT_BASE_URL):
         >>> command_sleep(6)
         {}
     """
-    dur_str = ' duration="' + str(duration) + '"' if duration else ''
+    dur_str = f' duration="{duration}"' if duration else ''
 
-    return commands_post('command sleep' + dur_str, base_url=base_url)
+    return commands_post(f'command sleep{dur_str}', base_url=base_url)
 
 
 def _command_2_get_query(cmd_string, base_url=DEFAULT_BASE_URL):
@@ -668,15 +668,15 @@ def _do_request(method, url, **kwargs):
 
 def _handle_error(caller, e, force_cy_error=False):
     if e.response is None or e.response.text is None or e.response.text == '':
-        print('In ' + caller + ': ' + str(e))
+        print(f'In {caller}: {e}')
         raise
     else:
         content = e.response.text
         try:
             content = json.loads(content)['errors'][0]['message']
-            print('In ' + caller + ': ' + str(e) + '\n' + content)
+            print(f'In {caller}: {e}\n{content}')
             e = CyError(content)
         except:
-            print('In ' + caller + ': ' + str(e) + '\n' + content)
+            print(f'In {caller}: {e}\n{content}')
             if force_cy_error: e = CyError(content)
         raise e

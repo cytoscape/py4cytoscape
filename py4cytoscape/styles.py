@@ -69,7 +69,7 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
         raise CyError('Cannot copy from a non-existent visual style ( + ' + from_style + ')')
 
     # get the current style from Cytoscape
-    res = commands.cyrest_get('styles/' + from_style, base_url=base_url)
+    res = commands.cyrest_get(f'styles/{from_style}', base_url=base_url)
     style_from_to = res
     style_from_to['title'] = to_style
 
@@ -77,9 +77,9 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_post('styles', body=style_from_to, base_url=base_url)
 
     # get and update dependencies as well
-    res = commands.cyrest_get('styles/' + from_style + '/dependencies', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{from_style}/dependencies', base_url=base_url)
     # TODO: Shouldn't we be throwing exceptions if these return results are bad?
-    res = commands.cyrest_put('styles/' + to_style + '/dependencies', body=res, base_url=base_url, require_json=False)
+    res = commands.cyrest_put(f'styles/{to_style}/dependencies', body=res, base_url=base_url, require_json=False)
     return res
 
 @cy_log
@@ -147,7 +147,7 @@ def delete_visual_style(style_name, base_url=DEFAULT_BASE_URL):
         >>> delete_visual_style('NewStyle')
         ''
     """
-    res = commands.cyrest_delete('styles/' + style_name, base_url=base_url, require_json=False)
+    res = commands.cyrest_delete(f'styles/{style_name}', base_url=base_url, require_json=False)
     return res
 
 @cy_log
@@ -227,7 +227,7 @@ def import_visual_styles(filename="styles.xml", base_url=DEFAULT_BASE_URL):
     """
     filename = os.path.abspath(filename)
 
-    res = commands.commands_post('vizmap load file file="' + filename + '"', base_url=base_url)
+    res = commands.commands_post(f'vizmap load file file="{filename}"', base_url=base_url)
     return res
 
 @cy_log
@@ -285,7 +285,7 @@ def set_visual_style(style_name, network=None, base_url=DEFAULT_BASE_URL):
         sys.stderr.write(error)
         raise CyError(error)
 
-    res = commands.cyrest_get('apply/styles/' + style_name + '/' + str(net_suid), base_url=base_url)
+    res = commands.cyrest_get(f'apply/styles/{style_name}/{net_suid}', base_url=base_url)
     return res
 
 

@@ -110,7 +110,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
         file_location = os.path.abspath(file_location)
 
     sys.stderr.write('Opening ' + file_location + '...')
-    return commands.commands_post('session open ' + type + '="' + file_location + '"', base_url=base_url)
+    return commands.commands_post(f'session open {type}="{file_location}"', base_url=base_url)
 
 
 @cy_log
@@ -154,4 +154,4 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
         if re.search('.cys$', filename) is None: filename += '.cys'
         filename = os.path.abspath(filename)
         if os.path.isfile(filename): print('This file has been overwritten.')
-        return commands.commands_post('session save as file="' + filename + '"', base_url=base_url)
+        return commands.commands_post(f'session save as file="{filename}"', base_url=base_url)

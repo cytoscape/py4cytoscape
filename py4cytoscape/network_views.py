@@ -63,7 +63,7 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
         [130223]
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get("networks/" + str(net_suid) + "/views", base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/views', base_url=base_url)
     # TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
     return res
 
@@ -159,9 +159,10 @@ def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """
     view_suid = get_network_view_suid(network, base_url=base_url)
     if selected_only:
-        res = commands.commands_post('view fit selected view=SUID:' + str(view_suid), base_url=base_url)
+        res = commands.commands_post(f'view fit selected view="SUID:{view_suid}"', base_url=base_url)
     else:
-        res = commands.commands_post('view fit content view=SUID:' + str(view_suid), base_url=base_url)
+        res = commands.commands_post(f'view fit content view="SUID:{view_suid}"', base_url=base_url)
+    # TODO: Added double quotes for SUID
     return res
 
 
@@ -194,7 +195,8 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
         {}
     """
     view_suid = get_network_view_suid(network, base_url=base_url)
-    res = commands.commands_post('view set current view=SUID:"' + str(view_suid) + '"', base_url=base_url)
+    res = commands.commands_post(f'view set current view="SUID:{view_suid}"', base_url=base_url)
+    # Added double quotes for SUID
     return res
 
 
@@ -261,8 +263,9 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     if os.path.isfile(filename): print(
         'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     res = commands.commands_post(
-        cmd_string + ' OutputFile="' + filename + '"' + ' options="' + type.upper() + '"' + ' view=SUID:"' + str(
-            view_SUID) + '"', base_url=base_url)
+        '%s OutputFile="%s" options="%s" view="SUID:%s"' % (cmd_string, filename, type.upper(), view_SUID),
+        base_url=base_url)
+    # TODO: Added double quotes to SUID
     return res
 
 

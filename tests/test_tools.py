@@ -168,6 +168,7 @@ class ToolsTests(unittest.TestCase):
         self._check_show(operation, ToolsTests.CYTOSCAPE_MANUAL)
 
         # Verify that the browser list contains all of the new pages
+        time.sleep(2)  # wait for windowing system to catch up
         check_browser_list(cybrowser_list(),
                            [ToolsTests.BROWSER_HELLO, ToolsTests.CYTOSCAPE_HOME_PAGE, ToolsTests.CYTOSCAPE_MANUAL])
 
@@ -183,14 +184,15 @@ class ToolsTests(unittest.TestCase):
         self.assertDictEqual(cybrowser_hide(ToolsTests.BROWSER_HELLO['id']), {})
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
         time.sleep(2)  # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
+        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL, ToolsTests.BROWSER_HELLO])
 
         # Verify that closing a browser twice does no harm
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_HOME_PAGE['id']), {})
         time.sleep(2)  # wait for windowing system to catch up
-        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL])
+        check_browser_list(cybrowser_list(), [ToolsTests.CYTOSCAPE_MANUAL, ToolsTests.BROWSER_HELLO])
 
         # Verify that closing the last browser window results in a clean browser list
+        self.assertDictEqual(cybrowser_close(ToolsTests.BROWSER_HELLO['id']), {})
         self.assertDictEqual(cybrowser_close(ToolsTests.CYTOSCAPE_MANUAL['id']), {})
         time.sleep(2)  # wait for windowing system to catch up
         check_browser_list(cybrowser_list(), [])
