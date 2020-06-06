@@ -1,6 +1,6 @@
 # py4cytoscape
 
-This project is an attempt to recreate the [R-based RCy3 Cytoscape Automation library](https://github.com/cytoscape/RCy3) as a Python package. The idea is to allow a Cytoscape workflow to be written in one language (R or Python) and translated to another language (Python or R) without having to learn different Cytoscape interfaces. The current Cytoscape Python interface ([Py2Cytoscape](https://github.com/cytoscape/py2cytoscape)) has different features than the Cytoscape R library, and therefore doesn't fit my purpose.
+This project recreates the [R-based RCy3 Cytoscape Automation library](https://github.com/cytoscape/RCy3) as a Python package. The idea is to allow a Cytoscape workflow to be written in one language (R or Python) and translated to another language (Python or R) without having to learn different Cytoscape interfaces. The current Cytoscape Python interface ([Py2Cytoscape](https://github.com/cytoscape/py2cytoscape)) has different features than the Cytoscape R library, and therefore doesn't fit my purpose.
 
 Additionally, this project attempts to maintain the same function signatures, return values, function implementation and module structure as the RCy3, thereby enabling smooth maintenance and evolution of both RCy3 and py4cytoscape.
 
@@ -27,6 +27,23 @@ dir(py4cytoscape)
 py4cytoscape.import_network_from_file("galfiltered.sif") # Before running this, save galfiltered.sif in the current directory.
 ```
 
+## How to use (from within a Jupyter Notebook on the same machine as Cytoscape)
+
+```
+# Install the current py4cytoscape package
+!pip install git+https://github.com/bdemchak/py4cytoscape
+
+# Manually start Cytoscape (using your mouse/keyboard and operating system)
+
+# Verify that Cytoscape is started and reachable
+!curl localhost:1234
+
+# Import py4cytoscape and verify its connection to Cytoscape
+import py4cytoscape as p4c
+p4c.cytoscape_ping()
+p4c.cytoscape_version_info()
+```
+
 ## How to test (in Windows)
 
 First, start Cytoscape.
@@ -42,7 +59,66 @@ python -m unittest test_apps.py
 rem To execute two sets of tests ...
 python -m unittest test_apps.py test_filters.py
 
+rem To execute all tests ...
+python -m unittest
+
 rem To execute a single test out of a set ...
 python -m unittest test_apps.AppsTests.test_get_app_information
 
+rem Pro Tip: To execute tests with less console debug output,
+rem set this environment variable before executing tests ...
+set PY4CYTOSCAPE_SUMMARY_LOGGER=FALSE
+
 ```
+
+## How to configure logging
+
+py4cytoscape logging is based on the Python ``logging`` package, which is based on ``JUnit``. 
+py4cytoscape emits log entries in SysLog format. For example:
+
+```
+[INFO] py4...S:  ǀHTTP DELETE(http://localhost:1234/v1/networks)
+[INFO] py4...S:  ǀOK[200]
+```  
+
+``[INFO]`` is the priority level.
+
+``py4...S`` the name of the py4cytoscape package.
+
+The count of ``|`` indicates the nesting level of the currently executing code, where ``||`` indicates log entries nested in code at the ``|`` level. 
+
+The remainder of the message contains the logged information. In the example above, an HTTP DELETE call is logged along with the HTTP server's reply.
+ 
+Logger configuration is available in the ``py4cytoscape_logger_settings.py`` module. py4cytoscape emits two independent logging streams: Summary (to the console) and Detail (to a file in the ``logs`` directory).
+
+By default, Summary logging is the short form, which shows HTTP calls and results. You can disable Summary logging by setting ``_SUMMARY_LOG_LEVEL`` to ``NOTSET``, and you can enable full logging by setting it to ``DEBUG``.
+
+By default, Detail logging is the long form, and is controlled by the ``_DETAIL_LOG_LEVEL`` setting.
+
+For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled:
+
+```
+set PY4CYTOSCAPE_SUMMARY_LOGGER=False
+```
+
+At execution time, it can be disabled by calling ``set_summary_logger()``. For example:
+
+```
+old_state = set_summary_logger(False)
+# ... make several py4cytoscape calls ...
+set_summary_logger(old_state)
+```
+
+``set_summary_logger()`` can also be called from a Python Console.
+
+Here is an example of detailed logging involving nested calls:
+
+```
+2020-06-06 15:29:55,721 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://localhost:1234/v1')
+2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://localhost:1234/v1')
+2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀHTTP GET(http://localhost:1234/v1/version)
+2020-06-06 15:29:55,737 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.0-SNAPSHOT"}
+2020-06-06 15:29:55,738 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
+2020-06-06 15:29:55,738 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
+```
+
