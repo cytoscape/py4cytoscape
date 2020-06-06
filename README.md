@@ -29,7 +29,7 @@ py4cytoscape.import_network_from_file("galfiltered.sif") # Before running this, 
 
 ## How to use (from within a Jupyter Notebook on the same machine as Cytoscape)
 
-```
+```shell
 # Install the current py4cytoscape package
 !pip install git+https://github.com/bdemchak/py4cytoscape
 
@@ -37,7 +37,8 @@ py4cytoscape.import_network_from_file("galfiltered.sif") # Before running this, 
 
 # Verify that Cytoscape is started and reachable
 !curl localhost:1234
-
+```
+```python
 # Import py4cytoscape and verify its connection to Cytoscape
 import py4cytoscape as p4c
 p4c.cytoscape_ping()
@@ -48,7 +49,7 @@ p4c.cytoscape_version_info()
 
 First, start Cytoscape.
 
-```
+```shell
 rem Assuming the current directory is the py4cytoscape project directory
 cd tests 
 set PYTHONPATH=..
@@ -97,7 +98,7 @@ By default, Detail logging is the long form, and is controlled by the ``_DETAIL_
 
 For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled:
 
-```
+```shell
 set PY4CYTOSCAPE_SUMMARY_LOGGER=False
 ```
 
