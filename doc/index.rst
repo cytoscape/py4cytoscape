@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 *****************************************
-py4cytoscape |version| Programmers Manual
+py4cytoscape |version| Programmers Manual (Test)
 *****************************************
 
 The py4cytoscape Programmers Manual copyright is owned by The Cytoscape Consortium, and is made available under the MIT License below.

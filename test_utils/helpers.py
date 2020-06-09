@@ -22,8 +22,6 @@
 
 from py4cytoscape import *
 import os
-import requests
-import unittest
 import functools
 
 

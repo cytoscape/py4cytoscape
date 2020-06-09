@@ -661,19 +661,18 @@ class NetworkTests(unittest.TestCase):
         # added by ``create_network_from_igraph()``.
         self._check_igraph_attributes(cur_igraph.es, new_igraph.es)
 
-    @skip
-    @print_entry_exit
-    def test_choke_memory(self):
-        # This is to show whether a memory leak occurs ... not part of the API tests
-        trial = 1
-        while True:
-            start = time.clock()
-            close_session(False)
-            closed_time = time.clock()
-            open_session()
-            print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (
-            trial, (closed_time - start), (time.clock() - closed_time)))
-            trial += 1
+    # @print_entry_exit
+    # def test_choke_memory(self):
+    #     # This is to show whether a memory leak occurs ... not part of the API tests
+    #     trial = 1
+    #     while True:
+    #         start = time.clock()
+    #         close_session(False)
+    #         closed_time = time.clock()
+    #         open_session()
+    #         print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (
+    #         trial, (closed_time - start), (time.clock() - closed_time)))
+    #         trial += 1
 
     def _check_igraph_attributes(self, original_collection, new_collection):
         def vals_eq(name, e_cur_key, val1, val2):
