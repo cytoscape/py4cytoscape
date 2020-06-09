@@ -32,7 +32,7 @@ class AppsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cytoscape_ping(self):
         self.assertIsNone(cytoscape_ping())
@@ -42,6 +42,7 @@ class AppsTests(unittest.TestCase):
         input('Restart Cytoscape, wait for startup to complete, and then hit [enter]')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cytoscape_version_info(self):
         version = cytoscape_version_info()

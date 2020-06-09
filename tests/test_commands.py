@@ -239,6 +239,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_open_dialog, base_url='http://yahoo.com')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_pause(self):
         # Verify that pause returns nothing at all
@@ -257,6 +258,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_pause, base_url='http://yahoo.com')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_quit(self):
         # Verify that pause returns nothing at all
@@ -289,6 +291,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_run_file, CMD_FILE, base_url='http://yahoo.com')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_sleep(self):
         # Verify that pause returns nothing at all

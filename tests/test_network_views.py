@@ -89,6 +89,7 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertRaises(CyError, get_network_view_suid, 'bogus network')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_fit_content(self):
         # Initialization
@@ -144,6 +145,7 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertRaises(CyError, set_current_network, network='bogus network')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_image(self):
         # Initialization
@@ -176,6 +178,7 @@ class NetworkViewsTests(unittest.TestCase):
                           height=10.7, width=3.5, zoom=500, network=gal_filtered_view)
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_image(self):
         # Initialization

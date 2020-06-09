@@ -71,17 +71,18 @@ class ToolsTests(unittest.TestCase):
         self.assertIsInstance(version, dict)
         self.assertIsInstance(version['version'], str)
 
-    
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cybrowser_show_list_hide(self):
         self.cybrowser_windows('show')
 
-    
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cybrowser_dialog_list_hide(self):
         self.cybrowser_windows('dialog')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cybrowser_send(self):
         self._check_show('dialog', ToolsTests.CYTOSCAPE_HOME_PAGE)
@@ -124,7 +125,6 @@ class ToolsTests(unittest.TestCase):
         self.assertEqual(res['rankColumn'], 'diffusion_output_1_rank')
         self.assertTrue(len(get_selected_nodes()) > 0)
 
-    
     @print_entry_exit
     def test_diffusion_advanced(self):
         # Initialization

@@ -38,6 +38,7 @@ class UserInterfaceTests(unittest.TestCase):
         pass
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_dock_hide_float_panel(self):
         # Initialization
@@ -65,6 +66,7 @@ class UserInterfaceTests(unittest.TestCase):
         self.assertRaises(CyError, dock_panel, 'bogus')
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_dock_hide_float_panel(self):
         # Initialization

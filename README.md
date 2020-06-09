@@ -66,10 +66,28 @@ python -m unittest
 rem To execute a single test out of a set ...
 python -m unittest test_apps.AppsTests.test_get_app_information
 
+rem Pro Tip: To send test output to a file, redirect stderr ...
+python -m unittest 2>myfile.log
+
 rem Pro Tip: To execute tests with less console debug output,
 rem set this environment variable before executing tests ...
 set PY4CYTOSCAPE_SUMMARY_LOGGER=FALSE
 
+rem Pro Tip: To execute tests that don't even show the names
+rem tests being executed, set this environment variable before
+rem executing tests
+set PY4CYTOSCAPE_SHOW_TEST_PROGRESS=FALSE
+
+rem Pro Tip: To skip execution of tests that require user input,
+rem set this environment variable before executing tests ...
+set PY4CYTOSCAPE_SKIP_UI_TESTS=TRUE
+
+rem When executing all tests, we recommend the following 
+rem that all three environment variables be set as described above.
+
+rem Pro Tip: When executing tests in PyCharm, you can set 
+rem environment variables using the 'Run | Edit Configurations...' 
+rem menu item. 
 ```
 
 ## How to configure logging

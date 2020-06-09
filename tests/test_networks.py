@@ -162,7 +162,7 @@ class NetworkTests(unittest.TestCase):
         delete_all_networks()
         self.assertListEqual(get_network_list(), [])
 
-    @skip  # OK to skip this for now because by the time this executes, a Cytoscape memory leak will make Cytoscape show an unreadable message box
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_network(self):
         # Initialization

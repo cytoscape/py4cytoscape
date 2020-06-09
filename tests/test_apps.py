@@ -174,6 +174,7 @@ class AppsTests(unittest.TestCase):
         self.assertIsInstance(get_app_updates(), list)
 
     
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_open_app_store(self):
         # Initialization

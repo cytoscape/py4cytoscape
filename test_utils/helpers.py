@@ -23,6 +23,8 @@
 from py4cytoscape import *
 import os
 import requests
+import unittest
+import functools
 
 
 def __init__(self):
@@ -56,3 +58,30 @@ def test_select_nodes(node_list):
 
 def clean_session_file(session_filename):
     if os.path.isfile(session_filename): os.remove(session_filename)
+
+def skip_for_ui():
+    return os.environ.get('PY4CYTOSCAPE_SKIP_UI_TESTS', 'FALSE').upper() == 'TRUE'
+
+def show_test_progress():
+    return os.environ.get('PY4CYTOSCAPE_SHOW_TEST_PROGRESS', 'TRUE').upper() == 'TRUE'
+
+
+# Decorators inspired by https://realpython.com/primer-on-python-decorators/
+def print_entry_exit(func):
+    """Print the function signature and return value"""
+
+    @functools.wraps(func)
+    def wrapper_entry_exit(*args, **kwargs):
+        if show_test_progress():
+            print(f"Into {func.__name__}()")
+            try:
+                value = func(*args, **kwargs)
+                print(f"Out of {func.__name__!r}")
+                return value
+            except Exception as e:
+                print(f"{func.__name__!r} exception {e!r}")
+                raise
+        else:
+            return func(*args, **kwargs)
+
+    return wrapper_entry_exit

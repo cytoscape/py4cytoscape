@@ -24,7 +24,9 @@ import functools
 import time
 
 
+
 # Inspired by https://realpython.com/primer-on-python-decorators/
+
 
 def debug(func):
     """Print the function signature and return value"""
@@ -42,22 +44,6 @@ def debug(func):
     return wrapper_debug
 
 
-def print_entry_exit(func):
-    """Print the function signature and return value"""
-
-    @functools.wraps(func)
-    def wrapper_entry_exit(*args, **kwargs):
-        print(f"Into {func.__name__}()")
-        try:
-            value = func(*args, **kwargs)
-            print(f"Out of {func.__name__!r}")
-            return value
-        except Exception as e:
-            print(f"{func.__name__!r} exception {e!r}")
-            raise
-
-    return wrapper_entry_exit
-
 
 def timer(func):
     """Print the runtime of the decorated function"""
@@ -74,6 +60,3 @@ def timer(func):
     return wrapper_timer
 
 
-def skip(func):
-    """Skip execution of this function completely"""
-    return
