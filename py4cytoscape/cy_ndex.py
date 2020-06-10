@@ -34,7 +34,7 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_tuning import NDEX_DELAY_SECS
 from .py4cytoscape_logger import cy_log
 
-
+@cy_log
 def import_network_from_ndex(ndex_id, username=None, password=None, access_key=None, base_url=DEFAULT_BASE_URL):
     """Import a network from the NDEx database into Cytoscape.
 
@@ -69,7 +69,7 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
     time.sleep(NDEX_DELAY_SECS)
     return res['data']['suid']
 
-
+@cy_log
 def export_network_to_ndex(username, password, is_public, network=None, metadata=None, base_url=DEFAULT_BASE_URL):
     """Send a copy of a Cytoscape network to NDEx as a new submission.
 
@@ -107,7 +107,7 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
     time.sleep(NDEX_DELAY_SECS)
     return res['data']['uuid']
 
-
+@cy_log
 def update_network_in_ndex(username, password, is_public, network=None, metadata=None, base_url=DEFAULT_BASE_URL):
     """Update Network In NDEx.
 
@@ -153,6 +153,7 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
 
 # TODO: It looks like [0] picks up the first sub-network instead of the one that was requested ... is this how it should work?
 
+@cy_log
 def get_network_ndex_id(network=None, base_url=DEFAULT_BASE_URL):
     """Get Network NDEx Id.
 
