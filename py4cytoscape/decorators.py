@@ -27,6 +27,7 @@ import time
 
 # Inspired by https://realpython.com/primer-on-python-decorators/
 # and https://pypi.org/project/decorator/
+# and https://github.com/micheles/decorator/blob/master/docs/documentation.md
 
 @decorator
 def debug(func):
