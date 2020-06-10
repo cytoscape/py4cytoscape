@@ -129,7 +129,7 @@ def cy_log(func):
         finally:
             log_finally()
 
-    return wrapper_log
+    return func # wrapper_log
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):
