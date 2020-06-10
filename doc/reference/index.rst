@@ -18,4 +18,5 @@ Reference
    filters
    groups
    layouts
+   networks
 
