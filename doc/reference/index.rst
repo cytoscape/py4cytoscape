@@ -21,5 +21,5 @@ Reference
    networks
    network_selection
    network_views
-
+   session
 
