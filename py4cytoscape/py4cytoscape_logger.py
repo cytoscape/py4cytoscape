@@ -65,6 +65,8 @@ _logger_nesting = -1
 _logger_nesting_spacer = ''
 
 # Allow automatic document builder (Sphinx) to see function signatures instead of logging wrappers
+# To set this up, be sure PY4_IS_BUILDING = TRUE is set up as an environment variable in the
+# Readthedocs configuration (in the Environment Variables section).
 _PY4_IS_BUILDING = (os.environ.get('PY4_IS_BUILDING', 'FALSE').upper() == 'TRUE')
 
 def cy_log(func):
