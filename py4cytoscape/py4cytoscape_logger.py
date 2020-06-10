@@ -129,7 +129,7 @@ def cy_log(func):
         finally:
             log_finally()
 
-    return func # wrapper_log
+    return func if os.environ.get('PY4_IS_BUILDING', 'FALSE').upper() == 'TRUE' else wrapper_log
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):
