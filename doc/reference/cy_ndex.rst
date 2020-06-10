@@ -19,5 +19,4 @@ Utility
 .. autosummary::
    :toctree: generated/
 
-   export_network_ndex_id
-   export_network_ndex_id
+   get_network_ndex_id

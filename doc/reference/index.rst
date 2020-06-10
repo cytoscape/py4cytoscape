@@ -16,4 +16,6 @@ Reference
    cytoscape_system
    exceptions
    filters
+   groups
+   layouts
 
