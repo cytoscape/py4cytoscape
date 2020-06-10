@@ -16,6 +16,12 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('./..'))
 
+# This is here as a signal to decorators in py4cytoscape. They should return
+# the decorated function instead of the function wrapper they normally would.
+# This allows AutoDoc to pick up the function signatures as defined so they
+# don't need to be manually generated in the *.rst files.
+os.environ['SPHINX_BUILD'] = 'TRUE'
+
 
 # -- Project information -----------------------------------------------------
 

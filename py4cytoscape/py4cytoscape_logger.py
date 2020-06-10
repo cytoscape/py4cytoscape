@@ -64,10 +64,10 @@ _FUNCTION_SPACER = '-' * 20
 _logger_nesting = -1
 _logger_nesting_spacer = ''
 
-# Allow automatic document builder (Sphinx) to see function signatures instead of logging wrappers
+# Allow automatic document builder (Sphinx) to see function signatures instead of logging wrappers.
 # To set this up, be sure PY4_IS_BUILDING = TRUE is set up as an environment variable in the
 # Readthedocs configuration (in the Environment Variables section).
-_PY4_IS_BUILDING = (os.environ.get('PY4_IS_BUILDING', 'FALSE').upper() == 'TRUE')
+SPHINX_BUILD = (os.environ.get('SPHINX_BUILD', 'FALSE').upper() == 'TRUE')
 
 def cy_log(func):
     """Log function call parameters and results"""
@@ -134,7 +134,7 @@ def cy_log(func):
         finally:
             log_finally()
 
-    return func if _PY4_IS_BUILDING else wrapper_log
+    return func if SPHINX_BUILD else wrapper_log
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):
