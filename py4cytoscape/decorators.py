@@ -20,18 +20,18 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # External library imports
-import functools
+from decorator import decorator
 import time
 
 
 
 # Inspired by https://realpython.com/primer-on-python-decorators/
+# and https://pypi.org/project/decorator/
 
-
+@decorator
 def debug(func):
     """Print the function signature and return value"""
 
-    @functools.wraps(func)
     def wrapper_debug(*args, **kwargs):
         args_repr = [repr(a) for a in args]  # 1
         kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]  # 2
@@ -45,10 +45,10 @@ def debug(func):
 
 
 
+@decorator
 def timer(func):
     """Print the runtime of the decorated function"""
 
-    @functools.wraps(func)
     def wrapper_timer(*args, **kwargs):
         start_time = time.perf_counter()  # 1
         value = func(*args, **kwargs)
