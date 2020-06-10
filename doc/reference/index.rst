@@ -12,4 +12,6 @@ Reference
    apps
    collections
    commands
+   cy_ndex
+   cytoscape_system
 
