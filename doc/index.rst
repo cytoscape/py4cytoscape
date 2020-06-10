@@ -16,6 +16,7 @@ Copyright (c) 2020 The Cytoscape Consortium
 .. toctree::
    :maxdepth: 4
 
+   reference/index
    py4cytoscape_package
 
    apps
