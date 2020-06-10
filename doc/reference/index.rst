@@ -10,3 +10,6 @@ Reference
    :maxdepth: 2
 
    apps
+   collections
+   commands
+
