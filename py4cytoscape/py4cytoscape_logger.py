@@ -28,6 +28,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import logging
 from logging.handlers import RotatingFileHandler
+from decorator import decorator
 import functools
 import os
 
@@ -69,6 +70,7 @@ _logger_nesting_spacer = ''
 # Readthedocs configuration (in the Environment Variables section).
 SPHINX_BUILD = (os.environ.get('SPHINX_BUILD', 'FALSE').upper() == 'TRUE')
 
+@decorator
 def cy_log(func):
     """Log function call parameters and results"""
 
@@ -123,7 +125,7 @@ def cy_log(func):
             if detail_logger.isEnabledFor(logging.DEBUG): detail_logger.debug(_FUNCTION_SPACER)
             if _summary_logger_enable: summary_logger.debug(_FUNCTION_SPACER)
 
-    @functools.wraps(func)
+#    @functools.wraps(func)
     def wrapper_log(*args, **kwargs):
         log_incoming(func, *args, **kwargs)
         try:
@@ -134,7 +136,8 @@ def cy_log(func):
         finally:
             log_finally()
 
-    return func if SPHINX_BUILD else wrapper_log
+    return wrapper_log
+#    return func if SPHINX_BUILD else wrapper_log
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):
