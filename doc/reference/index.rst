@@ -14,4 +14,6 @@ Reference
    commands
    cy_ndex
    cytoscape_system
+   exceptions
+   filters
 

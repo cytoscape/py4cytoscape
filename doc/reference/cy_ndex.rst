@@ -20,3 +20,4 @@ Utility
    :toctree: generated/
 
    export_network_ndex_id
+   export_network_ndex_id
