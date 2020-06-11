@@ -6,7 +6,7 @@ Styles
 .. automodule:: py4cytoscape.styles
 
 Style Management
-----------------
+================
 .. autosummary::
    :toctree: generated/
 
@@ -19,7 +19,7 @@ Style Management
    set_visual_style
 
 Visual Property Names and Values
---------------------------------
+================================
 .. autosummary::
    :toctree: generated/
 
@@ -29,15 +29,14 @@ Visual Property Names and Values
    get_visual_property_names
 
 .. _stylebypasses:
-**************
 Style Bypasses
-**************
+--------------
 
 .. automodule:: py4cytoscape.style_bypasses
 
 
 General Style Bypasses
--------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -45,7 +44,7 @@ General Style Bypasses
    set_edge_property_bypass
 
 Node Style Bypasses
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -72,7 +71,7 @@ Node Style Bypasses
    unhide_nodes
 
 Edge Style Bypasses
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -96,7 +95,7 @@ Edge Style Bypasses
    unhide_edges
 
 Network Style Bypasses
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -109,14 +108,13 @@ Network Style Bypasses
    unhide_all
 
 .. _styledefaults:
-**************
 Style Defaults
-**************
+--------------
 
 .. automodule:: py4cytoscape.style_defaults
 
 General Style Defaults
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -125,7 +123,7 @@ General Style Defaults
    update_style_defaults
 
 Custom Graphics
----------------
+===============
 .. autosummary::
    :toctree: generated/
 
@@ -141,7 +139,7 @@ Custom Graphics
    set_node_custom_ring_chart
 
 Node Style Defaults
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -164,7 +162,7 @@ Node Style Defaults
    set_node_width_default
 
 Edge Style Defaults
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -187,7 +185,7 @@ Edge Style Defaults
 
 
 Network Style Defaults
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -195,14 +193,13 @@ Network Style Defaults
    set_background_color_default
 
 .. _styledependencies:
-******************
 Style Dependencies
-******************
+------------------
 
 .. automodule:: py4cytoscape.style_dependencies
 
 General Style Dependencies
---------------------------
+==========================
 .. autosummary::
    :toctree: generated/
 
@@ -210,35 +207,34 @@ General Style Dependencies
    set_style_dependencies
 
 Custom Graphics
----------------
+===============
 .. autosummary::
    :toctree: generated/
 
     sync_node_custom_graphics_size
 
 Node Style Dependencies
------------------------
+=======================
 .. autosummary::
    :toctree: generated/
 
    lock_node_dimensions
 
 Edge Style Dependencies
------------------------
+=======================
 .. autosummary::
    :toctree: generated/
 
    match_arrow_color_to_edge
 
 .. _stylemappings:
-**************
 Style Mappings
-**************
+--------------
 
 .. automodule:: py4cytoscape.style_mappings
 
 General Style Mappings
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -249,7 +245,7 @@ General Style Mappings
    update_style_mapping
 
 Node Style Mappings
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -271,7 +267,7 @@ Node Style Mappings
    set_node_width_mapping
 
 Edge Style Mappings
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
