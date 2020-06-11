@@ -293,14 +293,13 @@ Edge Style Mappings
    set_edge_tooltip_mapping
 
 .. _stylevalues:
-************
 Style Values
-************
+------------
 
 .. automodule:: py4cytoscape.style_values
 
 Node Style Values
---------------------
+=================
 .. autosummary::
    :toctree: generated/
 
@@ -312,7 +311,7 @@ Node Style Values
    get_node_width
 
 Edge Style Values
---------------------
+=================
 .. autosummary::
    :toctree: generated/
 
@@ -322,7 +321,8 @@ Edge Style Values
    get_edge_property
    get_edge_target_arrow_shape
 
-### Network Style Values
+Network Style Values
+====================
 .. autosummary::
    :toctree: generated/
 
