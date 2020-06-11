@@ -4,21 +4,21 @@ Overview of py4cytoscape
 ========================
 
 py4cytoscape is a Python package that communicates with `Cytoscape <https://cytoscape.org>`_
-via its [REST API](https://pubmed.ncbi.nlm.nih.gov/31477170/), providing access to a set over 250 functions that
+via its `REST API <https://pubmed.ncbi.nlm.nih.gov/31477170/>`_, providing access to a set over 250 functions that
 enable control of Cytoscape from within standalone and Notebook Python programming environments. It provides
-nearly identical functionality to [RCy3](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/), an R package in
+nearly identical functionality to `RCy3 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/>`_, an R package in
 Bioconductor available to R programmers.
 
 py4cytoscape provides:
 
 -  functions that can be leveraged from Python code to implement network biology-oriented workflows;
--  access to user-written Cytoscape Apps that implement [Cytoscape Automation](https://pubmed.ncbi.nlm.nih.gov/31477170/) protocols;
+-  access to user-written Cytoscape Apps that implement `Cytoscape Automation <https://pubmed.ncbi.nlm.nih.gov/31477170/>`_ protocols;
 -  logging and debugging facilities that enable rapid development, maintenance, and auditing of Python-based workflow;
--  two-way conversion between the [igraph](https://igraph.org/python/) and
-[NetworkX](https://networkx.github.io/documentation/stable/) graph packages, which enables interoperability with popular
-packages available in public repositories (e.g., [PyPI](https://pypi.org/)); and
+-  two-way conversion between the `igraph <https://igraph.org/python/>`_ and
+`NetworkX <https://networkx.github.io/documentation/stable/>`_ graph packages, which enables interoperability with popular
+packages available in public repositories (e.g., `PyPI <https://pypi.org/>`_); and
 -  the ability to painlessly work with large data sets generated within Python or available on public repositories
-(e.g., [STRING](https://string-db.org/) and [NDEx](http://ndexbio.org)).
+(e.g., `STRING <https://string-db.org/>`_ and `NDEx <http://ndexbio.org>`_).
 
 With py4cytoscape, you can leverage Cytoscape to:
 
