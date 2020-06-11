@@ -49,6 +49,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx_autodoc_typehints',
+    "sphinx.ext.viewcode",
     'sphinx_rtd_theme',
 ]
 # If true, the current module name will be prepended to all description

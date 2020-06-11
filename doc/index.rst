@@ -19,22 +19,6 @@ Copyright (c) 2020 The Cytoscape Consortium
    reference/index
    py4cytoscape_package
 
-   apps
-   collections
-   commands
-   cytoscape_system
-   cy_ndex
-   exceptions
-   filters
-   groups
-   layouts
-   networks
-   session
-   styles
-   tables
-   tools
-   user_interface
-   py4cytoscape_utils
 
 .. rubric:: Indices and tables
 
