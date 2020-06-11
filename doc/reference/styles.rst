@@ -30,13 +30,13 @@ Visual Property Names and Values
 
 .. _stylebypasses:
 Style Bypasses
-==============
+--------------
 
 .. automodule:: py4cytoscape.style_bypasses
 
 
 General Style Bypasses
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
@@ -44,7 +44,7 @@ General Style Bypasses
    set_edge_property_bypass
 
 Node Style Bypasses
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -71,7 +71,7 @@ Node Style Bypasses
    unhide_nodes
 
 Edge Style Bypasses
--------------------
+===================
 .. autosummary::
    :toctree: generated/
 
@@ -95,7 +95,7 @@ Edge Style Bypasses
    unhide_edges
 
 Network Style Bypasses
-----------------------
+======================
 .. autosummary::
    :toctree: generated/
 
