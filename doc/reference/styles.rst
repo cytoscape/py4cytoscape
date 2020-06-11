@@ -65,7 +65,6 @@ Node Style Bypasses
    set_node_label_color_bypass
    set_node_label_opacity_bypass
    set_node_opacity_bypass
-
    set_node_shape_bypass
    set_node_size_bypass
    set_node_tooltip_bypass
@@ -89,7 +88,6 @@ Edge Style Bypasses
    set_edge_line_style_bypass
    set_edge_line_width_bypass
    set_edge_opacity_bypass
-
    set_edge_source_arrow_color_bypass
    set_edge_source_arrow_shape_bypass
    set_edge_target_arrow_color_bypass
@@ -324,8 +322,7 @@ Edge Style Values
    get_edge_property
    get_edge_target_arrow_shape
 
-Network Style Values
---------------------
+### Network Style Values
 .. autosummary::
    :toctree: generated/
 
