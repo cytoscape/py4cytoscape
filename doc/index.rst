@@ -36,7 +36,13 @@ Documentation
 .. toctree::
    :maxdepth: 1
 
+   install
+   tutorial
    reference/index
+   release_log
+   license
+   credits
+   citing
    py4cytoscape_package
 
 
