@@ -12,6 +12,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from datetime import date
 import os
 import sys
 sys.path.insert(0, os.path.abspath('./..'))
@@ -26,7 +27,7 @@ os.environ['SPHINX_BUILD'] = 'TRUE'
 # -- Project information -----------------------------------------------------
 
 project = 'py4cytoscape'
-copyright = '2020, The Cytoscape Consortium'
+copyright = f"2018-{date.today().year}, The Cytoscape Consortium"
 author = 'Barry Demchak'
 
 # The short X.Y version
@@ -108,6 +109,7 @@ html_favicon = '_static/images/cytoscape3-icon.ico'
 #
 html_theme_options = {
     'prev_next_buttons_location': 'both',
+    'navigation_depth': 3,
     'style_external_links': True,
 }
 
@@ -115,6 +117,10 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+html_last_updated_fmt = "%b %d, %Y"
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.

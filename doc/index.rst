@@ -1,15 +1,32 @@
-.. py4cytoscape documentation master file, created by
-   sphinx-quickstart on Fri Jan 31 16:27:11 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _contents
 
-****************************************
-py4cytoscape |version| Programmer Manual
-****************************************
+Overview of py4cytoscape
+========================
 
-The py4cytoscape Programmers Manual copyright is owned by The Cytoscape Consortium, and is made available under the MIT License below.
+... see NetworkX verbage
 
-Copyright (c) 2020 The Cytoscape Consortium
+Audience
+--------
+
+... see NetworkX verbage
+
+Python
+------
+
+... see NetworkX verbage
+
+Free Software
+-------------
+
+... see NetworkX verbage
+
+History
+-------
+
+... see NetworkX verbage
+
+Documentation
+-------------
 
 .. only:: html
 
@@ -32,7 +49,6 @@ Indices and tables
 
 LICENSE
 -------
-
 
 Copyright 2020 The Cytoscape Consortium
 
