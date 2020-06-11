@@ -3,10 +3,13 @@
 Networks
 ********
 
+Basic Networks
+--------------
+
 .. automodule:: py4cytoscape.networks
 
 Nodes
------
+=====
 .. autosummary::
    :toctree: generated/
 
@@ -16,7 +19,7 @@ Nodes
    get_node_count
 
 Edges
------
+=====
 .. autosummary::
    :toctree: generated/
 
@@ -25,8 +28,8 @@ Edges
    get_edge_count
    get_edge_info
 
-Networks
---------
+Network Management
+==================
 .. autosummary::
    :toctree: generated/
 
@@ -42,7 +45,7 @@ Networks
    set_current_network
 
 Import/Export
--------------
+=============
 .. autosummary::
    :toctree: generated/
 
