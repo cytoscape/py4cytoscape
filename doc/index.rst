@@ -11,16 +11,20 @@ The py4cytoscape Programmers Manual copyright is owned by The Cytoscape Consorti
 
 Copyright (c) 2020 The Cytoscape Consortium
 
-.. rubric:: Table of Contents
+.. only:: html
+
+    :Release: |version|
+    :Date: |today|
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
    reference/index
    py4cytoscape_package
 
 
-.. rubric:: Indices and tables
+Indices and tables
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
