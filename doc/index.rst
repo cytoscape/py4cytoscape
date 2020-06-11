@@ -3,7 +3,7 @@
 Overview of py4cytoscape
 ========================
 
-py4cytoscape is a Python package that communicates with [Cytoscape](https://cytoscape.org)
+py4cytoscape is a Python package that communicates with `Cytoscape <https://cytoscape.org>`_
 via its [REST API](https://pubmed.ncbi.nlm.nih.gov/31477170/), providing access to a set over 250 functions that
 enable control of Cytoscape from within standalone and Notebook Python programming environments. It provides
 nearly identical functionality to [RCy3](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/), an R package in
