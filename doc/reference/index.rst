@@ -19,7 +19,5 @@ Reference
    groups
    layouts
    networks
-   network_selection
-   network_views
    session
    styles

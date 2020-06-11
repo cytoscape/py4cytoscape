@@ -3,10 +3,13 @@
 Styles
 ******
 
+Basic Styles
+------------
+
 .. automodule:: py4cytoscape.styles
 
 Style Management
-----------------
+================
 .. autosummary::
    :toctree: generated/
 
@@ -19,7 +22,7 @@ Style Management
    set_visual_style
 
 Visual Property Names and Values
---------------------------------
+================================
 .. autosummary::
    :toctree: generated/
 
