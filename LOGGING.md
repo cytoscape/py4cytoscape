@@ -4,8 +4,10 @@ Logging
 py4cytoscape logging is based on the Python ``logging`` package, which is based on ``JUnit``. 
 py4cytoscape emits log entries in SysLog format. For example::
 
+```
    [INFO] py4...S:  ǀHTTP DELETE(http://localhost:1234/v1/networks)
-   [INFO] py4...S:  ǀOK[200]  
+   [INFO] py4...S:  ǀOK[200]
+```  
 
 ``[INFO]`` is the priority level.
 
