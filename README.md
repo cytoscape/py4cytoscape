@@ -98,7 +98,9 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 
 ## License
 
-Released under the MIT License (see [LICENSE.rst](LICENSE.rst) file)::
+Released under the MIT License (see [LICENSE.rst](LICENSE.rst) file):
 
+```
     Copyright (c) 2018-2020 The Cytoscape Consortium
     Barry Demchak <bdemchak@ucsd.edu>
+```
