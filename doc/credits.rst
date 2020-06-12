@@ -2,9 +2,9 @@ Credits
 =======
 
 ``py4cytoscape`` was originally written by Barry Demchak with the help of many others, particularly the developers
-of `RCy3 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/>`_, on which py4cytoscape is based.
+of `RCy3 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/>`_, on which ``py4cytoscape`` is based.
 Thanks to everyone who has
-improved py4cytoscape by contributing code, bug reports (and fixes), documentation,
+improved ``py4cytoscape`` by contributing code, bug reports (and fixes), documentation,
 and input on design, features, and the future of ``py4cytoscape``.
 
 Contributions

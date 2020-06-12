@@ -17,8 +17,11 @@ instructions for installing the full `scientific Python stack
    If you use one of these Python distribution, please refer to their online
    documentation.
 
+   `PyCharm <https://www.jetbrains.com/pycharm/>`_ and other integrated development
+   environment often install their own Python distributions.
+
 Below we assume you have the default Python environment already configured on
-your computer and you intend to install ``networkx`` inside of it.  If you want
+your computer and you intend to install ``py4cytoscape`` inside of it.  If you want
 to create and work with Python virtual environments, please follow instructions
 on `venv <https://docs.python.org/3/library/venv.html>`_ and `virtual
 environments <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
@@ -27,29 +30,39 @@ First, make sure you have the latest version of ``pip`` (the Python package mana
 installed. If you do not, refer to the `Pip documentation
 <https://pip.pypa.io/en/stable/installing/>`_ and install ``pip`` first.
 
-Install the released version
-----------------------------
+Install the development version
+-------------------------------
 
-Install the current release of ``networkx`` with ``pip``::
+Install the current release of ``py4cytoscape`` with ``pip``::
 
-    $ pip install networkx
+    $ pip install python-igraph requests pandas networkx
+    $ git clone git://github.com/bdemchak/py4cytoscape
+    $ cd py4cytoscape
+    $ python setup.py install # or python setup.py install --user
 
-To upgrade to a newer release use the ``--upgrade`` flag::
+To exercise ``py4cytoscape``, you must first have downloaded, installed, and
+executed Cytoscape. If you have not already done this, please refer to the `Launching
+Cytoscape <http://manual.cytoscape.org/en/stable/Launching_Cytoscape.html#launching-cytoscape>'_
+instructions.
 
-    $ pip install --upgrade networkx
+Trying ``py4cytoscape`` (Python Console)
+----------------------------------------
 
-If you do not have permission to install software systemwide, you can
-install into your user directory using the ``--user`` flag::
+To verify that ``py4cytoscape`` is properly installed and able to communicate with
+Cytoscape, execute the following in a Python Console::
 
-    $ pip install --user networkx
+   import py4cytoscape as py4
+   dir(py4)
+   py4.import_network_from_file("tests\data\galfiltered.sif")
 
-Alternatively, you can manually download ``networkx`` from
-`GitHub <https://github.com/networkx/networkx/releases>`_  or
-`PyPI <https://pypi.python.org/pypi/networkx>`_.
-To install one of these versions, unpack it and run the following from the
-top-level source directory using the Terminal::
+This will import ``py4cytoscape`` into the Python namespace, then print a (long) list
+of ``py4cytoscape`` entrypoints, and then direct Cytoscape to load a demonstration
+network.
 
-    $ pip install .
+Note that
+# Before running this, save galfiltered.sif in the current directory
+
+
 
 Install the development version
 -------------------------------

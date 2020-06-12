@@ -1,5 +1,5 @@
 Announcement: py4cytoscape 0.0.1
-================================
+--------------------------------
 
 We're happy to announce the release of py4cytoscape 0.0.1!
 
