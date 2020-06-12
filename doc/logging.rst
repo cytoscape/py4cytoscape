@@ -1,2 +1,2 @@
 .. _logging:
-.. include:: ../LOGGING.md
+.. include:: ../LOGGING.rst
