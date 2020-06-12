@@ -8,7 +8,7 @@ instructions for installing the full `scientific Python stack
 
 .. note::
    If you are on Windows and want to install optional packages (e.g., `scipy`),
-   then you will need to install a Python distribution such as
+   then you will need to install a Python distributions such as
    `Anaconda <https://www.anaconda.com/download/>`_,
    `Enthought Canopy <https://www.enthought.com/product/canopy>`_,
    `Python(x,y) <http://python-xy.github.io/>`_,
@@ -18,7 +18,7 @@ instructions for installing the full `scientific Python stack
    documentation.
 
    `PyCharm <https://www.jetbrains.com/pycharm/>`_ and other integrated development
-   environment often install their own Python distributions.
+   environments often install their own Python distributions.
 
 Below we assume you have the default Python environment already configured on
 your computer and you intend to install ``py4cytoscape`` inside of it.  If you want
@@ -41,7 +41,7 @@ instructions.
 .. note::
    Cytoscape and ``py4cytoscape`` must be running on the same workstation or
    virtual machine. ``py4cytoscape`` communicates with Cytoscape via a localhost
-   connection, which precludes ``py4cytoscape`` and Python accessing Cytoscape
+   connection, which precludes ``py4cytoscape`` from accessing Cytoscape
    remotely. While this limitation can be overcome by configuring ``py4cytoscape`` or
    supplying the Cytoscape URL in ``py4cytoscape`` calls, this can become a complex
    networking problem if firewalls and routers are present on the network.
@@ -69,7 +69,8 @@ Verify Cytoscape connection
 ---------------------------
 
 To verify that ``py4cytoscape`` is properly installed and able to communicate with
-Cytoscape, execute the following in a Python Console (after starting Cytoscape)::
+Cytoscape, execute the following in a Python Console or Jupyter Notebook
+(after starting Cytoscape)::
 
    import py4cytoscape as py4
    dir(py4)
@@ -95,11 +96,12 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
    set PYTHONPATH=..
 
 The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing one
-or two of them is relatively quick. To execute a single sub-suite (e.g., test_apps.py)::
+or two of them is relatively quick. To execute a single sub-suite
+(e.g., ``test_apps.py``)::
 
    python -m unittest test_apps.py
 
-To execute more than one sub-suite (e.g., test_apps.py and test_filters.py)::
+To execute more than one sub-suite (e.g., ``test_apps.py`` and ``test_filters.py``)::
 
    python -m unittest test_apps.py test_filters.py
 
@@ -117,19 +119,16 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
       python -m unittest 2>stderr.log 1>cons.log
 
 .. note::
-   To send test output to a file, redirect stderr and console::
-
-   python -m unittest 2>stderr.log 1>cons.log
-
-.. note::
    To execute tests with less console debug output, set this environment
    variable before executing tests::
 
       set PY4CYTOSCAPE_SUMMARY_LOGGER=FALSE
 
+   To further configure logging, see the logging_ file.
+
 .. note::
-   To execute tests without showing test names as test execute, set this
-   environment variable before executing tests::
+   To execute tests without showing test names as tests execute, set this
+   environment variable before executing the tests::
 
       set PY4CYTOSCAPE_SHOW_TEST_PROGRESS=FALSE
 
@@ -145,5 +144,5 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
 
 .. note::
     When executing tests in PyCharm, you can set environment
-    variables using the 'Run | Edit Configurations...' menu item.
+    variables using the ``Run | Edit Configurations...`` menu item.
 
