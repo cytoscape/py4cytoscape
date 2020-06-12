@@ -1,4 +1,10 @@
-.. currentmodule:: networkx
+.. currentmodule:: py4cytoscape
+
+
+.. versionchanged:: 1.1
+|  This changed.
+|  That changed.
+|  More changed.
 
 Release Log
 ===========

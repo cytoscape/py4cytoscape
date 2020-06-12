@@ -1,5 +1,8 @@
 .. _contents
 
+.. Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
+.. Look here for a general discussion of directives: https://docutils.sourceforge.io/docs/ref/rst/directives.html
+
 Overview of py4cytoscape
 ========================
 
@@ -60,12 +63,22 @@ Free Software
 -------------
 
 py4cytoscape is free software; you can redistribute it and/or modify it under the
-terms of the :ref:`license`.  We welcome contributions. Join us on `GitHub <https://github.com/bdemchak/py4cytoscape>`_.
+terms of the :ref:`License`.  We welcome contributions. Join us on `GitHub <https://github.com/bdemchak/py4cytoscape>`_.
 
 History
 -------
 
-... see NetworkX verbage
+The original Python libraries for Cytoscape were written by `Keiichiro Ono <https://f1000research.com/articles/4-478>`_ in
+2015 as an interface to the then-new CyREST automation interface. Its original name was
+`py2cytoscape <https://pypi.org/project/py2cytoscape/>`_. It was further evolved through 2019 by Kozo Nishida and Jorge Bouças.
+
+In late 2019, py4cytoscape was undertaken by Barry Demchak as a replacement for py2cytoscape. It implemented the API defined by RCy3,
+an R package in Bioconductor developed by a Cytoscape Automation working group consisting of Alex Pico (primary author),
+Mark Grimes, Julia Gustavsen, Shraddha Pai, Ruth Isserlin, Barry Demchak. RCy3 was based on prior work contributed by
+Paul Shannon, Tanja Muetze, Georgi Kolishkovski and Keiichiro Ono.
+
+We intend to keep the function definitions available through py4cytoscape and RCy3 consistent and synchronized going forward,
+and to re-integrate unique features found only in py2cytoscape.
 
 Documentation
 -------------
