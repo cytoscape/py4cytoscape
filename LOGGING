@@ -5,6 +5,7 @@ py4cytoscape logging is based on the Python ``logging`` package, which is based 
 py4cytoscape emits log entries in SysLog format. For example:
 
 .. code-block::
+
    [INFO] py4...S:  ǀHTTP DELETE(http://localhost:1234/v1/networks)
    [INFO] py4...S:  ǀOK[200]  
 
@@ -25,12 +26,13 @@ By default, Detail logging is the long form, and is controlled by the ``_DETAIL_
 For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled:
 
 .. code-block::
-   set PY4CYTOSCAPE_SUMMARY_LOGGER=False
 
+   set PY4CYTOSCAPE_SUMMARY_LOGGER=False
 
 At execution time, it can be disabled by calling ``set_summary_logger()``. For example:
 
 .. code-block::
+
    old_state = set_summary_logger(False)
    # ... make several py4cytoscape calls ...
    set_summary_logger(old_state)
@@ -40,6 +42,7 @@ At execution time, it can be disabled by calling ``set_summary_logger()``. For e
 Here is an example of detailed logging involving nested calls:
 
 .. code-block::
+
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://localhost:1234/v1')
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://localhost:1234/v1')
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀHTTP GET(http://localhost:1234/v1/version)

@@ -93,6 +93,8 @@ rem menu item.
 ## How to configure logging
 
 py4cytoscape logging is based on the Python ``logging`` package, which is based on ``JUnit``. 
+
+For an explanation of log configuration and use, see the [LOGGING](LOGGING) file.
 py4cytoscape emits log entries in SysLog format. For example:
 
 ```
@@ -144,7 +146,7 @@ Here is an example of detailed logging involving nested calls:
 License
 -------
 
-Released under the MIT License (see `LICENSE` file)::
+Released under the MIT License (see [LICENSE](LICENSE) file)::
 
     Copyright (c) 2018-2020 The Cytoscape Consortium
     Barry Demchak (bdemchak@ucsd.edu)
