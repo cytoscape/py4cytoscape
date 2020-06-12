@@ -39,7 +39,10 @@ Audience
 
 The audience for py4cytoscape includes biologists, mathematicians, physicists, biologists,
 computer scientists, and social scientists. A running sample of research based on Cytoscape can be found on
-`Tumblr <https://cytoscape-publications.tumblr.com/>`_. Google Scholar reports that Cytoscape was cited in over 10,000 in academic papers
+`Tumblr <https://cytoscape-publications.tumblr.com/>`_. Cytoscape provides `tutorials <https://github.com/cytoscape/cytoscape-tutorials/wiki>`_,
+`videos <https://www.youtube.com/channel/UCv6auk9FK4NgXiXiqrDLccw>`_, and `automation vignettes <https://github.com/cytoscape/cytoscape-automation/wiki>`_.
+
+Google Scholar reports that Cytoscape was cited in over 10,000 in academic papers
 in `2019 <https://scholar.google.com/scholar?start=0&q=cytoscape&hl=en&as_sdt=0,5&as_ylo=2019&as_yhi=2019>`_, most of
 which executed Cytoscape via the traditional mouse and keyboard. py4cytoscape can automate these results as a means of
 achieving `reproducible science <https://www.nature.com/articles/s41562-016-0021>`_.
