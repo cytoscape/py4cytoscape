@@ -19,7 +19,6 @@ For an explanation of ``py4cytoscape`` installation and testing, see the [INSTAL
 For a quick tutorial on how to build a workflow in Python and using ``py4cytoscape``, see
 the [TUTORIAL.rst](TUTORIAL.rst) file.
 
-
 ## How to configure logging
 
 py4cytoscape logging is based on the Python ``logging`` package, which is based on ``JUnit``. 

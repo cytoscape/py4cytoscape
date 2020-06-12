@@ -102,8 +102,6 @@ Documentation
    license
    credits
    citing
-   py4cytoscape_package
-
 
 Indices and tables
 ------------------
