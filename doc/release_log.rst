@@ -11,6 +11,6 @@ Initial release, matches API signatures for RCy3
 Release notes
 ~~~~~~~~~~~~~
 
-See :doc:`release/release_0.0.1`.
+.. include:: release/release_0.0.1.rst
 
 
