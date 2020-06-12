@@ -25,23 +25,28 @@ By default, Detail logging is the long form (priority ``DEBUG``), and is control
 
 Here is an example of Detail logging involving nested calls::
 
+```
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://localhost:1234/v1')
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://localhost:1234/v1')
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀHTTP GET(http://localhost:1234/v1/version)
    2020-06-06 15:29:55,737 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.0-SNAPSHOT"}
    2020-06-06 15:29:55,738 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
    2020-06-06 15:29:55,738 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
+```
 
 Runtime Control
 ---------------
    
 For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled::
 
+```
    set PY4CYTOSCAPE_SUMMARY_LOGGER=False
+```
 
 At execution time, it can be disabled by calling ``set_summary_logger()``. This is handy within a busy code block or when running in a Notebook environment. For example::
 
+```
    old_state = set_summary_logger(False)
      # ... make several py4cytoscape calls ...
    set_summary_logger(old_state)
-
+```
