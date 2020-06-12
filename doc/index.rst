@@ -47,7 +47,7 @@ Python
 Python is a powerful programming language that allows simple and flexible
 representations of networks as well as clear and concise expressions of network
 algorithms.  Python has a vibrant and growing ecosystem of packages that can be used in combination with
-py4cytoscape integrate with traditional workflow engines (e.g, `Galaxy <https://galaxyproject.org/>`_
+py4cytoscape integrate with traditional workflow engines (e.g., `Galaxy <https://galaxyproject.org/>`_
 and `Gene Pattern <https://www.genepattern.org/>`_) to produce robust
 end-to-end workflows.
 
@@ -60,7 +60,7 @@ Free Software
 -------------
 
 py4cytoscape is free software; you can redistribute it and/or modify it under the
-terms of the license_.  We welcome contributions. Join us on `GitHub <https://github.com/bdemchak/py4cytoscape>`_.
+terms of the :ref:`license`.  We welcome contributions. Join us on `GitHub <https://github.com/bdemchak/py4cytoscape>`_.
 
 History
 -------
