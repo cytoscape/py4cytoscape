@@ -1,6 +1,8 @@
 .. _license:
-License
-=======
+.. include:: ../LICENSE
+
+License1
+========
 
 Copyright 2020 The Cytoscape Consortium
 
