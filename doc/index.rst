@@ -97,6 +97,7 @@ Documentation
    install
    tutorial
    reference/index
+   logging
    release_log
    license
    credits

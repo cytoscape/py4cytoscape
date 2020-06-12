@@ -1,0 +1,2 @@
+.. _logging:
+.. include:: ../LOGGING
