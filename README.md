@@ -141,3 +141,10 @@ Here is an example of detailed logging involving nested calls:
 2020-06-06 15:29:55,738 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
 ```
 
+License
+-------
+
+Released under the MIT License (see `LICENSE` file)::
+
+    Copyright (c) 2018-2020 The Cytoscape Consortium
+    Barry Demchak (bdemchak@ucsd.edu)
