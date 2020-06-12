@@ -1,7 +1,7 @@
 Install
 =======
 
-NetworkX requires Python 3.6, 3.7, or 3.8.  If you do not already
+``py4cytoscape`` requires Python 3.6, 3.7, or 3.8.  If you do not already
 have a Python environment configured on your computer, please see the
 instructions for installing the full `scientific Python stack
 <https://scipy.org/install.html>`_.
@@ -17,8 +17,11 @@ instructions for installing the full `scientific Python stack
    If you use one of these Python distribution, please refer to their online
    documentation.
 
+   `PyCharm <https://www.jetbrains.com/pycharm/>`_ and other integrated development
+   environment often install their own Python distributions.
+
 Below we assume you have the default Python environment already configured on
-your computer and you intend to install ``networkx`` inside of it.  If you want
+your computer and you intend to install ``py4cytoscape`` inside of it.  If you want
 to create and work with Python virtual environments, please follow instructions
 on `venv <https://docs.python.org/3/library/venv.html>`_ and `virtual
 environments <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
@@ -27,122 +30,120 @@ First, make sure you have the latest version of ``pip`` (the Python package mana
 installed. If you do not, refer to the `Pip documentation
 <https://pip.pypa.io/en/stable/installing/>`_ and install ``pip`` first.
 
-Install the released version
-----------------------------
+Cytoscape Prerequisite
+----------------------
 
-Install the current release of ``networkx`` with ``pip``::
-
-    $ pip install networkx
-
-To upgrade to a newer release use the ``--upgrade`` flag::
-
-    $ pip install --upgrade networkx
-
-If you do not have permission to install software systemwide, you can
-install into your user directory using the ``--user`` flag::
-
-    $ pip install --user networkx
-
-Alternatively, you can manually download ``networkx`` from
-`GitHub <https://github.com/networkx/networkx/releases>`_  or
-`PyPI <https://pypi.python.org/pypi/networkx>`_.
-To install one of these versions, unpack it and run the following from the
-top-level source directory using the Terminal::
-
-    $ pip install .
-
-Install the development version
--------------------------------
-
-If you have `Git <https://git-scm.com/>`_ installed on your system, it is also
-possible to install the development version of ``networkx``.
-
-Before installing the development version, you may need to uninstall the
-standard version of ``networkx`` using ``pip``::
-
-    $ pip uninstall networkx
-
-Then do::
-
-    $ git clone https://github.com/networkx/networkx.git
-    $ cd networkx
-    $ pip install -e .
-
-The ``pip install -e .`` command allows you to follow the development branch as
-it changes by creating links in the right places and installing the command
-line scripts to the appropriate locations.
-
-Then, if you want to update ``networkx`` at any time, in the same directory do::
-
-    $ git pull
-
-Optional packages
------------------
+To exercise ``py4cytoscape``, you must first have downloaded, installed, and
+executed Cytoscape. If you have not already done this, please refer to the `Launching
+Cytoscape <http://manual.cytoscape.org/en/stable/Launching_Cytoscape.html#launching-cytoscape>`_
+instructions.
 
 .. note::
-   Some optional packages (e.g., `scipy`, `gdal`) may require compiling
-   C or C++ code.  If you have difficulty installing these packages
-   with `pip`, please review the instructions for installing
-   the full `scientific Python stack <https://scipy.org/install.html>`_.
+   Cytoscape and ``py4cytoscape`` must be running on the same workstation or
+   virtual machine. ``py4cytoscape`` communicates with Cytoscape via a localhost
+   connection, which precludes ``py4cytoscape`` and Python accessing Cytoscape
+   remotely. While this limitation can be overcome by configuring ``py4cytoscape`` or
+   supplying the Cytoscape URL in ``py4cytoscape`` calls, this can become a complex
+   networking problem if firewalls and routers are present on the network.
 
-The following optional packages provide additional functionality.
+Install the development version (Python Console)
+------------------------------------------------
 
-- `NumPy <http://www.numpy.org/>`_ (>= 1.15.4) provides matrix representation of
-  graphs and is used in some graph algorithms for high-performance matrix
-  computations.
-- `SciPy <http://scipy.org/>`_ (>= 1.1.0) provides sparse matrix representation
-  of graphs and many numerical scientific tools.
-- `pandas <http://pandas.pydata.org/>`_ (>= 0.23.3) provides a DataFrame, which
-  is a tabular data structure with labeled axes.
-- `Matplotlib <http://matplotlib.org/>`_ (>= 3.0.2) provides flexible drawing of
-  graphs.
-- `PyGraphviz <http://pygraphviz.github.io/>`_ (>= 1.5) and
-  `pydot <https://github.com/erocarrera/pydot>`_ (>= 1.2.4) provide graph drawing
-  and graph layout algorithms via `GraphViz <http://graphviz.org/>`_.
-- `PyYAML <http://pyyaml.org/>`_ provides YAML format reading and writing.
-- `gdal <http://www.gdal.org/>`_ provides shapefile format reading and writing.
-- `lxml <http://lxml.de/>`_ used for GraphML XML format.
+Install the current release of ``py4cytoscape`` with ``pip``::
 
-To install ``networkx`` and all optional packages, do::
+   pip install python-igraph requests pandas networkx
+   git clone git://github.com/bdemchak/py4cytoscape
+   cd py4cytoscape
+   python setup.py install # or python setup.py install --user
 
-    $ pip install networkx[all]
+Install the development version (Jupyter Notebook)
+--------------------------------------------------
 
-To explicitly install all optional packages, do::
+Install the current release of ``py4cytoscape`` with ``pip``::
 
-    $ pip install numpy scipy pandas matplotlib pygraphviz pydot pyyaml gdal
+   !pip install python-igraph requests pandas networkx
+   !pip install git+https://github.com/bdemchak/py4cytoscape
+   !curl localhost:1234
 
-Or, install any optional package (e.g., ``numpy``) individually::
+Verify Cytoscape connection
+---------------------------
 
-    $ pip install numpy
+To verify that ``py4cytoscape`` is properly installed and able to communicate with
+Cytoscape, execute the following in a Python Console (after starting Cytoscape)::
+
+   import py4cytoscape as py4
+   dir(py4)
+   py4.cytoscape_ping()
+   py4.cytoscape_version_info()
+   py4.import_network_from_file("tests\data\galfiltered.sif")
+
+This will import ``py4cytoscape`` into the Python namespace, print a (long) list
+of ``py4cytoscape`` entrypoints, and then demonstrate a connection to Cytoscape
+by collecting Cytoscape information and loading a demonstration
+network.
 
 Testing
 -------
 
-NetworkX uses the Python ``pytest`` testing package.  You can learn more
-about pytest on their `homepage <https://pytest.org>`_.
+``py4cytoscape`` uses the Python ``unittest`` testing package. You can learn more
+about ``unittest`` on its `homepage <https://docs.python.org/3/library/unittest.html>`_.
 
-Test a source distribution
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+To execute tests from an OS command line, set the current directory to
+the ``py4cytoscape`` package directory. Then, establish the execution environment::
 
-You can test the complete package from the unpacked source directory with::
+   cd tests
+   set PYTHONPATH=..
 
-    pytest networkx
+The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing one
+or two of them is relatively quick. To execute a single sub-suite (e.g., test_apps.py)::
 
-Test an installed package
-^^^^^^^^^^^^^^^^^^^^^^^^^
+   python -m unittest test_apps.py
 
-From a shell command prompt you can test the installed package with::
+To execute more than one sub-suite (e.g., test_apps.py and test_filters.py)::
 
-   pytest --pyargs networkx
+   python -m unittest test_apps.py test_filters.py
 
-If you have a file-based (not a Python egg) installation you can test the
-installed package with::
+To execute the entire test suite::
 
-    >>> import networkx as nx
-    >>> nx.test()
+   python -m unittest
 
-or::
+To execute a single test (e.g., test_get_app_information) in a single test suite::
 
-    python -c "import networkx as nx; nx.test()"
+   python -m unittest test_apps.AppsTests.test_get_app_information
 
-.. autofunction:: networkx.test
+.. note::
+   To send test output to a file, redirect stderr and console::
+
+      python -m unittest 2>stderr.log 1>cons.log
+
+.. note::
+   To send test output to a file, redirect stderr and console::
+
+   python -m unittest 2>stderr.log 1>cons.log
+
+.. note::
+   To execute tests with less console debug output, set this environment
+   variable before executing tests::
+
+      set PY4CYTOSCAPE_SUMMARY_LOGGER=FALSE
+
+.. note::
+   To execute tests without showing test names as test execute, set this
+   environment variable before executing tests::
+
+      set PY4CYTOSCAPE_SHOW_TEST_PROGRESS=FALSE
+
+.. note::
+   To skip execution of tests that require user input, set this environment
+   variable before executing tests::
+
+      set PY4CYTOSCAPE_SKIP_UI_TESTS=TRUE
+
+.. note::
+    When executing a large number of tests, we recommend that all three
+    environment variables be set as described above.
+
+.. note::
+    When executing tests in PyCharm, you can set environment
+    variables using the 'Run | Edit Configurations...' menu item.
+
