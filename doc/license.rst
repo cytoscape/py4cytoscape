@@ -1,2 +1,2 @@
 .. _license:
-.. include:: ../LICENSE
+.. include:: ../LICENSE.md
