@@ -2,9 +2,7 @@ Logging
 =======
 
 py4cytoscape logging is based on the Python ``logging`` package, which is based on ``JUnit``. 
-py4cytoscape emits log entries in SysLog format. For example:
-
-.. code-block::
+py4cytoscape emits log entries in SysLog format. For example::
 
    [INFO] py4...S:  ǀHTTP DELETE(http://localhost:1234/v1/networks)
    [INFO] py4...S:  ǀOK[200]  
@@ -23,9 +21,7 @@ By default, Summary logging is the short form (priority ``INFO``), which shows H
 
 By default, Detail logging is the long form (priority ``DEBUG``), and is controlled by the ``_DETAIL_LOG_LEVEL`` setting.
 
-Here is an example of Detail logging involving nested calls:
-
-.. code-block::
+Here is an example of Detail logging involving nested calls::
 
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://localhost:1234/v1')
    2020-06-06 15:29:55,721 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://localhost:1234/v1')
@@ -37,17 +33,13 @@ Here is an example of Detail logging involving nested calls:
 Runtime Control
 ---------------
    
-For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled:
-
-.. code-block::
+For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled::
 
    set PY4CYTOSCAPE_SUMMARY_LOGGER=False
 
-At execution time, it can be disabled by calling ``set_summary_logger()``. This is handy within a busy code block or when running in a Notebook environment. For example:
-
-.. code-block::
+At execution time, it can be disabled by calling ``set_summary_logger()``. This is handy within a busy code block or when running in a Notebook environment. For example::
 
    old_state = set_summary_logger(False)
-     *... make several py4cytoscape calls ...*
+     # ... make several py4cytoscape calls ...
    set_summary_logger(old_state)
 
