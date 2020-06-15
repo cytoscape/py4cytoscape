@@ -150,8 +150,8 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,
                               require_json=False)
-    time.sleep(
-        MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [BUG]
+#    time.sleep(
+#        MODEL_PROPAGATION_SECS)  # wait for attributes to be applied ... it looks like Cytoscape returns before this is complete [BUG]
     return res
 
 

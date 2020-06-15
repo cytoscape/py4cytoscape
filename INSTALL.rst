@@ -118,13 +118,17 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
 
       python -m unittest 2>stderr.log 1>cons.log
 
+   Some tests require console input, and without console prompts, the tests will
+   appear to stall. To avoid executing such tests, set the PY4CYTOSCAPE_SKIP_UI_TESTS
+   environment variable described below.
+
 .. note::
    To execute tests with less console debug output, set this environment
    variable before executing tests::
 
       set PY4CYTOSCAPE_SUMMARY_LOGGER=FALSE
 
-   To further configure logging, see the logging_ file.
+   To further configure logging, see the :ref:`Logging` file.
 
 .. note::
    To execute tests without showing test names as tests execute, set this

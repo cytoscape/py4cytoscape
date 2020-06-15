@@ -30,6 +30,7 @@ from test_utils import *
 class StylesTests(unittest.TestCase):
     def setUp(self):
         try:
+#           close_session(False)
             delete_all_networks()
         except:
             pass

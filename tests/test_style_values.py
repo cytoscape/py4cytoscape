@@ -31,7 +31,8 @@ from test_utils import *
 class StyleValuesTests(unittest.TestCase):
     def setUp(self):
         try:
-            delete_all_networks()
+            close_session(False)
+#            delete_all_networks()
         except:
             pass
 

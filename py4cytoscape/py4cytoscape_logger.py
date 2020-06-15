@@ -64,7 +64,7 @@ _FUNCTION_SPACER = '-' * 20
 _logger_nesting = -1
 _logger_nesting_spacer = ''
 
-SPHINX_BUILD = (os.environ.get('SPHINX_BUILD', 'FALSE').upper() == 'TRUE')
+_SPHINX_BUILD = (os.environ.get('SPHINX_BUILD', 'FALSE').upper() == 'TRUE')
 def cy_log(func):
     """Log function call parameters and results"""
 
@@ -130,7 +130,7 @@ def cy_log(func):
         finally:
             log_finally()
 
-    return func if SPHINX_BUILD else wrapper_log
+    return func if _SPHINX_BUILD else wrapper_log
 
 # HTTP loggers that take advantage of logging setup
 def log_http_request(method, url, **kwargs):

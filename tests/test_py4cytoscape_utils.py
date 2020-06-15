@@ -27,7 +27,8 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
 
     def setUp(self):
         try:
-            delete_all_networks()
+            close_session(False)
+#            delete_all_networks()
         except:
             pass
 
