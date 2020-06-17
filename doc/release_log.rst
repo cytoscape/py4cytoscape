@@ -1,4 +1,5 @@
 .. currentmodule:: py4cytoscape
+
 Release Log
 ===========
 

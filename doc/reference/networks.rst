@@ -1,4 +1,5 @@
 .. _networks:
+
 ********
 Networks
 ********
@@ -59,6 +60,7 @@ Import/Export
 
 
 .. _networkselection:
+
 Network Selection
 -----------------
 
@@ -97,6 +99,7 @@ Edges
    select_edges_connecting_selected_nodes
 
 .. _networkviews:
+
 Network Views
 -------------
 

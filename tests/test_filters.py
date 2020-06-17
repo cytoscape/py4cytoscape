@@ -154,6 +154,8 @@ class FiltersTests(unittest.TestCase):
                           None,
                           all_edges_set - {'YGL035C (pd) YLR044C', 'YER179W (pp) YLR044C', 'YNL216W (pd) YLR044C'})
 
+        # TODO: Can't test "hide" parameter in create_column_filter because I can't deduce which nodes/edges are hidden
+
         # Verify that invalid forms fail
         self.check_bad_filter('', lambda x: create_column_filter(x, 'COMMON', 'RAP1',
                                                                        'BOGUS'))  # TODO: Can't we throw an exception instead of having to check this way?
@@ -186,6 +188,8 @@ class FiltersTests(unittest.TestCase):
         self.check_result('degree filter 7x',
                           lambda x: create_degree_filter(x, [8, 10], 'BETWEEN', edge_type='ANY'),
                           {'YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'}, None)
+
+        # TODO: Can't test "hide" parameter in create_degree_filter because I can't deduce which nodes/edges are hidden
 
         # Verify that all bad filters are caught
         self.check_bad_filter('degree filter 10x', lambda x: create_degree_filter(x, [8, 10], 'BOGUS_PREDICATE'))
@@ -220,6 +224,9 @@ class FiltersTests(unittest.TestCase):
                           lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'],
                                                                        type='ANY'),
                           {'YGL035C', 'YNL216W', 'YLR362W', 'YPL248C'}, None)
+
+        # TODO: Can't test "hide" parameter in create_composite_filter because I can't deduce which nodes/edges are hidden
+
 
     
     @print_entry_exit
@@ -258,6 +265,8 @@ class FiltersTests(unittest.TestCase):
         selected = apply_filter('degree filter 2x')
         self.check_values(selected['nodes'], {'YGL035C', 'YNL216W', 'YPL248C'})
         self.check_values(selected['edges'], None)
+
+        # TODO: Can't test "hide" parameter in apply_filter because I can't deduce which nodes/edges are hidden
 
         # Verify that invalid filter is caught
         self.assertRaises(CyError, apply_filter, 'bogus_filter')

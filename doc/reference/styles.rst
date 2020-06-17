@@ -1,4 +1,5 @@
 .. _styles:
+
 ******
 Styles
 ******
@@ -32,6 +33,7 @@ Visual Property Names and Values
    get_visual_property_names
 
 .. _stylebypasses:
+
 Style Bypasses
 --------------
 
@@ -111,6 +113,7 @@ Network Style Bypasses
    unhide_all
 
 .. _styledefaults:
+
 Style Defaults
 --------------
 
@@ -196,6 +199,7 @@ Network Style Defaults
    set_background_color_default
 
 .. _styledependencies:
+
 Style Dependencies
 ------------------
 
@@ -231,6 +235,7 @@ Edge Style Dependencies
    match_arrow_color_to_edge
 
 .. _stylemappings:
+
 Style Mappings
 --------------
 
@@ -292,6 +297,7 @@ Edge Style Mappings
    set_edge_tooltip_mapping
 
 .. _stylevalues:
+
 Style Values
 ------------
 

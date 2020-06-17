@@ -25,6 +25,7 @@ import math
 import pandas as df
 import time
 import re
+import os
 
 from test_utils import *
 
@@ -173,18 +174,35 @@ class NetworkTests(unittest.TestCase):
         def check(res):
             self.assertIsNotNone(res['file'])
 
-        # For these tests, always answer Cytoscape verification message to allow overwrite
         input('On the following tests, allow Cytoscape to overwrite network')
-        check(export_network())
-        check(export_network(filename='test', network='yeastHighQuality.sif', type='sif'))
 
+        # For these SIF tests, always answer Cytoscape verification message to allow overwrite
+        if os.path.exists('galFiltered.sif'):
+            os.remove('galFiltered.sif')
+        check(export_network())
+        self.assertTrue(os.path.exists('galFiltered.sif'))
+        check(export_network(filename='galFiltered', network='yeastHighQuality.sif', type='sif'))
+        self.assertTrue(os.path.exists('galFiltered.sif'))
+
+        # For these CYS tests, always answer Cytoscape verification message to allow overwrite
+        net_name = get_network_name()
+        full_file_name = net_name + '.cys'
+        if os.path.exists(full_file_name):
+            os.remove(full_file_name)
+        self.assertDictEqual(export_network(type='cys'), {})
+        self.assertTrue(os.path.exists(full_file_name))
+        self.assertDictEqual(export_network(filename=net_name, network='yeastHighQuality.sif', type='cys'), {})
+        self.assertTrue(os.path.exists(full_file_name))
+        os.remove(full_file_name)
+
+        # Verify that bad network is caught
         self.assertRaises(CyError, export_network, filename='test', network='totallybogus', type='sif')
 
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
         input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(CyError, export_network)
+        os.remove('galFiltered.sif')
 
-    
     @print_entry_exit
     def test_delete_network(self):
         # Initialization

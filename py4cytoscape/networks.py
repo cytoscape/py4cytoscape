@@ -50,6 +50,7 @@ from . import commands
 from . import tables
 from . import network_selection
 from . import layouts
+from . import session
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
@@ -333,7 +334,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     type = type.upper()
     if type == 'CYS':
         sys.stderr.write('Saving session as a CYS file...')
-        raise CyError("Implement this")  # TODO: saveSession(filename=filename, base.url = base.url)
+        return session.save_session(filename=filename, base_url=base_url)
     else:
         # e.g., CX, CYJS, GraphML, NNF, SIF, XGMML
         if type == 'GRAPHML': type = 'GraphML'
