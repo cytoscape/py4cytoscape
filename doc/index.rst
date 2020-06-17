@@ -1,7 +1,7 @@
-.. _contents
-
 .. Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
 .. Look here for a general discussion of directives: https://docutils.sourceforge.io/docs/ref/rst/directives.html
+
+.. _contents:
 
 Overview of py4cytoscape
 ========================
