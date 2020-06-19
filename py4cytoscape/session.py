@@ -109,7 +109,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     else:
         file_location = os.path.abspath(file_location)
 
-    sys.stderr.write('Opening ' + file_location + '...')
+    narrate('Opening ' + file_location + '...')
     return commands.commands_post(f'session open {type}="{file_location}"', base_url=base_url)
 
 
@@ -146,12 +146,11 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
     if filename is None:
         filename = commands.cyrest_get('session/name', base_url=base_url)
         if filename == '':
-            print('Save not completed. Provide a filename the first time you save a session.')
-            return
+            raise CyError('Save failed. Provide a filename the first time you save a session.')
         return commands.commands_post('session save', base_url=base_url)
     else:
         # TODO: R uses '.cys$' here, but shouldn't the '.' be escaped??
         if re.search('.cys$', filename) is None: filename += '.cys'
         filename = os.path.abspath(filename)
-        if os.path.isfile(filename): print('This file has been overwritten.')
+        if os.path.isfile(filename): narrate('This file has been overwritten.')
         return commands.commands_post(f'session save as file="{filename}"', base_url=base_url)

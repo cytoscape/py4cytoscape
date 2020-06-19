@@ -28,7 +28,7 @@ from . import commands
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, narrate
 
 
 @cy_log
@@ -55,10 +55,7 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     """
     from .py4cytoscape_utils import verify_supported_versions
     verify_supported_versions(1, 3.6, base_url=base_url)
-    print('You are connected to Cytoscape!')
-
-
-# TODO: Is this the way this should be reported in Python? In R?
+    narrate('You are connected to Cytoscape!')
 
 @cy_log
 def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
@@ -82,11 +79,7 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
     """
     versions = commands.cyrest_get('version', base_url=base_url)
     if len(versions) == 0:
-        # TODO: Figure out whether we really want to report this to stderr.
-        error = 'CyREST connection problem. py4cytoscape can not continue!'
-        sys.stderr.write(error)
-        raise CyError(error)
-    # TODO: R doesn't raise an exception ... perhaps it should?
+        raise CyError('CyREST connection problem. py4cytoscape cannot continue!')
 
     return versions
 
@@ -188,8 +181,5 @@ def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
         res = commands.cyrest_get('gc', require_json=False)
         return 'Unused memory freed up.'  # TODO: Is this what we want to return?
     except:
-        # TODO: Figure out whether we really want to report this to stderr.
-        error = 'CyREST connection problem. py4cytoscape can not continue!'
-        sys.stderr.write(error)
-        raise CyError(error)
-# TODO: R doesn't raise an exception ... perhaps it should?
+        raise CyError('CyREST connection problem. py4cytoscape cannot continue!')
+

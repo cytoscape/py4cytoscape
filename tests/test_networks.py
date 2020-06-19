@@ -548,6 +548,8 @@ class NetworkTests(unittest.TestCase):
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String',
                               'selected': 'Boolean', 'interaction': 'String'})
 
+        # Verify that when no edges or nodes are passed in, an error occurs
+        self.assertRaises(CyError, create_network_from_data_frames)
     
     @print_entry_exit
     def test_import_network_from_file(self):

@@ -1011,15 +1011,14 @@ class StyleMappingsTests(unittest.TestCase):
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:
-            self.assertIsNone(
-                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
-                          **profile['cont_bad_map_params']), msg='Check bad continuous value')
+            self.assertRaises(CyError,
+                prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_bad_map_params'])
 
         # Verify that a bad mapping type is caught
         if 'invalid_map_params' in profile:
-            self.assertIsNone(
-                prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params']),
-                msg='Check bad mapping type')
+            self.assertRaises(CyError,
+                prop_func, style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params'])
 
         # Verify that a bad column name is caught
         self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column='Bogus Col',
@@ -1142,16 +1141,14 @@ class StyleMappingsTests(unittest.TestCase):
 
         # Verify that a bad value is caught
         if 'cont_bad_map_params' in profile:
-            self.assertIsNone(
-                prop_func(style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
-                          **profile['cont_bad_map_params']),
-                msg='Check bad continuous value')
+            self.assertRaises(CyError,
+                prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL, table_column_values=_CONT_VAL_RANGE,
+                          **profile['cont_bad_map_params'])
 
         # Verify that a bad mapping type is caught
         if 'invalid_map_params' in profile:
-            self.assertIsNone(
-                prop_func(style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params']),
-                msg='Check bad mapping type')
+            self.assertRaises(CyError,
+                prop_func, style_name=_TEST_STYLE, table_column=_PASS_COL, **profile['invalid_map_params'])
 
         # Verify that a bad column name is caught
         self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column='Bogus Col',

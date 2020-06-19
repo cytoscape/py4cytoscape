@@ -187,8 +187,7 @@ def set_node_border_color_default(new_color, style_name='default', base_url=DEFA
         >>> set_node_border_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'NODE_BORDER_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -210,7 +209,7 @@ def set_node_border_width_default(new_width, style_name='default', base_url=DEFA
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if width is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -219,6 +218,8 @@ def set_node_border_width_default(new_width, style_name='default', base_url=DEFA
         >>> set_node_border_width_default(10)
         ''
     """
+    verify_dimensions('width', new_width)
+
     style = {'visualProperty': 'NODE_BORDER_WIDTH', 'value': new_width}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -239,7 +240,7 @@ def set_node_border_opacity_default(new_opacity, style_name='default', base_url=
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -248,10 +249,7 @@ def set_node_border_opacity_default(new_opacity, style_name='default', base_url=
         >>> set_node_border_opacity_default(10)
         ''
     """
-    if new_opacity < 0 or new_opacity > 255:
-        error = 'Error: opacity must be between 0 and 255.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_opacity)
 
     style = {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -273,7 +271,7 @@ def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -282,8 +280,7 @@ def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         >>> set_node_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'NODE_FILL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -337,10 +334,9 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
     if type not in ['GROUPED', 'STACKED', 'HEAT_STRIPS', 'UP_DOWN']:
-        raise CyError('type must be one of the following: GROUPED, STACKED, HEAT_STRIPS, or UP_DOWN')
+        raise CyError(f'Type "{type}" must be one of the following: GROUPED, STACKED, HEAT_STRIPS, or UP_DOWN')
 
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         if type in ['GROUPED', 'STACKED']:
@@ -414,8 +410,7 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         colors = cyPalette('rdbu') * len(columns)
@@ -481,8 +476,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         palette = cyPalette('rdbu')
@@ -550,8 +544,7 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
@@ -610,8 +603,7 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
@@ -660,8 +652,7 @@ def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
@@ -706,8 +697,7 @@ def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
         >>> set_node_custom_linear_gradient(colors=['#FF00FF', '#00FF00'], angle=90.0, slot=2, style_name='galFiltered Style')
         ''
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     chart = {'cy_angle': angle, 'cy_gradientColors': colors, 'cy_gradientFractions': anchors}
     style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
@@ -750,8 +740,7 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
         >>> set_node_custom_radial_gradient(colors=['#FF00FF', '#00FF00'], x_center=0.0, y_center=0.0, slot=2, style_name='galFiltered Style')
         ''
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     chart = {'cy_gradientColors': colors, 'cy_gradientFractions': anchors, 'cy_center': {'x': x_center, 'y': y_center}}
     style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
@@ -794,8 +783,8 @@ def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification=
         >>> set_node_custom_position(justification='l', slot=2, style_name='galFiltered Style')
         ''
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
+
     style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_POSITION_{slot}',
                     'value': f'{node_anchor},{graphic_anchor},{justification},{x_offset},{y_offset}'}
 
@@ -830,8 +819,7 @@ def remove_node_custom_graphics(slot=1, style_name='default', base_url=DEFAULT_B
         >>> remove_node_custom_graphics(slot=2, style_name='galFiltered Style')
         ''
     """
-    if slot < 1 or slot > 9:
-        raise CyError('slot must be an integer between 1 and 9')
+    verify_slot(slot)
 
     res = set_visual_property_default({'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}', 'value': None}, style_name,
                                       base_url=base_url)
@@ -853,7 +841,7 @@ def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DE
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -862,10 +850,7 @@ def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DE
         >>> set_node_fill_opacity_default(10)
         ''
     """
-    if new_opacity < 0 or new_opacity > 255:
-        error = 'Error: opacity must be between 0 and 255.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_opacity)
 
     style = {'visualProperty': 'NODE_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -916,7 +901,7 @@ def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if size is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -925,6 +910,8 @@ def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         >>> set_node_font_size_default(20)
         ''
     """
+    verify_dimensions('size', new_size)
+
     style = {'visualProperty': 'NODE_LABEL_FONT_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -945,7 +932,7 @@ def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_B
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, if height is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -954,6 +941,7 @@ def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_B
         >>> set_node_height_default(20)
         ''
     """
+    verify_dimensions('height', new_height)
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
@@ -1006,7 +994,7 @@ def set_node_label_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1015,8 +1003,7 @@ def set_node_label_color_default(new_color, style_name='default', base_url=DEFAU
         >>> set_node_label_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'NODE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1038,7 +1025,7 @@ def set_node_label_opacity_default(new_opacity, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1047,10 +1034,7 @@ def set_node_label_opacity_default(new_opacity, style_name='default', base_url=D
         >>> set_node_label_opacity_default(50)
         ''
     """
-    if new_opacity < 0 or new_opacity > 255:
-        error = 'Error: opacity must be between 0 and 255.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_opacity)
 
     style = {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1099,7 +1083,7 @@ def set_node_selection_color_default(new_color, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1108,8 +1092,7 @@ def set_node_selection_color_default(new_color, style_name='default', base_url=D
         >>> set_node_selection_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'NODE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1131,7 +1114,7 @@ def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if shape is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1146,8 +1129,7 @@ def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BAS
         res = set_visual_property_default(style, style_name, base_url=base_url)
         return res
     else:
-        sys.stderr.write(new_shape + ' is not a valid shape. Use get_node_shapes() to find valid values.')
-        return None  # TODO: Is this the best thing to return?? ... probably should be an exception
+        raise CyError(f'"{new_shape}" is not a valid shape. For valid ones, check get_node_shapes().')
 
 
 @cy_log
@@ -1165,7 +1147,7 @@ def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if size is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1174,6 +1156,8 @@ def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_
         >>> set_node_size_default(20)
         ''
     """
+    verify_dimensions('size', new_size)
+
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(True, style_name=style_name, base_url=base_url)
 
@@ -1197,7 +1181,7 @@ def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if invalid width
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1206,6 +1190,8 @@ def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BAS
         >>> set_node_width_default(20)
         ''
     """
+    verify_dimensions('width', new_width)
+
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
@@ -1264,7 +1250,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1273,8 +1259,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
         >>> set_edge_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1329,7 +1314,7 @@ def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if size is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1338,6 +1323,8 @@ def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_
         >>> set_edge_font_size_default(20)
         ''
     """
+    verify_dimensions('size', new_size)
+
     style = {'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1387,7 +1374,7 @@ def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1396,8 +1383,7 @@ def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAU
         >>> set_edge_label_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        raise CyError('Color must be in hex code, e.g., #FD5903')
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'EDGE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1419,7 +1405,7 @@ def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1428,10 +1414,7 @@ def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=D
         >>> set_edge_label_opacity_default(10)
         ''
     """
-    if new_opacity < 0 or new_opacity > 255:
-        error = 'Error: opacity must be between 0 and 255.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_opacity)
 
     style = {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1453,7 +1436,7 @@ def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAUL
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if width is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1462,6 +1445,8 @@ def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAUL
         >>> set_edge_line_width_default(10)
         ''
     """
+    verify_dimensions('width', new_width)
+
     style = {'visualProperty': 'EDGE_WIDTH', 'value': new_width}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1511,7 +1496,7 @@ def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if style name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1520,10 +1505,7 @@ def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT
         >>> set_edge_opacity_default(10)
         ''
     """
-    if new_opacity < 0 or new_opacity > 255:
-        error = 'Error: opacity must be between 0 and 255.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_opacity)
 
     style = {'visualProperty': 'EDGE_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1574,7 +1556,7 @@ def set_edge_selection_color_default(new_color, style_name='default', base_url=D
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1583,8 +1565,7 @@ def set_edge_selection_color_default(new_color, style_name='default', base_url=D
         >>> set_edge_selection_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        raise CyError('Color must be in hex code, e.g., #FD5903')
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'EDGE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1611,7 +1592,7 @@ def set_edge_source_arrow_color_default(new_color, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1620,8 +1601,7 @@ def set_edge_source_arrow_color_default(new_color, style_name='default', base_ur
         >>> set_edge_source_arrow_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        raise CyError('Color must be in hex code, e.g., #FD5903')
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1643,7 +1623,7 @@ def set_edge_target_arrow_color_default(new_color, style_name='default', base_ur
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1652,8 +1632,7 @@ def set_edge_target_arrow_color_default(new_color, style_name='default', base_ur
         >>> set_edge_target_arrow_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        raise CyError('Color must be in hex code, e.g., #FD5903')
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1795,7 +1774,7 @@ def set_background_color_default(new_color, style_name='default', base_url=DEFAU
         str: ''
 
     Raises:
-        CyError: if style name doesn't exist
+        CyError: if invalid color, or if style name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1804,8 +1783,7 @@ def set_background_color_default(new_color, style_name='default', base_url=DEFAU
         >>> set_background_color_default('#CCCCCC')
         ''
     """
-    if is_not_hex_color(new_color):
-        return None  # TODO: Shouldn't this return an exception?
+    verify_hex_colors(new_color)
 
     style = {'visualProperty': 'NETWORK_BACKGROUND_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)

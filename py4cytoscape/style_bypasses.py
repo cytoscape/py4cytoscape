@@ -107,14 +107,12 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     if len(new_values) == 1: new_values = new_values * len(node_suids)
 
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property')
+        raise CyError(f'Invalid visual property ... visual_property must be non-null')
 
     if len(new_values) != len(node_suids):
-        error = 'ERROR in set_node_property_bypass():\n   the number of nodes ' + str(
-            len(node_suids)) + ' and new values ' + str(len(
-            new_values)) + ' are not the same >> node(s) attribute couldn\'t be set. Note that having multiple nodes with the same name in the network can cause this error. Use node SUIDs or pass in duplicated names on their own.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+        error = 'The number of nodes ' + str(len(node_suids)) + ' and new values ' + str(len(new_values)) \
+                + ' are not the same >> node(s) attribute couldn\'t be set. Note that having multiple nodes with the same name in the network can cause this error. Use node SUIDs or pass in duplicated names on their own.'
+        raise CyError(error)
 
     body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
                  zip(node_suids, new_values)]
@@ -164,10 +162,10 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual_property must be non-null')
 
     if node_names == 'all':
-        raise CyError('This is not yet supported by CyREST. Please provide a valid node list.')
+        raise CyError('"all" node_names is not yet supported by CyREST. Please provide a valid node list.')
 
     # TODO: Do we need to pass in net_suid ... other calls just let the function figure it out
     node_suids = node_name_to_node_suid(node_names, network=net_suid, base_url=base_url)
@@ -241,14 +239,12 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     if len(new_values) == 1: new_values = new_values * len(edge_suids)
 
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual_property must be non-null')
 
     if len(new_values) != len(edge_suids):
-        error = 'ERROR in set_node_property_bypass():\n   the number of nodes ' + str(
-            len(edge_suids)) + ' and new values ' + str(len(
-            new_values)) + ' are not the same >> node(s) attribute couldn\'t be set. Note that having multiple nodes with the same name in the network can cause this error. Use node SUIDs or pass in duplicated names on their own.'
-        sys.stderr.write(error)
-        return None  # TODO: Is this what we want to return here?
+        error = 'The number of nodes ' + str(len(edge_suids)) + ' and new values ' + str(len(new_values)) \
+                + ' are not the same >> node(s) attribute couldn\'t be set. Note that having multiple nodes with the same name in the network can cause this error. Use node SUIDs or pass in duplicated names on their own.'
+        raise CyError(error)
 
     body_list = [{'SUID': str(suid), 'view': [{'visualProperty': visual_property, 'value': val}]} for suid, val in
                  zip(edge_suids, new_values)]
@@ -298,10 +294,10 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual_property must be non-null')
 
     if edge_names == 'all':
-        raise CyError('This is not yet supported by CyREST. Please provide a valid edge list.')
+        raise CyError('"all" edge_names is not yet supported by CyREST. Please provide a valid edge list.')
 
     # TODO: Do we need to pass in net_suid ... other calls just let the function figure it out
     edge_suids = edge_name_to_edge_suid(edge_names, network=net_suid, base_url=base_url)
@@ -398,7 +394,7 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual_property must be non-null')
 
     res = commands.cyrest_delete(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}/bypass',
                                  base_url=base_url)
@@ -477,10 +473,10 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color is found in new_colors)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if invalid color, or if node or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -494,9 +490,7 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
     """
     if isinstance(new_colors, str): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
     return res
@@ -521,10 +515,10 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid size is found in new_sizes)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist or if size isn't valid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -542,11 +536,7 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     """
     if not isinstance(new_sizes, list): new_sizes = [
         new_sizes]  # TODO: It looks like this should be happening everywhere?
-    for size in new_sizes:
-        if not isinstance(size, float) and not isinstance(size, int):
-            error = 'illegal size string ' + str(size) + ' in set_node_size_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_dimensions('size', new_sizes)
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
     return res
@@ -609,10 +599,10 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if width is invalid)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if width is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -628,11 +618,7 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
 
     if not isinstance(new_widths, list): new_widths = [
         new_widths]  # TODO: It looks like this should be happening everywhere?
-    for width in new_widths:
-        if not isinstance(width, float) and not isinstance(width, int):
-            error = 'illegal node width ' + str(width) + ' in set_node_width_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_dimensions('width', new_widths)
 
     res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
     return res
@@ -657,10 +643,10 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if height is invalid)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if height is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -676,11 +662,7 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
 
     if not isinstance(new_heights, list): new_heights = [
         new_heights]  # TODO: It looks like this should be happening everywhere?
-    for height in new_heights:
-        if not isinstance(height, float) and not isinstance(height, int):
-            error = 'illegal node height ' + str(height) + ' in set_node_height_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_dimensions('height', new_heights)
 
     res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
     return res
@@ -784,7 +766,7 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
         str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if size is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -798,19 +780,10 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
     """
     if not isinstance(new_sizes, list): new_sizes = [
         new_sizes]  # TODO: It looks like this should be happening everywhere?
-    size_type_errors = 0
-    for size in new_sizes:
-        if not isinstance(size, float) and not isinstance(size, int):
-            error = 'illegal font size ' + str(size) + ' in set_node_font size_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            size_type_errors += 1  # TODO: Why are we doing this when no other function does it? ... return None OK??
+    verify_dimensions('size', new_sizes)
 
-    if size_type_errors == 0:
-        res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network,
-                                       base_url=base_url)
-    else:
-        res = None
-
+    res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network,
+                                   base_url=base_url)
     return res
 
 
@@ -833,10 +806,10 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if invalid color, or if node or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -850,9 +823,7 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     """
     if not isinstance(new_colors, list): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
 
@@ -878,10 +849,10 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid shape)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if shape list is invalid or doesn't match nodes
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -897,10 +868,8 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
         new_shapes]  # TODO: It looks like this should be happening everywhere?
 
     if len(node_names) != len(new_shapes) and len(new_shapes) != 1:
-        error = 'error in set_node_shape_bypass().  new_shapes count ' + str(
-            len(new_shapes)) + ' is neither 1 nor same as node_names count ' + str(len(node_names))
-        sys.stderr.write(error)
-        return None  # Should this be an exception?
+        raise CyError(
+            'New_shapes count "%d" is neither 1 nor same as node_names count "%d"' % (len(new_shapes), len(node_names)))
 
     # convert old to new node shapes
     # TODO: Why isn't this done on other shape functions?
@@ -911,9 +880,8 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
     valid_shapes = styles.get_node_shapes(base_url=base_url)
     for shape in new_shapes:
         if not shape in valid_shapes:
-            error = 'ERROR in set_node_shape_bypass(). ' + shape + ' is not a valid shape. Please note that some older shapes are no longer available. For valid ones check get_node_shapes().'
-            sys.stderr.write(error)
-            return None  # Should this be an exception?
+            raise CyError(
+                f'"{shape}" is not a valid shape. Please note that some older shapes are no longer available. For valid ones check get_node_shapes().')
 
     res = set_node_property_bypass(node_names, new_shapes, 'NODE_SHAPE', network=network, base_url=base_url)
 
@@ -939,10 +907,10 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if size is invalid)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if width is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -956,11 +924,7 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
     """
     if not isinstance(new_sizes, list): new_sizes = [
         new_sizes]  # TODO: It looks like this should be happening everywhere?
-    for size in new_sizes:
-        if not isinstance(size, float) and not isinstance(size, int):
-            error = 'illegal width string ' + str(size) + ' in set_node_border_width_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_dimensions('size', new_sizes)
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_BORDER_WIDTH', network=network, base_url=base_url)
     return res
@@ -985,10 +949,10 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color is found in new_colors)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if invalid color, or if node or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1002,9 +966,7 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
     """
     if isinstance(new_colors, str): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
     return res
@@ -1029,10 +991,10 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid opacity is found in new_values)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if opacity values are invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1046,11 +1008,7 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_node_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     # TODO: Concerned about losing intermediate res results
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
@@ -1118,10 +1076,10 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid opacity is found in new_values)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1135,11 +1093,7 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_node_fill_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
     return res
@@ -1164,10 +1118,10 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid opacity is found in new_values)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1181,11 +1135,7 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_node_border_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
                                    base_url=base_url)
@@ -1211,10 +1161,10 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid opacity is found in new_values)
+        str: ''
 
     Raises:
-        CyError: if node or network name doesn't exist
+        CyError: if node or network name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1228,11 +1178,7 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_node_label_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network,
                                    base_url=base_url)
@@ -1376,10 +1322,10 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid opacity is found in new_values)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1393,11 +1339,7 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_edge_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     # TODO: Concerned about losing intermediate res results
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
@@ -1428,7 +1370,7 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
         str: '' (None if invalid color is found in new_colors)
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if invalid color, or if edge or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1442,9 +1384,7 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
     """
     if isinstance(new_colors, str): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     # TODO: What to do about lost res?
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_STROKE_UNSELECTED_PAINT', network=network,
@@ -1551,7 +1491,7 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
         str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if size is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1565,19 +1505,10 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
     """
     if not isinstance(new_sizes, list): new_sizes = [
         new_sizes]  # TODO: It looks like this should be happening everywhere?
-    size_type_errors = 0
-    for size in new_sizes:
-        if not isinstance(size, float) and not isinstance(size, int):
-            error = 'illegal font size ' + str(size) + ' in set_edge_font size_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            size_type_errors += 1  # TODO: Why are we doing this when no other function does it? ... return None OK??
+    verify_dimensions('size', new_sizes)
 
-    if size_type_errors == 0:
-        res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network,
-                                       base_url=base_url)
-    else:
-        res = None
-
+    res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network,
+                                   base_url=base_url)
     return res
 
 
@@ -1600,10 +1531,10 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if invalid color, or if edge or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1617,9 +1548,7 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     """
     if not isinstance(new_colors, list): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_LABEL_COLOR', network=network, base_url=base_url)
 
@@ -1683,10 +1612,10 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if width is invalid)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if width is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1701,11 +1630,7 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
 
     if not isinstance(new_widths, list): new_widths = [
         new_widths]  # TODO: It looks like this should be happening everywhere?
-    for width in new_widths:
-        if not isinstance(width, float) and not isinstance(width, int):
-            error = 'illegal edge width ' + str(width) + ' in set_edge_line_width_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return None  # TODO: Is this what we want to return here?
+    verify_dimensions('width', new_widths)
 
     res = set_edge_property_bypass(edge_names, new_widths, 'EDGE_WIDTH', network=network, base_url=base_url)
     return res
@@ -1730,10 +1655,10 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid shape)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if syle is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1750,9 +1675,7 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
 
     for style in new_styles:
         if style not in styles.get_line_styles(base_url=base_url):
-            error = 'error in set_edge_line_style_bypass().  INVALID line style value ' + style
-            sys.stderr.write(error)
-            return False  # Should this be an exception?
+            raise CyError(f'Invalid line style value "{style}". For valid ones, check get_line_styles().')
 
     res = set_edge_property_bypass(edge_names, new_styles, 'EDGE_LINE_TYPE', network=network, base_url=base_url)
 
@@ -1778,10 +1701,10 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid shape)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if shape is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1798,9 +1721,7 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
-            error = 'error in set_edge_source_arrow_shape_bypass().  INVALID arrow shape value ' + style
-            sys.stderr.write(error)
-            return False  # Should this be an exception?
+            raise CyError(f'Invalid arrow shape value "{style}". For valid ones check, get_arrow_shapes().')
 
     res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_SOURCE_ARROW_SHAPE', network=network,
                                    base_url=base_url)
@@ -1827,10 +1748,10 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid shape)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if shape is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1847,9 +1768,7 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
-            error = 'error in set_edge_target_arrow_shape_bypass().  INVALID arrow shape value ' + style
-            sys.stderr.write(error)
-            return False  # Should this be an exception?
+            raise CyError(f'Invalid arrow shape value "{style}". For valid ones, check get_arrow_shapes().')
 
     res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_TARGET_ARROW_SHAPE', network=network,
                                    base_url=base_url)
@@ -1876,10 +1795,10 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if invalid color, or if edge or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1893,9 +1812,7 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     """
     if not isinstance(new_colors, list): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
@@ -1922,10 +1839,10 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: '' (None if invalid color)
+        str: ''
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if invalid color, or if edge or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1939,9 +1856,7 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
     """
     if not isinstance(new_colors, list): new_colors = [
         new_colors]  # TODO: It looks like this should be happening everywhere?
-    for color in new_colors:
-        if is_not_hex_color(color):
-            return None  # TODO: Shouldn't this be an exception?
+    verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
@@ -1971,7 +1886,7 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
         str: '' (None if invalid opacity is found in new_values)
 
     Raises:
-        CyError: if edge or network name doesn't exist
+        CyError: if edge or network name doesn't exist, or if opacity is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1985,11 +1900,7 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
     """
     if not isinstance(new_values, list): new_values = [
         new_values]  # TODO: It looks like this should be happening everywhere?
-    for value in new_values:
-        if (not isinstance(value, float) and not isinstance(value, int)) or value < 0 or value > 255:
-            error = 'illegal opacity ' + str(value) + ' in set_edge_label_opacity_bypass(). It needs to be a number.'
-            sys.stderr.write(error)
-            return False  # TODO: Is this what we want to return here?
+    verify_opacities(new_values)
 
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
                                    base_url=base_url)

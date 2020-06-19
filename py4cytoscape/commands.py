@@ -112,7 +112,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:cyrest_delete()', e)
+        _handle_error(e)
 
 
 @cy_log
@@ -152,7 +152,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:cyrest_get()', e)
+        _handle_error(e)
 
 
 @cy_log
@@ -193,7 +193,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:cyrest_post()', e)
+        _handle_error(e)
 
 
 @cy_log
@@ -232,7 +232,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
             else:
                 return r.text
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:cyrest_put()', e)
+        _handle_error(e)
 
 
 # ==============================================================================
@@ -306,7 +306,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
             -1]  # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:commands_get()', e, force_cy_error=True)
+        _handle_error(e, force_cy_error=True)
 
 
 # TODO: Make sure this works the same as in R
@@ -348,7 +348,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
             del res_list[-1]  # deal with artifact of .split() leaving last line blank
         return res_list
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:commands_help()', e, force_cy_error=True)
+        _handle_error(e, force_cy_error=True)
 
 
 @cy_log
@@ -387,7 +387,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
-        _handle_error('commands:commands_post()', e)
+        _handle_error(e)
 
 
 @cy_log
@@ -643,7 +643,7 @@ def _command_2_post_query_body(cmd):
     param_dict = {}
     for x in params:
         p = re.sub('"', '', x).split('=', 1)
-        if p[0] is None: raise CyError('Missing parameter name')
+        if p[0] is None: raise CyError('Missing parameter name in "{x}"')
         param_dict[p[0]] = p[1]
 
     return str.encode(json.dumps(param_dict))
@@ -666,17 +666,18 @@ def _do_request(method, url, **kwargs):
     log_http_result(r)
     return r
 
-def _handle_error(caller, e, force_cy_error=False):
+def _handle_error(e, force_cy_error=False):
+    caller = sys._getframe(1).f_code.co_name
     if e.response is None or e.response.text is None or e.response.text == '':
-        print(f'In {caller}: {e}')
+        narrate(f'In {caller}: {e}')
         raise
     else:
         content = e.response.text
         try:
             content = json.loads(content)['errors'][0]['message']
-            print(f'In {caller}: {e}\n{content}')
-            e = CyError(content)
+            narrate(f'In {caller}: {e}\n{content}')
+            e = CyError(content, caller=caller)
         except:
-            print(f'In {caller}: {e}\n{content}')
-            if force_cy_error: e = CyError(content)
+            narrate(f'In {caller}: {e}\n{content}')
+            if force_cy_error: e = CyError(content, caller=caller)
         raise e

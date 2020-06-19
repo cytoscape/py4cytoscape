@@ -95,6 +95,11 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
    cd tests
    set PYTHONPATH=..
 
+.. note::
+
+   You must start Cytoscape *before* executing any tests. For Cytoscape execution,
+   the current directory should be the Cytoscape program directory.
+
 The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing one
 or two of them is relatively quick. To execute a single sub-suite
 (e.g., ``test_apps.py``)::

@@ -158,3 +158,6 @@ def log_http_result(r):
             content = ', content: ' + r.text if _SUMMARY_ENABLE_HTTP_CONTENT else ''
             summary_logger.info(' ' + _logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 
+def narrate(progress):
+    if False:
+        print(progress)

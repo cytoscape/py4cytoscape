@@ -163,6 +163,8 @@ class FiltersTests(unittest.TestCase):
                           lambda x: create_column_filter(x, 'BOGUS_COLUMN', 'RAP1', 'BOGUS'))
         self.check_bad_filter('column filter 7x',
                               lambda x: create_column_filter(x, 'COMMON', 'RAP1', 'BOGUS_PREDICATE'))
+        self.assertRaises(CyError, create_column_filter, 'bad between 3', 'EdgeBetweenness', [18040.0, 18360.0, 99], "BETWEEN", type='edges')
+        self.assertRaises(CyError, create_column_filter, 'bad between 1', 'EdgeBetweenness', [18040.0], "BETWEEN", type='edges')
 
 
     @unittest.skip('As of 3.9.0, cannot create "degree filter 3x" anymore ... edge_type=UNDIRECTED seems unsupported')
@@ -224,6 +226,12 @@ class FiltersTests(unittest.TestCase):
                           lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'],
                                                                        type='ANY'),
                           {'YGL035C', 'YNL216W', 'YLR362W', 'YPL248C'}, None)
+
+        # Verify that there must be at least two filters
+        self.assertRaises(CyError, create_composite_filter, 'bad filter', ['degree filter 1x'])
+
+        # Verify that when composing filters, all components exist
+        self.assertRaises(CyError, create_composite_filter, 'missing filter', ['degree filter 1x', 'degree filter xx'])
 
         # TODO: Can't test "hide" parameter in create_composite_filter because I can't deduce which nodes/edges are hidden
 

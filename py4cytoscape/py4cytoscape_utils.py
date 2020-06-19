@@ -32,6 +32,7 @@ from . import cytoscape_system
 
 # Internal module convenience imports
 from .exceptions import CyError
+from .py4cytoscape_logger import narrate
 
 # ==============================================================================
 # I. Package Utility Functions
@@ -53,13 +54,34 @@ def cyPalette(name='set1'):
 
 # ------------------------------------------------------------------------------
 # Validate and provide user feedback when hex color codes are required input.
-def is_not_hex_color(color):
-    if color.startswith('#') and len(color) == 7:
-        return False
-    else:
-        # TODO: Do we want to report this way?
-        sys.stderr.write('Error. ' + color + ' is not a valid hexadecimal color (has to begin with # and be 7 characters long).')
-        return True
+def verify_hex_colors(colors):
+    if colors is None: return
+    if not isinstance(colors, list): colors = [colors]
+
+    for color in colors:
+        if not color.startswith('#') or len(color) != 7:
+            raise CyError(f'"{color}" is not a valid hexadecimal color (has to begin with # and be 7 characters long, for example: #FF00FF).', caller=sys._getframe(1).f_code.co_name)
+
+# Validate and provide user feedback when opacity is required input.
+def verify_opacities(opacities):
+    if opacities is None: return
+    if not isinstance(opacities, list):  opacities = [opacities]
+
+    for opacity in opacities:
+        if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 255:
+            raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 255).', caller=sys._getframe(1).f_code.co_name)
+
+def verify_dimensions(dimensions, size):
+    if dimensions is None: return
+    if not isinstance(dimensions, list): dimensions = [dimensions]
+
+    for dimension in dimensions:
+        if not isinstance(size, float) and not isinstance(size, int):
+            raise CyError(f'illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
+
+def verify_slot(slot):
+    if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
+        raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
 
 def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
     if node_names is None: return None
@@ -75,8 +97,7 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
     # map all node names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
     node_suids = [list(df[df.name.eq(node_name)].index.values) for node_name in node_names]
     if True in [True if len(x) == 0 else False for x in node_suids]:
-        print("Invalid name in list: " + str(node_names))
-        raise CyError('Invalid name in list')
+        raise CyError(f'Invalid name in node name list: {node_names}')
     node_suids = [x[0] if len(x) == 1 else x for x in node_suids]
 
     return node_suids
@@ -98,8 +119,7 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
         node_names = [all_names[all_suids_list.index(node_suid)] for node_suid in node_suids]
         return node_names
     except Exception as e:
-        print("Invalid SUID in list: " + str(node_suids))
-        raise CyError('Invalid SUID in list')
+        raise CyError(f'Invalid node SUID in list: {node_suids}')
 
 
 def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
@@ -115,8 +135,7 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     # map all edge names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
     edge_suids = [list(df[df.name.eq(edge_name)].index.values) for edge_name in edge_names]
     if True in [True if len(x) == 0 else False for x in edge_suids]:
-        print("Invalid name in list: " + str(edge_names))
-        raise CyError('Invalid name in list')
+        raise CyError(f'Invalid edge name in list: {edge_names}')
     edge_suids = [x[0] if len(x) == 1 else x for x in edge_suids]
 
     return edge_suids
@@ -138,8 +157,7 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
         edge_names = [all_names[all_suids_list.index(edge_suid)] for edge_suid in edge_suids]
         return edge_names
     except Exception as e:
-        print("Invalid SUID in list: " + str(edge_suids))
-        raise CyError('Invalid SUID in list')
+        raise CyError(f'Invalid edge SUID in list: {edge_suids}')
 
 # ------------------------------------------------------------------------------
 # Checks to see if a particular column name exists in the specific table. Returns
@@ -147,8 +165,7 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
 # TODO: R had netowrk=network, which looks like a typo
 def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE_URL):
     if table_column not in tables.get_table_column_names(table, network=network, base_url=base_url):
-        sys.stderr.write('Column ' + table_column + ' does not exist in the ' + table + ' table.')
-        # TODO: Is this a good idea ... writing the error out?
+        narrate('Column ' + table_column + ' does not exist in the ' + table + ' table.')
         return False
     return True
 
@@ -161,20 +178,15 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     v_cy_str = v['cytoscapeVersion']
     v_api_num = int(re.match('v([0-9]+)$', v_api_str).group(1))
     v_cy_num = float(re.match('([0-9]+\\.[0-9]+)\\..*$', v_cy_str).group(1))
-    nogo = False
+    nogo = None
 
     if cyrest > v_api_num:
-        sys.stderr.write("CyREST API version %d or greater is required. You are currently working with version %d." %
-                         (cyrest, v_api_num))
-        nogo = True
+        nogo = 'CyREST API version %d or greater is required. You are currently working with version %d.' % (cyrest, v_api_num)
 
     if cytoscape > v_cy_num:
-        sys.stderr.write(
-            "Cytoscape version %0.2g or greater is required. You are currently working with version %0.2g." %
-            (cytoscape, v_cy_num))
-        nogo = True
+        nogo = 'Cytoscape version %0.2g or greater is required. You are currently working with version %0.2g.' % (cytoscape, v_cy_num)
 
-    if nogo: raise CyError('Function not run due to unsupported version.')
+    if nogo: raise CyError(f'Function not run due to unsupported version: {nogo}')
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
     """ Append a command (if it exists) to a base URL """

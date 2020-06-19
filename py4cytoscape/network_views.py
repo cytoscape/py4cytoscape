@@ -101,7 +101,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         # network name (or "current") was provided, warn if multiple view
         network_views = get_network_views(network, base_url=base_url)
         if len(network_views) > 1:
-            print('Warning: This network has multiple views. Returning last.')
+            narrate('Warning: This network has multiple views. Returning last.')
         return network_views[-1]
     elif isinstance(network, int):
         # suid provided, but is it a network or a view?
@@ -109,14 +109,14 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         if network in net_suids:  # network SUID, warn if multiple view
             network_views = get_network_views(network, base_url=base_url)
             if len(network_views) > 1:
-                print('Warning: This network has multiple views. Returning last.')
+                narrate('Warning: This network has multiple views. Returning last.')
             return network_views[-1]
         else:
             view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
             if network in view_suids:  # view SUID, return it
                 return network
             else:
-                raise CyError('Network view does not exist for: ' + str(network))
+                raise CyError(f'Network view does not exist for network "{network}"')
     else:
         # use current network, return first view
         # TODO: R sets this but never uses it ...is this an error?
@@ -124,7 +124,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         # warn if multiple views
         network_views = get_network_views(network, base_url=base_url)
         if len(network_views) > 1:
-            print('Warning: This network has multiple views. Returning last.')
+            narrate(f'Warning: This network "{network}" has multiple views. Returning last.')
         return network_views[-1]
 
 
