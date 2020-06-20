@@ -71,11 +71,11 @@ def verify_opacities(opacities):
         if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 255:
             raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 255).', caller=sys._getframe(1).f_code.co_name)
 
-def verify_dimensions(dimensions, size):
-    if dimensions is None: return
-    if not isinstance(dimensions, list): dimensions = [dimensions]
+def verify_dimensions(dimension, sizes):
+    if sizes is None: return
+    if not isinstance(sizes, list): dimensions = [sizes]
 
-    for dimension in dimensions:
+    for size in sizes:
         if not isinstance(size, float) and not isinstance(size, int):
             raise CyError(f'illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
 
