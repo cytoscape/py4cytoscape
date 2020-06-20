@@ -156,7 +156,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     # then fill in each requested column
     for col in col_list:
         if not col in table_col_list:
-            narrate(f'Error: Column {col} not found in {table} table')
+            narrate(f'Column "{col}" not found in "{table}" table')
             # TODO: Is this really the behavior we want?
             break
 
@@ -184,7 +184,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         cvv = [f(x) for x in res_col['values']]
 
         if len(suid_list) != len(cvv):
-            narrate('Error: Column %s has only %d elements, but should have %d' % (col, len(cvv), len(suid_list)))
+            narrate('Column "%s" has only %d elements, but should have %d' % (col, len(cvv), len(suid_list)))
             break  # TODO: Is this the right response?
         # TODO: Consider assigning entire column all at once instead of iterating ... should be OK
         for val, suid_val in zip(cvv, suid_list):
@@ -429,7 +429,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
                               body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list},
                               require_json=False, base_url=base_url)
 
-    return f'Success: Data loaded in {tbl} table'
+    return f'Success: Data loaded in "{tbl}" table'
     # TODO: This is a difficult result to test for ... are we able to change it?
 
 

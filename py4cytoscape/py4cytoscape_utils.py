@@ -73,11 +73,11 @@ def verify_opacities(opacities):
 
 def verify_dimensions(dimension, sizes):
     if sizes is None: return
-    if not isinstance(sizes, list): dimensions = [sizes]
+    if not isinstance(sizes, list): sizes = [sizes]
 
     for size in sizes:
         if not isinstance(size, float) and not isinstance(size, int):
-            raise CyError(f'illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
+            raise CyError(f'Illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
 
 def verify_slot(slot):
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
