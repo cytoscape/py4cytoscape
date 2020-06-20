@@ -127,6 +127,10 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
    appear to stall. To avoid executing such tests, set the PY4CYTOSCAPE_SKIP_UI_TESTS
    environment variable described below.
 
+   The ``runalltests.bat`` script contains all commands needed to run all tests
+   with all environment variables set. It must be run with the ``tests`` directory
+   as the current directory.
+
 .. note::
    To execute tests with less console debug output, set this environment
    variable before executing tests::
