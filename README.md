@@ -18,6 +18,7 @@ For an explanation of ``py4cytoscape`` installation and testing, see the [INSTAL
 
 For a quick tutorial on how to build a workflow in Python and using ``py4cytoscape``, see
 https://py4cytoscape.readthedocs.io/en/latest/tutorial.html.
+You can try ``py4cytoscape`` with a web browser only, without installing anything in your local environment.
 
 ## How to configure logging
 
