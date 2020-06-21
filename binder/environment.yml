@@ -1,0 +1,11 @@
+channels:
+  - manics
+dependencies:
+  - websockify
+  - pandas
+  - networkx
+  - requests
+  - pip:
+    - python-igraph
+    - -e git+https://github.com/bdemchak/py4cytoscape.git#egg=py4cytoscape
+    - -e git+https://github.com/yuvipanda/jupyter-desktop-server.git#egg=jupyter-desktop-server

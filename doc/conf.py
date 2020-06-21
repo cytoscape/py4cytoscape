@@ -52,6 +52,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     "sphinx.ext.viewcode",
     'sphinx_rtd_theme',
+    'nbsphinx',
 ]
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::) in autodoc
