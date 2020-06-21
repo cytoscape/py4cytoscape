@@ -17,7 +17,7 @@ For an explanation of ``py4cytoscape`` installation and testing, see the [INSTAL
 ## How run a simple workflow
 
 For a quick tutorial on how to build a workflow in Python and using ``py4cytoscape``, see
-the [TUTORIAL.rst](TUTORIAL.rst) file.
+https://py4cytoscape.readthedocs.io/en/latest/tutorial.html.
 
 ## How to configure logging
 
