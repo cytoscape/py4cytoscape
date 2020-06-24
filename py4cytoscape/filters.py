@@ -371,10 +371,7 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
     """
     filename = os.path.abspath(filename)
     res = commands.commands_post(f'filter import file="{filename}"', base_url=base_url)
-    time.sleep(
-        CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res
-
 
 def _create_filter_and_finish(cmd, cmd_body, hide, network, base_url):
     res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
@@ -382,7 +379,6 @@ def _create_filter_and_finish(cmd, cmd_body, hide, network, base_url):
 
 
 def _check_selected(hide, network, base_url):
-    time.sleep(MODEL_PROPAGATION_SECS)  # Yikes! Have to wait a second for selection to settle!
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
 

@@ -324,7 +324,8 @@ class FiltersTests(unittest.TestCase):
 
     def check_result(self, filter_name, create_func, expected_nodes, expected_edges):
         self.assertNotIn(filter_name, get_filter_list())
-        selected = create_func(filter_name)
+        create_func(filter_name)
+        selected = apply_filter(filter_name)
         self.assertIn(filter_name, get_filter_list())
         self.check_values(selected['nodes'], expected_nodes)
         self.check_values(selected['edges'], expected_edges)
