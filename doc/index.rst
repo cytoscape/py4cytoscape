@@ -91,7 +91,7 @@ Documentation
    :maxdepth: 1
 
    install
-   tutorial
+   tutorials/index
    reference/index
    logging
    release_log
