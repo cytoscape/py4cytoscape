@@ -8,7 +8,7 @@ You can try the following tutorials in your web browser using `Binder <https://m
 1. Launch a Binder instance by clicking the following Binder badge. (It may take some time for the instance to start up.)
 
 .. image:: https://mybinder.org/badge_logo.svg
-   :target: https://mybinder.org/v2/gh/bdemchak/py4cytoscape/master
+   :target: https://mybinder.org/v2/gh/bdemchak/py4cytoscape/master?filepath=doc%2Ftutorials
 
 2. Launch Linux desktop by clicking the ``New ▼`` button -> ``desktop``.
 
@@ -20,7 +20,7 @@ You can try the following tutorials in your web browser using `Binder <https://m
 
 .. image:: https://raw.githubusercontent.com/nrnb/gsod2019_kozo_nishida/master/images/binder_starting_cytoscape_inXFCE4.jpg
 
-4. Open an ipynb file under doc/tutorials folder
+4. Click on the ipynb file for the tutorial you would like to try. 
 
 .. image:: ../images/openTutorial.jpg
 
