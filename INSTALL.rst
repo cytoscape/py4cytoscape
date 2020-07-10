@@ -76,7 +76,7 @@ Cytoscape, execute the following in a Python Console or Jupyter Notebook
    dir(py4)
    py4.cytoscape_ping()
    py4.cytoscape_version_info()
-   py4.import_network_from_file("tests\data\galfiltered.sif")
+   py4.import_network_from_file("tests/data/galfiltered.sif")
 
 This will import ``py4cytoscape`` into the Python namespace, print a (long) list
 of ``py4cytoscape`` entrypoints, and then demonstrate a connection to Cytoscape
