@@ -50,7 +50,7 @@ summary_handler.setFormatter(logging.Formatter('[%(levelname)s] %(name)s: %(mess
 summary_logger.setLevel(_SUMMARY_LOG_LEVEL)
 summary_logger.addHandler(summary_handler)
 
-_summary_logger_enable = (os.environ.get('PY4CYTOSCAPE_SUMMARY_LOGGER', 'TRUE').upper() == 'TRUE')
+_summary_logger_enable = (os.environ.get('PY4CYTOSCAPE_SUMMARY_LOGGER', 'FALSE').upper() == 'TRUE')
 def set_summary_logger(enable):
     global _summary_logger_enable
     orig_enable = _summary_logger_enable

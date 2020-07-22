@@ -70,6 +70,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
         >>> cyrest_api() # loads Swagger CyREST API into browser
         True
     """
+    # TODO: Push this down into _do_request so jupyter-bridge can work with it, too
     res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/', new=2,
                           autoraise=True)
     return res
@@ -183,7 +184,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('POST', url, params=parameters, json=body)
+        r = _do_request('POST', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'})
         r.raise_for_status()
         try:
             return r.json()
@@ -222,7 +223,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('PUT', url, params=parameters, json=body)
+        r = _do_request('PUT', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'})
         r.raise_for_status()
         try:
             return r.json()
@@ -260,6 +261,7 @@ def commands_api(base_url=DEFAULT_BASE_URL):
         >>> commands_api() # loads Swagger CyREST Commands API into browser
         True
     """
+    # TODO: Push this down into _do_request so jupyter-bridge can work with it, too
     res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/',
                           new=2, autoraise=True)
     return res
@@ -383,7 +385,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         post_url = _command_2_post_query_url(cmd, base_url=base_url)
         post_body = _command_2_post_query_body(cmd)
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        r = _do_request('POST', post_url, data=post_body, headers=headers)
+        r = _do_request('POST', post_url, json=post_body, headers=headers)
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
@@ -646,7 +648,7 @@ def _command_2_post_query_body(cmd):
         if p[0] is None: raise CyError('Missing parameter name in "{x}"')
         param_dict[p[0]] = p[1]
 
-    return str.encode(json.dumps(param_dict))
+    return param_dict
 
 
 def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
@@ -660,11 +662,6 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
 
     return cmd_list_ready
 
-def _do_request(method, url, **kwargs):
-    log_http_request(method, url, **kwargs)
-    r = requests.request(method, url, **kwargs)
-    log_http_result(r)
-    return r
 
 def _handle_error(e, force_cy_error=False):
     caller = sys._getframe(1).f_code.co_name
@@ -681,3 +678,88 @@ def _handle_error(e, force_cy_error=False):
             narrate(f'In {caller}: {e}\n{content}')
             if force_cy_error: e = CyError(content, caller=caller)
         raise e
+
+
+if False: # Replace this with some way of determining whether to direct-call or go through a Jupyter-bridge
+
+    def _do_request(method, url, **kwargs):
+        log_http_request(method, url, **kwargs)
+        r = requests.request(method, url, **kwargs)
+        log_http_result(r)
+        return r
+
+else:
+
+    import chardet
+    class SpoofResponse:
+
+        def __init__(self, url, status_code, reason, text):
+            self.url = url
+            self.status_code = status_code
+            self.reason = reason
+            self.text = text
+
+        def __repr__(self):
+            return '<SpoofResponse [%s]>' % (self.status_code)
+
+        def json(self):
+            return json.loads(self.text)
+
+        def raise_for_status(self):
+            """Raises stored :class:`HTTPError`, if one occurred."""
+
+            if 400 <= self.status_code < 500:
+                raise requests.exceptions.HTTPError(
+                    u'%s Client Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
+
+            elif 500 <= self.status_code < 600:
+                raise requests.exceptions.HTTPError(
+                    u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
+
+
+    def _do_request(method, url, **kwargs):
+        JUPYTER_BRIDGE_URL = 'http://127.0.0.1:9529' # For local testing
+#        JUPYTER_BRIDGE_URL = 'http://192.168.2.194:9529' # For production
+        log_http_request(method, url, **kwargs)
+        # Params: Method, url + params (cyrest_delete, cyrest_get, cyrest_post, cyrest_put), json (cyrest_post, cyrest_put), data(commands_post), headers (commands_get, commands_help, commands_post)
+        #    r = requests.request(method, url, **kwargs)
+        if 'json' in kwargs:
+            data = kwargs['json']
+        elif 'data' in kwargs:
+            data = kwargs['data'].decode('utf-8')
+        else:
+            data = None
+
+        http_request = {'command': method,
+                        'url': url,
+                        'params': kwargs['params'] if 'params' in kwargs else None,
+                        'data': data,
+                        'headers': kwargs['headers'] if 'headers' in kwargs else None
+                        }
+        r = requests.request('POST', JUPYTER_BRIDGE_URL + '/queue_request?channel=1',
+                             headers={'Content-Type': 'application/json'}, json=http_request)
+        if r.status_code != 200:
+            raise CyError('Error posting to Jupyter-bridge: ' + r.text)
+        r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
+        if r.status_code != 200:
+            raise CyError('Error receiving from Jupyter-bridge: ' + r.text)
+
+        # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
+        # If the dict is bad, we can't continue.
+        try:
+            content = r.content
+            encoding = chardet.detect(content)['encoding'] # TODO: Could this be returning None?? ... What to do?? ... from StyleValuesTests.test_get_edge_property, line 55, also test_get_node_height, line 326
+            if encoding == None:
+                print("I'm here")
+            message = str(content, encoding, errors='replace')
+            cy_reply = json.loads(message)
+        except:
+            content = content or 'None'
+            raise CyError(u'Undeciperable message received from Jupyter-bridge: %s' % (str(content)))
+
+        r = SpoofResponse(url, cy_reply['status'], cy_reply['reason'], cy_reply['text'])
+        if cy_reply['status'] == 0:
+            raise requests.exceptions.HTTPError(u'Could not contact url: %s' % (url), response=r)
+
+        log_http_result(r)
+        return r

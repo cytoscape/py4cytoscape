@@ -429,7 +429,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
                               body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list},
                               require_json=False, base_url=base_url)
 
-    return f'Success: Data loaded in "{tbl}" table'
+    return f'Success: Data loaded in {tbl} table'
     # TODO: This is a difficult result to test for ... are we able to change it?
 
 
