@@ -3,6 +3,8 @@
 """Error classes for py4cytoscape.
 """
 
+import sys
+
 """Copyright 2020 The Cytoscape Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -20,4 +22,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 class CyError(Exception):
-    pass
+
+    def __init__(self, message_text, caller=None):
+        if caller is None: caller = sys._getframe(1).f_code.co_name
+        super().__init__(f'In {caller}(): {message_text}')
+

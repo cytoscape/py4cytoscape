@@ -164,7 +164,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(CyError, commands_get, 'apps status app="bogusjunk"')
         self.assertRaises(CyError, commands_get, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_get, '', base_url='http://totallybogus')
-        self.assertRaises(CyError, commands_get, '', base_url='http://yahoo.com')
+        self.assertRaises(Exception, commands_get, '', base_url='http://yahoo.com')
 
     
     @print_entry_exit
@@ -178,7 +178,7 @@ class CommandsTests(unittest.TestCase):
         # Verify that bad commands are caught
         self.assertRaises(CyError, commands_help, 'bogus_junk')
         self.assertRaises(RequestException, commands_help, '', base_url='http://totallybogus')
-        self.assertRaises(CyError, commands_help, '', base_url='http://yahoo.com')
+        self.assertRaises(Exception, commands_help, '', base_url='http://yahoo.com')
 
     
     @print_entry_exit
@@ -210,7 +210,7 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(CyError, commands_run, 'apps status app="bogusjunk"')
         self.assertRaises(CyError, commands_run, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_run, '', base_url='http://totallybogus')
-        self.assertRaises(CyError, commands_run, '', base_url='http://yahoo.com')
+        self.assertRaises(Exception, commands_run, '', base_url='http://yahoo.com')
 
     
     @print_entry_exit

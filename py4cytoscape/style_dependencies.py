@@ -65,12 +65,7 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     """
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
-        error = 'Error in py4cytoscape:get_style_dependencies. No visual style named "' + style_name + '"'
-        # TODO: R version of this error has the wrong text
-        sys.stderr.write(error)
-        raise CyError(error)
-    #        return None
-    # TODO: Is this what we want to return here?
+        raise CyError(f'No visual style named "{style_name}"')
 
     res = commands.cyrest_get(f'styles/{style_name}/dependencies', base_url=base_url)
 
@@ -100,7 +95,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
     Examples:
         >>> set_style_dependencies(dependencies={'arrowColorMatchesEdge': True}, style_name='galFiltered Style')
         {'views': [275240]}
-        >>> get_style_dependencies(dependencies={'arrowColorMatchesEdge': True, 'nodeCustomGraphicsSizeSync': False})
+        >>> set_style_dependencies(dependencies={'arrowColorMatchesEdge': True, 'nodeCustomGraphicsSizeSync': False})
         {'views': [275240]}
 
     Available Dependencies:
@@ -108,12 +103,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
     """
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
-        error = 'Error in py4cytoscape:set_style_dependencies. No visual style named "' + style_name + '"'
-        # TODO: R version of this error has the wrong text
-        sys.stderr.write(error)
-        raise CyError(error)
-        # return None
-        # TODO: Is this what we want to return here?
+        raise CyError(f'No visual style named "{style_name}"')
 
     dep_list = [{'visualPropertyDependency': dep, 'enabled': val}    for dep, val in dependencies.items()]
 

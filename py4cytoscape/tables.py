@@ -30,7 +30,7 @@ from . import networks
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, narrate
 from .exceptions import CyError
 
 
@@ -156,7 +156,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     # then fill in each requested column
     for col in col_list:
         if not col in table_col_list:
-            print('Error: Column ' + col + ' not found in ' + table + ' table\n')
+            narrate(f'Column "{col}" not found in "{table}" table')
             # TODO: Is this really the behavior we want?
             break
 
@@ -184,8 +184,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         cvv = [f(x) for x in res_col['values']]
 
         if len(suid_list) != len(cvv):
-            print('Error: Column ' + col + ' has only ' + str(len(cvv)) + ' elements, but should have ' + str(
-                len(suid_list)))
+            narrate('Column "%s" has only %d elements, but should have %d' % (col, len(cvv), len(suid_list)))
             break  # TODO: Is this the right response?
         # TODO: Consider assigning entire column all at once instead of iterating ... should be OK
         for val, suid_val in zip(cvv, suid_list):
@@ -384,20 +383,19 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     # TODO: Shouldn't namespace be in this parameter list? R doesn't have it ... I added it
 
     if table_key_column_values.columns is None:
-        return "Failed to load data: Please check table.key.column"
-    # TODO: Consider whether this this the best kind of return value
+        raise CyError('Failed to load data. Please check table_key_column.')
 
     if data_key_column == 'row.names':
         data['row.names'] = data.index
 
     if not data_key_column in data.columns:
-        return "Failed to load data: Please check data.key.column"
+        raise CyError('Failed to load data. Please check data_key_column.')
 
     # verify that there is at least one key in the Cytoscape table that matches a key in the data
     table_keys = table_key_column_values[table_key_column].values
     filter = [key in table_keys for key in data[data_key_column]]
     if not True in filter:
-        return "Failed to load data: Provided key columns do not contain any matches"
+        raise CyError(f'Provided table key column "{table_key_column}" and data key column "{data_key_column}" do not contain any matches')
 
     # create table containing columns present in data and already present in Cytoscape table
     data_subset = data[filter]
@@ -431,7 +429,8 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
                               body={'key': table_key_column, 'dataKey': data_key_column, 'data': data_list},
                               require_json=False, base_url=base_url)
 
-    return 'Success: Data loaded in ' + tbl + ' table'
+    return f'Success: Data loaded in {tbl} table'
+    # TODO: This is a difficult result to test for ... are we able to change it?
 
 
 @cy_log
@@ -487,12 +486,12 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
     fs = 'true' if force_single else 'false'
 
     all_cols = get_table_column_names(table, namespace, network, base_url=base_url)
-    if not column in all_cols: raise CyError('ERROR:mapIdentifiers, ' + column + ' does not exist')
+    if not column in all_cols: raise CyError(f'Column "{column}" does not exist')
 
     res_map = commands.commands_post(
         f'idmapper map column columnName="{column}" forceSingle="{fs}" mapFrom="{map_from}" mapTo="{map_to}" species="{species}" table="{tbl}"',
         base_url=base_url)
-    if res_map['new column'] == 'null ': raise CyError('Error:mapIdentifiers failed')
+    if res_map['new column'] == 'null ': raise CyError('No mappings returned')
     # TODO: Do we really mean to throw this result away?? R does ... if the 'new column' value returns null, something went wrong ... I added check
 
     res = get_table_columns(table=table, columns=[column, map_to], namespace=namespace, network=network,

@@ -75,7 +75,7 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual property must be non-null')
 
     if node_names is None:
         res = commands.cyrest_get('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes',
@@ -131,7 +131,7 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual property must be non-null')
 
     if edge_names is None:
         res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/edges',
@@ -182,7 +182,7 @@ def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_UR
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
     if visual_property is None:
-        raise CyError('Invalid visual property')
+        raise CyError('Invalid visual property ... visual property must be non-null')
 
     res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}', base_url=base_url)
     return res['value']
@@ -379,7 +379,7 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     # two calls are not atomic. (This stands virtually no chance of failing, but non-atomic call must be checked.)
     name_skew = [[x_name, y_name] for x_name, y_name in zip(x_names, y_names) if x_name != y_name]
     if name_skew != []:
-        raise CyError('Inconsistent node sets returned: ' + str(name_skew))
+        raise CyError(f'Inconsistent node sets returned: "{name_skew}"')
 
     data = df.DataFrame(index=y_names, data={'x': x_values, 'y': y_values})
     # TODO: Verify that this is what R returns, too
