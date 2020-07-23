@@ -680,7 +680,7 @@ def _handle_error(e, force_cy_error=False):
         raise e
 
 
-if False: # Replace this with some way of determining whether to direct-call or go through a Jupyter-bridge
+if True: # Replace this with some way of determining whether to direct-call or go through a Jupyter-bridge
 
     def _do_request(method, url, **kwargs):
         log_http_request(method, url, **kwargs)
