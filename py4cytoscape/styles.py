@@ -66,7 +66,7 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     """
     current_names = get_visual_style_names(base_url=base_url)
     if from_style not in current_names:
-        raise CyError('Cannot copy from a non-existent visual style ( + ' + from_style + ')')
+        raise CyError(f'Cannot copy from a non-existent visual style "{from_style}"')
 
     # get the current style from Cytoscape
     res = commands.cyrest_get(f'styles/{from_style}', base_url=base_url)
@@ -192,7 +192,7 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     ext = '.' + type.lower() + '$'
     if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
     filename = os.path.abspath(filename)
-    if os.path.exists(filename): warnings.warn('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    if os.path.exists(filename): narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     cmd_string += ' OutputFile="' + filename + '"'
     # TODO: Can't we create a parameter to delete the file first?
 
@@ -281,9 +281,7 @@ def set_visual_style(style_name, network=None, base_url=DEFAULT_BASE_URL):
 
     # inform user if they want to set style that does not exist
     if style_name not in current_names:
-        error = 'Cannot call set_visual_style() on a non-existent visual style (' + style_name + ')'
-        sys.stderr.write(error)
-        raise CyError(error)
+        raise CyError(f'Cannot use non-existent visual style "{style_name}"')
 
     res = commands.cyrest_get(f'apply/styles/{style_name}/{net_suid}', base_url=base_url)
     return res

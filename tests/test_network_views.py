@@ -88,6 +88,7 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertEqual(check_view(get_network_view_suid(gal_filtered_view_suid)), gal_filtered_view_suid)
 
         self.assertRaises(CyError, get_network_view_suid, 'bogus network')
+        self.assertRaises(CyError, get_network_view_suid, -1)
 
     
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')

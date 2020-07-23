@@ -172,8 +172,6 @@ def _check_panel_name(panel_name):
     elif panel_name in {'WEST', 'EAST', 'SOUTH', 'SOUTH_WEST'}:
         pass
     else:
-        error = 'ERROR! Define a valid panel name.'
-        sys.stderr.write(error)
-        raise CyError(error)
+        raise CyError(f'Panel name "{panel_name}" is invalid. Common panel names include SOUTH, EAST, WEST and SOUTH_WEST.')
 
     return panel_name

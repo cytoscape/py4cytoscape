@@ -225,7 +225,7 @@ class LayoutsTests(unittest.TestCase):
                          orig_default_spring_coefficient)
 
         self.assertRaises(CyError, set_layout_properties, 'boguslayout', {})
-        self.assertEqual(set_layout_properties('force-directed', {'bogusparam': 666}), '')
+        self.assertRaises(CyError, set_layout_properties, 'force-directed', {'bogusparam': 666})
 
 
 if __name__ == '__main__':

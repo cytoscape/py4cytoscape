@@ -270,7 +270,7 @@ def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     if get_selected_node_count(net_suid, base_url=base_url) == 0:
-        print('No nodes selected.')
+        narrate('No nodes selected.')
         return None
     else:
         selected_node_suids = commands.cyrest_get(f'networks/{net_suid}/nodes',
@@ -607,7 +607,7 @@ def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL
     net_suid = networks.get_network_suid(network, base_url=base_url)
 
     if get_selected_edge_count(net_suid, base_url=base_url) == 0:
-        print('No edges selected.')
+        narrate('No edges selected.')
         return None
     else:
         selected_edge_suids = commands.cyrest_get(f'networks/{net_suid}/edges',

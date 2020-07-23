@@ -95,6 +95,11 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
    cd tests
    set PYTHONPATH=..
 
+.. note::
+
+   You must start Cytoscape *before* executing any tests. For Cytoscape execution,
+   the current directory should be the Cytoscape program directory.
+
 The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing one
 or two of them is relatively quick. To execute a single sub-suite
 (e.g., ``test_apps.py``)::
@@ -121,6 +126,10 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
    Some tests require console input, and without console prompts, the tests will
    appear to stall. To avoid executing such tests, set the PY4CYTOSCAPE_SKIP_UI_TESTS
    environment variable described below.
+
+   The ``runalltests.bat`` script contains all commands needed to run all tests
+   with all environment variables set. It must be run with the ``tests`` directory
+   as the current directory.
 
 .. note::
    To execute tests with less console debug output, set this environment

@@ -197,7 +197,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
             if suid in net_names:
                 return suid
             else:
-                raise CyError('Network does not exist: ' + suid)
+                raise CyError(f'Network does not exist for SUID "{suid}"')
     elif isinstance(suid, int):
         # suid provided
         network_suid = suid
@@ -250,13 +250,13 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
             if title in net_names:
                 network_title = title
             else:
-                raise CyError('Network does not exist: ' + title)
+                raise CyError(f'Network does not exist for name "{title}"')
     elif isinstance(title, int):
         # SUID was provided
         net_suids = commands.cyrest_get('networks', base_url=base_url)
         if title in net_suids:
             return title
-        raise CyError('Network does not exist: ' + str(title))
+        raise CyError(f'Network does not exist for SUID "{title}"')
     else:
         # Don't understand, so use current network
         network_title = 'current'
@@ -333,7 +333,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
 
     type = type.upper()
     if type == 'CYS':
-        sys.stderr.write('Saving session as a CYS file...')
+        narrate('Saving session as a CYS file...')
         return session.save_session(filename=filename, base_url=base_url)
     else:
         # e.g., CX, CYJS, GraphML, NNF, SIF, XGMML
@@ -343,7 +343,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     ext = '.' + type.lower()
     if re.search(ext + '$', filename) is None: filename += ext
     filename = os.path.abspath(filename)
-    if os.path.exists(filename): warnings.warn(
+    if os.path.exists(filename): narrate(
         'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
 
     return commands.commands_post(f'{cmd} OutputFile="{filename}"', base_url=base_url)
@@ -587,7 +587,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
         list of dicts: A ``list`` of dicts for each edge (SUID, source, target) added.
 
     Raises:
-        CyError: if network name or SUID doesn't exist
+        CyError: if network name or SUID doesn't exist, or if a source or target can't resolve to just one node.
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -608,11 +608,9 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
         flat_source_target_list = [item for sublist in source_target_list for item in sublist]
     edge_suid_list = node_name_to_node_suid(flat_source_target_list, net_suid, base_url=base_url)
 
-    # Verify that
+    # Verify that each edge is unambiguous
     if True in [True if isinstance(x, list) else False for x in edge_suid_list]:
-        sys.stderr.write('add_cy_edges: more than one node found for a given source or target - no edges added')
-        return None
-        # TODO: Create consistent policy for logging to console and returning error values
+        raise CyError('More than one node found for a given source or target - no edges added')
 
     # Note: use str() for edge SUIDs in case the SUIDs exceed JSON's int encoding
     edge_data = [{'source': str(edge_suid_list[x]), 'target': str(edge_suid_list[x + 1]), 'directed': directed,
@@ -1025,7 +1023,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                 id_list.append(target)
             nodes = pd.DataFrame(data=id_list, columns=['id'])
         else:
-            return 'Create Network Failed: Must provide either nodes or edges'
+            raise CyError('Must provide either nodes or edges')
 
     # create the JSON for a node list ... in cytoscape.js format
     # TODO: Verify that we really do need this 'id' field ... or maybe we can kill it afterward?
@@ -1074,10 +1072,10 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
             tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID',
                                    network=network_suid, base_url=base_url)
 
-    print('Applying default style...')
+    narrate('Applying default style...')
     commands.commands_post('vizmap apply styles="default"', base_url=base_url)
 
-    print('Applying preferred layout')
+    narrate('Applying preferred layout')
     layouts.layout_network(network=network_suid)
 
     # TODO: Verify that attribute types are properly set in Cytoscape

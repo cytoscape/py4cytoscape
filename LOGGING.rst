@@ -33,12 +33,12 @@ Here is an example of Detail logging involving nested calls::
 Runtime Control
 ---------------
    
-For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is enabled, but can be disabled::
+For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is disabled, but can be enabled::
 
-   set PY4CYTOSCAPE_SUMMARY_LOGGER=False
+   set PY4CYTOSCAPE_SUMMARY_LOGGER=True
 
-At execution time, it can be disabled by calling ``set_summary_logger()``. This is handy within a busy code block or when running in a Notebook environment. For example::
+At execution time, it can be enabled by calling ``set_summary_logger()``. This is handy within a busy code block or when running in a Notebook environment. For example::
 
-   old_state = set_summary_logger(False)
+   old_state = set_summary_logger(True)
      # ... make several py4cytoscape calls ...
    set_summary_logger(old_state)

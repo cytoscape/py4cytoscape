@@ -71,9 +71,7 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
         :meth:`unhide_all`
     """
     if not filter_name in get_filter_list(base_url=base_url):
-        error = 'Filter "%s" does not exist.' % (filter_name)
-        print(error)
-        raise CyError(error)
+        raise CyError(f'Filter "{filter_name}" does not exist.')
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     networks.set_current_network(net_suid, base_url=base_url)
@@ -141,15 +139,11 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
     networks.set_current_network(network, base_url=base_url)
 
     if column not in tables.get_table_column_names(type[:4], base_url=base_url):
-        error = 'Column %s does not exist in the %s table' % (column, type[:4])
-        print(error)
-        raise CyError(error)
+        raise CyError('Column "%s" does not exist in the "%s" table' % (column, type[:4]))
 
     if predicate in ['BETWEEN', 'IS_NOT_BETWEEN']:
         if not isinstance(criterion, list) or len(criterion) != 2:
-            error = 'criterion must be a list of two numeric values, e.g., [0.5,2.0]'
-            print(error)
-            raise CyError(error)
+            raise CyError('Criterion "{criterion}" must be a list of two numeric values, e.g., [0.5, 2.0]')
     elif predicate in ['GREATER_THAN', 'GREATER_THAN_OR_EQUAL']:
         #        # manually feed max bound so that UI is also correct ... UI doesn't show these predicates directly ... it uses BETWEEN, and doesn't distinguish between > and >=
         # TODO: Recommend that this check be limited to GREATER_THAN_OR_EQUAL because that's what the UI supports
@@ -220,9 +214,7 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
     networks.set_current_network(network, base_url=base_url)
 
     if not isinstance(criterion, list) or len(criterion) != 2:
-        error = 'criterion must be a list of two numeric values, e.g., c(2,5)'
-        print(error)
-        raise CyError(error)
+        raise CyError(f'Criterion "{criterion}" must be a list of two numeric values, e.g., [0.5, 2.0]')
 
     cmd_json = {'id': 'DegreeFilter',
                 'parameters': {'criterion': criterion, 'predicate': predicate, 'edgeType': edge_type}}
@@ -263,9 +255,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
     networks.set_current_network(network, base_url=base_url)
 
     if len(filter_list) < 2:
-        error = 'Must provide a list of two or more filter names, e.g., ["filter1", "filter2"]'
-        print(error)
-        raise CyError(error)
+        raise CyError(f'Filter list "{filter_list}" is invalid. Must provide a list of two or more filter names, e.g., ["filter1", "filter2"]')
 
     def fetch(x):
         return commands.commands_post('filter get name="' + x + '"', base_url=base_url)
@@ -275,11 +265,8 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
 
     trans_list = [extract(fetch(filter)) for filter in filter_list]
 
-    # TODO: Add this check in R
     if None in trans_list:
-        error = 'Filter name "%s" does not exist' % (filter_list[trans_list.index(None)])
-        print(error)
-        raise CyError(error)
+        raise CyError('Filter name "%s" does not exist' % (filter_list[trans_list.index(None)]))
 
     cmd_json = {'id': 'CompositeFilter', 'parameters': {'type': type}, 'transformers': trans_list}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}

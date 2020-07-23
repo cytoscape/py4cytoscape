@@ -113,7 +113,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_border_color_default(self):
-        self._check_setter_default(set_node_border_color_default, 'NODE_BORDER_PAINT', '#FF00FF', 'bogusColor')
+        self._check_setter_default(set_node_border_color_default, 'NODE_BORDER_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_border_width_default(self):
@@ -121,11 +121,11 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_border_opacity_default(self):
-        self._check_setter_default(set_node_border_opacity_default, 'NODE_BORDER_TRANSPARENCY', 150, 350)
+        self._check_setter_default(set_node_border_opacity_default, 'NODE_BORDER_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_color_default(self):
-        self._check_setter_default(set_node_color_default, 'NODE_FILL_COLOR', '#FF00FF', 'bogusColor')
+        self._check_setter_default(set_node_color_default, 'NODE_FILL_COLOR', '#FF00FF', 'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_custom_bar_chart(self):
@@ -699,7 +699,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_fill_opacity_default(self):
-        self._check_setter_default(set_node_fill_opacity_default, 'NODE_TRANSPARENCY', 150, 350)
+        self._check_setter_default(set_node_fill_opacity_default, 'NODE_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_font_face_default(self):
@@ -719,15 +719,15 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_label_color_default(self):
-        self._check_setter_default(set_node_label_color_default, 'NODE_LABEL_COLOR', '#FF00FF', 'bogusColor')
+        self._check_setter_default(set_node_label_color_default, 'NODE_LABEL_COLOR', '#FF00FF', 'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_label_opacity_default(self):
-        self._check_setter_default(set_node_label_opacity_default, 'NODE_LABEL_TRANSPARENCY', 150, 350)
+        self._check_setter_default(set_node_label_opacity_default, 'NODE_LABEL_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_selection_color_default(self):
-        self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', '#FF00FF', 'bogusColor')
+        self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_get_node_selection_color_default(self):
@@ -738,7 +738,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_shape_default(self):
-        self._check_setter_default(set_node_shape_default, 'NODE_SHAPE', 'HEXAGON', 'bogusShape')
+        self._check_setter_default(set_node_shape_default, 'NODE_SHAPE', 'HEXAGON', 'bogusShape', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_size_default(self):
@@ -754,8 +754,8 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_edge_color_default(self):
-        self._check_setter_default(set_edge_color_default, 'EDGE_UNSELECTED_PAINT', '#FF00FF', 'bogusColor')
-        self._check_setter_default(set_edge_color_default, 'EDGE_STROKE_UNSELECTED_PAINT', '#FFFF00', 'bogusColor')
+        self._check_setter_default(set_edge_color_default, 'EDGE_UNSELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_color_default, 'EDGE_STROKE_UNSELECTED_PAINT', '#FFFF00', 'bogusColor', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_font_face_default(self):
@@ -776,7 +776,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_edge_label_opacity_default(self):
-        self._check_setter_default(set_edge_label_opacity_default, 'EDGE_LABEL_TRANSPARENCY', 150, 350)
+        self._check_setter_default(set_edge_label_opacity_default, 'EDGE_LABEL_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_line_width_default(self):
@@ -788,7 +788,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_edge_opacity_default(self):
-        self._check_setter_default(set_edge_opacity_default, 'EDGE_TRANSPARENCY', 150, 350)
+        self._check_setter_default(set_edge_opacity_default, 'EDGE_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
     def test_get_edge_selection_color_default(self):
@@ -844,7 +844,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_background_color_default(self):
-        self._check_setter_default(set_background_color_default, 'NETWORK_BACKGROUND_PAINT', '#FF00FF', 'bogusColor')
+        self._check_setter_default(set_background_color_default, 'NETWORK_BACKGROUND_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
 
     def _check_getter_default(self, getter_func, prop_name, new_value):
         # Verify that the node selection color can be fetched and looks different after it's set

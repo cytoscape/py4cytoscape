@@ -365,11 +365,9 @@ def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_UR
     res = ''
     for prop, value in properties_dict.items():
         if not prop in all_possible_properties:
-            print(prop + ' is not a property in layout ' + layout_name)
-            # TODO: Consider throwning an exception here ... or just letting Cytoscape return the error
+            raise CyError(f'"{prop}" is not a property in layout "{layout_name}"')
         else:
             each_property = [{'name': prop, 'value': value}]
             res = commands.cyrest_put(f'apply/layouts/{layout_name}/parameters', body=each_property,
                                       base_url=base_url, require_json=False)
-
     return res

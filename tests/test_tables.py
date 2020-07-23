@@ -191,8 +191,7 @@ class TablesTests(unittest.TestCase):
 
         # Verify that adding into rows that don't exist fails
         unrelated_data = df.DataFrame(data={'id': ['New1', 'New2', 'New3'], 'newcol': [1, 2, 3]})
-        res = load_table_data(unrelated_data, data_key_column='id', table='node', table_key_column='name')
-        self.assertEqual(res, 'Failed to load data: Provided key columns do not contain any matches')
+        self.assertRaises(CyError, load_table_data, unrelated_data, data_key_column='id', table='node', table_key_column='name')
 
         # Verify that adding into rows that do exist succeeds
         test_data = df.DataFrame(data={'id': ['YDL194W', 'YDR277C', 'YBR043C'], 'newcol': [1, 2, 3]})
@@ -209,6 +208,7 @@ class TablesTests(unittest.TestCase):
         verify_each_newcol_value = [added_data[added_data['id'] == row['id']].iloc[0]['newcol'] == row['newcol'] for
                                     row_index, row in test_data.iterrows()]
         self.assertNotIn(False, verify_each_newcol_value)
+
 
         self.assertRaises(CyError, load_table_data, data, table='bogus')
         self.assertRaises(CyError, load_table_data, data, namespace='bogus')

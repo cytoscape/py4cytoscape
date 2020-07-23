@@ -139,12 +139,12 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_color_bypass(self):
 
-        self._check_node_bypass(set_node_color_bypass, '#800000', '#800080', 'BogusColor', 'NODE_FILL_COLOR')
+        self._check_node_bypass(set_node_color_bypass, '#800000', '#800080', 'BogusColor', 'NODE_FILL_COLOR', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_size_bypass(self):
 
-        self._check_node_bypass(set_node_size_bypass, 50, 75.5, 'BogusSize', 'NODE_SIZE')
+        self._check_node_bypass(set_node_size_bypass, 50, 75.5, 'BogusSize', 'NODE_SIZE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_tooltip_bypass(self):
@@ -154,12 +154,12 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_width_bypass(self):
 
-        self._check_node_bypass(set_node_width_bypass, 80, 125.5, 'BogusWidth', 'NODE_WIDTH')
+        self._check_node_bypass(set_node_width_bypass, 80, 125.5, 'BogusWidth', 'NODE_WIDTH', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_height_bypass(self):
 
-        self._check_node_bypass(set_node_height_bypass, 80, 125.5, 'BogusWidth', 'NODE_HEIGHT')
+        self._check_node_bypass(set_node_height_bypass, 80, 125.5, 'BogusWidth', 'NODE_HEIGHT', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_label_bypass(self):
@@ -175,17 +175,17 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_font_size_bypass(self):
 
-        self._check_node_bypass(set_node_font_size_bypass, 50, 100, 'BogusSize', 'NODE_LABEL_FONT_SIZE')
+        self._check_node_bypass(set_node_font_size_bypass, 50, 100, 'BogusSize', 'NODE_LABEL_FONT_SIZE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_label_color_bypass(self):
 
-        self._check_node_bypass(set_node_label_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', 'NODE_LABEL_COLOR')
+        self._check_node_bypass(set_node_label_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', 'NODE_LABEL_COLOR', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_shape_bypass(self):
 
-        self._check_node_bypass(set_node_shape_bypass, 'ROUND_RECTANGLE', 'OCTAGON', 'BogusShape', 'NODE_SHAPE')
+        self._check_node_bypass(set_node_shape_bypass, 'ROUND_RECTANGLE', 'OCTAGON', 'BogusShape', 'NODE_SHAPE', exception_scenario='exception')
 
         # Verify that old shapes are translated to new shapes
         load_test_session()
@@ -196,24 +196,24 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertEqual(xlate[nodes[1]], 'RECTANGLE')
 
         # Verify that count of shapes matches count of nodes
-        self.assertIsNone(set_node_shape_bypass(nodes, ['round_rect', 'rect', 'OCTAGON']))
+        self.assertRaises(CyError, set_node_shape_bypass, nodes, ['round_rect', 'rect', 'OCTAGON'])
 
     @print_entry_exit
     def test_set_node_border_width_bypass(self):
 
-        self._check_node_bypass(set_node_border_width_bypass, 5, 10.5, 'BogusWidth', 'NODE_BORDER_WIDTH')
+        self._check_node_bypass(set_node_border_width_bypass, 5, 10.5, 'BogusWidth', 'NODE_BORDER_WIDTH', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_border_color_bypass(self):
 
-        self._check_node_bypass(set_node_border_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', 'NODE_BORDER_PAINT')
+        self._check_node_bypass(set_node_border_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', 'NODE_BORDER_PAINT', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_opacity_bypass(self):
 
-        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_TRANSPARENCY')
-        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_BORDER_TRANSPARENCY')
-        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_LABEL_TRANSPARENCY')
+        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_TRANSPARENCY', exception_scenario='exception')
+        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_BORDER_TRANSPARENCY', exception_scenario='exception')
+        self._check_node_bypass(set_node_opacity_bypass, 128, 192, 300, 'NODE_LABEL_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_clear_node_opacity_bypass(self):
@@ -241,17 +241,17 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_fill_opacity_bypass(self):
 
-        self._check_node_bypass(set_node_fill_opacity_bypass, 128, 200, 300, 'NODE_TRANSPARENCY')
+        self._check_node_bypass(set_node_fill_opacity_bypass, 128, 200, 300, 'NODE_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_border_opacity_bypass(self):
 
-        self._check_node_bypass(set_node_border_opacity_bypass, 128, 200, 300, 'NODE_BORDER_TRANSPARENCY')
+        self._check_node_bypass(set_node_border_opacity_bypass, 128, 200, 300, 'NODE_BORDER_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_node_label_opacity_bypass(self):
 
-        self._check_node_bypass(set_node_label_opacity_bypass, 128, 200, 300, 'NODE_LABEL_TRANSPARENCY')
+        self._check_node_bypass(set_node_label_opacity_bypass, 128, 200, 300, 'NODE_LABEL_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_hide_selected_nodes(self):
@@ -290,14 +290,14 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_edge_opacity_bypass(self):
 
-        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_LABEL_TRANSPARENCY')
-        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_TRANSPARENCY')
+        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_LABEL_TRANSPARENCY', exception_scenario='exception')
+        self._check_edge_bypass(set_edge_opacity_bypass, 128, 192, 300, None, 'EDGE_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_color_bypass(self):
 
-        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_STROKE_UNSELECTED_PAINT')
-        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_UNSELECTED_PAINT')
+        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_STROKE_UNSELECTED_PAINT', exception_scenario='exception')
+        self._check_edge_bypass(set_edge_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_UNSELECTED_PAINT', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_label_bypass(self):
@@ -312,12 +312,12 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_edge_font_size_bypass(self):
 
-        self._check_edge_bypass(set_edge_font_size_bypass, 50, 100, 'BogusSize', None, 'EDGE_LABEL_FONT_SIZE')
+        self._check_edge_bypass(set_edge_font_size_bypass, 50, 100, 'BogusSize', None, 'EDGE_LABEL_FONT_SIZE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_label_color_bypass(self):
 
-        self._check_edge_bypass(set_edge_label_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_LABEL_COLOR')
+        self._check_edge_bypass(set_edge_label_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_LABEL_COLOR', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_tooltip_bypass(self):
@@ -327,37 +327,37 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_edge_line_width_bypass(self):
 
-        self._check_edge_bypass(set_edge_line_width_bypass, 80, 125.5, 'BogusWidth', None, 'EDGE_WIDTH')
+        self._check_edge_bypass(set_edge_line_width_bypass, 80, 125.5, 'BogusWidth', None, 'EDGE_WIDTH', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_line_style_bypass(self):
 
-        self._check_edge_bypass(set_edge_line_style_bypass, 'SINEWAVE', 'ZIGZAG', 'BogusStyle', False, 'EDGE_LINE_TYPE')
+        self._check_edge_bypass(set_edge_line_style_bypass, 'SINEWAVE', 'ZIGZAG', 'BogusStyle', False, 'EDGE_LINE_TYPE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_source_arrow_shape_bypass(self):
 
-        self._check_edge_bypass(set_edge_source_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_SOURCE_ARROW_SHAPE')
+        self._check_edge_bypass(set_edge_source_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_SOURCE_ARROW_SHAPE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_target_arrow_shape_bypass(self):
 
-        self._check_edge_bypass(set_edge_target_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_TARGET_ARROW_SHAPE')
+        self._check_edge_bypass(set_edge_target_arrow_shape_bypass, 'DIAMOND', 'CIRCLE', 'BogusShape', False, 'EDGE_TARGET_ARROW_SHAPE', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_source_arrow_color_bypass(self):
 
-        self._check_edge_bypass(set_edge_source_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT')
+        self._check_edge_bypass(set_edge_source_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_target_arrow_color_bypass(self):
 
-        self._check_edge_bypass(set_edge_target_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT')
+        self._check_edge_bypass(set_edge_target_arrow_color_bypass, '#FF00FF', '#FFFF00', 'BogusColor', None, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_label_opacity_bypass(self):
 
-        self._check_edge_bypass(set_edge_label_opacity_bypass, 128, 200, 300, False, 'EDGE_LABEL_TRANSPARENCY')
+        self._check_edge_bypass(set_edge_label_opacity_bypass, 128, 200, 300, False, 'EDGE_LABEL_TRANSPARENCY', exception_scenario='exception')
 
     @print_entry_exit
     def test_hide_selected_edges(self):
@@ -465,7 +465,7 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertRaises(CyError, unhide_nodes, names, network='BogusNetwork')
 
 
-    def _check_node_bypass(self, node_func, bypass_1, bypass_2, bogus_bypass, visual_property):
+    def _check_node_bypass(self, node_func, bypass_1, bypass_2, bogus_bypass, visual_property, exception_scenario=None):
         # Initialization
         load_test_session()
         all_node_names = get_all_nodes()
@@ -482,12 +482,16 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertFalse(False in [new_vals[node] == val for node, val in zip(all_node_names[0:2], [bypass_1, bypass_2])])
 
         # Verify that bad values, bad node lists and bad networks are caught
-        if bogus_bypass is not None: self.assertIsNone(node_func(all_node_names, bogus_bypass))
+        if bogus_bypass is not None:
+            if exception_scenario == 'exception':
+                self.assertRaises(CyError, node_func, all_node_names, bogus_bypass)
+            else:
+                self.assertIsNone(node_func(all_node_names, bogus_bypass))
         #        self.assertIsNone(set_node_color_bypass(None, bypass_1)) # TODO: In many functions, a null column list means all columns
         self.assertRaises(CyError, node_func, ['BogusNode'], bypass_1)
         self.assertRaises(CyError, node_func, all_node_names, bypass_1, network='BogusNetwork')
 
-    def _check_edge_bypass(self, edge_func, bypass_1, bypass_2, bogus_bypass, bogus_return, visual_property):
+    def _check_edge_bypass(self, edge_func, bypass_1, bypass_2, bogus_bypass, bogus_return, visual_property, exception_scenario=None):
         # Initialization
         load_test_session()
         all_edge_names = get_all_edges()
@@ -504,7 +508,12 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertFalse(False in [new_vals[node] == val for node, val in zip(all_edge_names[0:2], [bypass_1, bypass_2])])
 
         # Verify that bad values, bad node lists and bad networks are caught
-        if bogus_bypass is not None: self.assertEqual(edge_func(all_edge_names, bogus_bypass), bogus_return)
+        if bogus_bypass is not None:
+            if exception_scenario == 'exception':
+                self.assertRaises(CyError, edge_func, all_edge_names, bogus_bypass)
+            else:
+                self.assertEqual(edge_func(all_edge_names, bogus_bypass), bogus_return)
+
         #        self.assertIsNone(set_edge_color_bypass(None, bypass_1)) # TODO: In many functions, a null column list means all columns
         self.assertRaises(CyError, edge_func, ['BogusEdge'], bypass_1)
         self.assertRaises(CyError, edge_func, all_edge_names, bypass_1, network='BogusNetwork')
@@ -545,7 +554,7 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertEqual(bypass_func(list(all_names['name']), ['#FF0000'], 'BogusProperty'), '')
 
         # Verify that mismatch of count of nodes to properties is caught
-        self.assertRaises(CyError, bypass_func(list(all_names['name']), ['#FF0000', '#FF00FF'], visual_property))
+        self.assertRaises(CyError, bypass_func, list(all_names['name']), ['#FF0000', '#FF00FF'], visual_property)
 
         # Verify that invalid network is caught
         self.assertRaises(CyError, bypass_func, list(all_names['name']), ['#FF0000'], visual_property, network='BogusNetwork')

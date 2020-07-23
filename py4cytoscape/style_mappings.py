@@ -114,7 +114,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     # check visual prop name
     if visual_prop_name not in styles.get_visual_property_names(base_url=base_url):
         raise CyError(
-            'Could not find ' + visual_prop_name + '. Run get_visual_property_names() to retrieve property names.')
+            f'Could not find visual property "{visual_prop_name}". For valid ones, check get_visual_property_names().')
 
     # check mapping column and get type
     tp = visual_prop_name.split('_')[0].lower()
@@ -126,7 +126,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
             table_column_type = col['type']
             break
     if table_column_type is None:
-        raise CyError('Could not find ' + table_column + ' column in ' + table + ' table.')
+        raise CyError(f'Could not find "{table_column}" column in "{table}" table.')
 
     # construct visual property map
     visual_prop_map = {'mappingType': mapping_type_name, 'mappingColumn': table_column,
@@ -150,9 +150,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
             points = [{'value': col_val, 'lesser': prop_val, 'equal': prop_val, 'greater': prop_val} for
                       col_val, prop_val in zip(table_column_values, visual_prop_values)]
         else:
-            error = 'Error: table.column.values and visual.prop.values don\'t match up.'
-            sys.stderr.write(error)
-            raise CyError(error)
+            raise CyError(f'table_column_values "{table_column_values}" and visual_prop_values "{visual_prop_values}" don\'t match up.')
 
         visual_prop_map['points'] = points
 
@@ -339,10 +337,10 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -353,9 +351,7 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         >>> set_node_border_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
     """
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -387,10 +383,10 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -403,18 +399,14 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     # TODO: there is a set_node_border_opacity_default() ... shouldn't we be using that instead?
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -443,10 +435,10 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid width
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -457,6 +449,8 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
         >>> set_node_border_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('width', widths)
+
     # set default
     if default_width is not None:
         style_defaults.set_node_border_width_default(default_width, style_name, base_url=base_url)
@@ -485,10 +479,10 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -501,12 +495,10 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
     # check if colors are formatted correctly
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -537,10 +529,10 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -551,15 +543,11 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
         >>> set_node_combo_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
     """
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -602,10 +590,10 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -618,18 +606,14 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     # TODO: There is a set_node_fill_opacity_default() ... should that be called instead?
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -658,7 +642,7 @@ def set_node_font_face_mapping(table_column, table_column_values=None, fonts=Non
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -673,7 +657,7 @@ def set_node_font_face_mapping(table_column, table_column_values=None, fonts=Non
     # TODO: moved to _update_style_mapping
     # TODO: R documentation examples look wrong ... check this out
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
     if default_font is not None:
         style_defaults.set_node_font_face_default(default_font, style_name=style_name, base_url=base_url)
@@ -701,10 +685,10 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid size
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -715,6 +699,8 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
         >>> set_node_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('size', sizes)
+
     if default_size is not None:
         style_defaults.set_node_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
@@ -742,10 +728,10 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid height
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -756,6 +742,8 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
         >>> set_node_height_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('height', heights)
+
     if default_height is not None:
         style_defaults.set_node_height_default(default_height, style_name=style_name, base_url=base_url)
 
@@ -795,7 +783,7 @@ def set_node_label_mapping(table_column, style_name='default', network=None, bas
     """
     # TODO: The return value in the R code is None ... probably should be throwing an exception, which I'm doing
     if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-        raise CyError('Table column does not exist. Please try again.')
+        raise CyError(f'Table column "{table_column}" does not exist')
 
     # TODO: Should there be the ability to set the node label default here? The call exists in styles_defaults
 
@@ -824,10 +812,10 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -838,9 +826,7 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
         >>> set_node_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
     """
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -871,10 +857,10 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -887,18 +873,14 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     # TODO: There is a set_node_label_opacity_default ... should that be called here?
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -926,7 +908,7 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -936,6 +918,8 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
         >>> set_node_shape_mapping('Degree', table_column_values=['1', '2'], shapes=['TRIANGLE', 'OCTAGON'], default_shape='ELLIPSE', style_name='galFiltered Style')
         ''
     """
+    # TODO: Verify shapes
+
     if default_shape is not None:
         style_defaults.set_node_shape_default(default_shape, style_name, base_url=base_url)
 
@@ -964,10 +948,10 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid size
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -978,6 +962,8 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
         >>> set_node_size_mapping('PassthruCol', mapping_type='p', default_opacity=40, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('size', sizes)
+
     # set default
     if default_size is not None:
         style_defaults.set_node_size_default(default_size, style_name, base_url=base_url)
@@ -1003,7 +989,7 @@ def set_node_tooltip_mapping(table_column, style_name='default', network=None, b
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1015,7 +1001,7 @@ def set_node_tooltip_mapping(table_column, style_name='default', network=None, b
     """
     # TODO: The return value in the R code is None ... probably should be throwing an exception, which I'm doing
     if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
-        raise CyError('Table column does not exist. Please try again.')
+        raise CyError(f'Table column "{table_column}" does not exist')
 
     # TODO: There is a set_node_tooltip_default function ... should there be a default value here??
 
@@ -1044,10 +1030,10 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid width
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1058,6 +1044,8 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
         >>> set_node_width_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('width', widths)
+
     if default_width is not None:
         style_defaults.set_node_width_default(default_width, style_name=style_name, base_url=base_url)
 
@@ -1078,9 +1066,7 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
 @cy_log
 def set_edge_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
                            style_name='default', network=None, base_url=DEFAULT_BASE_URL):
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1119,7 +1105,7 @@ def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=Non
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1161,10 +1147,10 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid size
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1175,6 +1161,8 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
         >>> set_edge_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('size', sizes)
+
     if default_size is not None:
         style_defaults.set_edge_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
@@ -1197,7 +1185,7 @@ def set_edge_label_mapping(table_column, style_name='default', network=None, bas
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1211,7 +1199,7 @@ def set_edge_label_mapping(table_column, style_name='default', network=None, bas
     """
     # TODO: The return value in the R code is None ... probably should be throwing an exception, which I'm doing
     if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
-        raise CyError('Table column does not exist. Please try again.')
+        raise CyError(f'Table column "{table_column}" does not exist')
 
     # TODO: Should there be the ability to set the edge label default here? The call exists in styles_defaults
 
@@ -1240,10 +1228,10 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1254,9 +1242,7 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
         >>> set_edge_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
     """
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1287,10 +1273,10 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1303,18 +1289,14 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
-    #        raise CyError('Table column does not exist. Please try again.')
+    #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     # TODO: There is a set_edge_label_opacity_default ... should that be called here?
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -1342,7 +1324,7 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1352,6 +1334,8 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
         >>> set_edge_line_style_mapping('interaction', table_column_values=['pp','pd'], shapes=['ZIGZAG', 'SINEWAVE'], default_shape='EQUAL_DASH', style_name='galFiltered Style')
         ''
     """
+    # TODO: Validate line style
+
     # TODO: R code does not check for valid table_column ... this code does
     if default_line_style is not None:
         style_defaults.set_edge_line_style_default(default_line_style, style_name=style_name, base_url=base_url)
@@ -1381,10 +1365,10 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid width
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1395,6 +1379,8 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
         >>> set_edge_line_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
     """
+    verify_dimensions('width', widths)
+
     # TODO: R code does not check for valid table_column ... this code does
     # set default
     if default_width is not None:
@@ -1425,10 +1411,10 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type, or if invalid opacity
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1441,16 +1427,12 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
     """
     # TODO: This code checks the table_column ... the R code does not
 
-    for o in opacities or []:
-        if o < 0 or o > 255:
-            sys.stderr.write('Error: opacities must be between 0 and 255.')
-            return None
+    verify_opacities(opacities)
 
     # TODO: There is a set_edge_opacity_default ... should that be called here?
     if default_opacity is not None:
-        if default_opacity < 0 or default_opacity > 255:
-            sys.stderr.write('Error: opacity must be between 0 and 255.')
-            return None
+        verify_opacities(default_opacity)
+
         style_defaults.set_visual_property_default(
             {'visualProperty': 'EDGE_TRANSPARENCY', 'value': str(default_opacity)},
             style_name=style_name, base_url=base_url)
@@ -1480,7 +1462,7 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1490,6 +1472,8 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
         >>> set_edge_target_arrow_maping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
     """
+    # TODO: Validate shape
+
     # TODO: Isn't this the same as set_edge_target_arrow_shape_mapping? ... shouldn't this be renamed?
     # TODO: R code does not check for valid table_column ... this code does
     # set default
@@ -1521,7 +1505,7 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1531,6 +1515,8 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
         >>> set_edge_source_arrow_mapping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
     """
+    # TODO: Validate shape
+
     # TODO: Isn't this the same as set_edge_source_arrow_shape_mapping? ... shouldn't this be renamed?
     # TODO: R code does not check for valid table_column ... this code does
     # set default
@@ -1563,10 +1549,10 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1577,9 +1563,7 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
         >>> set_edge_target_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
     """
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1612,10 +1596,10 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
-        CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -1626,9 +1610,7 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
         >>> set_edge_source_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
     """
-    for color in colors or []:
-        if is_not_hex_color(color):
-            return None  # TODO: Should we be throwing an exception?
+    verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1659,7 +1641,7 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1699,7 +1681,7 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1733,7 +1715,7 @@ def set_edge_tooltip_mapping(table_column, style_name='default', network=None, b
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str or None: '' if successful or None if error
+        str: ''
 
     Raises:
         CyError: if table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
@@ -1756,7 +1738,7 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
 
     # TODO: Added because all mappings need to do this. R code should probably adopt this, too
     if not table_column_exists(table_column, table, network=network, base_url=base_url):
-        raise CyError('Table column does not exist. Please try again.')
+        raise CyError(f'Table column "{table_column}" does not exist')
 
     # perform mapping
     if mapping_type in ['continuous', 'c', 'interpolate']:
@@ -1764,22 +1746,20 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
             mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
                                       network=network, base_url=base_url)
         else:
-            raise CyError('Continuous mapping of ' + visual_prop_name + ' values is not supported.')
+            raise CyError(f'Continuous mapping of "{visual_prop_name}" values is not supported.')
     elif mapping_type in ['discrete', 'd', 'lookup']:
         if 'd' in supported_mappings:
             mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
                                       network=network, base_url=base_url)
         else:
-            raise CyError('Discrete mapping of ' + visual_prop_name + ' values is not supported.')
+            raise CyError(f'Discrete mapping of "{visual_prop_name}" values is not supported.')
     elif mapping_type in ['passthrough', 'p']:
         if 'p' in supported_mappings:
             mvp = map_visual_property(visual_prop_name, table_column, 'p', network=network, base_url=base_url)
         else:
-            raise CyError('Passthrough mapping of ' + visual_prop_name + ' values is not supported.')
+            raise CyError(f'Passthrough mapping of "{visual_prop_name}" values is not supported.')
     else:
-        # TODO: Do we want to report this way?
-        sys.stderr.write('mapping_type not recognized.')
-        return None
+        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
 
     res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res
