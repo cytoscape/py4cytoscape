@@ -73,6 +73,8 @@ class CommandsTests(unittest.TestCase):
     @print_entry_exit
     def test_cyrest_get(self):
 
+#        running_remote(True)
+
         # Verify that starting a garbage collection returns a non-JSON result
         res = cyrest_get('gc', require_json=False)
         self.assertIsInstance(res, str)

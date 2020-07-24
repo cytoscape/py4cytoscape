@@ -39,7 +39,7 @@ import os
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, log_http_result, log_http_request
-from .py4cytoscape_notebook import running_remote, do_request_remote
+from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote
 from .exceptions import CyError
 
 
@@ -689,5 +689,10 @@ def _do_request_local(method, url, **kwargs):
 
 # Determine whether actual call is local or remote
 def _do_request(method, url, **kwargs):
+    remote_cytoscape = running_remote()
+    if remote_cytoscape is None:
+        remote_cytoscape = check_running_remote()
+    if remote_cytoscape is None:
+        raise CyError('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
     requester = do_request_remote if running_remote() else _do_request_local
     return requester(method, url, **kwargs)

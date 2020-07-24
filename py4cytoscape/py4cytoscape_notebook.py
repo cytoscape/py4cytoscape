@@ -106,12 +106,11 @@ def do_request_remote(method, url, **kwargs):
 
 
 _notebook_is_running = None
-def notebook_is_running(new_state = None):
+def notebook_is_running(new_state=None):
     global _notebook_is_running
-    if new_state == None:
-        return _notebook_is_running
     old_state = _notebook_is_running
-    _notebook_is_running = new_state
+    if not new_state is None:
+        _notebook_is_running = new_state
     return old_state
 
 def _check_notebook_is_running():
@@ -134,32 +133,37 @@ def _check_notebook_is_running():
 _check_notebook_is_running()
 
 
-_running_remote = None
-def running_remote(new_state = None):
+_running_remote = None # Don't know whether Cytoscape is local or remote yet
+def running_remote(new_state=None):
     global _running_remote
-    if new_state == None:
-        return _running_remote
     old_state = _running_remote
-    _running_remote = new_state
+    if not new_state is None:
+        _running_remote = new_state
     return old_state
 
-def _check_running_remote():
+def check_running_remote():
     global _running_remote
     if notebook_is_running:
-        r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
-        if r.status_code == 200:
-            _running_remote = False
-        else:
+        if _running_remote is None:
             try:
-                do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
-                _running_remote = True
-            except Exception as e:
-                print(e)
+                # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
+                r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
+                if r.status_code != 200:
+                    raise Exception('Failed to connect to local Cytoscape')
                 _running_remote = False
+            except:
+                # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
+                try:
+                    do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
+                    _running_remote = True
+                except:
+                    # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
+                    _running_remote = None
     else:
         _running_remote = False
+    return _running_remote
 
-_check_running_remote()
+check_running_remote()
 
 
 
