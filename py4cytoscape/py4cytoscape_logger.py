@@ -33,6 +33,7 @@ import os
 
 from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _DETAIL_LOG_NAME, _DETAIL_ENABLE_HTTP_CALLS, _SUMMARY_LOG_LEVEL, _SUMMARY_ENABLE_HTTP_CALLS, _DETAIL_ENABLE_HTTP_CONTENT, _SUMMARY_ENABLE_HTTP_CONTENT
 
+
 _detail_log_base = os.path.join(_DETAIL_LOG_DIR, _DETAIL_LOG_NAME)
 if not os.path.exists(_DETAIL_LOG_DIR): os.makedirs(_DETAIL_LOG_DIR)
 
@@ -158,24 +159,7 @@ def log_http_result(r):
             content = ', content: ' + r.text if _SUMMARY_ENABLE_HTTP_CONTENT else ''
             summary_logger.info(' ' + _logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 
-_notebook_is_running = None
-
 def narrate(progress):
-    global _notebook_is_running
-    if _notebook_is_running is None:
-        try: # from https://exceptionshub.com/how-can-i-check-if-code-is-executed-in-the-ipython-notebook.html
-            shell = get_ipython().__class__.__name__
-            if shell == 'ZMQInteractiveShell':
-                _notebook_is_running = True  # Jupyter notebook or qtconsole
-            elif shell == 'TerminalInteractiveShell':
-                _notebook_is_running = False  # Terminal running IPython
-            else:
-                _notebook_is_running = False  # Other type (?)
-        except NameError:
-            _notebook_is_running = False  # Probably standard Python interpreter
-        except:
-            _notebook_is_running = False  # Safety check ... shouldn't ever happen
-            print('WARNING -- _notebook_is_running check failed')
-
-    if _notebook_is_running:
+    from .py4cytoscape_notebook import notebook_is_running
+    if notebook_is_running():
         print(progress)
