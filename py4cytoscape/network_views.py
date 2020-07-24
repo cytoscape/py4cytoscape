@@ -35,7 +35,7 @@ from . import networks
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-
+from .py4cytoscape_notebook import running_remote
 
 @cy_log
 def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
@@ -259,9 +259,10 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     # TODO: It looks like the '.' should be escaped ... true?
     # TODO: If a lower case comparison is going to be done, shouldn't filename also be lower-case?
     if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
-    filename = os.path.abspath(filename)
-    if os.path.isfile(filename): print(
-        'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    if not running_remote():
+        filename = os.path.abspath(filename)
+        if os.path.isfile(filename): print(
+            'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     res = commands.commands_post(
         '%s OutputFile="%s" options="%s" view="SUID:%s"' % (cmd_string, filename, type.upper(), view_SUID),
         base_url=base_url)

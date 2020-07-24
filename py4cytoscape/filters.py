@@ -39,7 +39,7 @@ from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import CATCHUP_FILTER_SECS, MODEL_PROPAGATION_SECS
-
+from .py4cytoscape_notebook import running_remote
 
 @cy_log
 def apply_filter(filter_name='Default filter', hide=False, network=None, base_url=DEFAULT_BASE_URL):
@@ -323,8 +323,9 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
     ext = '.json'
 
     if re.search(ext + '$', filename) is None: filename += ext
-    filename = os.path.abspath(filename)
-    if os.path.exists(filename): warnings.warn('This file has been overwritten.')
+    if not running_remote():
+        filename = os.path.abspath(filename)
+        if os.path.exists(filename): narrate('This file has been overwritten.')
 
     res = commands.commands_post(f'filter export file="{filename}"', base_url=base_url)
 
@@ -356,7 +357,8 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
         >>> import_filters('test') # Fetches filters in file 'test'
         {}
     """
-    filename = os.path.abspath(filename)
+    if not running_remote():
+        filename = os.path.abspath(filename)
     res = commands.commands_post(f'filter import file="{filename}"', base_url=base_url)
     time.sleep(
         CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug

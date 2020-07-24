@@ -36,7 +36,7 @@ from . import networks
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-
+from .py4cytoscape_notebook import running_remote
 
 # ==============================================================================
 # I. Style management functions
@@ -191,8 +191,9 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     if filename is None: filename = 'styles'
     ext = '.' + type.lower() + '$'
     if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
-    filename = os.path.abspath(filename)
-    if os.path.exists(filename): narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    if not running_remote():
+        filename = os.path.abspath(filename)
+        if os.path.exists(filename): narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     cmd_string += ' OutputFile="' + filename + '"'
     # TODO: Can't we create a parameter to delete the file first?
 
@@ -225,7 +226,8 @@ def import_visual_styles(filename="styles.xml", base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`export_visual_styles`
     """
-    filename = os.path.abspath(filename)
+    if not running_remote():
+        filename = os.path.abspath(filename)
 
     res = commands.commands_post(f'vizmap load file file="{filename}"', base_url=base_url)
     return res

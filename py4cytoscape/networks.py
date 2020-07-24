@@ -57,7 +57,7 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS
 from .exceptions import CyError
-
+from .py4cytoscape_notebook import running_remote
 
 def __init__(self):
     pass
@@ -342,9 +342,10 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
 
     ext = '.' + type.lower()
     if re.search(ext + '$', filename) is None: filename += ext
-    filename = os.path.abspath(filename)
-    if os.path.exists(filename): narrate(
-        'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    if not running_remote():
+        filename = os.path.abspath(filename)
+        if os.path.exists(filename): narrate(
+            'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
 
     return commands.commands_post(f'{cmd} OutputFile="{filename}"', base_url=base_url)
 
@@ -1108,8 +1109,8 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         {'networks': [131481], 'views': [131850]}
     """
     if file is None:
-        file = os.path.abspath('data/galFiltered.sif')
-    else:
+        file = 'data/galFiltered.sif'
+    if not running_remote():
         file = os.path.abspath(file)
     res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
     # TODO: Fix R documentation to match what's really returned
