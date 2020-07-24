@@ -29,6 +29,7 @@ from . import commands
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_notebook import running_remote
 
 
 def __init__(self):
@@ -106,7 +107,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
         file_location = './sampleData/sessions/Yeast Perturbation.cys'
     elif str.startswith(file_location, 'http'):
         type = 'url'
-    else:
+    elif not running_remote():
         file_location = os.path.abspath(file_location)
 
     narrate('Opening ' + file_location + '...')
@@ -151,6 +152,7 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
     else:
         # TODO: R uses '.cys$' here, but shouldn't the '.' be escaped??
         if re.search('.cys$', filename) is None: filename += '.cys'
-        filename = os.path.abspath(filename)
+        if not running_remote():
+            filename = os.path.abspath(filename)
         if os.path.isfile(filename): narrate('This file has been overwritten.')
         return commands.commands_post(f'session save as file="{filename}"', base_url=base_url)
