@@ -76,13 +76,23 @@ def do_request_remote(method, url, **kwargs):
                     'data': data,
                     'headers': kwargs['headers'] if 'headers' in kwargs else None
                     }
-    r = requests.request('POST', JUPYTER_BRIDGE_URL + '/queue_request?channel=1',
-                         headers={'Content-Type': 'application/json'}, json=http_request)
-    if r.status_code != 200:
-        raise CyError('Error posting to Jupyter-bridge: ' + r.text)
-    r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
-    if r.status_code != 200:
-        raise CyError('Error receiving from Jupyter-bridge: ' + r.text)
+
+    # Call Jupyter-bridge to request a Cytoscape operation. Jupyter-bridge will put the request into a queue, and
+    # the local browser will pick it out, use it to call Cytoscape, and then queue a reply.
+    try:
+        r = requests.request('POST', JUPYTER_BRIDGE_URL + '/queue_request?channel=1',
+                             headers={'Content-Type': 'application/json'}, json=http_request)
+        r.raise_for_status()
+    except Exception as e:
+        raise CyError('Error posting to Jupyter-bridge: ' + str(e))
+
+    # Call Juptyer-bridge to pick up a reply queued by the local browser, which called Cytoscape to execute an operation
+    # and return a reply.
+    try:
+        r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
+        r.raise_for_status()
+    except Exception as e:
+        raise CyError('Error receiving from Jupyter-bridge: ' + str(e))
 
     # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
     # If the dict is bad, we can't continue. I have seen this happen, but as a consequence of questionable networking.
