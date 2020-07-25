@@ -23,8 +23,6 @@ import json
 
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request
-from .exceptions import CyError
-
 
 
 # Call CyREST as a remote service via Jupyter-bridge
@@ -61,8 +59,7 @@ def do_request_remote(method, url, **kwargs):
     JUPYTER_BRIDGE_URL = 'http://70.95.64.191:9529' # For production
 
     log_http_request(method, url, **kwargs)
-    # Params: Method, url + params (cyrest_delete, cyrest_get, cyrest_post, cyrest_put), json (cyrest_post, cyrest_put), data(commands_post), headers (commands_get, commands_help, commands_post)
-    #    r = requests.request(method, url, **kwargs)
+
     if 'json' in kwargs:
         data = kwargs['json']
     elif 'data' in kwargs:
@@ -84,7 +81,7 @@ def do_request_remote(method, url, **kwargs):
                              headers={'Content-Type': 'application/json'}, json=http_request)
         r.raise_for_status()
     except Exception as e:
-        raise CyError('Error posting to Jupyter-bridge: ' + str(e))
+        raise requests.exceptions.HTTPError('Error posting to Jupyter-bridge: ' + str(e))
 
     # Call Juptyer-bridge to pick up a reply queued by the local browser, which called Cytoscape to execute an operation
     # and return a reply.
@@ -92,7 +89,7 @@ def do_request_remote(method, url, **kwargs):
         r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
         r.raise_for_status()
     except Exception as e:
-        raise CyError('Error receiving from Jupyter-bridge: ' + str(e))
+        raise requests.exceptions.HTTPError('Error receiving from Jupyter-bridge: ' + str(e))
 
     # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
     # If the dict is bad, we can't continue. I have seen this happen, but as a consequence of questionable networking.
@@ -111,7 +108,7 @@ def do_request_remote(method, url, **kwargs):
         cy_reply = json.loads(message)
     except:
         content = content or 'None'
-        raise CyError(u'Undeciperable message received from Jupyter-bridge: %s' % (str(content)))
+        raise requests.exceptions.HTTPError(u'Undeciperable message received from Jupyter-bridge: %s' % (str(content)))
 
     r = SpoofResponse(url, cy_reply['status'], cy_reply['reason'], cy_reply['text'])
     if cy_reply['status'] == 0:
@@ -162,20 +159,16 @@ def check_running_remote():
     if notebook_is_running:
         if _running_remote is None:
             try:
-                print('trying local Cytoscape')
                 # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
                 r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
-                if r.status_code != 200:
-                    raise Exception('Failed to connect to local Cytoscape')
+                r.raise_for_status()
                 _running_remote = False
             except:
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
-                    print('trying remote Cytoscape')
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
                 except:
-                    print('giving up on all Cytoscape')
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
     else:
