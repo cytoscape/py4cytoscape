@@ -85,12 +85,18 @@ def do_request_remote(method, url, **kwargs):
         raise CyError('Error receiving from Jupyter-bridge: ' + r.text)
 
     # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
-    # If the dict is bad, we can't continue.
+    # If the dict is bad, we can't continue. I have seen this happen, but as a consequence of questionable networking.
+    # Specifically, I use tcpdump to monitor a message sent from Jupyter-bridge, and the message has an HTTP status,
+    # headers, and JSON payload. However, on the receiver side, I use WireShark to see just the HTTP status and no
+    # headers or JSON payload. The smoking gun appears to be that the headers and JSON payload are contained in the
+    # TCP [FIN] packet, and never make it to the receiver side. Of course, this is bad form for TCP, but it is
+    # happening. To mitigate this, I changed Jupyter-bridge to add 1500 bytes to the end of the payload. For normal-size
+    # TCP packets (i.e., MTU=1500), this forces the headers and JSON payload to *not* be in the TCP [FIN] packet. This
+    # seems to work, tacky as it may be. If it fails, we'll see that 'encoding' ends up being None, and the str() will
+    # fail.
     try:
         content = r.content
-        encoding = chardet.detect(content)['encoding'] # TODO: Could this be returning None?? ... What to do?? ... from StyleValuesTests.test_get_edge_property, line 55, also test_get_node_height, line 326
-        if encoding == None:
-            print("I'm here")
+        encoding = chardet.detect(content)['encoding']
         message = str(content, encoding, errors='replace')
         cy_reply = json.loads(message)
     except:
@@ -146,6 +152,7 @@ def check_running_remote():
     if notebook_is_running:
         if _running_remote is None:
             try:
+                print('trying local Cytoscape')
                 # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
                 r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                 if r.status_code != 200:
@@ -154,9 +161,11 @@ def check_running_remote():
             except:
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
+                    print('trying remote Cytoscape')
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
                 except:
+                    print('giving up on all Cytoscape')
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
     else:
