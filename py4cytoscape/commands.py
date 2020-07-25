@@ -692,6 +692,6 @@ def _do_request_local(method, url, **kwargs):
 def _do_request(method, url, **kwargs):
     remote_cytoscape = check_running_remote()
     if remote_cytoscape is None:
-        raise CyError('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
+        raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
     requester = do_request_remote if running_remote() else _do_request_local
     return requester(method, url, **kwargs)
