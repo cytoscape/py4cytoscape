@@ -53,9 +53,9 @@ class SpoofResponse:
 
 
 def do_request_remote(method, url, **kwargs):
-#        JUPYTER_BRIDGE_URL = 'http://127.0.0.1:9529' # For local testing
+    JUPYTER_BRIDGE_URL = 'http://127.0.0.1:9529' # For local testing
 #        JUPYTER_BRIDGE_URL = 'http://192.168.2.194:9529' # For production
-    JUPYTER_BRIDGE_URL = 'https://jupyter-bridge.cytoscape.org' # For production
+#    JUPYTER_BRIDGE_URL = 'https://jupyter-bridge.cytoscape.org' # For production
 
     log_http_request(method, url, **kwargs)
 
