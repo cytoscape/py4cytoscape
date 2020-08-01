@@ -85,7 +85,9 @@ def do_request_remote(method, url, **kwargs):
     # Call Juptyer-bridge to pick up a reply queued by the local browser, which called Cytoscape to execute an operation
     # and return a reply.
     try:
-        r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
+        while True:
+            r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
+            if r.status_code != 408: break  # keep waiting for a result as long as we keep getting connection timeouts
         r.raise_for_status()
     except Exception as e:
         raise requests.exceptions.HTTPError('Error receiving from Jupyter-bridge: ' + str(e))
