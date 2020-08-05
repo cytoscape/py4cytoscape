@@ -147,7 +147,7 @@ def _check_notebook_is_running():
 _check_notebook_is_running()
 
 
-_running_remote = None # Don't know whether Cytoscape is local or remote yet
+_running_remote = True # None means "Don't know whether Cytoscape is local or remote yet"
 def running_remote(new_state=None):
     global _running_remote
     old_state = _running_remote
