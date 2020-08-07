@@ -170,7 +170,7 @@ def check_running_remote():
                 try:
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
- #                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
+                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
                 except:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
