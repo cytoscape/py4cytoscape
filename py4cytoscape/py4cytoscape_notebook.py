@@ -19,9 +19,10 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import requests
 import json
+import os
 
 # Internal module convenience imports
-from .py4cytoscape_logger import log_http_result, log_http_request
+from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
 
 
 # Call CyREST as a remote service via Jupyter-bridge
@@ -169,6 +170,9 @@ def check_running_remote():
                 try:
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
+                    module_dir = __file__.split('/')[:-1]
+                    module_path = os.path(*module_dir)
+                    detail_logger.debug(module_path)
                 except:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
