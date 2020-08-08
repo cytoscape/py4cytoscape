@@ -81,7 +81,11 @@ def do_request_remote(method, url, **kwargs):
                              headers={'Content-Type': 'application/json'}, json=http_request)
         r.raise_for_status()
     except Exception as e:
-        raise requests.exceptions.HTTPError('Error posting to Jupyter-bridge: ' + str(e))
+        if e.response is None or e.response.text is None or e.response.text == '':
+            content = f'{e}'
+        else:
+            content = e.response.text
+        raise requests.exceptions.HTTPError(f'Error posting to Jupyter-bridge: {content}')
 
     # Call Juptyer-bridge to pick up a reply queued by the local browser, which called Cytoscape to execute an operation
     # and return a reply.
@@ -91,7 +95,11 @@ def do_request_remote(method, url, **kwargs):
             if r.status_code != 408: break  # keep waiting for a result as long as we keep getting connection timeouts
         r.raise_for_status()
     except Exception as e:
-        raise requests.exceptions.HTTPError('Error receiving from Jupyter-bridge: ' + str(e))
+        if e.response is None or e.response.text is None or e.response.text == '':
+            content = f'{e}'
+        else:
+            content = e.response.text
+        raise requests.exceptions.HTTPError(f'Error receiving from Jupyter-bridge: {content}')
 
     # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
     # If the dict is bad, we can't continue. I have seen this happen, but as a consequence of questionable networking.
@@ -168,9 +176,10 @@ def check_running_remote():
             except:
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
+                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
-                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
+
                 except:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
