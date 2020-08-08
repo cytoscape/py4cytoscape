@@ -190,6 +190,7 @@ detail_logger.debug('JS: ' + js)
 if os.path.isfile(js):
     detail_logger.debug('exists')
     x = get_ipython()
+    detail_logger.debug(x.__name__)
     detail_logger.debug(dir(x))
     load_result = get_ipython().core.display.Javascript(filename=js)
     detail_logger.debug('load testjs.js ' + str(load_result))
