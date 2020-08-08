@@ -183,19 +183,19 @@ def check_running_remote():
     return _running_remote
 
 check_running_remote()
-js = os.path.join(os.path.dirname(__file__), 'testjs.js')
-detail_logger.debug('JS: ' + js)
-js = os.path.join(os.getcwd(), 'testjs.js')
-detail_logger.debug('JS: ' + js)
-if os.path.isfile(js):
-    detail_logger.debug('exists')
-    x = get_ipython()
-    detail_logger.debug(type(x))
-    detail_logger.debug(dir(x))
-    load_result = get_ipython().core.display.Javascript(filename=js)
-    detail_logger.debug('load testjs.js ' + str(load_result))
-else:
-    detail_logger.debug('does not exist')
+# js = os.path.join(os.path.dirname(__file__), 'testjs.js')
+# detail_logger.debug('JS: ' + js)
+# js = os.path.join(os.getcwd(), 'testjs.js')
+# detail_logger.debug('JS: ' + js)
+# if os.path.isfile(js):
+#     detail_logger.debug('exists')
+#     x = get_ipython()
+#     detail_logger.debug(type(x))
+#     detail_logger.debug(dir(x))
+#     load_result = get_ipython().core.display.Javascript(filename=js)
+#     detail_logger.debug('load testjs.js ' + str(load_result))
+# else:
+#     detail_logger.debug('does not exist')
 
 
 
