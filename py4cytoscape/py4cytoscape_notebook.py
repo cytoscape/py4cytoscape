@@ -180,8 +180,13 @@ def check_running_remote():
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
 
-                except:
+                except Exception as e:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
+                    if e.response is None or e.response.text is None or e.response.text == '':
+                        content = f'{e}'
+                    else:
+                        content = e.response.text
+                    detail_logger.debug(f'Error contacting Jupyter-bridge: {content}')
                     _running_remote = None
     else:
         _running_remote = False
