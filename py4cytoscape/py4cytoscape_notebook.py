@@ -146,7 +146,7 @@ def _check_notebook_is_running():
             notebook_is_running = False  # Probably standard Python interpreter
         except:
             notebook_is_running = False  # Safety check ... shouldn't ever happen
-            print('WARNING -- _notebook_is_running check failed')
+            detail_logger.debug('Warning: _notebook_is_running check failed')
 
 _check_notebook_is_running()
 
@@ -191,7 +191,7 @@ if os.path.isfile(js):
     detail_logger.debug('exists')
     x = get_ipython()
     detail_logger.debug(dir(x))
-    load_result = get_ipython().display.Javascript(filename=js)
+    load_result = get_ipython().core.display.Javascript(filename=js)
     detail_logger.debug('load testjs.js ' + str(load_result))
 else:
     detail_logger.debug('does not exist')
