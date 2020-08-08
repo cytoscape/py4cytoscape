@@ -171,7 +171,8 @@ def check_running_remote():
             except:
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
-#                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
+                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
+                    detail_logger.debug('py4: ' + os.getcwd())
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
 
