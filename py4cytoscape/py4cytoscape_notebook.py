@@ -148,7 +148,7 @@ def _check_notebook_is_running():
 _check_notebook_is_running()
 
 
-_running_remote = True # None means "Don't know whether Cytoscape is local or remote yet"
+_running_remote = None # None means "Don't know whether Cytoscape is local or remote yet"
 def running_remote(new_state=None):
     global _running_remote
     old_state = _running_remote
@@ -170,7 +170,7 @@ def check_running_remote():
                 try:
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
-#                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
+                    detail_logger.debug('JS: ' + os.path.join(os.path.dirname(__file__), 'howdy.js'))
                 except:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     _running_remote = None
