@@ -183,7 +183,9 @@ def check_running_remote():
     return _running_remote
 
 check_running_remote()
-js = os.path.join(os.path.dirname(__file__), 'test.js')
+js = os.path.join(os.path.dirname(__file__), 'testjs.js')
+detail_logger.debug('JS: ' + js)
+js = os.path.join(os.getcwd(), 'testjs.js')
 detail_logger.debug('JS: ' + js)
 if os.path.isfile(js):
     detail_logger.debug('exists')
