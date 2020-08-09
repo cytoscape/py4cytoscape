@@ -19,7 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import requests
 import json
-import uuid
+
 
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
@@ -52,8 +52,13 @@ class SpoofResponse:
             raise requests.exceptions.HTTPError(
                 u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
 
+# Create a unique channel that identifies this process so other processes don't mix up messages
+import uuid
+_CHANNEL = uuid.uuid4().int
 
-_CHANNEL = 1
+def get_browser_client_channel():
+    return _CHANNEL
+
 def do_request_remote(method, url, **kwargs):
 #    JUPYTER_BRIDGE_URL = 'http://127.0.0.1:5000' # For local testing
 #        JUPYTER_BRIDGE_URL = 'http://192.168.2.194:9529' # For production
@@ -78,7 +83,7 @@ def do_request_remote(method, url, **kwargs):
     # Call Jupyter-bridge to request a Cytoscape operation. Jupyter-bridge will put the request into a queue, and
     # the local browser will pick it out, use it to call Cytoscape, and then queue a reply.
     try:
-        r = requests.request('POST', f'{JUPYTER_BRIDGE_URL}/queue_request?{_CHANNEL}',
+        r = requests.request('POST', f'{JUPYTER_BRIDGE_URL}/queue_request?channel={_CHANNEL}',
                              headers={'Content-Type': 'application/json'}, json=http_request)
         r.raise_for_status()
     except Exception as e:
@@ -88,7 +93,7 @@ def do_request_remote(method, url, **kwargs):
     # and return a reply.
     try:
         while True:
-            r = requests.request('GET', f'{JUPYTER_BRIDGE_URL}/dequeue_reply?{_CHANNEL}')
+            r = requests.request('GET', f'{JUPYTER_BRIDGE_URL}/dequeue_reply?channel={_CHANNEL}')
             if r.status_code != 408: break  # keep waiting for a result as long as we keep getting connection timeouts
         r.raise_for_status()
     except Exception as e:
@@ -188,9 +193,7 @@ def check_running_remote():
 
 def get_browser_client_js():
     try:
-        # Create a unique channel that identifies this process so other processes don't mix up messages
-        global _CHANNEL
-        _CHANNEL = uuid.uuid4().int
+        # Prepend channel number of client Javascript so it can communicate with this process via Jupyter-bridge
         r = requests.get(
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
@@ -198,8 +201,6 @@ def get_browser_client_js():
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
 
-def get_browser_client_channel():
-    return _CHANNEL
 
 
 
