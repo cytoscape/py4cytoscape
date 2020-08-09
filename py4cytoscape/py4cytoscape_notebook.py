@@ -188,6 +188,7 @@ def get_browser_client_js():
         # Create a unique channel that identifies this process so other processes don't mix up messages
         global _CHANNEL
         _CHANNEL = uuid.uuid4().int
+        _CHANNEL = 1
         r = requests.get(
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
