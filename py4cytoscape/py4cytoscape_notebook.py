@@ -166,15 +166,18 @@ def check_running_remote():
         if _running_remote is None:
             try:
                 # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
+                detail_logger.debug(f'Attempting to connect to local Cytoscape')
                 r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                 r.raise_for_status()
                 _running_remote = False
+                detail_logger.debug(f'Detected local Cytoscape')
             except:
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
+                    detail_logger.debug(f'Attempting to connect to remote Cytoscape')
                     do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
                     _running_remote = True
-
+                    detail_logger.debug(f'Detected remote Cytoscape')
                 except Exception as e:
                     # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
                     detail_logger.debug(f'Error initially contacting Jupyter-bridge: {_error_content(e)}')
