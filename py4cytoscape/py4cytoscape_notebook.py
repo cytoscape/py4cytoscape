@@ -19,6 +19,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import requests
 import json
+import uuid
 
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
@@ -52,6 +53,7 @@ class SpoofResponse:
                 u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
 
 
+_CHANNEL = 1
 def do_request_remote(method, url, **kwargs):
 #    JUPYTER_BRIDGE_URL = 'http://127.0.0.1:5000' # For local testing
 #        JUPYTER_BRIDGE_URL = 'http://192.168.2.194:9529' # For production
@@ -183,16 +185,17 @@ def check_running_remote():
 
 def get_browser_client_js():
     try:
+        # Create a unique channel that identifies this process so other processes don't mix up messages
+        global _CHANNEL
+        _CHANNEL = uuid.uuid4().int
         r = requests.get(
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
-        return f'var Channel = {channel}; \n\n {r.text}'
+        return f'var Channel = {_CHANNEL}; \n\n {r.text}'
     except Exception as e:
-        raise requests.exceptions.HTTPError(f'Error posting to Jupyter-bridge: {_error_content(e)}')
+        raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
 
-# Create a unique channel that identifies this process so other processes don't mix up messages
-import uuid
-channel = uuid.uuid4().int
+
 
 
 
