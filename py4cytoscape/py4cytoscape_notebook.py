@@ -19,7 +19,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import requests
 import json
-import os
 
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
@@ -182,20 +181,20 @@ def check_running_remote():
         _running_remote = False
     return _running_remote
 
-# check_running_remote()
-# js = os.path.join(os.path.dirname(__file__), 'testjs.js')
-# detail_logger.debug('JS: ' + js)
-# js = os.path.join(os.getcwd(), 'testjs.js')
-# detail_logger.debug('JS: ' + js)
-# if os.path.isfile(js):
-#     detail_logger.debug('exists')
-#     x = get_ipython()
-#     detail_logger.debug(type(x))
-#     detail_logger.debug(dir(x))
-#     load_result = get_ipython().core.display.Javascript(filename=js)
-#     detail_logger.debug('load testjs.js ' + str(load_result))
-# else:
-#     detail_logger.debug('does not exist')
+def get_browser_client_js():
+    try:
+        r = requests.get(
+            'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
+        r.raise_for_status()
+        return f'var Channel = {channel}; \n\n {r.text}'
+    except Exception as e:
+        raise requests.exceptions.HTTPError(f'Error posting to Jupyter-bridge: {_error_content(e)}')
+
+# Create a unique channel that identifies this process so other processes don't mix up messages
+import uuid
+channel = uuid.uuid4().int
+
+
 
 
 
