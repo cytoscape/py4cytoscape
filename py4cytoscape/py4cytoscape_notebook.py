@@ -78,7 +78,7 @@ def do_request_remote(method, url, **kwargs):
     # Call Jupyter-bridge to request a Cytoscape operation. Jupyter-bridge will put the request into a queue, and
     # the local browser will pick it out, use it to call Cytoscape, and then queue a reply.
     try:
-        r = requests.request('POST', JUPYTER_BRIDGE_URL + '/queue_request?channel=1',
+        r = requests.request('POST', f'{JUPYTER_BRIDGE_URL}/queue_request?{_CHANNEL}',
                              headers={'Content-Type': 'application/json'}, json=http_request)
         r.raise_for_status()
     except Exception as e:
@@ -88,7 +88,7 @@ def do_request_remote(method, url, **kwargs):
     # and return a reply.
     try:
         while True:
-            r = requests.request('GET', JUPYTER_BRIDGE_URL + '/dequeue_reply?channel=1')
+            r = requests.request('GET', f'{JUPYTER_BRIDGE_URL}/dequeue_reply?{_CHANNEL}')
             if r.status_code != 408: break  # keep waiting for a result as long as we keep getting connection timeouts
         r.raise_for_status()
     except Exception as e:
@@ -191,13 +191,15 @@ def get_browser_client_js():
         # Create a unique channel that identifies this process so other processes don't mix up messages
         global _CHANNEL
         _CHANNEL = uuid.uuid4().int
-        _CHANNEL = 1
         r = requests.get(
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
         return f'var Channel = {_CHANNEL}; \n\n {r.text}'
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
+
+def get_browser_client_channel():
+    return _CHANNEL
 
 
 
