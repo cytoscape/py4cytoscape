@@ -42,7 +42,7 @@ from .style_bypasses import *
 from .py4cytoscape_utils import *
 from .cy_ndex import *
 from .decorators import *
-from .py4cytoscape_notebook import get_browser_client_js
+from .py4cytoscape_notebook import get_browser_client_js, get_browser_client_channel
 from .py4cytoscape_logger import set_summary_logger
 
 # Note that we have tried to enforce documentation standards for modules and private functions per:
