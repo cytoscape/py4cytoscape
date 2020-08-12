@@ -25,3 +25,8 @@ Reference
    tools
    user_interface
    utils
+
+Automation-enabled Apps
+-----------------------
+
+This is a new section
