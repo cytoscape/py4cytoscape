@@ -1,5 +1,6 @@
 .. Look here for code block commenting examples: http://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google
 .. Look here for a general discussion of directives: https://docutils.sourceforge.io/docs/ref/rst/directives.html
+.. Common formatting options: https://dockramer.com.au/creating-manuals-using-rst-and-sphinx-text-formatting/#:~:text=To%20designate%20%2A%2Abold%20text%2A%2A%2C%20use%20two%20asterisks%20before,before%20and%20after%20the%20text%20to%20be%20bolded.
 
 .. _contents:
 
@@ -92,6 +93,7 @@ Documentation
 
    install
    tutorials/index
+   concepts
    reference/index
    logging
    release_log
