@@ -40,18 +40,18 @@ The complete list of invokable Cytoscape operations (either in py4cytoscape or n
 is spread across two web pages, differing by the mechanism you would use to
 invoke them. Using the Cytoscape menus:
 
-* Help | Automation | CyREST API
-* Help | Automation | CyREST Commands API
+* **Help | Automation | CyREST API**
+* **Help | Automation | CyREST Commands API**
 
 Both pages enable you to try Cytoscape operations out directly in Cytoscape
-(via the Swagger interface). Addionally, the Commands panel
-(View | Show Commands Panel) contains the same material as the CyREST
+(via the Swagger interface). Additionally, the Commands panel
+(**View | Show Commands Panel**) contains the same material as the CyREST
 Commands API page, but uses a command line oriented interface for
 experimentation.
 
 For example, there is no py4cytoscape function for finding the name of
 the Cytoscape session. However, the CyREST API page lists this function under the
-``Session`` heading as ``GET /v1/session/name``. You can
+``Session`` heading as ``POST GET /v1/session/name``. You can
 try this function under Swagger by clicking the **Try it now!** button.
 
 For operations on the CyREST API page, you can write your own Python functions by
@@ -65,11 +65,13 @@ Swagger page:
 
 For the session rename operation, the py4cytoscape call would be:
 
-``commands.cyrest_post('session/name', {})``
+.. code:: python
+
+    commands.cyrest_post('session/name', {})
 
 The {} value reflects that there are no parameters to the ``session/name`` operation.
 If there were parameters, they would be passed as Python dictionary values (e.g.,
-``{'param1'='value1', 'param2'='value2'}``).
+``{'param1': 'value1', 'param2': 'value2'}``).
 
 As another example, there is no py4cytoscape function for renaming a filter.
 However, the CyREST Commands API page lists this operation under the ``filter`` heading as
@@ -102,15 +104,15 @@ result by trying the equivalent Cytoscape operation using Swagger's **Try it now
 Calling Cytoscape Apps
 ----------------------
 
-py4cytoscape includes operations for corresponding to functions in a number of
+py4cytoscape includes operations corresponding to functions in a number of
 apps delivered with Cytoscape. However, there are many more App Store apps for
 which py4cytoscape provides no function. However, you can still call these
 apps' functions using the techniques described in the `Missing Functions`_ section.
 
-To find out which apps are automation-enabled, you can visit the
-http://apps.cytoscape.org App Store and click on the *automation* category
+To find out which apps are automation-enabled, you can visit
+the `App Store <http://apps.cytoscape.org/>`_ and click on the *automation* category
 on the left. At this writing, there are over 40 apps, only a few of which are
-delivered with Cytoscape and are listed at the end of this section.
+delivered with Cytoscape -- see the end of this section for a list.
 
 You can also determine whether a specific app (e.g., MCODE) is enabled for
 automation by viewing its App Store page
@@ -118,7 +120,7 @@ automation by viewing its App Store page
 the page title, the app has functions callable via CyREST.
 
 To determine which functions and parameters an app offers, first install the
-app in Cytoscape (using the Apps | App Manager menu), and then look for the app's category
+app in Cytoscape (using the **Apps | App Manager** menu), and then look for the app's category
 in either the CyREST Commands API or the Commands panel as described in the
 `Missing Functions`_ section.
 
@@ -128,7 +130,7 @@ For example, to call the MCODE cluster function:
 
     commands.commands_post('mcode cluster degreeCutoff=2 fluff=true fluffNodeDensityCutoff=0.1 haircut=true includeLoops=false kCore=2 maxDepthFromStart=100 network=current nodeScoreCutoff=0.2 scope=NETWORK')
 
-Automation apps::
+Automation-enabled apps::
 
     aMatReader
     Analyzer
