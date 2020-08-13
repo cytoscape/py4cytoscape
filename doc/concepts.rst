@@ -33,7 +33,7 @@ Missing Functions
 
 While py4cytoscape provides hundreds of functions, there are still many Cytoscape
 operations for which py4cytoscape does not provide an equivalent function. However,
-it provides mechanisms for you to write your own functions that invoke many of these
+it *does* provide mechanisms for you to write your own functions that can invoke many of these
 Cytoscape operations.
 
 The complete list of invokable Cytoscape operations (either in py4cytoscape or not)
@@ -43,7 +43,7 @@ invoke them. Using the Cytoscape menus:
 * **Help | Automation | CyREST API**
 * **Help | Automation | CyREST Commands API**
 
-Both pages enable you to try Cytoscape operations out directly in Cytoscape
+Both pages enable you to try Cytoscape operations out directly from the web page
 (via the Swagger interface). Additionally, the Commands panel
 (**View | Show Commands Panel**) contains the same material as the CyREST
 Commands API page, but uses a command line oriented interface for
@@ -51,7 +51,7 @@ experimentation.
 
 For example, there is no py4cytoscape function for finding the name of
 the Cytoscape session. However, the CyREST API page lists this function under the
-``Session`` heading as ``POST GET /v1/session/name``. You can
+``Session`` heading as ``GET /v1/session/name``. You can
 try this function under Swagger by clicking the **Try it now!** button.
 
 For operations on the CyREST API page, you can write your own Python functions by
@@ -67,7 +67,7 @@ For the session rename operation, the py4cytoscape call would be:
 
 .. code:: python
 
-    commands.cyrest_post('session/name', {})
+    commands.cyrest_get('session/name', {})
 
 The {} value reflects that there are no parameters to the ``session/name`` operation.
 If there were parameters, they would be passed as Python dictionary values (e.g.,
@@ -92,7 +92,7 @@ Swagger page:
 * ``commands.commands_get()``
 * ``commands.commands_post()``
 
-For the filter rename operation, the py4cytoscape call would be:e:
+For the filter rename operation, the py4cytoscape call would be:
 
 .. code:: python
 
@@ -106,7 +106,7 @@ Calling Cytoscape Apps
 
 py4cytoscape includes operations corresponding to functions in a number of
 apps delivered with Cytoscape. However, there are many more App Store apps for
-which py4cytoscape provides no function. However, you can still call these
+which py4cytoscape provides no function. You can still call these
 apps' functions using the techniques described in the `Missing Functions`_ section.
 
 To find out which apps are automation-enabled, you can visit
