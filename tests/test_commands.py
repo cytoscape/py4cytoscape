@@ -178,7 +178,7 @@ class CommandsTests(unittest.TestCase):
                                'uninstall', 'update'], allow_subset=True)
 
         # Verify that bad commands are caught
-        self.assertRaises(CyError, commands_help, 'bogus_junk')
+        self.assertRaises(RequestException, commands_help, 'bogus_junk')
         self.assertRaises(RequestException, commands_help, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_help, '', base_url='http://yahoo.com')
 
@@ -343,7 +343,7 @@ class CommandsTests(unittest.TestCase):
         else:
             self.assertIsInstance(actual_res, list)
             if allow_subset:
-                self.assertTrue(set(actual_res).issubset(set(expected_res)))
+                self.assertTrue(set(expected_res).issubset(set(actual_res)))
             else:
                 self.assertListEqual(actual_res, expected_res)
 
