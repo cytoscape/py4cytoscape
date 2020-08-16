@@ -71,9 +71,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
         >>> cyrest_api() # loads Swagger CyREST API into browser
         True
     """
-    # TODO: Push this down into _do_request so jupyter-bridge can work with it, too
-    res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/', new=2,
-                          autoraise=True)
+    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/')
     return res
 
 
@@ -262,11 +260,8 @@ def commands_api(base_url=DEFAULT_BASE_URL):
         >>> commands_api() # loads Swagger CyREST Commands API into browser
         True
     """
-    # TODO: Push this down into _do_request so jupyter-bridge can work with it, too
-    res = webbrowser.open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/',
-                          new=2, autoraise=True)
+    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/')
     return res
-
 
 # TODO: Make sure this works the same as in R
 @cy_log
@@ -695,3 +690,12 @@ def _do_request(method, url, **kwargs):
         raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
     requester = do_request_remote if running_remote() else _do_request_local
     return requester(method, url, **kwargs)
+
+def _do_browser_open(url, **kwargs):
+    remote_cytoscape = check_running_remote()
+    if remote_cytoscape is None:
+        raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
+    if running_remote():
+        return do_request_remote('webbrowser', url, **kwargs)
+    else:
+        return webbrowser.open(url, new=2, autoraise=True)
