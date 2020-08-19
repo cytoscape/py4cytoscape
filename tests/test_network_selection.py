@@ -450,6 +450,7 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertEqual(len(edge_deleted_suids), 1)
         self.assertTrue(set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid]))
         self.assertEqual(get_edge_count(), original_edge_count)
+        original_edge_suid = (set([original_edge_suid, first_copy_edge_suid]) - set(edge_deleted_suids)).pop()
 
         # Verify that duplicating an edge twice then deleting one of the same-name edges results in the original network
         first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']

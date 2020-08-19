@@ -1054,7 +1054,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
 
     # load node attributes into Cytoscape network
-    if not set(nodes.columns) - {node_id_list} is None:
+    if len(set(nodes.columns) - {node_id_list}) != 0:
         tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid,
                                base_url=base_url)
 
@@ -1069,7 +1069,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         edges['data.key.column'] = edge_name_to_edge_suid(edge_names, network_suid, base_url=base_url)
 
         # if the edge list looks real, add the edge attributes (if any)
-        if not set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column']) is None:
+        if len(set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column'])) != 0:
             tables.load_table_data(edges, data_key_column='data.key.column', table='edge', table_key_column='SUID',
                                    network=network_suid, base_url=base_url)
 
