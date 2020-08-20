@@ -59,6 +59,7 @@ _CHANNEL = uuid.uuid4()
 
 # Get the name of the Jupyter-bridge server
 _JUPYTER_BRIDGE_URL = os.environ.get('JUPYTER_BRIDGE_URL', 'https://jupyter-bridge.cytoscape.org')
+_CYREST_URL_V1 = 'http://127.0.0.1:1234/v1' # Don't use 'localhost' here because Google Colab will hijack it
 
 def get_browser_client_channel():
     return _CHANNEL
@@ -174,7 +175,7 @@ def check_running_remote():
             try:
                 # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
                 detail_logger.debug(f'Attempting to connect to local Cytoscape')
-                r = requests.request('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
+                r = requests.request('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
                 r.raise_for_status()
                 _running_remote = False
                 detail_logger.debug(f'Detected local Cytoscape')
@@ -182,7 +183,7 @@ def check_running_remote():
                 # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
                 try:
                     detail_logger.debug(f'Attempting to connect to remote Cytoscape')
-                    do_request_remote('GET', 'http://localhost:1234/v1', headers={'Content-Type': 'application/json'})
+                    do_request_remote('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
                     _running_remote = True
                     detail_logger.debug(f'Detected remote Cytoscape')
                 except Exception as e:
@@ -200,7 +201,7 @@ def get_browser_client_js():
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
         return f'var Channel = "{_CHANNEL}"; \n\n' \
-               f'var JupyterBridge = {_JUPYTER_BRIDGE}; \n\n' \
+               f'var JupyterBridge = {_JUPYTER_BRIDGE_URL}; \n\n' \
                f' {r.text}'
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
