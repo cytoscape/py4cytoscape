@@ -39,7 +39,9 @@ class MyTestCase(unittest.TestCase):
 
         analyze = commands.commands_post('analyzer/analyze')
         mcode = commands.commands_post('mcode cluster degreeCutoff=2 fluff=false fluffNodeDensityCutoff=0.1 haircut=true includeLoops=false kCore=2 maxDepthFromStart=100 network=current nodeScoreCutoff=0.2 scope=NETWORK')
+        time.sleep(3)
         big_clusters = [i for i in range(len(mcode['clusters'])) if len(mcode['clusters'][i]['nodes']) > 3]
+
         clusters = []
         for i in range(len(big_clusters)):
             view_id = commands.commands_post('mcode view id=1 rank=' + str(i+1) )
@@ -48,11 +50,11 @@ class MyTestCase(unittest.TestCase):
                              .sort_values(by=['MCODE_Score'], ascending=False)
                              .reset_index(drop=True) )
             network_views.get_network_view_suid()
-            img_name = str(i) #uuid.uuid4().hex
+            img_name = uuid.uuid4().hex
             export_image(str(img_name))
-            # Image(img_name+'.png')
-            #img_name
-        # sleep(3)
+        #     # Image(img_name+'.png')
+        #     #img_name
+        # # sleep(3)
 
 
 if __name__ == '__main__':
