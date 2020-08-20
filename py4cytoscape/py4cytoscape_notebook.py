@@ -64,6 +64,10 @@ _CYREST_URL_V1 = 'http://127.0.0.1:1234/v1' # Don't use 'localhost' here because
 def get_browser_client_channel():
     return _CHANNEL
 
+
+def get_jupyter_bridge_url():
+    return _JUPYTER_BRIDGE_URL
+
 def do_request_remote(method, url, **kwargs):
 
 
