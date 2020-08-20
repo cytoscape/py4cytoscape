@@ -201,7 +201,7 @@ def get_browser_client_js():
             'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
         return f'var Channel = "{_CHANNEL}"; \n\n' \
-               f'var JupyterBridge = {_JUPYTER_BRIDGE_URL}; \n\n' \
+               f'var JupyterBridge = "{_JUPYTER_BRIDGE_URL}"; \n\n' \
                f' {r.text}'
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
