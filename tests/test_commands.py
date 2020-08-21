@@ -326,15 +326,15 @@ class CommandsTests(unittest.TestCase):
 
         # Check for a URL with no parameters
         check_cmd(commands._command_2_get_query('layout force-directed'),
-                  'http://localhost:1234/v1/commands/layout/force-directed', None)
+                  'http://127.0.0.1:1234/v1/commands/layout/force-directed', None)
 
         # Check for a URL with a single scalar parameter
         check_cmd(commands._command_2_get_query('layout force-directed defaultNodeMass=1'),
-                  'http://localhost:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
+                  'http://127.0.0.1:1234/v1/commands/layout/force-directed', {'defaultNodeMass': '1'})
 
         # Check for a URL with two parameters, one of which has an embedded blank
         check_cmd(commands._command_2_get_query('layout force-directed defaultNodeMass=1 file="C:\\file name"'),
-                  'http://localhost:1234/v1/commands/layout/force-directed',
+                  'http://127.0.0.1:1234/v1/commands/layout/force-directed',
                   {'defaultNodeMass': '1', 'file': 'C:\\file name'})
 
     def _check_cy_result(self, actual_res, expected_res, allow_subset=False):
