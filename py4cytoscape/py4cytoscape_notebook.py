@@ -202,7 +202,7 @@ def get_browser_client_js():
     try:
         # Prepend channel number of client Javascript so it can communicate with this process via Jupyter-bridge
         r = requests.get(
-            'https://raw.githubusercontent.com/bdemchak/jupyter-bridge/master/client/javascript_bridge.js')
+            'https://raw.githubusercontent.com/cytoscape/jupyter-bridge/master/client/javascript_bridge.js')
         r.raise_for_status()
         return f'var Channel = "{_CHANNEL}"; \n\n' \
                f'var JupyterBridge = "{_JUPYTER_BRIDGE_URL}"; \n\n' \
