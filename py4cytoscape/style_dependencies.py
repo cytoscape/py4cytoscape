@@ -47,7 +47,7 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     Args:
         style_name (str): Name of style; default is "default" style
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -82,7 +82,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
         dependencies (dict): A ``list`` of style dependencies, see Available Dependencies below. Note: each dependency
             is set by a boolean, True or False
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -126,7 +126,7 @@ def match_arrow_color_to_edge(new_state, style_name='default', base_url=DEFAULT_
         new_state (bool): Whether to match arrow color to edge.
         style_name (str): Name of style; default is "default" style
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -156,7 +156,7 @@ def lock_node_dimensions(new_state, style_name='default', base_url=DEFAULT_BASE_
         new_state (bool): Whether to lock node width and height
         style_name (str): Name of style; default is "default" style
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -186,7 +186,7 @@ def sync_node_custom_graphics_size(new_state, style_name='default', base_url=DEF
         new_state (bool): Whether to sync node custom graphics size
         style_name (str): Name of style; default is "default" style
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:

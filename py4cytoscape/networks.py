@@ -70,7 +70,7 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
     Args:
         network (SUID or str or None): Network name or SUID of the network that you want set as current
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -106,7 +106,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
         title (str): New name for the network
         network (SUID or str or None): name or SUID of the network that you want to rename; default is "current" network
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -137,7 +137,7 @@ def get_network_count(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -163,7 +163,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
         suid (SUID or str or None): SUID of the network; default is current network. If a name is
             provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -216,7 +216,7 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
         suid (SUID or str or None): Name of the network; default is "current" network. If an SUID is
             provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -273,7 +273,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -309,7 +309,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -358,7 +358,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -384,7 +384,7 @@ def delete_all_networks(base_url=DEFAULT_BASE_URL):
 
     Args:
          base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -415,7 +415,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -477,7 +477,7 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -510,7 +510,7 @@ def get_node_count(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -542,7 +542,7 @@ def get_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -581,7 +581,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -629,7 +629,7 @@ def get_edge_count(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-             port or version to connect to the CyREST API. Default is http://localhost:1234
+             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
              and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -663,7 +663,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-             port or version to connect to the CyREST API. Default is http://localhost:1234
+             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
              and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -710,7 +710,7 @@ def get_all_edges(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -745,7 +745,7 @@ def clone_network(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -782,7 +782,7 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -840,7 +840,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
         title (str): network name
         collection (str): network collection name
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -909,7 +909,7 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
         title (str): network name
         collection (str): network collection name
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -979,7 +979,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         title (str): network name
         collection (str): network collection name
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         * :
         node_id_list (str): Name of column in ``nodes`` containing node id
@@ -1092,7 +1092,7 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
             If None, a demo network file in SIF format is loaded.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -1145,7 +1145,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -1216,7 +1216,7 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:

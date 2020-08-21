@@ -68,7 +68,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -168,7 +168,7 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
         style_name (str): name for style
         mapping (dict): a single visual property mapping, see ``map_visual_property()``
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -213,7 +213,7 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         style_name (str): name for style
         visual_prop (str): name of visual property to delete
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -253,7 +253,7 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         style_name (str): name for style
         visual_prop (str): the name of the visual property
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -288,7 +288,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
     Args:
         style_name (str): name for style
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -333,7 +333,7 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
