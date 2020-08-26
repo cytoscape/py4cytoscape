@@ -1,11 +1,14 @@
 import setuptools
 
+# Nasty but effective way to set __version__
+exec(open("py4cytoscape/_version.py").read())
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="py4cytoscape",
-    version="0.0.1",
+    version=__version__,
     author="Barry Demchak",
     author_email="bdemchak@ucsd.edu",
     maintainer='Barry Demchak',

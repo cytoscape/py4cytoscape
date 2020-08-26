@@ -30,10 +30,11 @@ project = 'py4cytoscape'
 copyright = f"2018-{date.today().year}, The Cytoscape Consortium"
 author = 'Barry Demchak'
 
+import py4cytoscape
 # The short X.Y version
-version = '0.0.1'
+version = py4cytoscape.__version__
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = version
 
 
 # -- General configuration ---------------------------------------------------

@@ -74,7 +74,7 @@ The original Python libraries for Cytoscape were written by `Keiichiro Ono <http
 
 In late 2019, py4cytoscape was undertaken by Barry Demchak as a replacement for py2cytoscape. It implemented the API defined by RCy3,
 an R package in Bioconductor developed by a Cytoscape Automation working group consisting of Alex Pico (primary author),
-Mark Grimes, Julia Gustavsen, Shraddha Pai, Ruth Isserlin, Barry Demchak. RCy3 was based on prior work contributed by
+Mark Grimes, Julia Gustavsen, Shraddha Pai, Ruth Isserlin, and Barry Demchak. RCy3 was based on prior work contributed by
 Paul Shannon, Tanja Muetze, Georgi Kolishkovski and Keiichiro Ono.
 
 We intend to keep the function definitions available through py4cytoscape and RCy3 consistent and synchronized going forward,
