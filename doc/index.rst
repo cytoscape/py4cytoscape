@@ -49,9 +49,9 @@ Python
 
 Python is a powerful programming language that allows simple and flexible
 representations of networks as well as clear and concise expressions of network
-algorithms.  Python has a vibrant and growing ecosystem of packages that can be used in combination with
-py4cytoscape integrate with traditional workflow engines (e.g., `Galaxy <https://galaxyproject.org/>`_
-and `Gene Pattern <https://www.genepattern.org/>`_) to produce robust
+algorithms. Python has a vibrant and growing ecosystem of packages that can be used in combination with
+py4cytoscape to integrate with traditional workflow engines (e.g., `Gene Pattern <https://www.genepattern.org/>`_
+and `Galaxy <https://galaxyproject.org/>`_) to produce robust
 end-to-end workflows.
 
 In order to make the most out of py4cytoscape you should know how

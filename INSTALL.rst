@@ -46,24 +46,20 @@ instructions.
    supplying the Cytoscape URL in ``py4cytoscape`` calls, this can become a complex
    networking problem if firewalls and routers are present on the network.
 
-Install the development version (Python Console)
-------------------------------------------------
+Install the development version (Python Console or Jupyter Notebook)
+--------------------------------------------------------------------
 
 Install the current release of ``py4cytoscape`` with ``pip``::
 
    pip install python-igraph requests pandas networkx
-   git clone git://github.com/bdemchak/py4cytoscape
+   pip install py4cytoscape
    cd py4cytoscape
    python setup.py install # or python setup.py install --user
 
-Install the development version (Jupyter Notebook)
---------------------------------------------------
+To install the latest py4cytoscape development version, instead
+of ``pip install py4cytoscape``, use::
 
-Install the current release of ``py4cytoscape`` with ``pip``::
-
-   !pip install python-igraph requests pandas networkx
-   !pip install git+https://github.com/bdemchak/py4cytoscape
-   !curl localhost:1234
+   git clone git://github.com/cytoscape/py4cytoscape
 
 Verify Cytoscape connection
 ---------------------------
@@ -76,12 +72,10 @@ Cytoscape, execute the following in a Python Console or Jupyter Notebook
    dir(py4)
    py4.cytoscape_ping()
    py4.cytoscape_version_info()
-   py4.import_network_from_file("tests/data/galfiltered.sif")
 
 This will import ``py4cytoscape`` into the Python namespace, print a (long) list
 of ``py4cytoscape`` entrypoints, and then demonstrate a connection to Cytoscape
-by collecting Cytoscape information and loading a demonstration
-network.
+by collecting Cytoscape information.
 
 Testing
 -------
