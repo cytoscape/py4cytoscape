@@ -659,6 +659,12 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
 
     return cmd_list_ready
 
+def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
+    if _find_remote_cytoscape():
+        return do_request_remote('version', None, **kwargs)
+    else:
+        return {}
+
 
 def _handle_error(e, force_cy_error=False):
     caller = sys._getframe(1).f_code.co_name
@@ -685,17 +691,16 @@ def _do_request_local(method, url, **kwargs):
 
 # Determine whether actual call is local or remote
 def _do_request(method, url, **kwargs):
-    remote_cytoscape = check_running_remote()
-    if remote_cytoscape is None:
-        raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
-    requester = do_request_remote if running_remote() else _do_request_local
+    requester = do_request_remote if _find_remote_cytoscape() else _do_request_local
     return requester(method, url, **kwargs)
 
 def _do_browser_open(url, **kwargs):
-    remote_cytoscape = check_running_remote()
-    if remote_cytoscape is None:
-        raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
-    if running_remote():
+    if _find_remote_cytoscape():
         return do_request_remote('webbrowser', url, **kwargs)
     else:
         return webbrowser.open(url, new=2, autoraise=True)
+
+def _find_remote_cytoscape():
+    if check_running_remote() is None:
+        raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
+    return running_remote()

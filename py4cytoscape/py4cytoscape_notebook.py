@@ -69,8 +69,6 @@ def get_jupyter_bridge_url():
     return _JUPYTER_BRIDGE_URL
 
 def do_request_remote(method, url, **kwargs):
-
-
     log_http_request(method, url, **kwargs)
 
     if 'json' in kwargs:

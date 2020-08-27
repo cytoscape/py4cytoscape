@@ -23,4 +23,5 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # should pick it up automatically.
 
 __version__ = "0.0.2"
+_automation_api_version = '0.0.0'
 

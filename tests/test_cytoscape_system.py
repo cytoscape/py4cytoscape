@@ -40,18 +40,24 @@ class AppsTests(unittest.TestCase):
         input('Terminate Cytoscape and hit [enter]')
         self.assertRaises(requests.exceptions.RequestException, cytoscape_ping)
         input('Restart Cytoscape, wait for startup to complete, and then hit [enter]')
+        self.assertIsNone(cytoscape_ping())
 
     
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cytoscape_version_info(self):
-        version = cytoscape_version_info()
-        self.assertEqual(version['apiVersion'], 'v1')
-        self.assertRegex(version['cytoscapeVersion'], '([0-9]+\\.[0-9]+)\\..*$')
+        def check_version_info():
+            version = cytoscape_version_info()
+            self.assertEqual(version['apiVersion'], 'v1')
+            self.assertRegex(version['cytoscapeVersion'], '([0-9]+\\.[0-9]+)\\..*$')
+            self.assertRegex(version['automationAPIVersion'], '([0-9]+\\.[0-9]+)\\..*$')
+            self.assertRegex(version['py4cytoscapeVersion'], '([0-9]+\\.[0-9]+)\\..*$')
 
+        check_version_info()
         input('Terminate Cytoscape and hit [enter]')
         self.assertRaises(requests.exceptions.RequestException, cytoscape_version_info)
         input('Restart Cytoscape, wait for startup to complete, and then hit [enter]')
+        check_version_info()
 
     
     @print_entry_exit

@@ -29,6 +29,7 @@ from . import commands
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, narrate
+from ._version import __version__, _automation_api_version
 
 
 @cy_log
@@ -67,7 +68,7 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: {'apiVersion': <version>, 'cytoscapeVersion': <version>}
+        dict: {'apiVersion': <version>, 'cytoscapeVersion': <version>, 'automationAPIVersion': <version>, 'py4cytoscapeVersion': <version>}
 
     Raises:
         CyError: if error connecting to CyREST
@@ -75,11 +76,13 @@ def cytoscape_version_info(base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> cytoscape_version_info()
-        {'apiVersion': 'v1', 'cytoscapeVersion': '3.8.0'}
+        {'apiVersion': 'v1', 'cytoscapeVersion': '3.8.1', 'automationAPIVersion': '0.0.0', 'py4cytoscapeVersion': '0.0.2'}
     """
     versions = commands.cyrest_get('version', base_url=base_url)
     if len(versions) == 0:
         raise CyError('CyREST connection problem. py4cytoscape cannot continue!')
+    versions.update({'automationAPIVersion': _automation_api_version, 'py4cytoscapeVersion': __version__})
+    versions.update(commands.sub_versions(base_url=base_url))
 
     return versions
 
