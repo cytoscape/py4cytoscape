@@ -137,6 +137,7 @@ def cy_log(func):
 def log_http_request(method, url, **kwargs):
     if (_DETAIL_ENABLE_HTTP_CALLS and detail_logger.isEnabledFor(logging.DEBUG)) or \
         (_SUMMARY_ENABLE_HTTP_CALLS and summary_logger.isEnabledFor(logging.DEBUG)):
+        if url is None: url=''
         params = kwargs.get('params')
         params = '' if params is None else ', params: ' + str(params)
         json = kwargs.get('json')
