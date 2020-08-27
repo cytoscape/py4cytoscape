@@ -25,5 +25,8 @@ class CyError(Exception):
 
     def __init__(self, message_text, caller=None):
         if caller is None: caller = sys._getframe(1).f_code.co_name
-        super().__init__(f'In {caller}(): {message_text}')
+        whole_error = f'In {caller}(): {message_text}'
+        super().__init__(whole_error)
+        print(whole_error, file=sys.stderr)
+
 
