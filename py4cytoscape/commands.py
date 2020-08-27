@@ -661,7 +661,7 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
 
 def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
     if _find_remote_cytoscape():
-        return do_request_remote('version', None, **kwargs)
+        return do_request_remote('version', None, **kwargs).json()
     else:
         return {}
 
