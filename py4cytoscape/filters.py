@@ -307,18 +307,18 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: {}
+        list: []
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> export_filters() # Saves all filters in file 'filters.json'
-        {}
+        []
         >>> export_filters('test.json') # Saves all filters in file 'test.json'
-        {}
+        []
         >>> export_filters('test') # Saves all filters in file 'test.json'
-        {}
+        []
     """
     ext = '.json'
 
@@ -327,7 +327,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
         filename = os.path.abspath(filename)
         if os.path.exists(filename): narrate('This file has been overwritten.')
 
-    res = commands.commands_post(f'filter export file="{filename}"', base_url=base_url)
+    res = commands.commands_get(f'filter export file="{filename}"', base_url=base_url)
 
     return res
 
@@ -346,20 +346,20 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: {}
+        list: []
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> import_filters('test.json') # Fetches filters in file 'test.json'
-        {}
+        []
         >>> import_filters('test') # Fetches filters in file 'test'
-        {}
+        []
     """
     if not running_remote():
         filename = os.path.abspath(filename)
-    res = commands.commands_post(f'filter import file="{filename}"', base_url=base_url)
+    res = commands.commands_get(f'filter import file="{filename}"', base_url=base_url)
     time.sleep(
         CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res

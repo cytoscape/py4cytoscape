@@ -295,12 +295,12 @@ class FiltersTests(unittest.TestCase):
 
         # Verify that a file suffix is added if none is provided for a filter file
         if os.path.exists(FILTER_FILE + FILTER_SUFFIX): os.remove(FILTER_FILE + FILTER_SUFFIX)
-        self.assertDictEqual(export_filters(FILTER_FILE), {})
+        self.assertListEqual(export_filters(FILTER_FILE), [])
         self.assertTrue(os.path.exists(FILTER_FILE + FILTER_SUFFIX))
 
         # Verify that importing filters results in the expected filters
         load_test_session()
-        self.assertDictEqual(import_filters(FILTER_FILE + FILTER_SUFFIX), {})
+        self.assertListEqual(import_filters(FILTER_FILE + FILTER_SUFFIX), [])
         self.assertSetEqual(set(get_filter_list()),
                             {'Default filter', 'Default filter 1', 'degree filter 1x', 'degree filter 2x'})
 
@@ -314,12 +314,12 @@ class FiltersTests(unittest.TestCase):
 
         # Verify that no file suffix is added if the filter file name already has one
         if os.path.exists(FILTER_FILE + FILTER_SUFFIX): os.remove(FILTER_FILE + FILTER_SUFFIX)
-        self.assertDictEqual(export_filters(FILTER_FILE + FILTER_SUFFIX), {})
+        self.assertListEqual(export_filters(FILTER_FILE + FILTER_SUFFIX), [])
         self.assertTrue(os.path.exists(FILTER_FILE + FILTER_SUFFIX))
 
         # Verify that the filter file contains the expected filters
         load_test_session()
-        self.assertDictEqual(import_filters(FILTER_FILE + FILTER_SUFFIX), {})
+        self.assertListEqual(import_filters(FILTER_FILE + FILTER_SUFFIX), [])
         self.assertSetEqual(set(get_filter_list()),
                             {'Default filter', 'Default filter 1', 'Default filter 2', 'degree filter 1x',
                              'degree filter 2x'})
@@ -327,7 +327,7 @@ class FiltersTests(unittest.TestCase):
 
         # Verify that a filter file containing all types of filters is loaded
         load_test_session()
-        self.assertDictEqual(import_filters('data/All Predicates.filter'), {})
+        self.assertListEqual(import_filters('data/All Predicates.filter'), [])
         self.assertSetEqual(set(get_filter_list()), {'Default filter', 'All Predicates'})
 
     def check_result(self, filter_name, create_func, expected_nodes, expected_edges):
