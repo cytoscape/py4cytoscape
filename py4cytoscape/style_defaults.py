@@ -86,6 +86,10 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
         if visual_prop_name in _PROPERTY_NAMES: visual_prop_name = _PROPERTY_NAMES[visual_prop_name]
         return visual_prop_name
 
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; updating "default" style.')
+
     # process visual property, including common alternatives for vp names :)
     def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
 
@@ -95,7 +99,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def get_visual_property_default(property, style_name='default', base_url=DEFAULT_BASE_URL):
+def get_visual_property_default(property, style_name=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the default value for a visual property.
 
     Args:
@@ -118,13 +122,17 @@ def get_visual_property_default(property, style_name='default', base_url=DEFAULT
         >>> get_visual_property_default('NODE_SHAPE', style_name='galFiltered Style')
         ''
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; accessing "default" style.')
+
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_get(f'styles/{style_name}/defaults/{property}', base_url=base_url)
     return res['value']
 
 
 @cy_log
-def set_visual_property_default(style_string, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_visual_property_default(style_string, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default value for a visual property.
 
     Args:
@@ -147,6 +155,10 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
         >>> set_visual_property_default({'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'value': 'CIRCLE'})
         ''
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; updating "default" style.')
+
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,
                               require_json=False)
@@ -164,7 +176,7 @@ def set_visual_property_default(style_string, style_name='default', base_url=DEF
 # ------------------------------------------------------------------------------
 
 @cy_log
-def set_node_border_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_border_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node border color.
 
     Args:
@@ -195,7 +207,7 @@ def set_node_border_color_default(new_color, style_name='default', base_url=DEFA
 
 
 @cy_log
-def set_node_border_width_default(new_width, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_border_width_default(new_width, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node border width.
 
     Args:
@@ -226,7 +238,7 @@ def set_node_border_width_default(new_width, style_name='default', base_url=DEFA
 
 
 @cy_log
-def set_node_border_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_border_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set defaults opacity value for all unmapped node borders.
 
     Args:
@@ -257,7 +269,7 @@ def set_node_border_opacity_default(new_opacity, style_name='default', base_url=
 
 
 @cy_log
-def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node color.
 
     Args:
@@ -291,7 +303,7 @@ def set_node_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
 def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, orientation='VERTICAL', col_axis=False,
                               range_axis=False, zero_line=False, axis_width=0.25, axis_color='#000000',
                               axis_font_size=1, separation=0.0,
-                              slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                              slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Bar Chart.
 
     Makes a bar chart per node using specified node table columns by setting a default custom graphic style.
@@ -370,7 +382,7 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
 @cy_log
 def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VERTICAL', range_axis=False,
                               zero_line=False, axis_width=0.25, axis_color='#000000', axis_font_size=1,
-                              slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                              slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Box Chart.
 
     Makes a box chart per node using specified node table columns by setting a default custom graphic style.
@@ -437,7 +449,7 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
 @cy_log
 def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation='HORIZONTAL', range_axis=False,
                                    zero_line=False, axis_width=0.25, axis_color='#000000', axis_font_size=1,
-                                   slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                                   slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom HeatMap Chart.
 
     Makes a heat map per node using specified node table columns by setting a default custom graphic style.
@@ -505,7 +517,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
 @cy_log
 def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0, range_axis=False, zero_line=False,
                                axis_width=0.25, axis_color='#000000', axis_font_size=1,
-                               slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                               slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Line Chart.
 
     Makes a line chart per node using specified node table columns by setting a default custom graphic style.
@@ -570,7 +582,7 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
 
 @cy_log
 def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
-                              slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                              slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Pie Chart.
 
     Makes a pie chart per node using specified node table columns by setting a default custom graphic style.
@@ -619,7 +631,7 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
 
 @cy_log
 def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=0.5,
-                               slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                               slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Ring Chart.
 
     Makes a ring chart per node using specified node table columns by setting a default custom graphic style.
@@ -668,7 +680,7 @@ def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=
 
 @cy_log
 def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0, 1.0], angle=0.0,
-                                    slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+                                    slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Linear Gradient.
 
     Makes a gradient fill per node by setting a default custom graphic style.
@@ -710,7 +722,7 @@ def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
 @cy_log
 def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0, 1.0], x_center=0.5, y_center=0.5,
                                     slot=1,
-                                    style_name='default', base_url=DEFAULT_BASE_URL):
+                                    style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Radial Gradient.
 
     Makes a gradient fill per node by setting a default custom graphic style.
@@ -752,7 +764,7 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
 
 @cy_log
 def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification='C', x_offset=0.0, y_offset=0.0, slot=1,
-                             style_name='default', base_url=DEFAULT_BASE_URL):
+                             style_name=None, base_url=DEFAULT_BASE_URL):
     """Set Node Custom Position.
 
     Adjust the position of a custom graphic relative to its node.
@@ -793,7 +805,7 @@ def set_node_custom_position(node_anchor='C', graphic_anchor='C', justification=
 
 
 @cy_log
-def remove_node_custom_graphics(slot=1, style_name='default', base_url=DEFAULT_BASE_URL):
+def remove_node_custom_graphics(slot=1, style_name=None, base_url=DEFAULT_BASE_URL):
     """Remove Node Custom Graphics.
 
     Remove the default custom charts, images and gradients.
@@ -827,7 +839,7 @@ def remove_node_custom_graphics(slot=1, style_name='default', base_url=DEFAULT_B
 
 
 @cy_log
-def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_fill_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped nodes.
 
     Args:
@@ -858,7 +870,7 @@ def set_node_fill_opacity_default(new_opacity, style_name='default', base_url=DE
 
 
 @cy_log
-def set_node_font_face_default(new_font, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_font_face_default(new_font, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node font.
 
     Args:
@@ -887,7 +899,7 @@ def set_node_font_face_default(new_font, style_name='default', base_url=DEFAULT_
 
 
 @cy_log
-def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_font_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node font size.
 
     Args:
@@ -918,7 +930,7 @@ def set_node_font_size_default(new_size, style_name='default', base_url=DEFAULT_
 
 
 @cy_log
-def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_height_default(new_height, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node height.
 
     Args:
@@ -951,7 +963,7 @@ def set_node_height_default(new_height, style_name='default', base_url=DEFAULT_B
 
 
 @cy_log
-def set_node_label_default(new_label, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_label_default(new_label, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node label.
 
     Args:
@@ -980,7 +992,7 @@ def set_node_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
 
 
 @cy_log
-def set_node_label_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_label_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node label color.
 
     Args:
@@ -1011,7 +1023,7 @@ def set_node_label_color_default(new_color, style_name='default', base_url=DEFAU
 
 
 @cy_log
-def set_node_label_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_label_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped node labels.
 
     Args:
@@ -1042,7 +1054,7 @@ def set_node_label_opacity_default(new_opacity, style_name='default', base_url=D
 
 
 @cy_log
-def get_node_selection_color_default(style_name='default', base_url=DEFAULT_BASE_URL):
+def get_node_selection_color_default(style_name=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the default selection node color.
 
     Args:
@@ -1069,7 +1081,7 @@ def get_node_selection_color_default(style_name='default', base_url=DEFAULT_BASE
 
 
 @cy_log
-def set_node_selection_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_selection_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node border color.
 
     Args:
@@ -1100,7 +1112,7 @@ def set_node_selection_color_default(new_color, style_name='default', base_url=D
 
 
 @cy_log
-def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_shape_default(new_shape, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node shape.
 
     Args:
@@ -1133,7 +1145,7 @@ def set_node_shape_default(new_shape, style_name='default', base_url=DEFAULT_BAS
 
 
 @cy_log
-def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node font size.
 
     Args:
@@ -1167,7 +1179,7 @@ def set_node_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_
 
 
 @cy_log
-def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_width_default(new_width, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node width.
 
     Args:
@@ -1201,7 +1213,7 @@ def set_node_width_default(new_width, style_name='default', base_url=DEFAULT_BAS
 
 
 @cy_log
-def set_node_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_node_tooltip_default(new_tooltip, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node tooltip.
 
     Args:
@@ -1236,7 +1248,7 @@ def set_node_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
 # ------------------------------------------------------------------------------
 
 @cy_log
-def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge color.
 
     Args:
@@ -1271,7 +1283,7 @@ def set_edge_color_default(new_color, style_name='default', base_url=DEFAULT_BAS
 
 
 @cy_log
-def set_edge_font_face_default(new_font, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_font_face_default(new_font, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge font.
 
     Args:
@@ -1300,7 +1312,7 @@ def set_edge_font_face_default(new_font, style_name='default', base_url=DEFAULT_
 
 
 @cy_log
-def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_font_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge font size.
 
     Args:
@@ -1331,7 +1343,7 @@ def set_edge_font_size_default(new_size, style_name='default', base_url=DEFAULT_
 
 
 @cy_log
-def set_edge_label_default(new_label, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_label_default(new_label, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge label.
 
     Args:
@@ -1360,7 +1372,7 @@ def set_edge_label_default(new_label, style_name='default', base_url=DEFAULT_BAS
 
 
 @cy_log
-def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_label_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge label color.
 
     Args:
@@ -1391,7 +1403,7 @@ def set_edge_label_color_default(new_color, style_name='default', base_url=DEFAU
 
 
 @cy_log
-def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_label_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped edges.
 
     Args:
@@ -1422,7 +1434,7 @@ def set_edge_label_opacity_default(new_opacity, style_name='default', base_url=D
 
 
 @cy_log
-def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_line_width_default(new_width, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge width.
 
     Args:
@@ -1453,7 +1465,7 @@ def set_edge_line_width_default(new_width, style_name='default', base_url=DEFAUL
 
 
 @cy_log
-def set_edge_line_style_default(new_line_style, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_line_style_default(new_line_style, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge style.
 
     Args:
@@ -1482,7 +1494,7 @@ def set_edge_line_style_default(new_line_style, style_name='default', base_url=D
 
 
 @cy_log
-def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set default opacity value for all unmapped edges.
 
     Args:
@@ -1513,7 +1525,7 @@ def set_edge_opacity_default(new_opacity, style_name='default', base_url=DEFAULT
 
 
 @cy_log
-def get_edge_selection_color_default(style_name='default', base_url=DEFAULT_BASE_URL):
+def get_edge_selection_color_default(style_name=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the default selected edge color.
 
     Args:
@@ -1542,7 +1554,7 @@ def get_edge_selection_color_default(style_name='default', base_url=DEFAULT_BASE
 
 
 @cy_log
-def set_edge_selection_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_selection_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default selected edge color.
 
     Args:
@@ -1578,7 +1590,7 @@ def set_edge_selection_color_default(new_color, style_name='default', base_url=D
 
 
 @cy_log
-def set_edge_source_arrow_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_source_arrow_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge source arrow color.
 
     Args:
@@ -1609,7 +1621,7 @@ def set_edge_source_arrow_color_default(new_color, style_name='default', base_ur
 
 
 @cy_log
-def set_edge_target_arrow_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_target_arrow_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge target arrow color.
 
     Args:
@@ -1640,7 +1652,7 @@ def set_edge_target_arrow_color_default(new_color, style_name='default', base_ur
 
 
 @cy_log
-def set_edge_source_arrow_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_source_arrow_shape_default(new_shape, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge source arrow shape.
 
     Args:
@@ -1669,7 +1681,7 @@ def set_edge_source_arrow_shape_default(new_shape, style_name='default', base_ur
 
 
 @cy_log
-def set_edge_target_arrow_shape_default(new_shape, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_target_arrow_shape_default(new_shape, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge target arrow shape.
 
     Args:
@@ -1698,7 +1710,7 @@ def set_edge_target_arrow_shape_default(new_shape, style_name='default', base_ur
 
 
 @cy_log
-def set_edge_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_edge_tooltip_default(new_tooltip, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default edge tooltip.
 
     Args:
@@ -1733,7 +1745,7 @@ def set_edge_tooltip_default(new_tooltip, style_name='default', base_url=DEFAULT
 # ------------------------------------------------------------------------------
 
 @cy_log
-def get_background_color_default(style_name='default', base_url=DEFAULT_BASE_URL):
+def get_background_color_default(style_name=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the default background color.
 
     Args:
@@ -1760,7 +1772,7 @@ def get_background_color_default(style_name='default', base_url=DEFAULT_BASE_URL
 
 
 @cy_log
-def set_background_color_default(new_color, style_name='default', base_url=DEFAULT_BASE_URL):
+def set_background_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default background color.
 
     Args:

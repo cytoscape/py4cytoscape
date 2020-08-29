@@ -188,6 +188,10 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
     """
     visual_prop_name = mapping['visualProperty']
 
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; updating "default" style.')
+
     # check if vp exists already
     res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     vp_list = [prop['visualProperty'] for prop in res]
@@ -228,7 +232,7 @@ def delete_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
         ''
     """
     # check if vp exists already
-    res = commands.cyrest_get('styles/' + style_name + '/mappings', base_url=base_url)
+    res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     vp_list = [prop['visualProperty'] for prop in res]
     exists = visual_prop in vp_list
 
@@ -270,6 +274,10 @@ def get_style_mapping(style_name, visual_prop, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`map_visual_property`
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; accessing "default" style.')
+
     # check if vp exists already
     res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     for prop in res:
@@ -306,6 +314,10 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`map_visual_property`
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; accessing "default" style.')
+
     res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     return res
 
@@ -320,7 +332,7 @@ def get_style_all_mappings(style_name, base_url=DEFAULT_BASE_URL):
 # TODO: R documented colors list incorrectly
 @cy_log
 def set_node_border_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
-                                  default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                  default_color=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node border color.
 
     Args:
@@ -365,7 +377,7 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
 
 @cy_log
 def set_node_border_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                                    default_opacity=None, style_name='default', network=None,
+                                    default_opacity=None, style_name=None, network=None,
                                     base_url=DEFAULT_BASE_URL):
     """Set opacity for node border only.
 
@@ -418,7 +430,7 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
 
 @cy_log
 def set_node_border_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c',
-                                  default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                  default_width=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to widths to set the node border width.
 
     Args:
@@ -462,7 +474,7 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
 
 @cy_log
 def set_node_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
-                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                           style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node fill color.
 
     Args:
@@ -512,7 +524,7 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
 
 @cy_log
 def set_node_combo_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                   default_opacity=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Set opacity for node fill, border and label all together.
 
     Args:
@@ -573,7 +585,7 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
 
 @cy_log
 def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                                  default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                  default_opacity=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Set opacity for node fill only.
 
     Args:
@@ -625,7 +637,7 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
 
 @cy_log
 def set_node_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None,
-                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                               style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Sets font face for node labels.
 
     Args:
@@ -668,7 +680,7 @@ def set_node_font_face_mapping(table_column, table_column_values=None, fonts=Non
 
 
 def set_node_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
-                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                               style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to sizes to set the node size.
 
     Args:
@@ -711,7 +723,7 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
 
 @cy_log
 def set_node_height_mapping(table_column, table_column_values=None, heights=None, mapping_type='c', default_height=None,
-                            style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                            style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to the node heights.
 
     Args:
@@ -756,7 +768,7 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
 
 
 @cy_log
-def set_node_label_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_node_label_mapping(table_column, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as node labels.
 
     Args:
@@ -795,7 +807,7 @@ def set_node_label_mapping(table_column, style_name='default', network=None, bas
 
 @cy_log
 def set_node_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
-                                 default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                 default_color=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the node border color.
 
     Args:
@@ -840,7 +852,7 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
 
 @cy_log
 def set_node_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                   default_opacity=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Sets opacity for node label only.
 
     Args:
@@ -892,7 +904,7 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
 
 @cy_log
 def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, default_shape=None,
-                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                           style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the node shape.
 
     Args:
@@ -931,7 +943,7 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
 # TODO: R documentation claims this is about font sizes
 @cy_log
 def set_node_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
-                          style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                          style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to node sizes.
 
     Args:
@@ -976,7 +988,7 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
 
 
 @cy_log
-def set_node_tooltip_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_node_tooltip_mapping(table_column, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as node tooltips.
 
     Args:
@@ -1013,7 +1025,7 @@ def set_node_tooltip_mapping(table_column, style_name='default', network=None, b
 
 @cy_log
 def set_node_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c', default_width=None,
-                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                           style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to the node widths.
 
     Args:
@@ -1065,7 +1077,7 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
 # TODO: Come back to this once we figure out what it should be doing
 @cy_log
 def set_edge_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
-                           style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                           style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     verify_hex_colors(colors)
 
     # set default
@@ -1075,8 +1087,9 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
 
     # perform mapping for COLOR (i.e., when arrowColorMatchesEdge=T)
     # TODO: This code checks table_column, but the R code does not
-    res = _update_visual_property('EDGE_UNSELECTED_PAINT', table_column, table_column_values, colors, mapping_type,
-                                  style_name, network, base_url, table='edge')
+    res = _update_visual_property('EDGE_UNSELECTED_PAINT', table_column, table_column_values=table_column_values, range_map=colors,
+                                  mapping_type=mapping_type, style_name=style_name, network=network,
+                                  base_url=base_url, table='edge')
     if res is not None:
         # perform mapping for STROKE (i.e., when arrowColorMatchesEdge=F)
         res = _update_visual_property('EDGE_STROKE_UNSELECTED_PAINT', table_column,
@@ -1088,7 +1101,7 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
 
 @cy_log
 def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=None, mapping_type='d', default_font=None,
-                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                               style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Sets font face for edge labels.
 
     Args:
@@ -1130,7 +1143,7 @@ def set_edge_font_face_mapping(table_column, table_column_values=None, fonts=Non
 
 @cy_log
 def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=None, mapping_type='c', default_size=None,
-                               style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                               style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to sizes to set the edge size.
 
     Args:
@@ -1172,7 +1185,7 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
 
 
 @cy_log
-def set_edge_label_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_edge_label_mapping(table_column, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as edge labels.
 
     Args:
@@ -1211,7 +1224,7 @@ def set_edge_label_mapping(table_column, style_name='default', network=None, bas
 
 @cy_log
 def set_edge_label_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
-                                 default_color=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                 default_color=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the edge border color.
 
     Args:
@@ -1256,7 +1269,7 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
 
 @cy_log
 def set_edge_label_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                                   default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                   default_opacity=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Sets opacity for edge label only.
 
     Args:
@@ -1308,7 +1321,7 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
 
 @cy_log
 def set_edge_line_style_mapping(table_column, table_column_values=None, line_styles=None, default_line_style='SOLID',
-                                style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to styles to set the edge style.
 
     Args:
@@ -1348,7 +1361,7 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
 
 @cy_log
 def set_edge_line_width_mapping(table_column, table_column_values=None, widths=None, mapping_type='c',
-                                default_width=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                default_width=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to widths to set the node border width.
 
     Args:
@@ -1394,7 +1407,7 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
 
 @cy_log
 def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=None, mapping_type='c',
-                             default_opacity=None, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                             default_opacity=None, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to opacities to set the edge opacity.
 
     Args:
@@ -1446,7 +1459,7 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
 # TODO: This is the same as set_edge_target_arrow_shape_mapping???
 @cy_log
 def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
-                                  style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                  style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the target arrow shape.
 
     Args:
@@ -1489,7 +1502,7 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
 # TODO: This is the same as set_edge_source_arrow_shape_mapping???
 @cy_log
 def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes=None, default_shape='ARROW',
-                                  style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+                                  style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Map table column values to shapes to set the source arrow shape.
 
     Args:
@@ -1531,7 +1544,7 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
 
 @cy_log
 def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
-                                        default_color=None, style_name='default', network=None,
+                                        default_color=None, style_name=None, network=None,
                                         base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the target arrow color.
 
@@ -1578,7 +1591,7 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
 
 @cy_log
 def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c',
-                                        default_color=None, style_name='default', network=None,
+                                        default_color=None, style_name=None, network=None,
                                         base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the source arrow color.
 
@@ -1624,7 +1637,7 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
 
 @cy_log
 def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, shapes=None,
-                                        default_shape=None, style_name='default', network=None,
+                                        default_shape=None, style_name=None, network=None,
                                         base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the target arrow color.
 
@@ -1664,7 +1677,7 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
 
 @cy_log
 def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, shapes=None,
-                                        default_shape=None, style_name='default', network=None,
+                                        default_shape=None, style_name=None, network=None,
                                         base_url=DEFAULT_BASE_URL):
     """Map table column values to colors to set the source arrow color.
 
@@ -1702,7 +1715,7 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
                                         base_url=base_url)
 
 @cy_log
-def set_edge_tooltip_mapping(table_column, style_name='default', network=None, base_url=DEFAULT_BASE_URL):
+def set_edge_tooltip_mapping(table_column, style_name=None, network=None, base_url=DEFAULT_BASE_URL):
     """Pass the values from a table column to display as edge tooltips.
 
     Args:
@@ -1732,7 +1745,7 @@ def set_edge_tooltip_mapping(table_column, style_name='default', network=None, b
 
 # Check table column, create the visual property map, and update Cytoscape's copy of the visual property
 def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
-                            style_name='default', network=None, base_url=DEFAULT_BASE_URL,
+                            style_name=None, network=None, base_url=DEFAULT_BASE_URL,
                             supported_mappings=['c', 'd', 'p'], table='node'):
     if range_map is not None: range_map = [str(x) for x in range_map]  # CyREST requires strings
 

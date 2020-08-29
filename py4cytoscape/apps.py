@@ -55,7 +55,7 @@ def disable_app(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps disable app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)
 
 
 @cy_log
@@ -82,7 +82,7 @@ def enable_app(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps enable app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)
 
 
 @cy_log
@@ -108,7 +108,6 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps information app="{app}"', base_url=base_url)
-    # TODO: R uses commands_get ... py4cytoscape uses commands_post ... Swagger recommends POST ... is R wrong for all of these calls?
     return res
 
 
@@ -134,7 +133,7 @@ def install_app(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps install app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)
 
 
 @cy_log
@@ -279,7 +278,7 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps open appstore app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)
 
 
 @cy_log
@@ -330,7 +329,7 @@ def uninstall_app(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps uninstall app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)
 
 
 @cy_log
@@ -355,4 +354,4 @@ def update_app(app, base_url=DEFAULT_BASE_URL):
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
     res = commands.commands_post(f'apps update app="{app}"', base_url=base_url)
-    return res
+    return narrate(res)

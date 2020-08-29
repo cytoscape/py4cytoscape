@@ -41,7 +41,7 @@ from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
 # ------------------------------------------------------------------------------
 
 @cy_log
-def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
+def get_style_dependencies(style_name=None, base_url=DEFAULT_BASE_URL):
     """Get the values of dependencies in a style.
 
     Args:
@@ -63,6 +63,10 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
         >>> get_style_dependencies()
         {'arrowColorMatchesEdge': False, 'nodeCustomGraphicsSizeSync': True, 'nodeSizeLocked': False}
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; accessing "default" style.')
+
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
         raise CyError(f'No visual style named "{style_name}"')
@@ -74,7 +78,7 @@ def get_style_dependencies(style_name='default', base_url=DEFAULT_BASE_URL):
     return dep_list
 
 @cy_log
-def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAULT_BASE_URL):
+def set_style_dependencies(style_name=None, dependencies={}, base_url=DEFAULT_BASE_URL):
     """Set the values of dependencies in a style, overriding any prior setting.
 
     Args:
@@ -101,6 +105,10 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
     Available Dependencies:
         arrowColorMatchesEdge, nodeCustomGraphicsSizeSync, nodeSizeLocked
     """
+    if style_name is None:
+        style_name = 'default'
+        narrate(f'style_name not specified; updating "default" style.')
+
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
         raise CyError(f'No visual style named "{style_name}"')
@@ -119,7 +127,7 @@ def set_style_dependencies(style_name='default', dependencies={}, base_url=DEFAU
 # ------------------------------------------------------------------------------
 
 @cy_log
-def match_arrow_color_to_edge(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+def match_arrow_color_to_edge(new_state, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set a boolean value to have arrow shapes share the same color as the edge.
 
     Args:
@@ -149,7 +157,7 @@ def match_arrow_color_to_edge(new_state, style_name='default', base_url=DEFAULT_
     return res
 
 @cy_log
-def lock_node_dimensions(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+def lock_node_dimensions(new_state, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set a boolean value to have node width and height fixed to a single size value.
 
     Args:
@@ -179,7 +187,7 @@ def lock_node_dimensions(new_state, style_name='default', base_url=DEFAULT_BASE_
     return res
 
 @cy_log
-def sync_node_custom_graphics_size(new_state, style_name='default', base_url=DEFAULT_BASE_URL):
+def sync_node_custom_graphics_size(new_state, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set a boolean value to have the size of custom graphics match that of the node.
 
     Args:
