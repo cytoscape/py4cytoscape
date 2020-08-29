@@ -164,3 +164,4 @@ def narrate(progress):
     from .py4cytoscape_notebook import notebook_is_running
     if notebook_is_running():
         print(progress)
+    return progress
