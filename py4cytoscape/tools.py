@@ -32,6 +32,36 @@ from .py4cytoscape_logger import cy_log
 
 
 @cy_log
+def analyze_network(directed=False, base_url=DEFAULT_BASE_URL):
+    """Calculate various network statistics.
+
+    The results are added to the Node and Edge tables and the Results Panel.
+    The summary statistics in the Results Panel are also returned by the function
+    as a list of named values.
+
+    Args:
+        directed (bool): If True, the network is considered a directed graph. Default is False.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Named list of summary statistics
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> analyze_network()
+        {}
+        >>> analyze_network(True)
+        {}
+    """
+    res = commands.commands_post(f'analyzer analyze directed={directed}', base_url=base_url)
+    return res
+
+
+@cy_log
 def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
     """Cybrowser Close.
 
@@ -40,7 +70,7 @@ def cybrowser_close(id=None, base_url=DEFAULT_BASE_URL):
     Args:
         id (str): The identifier for the browser window to close
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -71,7 +101,7 @@ def cybrowser_dialog(id=None, text=None, title=None, url=None, base_url=DEFAULT_
         title (str): Text to be shown in the title bar of the browser window
         url (str): The URL the browser should load
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -107,7 +137,7 @@ def cybrowser_hide(id=None, base_url=DEFAULT_BASE_URL):
     Args:
         id (str): The identifier for the browser window to hide
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -137,7 +167,7 @@ def cybrowser_list(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -171,7 +201,7 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
         script (str) A string that represents a JavaScript variable, script, or call to be executed in the browser.
             Note that only string results are returned.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -213,7 +243,7 @@ def cybrowser_show(id=None, text=None, title=None, url=None, base_url=DEFAULT_BA
         title (str): Text to be shown in the title bar of the browser window
         url (str): The URL the browser should load
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -246,7 +276,7 @@ def cybrowser_version(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -276,7 +306,7 @@ def diffusion_basic(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -310,7 +340,7 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
             This represents the query vector and corresponds to h in the diffusion equation.
         time (str): The extent of spread over the network. This corresponds to t in the diffusion equation.
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -329,3 +359,84 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
 
     res = commands.commands_post(f'diffusion diffuse_advanced{heat_str}{time_str}', base_url=base_url)
     return res
+
+
+def merge_networks(sources=None,
+                   title=None,
+                   operation="union",
+                   node_keys=None,
+                   node_merge_map=None,
+                   nodes_only=False,
+                   edge_keys=None,
+                   edge_merge_map=None,
+                   network_merge_map=None,
+                   in_network_merge=True,
+                   base_url=DEFAULT_BASE_URL):
+    """Merge Networks.
+
+    Combine networks via union, intersection, or difference operations. Lots of optional parameters choose from!
+
+    Args:
+        sources (list): List of network names to be merged.
+        title (str): Title of the resulting merged network. Default is a concatentation of operation and source network titles.
+        operation (str): Type of merge: union (default), intersection or difference.
+        node_keys (list): An order-dependent list of columns to match nodes across source networks. Default is "name"
+            column for all sources.
+        node_merge_map (list): A list of column merge records specifying how to merge node table data. Each record should
+            be of the form: ["network1 column", "network2 column", "merged column", "type"], where column names are
+            provided and type is String, Integer, Double or List.
+        nodes_only (bool): If True, this will merge the node tables and ignore edge and network table data. Default is False.
+        edge_keys (list): An order-dependent list of columns to match edges across source networks. Default is "name"
+            column for all sources.
+        edge_merge_map (list): A list of column merge records specifying how to merge edge table data. Each record should
+            be of the form: ["network1 column", "network2 column", "merged column", "type"], where column names are
+            provided and type is String, Integer, Double or List.
+        network_merge_map (list): A list of column merge records specifying how to merge network table data. Each record
+            should be of the form: ["network1 column", "network2 column", "merged column", "type"], where column names
+            are provided and type is String, Integer, Double or List.
+        in_network_merge (bool) If True (default), nodes and edges with matching attributes in the same network will be
+            merged.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        int: SUID of merged network
+
+    Raises:
+        CyError: if an invalid parameter is passed
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>>
+        366343
+    """
+    cmd_string = 'network merge'  # a good start
+
+    # Sources must be supplied
+    if sources is None:
+        raise CyError('Missing sources!')
+
+    # Create mandatory args
+    cmd_string += f' sources="{",".join(sources)}" operation={operation} nodesOnly={nodes_only} inNetworkMerge={in_network_merge}'
+
+    # Add optional args
+    if not title is None:
+        cmd_string += f' netName="{title}"'
+    if not node_keys is None:
+        cmd_string += f' nodeKeys="{",".join(node_keys)}"'
+    if not edge_keys is None:
+        cmd_string += f' edgeKeys="{",".join(edge_keys)}"'
+    if not node_merge_map is None:
+        record_list = [f'{{{",".join(rec)}}}' for rec in node_merge_map]
+        cmd_string += f' nodeMergeMap="{",".join(record_list)}"'
+    if not edge_merge_map is None:
+        record_list = [f'{{{",".join(rec)}}}' for rec in edge_merge_map]
+        cmd_string += f' edgeMergeMap="{",".join(record_list)}"'
+    if not network_merge_map is None:
+        record_list = [f'{{{",".join(rec)}}}' for rec in network_merge_map]
+        cmd_string += f' networkMergeMap="{",".join(record_list)}"'
+
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res['SUID'] if 'SUID' in res else res

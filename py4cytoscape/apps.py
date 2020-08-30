@@ -40,7 +40,7 @@ def disable_app(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -67,7 +67,7 @@ def enable_app(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -92,7 +92,7 @@ def get_app_information(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -118,7 +118,7 @@ def install_app(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -142,7 +142,7 @@ def get_available_apps(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -166,7 +166,7 @@ def get_disabled_apps(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -190,7 +190,7 @@ def get_installed_apps(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -214,7 +214,7 @@ def get_uninstalled_apps(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -238,7 +238,7 @@ def get_app_updates(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -263,7 +263,7 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app ('' for main App Store page)
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -288,7 +288,7 @@ def get_app_status(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -314,7 +314,7 @@ def uninstall_app(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -339,7 +339,7 @@ def update_app(app, base_url=DEFAULT_BASE_URL):
     Args:
         app (str): Name of app
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:

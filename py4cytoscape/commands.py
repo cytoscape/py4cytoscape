@@ -58,7 +58,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -83,7 +83,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
         operation (str): A string to be converted to the REST query namespace
         parameters (dict): A named list of values to be converted to REST query parameters
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
 
@@ -123,7 +123,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
         operation (str): A string to be converted to the REST query namespace
         parameters (dict): A named list of values to be converted to REST query parameters
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
 
@@ -164,7 +164,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
         parameters (dict): A named list of values to be converted to REST query parameters
         body (dict): A named list of values to be converted to JSON
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
 
@@ -205,7 +205,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
         parameters (dict): A named list of values to be converted to REST query parameters
         body (dict): A named list of values to be converted to JSON
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
 
@@ -247,7 +247,7 @@ def commands_api(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -274,7 +274,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
     Args:
         cmd_string (str): command
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -319,7 +319,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
     Args:
         cmd_string (str): command
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -359,7 +359,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
     Args:
         cmd_string (str): command
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -398,7 +398,7 @@ def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
     Args:
         cmd_string (str): command
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -426,7 +426,7 @@ def command_echo(variable_name='*', base_url=DEFAULT_BASE_URL):
     Args:
         variable_name (str): The name of the variable to display. Default is to display all variable values using "*".
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -454,7 +454,7 @@ def command_open_dialog(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -478,7 +478,7 @@ def command_pause(message='', base_url=DEFAULT_BASE_URL):
     Args:
         message (str): Text to display in pause dialog
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -502,7 +502,7 @@ def command_quit(base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -528,7 +528,7 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
@@ -558,7 +558,7 @@ def command_sleep(duration=None, base_url=DEFAULT_BASE_URL):
     Args:
         duration (float): The time in seconds to sleep
         base_url (str): Ignore unless you need to specify a custom domain,
-            port or version to connect to the CyREST API. Default is http://localhost:1234
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
