@@ -53,9 +53,9 @@ def analyze_network(directed=False, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> analyze_network()
-        {}
+        {'networkTitle': 'galFiltered.sif (undirected)', 'nodeCount': '330', 'edgeCount': '359', 'avNeighbors': '2.379032258064516', 'diameter': '27', 'radius': '14', 'avSpl': '9.127660963823953', 'cc': '0.06959203036053131', 'density': '0.009631709546819902', 'heterogeneity': '0.8534500004035027', 'centralization': '0.06375695335900727', 'ncc': '26'}
         >>> analyze_network(True)
-        {}
+        {'networkTitle': 'galFiltered.sif (directed)', 'nodeCount': '330', 'edgeCount': '359', 'avNeighbors': '2.16969696969697', 'diameter': '10', 'radius': '1', 'avSpl': '3.4919830756382395', 'cc': '0.03544266191325015', 'density': '0.003297411808050106', 'ncc': '26', 'mnp': '1', 'nsl': '0'}
     """
     res = commands.commands_post(f'analyzer analyze directed={directed}', base_url=base_url)
     return res
