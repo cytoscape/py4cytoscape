@@ -26,3 +26,11 @@ Diffusion
 
    diffusion_advanced
    diffusion_basic
+
+Misc
+----
+.. autosummary::
+   :toctree: generated/
+
+   analyze_network
+   merge_networks
