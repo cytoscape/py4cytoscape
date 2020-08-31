@@ -26,6 +26,7 @@ class MyTestCase(unittest.TestCase):
 
     @print_entry_exit
     def test_ui(self):
+        # Create a clean network using just edges from a known network
         load_test_session('c:/Program Files/Cytoscape_v3.8.1/sampleData/sessions/Affinity Purification.cys')
         edges = get_all_edges()
         sources = [re.match('(\S*) \(.*\) (\S*)', edge).group(1)   for edge in edges]
@@ -37,11 +38,15 @@ class MyTestCase(unittest.TestCase):
         network_name = uuid.uuid4().hex
         network_suid = networks.create_network_from_data_frames(edges=edges_frame, title=network_name, collection=network_name + '_collection')
 
-        analyze = commands.commands_post('analyzer/analyze')
+        # Create the MCODE clusters
         mcode = commands.commands_post('mcode cluster degreeCutoff=2 fluff=false fluffNodeDensityCutoff=0.1 haircut=true includeLoops=false kCore=2 maxDepthFromStart=100 network=current nodeScoreCutoff=0.2 scope=NETWORK')
-        time.sleep(3)
-        big_clusters = [i for i in range(len(mcode['clusters'])) if len(mcode['clusters'][i]['nodes']) > 3]
+        time.sleep(3) # Subsequent MCODE View commands fail unless this delay is included
 
+
+        # Do calculations that require that each MCODE View exists ... failure looks like this:
+        # requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:1234/v1/commands/mcode/view
+
+        big_clusters = [i for i in range(len(mcode['clusters'])) if len(mcode['clusters'][i]['nodes']) > 3]
         clusters = []
         for i in range(len(big_clusters)):
             view_id = commands.commands_post('mcode view id=1 rank=' + str(i+1) )
