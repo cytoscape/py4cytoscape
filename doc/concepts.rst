@@ -96,7 +96,7 @@ For the filter rename operation, the py4cytoscape call would be:
 
 .. code:: python
 
-    commands.commands_post('filter rename container='filter' name='affinity' newName='myAffinity')
+    commands.commands_post('filter rename container="filter" name="affinity" newName="myAffinity"')
 
 For commands.cyrest* and commands.commands* functions, you can determine the return
 result by trying the equivalent Cytoscape operation using Swagger's **Try it now!** button.

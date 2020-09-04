@@ -13,7 +13,6 @@ from requests import RequestException
 
 from test_utils import *
 
-
 class MyTestCase(unittest.TestCase):
     def setUp(self):
         try:
@@ -40,8 +39,7 @@ class MyTestCase(unittest.TestCase):
 
         # Create the MCODE clusters
         mcode = commands.commands_post('mcode cluster degreeCutoff=2 fluff=false fluffNodeDensityCutoff=0.1 haircut=true includeLoops=false kCore=2 maxDepthFromStart=100 network=current nodeScoreCutoff=0.2 scope=NETWORK')
-        time.sleep(3) # Subsequent MCODE View commands fail unless this delay is included
-
+        #time.sleep(3) # Subsequent MCODE View commands fail unless this delay is included
 
         # Do calculations that require that each MCODE View exists ... failure looks like this:
         # requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: http://127.0.0.1:1234/v1/commands/mcode/view
@@ -51,8 +49,8 @@ class MyTestCase(unittest.TestCase):
         for i in range(len(big_clusters)):
             view_id = commands.commands_post('mcode view id=1 rank=' + str(i+1) )
             clusters.append( tables.get_table_columns()
-                             .drop(columns=['id','name','selected','MCODE_Cluster','SUID'])
-                             .sort_values(by=['MCODE_Score'], ascending=False)
+                             .drop(columns=['id','name','selected','MCODE::Clusters','SUID'])
+                             .sort_values(by=['MCODE::Score'], ascending=False)
                              .reset_index(drop=True) )
             network_views.get_network_view_suid()
             img_name = uuid.uuid4().hex
@@ -60,7 +58,6 @@ class MyTestCase(unittest.TestCase):
         #     # Image(img_name+'.png')
         #     #img_name
         # # sleep(3)
-
 
 if __name__ == '__main__':
     unittest.main()
