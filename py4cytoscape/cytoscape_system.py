@@ -56,7 +56,7 @@ def cytoscape_ping(base_url=DEFAULT_BASE_URL):
     """
     from .py4cytoscape_utils import verify_supported_versions
     verify_supported_versions(1, 3.6, base_url=base_url)
-    narrate('You are connected to Cytoscape!')
+    return narrate('You are connected to Cytoscape!')
 
 @cy_log
 def cytoscape_version_info(base_url=DEFAULT_BASE_URL):

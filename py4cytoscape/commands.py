@@ -39,7 +39,8 @@ import os
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, log_http_result, log_http_request
-from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote
+from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote, notebook_is_running
+from .py4cytoscape_sandbox import *
 from .exceptions import CyError
 
 
@@ -665,7 +666,6 @@ def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
     else:
         return {}
 
-
 def _handle_error(e, force_cy_error=False):
     caller = sys._getframe(1).f_code.co_name
     if e.response is None or e.response.text is None or e.response.text == '':
@@ -692,6 +692,24 @@ def _do_request_local(method, url, **kwargs):
 # Determine whether actual call is local or remote
 def _do_request(method, url, **kwargs):
     requester = do_request_remote if _find_remote_cytoscape() else _do_request_local
+
+    if not sandbox_initialized():
+        xs = explicit_sandbox()
+        if len(xs):
+            sandbox_to_set = dict(xs)
+        elif notebook_is_running() or running_remote():
+            # User hasn't defined a sandbox for us, so calculate a default for current platform
+            sandbox_to_set = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
+        else:
+            sandbox_to_set = sandbox_initializer(sandboxName=None) # for local execution not under a Notebook
+        if sandbox_to_set['sandboxName']:
+            url_parts = urllib.parse.urlparse(url)
+            sandbox_url = f'{url_parts.scheme}://{url_parts.netloc}/v1/commands/filetransfer/setSandbox'
+            r = requester('POST', sandbox_url, json=sandbox_to_set)
+            r.raise_for_status()
+            current_sandbox(init=sandbox_to_set)
+        sandbox_initialized(True)
+
     return requester(method, url, **kwargs)
 
 def _do_browser_open(url, **kwargs):

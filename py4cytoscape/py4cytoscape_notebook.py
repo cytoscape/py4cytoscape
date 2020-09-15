@@ -133,6 +133,9 @@ def do_request_remote(method, url, **kwargs):
 def _error_content(e):
     return f'{e}' if e.response is None or e.response.text is None or e.response.text == '' else e.response.text
 
+"""Determine whether a notebook is running. This matters because if none is running, we're going to have to
+   connect to Cytoscape only via a local socket. If a notebook is running, there will be an option to connect
+   via either a local socket (preferred) or Jupyter-Bridge (sufficient)."""
 
 _notebook_is_running = None
 def notebook_is_running(new_state=None):
@@ -161,6 +164,11 @@ def _check_notebook_is_running():
 
 _check_notebook_is_running()
 
+"""Determine whether we're running locally or on a remote server. If locally (either via raw Python or via a
+   locally installed Notebook), we prefer to connect to Cytoscape over a local socket. If remote, we have to
+   connect over Jupyter-Bridge. Either way, we can determine which by whether Cytoscape answers to a version
+   check. If Cytoscape doesn't answer, we have no information ... and we have to wait until Cytoscape is
+   started and becomes reachable before we can determine local vs remote."""
 
 _running_remote = None # None means "Don't know whether Cytoscape is local or remote yet"
 def running_remote(new_state=None):

@@ -44,6 +44,7 @@ from .cy_ndex import *
 from .decorators import *
 from .py4cytoscape_notebook import get_browser_client_js, get_browser_client_channel, get_jupyter_bridge_url
 from .py4cytoscape_logger import set_summary_logger
+from .py4cytoscape_sandbox import *
 from ._version import __version__
 
 # Note that we have tried to enforce documentation standards for modules and private functions per:
