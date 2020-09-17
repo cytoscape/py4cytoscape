@@ -19,6 +19,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+# External library imports
+
+# Internal module imports
+
+# Internal module convenience imports
+
+_default_sandbox = {} # If a sandbox is explicitly defined, it'll override the default
+PREDEFINED_SANDBOX_NAME = 'default_sandbox'
+_current_sandbox_name = None
+_current_sandbox_path = None # Resolve this by explicitly setting it or when first Cytoscape command is issued
+_sandbox_reinitialize = True
+
+
 _SANDBOX_TEMPLATE = {'sandboxName': None, 'copySamples': True, 'reinitialize': True}
 def sandbox_initializer(**new_sandbox):
     if len(new_sandbox) == 1 and 'init' in new_sandbox:
@@ -33,33 +46,37 @@ def sandbox_initializer(**new_sandbox):
             raise Exception(f'Invalid key {key} in sandbox parameter list')
     return sandbox
 
-_explicit_sandbox = {} # If a sandbox is explicitly defined, it'll override the default
-PREDEFINED_SANDBOX_NAME = 'default_sandbox'
-_current_sandbox = sandbox_initializer() # Resolve this by explicitly setting it or when first Cytoscape command is issued (see below)
-_sandbox_initialized = False
-
-def explicit_sandbox(**new_sandbox):
-    global _explicit_sandbox
-    old_explicit_sandbox = dict(_explicit_sandbox)
+def default_sandbox(**new_sandbox):
+    global _default_sandbox
+    old_default_sandbox = dict(_default_sandbox)
     if len(new_sandbox):
-        _explicit_sandbox = sandbox_initializer(**new_sandbox)
-    return old_explicit_sandbox
+        _default_sandbox = sandbox_initializer(init=new_sandbox)
+        sandbox_reinitialize(True)
+    return old_default_sandbox
 
-def current_sandbox(**new_sandbox):
-    global _current_sandbox
-    old_current_sandbox = dict(_current_sandbox)
-    if len(new_sandbox):
-        _current_sandbox = sandbox_initializer(**new_sandbox)
-    return old_current_sandbox
+def get_current_sandbox_name():
+    return _current_sandbox_name
 
-def sandbox_initialized(new_state=None):
-    global _sandbox_initialized
-    old_state = _sandbox_initialized
+def get_current_sandbox_path():
+    return _current_sandbox_path
+
+def get_current_sandbox():
+    return _current_sandbox_path, _current_sandbox_name
+
+def set_current_sandbox(sandbox_name, sandbox_path):
+    global _current_sandbox_name, _current_sandbox_path
+    _current_sandbox_name = sandbox_name
+    _current_sandbox_path = sandbox_path
+    return get_current_sandbox()
+
+def sandbox_reinitialize(new_state=None):
+    global _sandbox_reinitialize
+    old_state = _sandbox_reinitialize
     if new_state is not None:
-        _sandbox_initialized = new_state
+        _sandbox_reinitialize = new_state
     return old_state
 
-
+_current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)
 
 """There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. They affect
  how/whether a sandbox is used. If no sandbox is used, we assume that file names/paths used in py4cytoscape

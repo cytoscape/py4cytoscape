@@ -103,7 +103,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('DELETE', url, params=parameters)
+        r = _do_request('DELETE', url, params=parameters, base_url=base_url)
         r.raise_for_status()
         try:
             return r.json()
@@ -143,7 +143,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('GET', url, params=parameters)
+        r = _do_request('GET', url, params=parameters, base_url=base_url)
         r.raise_for_status()
         try:
             return r.json()
@@ -184,7 +184,7 @@ def cyrest_post(operation=None, parameters=None, body=None, base_url=DEFAULT_BAS
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('POST', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'})
+        r = _do_request('POST', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'}, base_url=base_url)
         r.raise_for_status()
         try:
             return r.json()
@@ -223,7 +223,7 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('PUT', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'})
+        r = _do_request('PUT', url, params=parameters, json=body, headers = {'Content-Type': 'application/json'}, base_url=base_url)
         r.raise_for_status()
         try:
             return r.json()
@@ -295,7 +295,7 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
     """
     try:
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'})
+        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'}, base_url=base_url)
         r.raise_for_status()
 
         # Break response into a list of lines and return it
@@ -337,7 +337,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
     try:
         cmd_string = re.sub(r'help *', cmd_string, cmd_string)  # remove 'help ' if it's already in the request
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
-        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'})
+        r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'}, base_url=base_url)
         r.raise_for_status()
 
         # Break response into a list of lines and return it
@@ -382,7 +382,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         post_url = _command_2_post_query_url(cmd, base_url=base_url)
         post_body = _command_2_post_query_body(cmd)
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        r = _do_request('POST', post_url, json=post_body, headers=headers)
+        r = _do_request('POST', post_url, json=post_body, headers=headers, base_url=base_url)
         r.raise_for_status()
         return json.loads(r.text)['data']
     except requests.exceptions.RequestException as e:
@@ -690,27 +690,42 @@ def _do_request_local(method, url, **kwargs):
     return r
 
 # Determine whether actual call is local or remote
-def _do_request(method, url, **kwargs):
-    requester = do_request_remote if _find_remote_cytoscape() else _do_request_local
+def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
+    requester = _get_requester()
 
-    if not sandbox_initialized():
-        xs = explicit_sandbox()
-        if len(xs):
-            sandbox_to_set = dict(xs)
+    do_initialize_sandbox(requester, base_url=base_url)
+
+    return requester(method, url, **kwargs)
+
+def do_initialize_sandbox(requester=None, base_url=DEFAULT_BASE_URL):
+    if sandbox_reinitialize():
+        ds = default_sandbox()
+        if len(ds):
+            sandbox_to_set = dict(ds)
         elif notebook_is_running() or running_remote():
             # User hasn't defined a sandbox for us, so calculate a default for current platform
             sandbox_to_set = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
         else:
             sandbox_to_set = sandbox_initializer(sandboxName=None) # for local execution not under a Notebook
-        if sandbox_to_set['sandboxName']:
-            url_parts = urllib.parse.urlparse(url)
-            sandbox_url = f'{url_parts.scheme}://{url_parts.netloc}/v1/commands/filetransfer/setSandbox'
-            r = requester('POST', sandbox_url, json=sandbox_to_set)
-            r.raise_for_status()
-            current_sandbox(init=sandbox_to_set)
-        sandbox_initialized(True)
+        return do_set_sandbox(sandbox_to_set, requester, base_url=base_url)
+    else:
+        return get_current_sandbox()
 
-    return requester(method, url, **kwargs)
+def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
+    requester = requester or _get_requester()
+    sandbox_name = sandbox_to_set['sandboxName']
+    if sandbox_name:
+        headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
+        r = requester('POST', f'{base_url}/commands/filetransfer/setSandbox', json=sandbox_to_set, headers=headers)
+        r.raise_for_status()
+        new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
+    else:
+        new_sandbox = set_current_sandbox(None, None)
+    sandbox_reinitialize(False)
+    return new_sandbox
+
+def _get_requester():
+    return do_request_remote if _find_remote_cytoscape() else _do_request_local
 
 def _do_browser_open(url, **kwargs):
     if _find_remote_cytoscape():

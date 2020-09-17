@@ -25,10 +25,35 @@ class MyTestCase(unittest.TestCase):
 
 
     def test_something(self):
-        x = explicit_sandbox(sandboxName=PREDEFINED_SANDBOX_NAME, reinitialize=False)
+        # x = default_sandbox(sandboxName=PREDEFINED_SANDBOX_NAME, reinitialize=False)
+        #
+        #
+        # print(default_sandbox())
+
+        x = sandbox_get_file_info("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/test.png")
+        print(x)
+        x = sandbox_get_file_info("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/testx.png")
+
+        x = sandbox_send_to("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/test.png", "C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/myFile.png")
+        x = sandbox_get_from("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/myFile.png", "C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/foo.png")
+        x = sandbox_remove_file("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/myFile.png")
+
+        x = sandbox_remove()
+
+        x = sandbox_set('mySandbox')
+        print(x)
 
 
-        print(explicit_sandbox())
+        x = sandbox_get_file_info('.')
+        print(x)
+        x = sandbox_get_file_info('sampleData/galFiltered.sif')
+        print(x)
+
+        x = sandbox_send_to("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/test.png", "myFile.png")
+        x = sandbox_get_from('myFile.png', "C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/foo.png")
+        x = sandbox_remove_file('myFile.png')
+
+        x = sandbox_remove()
 
         print(cytoscape_ping())
 
