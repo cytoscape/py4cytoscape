@@ -30,6 +30,21 @@ class MyTestCase(unittest.TestCase):
         #
         # print(default_sandbox())
 
+# without sandbox
+        x = open_session()
+        x = open_session('sampleData/sessions/Affinity Purification.cys')
+        x = save_session("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/mySession")
+        x = save_session("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/mySession")
+
+# with sandbox
+        x = sandbox_set('default_sandbox')
+        x = open_session()
+        x = open_session('sampleData/sessions/Affinity Purification.cys')
+        x = save_session('mySession')
+        set_current_sandbox(None, None)
+
+
+# without sandbox
         x = sandbox_get_file_info("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/test.png")
         print(x)
         x = sandbox_get_file_info("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/testx.png")
@@ -38,11 +53,13 @@ class MyTestCase(unittest.TestCase):
         x = sandbox_get_from("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/myFile.png", "C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/foo.png")
         x = sandbox_remove_file("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/myFile.png")
 
-        x = sandbox_remove()
+#        x = sandbox_remove()
 
+
+
+# with sandbox
         x = sandbox_set('mySandbox')
         print(x)
-
 
         x = sandbox_get_file_info('.')
         print(x)

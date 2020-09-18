@@ -20,16 +20,15 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # External library imports
-import sys
-import os
 
 # Internal module imports
 from . import commands
+from . import sandbox
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-from .py4cytoscape_notebook import running_remote
+from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 
 def __init__(self):
@@ -102,15 +101,13 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`save_session`
     """
-    type = 'file'
-    if file_location is None:
-        file_location = './sampleData/sessions/Yeast Perturbation.cys'
-    elif str.startswith(file_location, 'http'):
+    if file_location and str.startswith(file_location, 'http'):
         type = 'url'
-    elif not running_remote():
-        file_location = os.path.abspath(file_location)
+    else:
+        type = 'file'
+        file_location = get_abs_sandbox_path(file_location or 'sampleData/sessions/Yeast Perturbation.cys')
 
-    narrate('Opening ' + file_location + '...')
+    narrate(f'Opening {file_location}...')
     return commands.commands_post(f'session open {type}="{file_location}"', base_url=base_url)
 
 
@@ -152,7 +149,9 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
     else:
         # TODO: R uses '.cys$' here, but shouldn't the '.' be escaped??
         if re.search('.cys$', filename) is None: filename += '.cys'
-        if not running_remote():
-            filename = os.path.abspath(filename)
-            if os.path.isfile(filename): narrate('This file has been overwritten.')
-        return commands.commands_post(f'session save as file="{filename}"', base_url=base_url)
+
+        file_info = sandbox.sandbox_get_file_info(filename)
+        if len(file_info['modifiedTime']) and file_info['isFile']:
+            narrate('This file has been overwritten.')
+
+        return commands.commands_post(f'session save as file="{get_abs_sandbox_path(filename)}"', base_url=base_url)

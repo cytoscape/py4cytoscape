@@ -53,6 +53,9 @@ def test_select_nodes(node_list):
     else:
         select_nodes(node_list, by_col='COMMON')
 
+def localize_path(filename):
+    return os.path.join(os.getcwd(), filename)
+
 
 def clean_session_file(session_filename):
     if os.path.isfile(session_filename): os.remove(session_filename)

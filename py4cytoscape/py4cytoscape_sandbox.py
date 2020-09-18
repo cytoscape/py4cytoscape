@@ -76,6 +76,12 @@ def sandbox_reinitialize(new_state=None):
         _sandbox_reinitialize = new_state
     return old_state
 
+def get_abs_sandbox_path(file_location):
+    sandbox_path = get_current_sandbox_path()
+    if sandbox_path:
+        file_location = f'{sandbox_path}/{file_location}'
+    return file_location
+
 _current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)
 
 """There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. They affect
