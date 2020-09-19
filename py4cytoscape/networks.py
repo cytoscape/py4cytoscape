@@ -38,7 +38,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # External library imports
 import sys
-import os
 import time
 import warnings
 import pandas as pd
@@ -51,6 +50,7 @@ from . import tables
 from . import network_selection
 from . import layouts
 from . import session
+from . import sandbox
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
@@ -58,6 +58,7 @@ from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS
 from .exceptions import CyError
 from .py4cytoscape_notebook import running_remote
+from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 def __init__(self):
     pass
@@ -326,7 +327,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     cmd = 'network export'  # a good start
 
     # filename must be suppled
-    if filename is None: filename = get_network_name(network)
+    if filename is None: filename = get_abs_sandbox_path(get_network_name(network), force_cwd=True)
 
     # optional args
     if network is not None: cmd += ' network="SUID:' + str(get_network_suid(network, base_url=base_url)) + '"'
@@ -342,12 +343,12 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
 
     ext = '.' + type.lower()
     if re.search(ext + '$', filename) is None: filename += ext
-    if not running_remote():
-        filename = os.path.abspath(filename)
-        if os.path.exists(filename): narrate(
-            'This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
 
-    return commands.commands_post(f'{cmd} OutputFile="{filename}"', base_url=base_url)
+    file_info = sandbox.sandbox_get_file_info(filename)
+    if len(file_info['modifiedTime']) and file_info['isFile']:
+        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+
+    return commands.commands_post(f'{cmd} OutputFile="{get_abs_sandbox_path(filename)}"', base_url=base_url)
 
 
 @cy_log
@@ -1109,10 +1110,8 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         {'networks': [131481], 'views': [131850]}
     """
     if file is None:
-        file = 'data/galFiltered.sif'
-    if not running_remote():
-        file = os.path.abspath(file)
-    res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
+        file = get_abs_sandbox_path('data/galFiltered.sif', force_cwd=True)
+    res = commands.commands_post(f'network load file file="{get_abs_sandbox_path(file)}"', base_url=base_url)
     # TODO: Fix R documentation to match what's really returned
     # TODO: Put double quotes around file
 

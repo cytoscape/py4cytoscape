@@ -35,12 +35,12 @@ class AppsTests(unittest.TestCase):
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_cytoscape_ping(self):
-        self.assertIsNone(cytoscape_ping())
+        self.assertEqual(cytoscape_ping(), 'You are connected to Cytoscape!')
 
         input('Terminate Cytoscape and hit [enter]')
         self.assertRaises(requests.exceptions.RequestException, cytoscape_ping)
         input('Restart Cytoscape, wait for startup to complete, and then hit [enter]')
-        self.assertIsNone(cytoscape_ping())
+        self.assertEqual(cytoscape_ping(), 'You are connected to Cytoscape!')
 
     
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')

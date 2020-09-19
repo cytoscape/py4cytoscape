@@ -543,8 +543,7 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
         {}
     """
     args_str = f' args="{args}"' if args else ''
-    if not running_remote():
-        file = os.path.abspath(file)
+    file = get_abs_sandbox_path(file)
 
     return commands_post(f'command run{args_str} file="{file}"', base_url=base_url)
 

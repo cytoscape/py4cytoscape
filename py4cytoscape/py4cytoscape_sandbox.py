@@ -20,6 +20,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # External library imports
+import os
 
 # Internal module imports
 
@@ -76,8 +77,10 @@ def sandbox_reinitialize(new_state=None):
         _sandbox_reinitialize = new_state
     return old_state
 
-def get_abs_sandbox_path(file_location):
+def get_abs_sandbox_path(file_location, force_cwd = False):
     sandbox_path = get_current_sandbox_path()
+    if not sandbox_path and force_cwd:
+        sandbox_path = os.getcwd()
     if sandbox_path:
         file_location = f'{sandbox_path}/{file_location}'
     return file_location

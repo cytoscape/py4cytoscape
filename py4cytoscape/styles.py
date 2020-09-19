@@ -25,18 +25,19 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # External library imports
 import sys
-import os
 import warnings
 
 # Internal module imports
 from . import commands
 from . import networks
+from . import sandbox
 
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_notebook import running_remote
+from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 # ==============================================================================
 # I. Style management functions
@@ -188,13 +189,15 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     if styles is not None: cmd_string += ' styles="' + styles + '"'
     cmd_string += ' options="' + type + '"'
 
-    if filename is None: filename = 'styles'
+    if filename is None: filename = get_abs_sandbox_path('styles', force_cwd=True)
     ext = '.' + type.lower() + '$'
     if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
-    if not running_remote():
-        filename = os.path.abspath(filename)
-        if os.path.exists(filename): narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
-    cmd_string += ' OutputFile="' + filename + '"'
+
+    file_info = sandbox.sandbox_get_file_info(filename)
+    if len(file_info['modifiedTime']) and file_info['isFile']:
+        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+
+    cmd_string += ' OutputFile="' + get_abs_sandbox_path(filename) + '"'
     # TODO: Can't we create a parameter to delete the file first?
 
     res = commands.commands_post(cmd_string, base_url=base_url)
@@ -226,10 +229,7 @@ def import_visual_styles(filename="styles.xml", base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`export_visual_styles`
     """
-    if not running_remote():
-        filename = os.path.abspath(filename)
-
-    res = commands.commands_post(f'vizmap load file file="{filename}"', base_url=base_url)
+    res = commands.commands_post(f'vizmap load file file="{get_abs_sandbox_path(filename)}"', base_url=base_url)
     return res
 
 @cy_log

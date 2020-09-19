@@ -30,19 +30,20 @@ def __init__(self):
 
 
 def load_test_session(session_filename=None):
+    if session_filename: session_filename = localize_path(session_filename)
     open_session(session_filename)
 
 
 def load_test_network(network_name, make_current=True):
     if make_current:
-        imported = import_network_from_file(network_name)
+        imported = import_network_from_file(localize_path(network_name))
         set_current_network(imported['networks'][0])
     else:
         try:
             cur_suid = get_network_suid()
         except:
             cur_suid = None
-        imported = import_network_from_file(network_name)
+        imported = import_network_from_file(localize_path(network_name))
         if cur_suid: set_current_network(cur_suid)
     return imported['networks'][0], imported['views'][0]
 
@@ -54,6 +55,14 @@ def test_select_nodes(node_list):
         select_nodes(node_list, by_col='COMMON')
 
 def localize_path(filename):
+    # Create a full path that includes the cwd on the workstation. This identifies
+    # a file that is in a directory relative to the test suite ... the test suite
+    # directory is the current directory for these tests written in Python. This
+    # is different from the current directory that Cytoscape (in a different
+    # process) uses ... that would be the Cytoscape installation directory.
+    # So, when we call this function, we expect to be telling Cytoscape to access
+    # a file in this test suite directory instead of in its installation
+    # directory.
     return os.path.join(os.getcwd(), filename)
 
 

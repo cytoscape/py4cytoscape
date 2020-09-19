@@ -22,7 +22,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # Internal module convenience imports
-import os
 import time
 import json
 import warnings
@@ -33,12 +32,14 @@ from . import networks
 from . import network_selection
 from . import tables
 from . import style_bypasses
+from . import sandbox
 
 # External library imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import CATCHUP_FILTER_SECS, MODEL_PROPAGATION_SECS
+from .py4cytoscape_sandbox import get_abs_sandbox_path
 from .py4cytoscape_notebook import running_remote
 
 @cy_log
@@ -323,12 +324,12 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
     ext = '.json'
 
     if re.search(ext + '$', filename) is None: filename += ext
-    if not running_remote():
-        filename = os.path.abspath(filename)
-        if os.path.exists(filename): narrate('This file has been overwritten.')
 
-    res = commands.commands_get(f'filter export file="{filename}"', base_url=base_url)
+    file_info = sandbox.sandbox_get_file_info(filename)
+    if len(file_info['modifiedTime']) and file_info['isFile']:
+        narrate('This file has been overwritten.')
 
+    res = commands.commands_get(f'filter export file="{get_abs_sandbox_path(filename)}"', base_url=base_url)
     return res
 
 
@@ -357,9 +358,8 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
         >>> import_filters('test') # Fetches filters in file 'test'
         []
     """
-    if not running_remote():
-        filename = os.path.abspath(filename)
-    res = commands.commands_get(f'filter import file="{filename}"', base_url=base_url)
+
+    res = commands.commands_get(f'filter import file="{get_abs_sandbox_path(filename)}"', base_url=base_url)
     time.sleep(
         CATCHUP_FILTER_SECS)  # give the filters time to finish executing ... this race condition is a Cytoscape bug
     return res

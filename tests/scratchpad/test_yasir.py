@@ -26,7 +26,7 @@ class MyTestCase(unittest.TestCase):
     @print_entry_exit
     def test_ui(self):
         # Create a clean network using just edges from a known network
-        load_test_session('c:/Program Files/Cytoscape_v3.8.1/sampleData/sessions/Affinity Purification.cys')
+        load_test_session('Affinity Purification.cys')
         edges = get_all_edges()
         sources = [re.match('(\S*) \(.*\) (\S*)', edge).group(1)   for edge in edges]
         targets = [re.match('(\S*) \(.*\) (\S*)', edge).group(2)   for edge in edges]

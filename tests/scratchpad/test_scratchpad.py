@@ -32,14 +32,14 @@ class MyTestCase(unittest.TestCase):
 
 # without sandbox
         x = open_session()
-        x = open_session('sampleData/sessions/Affinity Purification.cys')
+        x = open_session('data/Affinity Purification.cys')
         x = save_session("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/mySession")
         x = save_session("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/mySession")
 
 # with sandbox
         x = sandbox_set('default_sandbox')
         x = open_session()
-        x = open_session('sampleData/sessions/Affinity Purification.cys')
+        x = open_session('data/Affinity Purification.cys')
         x = save_session('mySession')
         set_current_sandbox(None, None)
 
@@ -63,7 +63,7 @@ class MyTestCase(unittest.TestCase):
 
         x = sandbox_get_file_info('.')
         print(x)
-        x = sandbox_get_file_info('sampleData/galFiltered.sif')
+        x = sandbox_get_file_info('data/galFiltered.sif')
         print(x)
 
         x = sandbox_send_to("C:/Users/CyDeveloper/CytoscapeConfiguration/Barry/test.png", "myFile.png")

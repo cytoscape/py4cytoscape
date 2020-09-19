@@ -279,7 +279,7 @@ class CommandsTests(unittest.TestCase):
     def test_command_run_file(self):
         # Initialization
         load_test_session()
-        CMD_FILE = 'data/CommandScript.txt'
+        CMD_FILE = localize_path('data/CommandScript.txt')
         self.assertIsInstance(get_network_suid(), int)
 
         # Verify that script file returns nothing at all

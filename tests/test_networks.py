@@ -177,16 +177,17 @@ class NetworkTests(unittest.TestCase):
         input('On the following tests, allow Cytoscape to overwrite network')
 
         # For these SIF tests, always answer Cytoscape verification message to allow overwrite
-        if os.path.exists('galFiltered.sif'):
-            os.remove('galFiltered.sif')
+        gal_filename = localize_path('galFiltered.sif')
+        if os.path.exists(gal_filename):
+            os.remove(gal_filename)
         check(export_network())
-        self.assertTrue(os.path.exists('galFiltered.sif'))
-        check(export_network(filename='galFiltered', network='yeastHighQuality.sif', type='sif'))
-        self.assertTrue(os.path.exists('galFiltered.sif'))
+        self.assertTrue(os.path.exists(gal_filename))
+        check(export_network(filename=gal_filename, network='yeastHighQuality.sif', type='sif'))
+        self.assertTrue(os.path.exists(gal_filename))
 
         # For these CYS tests, always answer Cytoscape verification message to allow overwrite
         net_name = get_network_name()
-        full_file_name = net_name + '.cys'
+        full_file_name = localize_path(net_name) + '.cys'
         if os.path.exists(full_file_name):
             os.remove(full_file_name)
         self.assertDictEqual(export_network(type='cys'), {})
@@ -555,7 +556,7 @@ class NetworkTests(unittest.TestCase):
     def test_import_network_from_file(self):
 
         # Verify that test network loads from test data directory
-        res = import_network_from_file('data/galFiltered.sif')
+        res = import_network_from_file(localize_path('data/galFiltered.sif'))
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)
