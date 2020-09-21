@@ -26,7 +26,8 @@ import os
 
 # Internal module convenience imports
 
-_default_sandbox = {} # If a sandbox is explicitly defined, it'll override the default
+_default_sandbox = {} # Once a sandbox is explicitly defined, it'll override this default
+_default_sandbox_path = None
 PREDEFINED_SANDBOX_NAME = 'default_sandbox'
 _current_sandbox_name = None
 _current_sandbox_path = None # Resolve this by explicitly setting it or when first Cytoscape command is issued
@@ -47,13 +48,21 @@ def sandbox_initializer(**new_sandbox):
             raise Exception(f'Invalid key {key} in sandbox parameter list')
     return sandbox
 
-def default_sandbox(**new_sandbox):
+def set_default_sandbox(**new_sandbox):
     global _default_sandbox
-    old_default_sandbox = dict(_default_sandbox)
-    if len(new_sandbox):
-        _default_sandbox = sandbox_initializer(init=new_sandbox)
-        sandbox_reinitialize(True)
-    return old_default_sandbox
+    _default_sandbox = sandbox_initializer(init=new_sandbox)
+    return _default_sandbox
+
+def get_default_sandbox():
+    return _default_sandbox
+
+def set_default_sandbox_path(newPath):
+    global _default_sandbox_path
+    _default_sandbox_path = newPath
+    return _default_sandbox_path
+
+def get_default_sandbox_path():
+    return _default_sandbox_path
 
 def get_current_sandbox_name():
     return _current_sandbox_name
@@ -62,7 +71,7 @@ def get_current_sandbox_path():
     return _current_sandbox_path
 
 def get_current_sandbox():
-    return _current_sandbox_path, _current_sandbox_name
+    return _current_sandbox_name, _current_sandbox_path
 
 def set_current_sandbox(sandbox_name, sandbox_path):
     global _current_sandbox_name, _current_sandbox_path
@@ -70,19 +79,20 @@ def set_current_sandbox(sandbox_name, sandbox_path):
     _current_sandbox_path = sandbox_path
     return get_current_sandbox()
 
-def sandbox_reinitialize(new_state=None):
+def set_sandbox_reinitialize(do_reinitialize=True):
     global _sandbox_reinitialize
-    old_state = _sandbox_reinitialize
-    if new_state is not None:
-        _sandbox_reinitialize = new_state
-    return old_state
+    _sandbox_reinitialize = do_reinitialize
+    return _sandbox_reinitialize
+
+def get_sandbox_reinitialize():
+    return _sandbox_reinitialize
 
 def get_abs_sandbox_path(file_location, force_cwd = False):
     sandbox_path = get_current_sandbox_path()
     if not sandbox_path and force_cwd:
         sandbox_path = os.getcwd()
     if sandbox_path:
-        file_location = f'{sandbox_path}/{file_location}'
+        file_location = f'{sandbox_path}/{file_location}' # this works on all Cytoscape platforms ... don't use Path()
     return file_location
 
 _current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)

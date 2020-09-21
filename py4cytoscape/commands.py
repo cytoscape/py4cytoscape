@@ -692,36 +692,64 @@ def _do_request_local(method, url, **kwargs):
 def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
     requester = _get_requester()
 
-    do_initialize_sandbox(requester, base_url=base_url)
+    do_initialize_sandbox(requester, base_url=base_url) # make sure there's a sandbox before executing a command
 
     return requester(method, url, **kwargs)
 
 def do_initialize_sandbox(requester=None, base_url=DEFAULT_BASE_URL):
-    if sandbox_reinitialize():
-        ds = default_sandbox()
-        if len(ds):
-            sandbox_to_set = dict(ds)
-        elif notebook_is_running() or running_remote():
-            # User hasn't defined a sandbox for us, so calculate a default for current platform
-            sandbox_to_set = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
-        else:
-            sandbox_to_set = sandbox_initializer(sandboxName=None) # for local execution not under a Notebook
-        return do_set_sandbox(sandbox_to_set, requester, base_url=base_url)
+    if get_sandbox_reinitialize():
+        return do_set_sandbox(_get_default_sandbox(), requester, base_url=base_url)
     else:
         return get_current_sandbox()
 
 def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     requester = requester or _get_requester()
+    if not sandbox_to_set['sandboxName']:
+        # A null name means that the default sandbox should be used, but honoring the copySamples and reinitialize
+        # settings passed in by the caller.
+        sandbox_to_set['sandboxName'] = _get_default_sandbox()['sandboxName']
     sandbox_name = sandbox_to_set['sandboxName']
     if sandbox_name:
-        headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-        r = requester('POST', f'{base_url}/commands/filetransfer/setSandbox', json=sandbox_to_set, headers=headers)
+        # A named sandbox name means to create one if it doesn't already exist ... otherwise, preserve it and apply
+        # copySamples or reinitialize if true
+        r = requester('POST', f'{base_url}/commands/filetransfer/setSandbox',
+                      json=sandbox_to_set,
+                      headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
         r.raise_for_status()
         new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
     else:
-        new_sandbox = set_current_sandbox(None, None)
-    sandbox_reinitialize(False)
+        # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
+        # we should never get here if we're running a notebook or remote configuration.
+        #
+        # Either way, we consider the Cytoscape installation directory to be the sandbox because that's what the
+        # Cytoscape current directory is when Cytoscape executes ... the same place an unqualified file name would
+        # resolve to if Cytoscape were to be saving a file. For the sake of testing and consistency, we need to
+        # find out what that path is and return it as part of the sandbox descriptor.
+        default_sandbox_path = get_default_sandbox_path()
+        if default_sandbox_path is None:
+            r = requester('POST', f'{base_url}/commands/filetransfer/getFileInfo',
+                          json={'sandboxName': None, 'fileName': '.'},
+                          headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
+            r.raise_for_status()
+            default_sandbox_path = set_default_sandbox_path(json.loads(r.text)['data']['filePath'])
+        new_sandbox = set_current_sandbox(None, default_sandbox_path)
+
+    set_sandbox_reinitialize(False) # No need to initialize again immediately before the next command is issued
     return new_sandbox
+
+def _get_default_sandbox():
+    default = get_default_sandbox()
+    if len(default) == 0:
+        # There hasn't been a default sandbox calculated yet ... create a new default to reflect Notebook and remote
+        # execution. This determination is deferred until now (instead of occurring when Python execution first starts)
+        # so as to give the user some flexibility regarding when Cytoscape needs to be started ... this allows
+        # Cytoscape to be started only before the user issues the first command.
+        if notebook_is_running() or running_remote():
+            default = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
+        else:
+            default = sandbox_initializer(sandboxName=None)  # for local execution not under a Notebook
+        set_default_sandbox(**default)
+    return default
 
 def _get_requester():
     return do_request_remote if _find_remote_cytoscape() else _do_request_local
