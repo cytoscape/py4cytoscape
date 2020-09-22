@@ -54,6 +54,7 @@ def set_default_sandbox(**new_sandbox):
     return _default_sandbox
 
 def get_default_sandbox():
+    global _default_sandbox
     return _default_sandbox
 
 def set_default_sandbox_path(newPath):
@@ -95,7 +96,15 @@ def get_abs_sandbox_path(file_location, force_cwd = False):
         file_location = f'{sandbox_path}/{file_location}' # this works on all Cytoscape platforms ... don't use Path()
     return file_location
 
-_current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)
+def reset_default_sandbox():
+    global _default_sandbox, _default_sandbox_path, _current_sandbox_name, _current_sandbox_path, _sandbox_reinitialize
+    _default_sandbox = {}
+    _default_sandbox_path = None
+    _current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)
+    _sandbox_reinitialize = True
+
+
+reset_default_sandbox() # Create a clean slate
 
 """There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. They affect
  how/whether a sandbox is used. If no sandbox is used, we assume that file names/paths used in py4cytoscape

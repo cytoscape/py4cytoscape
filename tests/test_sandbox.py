@@ -35,7 +35,8 @@ class SandboxTests(unittest.TestCase):
     def setUp(self):
         # Close all browser windows if possible
         try:
-            set_default_sandbox(**{'sandboxName': None, 'copySamples': True, 'reinitialize': True})
+            notebook_is_running(False)
+            reset_default_sandbox()
         except:
             pass
 
@@ -45,8 +46,16 @@ class SandboxTests(unittest.TestCase):
 
 
     @print_entry_exit
-    def test_sandbox_set_remove_standalone(self):
+    def test_sandbox_set_invalid(self):
+        # Set invalid sandboxes (null, "", having a path, having '.', having '..', having absolute path
+        self.assertRaises(HTTPError, sandbox_set, 'foo/bar')
+        self.assertRaises(HTTPError, sandbox_set, '.')
+        self.assertRaises(HTTPError, sandbox_set, '..')
+        self.assertRaises(HTTPError, sandbox_set, '...')
+        self.assertRaises(HTTPError, sandbox_set, '/windows/system32')
 
+    @print_entry_exit
+    def test_sandbox_set_remove_standalone(self):
         # Verify that setting an empty sandbox really creates one that it points to Cytoscape program directory
         sandbox = sandbox_set(None)
         sandbox1 = self._verify_empty_sandbox()
@@ -101,12 +110,6 @@ class SandboxTests(unittest.TestCase):
         self._verify_removed(_ALTTEST_SANDBOX_NAME, True, new_sandbox)
         self._verify_empty_sandbox()
 
-        # Set invalid sandboxes (null, "", having a path, having '.', having '..', having absolute path
-        self.assertRaises(HTTPError, sandbox_set, 'foo/bar')
-        self.assertRaises(HTTPError, sandbox_set, '.')
-        self.assertRaises(HTTPError, sandbox_set, '..')
-        self.assertRaises(HTTPError, sandbox_set, '...')
-        self.assertRaises(HTTPError, sandbox_set, '/windows/system32')
 
     @print_entry_exit
     def test_sandbox_set_remove_standalone_multiple(self):
@@ -152,6 +155,59 @@ class SandboxTests(unittest.TestCase):
         empty1_sandbox = self._verify_empty_sandbox()
         self.assertEqual(empty_sandbox, empty1_sandbox)
 
+    @print_entry_exit
+    def test_sandbox_set_remove_notebook(self):
+        notebook_is_running(True) # Should cause default notebook to be created
+
+        # Verify that setting an empty sandbox resolves to the pre-created sandbox
+        default_sandbox = sandbox_set(None)
+        default_sandbox1 = self._verify_preset_sandbox()
+        self.assertEqual(default_sandbox, default_sandbox1)
+
+        # Remove the default sandbox and verify that it's actually removed
+        self._verify_removed(None, True, default_sandbox)
+        self.assertFalse(os.path.exists(default_sandbox))
+
+        # Verify that the slightest operation causes the default sandbox to be re-created
+        default_sandbox1 = self._verify_preset_sandbox()
+
+        # Verify that deleting it erases it. Verify that even deleting the sandbox causes it to be re-created before
+        # it's then deleted ... and then verify that the slightest operation also causes it to be automatically re-created
+        self._verify_removed(None, True, default_sandbox)
+        self._verify_removed(None, True, default_sandbox)
+        default_sandbox1 = self._verify_preset_sandbox()
+
+        # Create a new sandbox and verify that it's not the default.
+        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
+        self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
+        self.assertNotEqual(default_sandbox, test_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(), test_sandbox) # Verify that the new sandbox exists and it's the current sandbox
+
+        # Verify that deleting the new sandbox causes the default sandbox to become current again ... and without messing up the default sandbox
+        self._verify_removed(None, True, test_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+
+        # Create the new sandbox again and verify that it's not the default.
+        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
+        self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
+        self.assertNotEqual(default_sandbox, test_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(),
+                         test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
+
+        # Verify that deleting the default sandbox leaves the new sandbox as the current sandbox
+        self._verify_removed(PREDEFINED_SANDBOX_NAME, True, default_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(),
+                         test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
+
+        # Next ... verify that the default sandbox gets created once the new sandbox is deleted
+        self._verify_removed(None, True, test_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+        self._write_file(default_sandbox)
+
+        # With the default sandbox being current, verify that deleting the new sandbox again leaves the default as current
+        self._verify_removed(_TEST_SANDBOX_NAME, False, test_sandbox)
+        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+        self.assertEqual(os.path.isfile(os.path.join(default_sandbox, _TEST_FILE)), True)
 
     def _verify_valid_sandbox(self):
         sandbox = sandbox_get_file_info('.')
@@ -165,6 +221,12 @@ class SandboxTests(unittest.TestCase):
         empty_sandbox = self._verify_valid_sandbox()
         self.assertEqual(os.path.isfile(os.path.join(empty_sandbox, 'Cytoscape.vmoptions')), True)
         return empty_sandbox
+
+    def _verify_preset_sandbox(self):
+        sandbox = self._verify_valid_sandbox()
+        self.assertEqual(len(os.listdir(sandbox)), 1)
+        self.assertEqual(os.path.isdir(os.path.join(sandbox, 'sampleData')), True)
+        return sandbox
 
     def _verify_removed(self, sandbox_name, existed, original_sandbox_path):
         removed_sandbox = sandbox_remove(sandbox_name)

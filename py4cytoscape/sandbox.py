@@ -77,16 +77,18 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
     res = _sandbox_op(f'filetransfer removeSandbox', sandbox_name, base_url)
     if not sandbox_name or sandbox_name == current_sandbox_before_remove:
         set_current_sandbox(default_sandbox_name, get_default_sandbox_path()) # There is no more current sandbox ... wipe out name of sandbox
+        sandbox_name = current_sandbox_before_remove
 
     # At this point, the sandbox has been deleted. If it was the current sandbox, there is no more current sandbox.
     # A null current sandbox means that the Cytoscape native file system should be used. This is not OK if we're
     # executing from a notebook or remotely. To remedy this, we revert to the default sandbox as the new current
     # sandbox. If that was the sandbox we just deleted, we need to re-initialize so it gets re-created.
 
-    if sandbox_name == default_sandbox_name:
+    if sandbox_name == default_sandbox_name and default_sandbox_name == current_sandbox_before_remove:
         set_sandbox_reinitialize() # Recreate the default sandbox before the next command executes
     elif sandbox_name == current_sandbox_before_remove:
-        # Make the default sandbox current ... be sure not to wipe out any work that's already there
+        # A user-created sandbox was removed, so fall back to the making the default sandbox current ...
+        # be sure not to wipe out any work that's already there
         commands.do_set_sandbox({'sandboxName': default_sandbox_name, 'copySamples': False, 'reinitialize': False})
     return res
 
