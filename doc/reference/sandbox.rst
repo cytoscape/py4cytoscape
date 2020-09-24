@@ -4,7 +4,7 @@
 Sandbox
 *******
 
-.. automodule:: sandbox
+.. automodule:: py4cytoscape.sandbox
 
 Sandbox
 -------
