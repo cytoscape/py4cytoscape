@@ -56,6 +56,8 @@ class SandboxTests(unittest.TestCase):
 
     @print_entry_exit
     def test_sandbox_set_remove_standalone(self):
+        # This tests that common/casual set/remove options on sandboxes work when running standalone Python
+
         # Verify that setting an empty sandbox really creates one that it points to Cytoscape program directory
         sandbox = sandbox_set(None)
         sandbox1 = self._verify_empty_sandbox()
@@ -113,6 +115,8 @@ class SandboxTests(unittest.TestCase):
 
     @print_entry_exit
     def test_sandbox_set_remove_standalone_multiple(self):
+        # This tests that multiple sandboxes are managed properly when running Python standalone. The hardest part of
+        # this is to make sure that when the current sandbox is deleted, we fall back to the native Cytoscape file system.
 
         def check_sandbox_files(test_file, alt_file):
             self.assertEqual(os.path.isfile(os.path.join(test_sandbox, _TEST_FILE)), test_file)
@@ -147,7 +151,7 @@ class SandboxTests(unittest.TestCase):
         test1_sandbox = sandbox_set(_TEST_SANDBOX_NAME, copy_samples=False, reinitialize=False)
         self.assertEqual(test_sandbox, test1_sandbox)
         self._verify_removed(_ALTTEST_SANDBOX_NAME, True, alt_sandbox)
-        test1_sandbox = self._verify_valid_sandbox()
+        test1_sandbox = self._verify_valid_sandbox_file()
         self.assertEqual(test_sandbox, test1_sandbox)
 
         # Verify that deleting the current sandbox makes the empty sandbox current
@@ -157,6 +161,10 @@ class SandboxTests(unittest.TestCase):
 
     @print_entry_exit
     def test_sandbox_set_remove_notebook(self):
+        # This tests that the default sandbox is created when in a notebook or remote execution. We make sure that
+        # if the current sandbox gets deleted, we fall back to the default sandbox. And we make sure that if the
+        # default sandbox is deleted, we re-create it before trying to use it.
+
         notebook_is_running(True) # Should cause default notebook to be created
 
         # Verify that setting an empty sandbox resolves to the pre-created sandbox
@@ -181,52 +189,277 @@ class SandboxTests(unittest.TestCase):
         test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
         self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
         self.assertNotEqual(default_sandbox, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(), test_sandbox) # Verify that the new sandbox exists and it's the current sandbox
+        self.assertEqual(self._verify_valid_sandbox_file(), test_sandbox) # Verify that the new sandbox exists and it's the current sandbox
 
         # Verify that deleting the new sandbox causes the default sandbox to become current again ... and without messing up the default sandbox
         self._verify_removed(None, True, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
 
         # Create the new sandbox again and verify that it's not the default.
         test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
         self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
         self.assertNotEqual(default_sandbox, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(),
+        self.assertEqual(self._verify_valid_sandbox_file(),
                          test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
 
         # Verify that deleting the default sandbox leaves the new sandbox as the current sandbox
         self._verify_removed(PREDEFINED_SANDBOX_NAME, True, default_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(),
+        self.assertEqual(self._verify_valid_sandbox_file(),
                          test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
 
         # Next ... verify that the default sandbox gets created once the new sandbox is deleted
         self._verify_removed(None, True, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
         self._write_file(default_sandbox)
 
         # With the default sandbox being current, verify that deleting the new sandbox again leaves the default as current
         self._verify_removed(_TEST_SANDBOX_NAME, False, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox(), default_sandbox)
+        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
         self.assertEqual(os.path.isfile(os.path.join(default_sandbox, _TEST_FILE)), True)
 
-    def _verify_valid_sandbox(self):
-        sandbox = sandbox_get_file_info('.')
+    @print_entry_exit
+    def test_sandbox_file_info_standalone(self):
+        # Verify that the Cytoscape install directory is returned when asking for '.' during standalone Python execution
+        empty_sandbox = self._verify_empty_sandbox()
+
+        # Verify that a non-existent file name returns an empty modifiedTime
+        no_such_file = self._verify_missing_sandbox_file('complete garbage name')
+
+        # Verify that a non-existent directory name returns an empty modifiedTime
+        no_such_file = self._verify_missing_sandbox_file('garbage/')
+
+        # Verify that an existing directory returns a modifiedTime and valid info
+        dir_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/')
+
+        # Verify that a sandbox can have files in subdirectories
+        gal_filtered_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+
+        # Verify that a file outside of the Cytoscape install directory (i.e., anywhere) is allowed (... this isn't
+        # allowed in a strict sandboxing mode like notebooks and remote execution gets)
+        parent_dir = self._verify_missing_sandbox_file('../../fooled')
+        root_dir = self._verify_valid_sandbox_file(file_name='/')
+
+        # Verify that a file can be found in a named sandbox, including using all forms of the "current sandbox" name
+        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=_TEST_SANDBOX_NAME, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=None, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name="   ", file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+
+        # Verify that null file names always fail
+        self.assertRaises(CyError, sandbox_get_file_info, file_name=None)
+        self.assertRaises(CyError, sandbox_get_file_info, file_name='')
+        self.assertRaises(CyError, sandbox_get_file_info, file_name='  ')
+
+    @print_entry_exit
+    def test_sandbox_from(self):
+        _FROM_FILE_NAME = 'sampleData/sessions/Styles Demo.cys'
+        _FROM_FILE_BYTES = 2548166
+        _ALT_FROM_FILE_NAME = 'sampleData/sessions/Import & Save.cys'
+        _ALT_FROM_FILE_BYTES = 2410184
+        _LOCAL_DEST_FILE_NAME = _TEST_FILE
+
+        def check_from_result(res, sandbox_path, expected_length):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath', 'modifiedTime', 'fileByteCount'})
+            self.assertNotEqual(res['modifiedTime'], '')
+            self.assertEqual(res['fileByteCount'], expected_length)
+            self.assertTrue(res['filePath'].startswith(sandbox_path))
+            self.assertEqual(os.path.isfile(_LOCAL_DEST_FILE_NAME), True)
+            self.assertEqual(os.path.getsize(_LOCAL_DEST_FILE_NAME), expected_length)
+
+        def check_from_sandbox(sandbox_path):
+            # Remove local file if it exists
+            if os.path.exists(_LOCAL_DEST_FILE_NAME): os.remove(_LOCAL_DEST_FILE_NAME)
+
+            # Verify that a file can be transferred from the sandbox
+            res = sandbox_get_from(_FROM_FILE_NAME, _LOCAL_DEST_FILE_NAME)
+            check_from_result(res, sandbox_path, _FROM_FILE_BYTES)
+
+            # Verify that the file can't be overwritten if we don't want it to be
+            self.assertRaises(CyError, sandbox_get_from, source_file=_FROM_FILE_NAME, dest_file=_LOCAL_DEST_FILE_NAME,
+                              overwrite=False)
+            self.assertEqual(os.path.isfile(_TEST_FILE), True)
+            self.assertEqual(os.path.getsize(_TEST_FILE), _FROM_FILE_BYTES)
+
+            # Verify that a different file can overwrite it if we allow it
+            res = sandbox_get_from(_ALT_FROM_FILE_NAME, _TEST_FILE)
+            check_from_result(res, sandbox_path, _ALT_FROM_FILE_BYTES)
+
+            # Verify that trying to get a non-existent file files
+            self.assertRaises(CyError, sandbox_get_from, 'totally bogus', dest_file=_LOCAL_DEST_FILE_NAME)
+            self.assertRaises(CyError, sandbox_get_from, _FROM_FILE_NAME, dest_file=None)
+            self.assertRaises(CyError, sandbox_get_from, None, dest_file=_LOCAL_DEST_FILE_NAME)
+            self.assertRaises(CyError, sandbox_get_from, '  ', dest_file=_LOCAL_DEST_FILE_NAME)
+            self.assertRaises(CyError, sandbox_get_from, _FROM_FILE_NAME, dest_file='  ')
+            self.assertRaises(CyError, sandbox_get_from, _FROM_FILE_NAME, dest_file=_LOCAL_DEST_FILE_NAME,
+                              sandbox_name='totally bogus')
+            self.assertRaises(CyError, sandbox_get_from, _FROM_FILE_NAME, dest_file=_LOCAL_DEST_FILE_NAME,
+                              sandbox_name='/totally/bogus/sandbox')
+
+        # Check fetching from empty sandbox (Cytoscape install directory)
+        empty_sandbox_path = self._verify_empty_sandbox()
+        check_from_sandbox(empty_sandbox_path)
+
+        # Check fetching from default sandbox (when Notebook is running)
+        reset_default_sandbox()
+        notebook_is_running(True) # Should cause default notebook to be created
+        default_sandbox_path = sandbox_set(None)
+        check_from_sandbox(default_sandbox_path)
+
+    @print_entry_exit
+    def test_sandbox_to_remove(self):
+        _FROM_FILE_NAME = 'data/Multiple Collections.cys'
+        _FROM_FILE_BYTES = 4445369
+        _ALT_FROM_FILE_NAME = 'data/Affinity Purification.cys'
+        _ALT_FROM_FILE_BYTES = 1054245
+        _NESTED_DIR = '1/2/3/'
+        _ESCAPE_DIR = '1/../../../2/3/'
+
+        def check_to_result(res, sandbox_path, sandbox_name, file_name, expected_length):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath'})
+            self.assertTrue(res['filePath'].startswith(sandbox_path))
+            self._verify_valid_sandbox_file(sandbox_name=sandbox_name, file_name=file_name, is_file=True)
+            self.assertEqual(os.path.getsize(res['filePath']), expected_length)
+
+        def check_remove(res, sandbox_path, existed):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath', 'existed'})
+            self.assertEqual(res['existed'], existed)
+            self.assertTrue(res['filePath'].startswith(sandbox_path))
+
+        def check_to_sandbox(sandbox_path, sandbox_name):
+            # Get rid of the sandbox test file if it already exists ... and verify empty remove either way
+            res = sandbox_get_file_info(_TEST_FILE)
+            if res['modifiedTime']:
+                check_remove(sandbox_remove_file(_TEST_FILE), sandbox_path, True)
+            check_remove(sandbox_remove_file(_TEST_FILE), sandbox_path, False)
+
+            # Verify that a file can be transferred to the sandbox
+            res = sandbox_send_to(_FROM_FILE_NAME, _TEST_FILE)
+            check_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_FILE_BYTES)
+
+            # Verify that the file can't be overwritten if we don't want it to be
+            self.assertRaises(CyError, sandbox_send_to, source_file=_ALT_FROM_FILE_NAME, dest_file=_TEST_FILE,
+                              overwrite=False)
+            check_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_FILE_BYTES)
+
+            # Verify that a different file can overwrite it if we allow it
+            res = sandbox_send_to(_ALT_FROM_FILE_NAME, _TEST_FILE)
+            check_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _ALT_FROM_FILE_BYTES)
+
+            # Verify that removing a file actually removes it, and removing twice is properly detected
+            res = sandbox_remove_file(file_name=_TEST_FILE, sandbox_name=sandbox_name)
+            check_remove(res, sandbox_path, True)
+            res = sandbox_remove_file(file_name=_TEST_FILE, sandbox_name=sandbox_name)
+            check_remove(res, sandbox_path, False)
+
+            # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
+            nested_test_file = _NESTED_DIR + _TEST_FILE
+            res = sandbox_send_to(_FROM_FILE_NAME, nested_test_file)
+            check_to_result(res, sandbox_path, sandbox_name, nested_test_file, _FROM_FILE_BYTES)
+            res = sandbox_remove_file(file_name=nested_test_file, sandbox_name=sandbox_name)
+            check_remove(res, sandbox_path, True)
+
+
+            # Verify that trying to send a non-existent file fails
+            self.assertRaises(CyError, sandbox_send_to, 'totally bogus', dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_send_to, _FROM_FILE_NAME, dest_file=None)
+            self.assertRaises(CyError, sandbox_send_to, None, dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_send_to, '  ', dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_send_to, _FROM_FILE_NAME, dest_file='  ')
+            self.assertRaises(CyError, sandbox_send_to, _FROM_FILE_NAME, dest_file=_TEST_FILE,
+                              sandbox_name='totally bogus')
+            self.assertRaises(CyError, sandbox_send_to, _FROM_FILE_NAME, dest_file=_TEST_FILE,
+                              sandbox_name='/totally/bogus/sandbox')
+            self.assertRaises(CyError, sandbox_send_to, _FROM_FILE_NAME, dest_file=_ESCAPE_DIR + _TEST_FILE)
+            self.assertRaises(CyError, sandbox_remove_file, file_name=None)
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='totally bogus')
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='/totally/bogus/sandbox')
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_ESCAPE_DIR + _TEST_FILE)
+
+        # Check sending to empty sandbox (Cytoscape install directory)
+        default_sandbox_path = sandbox_set(PREDEFINED_SANDBOX_NAME)
+        self._verify_preset_sandbox()
+        check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
+
+        # Check fetching from default sandbox (when Notebook is running)
+        reset_default_sandbox()
+        notebook_is_running(True) # Should cause default notebook to be created
+        default_sandbox_path = sandbox_set(None)
+        check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
+
+    @print_entry_exit
+    def test_sandbox_file_info_notebook(self):
+        notebook_is_running(True) # Should cause default notebook to be created
+
+        # Verify that the Cytoscape install directory is returned when asking for '.' during standalone Python execution
+        default_sandbox = self._verify_valid_sandbox_file()
+        self._verify_sandbox_path(default_sandbox, sandbox_name=PREDEFINED_SANDBOX_NAME)
+
+        # Verify that a non-existent file name returns an empty modifiedTime
+        no_such_file = self._verify_missing_sandbox_file('complete garbage name')
+
+        # Verify that a non-existent directory name returns an empty modifiedTime
+        no_such_file = self._verify_missing_sandbox_file('garbage/')
+
+        # Verify that an existing directory returns a modifiedTime and valid info
+        dir_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/')
+
+        # Verify that a sandbox can have files in subdirectories
+        gal_filtered_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+
+        # Verify that a file outside of the Cytoscape install directory (i.e., anywhere) is disllowed (... this is
+        # allowed in a standalone Python mode)
+        self.assertRaises(CyError, sandbox_get_file_info, file_name='../../fooled')
+
+        # Verify that a file can be found in a named sandbox, including using all forms of the "current sandbox" name
+        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=_TEST_SANDBOX_NAME, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=None, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name="   ", file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
+
+        # Verify that null file names always fail
+        self.assertRaises(CyError, sandbox_get_file_info, file_name=None)
+        self.assertRaises(CyError, sandbox_get_file_info, file_name='')
+        self.assertRaises(CyError, sandbox_get_file_info, file_name='  ')
+
+
+
+    def _verify_missing_sandbox_file(self, file_name='.', is_file=False):
+        sandbox = sandbox_get_file_info(file_name)
+        self.assertIsInstance(sandbox, dict)
+        self.assertSetEqual(set(sandbox.keys()), {'filePath', 'modifiedTime', 'isFile'})
+        self.assertEqual(sandbox['modifiedTime'], '')
+        self.assertEqual(sandbox['isFile'], is_file)
+        return sandbox['filePath']
+
+    def _verify_valid_sandbox_file(self, sandbox_name=None, file_name='.', is_file=False):
+        sandbox = sandbox_get_file_info(sandbox_name=sandbox_name, file_name=file_name)
         self.assertIsInstance(sandbox, dict)
         self.assertSetEqual(set(sandbox.keys()), {'filePath', 'modifiedTime', 'isFile'})
         self.assertNotEqual(sandbox['modifiedTime'], '')
-        self.assertEqual(sandbox['isFile'], False)
+        self.assertEqual(sandbox['isFile'], is_file)
         return sandbox['filePath']
 
     def _verify_empty_sandbox(self):
-        empty_sandbox = self._verify_valid_sandbox()
-        self.assertEqual(os.path.isfile(os.path.join(empty_sandbox, 'Cytoscape.vmoptions')), True)
-        return empty_sandbox
+        empty_sandbox_path = self._verify_valid_sandbox_file()
+        self.assertEqual(os.path.isfile(os.path.join(empty_sandbox_path, 'Cytoscape.vmoptions')), True)
+        return empty_sandbox_path
 
     def _verify_preset_sandbox(self):
-        sandbox = self._verify_valid_sandbox()
-        self.assertEqual(len(os.listdir(sandbox)), 1)
-        self.assertEqual(os.path.isdir(os.path.join(sandbox, 'sampleData')), True)
-        return sandbox
+        sandbox_path = self._verify_valid_sandbox_file()
+        self.assertEqual(len(os.listdir(sandbox_path)), 1)
+        self.assertEqual(os.path.isdir(os.path.join(sandbox_path, 'sampleData')), True)
+        head, tail = os.path.split(sandbox_path)
+        self.assertEqual(tail, PREDEFINED_SANDBOX_NAME)
+        return sandbox_path
 
     def _verify_removed(self, sandbox_name, existed, original_sandbox_path):
         removed_sandbox = sandbox_remove(sandbox_name)

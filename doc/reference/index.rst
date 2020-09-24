@@ -19,6 +19,7 @@ Reference
    groups
    layouts
    networks
+   sandbox
    session
    styles
    tables
