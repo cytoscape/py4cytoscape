@@ -1,6 +1,24 @@
 # -*- coding: utf-8 -*-
 
 """Functions for performing file operations within a sandbox.
+
+A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed not to be the
+whole file system. All file operations are carried out relative to the "current sandbox". Generally, the user doesn't
+have to do anything to set up a sandbox ... the default sandbox is automatically set up as part of py4cytoscape
+startup. However, the user can set different sandboxes if there's an advantage in that, and can even switch between
+them. A sandbox can contain both files and directories, and the user can transfer files to/from a sandbox.
+
+Thus, is it possible to build workflows that don't depend on the structure of the Cytoscape workstation's file system.
+Such workflows can store workflow data files along with other workflow files, then transfer them to a sandbox only when
+Cytoscape will need them. Conversely, when Cytoscape creates a file in a sandbox (e.g., exporting an image), the workflow
+can transfer the file to workflow storage. Sandboxes are especially handy when the workflow is executing in a
+Notebook on a remote server. Workflow data can be transferred to a sandbox for Cytoscape to consume, and Cytoscape
+results can be transferred from the sandbox back to the Notebook file system.
+
+A special case is when py4cytoscape is running on the same workstation as Cytoscape. The default sandbox is considered
+to be the whole workstation file system, and the workflow is responsible for providing full file paths to Cytoscape
+functions. Alternatively, the user could also define a sandbox, and then move files in and out of it just as a
+remote Notebook would.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -156,7 +174,7 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
     Note that this function can be used to query either a file or a directory.
 
     Args:
-        file_name (str): Name of file whose metadata to return ... can be sandbox-relative path ... '.' returns
+        file_name (str): Name of file whose metadata to return ... can be sandbox-relative path ... ``.`` returns
             metadata on sandbox itself
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -196,7 +214,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
 
     Args:
         source_file (str): Name of file in the Python workflow's file system
-        dest_file (str): Name of file write (as absolute path or sandbox-relative path)
+        dest_file (str): Name of file write (as absolute path or sandbox-relative path) ... if None, use file name in source_file
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
@@ -210,6 +228,8 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
         requests.exceptions.HTTPError: if can't connect to Cytoscape, Cytoscape returns an error, or sandbox is invalid
 
     Examples:
+        >>> sandbox_send_to('myData.csv')
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
         >>> sandbox_send_to('myData01.csv', 'myData.csv', overwrite=True)
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
         >>> sandbox_send_to('myData01.csv', 'myData.csv', sandbox_name='mySand')
@@ -222,7 +242,10 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
     except Exception as e:
         raise CyError(f'Could not read file "{source_file}": {e}')
 
-    dest_file_param = f'fileName="{dest_file.strip()}"' if dest_file else ''
+    if not dest_file or not dest_file.strip():
+        head, dest_file = os.path.split(source_file)
+
+    dest_file_param = f'fileName="{dest_file}"' if dest_file else ''
     return _sandbox_op(f'filetransfer toSandbox fileByteCount={len(file_content)} {dest_file_param} overwrite={overwrite} fileBase64="{file_content64}"', sandbox_name, base_url=base_url)
 
 @cy_log
@@ -238,7 +261,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
 
     Args:
         source_file (str): Name of file write (as absolute path or sandbox-relative path)
-        dest_file (str): Name of file in the Python workflow's file system
+        dest_file (str): Name of file in the Python workflow's file system ... if None, use file name in source_file
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
@@ -257,10 +280,14 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
         >>> sandbox_get_from('mySamples/workspace.cys', 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys', sandbox_name='mySand')
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys'}
     """
+    source_file = source_file.strip() if source_file else ''
+    if not dest_file or not dest_file.strip():
+        head, dest_file = os.path.split(source_file)
+
     if not overwrite and os.path.exists(dest_file):
         raise CyError(f'File "{dest_file}" already exists')
 
-    source_file_param = f'fileName="{source_file.strip()}"' if source_file else ''
+    source_file_param = f'fileName="{source_file}"' if source_file else ''
     res = _sandbox_op(f'filetransfer fromSandbox {source_file_param}', sandbox_name, base_url)
 
     file_content = base64.b64decode(res['fileBase64'], validate=True)
