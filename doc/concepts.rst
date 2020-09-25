@@ -188,8 +188,8 @@ Sandboxing
 ----------
 
 If you use py4cytoscape to create and run a Python workflow on the same workstation as
-your Cytoscape instance, you may not need sandbox features, but they may make your Python
-coding simpler. If you use py4cytoscape from a Jupyter Notebook running on a remote server,
+your Cytoscape instance, you may not need sandbox features (but they may make your Python
+coding simpler). If you use py4cytoscape from a Jupyter Notebook running on a remote server,
 you very likely **need** sandboxing.
 
 For context, py4cytoscape functions (e.g., ``open_session()``, ``save_session()``
@@ -203,9 +203,10 @@ This situation works well only as long as the workflow executes on the same work
 it was written. However, it raises a number of problems:
 
 * Workflows with hard-coded paths are not likely to be portable to other Cytoscape workstations,
-  which are likely to have their own (different) file system layouts. This applies to both
-  equally to workflows running on other Cytoscape workstations and those running in a remote Jupyter
+  which are likely to have their own (different) file system layouts. This applies equally to both
+  to workflows running on other Cytoscape workstations and those running in a remote Jupyter
   Notebook server.
+
 
 * To enable collaboration, workflows running on a remote Jupyter Notebook server likely
   prefer to store Cytoscape data and output on the Notebook server. As the server's file
@@ -213,9 +214,9 @@ it was written. However, it raises a number of problems:
   workflow can pass to make Cytoscape read or write those files.
 
 Sandboxing solves this by defining a subdirectory on the Cytoscape workstation (in the
-user's ``CytoscapeConfiguration/filetransfer`` folder) so that files
+user's ``CytoscapeConfiguration/filetransfer`` folder); files
 read and written by Cytoscape are all contained with the subdirectory (aka sandbox).
-Sandboxing functions allow files to be transfered
+Sandboxing functions allow files to be transferred
 between the workflow's native file system (e.g., on the Jupyter Notebook server)
 and the sandbox. Thus, a Notebook-based workflow can maintain Cytoscape files on the
 Notebook server, and transfer them to/from the Cytoscape workstation (in the sandbox) at
@@ -229,7 +230,7 @@ safety further encourages sharing of workflows between collaboratating researche
 
 Notebook workflows are automatically provisioned with a default sandbox (called
 ``default_sandbox``). To get the same effect with Python running standalone on the
-Cytoscape workstation, you can explicitly create the default sandbox.
+Cytoscape workstation, you can explicitly create the default sandbox. (See vignettes below.)
 
 .. note::
     By default, a sandbox is pre-loaded with a copy of Cytoscape's ``sampleData``
@@ -237,7 +238,7 @@ Cytoscape workstation, you can explicitly create the default sandbox.
 
 A workflow can define any number of sandboxes and even switch between them.
 This promotes modularity by facilitating the creation of different sub-workflows with
-some certainty that a sub-workflow's files aren't corrupted by conflicting other
+some certainty that a sub-workflow's files aren't accidentally corrupted by other
 sub-workflows over time.
 
 **Vignette 1**: A workstation-based Python workflow loading a session and creating a network image.
@@ -247,13 +248,14 @@ Without sandboxing, the workflow must provide full paths to Cytoscape files.
 .. code:: python
 
     open_session('C:\Users\Me\Documents\CyFiles\mySession')
+    # ...
     export_image('C:\Users\Me\Documents\CyFiles\myImage.png')
     # ... do something with the .png
 
 This workflow is portable only to workstations that have their Cytoscape files in the
 ``C:\Users\Me\Documents\CyFiles``, which doesn't seem likely.
 
-**Vignette 2**: A Notebook-based Python workflow loading a session and creating a network image.
+**Vignette 2**: A Notebook-based version of Vignette 1.
 
 A sandbox is automatically created for Notebook-bsed workflows. The workflow must transfer
 a session file from the Notebook's file system
@@ -262,22 +264,23 @@ system for further processing.
 
 .. code:: python
 
-    sandbox_send_to('data/mySession') # copy session file from Notebook server to workstation
+    sandbox_send_to('data/mySession.cys') # copy session file from Notebook server to workstation
     open_session('mySession')
+    # ...
     export_image('myImage.png')
     sandbox_get_from('myImage.png', 'data/myImage.png') # copy image file to Notebook server
     # ... do something with the .png
 
 This workflow can run on any Notebook server and Cytoscape workstation without knowledge of
 or risk to the workstation's file system. Various Python-based libraries can process the
-.png once it is copied to the Notebook's file system.
+.png after it is copied to the Notebook's file system.
 
 When calling sandbox functions, if you don't specify the name of a sandbox, the operation
 is performed on the "current sandbox".
 
 **Vignette 3**: A workstation-based Python workflow accesses sandbox-based files
 
-Sandboxes are stored as directories under the user's CytoscapeConfiguration/filetransfer folder.
+Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder.
 By always maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the file
 system), you get all of the benefits of sandboxing without having to specify non-portable
 file paths.
@@ -286,12 +289,13 @@ file paths.
 
     sandbox_set('mySandbox', copy_samples=False, reinitialize=False)
     open_session('mySession')
+    # ...
     export_image('myImage.png')
     # ... do something with the .png
 
-Because Cytoscape files reside in the sandbox *apriori*, no ``sandbox_send_to()`` or
+Because Cytoscape files reside in the sandbox *a priori*, no ``sandbox_send_to()`` or
 ``sandbox_get_from()`` calls are needed. Note that to make this workflow run in a remote
-notebook, you'll still have to add these calls (as in Vignette 2).
+Notebook, you'll still have to add these calls (as in Vignette 2).
 
 The ``reinitialize`` parameter is needed to prevent the ``sandbox_set()`` call from
 erasing the sandbox folder's contents, which is its default behavior.
