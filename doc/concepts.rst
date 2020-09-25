@@ -30,47 +30,12 @@ Your Python application can be run in several modes:
 
 This section discusses conceptual and miscellaneous topics relating to py4cytoscape use:
 
-`Missing Functions`_    asfd asdf asdfasdf
+* `Missing Functions`_ shows how to call Cytoscape functions not covered in py4cytoscape.
 
-`Calling Cytoscape Apps`_   .asdf.asdf.
+* `Calling Cytoscape Apps`_ shows how to call Cytoscape apps that support automation.
 
-+------------------------+------------+----------+----------+
-| Header row, column 1   | Header 2   | Header 3 | Header 4 |
-| (header rows optional) |            |          |          |
-+========================+============+==========+==========+
-| body row 1, column 1   | column 2   | column 3 | column 4 |
-+------------------------+------------+----------+----------+
-| `Missing Functions`_             | ...        | ...      |          |
-+------------------------+------------+----------+----------+
+* `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
 
-=====  =====  =======
-  A      B    A and B
-=====  =====  =======
-False  False  False
-True   False  False
-False  True   False
-True   True   True
-=====  =====  =======
-
-There are two tables in this page
-
-
-
-
-+----------+---------+
-| Section  | Topic   |
-+==========+=========+
-| `Missing Functions`_ | How to call Cytoscape functions not supported by py4cytoscape |
-+------------------------+------------+----------+----------+
-| `Calling Cytoscape Apps`_ | How to call Cytoscape apps that support automation |
-+----------+---------+
-
-Learn how to :ref:`here<Missing Functions>`.
-
-
-Learn how to :ref:`here<Calling Cytoscape Apps>`.
-
-Learn how to :ref:`link to a different section<Missing Functions>`.
 
 
 Missing Functions
@@ -218,3 +183,8 @@ Automation-enabled apps::
     WikiPathways
     wk-shell-decomposition
     WordCloud
+
+Sandboxing
+----------
+
+Blah blah blah
