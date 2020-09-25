@@ -270,14 +270,34 @@ When calling sandbox functions, if you don't specify the name of a sandbox, the 
 is performed on the "current sandbox", which is automatically set up for Notebook-based
 workflows.
 
+**Vignette 3**: A workstation-based Python workflow accesses sandbox-based files
+
+Sandboxes are stored as directories under the user's CytoscapeConfiguration/filetransfer folder.
+By maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the file
+system), you get all of the benefits of sandboxing without having to specify non-portable
+file paths.
+
+.. code:: python
+
+    sandbox_set('mySandbox', copy_samples=False, reinitialize=False)
+    open_session('mySession')
+    export_image('myImage.png')
+    # ... do something with the .png
+
+Because Cytoscape files reside in the sandbox *apriori*, no sandbox_send_to() or
+sandbox_get_from() calls are needed.
+
+The ``reinitialize`` parameter is needed to prevent the ``sandbox_set()`` call from
+erasing the sandbox folder's contents, which is its default behavior.
+
 .. note::
     Sandbox functions allow the following operations on files and sandboxes:
-        * sandbox_set(): Create a new sandbox or makes another sandbox the "current sandbox"
-        * sandbox_remove(): Delete a sandbox and its files and directories
-        * sandbox_send_to(): Transfer a Notebook file to a sandbox
-        * sandbox_get_from(): Transfer a sandbox file to the Notebook file system
-        * sandbox_get_file_info(): Get sandbox file metadata
-        * sandbox_remove_file(): Remove a sandbox file
+        * ``sandbox_set()``: Create a new sandbox or makes another sandbox the "current sandbox"
+        * ``sandbox_remove()``: Delete a sandbox and its files and directories
+        * ``sandbox_send_to()``: Transfer a Notebook file to a sandbox
+        * ``sandbox_get_from()``: Transfer a sandbox file to the Notebook file system
+        * ``sandbox_get_file_info()``: Get sandbox file metadata
+        * ``sandbox_remove_file()``: Remove a sandbox file
 
     A sandbox can contain both files and directories (which can contain files and
     directories, too).
