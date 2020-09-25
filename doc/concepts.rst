@@ -30,12 +30,35 @@ Your Python application can be run in several modes:
 
 This section discusses conceptual and miscellaneous topics relating to py4cytoscape use:
 
++------------------------+------------+----------+----------+
+| Header row, column 1   | Header 2   | Header 3 | Header 4 |
+| (header rows optional) |            |          |          |
++========================+============+==========+==========+
+| body row 1, column 1   | column 2   | column 3 | column 4 |
++------------------------+------------+----------+----------+
+| body row 2             | ...        | ...      |          |
++------------------------+------------+----------+----------+
+
+=====  =====  =======
+  A      B    A and B
+=====  =====  =======
+False  False  False
+True   False  False
+False  True   False
+True   True   True
+=====  =====  =======
+
+There are two tables in this page
+
+
+
+
 +----------+---------+
 | Section  | Topic   |
 +==========+=========+
-| :ref:`Missing Functions<Missing Functions>` | How to call Cytoscape functions not supported by py4cytoscape |
+| `Missing Functions`_ | How to call Cytoscape functions not supported by py4cytoscape |
 +------------------------+------------+----------+----------+
-| :ref:`Calling Cytoscape Apps<Calling Cytoscape Apps>` | How to call Cytoscape apps that support automation |
+| `Calling Cytoscape Apps`_ | How to call Cytoscape apps that support automation |
 +----------+---------+
 
 Learn how to :ref:`here<Missing Functions>`.
