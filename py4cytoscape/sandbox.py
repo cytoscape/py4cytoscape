@@ -2,8 +2,8 @@
 
 """Functions for performing file operations within a sandbox.
 
-A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed not to be the
-whole file system. All file operations are carried out relative to the "current sandbox". Generally, the user doesn't
+A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed to be isolated
+from the whole file system. All file operations are carried out relative to the "current sandbox". Generally, the user doesn't
 have to do anything to set up a sandbox ... the default sandbox is automatically set up as part of py4cytoscape
 startup. However, the user can set different sandboxes if there's an advantage in that, and can even switch between
 them. A sandbox can contain both files and directories, and the user can transfer files to/from a sandbox.
@@ -214,7 +214,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
 
     Args:
         source_file (str): Name of file in the Python workflow's file system
-        dest_file (str): Name of file write (as absolute path or sandbox-relative path) ... if None, use file name in source_file
+        dest_file (str): Name of file to write (as absolute path or sandbox-relative path) ... if None, use file name in source_file
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
@@ -260,7 +260,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
     Note that there is no function that transfers an entire directory.
 
     Args:
-        source_file (str): Name of file write (as absolute path or sandbox-relative path)
+        source_file (str): Name of file to read (as absolute path or sandbox-relative path)
         dest_file (str): Name of file in the Python workflow's file system ... if None, use file name in source_file
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,

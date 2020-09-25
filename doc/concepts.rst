@@ -28,6 +28,12 @@ Your Python application can be run in several modes:
 * In a Jupyter Notebook running on the same workstation as your Cytoscape
 * In a Jupyter Notebook running on a remote server (e.g., Google Colab or GenePattern Notebook)
 
+This section discusses conceptual and miscellaneous issues relating to py4cytoscape use.
+
+[here](#Missing-Functions)
+[here](#Calling-Cytoscape-Apps)
+
+
 Missing Functions
 -----------------
 
