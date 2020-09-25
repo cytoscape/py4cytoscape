@@ -187,4 +187,99 @@ Automation-enabled apps::
 Sandboxing
 ----------
 
-Blah blah blah
+If you use py4cytoscape by creating and running a Python workflow on the same workstation
+your Cytoscape instance, you may not need sandbox features, but they may make your Python
+coding simpler. If you use py4cytoscape from a Jupyter Notebook running on a remote server,
+you very likely **need** sandboxing.
+
+Sandboxing involves defining a subdirectory on your Cytoscape workstation so that files
+read and written by Cytoscape are all contained with the subdirectory (aka sandbox). For
+context, py4cytoscape functions that access files (e.g., ``open_session()``, ``save_session()``
+and ``export_image()``) accept the name of a file, possibly including a full path. When
+Cytoscape starts, the current working directory is the Cytoscape program install directory,
+which has no write permissions and likely contains no user data files. Very quickly, a
+Python workflow author learns to pass file names qualified by full paths that are unique
+to the workstation.
+
+This situation works well only as long as the workflow executes on the same workstation as
+it was written. However, it raises a number of problems:
+
+* Workflows with hard-coded paths are not likely to be portable to other Cytoscape workstations,
+which are likely to have their own (different) file system layouts. This applies to both
+workflows running on other Cytoscape workstations, and those running in a remote Jupyter
+Notebook server.
+
+* To enable collaboration, workflows running on a remote Jupyter Notebook server likely
+prefer to store Cytoscape data and output on the Notebook server. As the server's file
+system is inaccessible to the Cytoscape running on your workstation, there is no path the
+workflow can pass to make Cytoscape read or write those files.
+
+A sandbox directory is stored in the user's CytoscapeConfiguration folder, where it is
+guaranteed to allow Cytoscape to read and write files. Sandboxing functions allow transfer
+of files between the workflow's native file system (e.g., on the Jupyter Notebook server)
+and the sandbox. Thus, Notebook-based workflow can maintain Cytoscape files on the
+Notebook server, and transfer them to/from the Cytoscape workstation (in the sandbox) at
+will.
+
+A useful side effect of sandboxing is that workflows that use them stand no chance of
+inadvertantly (or maliciously) corrupting the Cytoscape workstation's file system. This
+safety further encourages sharing of workflows between collaboratating researchers.
+
+Notebook workflows are automatically provisioned with a default sandbox (called
+``default_sandbox``), which is pre-loaded with a copy of Cytoscape's ``sampleData``
+files, thereby making it easy to experiment on sample data. To get the same effect with
+Python running standalone on the Cytoscape workstation, you can explicitly create the
+default sandbox.
+
+Note that a workflow can define any number of sandboxes and even switch between them.
+This promotes modularity by allowing the creation of different sub-workflows and need
+some certainty that workflow files aren't corrupted over time.
+
+**Vignette 1**: A workstation-based Python workflow loading a session and creating a network image.
+
+Without sandboxing, the workflow must provide full paths to Cytoscape files.
+
+.. code:: python
+
+    open_session('C:\Users\Me\Documents\CyFiles\mySession')
+    export_image('C:\Users\Me\Documents\CyFiles\myImage.png')
+    # ... do something with the .png
+
+This workflow is portable only to workstations that have their Cytoscape files in the
+``C:\Users\Me\Documents\CyFiles``, which doesn't seem likely.
+
+**Vignette 2**: A Notebook-based Python workflow loading a session and creating a network image.
+
+With sandboxing, the workflow must transfer a session file from the Notebook's file system
+to the sandbox, call Cytoscape, and then transfer the result back to the Notebook's file
+system.
+
+.. code:: python
+
+    sandbox_send_to('data/mySession') # copy session file from Notebook server to workstation
+    open_session('mySession')
+    export_image('myImage.png')
+    sandbox_get_from('myImage.png', 'data/myImage.png') # copy image file to Notebook server
+    # ... do something with the .png
+
+This workflow can run on any Notebook server and Cytoscape workstation without knowledge of
+or risk to the workstation's file system. Various Python-based libraries can process the
+.png once it is copied to the Notebook's file system.
+
+When calling sandbox functions, if you don't specify the name of a sandbox, the operation
+is performed on the "current sandbox", which is automatically set up for Notebook-based
+workflows.
+
+.. note::
+    Sandbox functions allow the following operations on files and sandboxes:
+        * sandbox_set(): Create a new sandbox or makes another sandbox the "current sandbox"
+        * sandbox_remove(): Delete a sandbox and its files and directories
+        * sandbox_send_to(): Transfer a Notebook file to a sandbox
+        * sandbox_get_from(): Transfer a sandbox file to the Notebook file system
+        * sandbox_get_file_info(): Get sandbox file metadata
+        * sandbox_remove_file(): Remove a sandbox file
+
+    A sandbox can contain both files and directories (which can contain files and
+    directories, too).
+
+
