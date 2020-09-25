@@ -30,10 +30,10 @@ Your Python application can be run in several modes:
 
 This section discusses conceptual and miscellaneous issues relating to py4cytoscape use.
 
-[here](#missing-functions)
+:ref:`here<Missing Functions>`
 
 
-[here](#calling-cytoscape-apps)
+:ref:`here<Calling Cytoscape Apps>`
 
 
 Missing Functions
