@@ -41,6 +41,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import base64
 import os
+import time
 
 # Internal module imports
 from . import commands
@@ -198,7 +199,24 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand\\test.png', 'modifiedTime': '2020-09-24 14:10:08.0560', 'isFile': True}
     """
     file_name_param = f'fileName="{file_name.strip()}"' if file_name else ''
-    return _sandbox_op(f'filetransfer getFileInfo {file_name_param}', sandbox_name, base_url)
+    try:
+        return _sandbox_op(f'filetransfer getFileInfo {file_name_param}', sandbox_name, base_url)
+    except Exception as e:
+        # This is a nasty case ... there isn't much way for getFileInfo to fail as long as the FileTransfer app
+        # is installed. We'll assume failure means it isn't installed. And if that's so, it must mean that we're
+        # running on the Cytoscape workstation. If so, get the file metadata the old fashioned way. This way,
+        # callers don't have to know or care about the case of the uninstalled FileTransfer app.
+        if not sandbox_name and not get_current_sandbox_name() and file_name and file_name.strip():
+            file_path = os.path.abspath(file_name)
+            if os.path.exists(file_path):
+                is_file = os.path.isfile(file_name)
+                modifiedTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getmtime(file_name)))
+            else:
+                is_file = False
+                modifiedTime = ''
+            return {'filePath': file_path, 'modifiedTime': modifiedTime, 'isFile': is_file}
+        else:
+            raise e
 
 @cy_log
 def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):

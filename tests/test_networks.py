@@ -192,7 +192,7 @@ class NetworkTests(unittest.TestCase):
             os.remove(full_file_name)
         self.assertDictEqual(export_network(type='cys'), {})
         self.assertTrue(os.path.exists(full_file_name))
-        self.assertDictEqual(export_network(filename=net_name, network='yeastHighQuality.sif', type='cys'), {})
+        self.assertDictEqual(export_network(filename=localize_path(net_name), network='yeastHighQuality.sif', type='cys'), {})
         self.assertTrue(os.path.exists(full_file_name))
         os.remove(full_file_name)
 
@@ -202,7 +202,7 @@ class NetworkTests(unittest.TestCase):
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
         input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(CyError, export_network)
-        os.remove('galFiltered.sif')
+        os.remove(localize_path('galFiltered.sif'))
 
     @print_entry_exit
     def test_delete_network(self):

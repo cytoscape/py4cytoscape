@@ -36,6 +36,7 @@ _sandbox_reinitialize = True
 
 _SANDBOX_TEMPLATE = {'sandboxName': None, 'copySamples': True, 'reinitialize': True}
 def sandbox_initializer(**new_sandbox):
+    # Start with a sandbox template and update properties using whatever is found in the new_sandbox
     if len(new_sandbox) == 1 and 'init' in new_sandbox:
         params = new_sandbox['init']
     else:
@@ -49,54 +50,66 @@ def sandbox_initializer(**new_sandbox):
     return sandbox
 
 def set_default_sandbox(**new_sandbox):
+    # Set and return the sandbox properties to be used as a default, probably based on whether a Notebook is running
     global _default_sandbox
     _default_sandbox = sandbox_initializer(init=new_sandbox)
     return _default_sandbox
 
 def get_default_sandbox():
-    global _default_sandbox
+    # Return whatever is the current default sandbox properties
     return _default_sandbox
 
 def set_default_sandbox_path(newPath):
+    # Set and return the default path, which isn't one of the properties tracked in the default_sandbox
     global _default_sandbox_path
     _default_sandbox_path = newPath
     return _default_sandbox_path
 
 def get_default_sandbox_path():
+    # Return the default path, which isn't one of the properties tracked in the default_sandbox
     return _default_sandbox_path
 
 def get_current_sandbox_name():
+    # Return the current sandbox name
     return _current_sandbox_name
 
 def get_current_sandbox_path():
+    # Return the current sandbox path
     return _current_sandbox_path
 
 def get_current_sandbox():
+    # Return both the current sandbox name and path
     return _current_sandbox_name, _current_sandbox_path
 
 def set_current_sandbox(sandbox_name, sandbox_path):
+    # Set and return the current sandbox name and path
     global _current_sandbox_name, _current_sandbox_path
     _current_sandbox_name = sandbox_name
     _current_sandbox_path = sandbox_path
     return get_current_sandbox()
 
 def set_sandbox_reinitialize(do_reinitialize=True):
+    # Set and return flag indicating that next command should reinitialize the sandbox according to the default_sandbox
     global _sandbox_reinitialize
     _sandbox_reinitialize = do_reinitialize
     return _sandbox_reinitialize
 
 def get_sandbox_reinitialize():
+    # Return flag indicating that next command should reinitialize the sandbox according to the default_sandbox
     return _sandbox_reinitialize
 
-def get_abs_sandbox_path(file_location, force_cwd = False):
-    sandbox_path = get_current_sandbox_path()
-    if not sandbox_path and force_cwd:
-        sandbox_path = os.getcwd()
-    if sandbox_path:
-        file_location = f'{sandbox_path}/{file_location}' # this works on all Cytoscape platforms ... don't use Path()
-    return file_location
+def get_abs_sandbox_path(file_location, force_cwd=False):
+    sandbox_name, sandbox_path = get_current_sandbox()
+    if not sandbox_name and force_cwd:
+        return f'{os.getcwd()}/{file_location}' # Handle case of network name used as default file name
+    elif sandbox_name and sandbox_path:
+        return f'{sandbox_path}/{file_location}'
+    else:
+        return file_location
+
 
 def reset_default_sandbox():
+    # Reset the entire state of the sandbox system
     global _default_sandbox, _default_sandbox_path, _current_sandbox_name, _current_sandbox_path, _sandbox_reinitialize
     _default_sandbox = {}
     _default_sandbox_path = None
@@ -140,7 +153,7 @@ reset_default_sandbox() # Create a clean slate
       don't use sandbox
 
   This logic would apply immediately before the first Cytoscape command (i.e., when py4Cytoscape determines whether
-  on_notebook and remote_execution. It can be pre-empted by explicitly declaring a sandbox (or no sandbox) at any
+  on_notebook and remote_execution). It can be pre-empted by explicitly declaring a sandbox (or no sandbox) at any
   time before or after the first Cytoscape command, and an explicit sandbox declaration overrules the default.
     
   """

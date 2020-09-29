@@ -267,7 +267,6 @@ class ToolsTests(unittest.TestCase):
 
  #       merge_networks(['Network_0', 'Network_1'], operation='difference')
 
-        print('hi')
 
     def _cybrowser_windows(self, operation='show'):
 
