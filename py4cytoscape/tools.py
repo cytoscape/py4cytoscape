@@ -408,7 +408,11 @@ def merge_networks(sources=None,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>>
+        >>> merge_networks(['Network_0', 'Network_1'])
+        366343
+        >>> merge_networks(['Network_0', 'Network_1'], title='nodes mapped')
+        366343
+        >>> merge_networks(['Network_0', 'Network_1'], node_merge_map=[['given name', 'first name', 'called', 'String'], ['score', 'age', 'score_m', 'Integer']], title='nodes mapped')
         366343
     """
     cmd_string = 'network merge'  # a good start
