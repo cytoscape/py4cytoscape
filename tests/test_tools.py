@@ -193,12 +193,15 @@ class ToolsTests(unittest.TestCase):
                               'node X (interacts with) node 10', 'node 0 (inhibits) node 1'}
 
         def check_merge(new_suid, new_title, node_count=9, edge_count=10,
-                        extra_node_props={}, extra_edge_props={}, extra_network_props={}):
+                        extra_node_props={}, extra_edge_props={}, extra_network_props={},
+                        merged_nodes=BASIC_MERGED_NODES, merged_edges=BASIC_MERGED_EDGES):
             self.assertEqual(get_network_name(suid=new_suid), new_title)
             self.assertEqual(get_node_count(network=new_suid), node_count)
             self.assertEqual(get_edge_count(network=new_suid), edge_count)
-            self.assertEqual(set(get_all_nodes(network=new_suid)), BASIC_MERGED_NODES)
-            self.assertSetEqual(set(get_all_edges(network=new_suid)), BASIC_MERGED_EDGES)
+            if node_count:
+                self.assertEqual(set(get_all_nodes(network=new_suid)), merged_nodes)
+            if edge_count:
+                self.assertSetEqual(set(get_all_edges(network=new_suid)), merged_edges)
             actual_nodes = BASIC_MERGED_NODE_PROPS.copy()
             actual_nodes.update(extra_node_props)
             actual_edges = BASIC_MERGED_EDGE_PROPS.copy()
@@ -265,8 +268,21 @@ class ToolsTests(unittest.TestCase):
         check_merge(res, 'networks mapped', 9, 10,
                     extra_network_props={'jumble forward': 'String', 'jumble backward': 'String'})
 
- #       merge_networks(['Network_0', 'Network_1'], operation='difference')
+        # It would be very reasonable to add more tests for the nodes_only, edge_keys, node_keys, and in_network_merge
+        # parameters, but I can't get a good definition of what these parameters do, so I don't know what to test for. So,
+        # for now, we pass them on and hope for the best.
 
+        # For the operation='difference' parameter, the best test would be to execute a merge that corresponds to the
+        # GUI's "Remove all nodes that are in the 2nd network". I don't think the parameter for this is exposed, so
+        # I have to punt on checking the 'difference' operation.
+
+        # Verify that an intersection leaves only the single node 'node X'
+        res = merge_networks(['Network_0', 'Network_1'], operation='intersection', title='Cool Intersection')
+        check_merge(res, 'Cool Intersection', node_count=1, edge_count=0, merged_nodes={'node X'}, merged_edges={})
+
+        # Verify that exception is thrown for bad cases
+        self.assertRaises(CyError, merge_networks, [])
+        self.assertRaises(CyError, merge_networks, None)
 
     def _cybrowser_windows(self, operation='show'):
 
