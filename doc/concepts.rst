@@ -1,3 +1,5 @@
+.. _concepts:
+
 Concepts
 ========
 
@@ -34,11 +36,11 @@ This section discusses conceptual and miscellaneous topics relating to py4cytosc
 
 * `Calling Cytoscape Apps`_ shows how to call Cytoscape apps that support automation.
 
-* `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
-
+* `sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
 
 
 .. _missing-functions:
+
 Missing Functions
 -----------------
 
@@ -113,6 +115,7 @@ For commands.cyrest* and commands.commands* functions, you can determine the ret
 result by trying the equivalent Cytoscape operation using Swagger's **Try it now!** button.
 
 .. _calling-cytoscape-apps:
+
 Calling Cytoscape Apps
 ----------------------
 
@@ -187,6 +190,7 @@ Automation-enabled apps::
     WordCloud
 
 .. _sandboxing:
+
 Sandboxing
 ----------
 
@@ -313,6 +317,7 @@ erasing the sandbox folder's contents, which is its default behavior.
         * ``sandbox_remove_file()``: Remove a sandbox file
 
 .. _jupyter-notebook:
+
 Jupyter Notebook
 ----------------
 
