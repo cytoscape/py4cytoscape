@@ -36,7 +36,7 @@ This section discusses conceptual and miscellaneous topics relating to py4cytosc
 
 * `Calling Cytoscape Apps`_ shows how to call Cytoscape apps that support automation.
 
-* `sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
+* `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
 
 
 .. _missing-functions:

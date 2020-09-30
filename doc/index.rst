@@ -32,9 +32,10 @@ With py4cytoscape, you can leverage Cytoscape to:
 py4cytoscape enables an agile collaboration between powerful Cytoscape, Python libraries, and novel Python code
 so as to realize auditable, reproducible and sharable workflows.
 
-Look to the `tutorials`_ section to get started with py4cytoscape.
 
 Look to the `install`_ section for installation instructions.
+
+Look to the `tutorials`_ section to get started with py4cytoscape.
 
 Look to the `reference`_ section to see details on py4cytoscape functions.
 
