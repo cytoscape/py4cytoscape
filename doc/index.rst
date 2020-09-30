@@ -32,16 +32,15 @@ With py4cytoscape, you can leverage Cytoscape to:
 py4cytoscape enables an agile collaboration between powerful Cytoscape, Python libraries, and novel Python code
 so as to realize auditable, reproducible and sharable workflows.
 
+Look to the tutorials_ section to get started with py4cytoscape.
 
-Look to the `install`_ section for installation instructions.
+Look to the install_ section for installation instructions.
 
-Look to the `tutorials`_ section to get started with py4cytoscape.
+Look to the reference_ section to see details on py4cytoscape functions.
 
-Look to the `reference`_ section to see details on py4cytoscape functions.
+Look to the concepts_ section to see read about important py4cytoscape topics.
 
-Look to the `concepts`_ section to see read about important py4cytoscape topics.
-
-Look to the `jupyter-notebook`_ section to learn how to use py4cytoscape from a Jupyter Notebook running on a remote server.
+Look to the jupyter-notebook_ section to learn how to use py4cytoscape from a Jupyter Notebook running on a remote server.
 
 Note that py4cytoscape and RCy3 functions implement a common interface called the `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_.
 
