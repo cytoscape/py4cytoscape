@@ -38,6 +38,7 @@ This section discusses conceptual and miscellaneous topics relating to py4cytosc
 
 
 
+.. _missing-functions:
 Missing Functions
 -----------------
 
@@ -111,6 +112,7 @@ For the filter rename operation, the py4cytoscape call would be:
 For commands.cyrest* and commands.commands* functions, you can determine the return
 result by trying the equivalent Cytoscape operation using Swagger's **Try it now!** button.
 
+.. _calling-cytoscape-apps:
 Calling Cytoscape Apps
 ----------------------
 
@@ -184,6 +186,7 @@ Automation-enabled apps::
     wk-shell-decomposition
     WordCloud
 
+.. _sandboxing:
 Sandboxing
 ----------
 
@@ -309,6 +312,7 @@ erasing the sandbox folder's contents, which is its default behavior.
         * ``sandbox_get_file_info()``: Get sandbox file metadata
         * ``sandbox_remove_file()``: Remove a sandbox file
 
+.. _jupyter-notebook:
 Jupyter Notebook
 ----------------
 
