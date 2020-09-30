@@ -309,5 +309,9 @@ erasing the sandbox folder's contents, which is its default behavior.
         * ``sandbox_get_file_info()``: Get sandbox file metadata
         * ``sandbox_remove_file()``: Remove a sandbox file
 
+Jupyter Notebook
+----------------
+
+How to run from a Jupyter Notebook on a remote server.
 
 

@@ -19,7 +19,8 @@ py4cytoscape provides:
 -  access to user-written `Cytoscape Apps <http://apps.cytoscape.org/>`_ that implement `Cytoscape Automation <https://pubmed.ncbi.nlm.nih.gov/31477170/>`_ protocols;
 -  logging and debugging facilities that enable rapid development, maintenance, and auditing of Python-based workflow;
 -  two-way conversion between the `igraph <https://igraph.org/python/>`_ and `NetworkX <https://networkx.github.io/documentation/stable/>`_ graph packages, which enables interoperability with popular packages available in public repositories (e.g., `PyPI <https://pypi.org/>`_); and
--  the ability to painlessly work with large data sets generated within Python or available on public repositories (e.g., `STRING <https://string-db.org/>`_ and `NDEx <http://ndexbio.org>`_).
+-  the ability to painlessly work with large data sets generated within Python or available on public repositories (e.g., `STRING <https://string-db.org/>`_ and `NDEx <http://ndexbio.org>`_);
+-  execute Python code on the Cytoscape workstation or in Jupyter Notebooks on local or remote servers.
 
 With py4cytoscape, you can leverage Cytoscape to:
 
@@ -30,6 +31,18 @@ With py4cytoscape, you can leverage Cytoscape to:
 
 py4cytoscape enables an agile collaboration between powerful Cytoscape, Python libraries, and novel Python code
 so as to realize auditable, reproducible and sharable workflows.
+
+Look to the `Tutorials`_ section to get started with py4cytoscape.
+
+Look to the `Install`_ section for installation instructions.
+
+Look to the `Reference`_ section to see details on py4cytoscape functions.
+
+Look to the `Concepts`_ section to see read about important py4cytoscape topics.
+
+Look to the `Jupyter Notebook`_ section to learn how to use py4cytoscape from a Jupyter Notebook running on a remote server.
+
+Note that py4cytoscape and RCy3 functions implement a common interface called the `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_.
 
 Audience
 --------
