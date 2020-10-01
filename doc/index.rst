@@ -89,7 +89,9 @@ Mark Grimes, Julia Gustavsen, Shraddha Pai, Ruth Isserlin, and Barry Demchak. RC
 Paul Shannon, Tanja Muetze, Georgi Kolishkovski and Keiichiro Ono.
 
 We intend to keep the function definitions available through py4cytoscape and RCy3 consistent and synchronized going forward,
-and to re-integrate unique features found only in py2cytoscape.
+and to re-integrate unique features found only in py2cytoscape. This common interface is
+called the `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_.
+
 
 Documentation
 -------------
