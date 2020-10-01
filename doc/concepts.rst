@@ -304,10 +304,12 @@ If Cytoscape files reside in the sandbox *a priori*, no ``sandbox_send_to()`` or
 Notebook, you'll still have to add these calls (as in Vignette 2).
 
 .. warning::
+
 The ``reinitialize`` parameter is needed to prevent the ``sandbox_set()`` call from
-erasing the sandbox folder's contents, which is its default behavior.
+erasing the sandbox folder's contents, which is its default behavior. xxx
 
 .. note::
+
     Sandbox functions allow the following operations on files and sandboxes:
         * ``sandbox_set()``: Create a new sandbox or makes another sandbox the "current sandbox"
         * ``sandbox_remove()``: Delete a sandbox and its files and directories
