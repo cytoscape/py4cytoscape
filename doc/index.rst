@@ -34,7 +34,7 @@ so as to realize auditable, reproducible and sharable workflows.
 
 Look to the tutorials_ section to get started with py4cytoscape.
 
-Look to the install_ section for installation instructions.
+Look to the :doc:`install <install>` section for installation instructions.
 
 Look to the reference_ section to see details on py4cytoscape functions.
 
