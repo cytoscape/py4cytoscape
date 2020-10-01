@@ -207,31 +207,30 @@ data files. Very quickly, a Python workflow author learns to pass file names
 qualified by full paths that are unique to the workstation.
 
 This situation works well only as long as the workflow executes on the same workstation as
-it was written. However, it raises a number of problems:
+it was written. It raises a number of problems:
 
 * Workflows with hard-coded paths are not likely to be portable to other Cytoscape workstations,
-  which are likely to have their own (different) file system layouts. This applies equally to both
+  which may have their own (different) file system layouts. This applies equally to both
   to workflows running on other Cytoscape workstations and those running in a remote Jupyter
   Notebook server.
-
 
 * To enable collaboration, workflows running on a remote Jupyter Notebook server likely
   prefer to store Cytoscape data and output on the Notebook server. As the server's file
   system is inaccessible to the Cytoscape running on your workstation, there is no path the
   workflow can pass to make Cytoscape read or write those files.
 
-Sandboxing solves this by defining a subdirectory on the Cytoscape workstation (in the
+Sandboxing solves these by defining a dedicated folder on the Cytoscape workstation (in the
 user's ``CytoscapeConfiguration/filetransfer`` folder); files
-read and written by Cytoscape are all contained with the subdirectory (aka sandbox).
+read and written by Cytoscape are all contained with the folder (aka sandbox).
 Sandboxing functions allow files to be transferred
-between the workflow's native file system (e.g., on the Jupyter Notebook server)
+between the Jupyter Notebook server's native file system
 and the sandbox. Thus, a Notebook-based workflow can maintain Cytoscape files on the
 Notebook server, and transfer them to/from the Cytoscape workstation (in the sandbox) at
 will.
 
 A sandbox can contain both files and directories (which can contain files and directories, too).
 
-A useful side effect of sandboxing is that workflows that use them stand no chance of
+A useful side effect of sandboxing is that workflows that use them stand little chance of
 inadvertantly (or maliciously) corrupting the Cytoscape workstation's file system. This
 safety further encourages sharing of workflows between collaboratating researchers.
 
@@ -248,9 +247,9 @@ This promotes modularity by facilitating the creation of different sub-workflows
 some certainty that a sub-workflow's files aren't accidentally corrupted by other
 sub-workflows over time.
 
-**Vignette 1**: A workstation-based Python workflow loading a session and creating a network image.
+**Vignette 1**: A workstation-based Python workflow calling Cytoscape to load a session and create a network image.
 
-Without sandboxing, the workflow must provide full paths to Cytoscape files.
+Without sandboxing, the workflow must provide full (non-portable) paths to Cytoscape files.
 
 .. code:: python
 
@@ -264,7 +263,7 @@ This workflow is portable only to workstations that have their Cytoscape files i
 
 **Vignette 2**: A Notebook-based version of Vignette 1.
 
-A sandbox is automatically created for Notebook-bsed workflows. The workflow must transfer
+A sandbox is automatically created for Notebook-based workflows. The workflow must transfer
 a session file from the Notebook's file system
 to the sandbox, call Cytoscape, and then transfer the result back to the Notebook's file
 system for further processing.
@@ -288,8 +287,8 @@ is performed on the "current sandbox".
 **Vignette 3**: A workstation-based Python workflow accesses sandbox-based files
 
 Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder.
-By always maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the file
-system), you get all of the benefits of sandboxing without having to specify non-portable
+By always maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the
+workstation file system), you get all of the benefits of sandboxing without having to specify non-portable
 file paths.
 
 .. code:: python
@@ -300,10 +299,11 @@ file paths.
     export_image('myImage.png')
     # ... do something with the .png
 
-Because Cytoscape files reside in the sandbox *a priori*, no ``sandbox_send_to()`` or
+If Cytoscape files reside in the sandbox *a priori*, no ``sandbox_send_to()`` or
 ``sandbox_get_from()`` calls are needed. Note that to make this workflow run in a remote
 Notebook, you'll still have to add these calls (as in Vignette 2).
 
+.. warning::
 The ``reinitialize`` parameter is needed to prevent the ``sandbox_set()`` call from
 erasing the sandbox folder's contents, which is its default behavior.
 

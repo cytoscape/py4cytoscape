@@ -40,13 +40,6 @@ Look to the :doc:`Reference <reference/index>` section to see details on py4cyto
 
 Look to the :doc:`Concepts <concepts>` section to see read about important py4cytoscape topics, including how to use py4cytoscape from a Jupyter Notebook running on a remote server.
 
-`Jupyter Notebook`_ is it
-
-:doc:`Jupyter Notebook <concepts#jupyter-notebook>` is it
-
-:doc:`Jupyter Notebook <concepts/jupyter-notebook>` is it
-
-
 Note that py4cytoscape and RCy3 functions implement a common interface called the `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_.
 
 Audience
