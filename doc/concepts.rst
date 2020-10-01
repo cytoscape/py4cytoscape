@@ -210,7 +210,7 @@ function:
     import py4cytoscape as p4c
     p4c.cytoscape_version_info()
 
-You can create a Notebook cell to directly install the py4cytoscape library, and then
+Alternatively, you can create a Notebook cell to directly install the py4cytoscape library, and then
 import it and call a test function:
 
 .. code:: python
@@ -233,7 +233,7 @@ py4cytoscape library:
     import py4cytoscape as p4c
     p4c.cytoscape_version_info()
 
-.. note:: To get Jupyter to recognize a newly loaded py4cytoscape, you may need to restart the Python kernel -- see your Jupyter Notebook documentation.
+.. note:: To get Jupyter to recognize a py4cytoscape library different from the one first used by your Notebook, you may need to restart the Python kernel -- see your Jupyter Notebook documentation.
 
 Jupyter Notebooks that run on *remote* (private or public) servers can use py4cytoscape to
 execute Cytoscape functions on your workstation via
@@ -258,12 +258,12 @@ you must create a cell at the beginning of your Notebook:
 
 All of these scenarios will result in Jupyter Notebook that can call functions executed on the
 Cytoscape executing in your workstation. Note, though, that without an extra step, Cytoscape generally can't access
-files stored in a *remote* Notebook's file system, and the Notebook can't access files created
+files stored in a *remote* Notebook's file system, and a *remote* Notebook can't access files created
 by Cytoscape. See the `Sandboxing`_ section (below) for an explanation of the file sharing protocol.
 
-.. note:: In all cases, py4cytoscape calls the Cytoscape running on your private workstation. Cytoscape is not a full server, and can support exactly one Notebook running at a time -- multiple simultaneous Notebooks are not supported.
+.. note:: In all cases, py4cytoscape calls the Cytoscape running on your *private workstation*. Cytoscape is not a full server, and can support exactly one Notebook running at a time -- multiple simultaneous Notebooks are not supported.
 
-.. note:: This solution does not create a standalone server-based Cytoscape -- it relies on the Cytoscape running on your private workstation.
+.. note:: The Jupyter-Bridge does not require any changes to the remote Notebook server and can reach your Cytoscape workstation whether or not it's behind a firewall.
 
 
 Sandboxing
