@@ -34,12 +34,10 @@ This section discusses conceptual and miscellaneous topics relating to py4cytosc
 
 * `Calling Cytoscape Apps`_ shows how to call Cytoscape apps that support automation.
 
-* `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
-
 * `Jupyter Notebook`_ shows how to use py4cytoscape from within a Jupyter Notebook.
 
+* `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
 
-.. _missing-functions:
 
 Missing Functions
 -----------------
@@ -189,7 +187,84 @@ Automation-enabled apps::
     wk-shell-decomposition
     WordCloud
 
-.. _sandboxing:
+
+Jupyter Notebook
+----------------
+
+Jupyter Notebooks can be executed on a number of platforms, including:
+
+* Your Cytoscape workstation (via `PyCharm <https://www.jetbrains.com/pycharm/>`_, `Anaconda <https://www.anaconda.com/>`_, and others)
+* Private Notebook servers (e.g., `GenePattern Notebook <https://notebook.genepattern.org>`_)
+* Public Notebook servers (e.g., `Google Collaboratory <https://colab.research.google.com/>`_)
+
+In each case, your Jupyter Notebook can call py4cytoscape functions that are executed
+by Cytoscape running on your own workstation.
+
+To call py4cytoscape from a Notebook running on your Cytoscape workstation (a so-called
+*local* Notebook), simply use your Python environment to install the py4cytoscape library,
+then create a Notebook cell that imports the py4cytoscape library and calls a py4cytoscape
+function:
+
+.. code:: python
+
+    import py4cytoscape as p4c
+    p4c.cytoscape_version_info()
+
+You can create a Notebook cell to directly install the py4cytoscape library, and then
+import it and call a test function:
+
+.. code:: python
+
+    import sys
+    !{sys.executable} -m pip install py4cytoscape
+
+    import py4cytoscape as p4c
+    p4c.cytoscape_version_info()
+
+Alternatively, you can create a Notebook cell to load an unreleased version of the
+py4cytoscape library:
+
+.. code:: python
+
+    import sys
+    !{sys.executable} -m pip uninstall -y py4cytoscape
+    !{sys.executable} -m pip install --upgrade git+https://github.com/cytoscape/py4cytoscape
+
+    import py4cytoscape as p4c
+    p4c.cytoscape_version_info()
+
+.. note:: To get Jupyter to recognize a newly loaded py4cytoscape, you may need to restart the Python kernel -- see your Jupyter Notebook documentation.
+
+Jupyter Notebooks that run on *remote* (private or public) servers can use py4cytoscape to
+execute Cytoscape functions on your workstation via
+the `Jupyter-Bridge <https://github.com/cytoscape/jupyter-bridge>`_. To use the Jupyter-Bridge,
+you must create a cell at the beginning of your Notebook:
+
+.. code:: python
+
+     import sys, IPython
+     !{sys.executable} -m pip uninstall -y py4cytoscape
+
+     # Comment this out to avoid installing the release py4cytoscape
+     !{sys.executable} -m pip install --upgrade py4cytoscape
+
+     # Uncomment this to install the development py4cytoscape
+     # !{sys.executable} -m pip install --upgrade git+https://github.com/cytoscape/py4cytoscape
+
+     import py4cytoscape as p4c
+     print(f'Loading Javascript client ... {p4c.get_browser_client_channel()} on {p4c.get_jupyter_bridge_url()}')
+     browser_client_js = p4c.get_browser_client_js()
+     IPython.display.Javascript(browser_client_js) # Start browser client
+
+All of these scenarios will result in Jupyter Notebook that can call functions executed on the
+Cytoscape executing in your workstation. Note, though, that without an extra step, Cytoscape generally can't access
+files stored in a *remote* Notebook's file system, and the Notebook can't access files created
+by Cytoscape. See the `Sandboxing`_ section (below) for an explanation of the file sharing protocol.
+
+.. note:: In all cases, py4cytoscape calls the Cytoscape running on your private workstation. Cytoscape is not a full server, and can support exactly one Notebook running at a time -- multiple simultaneous Notebooks are not supported.
+
+.. note:: This solution does not create a standalone server-based Cytoscape -- it relies on the Cytoscape running on your private workstation.
+
 
 Sandboxing
 ----------
@@ -314,11 +389,5 @@ Notebook, you'll still have to add these calls (as in Vignette 2).
         * ``sandbox_get_file_info()``: Get sandbox file metadata
         * ``sandbox_remove_file()``: Remove a sandbox file
 
-.. _jupyter-notebook:
-
-Jupyter Notebook
-----------------
-
-How to run from a Jupyter Notebook on a remote server.
 
 
