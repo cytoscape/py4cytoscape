@@ -3,7 +3,12 @@
 """Error classes for py4cytoscape.
 """
 
+# External library imports
 import sys
+
+# Internal module convenience imports
+from .py4cytoscape_logger import show_error
+
 
 """Copyright 2020 The Cytoscape Consortium
 
@@ -27,6 +32,6 @@ class CyError(Exception):
         if caller is None: caller = sys._getframe(1).f_code.co_name
         whole_error = f'In {caller}(): {message_text}'
         super().__init__(whole_error)
-        print(whole_error, file=sys.stderr)
+        show_error(whole_error)     # was: print(whole_error, file=sys.stderr)
 
 

@@ -38,7 +38,7 @@ import os
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log, log_http_result, log_http_request
+from .py4cytoscape_logger import cy_log, log_http_result, log_http_request, show_error
 from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote, notebook_is_running
 from .py4cytoscape_sandbox import *
 from .exceptions import CyError
@@ -668,17 +668,20 @@ def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
 def _handle_error(e, force_cy_error=False):
     caller = sys._getframe(1).f_code.co_name
     if e.response is None or e.response.text is None or e.response.text == '':
-        narrate(f'In {caller}: {e}')
+        show_error(f'In {caller}: {e}') # Was: narrate(f'In {caller}: {e}')
         raise
     else:
         content = e.response.text
         try:
             content = json.loads(content)['errors'][0]['message']
-            narrate(f'In {caller}: {e}\n{content}')
+# now written to stderrr by CyError constructor:            narrate(f'In {caller}: {e}\n{content}')
             e = CyError(content, caller=caller)
         except:
-            narrate(f'In {caller}: {e}\n{content}')
-            if force_cy_error: e = CyError(content, caller=caller)
+# now written to stderrr by CyError constructor:            narrate(f'In {caller}: {e}\n{content}')
+            if force_cy_error:
+                e = CyError(content, caller=caller)
+            else:
+                show_error(f'In {caller}: {e}\n{content}')
         raise e
 
 # Call CyREST via a local URL

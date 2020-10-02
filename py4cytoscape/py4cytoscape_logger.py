@@ -30,6 +30,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import functools
 import os
+import sys
 
 from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _DETAIL_LOG_NAME, _DETAIL_ENABLE_HTTP_CALLS, _SUMMARY_LOG_LEVEL, _SUMMARY_ENABLE_HTTP_CALLS, _DETAIL_ENABLE_HTTP_CONTENT, _SUMMARY_ENABLE_HTTP_CONTENT
 
@@ -165,3 +166,6 @@ def narrate(progress):
     if notebook_is_running():
         print(progress)
     return progress
+
+def show_error(error_text):
+    print(error_text, file=sys.stderr)
