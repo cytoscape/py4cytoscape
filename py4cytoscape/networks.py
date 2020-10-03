@@ -371,8 +371,11 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> delete_network() # delete the current network
+        ''
         >>> delete_network(22752) # delete network having SUID
+        ''
         >>> delete_network('galFiltered.sif') # delete network having name
+        ''
     """
     suid = get_network_suid(network)
     res = commands.cyrest_delete(f'networks/{suid}', base_url=base_url, require_json=False)
@@ -808,8 +811,8 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
     if isinstance(edges, str) and edges in ['all', 'selected', 'unselected']: edges_by_col = None
     json_sub = {'source': 'SUID:' + str(title), 'excludeEdges': exclude_edges,
-                'nodeList': commands.prep_post_query_lists(nodes, nodes_by_col),
-                'edgeList': commands.prep_post_query_lists(edges, edges_by_col)}
+                'nodeList': _prep_post_query_lists(nodes, nodes_by_col),
+                'edgeList': _prep_post_query_lists(edges, edges_by_col)}
     if not subnetwork_name is None: json_sub['networkName'] = subnetwork_name
 
     res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
@@ -1276,3 +1279,16 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # Dev Notes: Prefix internal functions with a '_'. Skip doc_strings for these
 # functions.
 # ------------------------------------------------------------------------------
+
+
+
+def _prep_post_query_lists(cmd_list=None, cmd_by_col=None):
+    if cmd_list is None:
+        cmd_list_ready = 'selected'
+    elif not cmd_by_col is None:
+        cmd_list_col = [cmd_by_col + ':' + cmd for cmd in cmd_list]
+        cmd_list_ready = ','.join(cmd_list_col)
+    else:
+        cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
+
+    return cmd_list_ready

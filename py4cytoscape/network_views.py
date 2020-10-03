@@ -237,11 +237,11 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
 
     Examples:
         >>> export_image('output/test', type='JPEG', units='pixels', height=1000, width=2000, zoom=200)
-        {"file": "C:\\Users\\CyDeveloper\\tests\\output\\test.jpeg"
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpeg'}
         >>> export_image('output/test', type='PDF', network='My Network')
-        {"file": "C:\\Users\\CyDeveloper\\tests\\output\\test.pdf"
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.pdf'}
         >>> export_image(type='PNG', resolution=600, units='inches', height=1.7, width=3.5, zoom=500, network=13098)
-        {"file": "C:\\Users\\CyDeveloper\\tests\\output\\test.png"
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
     """
     cmd_string = 'view export'  # a good start
 

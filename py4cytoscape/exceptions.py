@@ -27,6 +27,24 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 class CyError(Exception):
+    """Create an error describing a Cytoscape or py4cytoscape fault.
+
+    Args:
+        message_text (str): text describing error condition
+        caller (str): name of function in which error is to be reported
+
+    Returns:
+         CyError: contains the text message and error location
+
+    Raises:
+        none
+
+    Examples:
+        >>> CyError('Invalid column name')
+        'In commands_get(): Invalid column name'
+        >>> CyError('slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
+        'In get_network_suid(): slot must be an integer between 1 and 9'
+    """
 
     def __init__(self, message_text, caller=None):
         if caller is None: caller = sys._getframe(1).f_code.co_name

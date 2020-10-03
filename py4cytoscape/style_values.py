@@ -63,13 +63,13 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
 
     Examples:
         >>> get_node_property(visual_property='NODE_LABEL')
-        >>> {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C', ...}
+        {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C', ...}
         >>> get_node_property(visual_property='NODE_LABEL', node_names=['YIL070C', 'YHR198C'])
-        >>> {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C'}
+        {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C'}
         >>> get_node_property(visual_property='NODE_LABEL', node_names=[391173, 391172, 391175])
-        >>> {391173: 'RPL11B', 391172: 'SXM1', 391175: 'MPT1'}
+        {391173: 'RPL11B', 391172: 'SXM1', 391175: 'MPT1'}
         >>> get_node_property(visual_property='NODE_LABEL', node_names='YER112W', network='galFiltered.sif')
-        >>> {'YER112W': 'LSM4'}
+        {'YER112W': 'LSM4'}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -119,13 +119,13 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
 
     Examples:
         >>> get_edge_property(visual_property='EDGE_LABEL')
-        >>> {'YJR022W (pp) YNL050C': 'pp', 'YKR026C (pp) YGL122C': 'pp', ...}
+        {'YJR022W (pp) YNL050C': 'pp', 'YKR026C (pp) YGL122C': 'pp', ...}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names=['YCL067C (pd) YIL015W', 'YCR084C (pp) YCL067C'])
-        >>> {'YCL067C (pd) YIL015W': 'pd', 'YCR084C (pp) YCL067C': 'pp'}
+        {'YCL067C (pd) YIL015W': 'pd', 'YCR084C (pp) YCL067C': 'pp'}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names=[393222, 393223])
-        >>> {393222: 'pd', 393223: 'pp'}
+        {393222: 'pd', 393223: 'pp'}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names='YDR277C (pp) YJR022W', network='galFiltered.sif')
-        >>> {'YDR277C (pp) YJR022W': 'pp'}
+        {'YDR277C (pp) YJR022W': 'pp'}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -174,9 +174,9 @@ def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_UR
 
     Examples:
         >>> get_network_property('NETWORK_SCALE_FACTOR')
-        >>> 0.6299925248514752
+        0.6299925248514752
         >>> get_network_property(visual_property='NETWORK_SCALE_FACTOR', network='galFiltered.sif')
-        >>> 0.6299925248514752
+        0.6299925248514752
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -216,13 +216,13 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_node_color()
-        >>> {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3', ...}
+        {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3', ...}
         >>> get_node_color(['YOR215C', 'YBL026W', 'YOL149W'])
-        >>> {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3'}
+        {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3'}
         >>> get_node_color([395406, 395407, 395404])
-        >>> {395406: '#FFFFEC', 395407: '#FCFDFE', 395404: '#FFFFE3'}
+        {395406: '#FFFFEC', 395407: '#FCFDFE', 395404: '#FFFFE3'}
         >>> get_node_color(node_names='YOR215C', network='galFiltered.sif')
-        >>> {'YYOR215C': '#FFFFEC'}
+        {'YYOR215C': '#FFFFEC'}
     """
     res = get_node_property(node_names, "NODE_FILL_COLOR", network=network, base_url=base_url)
     return res
@@ -249,13 +249,13 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_node_size()
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_size(['YOR215C', 'YBL026W', 'YOL149W'])
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_size([395406, 395407, 395404])
-        >>> {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
         >>> get_node_size(node_names='YOR215C', network='galFiltered.sif')
-        >>> {'YYOR215C': 50.0}
+        {'YYOR215C': 50.0}
     """
     res = get_node_property(node_names, "NODE_SIZE", network=network, base_url=base_url)
     return res
@@ -282,13 +282,13 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_node_width()
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_width(['YOR215C', 'YBL026W', 'YOL149W'])
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_width([395406, 395407, 395404])
-        >>> {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
         >>> get_node_width(node_names='YOR215C', network='galFiltered.sif')
-        >>> {'YYOR215C': 46.470588235294116}
+        {'YYOR215C': 46.470588235294116}
     """
     res = get_node_property(node_names, "NODE_WIDTH", network=network, base_url=base_url)
     return res
@@ -315,13 +315,13 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_node_height()
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_height(['YOR215C', 'YBL026W', 'YOL149W'])
-        >>> {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_height([395406, 395407, 395404])
-        >>> {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
         >>> get_node_height(node_names='YOR215C', network='galFiltered.sif')
-        >>> {'YYOR215C': 46.470588235294116}
+        {'YYOR215C': 46.470588235294116}
     """
     res = get_node_property(node_names, "NODE_HEIGHT", network=network, base_url=base_url)
     return res
@@ -348,24 +348,24 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_node_position()
-        >>>                 x                    y
-        >>> YIL052C 2628.866343678256  1180.9601936051579
-        >>> YDL215C 1723.7108261001308 2230.935871095392
-        >>> YLR432W 1660.9524948013027 2387.6488532731264
-        >>> ...
+                        x                    y
+        YIL052C 2628.866343678256  1180.9601936051579
+        YDL215C 1723.7108261001308 2230.935871095392
+        YLR432W 1660.9524948013027 2387.6488532731264
+        ...
         >>> get_node_position(['YDR429C', 'YMR005W', 'YDR142C'])
-        >>>                 x                    y
-        >>> YDR429C 2628.866343678256  1180.9601936051579
-        >>> YMR005W 1723.7108261001308 2230.935871095392
-        >>> YDR142C 1660.9524948013027 2387.6488532731264
+                        x                    y
+        YDR429C 2628.866343678256  1180.9601936051579
+        YMR005W 1723.7108261001308 2230.935871095392
+        YDR142C 1660.9524948013027 2387.6488532731264
         >>> get_node_position([432646, 432647, 432644])
-        >>>                 x                    y
-        >>> 432646  2628.866343678256  1180.9601936051579
-        >>> 432647  1723.7108261001308 2230.935871095392
-        >>> 432644  1660.9524948013027 2387.6488532731264
+                        x                    y
+        432646  2628.866343678256  1180.9601936051579
+        432647  1723.7108261001308 2230.935871095392
+        432644  1660.9524948013027 2387.6488532731264
         >>> get_node_position(node_names='YER112W', network='galFiltered.sif')
-        >>>                 x                    y
-        >>> YER112W  2151.8481399429043 2326.677814454767
+                        x                    y
+        YER112W  2151.8481399429043 2326.677814454767
     """
     x_location = get_node_property(node_names, "NODE_X_LOCATION", network=network, base_url=base_url)
     x_values = [x_location[node_name] for node_name in x_location]
@@ -413,13 +413,13 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
 
     Examples:
         >>> get_edge_line_width()
-        >>> {'YLR197W (pp) YOR310C': 2.0, 'YIL074C (pp) YNL311C': 2.0, ...}
+        {'YLR197W (pp) YOR310C': 2.0, 'YIL074C (pp) YNL311C': 2.0, ...}
         >>> get_edge_line_width(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
-        >>> {'YHR084W (pd) YFL026W': 2.0, 'YHR084W (pd) YDR461W': 2.0, 'YMR255W (pp) YGL122C': 2.0}
+        {'YHR084W (pd) YFL026W': 2.0, 'YHR084W (pd) YDR461W': 2.0, 'YMR255W (pp) YGL122C': 2.0}
         >>> get_edge_line_width([421382, 421383, 421380])
-        >>> {421382: 2.0, 421383: 2.0, 421380: 2.0}
+        {421382: 2.0, 421383: 2.0, 421380: 2.0}
         >>> get_edge_line_width(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
-        >>> {'YOR355W (pp) YNL091W': 2.0}
+        {'YOR355W (pp) YNL091W': 2.0}
     """
     res = get_edge_property(edge_names, "EDGE_WIDTH", network=network, base_url=base_url)
     return res
@@ -446,13 +446,13 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_edge_color()
-        >>> {'YMR117C (pp) YCL032W': '#808080', 'YMR255W (pp) YGL122C': '#808080', 'YNL214W (pp) YGL153W': '#808080', ...}
+        {'YMR117C (pp) YCL032W': '#808080', 'YMR255W (pp) YGL122C': '#808080', 'YNL214W (pp) YGL153W': '#808080', ...}
         >>> get_edge_color(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
-        >>> {'YHR084W (pd) YFL026W': '#808080', 'YHR084W (pd) YDR461W': '#808080', 'YMR255W (pp) YGL122C': '#808080'}
+        {'YHR084W (pd) YFL026W': '#808080', 'YHR084W (pd) YDR461W': '#808080', 'YMR255W (pp) YGL122C': '#808080'}
         >>> get_edge_color([421382, 421383, 421380])
-        >>> {421382: '#808080', 421383: '#808080', 421380: '#808080'}
+        {421382: '#808080', 421383: '#808080', 421380: '#808080'}
         >>> get_edge_color(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
-        >>> {'YOR355W (pp) YNL091W': '#808080'}
+        {'YOR355W (pp) YNL091W': '#808080'}
     """
     res = get_edge_property(edge_names, "EDGE_PAINT", network=network, base_url=base_url)
     return res
@@ -479,13 +479,13 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
 
     Examples:
         >>> get_edge_line_style()
-        >>> {'YMR117C (pp) YCL032W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID', 'YNL214W (pp) YGL153W': 'SOLID', ...}
+        {'YMR117C (pp) YCL032W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID', 'YNL214W (pp) YGL153W': 'SOLID', ...}
         >>> get_edge_line_style(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
-        >>> {'YHR084W (pd) YFL026W': 'SOLID', 'YHR084W (pd) YDR461W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID'}
+        {'YHR084W (pd) YFL026W': 'SOLID', 'YHR084W (pd) YDR461W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID'}
         >>> get_edge_line_style([421382, 421383, 421380])
-        >>> {421382: 'SOLID', 421383: 'SOLID', 421380: 'SOLID'}
+        {421382: 'SOLID', 421383: 'SOLID', 421380: 'SOLID'}
         >>> get_edge_line_style(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
-        >>> {'YOR355W (pp) YNL091W': 'SOLID'}
+        {'YOR355W (pp) YNL091W': 'SOLID'}
     """
     res = get_edge_property(edge_names, "EDGE_LINE_TYPE", network=network, base_url=base_url)
     return res
@@ -512,13 +512,13 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
 
     Examples:
         >>> get_edge_target_arrow_shape()
-        >>> {'YMR117C (pp) YCL032W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE', 'YNL214W (pp) YGL153W': 'NONE', ...}
+        {'YMR117C (pp) YCL032W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE', 'YNL214W (pp) YGL153W': 'NONE', ...}
         >>> get_edge_target_arrow_shape(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
-        >>> {'YHR084W (pd) YFL026W': 'NONE', 'YHR084W (pd) YDR461W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE'}
+        {'YHR084W (pd) YFL026W': 'NONE', 'YHR084W (pd) YDR461W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE'}
         >>> get_edge_target_arrow_shape([421382, 421383, 421380])
-        >>> {421382: 'NONE', 421383: 'NONE', 421380: 'NONE'}
+        {421382: 'NONE', 421383: 'NONE', 421380: 'NONE'}
         >>> get_edge_target_arrow_shape(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
-        >>> {'YOR355W (pp) YNL091W': 'NONE'}
+        {'YOR355W (pp) YNL091W': 'NONE'}
     """
     res = get_edge_property(edge_names, "EDGE_TARGET_ARROW_SHAPE", network=network, base_url=base_url)
     return res
@@ -549,9 +549,9 @@ def get_network_center(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_network_center()
-        >>> {'x': 2628.866343678256, 'y': 1180.9601936051579}
+        {'x': 2628.866343678256, 'y': 1180.9601936051579}
         >>> get_network_center(network='galFiltered.sif')
-        >>> {'x': 2628.866343678256, 'y': 1180.9601936051579}
+        {'x': 2628.866343678256, 'y': 1180.9601936051579}
     """
     x_coordinate = get_network_property('NETWORK_CENTER_X_LOCATION', network=network, base_url=base_url)
     y_coordinate = get_network_property('NETWORK_CENTER_Y_LOCATION', network=network, base_url=base_url)
@@ -579,9 +579,9 @@ def get_network_zoom(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> get_network_zoom()
-        >>> 0.6299925248514752
+        0.6299925248514752
         >>> get_network_zoom(network='galFiltered.sif')
-        >>> 0.6299925248514752
+        0.6299925248514752
     """
     res = get_network_property('NETWORK_SCALE_FACTOR', network=network, base_url=base_url)
     return res

@@ -113,7 +113,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
     Examples:
         >>> get_collection_name()
         'galFiltered.sif'
-        >>> get_collection_suid(851296)
+        >>> get_collection_name(851296)
         'galFiltered.sif'
     """
     if collection_suid is None: collection_suid = get_collection_suid(base_url=base_url)
@@ -139,10 +139,8 @@ def get_collection_networks(collection_suid=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error or SUID doesn't exist
 
     Examples:
-        >>> get_collection_name()
-        'galFiltered.sif'
-        >>> get_collection_suid(851296)
-        'galFiltered.sif'
+        >>> get_collection_networks()
+        [52, 152]
     """
     if collection_suid is None: collection_suid = get_collection_suid(base_url=base_url)
     res = commands.cyrest_get(f'collections/{collection_suid}/subnetworks', base_url=base_url)

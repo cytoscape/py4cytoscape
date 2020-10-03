@@ -1483,9 +1483,9 @@ def set_edge_line_style_default(new_line_style, style_name=None, base_url=DEFAUL
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_edge_line_width_default('SOLID', style_name='galFiltered Style')
+        >>> set_edge_line_style_default('SOLID', style_name='galFiltered Style')
         ''
-        >>> set_edge_line_width_default('ZIGZAG')
+        >>> set_edge_line_style_default('ZIGZAG')
         ''
     """
     style = {'visualProperty': 'EDGE_LINE_TYPE', 'value': new_line_style}

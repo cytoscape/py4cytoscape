@@ -382,13 +382,13 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
 
     Examples:
         >>> delete_group(['Group 1', 'Group 2'], groups_by_col='shared name') # delete groups by name
-        {groups:[7970, 7980]}
+        {'groups':[7970, 7980]}
         >>> delete_group([7970]) # delete groups by SUID
-        {groups:[7970]}
+        {'groups':[7970]}
         >>> delete_group() # delete all selected groups
-        {groups:[7970, 7980]}
+        {'groups':[7970, 7980]}
         >>> delete_group(groups='all') # delete all groups
-        {groups:[7970, 7980]}
+        {'groups':[7970, 7980]}
 
     Note:
         Group nodes are ungrouped but not deleted in Cytoscape 3.6.1

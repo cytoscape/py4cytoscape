@@ -1078,6 +1078,36 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
 @cy_log
 def set_edge_color_mapping(table_column, table_column_values=None, colors=None, mapping_type='c', default_color=None,
                            style_name=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Map table column values to colors to set the edge color.
+
+    Args:
+        table_column (str): Name of Cytoscape table column to map values from
+        table_column_values (list): List of values from Cytoscape table to be used in mapping
+        colors (list): list of hex colors to map to ``table_column_values``
+        mapping_type (str): continuous, discrete or passthrough (c,d,p); default is continuous
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if invalid color, table column doesn't exist, table column values doesn't match values list, or invalid style name, network or mapping type
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_edge_color_mapping('EdgeBetweenness', [1.0, 16.36], ['#FBE723', '#440256'], style_name='galFiltered Style')
+        ''
+        >>> set_edge_color_mapping('EdgeBetweenness', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
+        ''
+        >>> set_edge_color_mapping('EdgeBetweennessColor', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
+        ''
+    """
     verify_hex_colors(colors)
 
     # set default

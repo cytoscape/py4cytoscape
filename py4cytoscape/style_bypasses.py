@@ -85,10 +85,10 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     Examples:
         >>> node_names = list(get_table_columns(columns='name')['name'])
         >>> set_node_property_bypass(node_names, '#FF00FF', 'NODE_FILL_COLOR')
-        >>> ''
+        ''
         >>> node_suids = list(get_table_columns(columns='name').index)
         >>> set_node_property_bypass(node_suids, ['#FF00FF'], 'NODE_FILL_COLOR', network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`clear_node_property_bypass`
@@ -150,10 +150,10 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
     Examples:
         >>> node_names = list(get_table_columns(columns='name')['name'])
         >>> clear_node_property_bypass(node_names, 'NODE_FILL_COLOR')
-        >>> ''
+        ''
         >>> node_suids = list(get_table_columns(columns='name').index)
         >>> clear_node_property_bypass(node_suids, 'NODE_FILL_COLOR', network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`
@@ -217,10 +217,10 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     Examples:
         >>> edge_names = list(get_table_columns(table='edge', columns='name')['name'])
         >>> set_edge_property_bypass(edge_names, '#FF00FF', 'EDGE_UNSELECTED_PAINT')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
         >>> edge_suids = list(get_table_columns(table='edge', columns='name').index)
         >>> set_edge_property_bypass(edge_suids, ['#FF00FF'], 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
 
     See Also:
         :meth:`clear_edge_property_bypass`
@@ -282,10 +282,10 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
     Examples:
         >>> edge_names = list(get_table_columns(table='edge', columns='name')['name'])
         >>> clear_edge_property_bypass(edge_names, 'EDGE_UNSELECTED_PAINT')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
         >>> edge_suids = list(get_table_columns(table='edge', columns='name').index)
         >>> clear_edge_property_bypass(edge_suids, 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
 
     See Also:
         :meth:`set_edge_property_bypass`
@@ -341,9 +341,9 @@ def set_network_property_bypass(new_value, visual_property, bypass=True, network
 
     Examples:
         >>> set_network_property_bypass(0.5, 'NETWORK_SCALE_FACTOR')
-        >>> ''
+        ''
         >>> set_network_property_bypass(0.5, 'NETWORK_SCALE_FACTOR', network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`clear_network_property_bypass`
@@ -383,9 +383,9 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
 
     Examples:
         >>> clear_network_property_bypass('NETWORK_SCALE_FACTOR')
-        >>> ''
+        ''
         >>> clear_network_property_bypass('NETWORK_SCALE_FACTOR', network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_network_property_bypass`
@@ -425,9 +425,9 @@ def unhide_all(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> unhide_all()
-        >>> ''
+        ''
         >>> unhide_all(network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`clear_edge_property_bypass`, :meth:`unhide_nodes`, :meth:`unhide_edges`
@@ -481,9 +481,9 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_node_color_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -523,9 +523,9 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
 
     Examples:
         >>> set_node_size_bypass(get_node_names(), 50)
-        >>> ''
+        ''
         >>> set_node_size_bypass(['YDL194W', 'YBR043C'], [150.5, 90.5], network='galFiltered.sif')
-        >>> ''
+        ''
 
     Note:
         Sets the bypass value of node size for one or more nodes. Only applicable if node dimensions are locked.
@@ -569,9 +569,9 @@ def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFA
 
     Examples:
         >>> set_node_tooltip_bypass(get_node_names(), 'Some Tooltip')
-        >>> ''
+        ''
         >>> set_node_tooltip_bypass(['YDL194W', 'YBR043C'], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -607,9 +607,9 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_node_width_bypass(get_node_names(), 80)
-        >>> ''
+        ''
         >>> set_node_width_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -651,9 +651,9 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
 
     Examples:
         >>> set_node_height_bypass(get_node_names(), 80)
-        >>> ''
+        ''
         >>> set_node_height_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -695,9 +695,9 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_node_label_bypass(get_node_names(), 'test label')
-        >>> ''
+        ''
         >>> set_node_label_bypass(['YDL194W', 'YBR043C'], ['A', 'B'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -733,9 +733,9 @@ def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFA
 
     Examples:
         >>> set_node_font_face_bypass(get_node_names(), 'Dialog.italic,plain,20')
-        >>> ''
+        ''
         >>> set_node_font_face_bypass(['YDL194W', 'YBR043C'], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -771,9 +771,9 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
 
     Examples:
         >>> set_node_font_size_bypass(get_node_names(), 20)
-        >>> ''
+        ''
         >>> set_node_font_size_bypass(['YDL194W', 'YBR043C'], [50, 100], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -814,9 +814,9 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
 
     Examples:
         >>> set_node_label_color_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_label_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -857,9 +857,9 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_node_shape_bypass(get_node_names(), 'ROUND_RECTANGLE')
-        >>> ''
+        ''
         >>> set_node_shape_bypass(['YDL194W', 'YBR043C'], ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -915,9 +915,9 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
 
     Examples:
         >>> set_node_border_width_bypass(get_node_names(), 10)
-        >>> ''
+        ''
         >>> set_node_border_width_bypass(['YDL194W', 'YBR043C'], [10, 20.5], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -957,9 +957,9 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
 
     Examples:
         >>> set_node_border_color_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_border_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -999,9 +999,9 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
 
     Examples:
         >>> set_node_opacity_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1043,9 +1043,9 @@ def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_UR
 
     Examples:
         >>> clear_node_opacity_bypass(get_node_names())
-        >>> ''
+        ''
         >>> clear_node_opacity_bypass(['YDL194W', 'YBR043C'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_opacity_bypass`
@@ -1084,9 +1084,9 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
 
     Examples:
         >>> set_node_fill_opacity_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_fill_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1126,9 +1126,9 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
 
     Examples:
         >>> set_node_border_opacity_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_border_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1169,9 +1169,9 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
 
     Examples:
         >>> set_node_label_opacity_bypass(get_node_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_node_label_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1211,9 +1211,9 @@ def hide_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> hide_selected_nodes()
-        >>> ''
+        ''
         >>> hide_selected_nodes(network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`hide_nodes`, :meth:`unhide_nodes`, :meth:`unhide_all`
@@ -1250,9 +1250,9 @@ def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> hide_nodes(get_node_names())
-        >>> ''
+        ''
         >>> hide_nodes(['YDL194W', 'YBR043C'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`hide_nodes`, :meth:`unhide_nodes`, :meth:`unhide_all`
@@ -1287,9 +1287,9 @@ def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> hide_nodes(get_node_names())
-        >>> ''
+        ''
         >>> hide_nodes(['YDL194W', 'YBR043C'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`clear_node_property_bypass`, :meth:`unhide_all`
@@ -1330,9 +1330,9 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
 
     Examples:
         >>> set_edge_opacity_bypass(get_edge_names(), 128)
-        >>> ''
+        ''
         >>> set_edge_opacity_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1375,9 +1375,9 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_edge_color_bypass(get_edge_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_edge_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1420,9 +1420,9 @@ def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_edge_label_bypass(get_edge_names(), 'test label')
-        >>> ''
+        ''
         >>> set_edge_label_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['A', 'B'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1458,9 +1458,9 @@ def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFA
 
     Examples:
         >>> set_edge_font_face_bypass(get_edge_names(), 'Dialog.italic,plain,20')
-        >>> ''
+        ''
         >>> set_edge_font_face_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1496,9 +1496,9 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
 
     Examples:
         >>> set_edge_font_size_bypass(get_edge_names(), 20)
-        >>> ''
+        ''
         >>> set_edge_font_size_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [50, 100], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1539,9 +1539,9 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
 
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1582,9 +1582,9 @@ def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFA
 
     Examples:
         >>> set_edge_tooltip_bypass(get_edge_names(), 'Some Tooltip')
-        >>> ''
+        ''
         >>> set_edge_tooltip_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1620,9 +1620,9 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
 
     Examples:
         >>> set_edge_width_bypass(get_edge_names(), 80)
-        >>> ''
+        ''
         >>> set_edge_width_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [80, 100.5], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1663,9 +1663,9 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
 
     Examples:
         >>> set_edge_shape_bypass(get_edge_names(), 'SOLID')
-        >>> ''
+        ''
         >>> set_edge_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['SOLID', 'ZIGZAG'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1709,9 +1709,9 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
 
     Examples:
         >>> set_edge_source_arrow_shape_bypass(get_edge_names(), 'ARROW')
-        >>> ''
+        ''
         >>> set_edge_source_arrow_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1756,9 +1756,9 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
 
     Examples:
         >>> set_edge_target_arrow_shape_bypass(get_edge_names(), 'ARROW')
-        >>> ''
+        ''
         >>> set_edge_target_arrow_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1803,9 +1803,9 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
 
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1847,9 +1847,9 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
 
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1891,9 +1891,9 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
 
     Examples:
         >>> set_edge_label_opacity_bypass(get_edge_names(), '#FF00FF')
-        >>> ''
+        ''
         >>> set_edge_label_opacity_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [128, 192], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1933,9 +1933,9 @@ def hide_selected_edges(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> hide_selected_edges()
-        >>> ''
+        ''
         >>> hide_selected_edges(network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`hide_edges`, :meth:`unhide_edges`, :meth:`unhide_all`
@@ -1972,9 +1972,9 @@ def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> hide_edges(get_edge_names())
-        >>> ''
+        ''
         >>> hide_edges(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`hide_edges`, :meth:`unhide_edges`, :meth:`unhide_all`
@@ -2008,10 +2008,10 @@ def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> hide_edges(get_edge_names())
-        >>> ''
-        >>> hide_edges(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], network='galFiltered.sif')
-        >>> ''
+        >>> unhide_edges(get_edge_names())
+        ''
+        >>> unhide_edges(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], network='galFiltered.sif')
+        ''
 
     See Also:
         :meth:`clear_edge_property_bypass`, :meth:`unhide_all`
@@ -2052,9 +2052,9 @@ def set_network_zoom_bypass(new_value, bypass=False, network=None, base_url=DEFA
 
     Examples:
         >>> set_network_zoom_bypass(1.5, bypass=True)
-        >>> ''
+        ''
         >>> set_network_zoom_bypass(0.25, bypass=True, network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_network_property_bypass`, :meth:`clear_netowrk_property_bypass`
@@ -2085,9 +2085,9 @@ def clear_network_zoom_bypass(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> clear_network_zoom_bypass()
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
         >>> clear_network_zoom_bypass(network='galFiltered.sif')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
 
     Warning:
         Before clearing the zoom bypass, the zoom bypass must have been set via a call to either
@@ -2128,9 +2128,9 @@ def set_network_center_bypass(x, y, bypass=False, network=None, base_url=DEFAULT
 
     Examples:
         >>> set_network_center_bypass(1.5, bypass=True)
-        >>> ''
+        ''
         >>> set_network_center_bypass(0.25, bypass=True, network='galFiltered.sif')
-        >>> ''
+        ''
 
     See Also:
         :meth:`set_network_property_bypass`, :meth:`clear_netowrk_property_bypass`
@@ -2162,9 +2162,9 @@ def clear_network_center_bypass(network=None, base_url=DEFAULT_BASE_URL):
 
     Examples:
         >>> clear_network_center_bypass()
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
         >>> clear_network_center_bypass(network='galFiltered.sif')
-        >>> {'data': {}, 'errors': []}
+        {'data': {}, 'errors': []}
 
     Warning:
         Before clearing the center coordinate bypass, the coordinate bypass must have been set via a call to either

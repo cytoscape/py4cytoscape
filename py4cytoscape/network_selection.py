@@ -337,11 +337,11 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> invert_node_selection()
+        >>> delete_selected_nodes()
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
-        >>> invert_node_selection(network='My Network')
+        >>> delete_selected_nodes(network='My Network')
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
-        >>> invert_node_selection(network=52)
+        >>> delete_selected_nodes(network=52)
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
     """
     title = networks.get_network_name(network, base_url=base_url)

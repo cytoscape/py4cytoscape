@@ -647,25 +647,15 @@ def _command_2_post_query_body(cmd):
 
     return param_dict
 
-
-def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
-    if cmd_list is None:
-        cmd_list_ready = 'selected'
-    elif not cmd_by_col is None:
-        cmd_list_col = [cmd_by_col + ':' + cmd for cmd in cmd_list]
-        cmd_list_ready = ','.join(cmd_list_col)
-    else:
-        cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
-
-    return cmd_list_ready
-
 def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
+    # If we're running through Jupyter-Bridge, get the versions of components along the way
     if _find_remote_cytoscape():
         return do_request_remote('version', None, **kwargs).json()
     else:
         return {}
 
 def _handle_error(e, force_cy_error=False):
+    # An exception occurred ... figure out the most sensible thing to return as the exception text
     caller = sys._getframe(1).f_code.co_name
     if e.response is None or e.response.text is None or e.response.text == '':
         show_error(f'In {caller}: {e}') # Was: narrate(f'In {caller}: {e}')
@@ -684,15 +674,16 @@ def _handle_error(e, force_cy_error=False):
                 show_error(f'In {caller}: {e}\n{content}')
         raise e
 
-# Call CyREST via a local URL
+
 def _do_request_local(method, url, **kwargs):
+    # Call CyREST via a local URL
     log_http_request(method, url, **kwargs)
     r = requests.request(method, url, **kwargs)
     log_http_result(r)
     return r
 
-# Determine whether actual call is local or remote
 def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
+    # Determine whether actual call is local or remote
     requester = _get_requester()
 
     do_initialize_sandbox(requester, base_url=base_url) # make sure there's a sandbox before executing a command
@@ -700,12 +691,14 @@ def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
     return requester(method, url, **kwargs)
 
 def do_initialize_sandbox(requester=None, base_url=DEFAULT_BASE_URL):
+    # If re-initialize has been requested, reset sandbox to environment's default (i.e., None or default_sandbox)
     if get_sandbox_reinitialize():
         return do_set_sandbox(_get_default_sandbox(), requester, base_url=base_url)
     else:
         return get_current_sandbox()
 
 def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
+    # Set the sandbox to whatever is passed in. Note that sandbox_to_set is a dictionary not a string.
     requester = requester or _get_requester()
     if not sandbox_to_set['sandboxName']:
         # A null name means that the default sandbox should be used, but honoring the copySamples and reinitialize
@@ -749,6 +742,7 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     return new_sandbox
 
 def _get_default_sandbox():
+    # Figure out what the default sandbox be, depending on whether a Notebook is running or we're on the Cytoscape workstation
     default = get_default_sandbox()
     if len(default) == 0:
         # There hasn't been a default sandbox calculated yet ... create a new default to reflect Notebook and remote
@@ -763,9 +757,11 @@ def _get_default_sandbox():
     return default
 
 def _get_requester():
+    # Figure out whether CyREST is local or remote ... if remote, we'll want to go through Jupyter-Bridge
     return do_request_remote if _find_remote_cytoscape() else _do_request_local
 
 def _do_browser_open(url, **kwargs):
+    # Figure out whether CyREST is local or remote ... if remote, issue a browser command through Jupyter-Bridge
     if _find_remote_cytoscape():
         return do_request_remote('webbrowser', url, **kwargs)
     else:

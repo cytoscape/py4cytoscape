@@ -37,8 +37,25 @@ from .py4cytoscape_logger import narrate
 # ==============================================================================
 # I. Package Utility Functions
 # ------------------------------------------------------------------------------
-# Supply a set of colors from Brewer palettes (without requiring rColorBrewer)
+
 def cyPalette(name='set1'):
+    """Supply a set of colors from Brewer palettes (without requiring rColorBrewer).
+
+    Args:
+        name (str): name of a set of colors (e.g., 'set1', 'burd')
+
+    Returns:
+         list: list of color values in the palette
+
+    Raises:
+        KeyError: if palette name is invalid
+
+    Examples:
+        >>> cyPalette()
+        ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF', '#999999']
+        >>> cyPalette('burd')
+        ['#053061', '#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7', '#FDDBC7', '#F4A582', '#D6604D', '#B2182B', '#67001F']
+    """
     PALETTES = {
         'set1': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF', '#999999'],
         'set2': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'],
@@ -53,8 +70,22 @@ def cyPalette(name='set1'):
     return PALETTES[name]
 
 # ------------------------------------------------------------------------------
-# Validate and provide user feedback when hex color codes are required input.
 def verify_hex_colors(colors):
+    """Validate and provide user feedback when hex color codes (or a list of codes) are required input.
+
+    Args:
+        colors (str or list): a single value or a list of colors, which are 6 digit hex values
+
+    Returns:
+         None
+
+    Raises:
+        CyError: if color is invalid
+
+    Examples:
+        >>> verify_hex_colors('#92C5DE')
+        >>> verify_hex_colors(['#053061', '#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7', '#FDDBC7', '#F4A582', '#D6604D', '#B2182B', '#67001F'])
+    """
     if colors is None: return
     if not isinstance(colors, list): colors = [colors]
 
@@ -62,8 +93,22 @@ def verify_hex_colors(colors):
         if not color.startswith('#') or len(color) != 7:
             raise CyError(f'"{color}" is not a valid hexadecimal color (has to begin with # and be 7 characters long, for example: #FF00FF).', caller=sys._getframe(1).f_code.co_name)
 
-# Validate and provide user feedback when opacity is required input.
 def verify_opacities(opacities):
+    """Validate and provide user feedback when opacity is required input.
+
+    Args:
+        opacities (int, float or list): a single value or a list of values, all of which are integers or floats
+
+    Returns:
+         None
+
+    Raises:
+        CyError: if opacity is invalid
+
+    Examples:
+        >>> verify_opacities(177)
+        >>> verify_opacities([177, 200])
+    """
     if opacities is None: return
     if not isinstance(opacities, list):  opacities = [opacities]
 
@@ -72,6 +117,22 @@ def verify_opacities(opacities):
             raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 255).', caller=sys._getframe(1).f_code.co_name)
 
 def verify_dimensions(dimension, sizes):
+    """Validate and provide user feedback when dimensions is required input.
+
+    Args:
+        dimension (str): name of the sizes being examined (e.g., 'width')
+        sizes (int, float or list): a single value or a list of values, all of which are integers or floats
+
+    Returns:
+         None
+
+    Raises:
+        CyError: if size is invalid
+
+    Examples:
+        >>> verify_dimensions('width', 50)
+        >>> verify_dimensions('width', [10, 20])
+    """
     if sizes is None: return
     if not isinstance(sizes, list): sizes = [sizes]
 
@@ -80,10 +141,54 @@ def verify_dimensions(dimension, sizes):
             raise CyError(f'Illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
 
 def verify_slot(slot):
+    """Validate and provide user feedback when slot is required input.
+
+    Args:
+        slot (int or float): a slot number between 1 and 9
+
+    Returns:
+         None
+
+    Raises:
+        CyError: if slot is invalid
+
+    Examples:
+        >>> verify_slot(5)
+    """
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
         raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
 
 def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
+    """Translate one node name or a list of node names into a list of SUIDs.
+
+    List can contain a mixture of names and SUIDs. If it does, only the names are translated,
+    but all entries are returned. If the list contains all SUIDs and no names, the list is returned.
+
+    If a name maps to multiple SUIDs, a list of SUIDs are returned instead of a single SUID.
+
+    Args:
+        node_names (str or list): an node name or a list of node names
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         list: [<SUID or SUID list corresponding to each name>]
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> node_name_to_node_suid('YDR277C')
+        [1022]
+        >>> node_name_to_node_suid(['YDR277C', 'YDL194W'], network='myNetwork')
+        [1022, 1023]
+        >>> node_name_to_node_suid(['YDR277C', 'AXD206W'], network='myNetwork')
+        [1022, [1099, 1100]]
+    """
     if node_names is None: return None
     # TODO: Should this be a simple conversion, or a split(',')??
     if isinstance(node_names, str): node_names = [node_names]
@@ -103,6 +208,32 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
     return node_suids
 
 def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
+    """Translate one node SUID or a list of node SUIDs into a list of names.
+
+    List can contain a mixture of names and SUIDs. If it does, only the SUIDs are translated,
+    but all entries are returned. If the list contains all names and no SUIDs, the list is returned.
+
+    Args:
+        node_suids (SUID or list): an edge SUID or a list of edge SUIDs
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         list: [<name corresponding to each SUID>]
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> node_suid_to_node_name(1022)
+        ['YDR277C']
+        >>> node_suid_to_node_name([1022, 1023], network='myNetwork')
+        ['YDR277C', 'YDL194W']
+    """
     if node_suids is None: return None
     if isinstance(node_suids, str): node_suids = [node_suids]
 
@@ -123,6 +254,36 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
 
 
 def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
+    """Translate one edge name or a list of edge names into a list of SUIDs.
+
+    List can contain a mixture of names and SUIDs. If it does, only the names are translated,
+    but all entries are returned. If the list contains all SUIDs and no names, the list is returned.
+
+    If a name maps to multiple SUIDs, a list of SUIDs are returned instead of a single SUID.
+
+    Args:
+        edge_names (str or list): an edge name or a list of edge names
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         list: [<SUID or SUID list corresponding to each name>]
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> edge_name_to_edge_suid('YDR277C (pp) YDL194W')
+        [1022]
+        >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
+        [1022, 1023]
+        >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) AXD206W'], network='myNetwork')
+        [1022, [1099, 1100]]
+    """
     if edge_names is None: return None
     if isinstance(edge_names, str): edge_names = [edge_names]
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
@@ -142,6 +303,32 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
 
 
 def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
+    """Translate one edge SUID or a list of edge SUIDs into a list of names.
+
+    List can contain a mixture of names and SUIDs. If it does, only the SUIDs are translated,
+    but all entries are returned. If the list contains all names and no SUIDs, the list is returned.
+
+    Args:
+        edge_suids (SUID or list): an edge SUID or a list of edge SUIDs
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         list: [<name corresponding to each SUID>]
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> edge_suid_to_edge_name(1022)
+        ['YDR277C (pp) YDL194W']
+        >>> edge_suid_to_edge_name([1022, 1023], network='myNetwork')
+        ['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W']
+    """
     if edge_suids is None: return None
     if isinstance(edge_suids, str): edge_suids = [edge_suids]
 
@@ -160,19 +347,59 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
         raise CyError(f'Invalid edge SUID in list: {edge_suids}')
 
 # ------------------------------------------------------------------------------
-# Checks to see if a particular column name exists in the specific table. Returns
-# TRUE or FALSE.
 # TODO: R had netowrk=network, which looks like a typo
 def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE_URL):
+    """Checks to see if a particular column name exists in the specific table.
+
+    Args:
+        table_column (str): name of column within table
+        table (str): name of table to check (e.g., 'node', 'edge', 'network')
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         bool: True if column exists, False if not
+
+    Raises:
+        CyError: if table or network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> table_column_exists('YDL194W', 'node')
+        True
+        >>> table_column_exists('bogus', 'edge', network='myNetwork')
+        False
+    """
     if table_column not in tables.get_table_column_names(table, network=network, base_url=base_url):
         narrate('Column ' + table_column + ' does not exist in the ' + table + ' table.')
         return False
     return True
 
 # ------------------------------------------------------------------------------
-# Checks to see if min supported versions of api and cytoscape are running.
-# Extracts numerics from api and major cytoscape versions before making comparison.
 def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL):
+    """Checks to see if min supported versions of api and cytoscape are running.
+
+    Extracts numerics from api and major cytoscape versions before making comparison.
+
+    Args:
+        cyrest (int): minimum CyREST version
+        cytoscape (float): minimum Cytoscape version
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         None
+
+    Raises:
+        none
+
+    Examples:
+        >>> verify_supported_versions(1, 3.7)
+    """
     v = cytoscape_system.cytoscape_version_info(base_url=base_url)
     v_api_str = v['apiVersion']
     v_cy_str = v['cytoscapeVersion']
@@ -189,7 +416,26 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     if nogo: raise CyError(f'Function not run due to unsupported version: {nogo}')
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
-    """ Append a command (if it exists) to a base URL """
+    """Append a command (if it exists) to a base URL.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+        command (str): the command (if any) to append to the base_url
+
+    Returns:
+         str: URL composed of base and URL-encoded command
+
+    Raises:
+        none
+
+    Examples:
+        >>> build_url()
+        'http://127.0.0.1:1234/v1'
+        >>> build_url('collections/1043355/tables/default')
+        'http://127.0.0.1:1234/v1/collections/1043355/tables/default'
+    """
     if command is not None:
         return base_url + "/" + urllib.parse.quote(command)
     else:

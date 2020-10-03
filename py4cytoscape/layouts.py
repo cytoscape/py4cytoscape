@@ -323,7 +323,7 @@ def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_
         requests.exceptions.RequestException: if layout_name is invalid or can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> getLayoutPropertyValue('force-directed','defaultSpringLength')
+        >>> get_layout_property_value('force-directed','defaultSpringLength')
         50
     """
     res = commands.cyrest_get(f'apply/layouts/{layout_name}/parameters', base_url=base_url)
