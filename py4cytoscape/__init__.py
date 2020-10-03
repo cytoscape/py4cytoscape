@@ -42,7 +42,7 @@ from .style_bypasses import *
 from .py4cytoscape_utils import *
 from .cy_ndex import *
 from .decorators import *
-from .py4cytoscape_notebook import get_browser_client_js, get_browser_client_channel, get_jupyter_bridge_url
+from .py4cytoscape_notebook import get_browser_client_js, get_browser_client_channel, get_jupyter_bridge_url, get_notebook_is_running, set_notebook_is_running
 from .py4cytoscape_logger import set_summary_logger
 from .sandbox import *
 from .py4cytoscape_sandbox import *

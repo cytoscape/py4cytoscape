@@ -40,7 +40,7 @@ if not os.path.exists(_DETAIL_LOG_DIR): os.makedirs(_DETAIL_LOG_DIR)
 
 # Set up detail logger
 detail_logger = logging.getLogger('py4...')
-detail_handler = RotatingFileHandler(_detail_log_base, maxBytes=1048576, backupCount=10, encoding='utf8')
+detail_handler = RotatingFileHandler(_detail_log_base, maxBytes=10485760, backupCount=10, encoding='utf8')
 detail_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s'))
 detail_logger.setLevel(_DETAIL_LOG_LEVEL)
 detail_logger.addHandler(detail_handler)
@@ -162,8 +162,8 @@ def log_http_result(r):
             summary_logger.info(' ' + _logger_nesting_spacer + r.reason + '[' + str(r.status_code) + ']' + content)
 
 def narrate(progress):
-    from .py4cytoscape_notebook import notebook_is_running
-    if notebook_is_running():
+    from .py4cytoscape_notebook import get_notebook_is_running
+    if get_notebook_is_running():
         print(progress)
     return progress
 

@@ -110,14 +110,15 @@ def get_abs_sandbox_path(file_location, force_cwd=False):
 
 def reset_default_sandbox():
     # Reset the entire state of the sandbox system
-    global _default_sandbox, _default_sandbox_path, _current_sandbox_name, _current_sandbox_path, _sandbox_reinitialize
+    global _default_sandbox, _default_sandbox_path , _sandbox_reinitialize
     _default_sandbox = {}
     _default_sandbox_path = None
-    _current_sandbox_name, _current_sandbox_path = set_current_sandbox(None, None)
+    set_current_sandbox(None, None)
     _sandbox_reinitialize = True
 
 
 reset_default_sandbox() # Create a clean slate
+
 
 """There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. They affect
  how/whether a sandbox is used. If no sandbox is used, we assume that file names/paths used in py4cytoscape

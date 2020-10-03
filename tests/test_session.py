@@ -28,7 +28,7 @@ from test_utils import *
 class SessionTests(unittest.TestCase):
     def setUp(self):
         try:
-            close_session(False)
+             close_session(False)
 #            delete_all_networks()
         except:
             pass

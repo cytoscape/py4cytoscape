@@ -138,28 +138,29 @@ def _error_content(e):
    via either a local socket (preferred) or Jupyter-Bridge (sufficient)."""
 
 _notebook_is_running = None
-def notebook_is_running(new_state=None):
+def set_notebook_is_running(new_state=None):
     global _notebook_is_running
     old_state = _notebook_is_running
-    if not new_state is None:
-        _notebook_is_running = new_state
+    _notebook_is_running = new_state
     return old_state
 
+def get_notebook_is_running():
+    return _notebook_is_running
+
 def _check_notebook_is_running():
-    global notebook_is_running
-    if notebook_is_running is None:
+    if get_notebook_is_running() is None:
         try: # from https://exceptionshub.com/how-can-i-check-if-code-is-executed-in-the-ipython-notebook.html
             shell = get_ipython().__class__.__name__
             if shell == 'ZMQInteractiveShell':
-                notebook_is_running = True  # Jupyter notebook or qtconsole
+                set_notebook_is_running(True)  # Jupyter notebook or qtconsole
             elif shell == 'TerminalInteractiveShell':
-                notebook_is_running = False  # Terminal running IPython
+                set_notebook_is_running(False)  # Terminal running IPython
             else:
-                notebook_is_running = False  # Other type (?)
+                set_notebook_is_running(False)  # Other type (?)
         except NameError:
-            notebook_is_running = False  # Probably standard Python interpreter
+            set_notebook_is_running(False)  # Probably standard Python interpreter
         except:
-            notebook_is_running = False  # Safety check ... shouldn't ever happen
+            set_notebook_is_running(False)  # Safety check ... shouldn't ever happen
             detail_logger.debug('Warning: _notebook_is_running check failed')
 
 _check_notebook_is_running()
@@ -180,7 +181,7 @@ def running_remote(new_state=None):
 
 def check_running_remote():
     global _running_remote
-    if notebook_is_running:
+    if get_notebook_is_running():
         if _running_remote is None:
             try:
                 # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape

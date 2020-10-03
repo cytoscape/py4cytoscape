@@ -32,18 +32,21 @@ _TEST_FILE = 'test file'
 _ALTTEST_SANDBOX_NAME = '.test.sandbox'
 
 class SandboxTests(unittest.TestCase):
+
+    _notebook_was_running = None
+
     def setUp(self):
         # Close all browser windows if possible
+        global _notebook_was_running
         try:
-            notebook_is_running(False)
+            _notebook_was_running = set_notebook_is_running(False)
             reset_default_sandbox()
         except:
             pass
 
     def tearDown(self):
-        pass
-
-
+        reset_default_sandbox()
+        set_notebook_is_running(_notebook_was_running)
 
     @print_entry_exit
     def test_sandbox_set_invalid(self):
@@ -165,7 +168,7 @@ class SandboxTests(unittest.TestCase):
         # if the current sandbox gets deleted, we fall back to the default sandbox. And we make sure that if the
         # default sandbox is deleted, we re-create it before trying to use it.
 
-        notebook_is_running(True) # Should cause default notebook to be created
+        set_notebook_is_running(True) # Should cause default notebook to be created
 
         # Verify that setting an empty sandbox resolves to the pre-created sandbox
         default_sandbox = sandbox_set(None)
@@ -257,7 +260,7 @@ class SandboxTests(unittest.TestCase):
 
     @print_entry_exit
     def test_sandbox_file_info_notebook(self):
-        notebook_is_running(True) # Should cause default notebook to be created
+        set_notebook_is_running(True) # Should cause default notebook to be created
 
         # Verify that the Cytoscape install directory is returned when asking for '.' during standalone Python execution
         default_sandbox = self._verify_valid_sandbox_file()
@@ -351,7 +354,7 @@ class SandboxTests(unittest.TestCase):
 
         # Check fetching from default sandbox (when Notebook is running)
         reset_default_sandbox()
-        notebook_is_running(True) # Should cause default notebook to be created
+        set_notebook_is_running(True) # Should cause default notebook to be created
         default_sandbox_path = sandbox_set(None)
         check_from_sandbox(default_sandbox_path)
 
@@ -446,7 +449,7 @@ class SandboxTests(unittest.TestCase):
 
         # Check fetching from default sandbox (when Notebook is running)
         reset_default_sandbox()
-        notebook_is_running(True) # Should cause default notebook to be created
+        set_notebook_is_running(True) # Should cause default notebook to be created
         default_sandbox_path = sandbox_set(None)
         check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
 

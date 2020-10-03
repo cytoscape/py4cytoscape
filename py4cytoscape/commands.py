@@ -39,7 +39,7 @@ import os
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, log_http_result, log_http_request, show_error
-from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote, notebook_is_running
+from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote, get_notebook_is_running
 from .py4cytoscape_sandbox import *
 from .exceptions import CyError
 
@@ -755,7 +755,7 @@ def _get_default_sandbox():
         # execution. This determination is deferred until now (instead of occurring when Python execution first starts)
         # so as to give the user some flexibility regarding when Cytoscape needs to be started ... this allows
         # Cytoscape to be started only before the user issues the first command.
-        if notebook_is_running() or running_remote():
+        if get_notebook_is_running() or running_remote():
             default = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
         else:
             default = sandbox_initializer(sandboxName=None)  # for local execution not under a Notebook
