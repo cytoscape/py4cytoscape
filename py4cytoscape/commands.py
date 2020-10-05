@@ -715,8 +715,7 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
             r.raise_for_status()
             new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
         except Exception as e:
-            narrate('Error: FileTransfer app must be installed in Cytoscape')
-            raise e
+            raise CyError(f'Error: FileTransfer app must be installed in Cytoscape: {e}')
     else:
         # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
         # we should never get here if we're running a notebook or remote configuration.
