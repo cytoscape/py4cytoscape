@@ -3,6 +3,18 @@
 Release Log
 ===========
 
+py4cytoscape 0.0.4
+------------------
+Release date: 05 Oct 2020
+
+* Corrected a build problem that stopped 0.0.3 from initializing
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.4.rst
+
+
 py4cytoscape 0.0.3
 ------------------
 Release date: 05 Oct 2020

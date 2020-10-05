@@ -1,6 +1,7 @@
 import setuptools
 
 # Nasty but effective way to set __version__
+__version__=None
 exec(open("py4cytoscape/_version.py").read())
 
 with open("README.md", "r") as fh:
@@ -16,7 +17,7 @@ setuptools.setup(
     description="Cytoscape Automation API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/bdemchak/py4cytoscape",
+    url="https://github.com/cytoscape/py4cytoscape",
     license='MIT License',
     keywords=['data visualization', 'visualization', 'cytoscape',
               'bioinformatics', 'graph', 'network'],
