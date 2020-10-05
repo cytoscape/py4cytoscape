@@ -708,11 +708,15 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     if sandbox_name:
         # A named sandbox name means to create one if it doesn't already exist ... otherwise, preserve it and apply
         # copySamples or reinitialize if true
-        r = requester('POST', f'{base_url}/commands/filetransfer/setSandbox',
-                      json=sandbox_to_set,
-                      headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
-        r.raise_for_status()
-        new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
+        try:
+            r = requester('POST', f'{base_url}/commands/filetransfer/setSandbox',
+                          json=sandbox_to_set,
+                          headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
+            r.raise_for_status()
+            new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
+        except Exception as e:
+            narrate('Error: FileTransfer app must be installed in Cytoscape')
+            raise e
     else:
         # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
         # we should never get here if we're running a notebook or remote configuration.

@@ -671,9 +671,6 @@ class NetworkTests(unittest.TestCase):
         new_igraph = create_igraph_from_network(new_SUID)
 
         self.assertEqual(get_network_name(new_SUID), 'From igraph')
-        print('calling isomorphic')
-        self.assertTrue(cur_igraph.isomorphic(new_igraph))
-        print('returning from isomorphic')
 
         # Verify that all nodes in the new network are present along with their attributes. This doesn't test
         # whether there are extra attributes on the nodes ... there well may be because of the extra ``id`` attribute
@@ -684,6 +681,11 @@ class NetworkTests(unittest.TestCase):
         # whether there are extra attributes on the edges ... there well may be because of the extra ``data.key`` attribute
         # added by ``create_network_from_igraph()``.
         self._check_igraph_attributes(cur_igraph.es, new_igraph.es)
+
+        # With the nodes and edges verified, see whether they're all connected the same
+        print('calling isomorphic')
+        self.assertTrue(cur_igraph.isomorphic(new_igraph))
+        print('returning from isomorphic')
 
     # @print_entry_exit
     # def test_choke_memory(self):

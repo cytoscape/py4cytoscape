@@ -9,7 +9,7 @@ Release date: 05 Oct 2020
 
 * Conform to `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_
 * Change CyError logger to write exceptions to stderr
-* Add `Sandboxing`_ interface and functions
+* Add `Sandboxing` interface and functions
 * Add merge_network() and analyze_network()
 * Add Jupyter-bridge, Cytoscape Automation API, py4cytoscape versions to cytoscape_version_info
 * Add support for Jupyter-bridge

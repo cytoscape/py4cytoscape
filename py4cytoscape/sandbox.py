@@ -105,7 +105,7 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
 
 @cy_log
 def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
-    """Delete sandbox contents and remove its directory
+    """Delete sandbox contents and remove its directory.
 
     If the current sandbox is the entire file system on a Cytoscape workstation, trying to delete it
     is an error. Otherwise, deleting the current sandbox results in the default sandbox becoming the
@@ -163,7 +163,7 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
 
 @cy_log
 def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL):
-    """Get metadata on file in sandbox (or entire sandbox)
+    """Get metadata on file in sandbox (or entire sandbox).
 
     If the current sandbox is the entire file system on a Cytoscape workstation, trying to delete it
     is an error. Otherwise, deleting the current sandbox results in the default sandbox becoming the
@@ -220,7 +220,7 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
 
 @cy_log
 def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):
-    """Transfer a file to a sandbox
+    """Transfer a file to a sandbox.
 
     The source file is transferred to the named (or current) sandbox, overwriting an existing file if one
     already exists. The ``dest_file`` can be an absolute path if the sandbox is the entire file system (i.e., for
@@ -269,7 +269,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
 
 @cy_log
 def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):
-    """Transfer a file from a sandbox
+    """Transfer a file from a sandbox.
 
     The source file is transferred from the named (or current) sandbox to the Python workflow's file system,
     overwriting an existing file if one already exists. The ``source_file`` can be an absolute path if the sandbox is
@@ -321,7 +321,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
 
 @cy_log
 def sandbox_remove_file(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL):
-    """Remove a file from a sandbox
+    """Remove a file from a sandbox.
 
     The named file is removed from the named sandbox. If the sandbox is the entire file system (i.e., for standalone
     Python execution), the file name can be an absolute path. Otherwise, it is a path relative to the named sandbox.
