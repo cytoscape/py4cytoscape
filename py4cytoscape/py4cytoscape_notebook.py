@@ -150,10 +150,10 @@ def get_notebook_is_running():
 def _check_notebook_is_running():
     if get_notebook_is_running() is None:
         try: # from https://exceptionshub.com/how-can-i-check-if-code-is-executed-in-the-ipython-notebook.html
-            shell = get_ipython().__class__.__name__
-            if shell == 'ZMQInteractiveShell':
+            shell_class = get_ipython().__class__
+            if shell_class.__name__ == 'ZMQInteractiveShell' or 'google.colab._shell' in str(shell_class):
                 set_notebook_is_running(True)  # Jupyter notebook or qtconsole
-            elif shell == 'TerminalInteractiveShell':
+            elif shell_class.__name__ == 'TerminalInteractiveShell':
                 set_notebook_is_running(False)  # Terminal running IPython
             else:
                 set_notebook_is_running(False)  # Other type (?)
