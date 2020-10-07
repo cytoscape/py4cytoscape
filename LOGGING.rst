@@ -30,6 +30,9 @@ Here is an example of Detail logging involving nested calls::
    2020-06-06 15:29:55,738 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
    2020-06-06 15:29:55,738 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
 
+``py4cytoscape`` logs are stored in the ``logs`` directory relative to the Python workflow's
+current directory.
+
 Runtime Control
 ---------------
    

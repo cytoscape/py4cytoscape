@@ -1,7 +1,7 @@
 Install
 =======
 
-``py4cytoscape`` requires Python 3.6, 3.7, or 3.8.  If you do not already
+``py4cytoscape`` requires Python 3.6 or later.  If you do not already
 have a Python environment configured on your computer, please see the
 instructions for installing the full `scientific Python stack
 <https://scipy.org/install.html>`_.
@@ -20,7 +20,7 @@ instructions for installing the full `scientific Python stack
    `PyCharm <https://www.jetbrains.com/pycharm/>`_ and other integrated development
    environments often install their own Python distributions.
 
-Below we assume you have the default Python environment already configured on
+Below we assume you have a suitable Python environment already configured on
 your computer and you intend to install ``py4cytoscape`` inside of it.  If you want
 to create and work with Python virtual environments, please follow instructions
 on `venv <https://docs.python.org/3/library/venv.html>`_ and `virtual
@@ -39,34 +39,36 @@ Cytoscape <http://manual.cytoscape.org/en/stable/Launching_Cytoscape.html#launch
 instructions.
 
 .. note::
-   Cytoscape and ``py4cytoscape`` must be running on the same workstation or
-   virtual machine. ``py4cytoscape`` communicates with Cytoscape via a localhost
-   connection, which precludes ``py4cytoscape`` from accessing Cytoscape
-   remotely. While this limitation can be overcome by configuring ``py4cytoscape`` or
-   supplying the Cytoscape URL in ``py4cytoscape`` calls, this can become a complex
-   networking problem if firewalls and routers are present on the network.
+   These instructions assume Cytoscape and ``py4cytoscape`` are running on the same
+   workstation or virtual machine. ``py4cytoscape`` communicates with Cytoscape
+   via a localhost (127.0.0.1) connection, which precludes ``py4cytoscape`` from
+   accessing Cytoscape remotely.
 
-Install the development version (Python Console or Jupyter Notebook)
---------------------------------------------------------------------
+   To overcome this limitation, you can execute your Python/``py4cytoscape`` workflow
+   on a remote Jupyter Notebook server (e.g., `Google Colab <https://colab.research.google.com/>`_
+   or `GenePattern Notebook <https://notebook.genepattern.org/hub>`_)
+   as described in
+   the `Jupyter Notebook <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#jupyter-notebook>`_ section.
+
+Install the development version (Python Console)
+------------------------------------------------
 
 Install the current release of ``py4cytoscape`` with ``pip``::
 
    pip install python-igraph requests pandas networkx
    pip install py4cytoscape
-   cd py4cytoscape
-   python setup.py install # or python setup.py install --user
 
 To install the latest py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
+   pip install python-igraph requests pandas networkx
    git clone git://github.com/cytoscape/py4cytoscape
 
 Verify Cytoscape connection
 ---------------------------
 
 To verify that ``py4cytoscape`` is properly installed and able to communicate with
-Cytoscape, execute the following in a Python Console or Jupyter Notebook
-(after starting Cytoscape)::
+Cytoscape, execute the following in a Python Console (after starting Cytoscape)::
 
    import py4cytoscape as py4
    dir(py4)
@@ -86,6 +88,7 @@ about ``unittest`` on its `homepage <https://docs.python.org/3/library/unittest.
 To execute tests from an OS command line, set the current directory to
 the ``py4cytoscape`` package directory. Then, establish the execution environment::
 
+   cd py4cytoscape
    cd tests
    set PYTHONPATH=..
 
@@ -94,8 +97,18 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
    You must start Cytoscape *before* executing any tests. For Cytoscape execution,
    the current directory should be the Cytoscape program directory.
 
-The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing one
-or two of them is relatively quick. To execute a single sub-suite
+The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing all
+of them can take an hour or two, depending on your workstation. To execute all
+tests that don't require user interaction::
+
+    runalltests.bat
+
+Note that ``runalltests`` executes without any console output. Instead, it sends normal console
+output to the ``cons`` file, and standard error output to the ``err`` file. The ``err``
+contains normal test failures, but also contains a summary report of any failures once
+all tests have been run.
+
+Executing one or two tests is relatively quick. To execute a single sub-suite
 (e.g., ``test_apps.py``)::
 
    python -m unittest test_apps.py
@@ -104,11 +117,11 @@ To execute more than one sub-suite (e.g., ``test_apps.py`` and ``test_filters.py
 
    python -m unittest test_apps.py test_filters.py
 
-To execute the entire test suite::
+To execute all sub-suites::
 
    python -m unittest
 
-To execute a single test (e.g., test_get_app_information) in a single test suite::
+To execute a single test (e.g., test_get_app_information) in a single sub-suite::
 
    python -m unittest test_apps.AppsTests.test_get_app_information
 
@@ -117,13 +130,10 @@ To execute a single test (e.g., test_get_app_information) in a single test suite
 
       python -m unittest 2>stderr.log 1>cons.log
 
+.. note::
    Some tests require console input, and without console prompts, the tests will
    appear to stall. To avoid executing such tests, set the PY4CYTOSCAPE_SKIP_UI_TESTS
    environment variable described below.
-
-   The ``runalltests.bat`` script contains all commands needed to run all tests
-   with all environment variables set. It must be run with the ``tests`` directory
-   as the current directory.
 
 .. note::
    To execute tests with less console debug output, set this environment
