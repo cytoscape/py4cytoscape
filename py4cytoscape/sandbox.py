@@ -95,6 +95,8 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
 
     See Also:
         :meth:`sandbox_remove`
+        :meth:'Sandboxing'
+        :ref:'Sandboxing'
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
