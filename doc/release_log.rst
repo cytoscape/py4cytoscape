@@ -3,6 +3,21 @@
 Release Log
 ===========
 
+py4cytoscape 0.0.5
+------------------
+Release date: 15 Oct 2020
+
+* Referenced Concepts:Sandboxing from documentation for sandbox functions
+* Updated installation and logging documentation
+* Updated test to detect Colab shell
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.5.rst
+
+
 py4cytoscape 0.0.4
 ------------------
 Release date: 05 Oct 2020
