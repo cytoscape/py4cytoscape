@@ -92,6 +92,9 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox'
         >>> sandbox_set('mySand', copy_samples=False, reinitialize=False) # Keep prior sandbox contents
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand'
+
+    See Also:
+        :meth:`sandbox_remove`
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
