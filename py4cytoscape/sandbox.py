@@ -19,7 +19,8 @@ to be the whole workstation file system, and the workflow is responsible for pro
 functions. Alternatively, the workflow could also define a sandbox, and then move files in and out of it just as a
 remote Notebook would.
 
-For more information, see the Concepts section in the py4cytoscape User Manual.
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -94,9 +95,7 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand'
 
     See Also:
-        :meth:`sandbox_remove`
-        :meth:'Sandboxing'
-        :ref:'Sandboxing'
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
@@ -138,6 +137,9 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
         {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox', 'existed': True}
         >>> sandbox_set('mySand')
         {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox', 'existed': True}
+
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
@@ -202,6 +204,9 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\test.png', 'modifiedTime': '2020-09-24 14:10:08.0560', 'isFile': True}
         >>> sandbox_get_file_info('test.png', sandbox_name='mySand')
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand\\test.png', 'modifiedTime': '2020-09-24 14:10:08.0560', 'isFile': True}
+
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     file_name_param = f'fileName="{file_name.strip()}"' if file_name else ''
     try:
@@ -258,6 +263,9 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
         >>> sandbox_send_to('myData01.csv', 'myData.csv', sandbox_name='mySand')
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
+
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     try:
         with open(source_file, mode='rb') as file:
@@ -303,6 +311,9 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\test.png'}
         >>> sandbox_get_from('mySamples/workspace.cys', 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys', sandbox_name='mySand')
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys'}
+
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     source_file = source_file.strip() if source_file else ''
     if not dest_file or not dest_file.strip():
@@ -353,6 +364,9 @@ def sandbox_remove_file(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL)
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\test.png', 'existed': True}
         >>> sandbox_remove_file('mySamples/workspace.cys', sandbox_name='mySand')
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys', 'existed': False}
+
+    See Also:
+        Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
     file_name_param = f'fileName="{file_name.strip()}"' if file_name else ''
     return _sandbox_op(f'filetransfer removeFile {file_name_param}', sandbox_name, base_url)
