@@ -51,11 +51,12 @@ class SandboxTests(unittest.TestCase):
     @print_entry_exit
     def test_sandbox_set_invalid(self):
         # Set invalid sandboxes (null, "", having a path, having '.', having '..', having absolute path
-        self.assertRaises(HTTPError, sandbox_set, 'foo/bar')
-        self.assertRaises(HTTPError, sandbox_set, '.')
-        self.assertRaises(HTTPError, sandbox_set, '..')
-        self.assertRaises(HTTPError, sandbox_set, '...')
-        self.assertRaises(HTTPError, sandbox_set, '/windows/system32')
+        self.assertRaises(CyError, sandbox_set, 'foo/bar')
+        self.assertRaises(CyError, sandbox_set, '.')
+        self.assertRaises(CyError, sandbox_set, '..')
+        self.assertRaises(CyError, sandbox_set, '...')
+        self.assertRaises(CyError, sandbox_set, '../..')
+        self.assertRaises(CyError, sandbox_set, '/windows/system32')
 
     @print_entry_exit
     def test_sandbox_set_remove_standalone(self):

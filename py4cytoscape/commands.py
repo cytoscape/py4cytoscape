@@ -713,9 +713,18 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
                           json=sandbox_to_set,
                           headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
             r.raise_for_status()
-            new_sandbox = set_current_sandbox(sandbox_name, json.loads(r.text)['data']['sandboxPath'])
+            new_sandbox = set_current_sandbox(sandbox_name, r.json()['data']['sandboxPath'])
         except Exception as e:
-            raise CyError(f'Error: FileTransfer app must be installed in Cytoscape: {e}')
+            message = r.text
+            caller = sys._getframe(1).f_code.co_name
+            try:
+                message = r.json()['errors'][0]['message']
+            except Exception as e0:
+                raise CyError(message, caller=caller)
+            if message.startswith('Failed to find command namespace'):
+                raise CyError(f'Error: FileTransfer app must be installed in Cytoscape', caller=caller)
+            else:
+                raise CyError(message, caller=caller)
     else:
         # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
         # we should never get here if we're running a notebook or remote configuration.
