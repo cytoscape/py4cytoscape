@@ -31,6 +31,18 @@ You can try ``py4cytoscape`` with a web browser only, without installing anythin
 
 For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.rst) file.
 
+## How to build and release
+1. Check all sources (including tests) into Github, merge them into the Master branch, and make Master the current branch
+1. Update the version number in both py4cytoscape/_version.py and build.bat
+1. Successfully execute all tests by using the tests/runalltests.bat file
+1. Create a new release file in doc/release to match the version number (e.g., release_0.0.1.rst) 
+1. Update the theme list in doc/release_log.rst and reference the release file you just created
+1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
+1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__ 
+
+Note that the user manual is automatically updated when Master files changes. You can find the manual [here](https://py4cytoscape.readthedocs.io/en/latest/).
+
+
 ## License
 
 ``py4cytoscape`` is released under the MIT License (see [LICENSE.rst](LICENSE.rst) file):

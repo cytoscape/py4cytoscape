@@ -62,7 +62,7 @@ class SandboxTests(unittest.TestCase):
     def test_sandbox_set_remove_standalone(self):
         # This tests that common/casual set/remove options on sandboxes work when running standalone Python
 
-        # Verify that setting an empty sandbox really creates one that it points to Cytoscape program directory
+        # Verify that setting an empty sandbox really creates one that points to Cytoscape program directory
         sandbox = sandbox_set(None)
         sandbox1 = self._verify_sandbox_is_native_filesystem()
         self.assertEqual(sandbox, sandbox1)
@@ -235,10 +235,10 @@ class SandboxTests(unittest.TestCase):
         no_such_file = self._verify_missing_sandbox_file('garbage/')
 
         # Verify that an existing directory returns a modifiedTime and valid info
-        dir_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/')
+        dir_file = self._verify_valid_sandbox_file(file_name='data/')
 
         # Verify that a sandbox can have files in subdirectories
-        gal_filtered_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
+        gal_filtered_file = self._verify_valid_sandbox_file(file_name='data/Yeast Perturbation.cys', is_file=True)
 
         # Verify that a file outside of the Cytoscape install directory (i.e., anywhere) is allowed (... this isn't
         # allowed in a strict sandboxing mode like notebooks and remote execution gets)
@@ -475,9 +475,18 @@ class SandboxTests(unittest.TestCase):
         return sandbox['filePath']
 
     def _verify_sandbox_is_native_filesystem(self):
-        # Verify that the current sandbox is valid, and that it is in the native file system, not a captive sandbox
+        # Verify that the current sandbox is valid, and that it is in the native file system
+        # test_file_name = self._write_file('.')
+        # cur_sandbox_name, cur_sandbox_path = do_initialize_sandbox()
+        # self.assertEqual(os.path.isfile(os.path.join(cur_sandbox_path, test_file_name)), True)
+        # os.remove(test_file_name)
+        # return cur_sandbox_path
+
+        test_file_name = self._write_file('.')
         empty_sandbox_path = self._verify_valid_sandbox_file()
-        self.assertEqual(os.path.isfile(os.path.join(empty_sandbox_path, 'Cytoscape.vmoptions')), True)
+        # self.assertEqual(os.path.isfile(os.path.join(empty_sandbox_path, 'Cytoscape.vmoptions')), True)
+        self.assertEqual(os.path.isfile(test_file_name), True)
+        os.remove(test_file_name)
         return empty_sandbox_path
 
     def _verify_current_sandbox_is_preset(self):
@@ -508,8 +517,10 @@ class SandboxTests(unittest.TestCase):
         self.assertEqual(cyconfig_path[1], 'CytoscapeConfiguration')
 
     def _write_file(self, sandbox_name):
-        with open(os.path.join(sandbox_name, _TEST_FILE), 'w') as file:
+        file_name = os.path.join(sandbox_name, _TEST_FILE)
+        with open(file_name, 'w') as file:
             file.write('This is a test')
+        return file_name
 
 
 if __name__ == '__main__':

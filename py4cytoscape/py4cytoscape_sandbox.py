@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Logging configuration values that can be set by a user.
+"""Low level sandbox functions and state broken out into this file to avoid circular module usage.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -107,7 +107,6 @@ def get_abs_sandbox_path(file_location, force_cwd=False):
     else:
         return file_location
 
-
 def reset_default_sandbox():
     # Reset the entire state of the sandbox system
     global _default_sandbox, _default_sandbox_path , _sandbox_reinitialize
@@ -120,14 +119,21 @@ def reset_default_sandbox():
 reset_default_sandbox() # Create a clean slate
 
 
-"""There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. They affect
- how/whether a sandbox is used. If no sandbox is used, we assume that file names/paths used in py4cytoscape
- identify files/paths on the Cytoscape workstation. If a sandbox is used, all file names/paths are relative
- to the sandbox. Here is a discussion of each case:
+"""There are four cases: {Raw Python, Notebook Python} x {Local Execution, Remote Execution}. We have
+ to draw these distinctions because there may be a difference between the file system seen by the Python
+ script as distinct from Cytoscape. For example, when running standalone Python on the same workstation as
+ Cytoscape, both Python and Cytoscape see the same file system. When running Python in a Notebook on a remote
+ Notebook server, Python sees the server's file system, while Cytoscape sees the workstation's file system.
+ 
+ The four cases affect how/whether a sandbox is used. If no sandbox is used, we assume that file names/paths 
+ used in py4cytoscape identify files/paths on the Cytoscape workstation. If a sandbox is used, all 
+ file names/paths are relative to the sandbox. Here is a discussion of each case:
   
  (Raw Python, Local Execution) - The common case would be "no sandbox", though it is reasonable that a sandbox 
      would be desirable, especially if the workflow is expected to execute remotely (with Notebook), too. IMPLEMENTATION:
-     Use no sandbox, but allow workflow author to easily opt for a sandbox early in the workflow. 
+     Use no sandbox, but allow workflow author to easily opt for a sandbox early in the workflow. By default,
+     non-absolute paths are evaluated relative to the Python kernel's current directory ... this is consistent with
+     pre-sandbox behaviors of py4cytoscape functions. 
      
  (Raw Python, Remote Execution) - This means execution without a Notebook system. This case is unknown to us, so
      handling it won't be prioritized. IMPLEMENTATION: Same as (Notebook Python, Local Execution).
@@ -151,11 +157,27 @@ reset_default_sandbox() # Create a clean slate
   if on_notebook or remote_execution:
       set up pre-defined sandbox
   else # Raw Python, Local Execution
-      don't use sandbox
+      don't use sandbox ... use kernel's CWD instead
 
   This logic would apply immediately before the first Cytoscape command (i.e., when py4Cytoscape determines whether
   on_notebook and remote_execution). It can be pre-empted by explicitly declaring a sandbox (or no sandbox) at any
   time before or after the first Cytoscape command, and an explicit sandbox declaration overrules the default.
-    
+  
+  Note that one would think that py4cytoscape should set up the sandbox as part of its module initialization. 
+  Similarly, one would think that at that time, a determination of whether a Notebook is running or is running on 
+  a remote server should be possible. It's true that determining Notebook-or-not is possible at module initialization,
+  but it's not possible to determine remote-or-not because that determination relies on Cytoscape having been started
+  on the workstation. (If it has been started, then accessing it directly 127.0.0.1 or via Jupyter-Bridge is possible
+  and necessary.) Because we allow the user to start Cytoscape after module initialization, the remote-or-not 
+  decision is deferred, too, and so is creation of the default sandbox (which relies on a Cytoscape connection).
+  
+  So, the remote-or-not and sandbox initialization are carried out lazily upon execution of the first Cytoscape
+  command. And it's also possible that the first Cytoscape command could be a sandbox_set() that changes the sandbox
+  to be different than the default.
+  
+  Finally, while we intend that the user will have installed the FileTransfer app into Cytoscape (and that it will be
+  core at some point), we have to allow for the FileTransfer app to be missing in the case of (Raw Python, Local 
+  Execution) -- other cases really do need sandboxes, so the absence of FileTransfer would be an error. In that
+  situation, the sandbox should be considered to be the kernel's CWD.    
   """
 

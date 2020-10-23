@@ -23,6 +23,8 @@ remote Notebook would.
         Sandboxing in Concepts section in the py4cytoscape User Manual.
 """
 
+"""Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
+
 """Copyright 2020 The Cytoscape Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
@@ -150,8 +152,9 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
     # removal is essentially an error because it's very bad to remove the whole Cytoscape file system.
     default_sandbox_name = get_default_sandbox()['sandboxName']
     current_sandbox_before_remove = get_current_sandbox_name()
-    res = _sandbox_op(f'filetransfer removeSandbox', sandbox_name, base_url)
-    if not sandbox_name or sandbox_name == current_sandbox_before_remove:
+
+    res = _sandbox_op(f'filetransfer removeSandbox', sandbox_name, base_url=base_url)
+    if sandbox_name is None or sandbox_name == current_sandbox_before_remove:
         set_current_sandbox(default_sandbox_name, get_default_sandbox_path()) # There is no more current sandbox ... wipe out name of sandbox
         sandbox_name = current_sandbox_before_remove
 
@@ -208,9 +211,8 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
     See Also:
         Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
-    file_name_param = f'fileName="{file_name.strip()}"' if file_name else ''
     try:
-        return _sandbox_op(f'filetransfer getFileInfo {file_name_param}', sandbox_name, base_url)
+        return _sandbox_op(f'filetransfer getFileInfo', sandbox_name, file_name=file_name, base_url=base_url)
     except Exception as e:
         # This is a nasty case ... there isn't much way for getFileInfo to fail as long as the FileTransfer app
         # is installed. We'll assume failure means it isn't installed. And if that's so, it must mean that we're
@@ -277,8 +279,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
     if not dest_file or not dest_file.strip():
         head, dest_file = os.path.split(source_file)
 
-    dest_file_param = f'fileName="{dest_file}"' if dest_file else ''
-    return _sandbox_op(f'filetransfer toSandbox fileByteCount={len(file_content)} {dest_file_param} overwrite={overwrite} fileBase64="{file_content64}"', sandbox_name, base_url=base_url)
+    return _sandbox_op(f'filetransfer toSandbox fileByteCount={len(file_content)} overwrite={overwrite} fileBase64="{file_content64}"', sandbox_name, file_name=dest_file, base_url=base_url)
 
 @cy_log
 def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):
@@ -322,8 +323,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
     if not overwrite and os.path.exists(dest_file):
         raise CyError(f'File "{dest_file}" already exists')
 
-    source_file_param = f'fileName="{source_file}"' if source_file else ''
-    res = _sandbox_op(f'filetransfer fromSandbox {source_file_param}', sandbox_name, base_url)
+    res = _sandbox_op(f'filetransfer fromSandbox', sandbox_name, file_name=source_file, base_url=base_url)
 
     file_content = base64.b64decode(res['fileBase64'], validate=True)
     try:
@@ -368,12 +368,14 @@ def sandbox_remove_file(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL)
     See Also:
         Sandboxing in Concepts section in the py4cytoscape User Manual.
     """
-    file_name_param = f'fileName="{file_name.strip()}"' if file_name else ''
-    return _sandbox_op(f'filetransfer removeFile {file_name_param}', sandbox_name, base_url)
+    return _sandbox_op(f'filetransfer removeFile', sandbox_name, file_name=file_name, base_url=base_url)
 
-def _sandbox_op(command, sandbox_name, base_url):
-    if sandbox_name: sandbox_name = sandbox_name.strip()
-    if not sandbox_name:
+def _sandbox_op(command, sandbox_name, file_name=None, base_url=DEFAULT_BASE_URL):
+    if file_name: file_name = file_name.strip()
+    if sandbox_name:
+        sandbox_name = sandbox_name.strip()
+        sandbox_path = get_current_sandbox_path()
+    else:
         # An empty sandbox name (either None or "") means to use the currently set sandbox (from sandbox_set).
         # Fetch the current sandbox name and use it. After that, the sandbox name could still be None ... meaning
         # that either there is no sandbox set yet, or the entire raw Cytoscape file system is being used as a sandbox.
@@ -391,6 +393,12 @@ def _sandbox_op(command, sandbox_name, base_url):
         # Given all of this, we let the do_initialize_sandbox figure out whether an initialization is needed, and
         # beyond that, what the current sandbox name is.
         sandbox_name, sandbox_path = commands.do_initialize_sandbox(base_url=base_url)
-    sandbox_param = f' sandboxName="{sandbox_name}"' if sandbox_name else ''
-    res = commands.commands_post(command + sandbox_param, base_url=base_url)
+
+    if sandbox_name:
+        command += f' sandboxName="{sandbox_name}"'
+    elif file_name:
+        file_name = os.path.join(sandbox_path, file_name)
+    if file_name: command += f' fileName="{file_name}"'
+
+    res = commands.commands_post(command, base_url=base_url)
     return res

@@ -34,6 +34,7 @@ class CyNDExTests(unittest.TestCase):
 
     _NDEX_USERID = 'cytoscape_test'
     _NDEX_PASSWORD = 'cytoscape_rocks'
+    _NDEX_SERVER_WAIT_SECS = 10
 
     @unittest.skip('Get_network_ndex_id returns the first network UUID regardless ... it should scan for the network SUID')
     @print_entry_exit
@@ -52,6 +53,7 @@ class CyNDExTests(unittest.TestCase):
         fetched_galFiltered_uuid = get_network_ndex_id()
         self.assertIsInstance(fetched_galFiltered_uuid, str)
         self.assertEqual(galFiltered_uuid, fetched_galFiltered_uuid)
+        time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that storing the second (and unselected) network returns a UUID and it matches what's fetched separately
         yeast_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, network='yeastHighQuality.sif')
@@ -75,12 +77,14 @@ class CyNDExTests(unittest.TestCase):
         # Initialization
         load_test_session()
         galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
+        time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that the network (with all nodes selected) can be updated on NDEx and that the same UUID is returned
         all_node_names = node_suid_to_node_name(select_all_nodes())
         updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
         self.assertIsInstance(updated_galFiltered_uuid, str)
         self.assertEqual(updated_galFiltered_uuid, galFiltered_uuid)
+        time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
         close_session(False)
@@ -104,6 +108,7 @@ class CyNDExTests(unittest.TestCase):
         galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False)
         all_node_names = get_all_nodes()
         close_session(False)
+        time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that the network can be loaded from NDEx and it has the same nodes
         fetched_galFiltered_suid = import_network_from_ndex(galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD)

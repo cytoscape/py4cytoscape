@@ -31,7 +31,6 @@ from . import networks
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
-from .py4cytoscape_tuning import NDEX_DELAY_SECS
 from .py4cytoscape_logger import cy_log
 
 @cy_log
@@ -59,6 +58,9 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
         52
         >>> import_network_from_ndex(galFiltered_uuid, access_key=test_key)
         52
+
+    Note:
+        Importing a network that has recently been stored on NDEx may result in an error if NDEx has not finished indexing it. Lags can range from a few seconds to a few minutes.
     """
     ndex_body = {'serverUrl': 'http://ndexbio.org/v2', 'uuid': ndex_id}
     if username is not None: ndex_body.update({'username': username})
@@ -66,7 +68,6 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
     if access_key is not None: ndex_body.update({'accessKey': access_key})
 
     res = commands.cyrest_post('networks', body=ndex_body, base_url=_cy_ndex_base_url(base_url))
-    time.sleep(NDEX_DELAY_SECS)
     return res['data']['suid']
 
 @cy_log
@@ -96,6 +97,9 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
         >>> export_network_to_ndex('userid', 'password', False, network='galFiltered.sif')
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
+
+    Note:
+        Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
     suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.cyrest_post(f'networks/{suid}', body={'serverUrl': 'http://ndexbio.org/v2',
@@ -104,7 +108,6 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
                                                          'metadata': metadata,
                                                          'isPublic': is_public},
                                base_url=_cy_ndex_base_url(base_url))
-    time.sleep(NDEX_DELAY_SECS)
     return res['data']['uuid']
 
 @cy_log
@@ -137,6 +140,9 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
         >>> update_network_in_ndex('userid', 'password', False, network='galFiltered.sif')
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
+
+    Note:
+        Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
@@ -147,7 +153,6 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
                                                         'isPublic': is_public},
                               base_url=_cy_ndex_base_url(base_url)
                               )
-    time.sleep(NDEX_DELAY_SECS)
     return res['data']['uuid']
 
 

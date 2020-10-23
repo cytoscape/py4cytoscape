@@ -384,7 +384,10 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
         headers = {'Content-Type': 'application/json', 'Accept': 'application/json'}
         r = _do_request('POST', post_url, json=post_body, headers=headers, base_url=base_url)
         r.raise_for_status()
-        return json.loads(r.text)['data']
+        res = json.loads(r.text)
+        if len(res['errors']):
+            raise CyError(str(res['errors'][0]))
+        return res['data']
     except requests.exceptions.RequestException as e:
         _handle_error(e)
 
@@ -735,26 +738,30 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
         # find out what that path is and return it as part of the sandbox descriptor.
         default_sandbox_path = get_default_sandbox_path()
         if default_sandbox_path is None:
-            try:
-                r = requester('POST', f'{base_url}/commands/filetransfer/getFileInfo',
-                              json={'sandboxName': None, 'fileName': '.'},
-                              headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
-                r.raise_for_status()
-                default_sandbox_path = set_default_sandbox_path(json.loads(r.text)['data']['filePath'])
-            except Exception as e:
-                # This is a nasty case ... it's hard for getFileInfo to fail unless FileTransfer isn't installed.
-                # We'll assume that's so, and assume that means we're running on the Cytoscape workstation. So,
-                # coerce the paths to be consistent with that situation. Sandbox functions will fail, but
-                # functions that depend only on calculating paths should do fine.
-                default_sandbox_path = None
-                narrate('Warning: FileTransfer app is not available, so sandbox operations will fail')
+            if get_notebook_is_running():
+                try:
+                    r = requester('POST', f'{base_url}/commands/filetransfer/getFileInfo',
+                                  json={'sandboxName': None, 'fileName': '.'},
+                                  headers={'Content-Type': 'application/json', 'Accept': 'application/json'})
+                    r.raise_for_status()
+                    default_sandbox_path = set_default_sandbox_path(json.loads(r.text)['data']['filePath'])
+                except Exception as e:
+                    # This is a nasty case ... it's hard for getFileInfo to fail unless FileTransfer isn't installed.
+                    # We'll assume that's so, and assume that means we're running on the Cytoscape workstation. So,
+                    # coerce the paths to be consistent with that situation. Sandbox functions will fail, but
+                    # functions that depend only on calculating paths should do fine.
+                    default_sandbox_path = None
+                    narrate('Warning: FileTransfer app is not available, so sandbox operations will fail')
+            else:
+                default_sandbox_path = os.getcwd()
+
         new_sandbox = set_current_sandbox(None, default_sandbox_path)
 
     set_sandbox_reinitialize(False) # No need to initialize again immediately before the next command is issued
     return new_sandbox
 
 def _get_default_sandbox():
-    # Figure out what the default sandbox be, depending on whether a Notebook is running or we're on the Cytoscape workstation
+    # Figure out what the default sandbox should be, depending on whether a Notebook is running or we're on the Cytoscape workstation
     default = get_default_sandbox()
     if len(default) == 0:
         # There hasn't been a default sandbox calculated yet ... create a new default to reflect Notebook and remote

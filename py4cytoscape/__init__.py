@@ -46,6 +46,7 @@ from .py4cytoscape_notebook import get_browser_client_js, get_browser_client_cha
 from .py4cytoscape_logger import set_summary_logger
 from .sandbox import *
 from .py4cytoscape_sandbox import *
+from .py4cytoscape_tuning import set_catchup_filter_secs, set_catchup_network_secs, set_model_propagation_secs
 from ._version import __version__
 
 # Note that we have tried to enforce documentation standards for modules and private functions per:
