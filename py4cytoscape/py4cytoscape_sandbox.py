@@ -98,10 +98,10 @@ def get_sandbox_reinitialize():
     # Return flag indicating that next command should reinitialize the sandbox according to the default_sandbox
     return _sandbox_reinitialize
 
-def get_abs_sandbox_path(file_location, force_cwd=False):
+def get_abs_sandbox_path(file_location):
     sandbox_name, sandbox_path = get_current_sandbox()
-    if not sandbox_name and force_cwd:
-        return f'{os.getcwd()}/{file_location}' # Handle case of network name used as default file name
+    if not sandbox_name:
+        return os.path.abspath(file_location)
     elif sandbox_name and sandbox_path:
         return f'{sandbox_path}/{file_location}'
     else:

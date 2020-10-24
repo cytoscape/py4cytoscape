@@ -328,8 +328,9 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         narrate('This file has been overwritten.')
+    full_filename = file_info['filePath']
 
-    res = commands.commands_get(f'filter export file="{get_abs_sandbox_path(filename)}"', base_url=base_url)
+    res = commands.commands_get(f'filter export file="{full_filename}"', base_url=base_url)
     return res
 
 

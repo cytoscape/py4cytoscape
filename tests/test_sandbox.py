@@ -128,7 +128,7 @@ class SandboxTests(unittest.TestCase):
             self.assertEqual(os.path.isfile(os.path.join(alt_sandbox, _TEST_FILE)), alt_file)
             self.assertEqual(os.path.isdir(os.path.join(alt_sandbox, 'sampleData')), True)
             self.assertEqual(os.path.isfile(os.path.join(empty_sandbox, _TEST_FILE)), False)
-            self.assertEqual(os.path.isdir(os.path.join(empty_sandbox, 'sampleData')), True)
+            self.assertEqual(os.path.isdir(os.path.join(empty_sandbox, 'sampleData')), False)
 
         # Set two real sandboxes but revert back to the null sandbox ... both real sandboxes should remain intact
         test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
@@ -299,10 +299,12 @@ class SandboxTests(unittest.TestCase):
 
     @print_entry_exit
     def test_sandbox_from(self):
-        _FROM_FILE_NAME = 'sampleData/sessions/Styles Demo.cys'
+        _FROM_FILE_NAME = 'data/Styles Demo.cys'
         _FROM_FILE_BYTES = 2548166
-        _ALT_FROM_FILE_NAME = 'sampleData/sessions/Import & Save.cys'
+        _FROM_FILE_NAME_SANDBOX = 'sampleData/sessions/Styles Demo.cys'
+        _ALT_FROM_FILE_NAME = 'data/Import & Save.cys'
         _ALT_FROM_FILE_BYTES = 2410184
+        _ALT_FROM_FILE_NAME_SANDBOX = 'sampleData/sessions/Import & Save.cys'
         _LOCAL_DEST_FILE_NAME = _TEST_FILE
 
         def check_from_result(res, sandbox_path, expected_length, expected_file_name=_LOCAL_DEST_FILE_NAME):
@@ -314,30 +316,31 @@ class SandboxTests(unittest.TestCase):
             self.assertEqual(os.path.isfile(expected_file_name), True)
             self.assertEqual(os.path.getsize(expected_file_name), expected_length)
 
-        def check_from_sandbox(sandbox_path):
+        def check_from_sandbox(sandbox_path, from_file_name = _FROM_FILE_NAME, alt_from_file_name = _ALT_FROM_FILE_NAME):
             # Remove local file if it exists
             if os.path.exists(_LOCAL_DEST_FILE_NAME): os.remove(_LOCAL_DEST_FILE_NAME)
 
             # Verify that a file can be transferred from the sandbox
-            res = sandbox_get_from(_FROM_FILE_NAME, _LOCAL_DEST_FILE_NAME)
+            res = sandbox_get_from(from_file_name, _LOCAL_DEST_FILE_NAME)
             check_from_result(res, sandbox_path, _FROM_FILE_BYTES)
 
             # Verify that the file can't be overwritten if we don't want it to be
-            self.assertRaises(CyError, sandbox_get_from, source_file=_FROM_FILE_NAME, dest_file=_LOCAL_DEST_FILE_NAME,
+            self.assertRaises(CyError, sandbox_get_from, source_file=from_file_name, dest_file=_LOCAL_DEST_FILE_NAME,
                               overwrite=False)
             self.assertEqual(os.path.isfile(_TEST_FILE), True)
             self.assertEqual(os.path.getsize(_TEST_FILE), _FROM_FILE_BYTES)
 
             # Verify that a different file can overwrite it if we allow it
-            res = sandbox_get_from(_ALT_FROM_FILE_NAME, _TEST_FILE)
+            res = sandbox_get_from(alt_from_file_name, _TEST_FILE)
             check_from_result(res, sandbox_path, _ALT_FROM_FILE_BYTES)
 
             # Verify that if a destination file isn't provided, it defaults to the name of the source file
-            res = sandbox_get_from(_ALT_FROM_FILE_NAME)
-            head, tail = os.path.split(_ALT_FROM_FILE_NAME)
+            res = sandbox_get_from(alt_from_file_name)
+            head, tail = os.path.split(alt_from_file_name)
             check_from_result(res, sandbox_path, _ALT_FROM_FILE_BYTES, expected_file_name=tail)
-            res = sandbox_get_from(_ALT_FROM_FILE_NAME, '  ', overwrite=True)
+            res = sandbox_get_from(alt_from_file_name, '  ', overwrite=True)
             check_from_result(res, sandbox_path, _ALT_FROM_FILE_BYTES, expected_file_name=tail)
+            os.remove(tail)
 
             # Verify that trying to get a non-existent file files
             self.assertRaises(CyError, sandbox_get_from, 'totally bogus', dest_file=_LOCAL_DEST_FILE_NAME)
@@ -357,7 +360,7 @@ class SandboxTests(unittest.TestCase):
         reset_default_sandbox()
         set_notebook_is_running(True) # Should cause default notebook to be created
         default_sandbox_path = sandbox_set(None)
-        check_from_sandbox(default_sandbox_path)
+        check_from_sandbox(default_sandbox_path, from_file_name=_FROM_FILE_NAME_SANDBOX, alt_from_file_name=_ALT_FROM_FILE_NAME_SANDBOX)
 
     @print_entry_exit
     def test_sandbox_to_remove(self):
@@ -476,15 +479,8 @@ class SandboxTests(unittest.TestCase):
 
     def _verify_sandbox_is_native_filesystem(self):
         # Verify that the current sandbox is valid, and that it is in the native file system
-        # test_file_name = self._write_file('.')
-        # cur_sandbox_name, cur_sandbox_path = do_initialize_sandbox()
-        # self.assertEqual(os.path.isfile(os.path.join(cur_sandbox_path, test_file_name)), True)
-        # os.remove(test_file_name)
-        # return cur_sandbox_path
-
         test_file_name = self._write_file('.')
         empty_sandbox_path = self._verify_valid_sandbox_file()
-        # self.assertEqual(os.path.isfile(os.path.join(empty_sandbox_path, 'Cytoscape.vmoptions')), True)
         self.assertEqual(os.path.isfile(test_file_name), True)
         os.remove(test_file_name)
         return empty_sandbox_path

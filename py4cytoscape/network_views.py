@@ -265,9 +265,10 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    full_filename = file_info['filePath']
 
     res = commands.commands_post(
-        '%s OutputFile="%s" options="%s" view="SUID:%s"' % (cmd_string, get_abs_sandbox_path(filename), type.upper(), view_SUID),
+        '%s OutputFile="%s" options="%s" view="SUID:%s"' % (cmd_string, full_filename, type.upper(), view_SUID),
         base_url=base_url)
     # TODO: Added double quotes to SUID
     return res

@@ -326,8 +326,8 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     """
     cmd = 'network export'  # a good start
 
-    # filename must be suppled
-    if filename is None: filename = get_abs_sandbox_path(get_network_name(network), force_cwd=True)
+    # filename must be supplied
+    if not filename: filename = get_network_name(network)
 
     # optional args
     if network is not None: cmd += ' network="SUID:' + str(get_network_suid(network, base_url=base_url)) + '"'
@@ -347,8 +347,9 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    full_filename = file_info['filePath']
 
-    return commands.commands_post(f'{cmd} OutputFile="{get_abs_sandbox_path(filename)}"', base_url=base_url)
+    return commands.commands_post(f'{cmd} OutputFile="{full_filename}"', base_url=base_url)
 
 
 @cy_log
@@ -1113,8 +1114,10 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         {'networks': [131481], 'views': [131850]}
     """
     if file is None:
-        file = get_abs_sandbox_path('data/galFiltered.sif', force_cwd=True)
-    res = commands.commands_post(f'network load file file="{get_abs_sandbox_path(file)}"', base_url=base_url)
+        file = 'sampleData/galFiltered.sif'
+    else:
+        file = get_abs_sandbox_path(file)
+    res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
     # TODO: Fix R documentation to match what's really returned
     # TODO: Put double quotes around file
 

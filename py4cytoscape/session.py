@@ -105,7 +105,10 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
         type = 'url'
     else:
         type = 'file'
-        file_location = get_abs_sandbox_path(file_location or 'sampleData/sessions/Yeast Perturbation.cys')
+        if file_location:
+            file_location = get_abs_sandbox_path(file_location)
+        else:
+            file_location = 'sampleData/sessions/Yeast Perturbation.cys' # relative to Cytoscape install directory
 
     narrate(f'Opening {file_location}...')
     return commands.commands_post(f'session open {type}="{file_location}"', base_url=base_url)

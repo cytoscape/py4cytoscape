@@ -140,12 +140,12 @@ class StylesTests(unittest.TestCase):
     def test_export_import_visual_styles(self):
         # Initialization
         load_test_session()
-        STYLE_FILE = localize_path('test')
+        STYLE_FILE = 'test'
         STYLE_SUFFIX = ".xml"
         STYLE_SUFFIX_ALT = '.json'
 
         def check_write(style_file, style_suffix, use_file=True, use_suffix=True, type='XML'):
-            full_file = localize_path(style_file) + style_suffix
+            full_file = style_file + style_suffix
 
             if not use_file:
                 file = None

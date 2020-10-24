@@ -53,12 +53,12 @@ instructions.
 Install the development version (Python Console)
 ------------------------------------------------
 
-Install the current release of ``py4cytoscape`` with ``pip``::
+Install the *current* release of ``py4cytoscape`` with ``pip``::
 
    pip install python-igraph requests pandas networkx
    pip install py4cytoscape
 
-To install the latest py4cytoscape development version, instead
+To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
    pip install python-igraph requests pandas networkx
@@ -79,8 +79,8 @@ This will import ``py4cytoscape`` into the Python namespace, print a (long) list
 of ``py4cytoscape`` entrypoints, and then demonstrate a connection to Cytoscape
 by collecting Cytoscape information.
 
-Testing
--------
+Testing (command line)
+----------------------
 
 ``py4cytoscape`` uses the Python ``unittest`` testing package. You can learn more
 about ``unittest`` on its `homepage <https://docs.python.org/3/library/unittest.html>`_.
@@ -94,14 +94,30 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
 
 .. note::
 
-   You must start Cytoscape *before* executing any tests. For Cytoscape execution,
-   the current directory should be the Cytoscape program directory.
+   You must start Cytoscape *before* executing any tests.
 
 The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing all
-of them can take an hour or two, depending on your workstation. To execute all
-tests that don't require user interaction::
+of them can take an hour or two, depending on your workstation. Executing just the
+sanity test takes only a few minutes::
 
-    runalltests.bat
+    runsanitytests.bat
+
+Deep testing (command line)
+---------------------------
+
+To execute all tests that don't require user interaction, establish the environment (if you haven't already done so)::
+
+   cd py4cytoscape
+   cd tests
+   set PYTHONPATH=..
+
+.. note::
+
+   You must start Cytoscape *before* executing any tests.
+
+Run all test sub-suites::
+
+   runalltests.bat
 
 Note that ``runalltests`` executes without any console output. Instead, it sends normal console
 output to the ``cons`` file, and standard error output to the ``err`` file. The ``err``

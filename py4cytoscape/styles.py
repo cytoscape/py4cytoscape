@@ -189,15 +189,16 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     if styles is not None: cmd_string += ' styles="' + styles + '"'
     cmd_string += ' options="' + type + '"'
 
-    if filename is None: filename = get_abs_sandbox_path('styles', force_cwd=True)
+    if filename is None: filename = 'styles'
     ext = '.' + type.lower() + '$'
     if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
 
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+    full_filename = file_info['filePath']
 
-    cmd_string += ' OutputFile="' + get_abs_sandbox_path(filename) + '"'
+    cmd_string += f' OutputFile="{full_filename}"'
     # TODO: Can't we create a parameter to delete the file first?
 
     res = commands.commands_post(cmd_string, base_url=base_url)

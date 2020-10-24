@@ -177,7 +177,7 @@ class NetworkTests(unittest.TestCase):
         input('On the following tests, allow Cytoscape to overwrite network')
 
         # For these SIF tests, always answer Cytoscape verification message to allow overwrite
-        gal_filename = localize_path('galFiltered.sif')
+        gal_filename = 'galFiltered.sif'
         if os.path.exists(gal_filename):
             os.remove(gal_filename)
         check(export_network())
@@ -187,12 +187,12 @@ class NetworkTests(unittest.TestCase):
 
         # For these CYS tests, always answer Cytoscape verification message to allow overwrite
         net_name = get_network_name()
-        full_file_name = localize_path(net_name) + '.cys'
+        full_file_name = net_name + '.cys'
         if os.path.exists(full_file_name):
             os.remove(full_file_name)
         self.assertDictEqual(export_network(type='cys'), {})
         self.assertTrue(os.path.exists(full_file_name))
-        self.assertDictEqual(export_network(filename=localize_path(net_name), network='yeastHighQuality.sif', type='cys'), {})
+        self.assertDictEqual(export_network(filename=net_name, network='yeastHighQuality.sif', type='cys'), {})
         self.assertTrue(os.path.exists(full_file_name))
         os.remove(full_file_name)
 
@@ -202,7 +202,7 @@ class NetworkTests(unittest.TestCase):
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
         input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(CyError, export_network)
-        os.remove(localize_path('galFiltered.sif'))
+        os.remove('galFiltered.sif')
 
     @print_entry_exit
     def test_delete_network(self):
@@ -556,7 +556,7 @@ class NetworkTests(unittest.TestCase):
     def test_import_network_from_file(self):
 
         # Verify that test network loads from test data directory
-        res = import_network_from_file(localize_path('data/galFiltered.sif'))
+        res = import_network_from_file('data/galFiltered.sif')
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)

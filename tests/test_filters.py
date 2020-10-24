@@ -284,7 +284,7 @@ class FiltersTests(unittest.TestCase):
     def test_export_import_filters(self):
         # Initialization
         load_test_session()
-        FILTER_FILE = localize_path('test')
+        FILTER_FILE = 'test'
         FILTER_SUFFIX = '.json'
 
         # Create two independent filters
@@ -327,7 +327,7 @@ class FiltersTests(unittest.TestCase):
 
         # Verify that a filter file containing all types of filters is loaded
         load_test_session()
-        self.assertListEqual(import_filters(localize_path('data/All Predicates.filter')), [])
+        self.assertListEqual(import_filters('data/All Predicates.filter'), [])
         self.assertSetEqual(set(get_filter_list()), {'Default filter', 'All Predicates'})
 
     def check_result(self, filter_name, create_func, expected_nodes, expected_edges):

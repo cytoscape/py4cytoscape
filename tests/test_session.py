@@ -47,7 +47,7 @@ class SessionTests(unittest.TestCase):
         self.assertDictEqual(close_session(False), {})
 
         # Verify that closing a session after saving works
-        SESSION_TEST = localize_path('close_session_test.cys')
+        SESSION_TEST = 'close_session_test.cys'
         clean_session_file(SESSION_TEST)
         load_test_session()
         self.assertDictEqual(close_session(True, SESSION_TEST), {})
@@ -56,7 +56,7 @@ class SessionTests(unittest.TestCase):
 
         # Verify that an error is thrown if a crazy file name is used
         load_test_session()
-        self.assertRaises(CyError, close_session, True, localize_path("totallybogusdir/bogusfile"))
+        self.assertRaises(CyError, close_session, True, 'totallybogusdir/bogusfile')
 
     
     @print_entry_exit
@@ -67,10 +67,10 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(get_network_name(), 'galFiltered.sif')
 
         # Verify that an error is thrown if a crazy file name is used
-        self.assertRaises(CyError, open_session, localize_path("bogusfile"))
+        self.assertRaises(CyError, open_session, 'bogusfile')
 
         # Verify that an error is thrown if a crazy URL is used
-        self.assertRaises(CyError, open_session, "http://bogusfile")
+        self.assertRaises(CyError, open_session, 'http://bogusfile')
 
         # Verify that file opens if direct URL is used
         # This should work, but doesn't at the CyREST level ... so, I'm commenting it out for now
@@ -80,7 +80,7 @@ class SessionTests(unittest.TestCase):
         # close_session()
 
         # Verify that file opens if a direct filename is used
-        self.assertDictEqual(open_session(localize_path('data/Affinity Purification.cys')), {})
+        self.assertDictEqual(open_session('data/Affinity Purification.cys'), {})
         self.assertEqual(get_network_count(), 1)
         self.assertEqual(get_network_name(), 'HIV-human PPI')
 
@@ -88,7 +88,7 @@ class SessionTests(unittest.TestCase):
     @print_entry_exit
     def test_save_session(self):
         # Verify that the .cys suffix is added if it's not in the filename
-        OTHER_NAME = localize_path('other')
+        OTHER_NAME = 'other'
         OTHER_NAME_CYS = OTHER_NAME + '.cys'
         clean_session_file(OTHER_NAME_CYS)
         load_test_session()
@@ -113,8 +113,12 @@ class SessionTests(unittest.TestCase):
         self.assertTrue(os.path.isfile(OTHER_NAME_CYS))
         clean_session_file(OTHER_NAME_CYS)
 
+        # Verify that if a session was loaded from the Cytoscape Install directory, trying to save it gives a permission error
+        load_test_session()
+        self.assertRaises(CyError, save_session)
+
         # Verify that an error is thrown if a crazy file name is used
-        self.assertRaises(CyError, save_session, localize_path("totallybogusdir/bogusfile"))
+        self.assertRaises(CyError, save_session, 'totallybogusdir/bogusfile')
 
 
 if __name__ == '__main__':

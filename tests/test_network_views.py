@@ -182,7 +182,7 @@ class NetworkViewsTests(unittest.TestCase):
     
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
-    def test_export_image(self):
+    def test_level_of_detail(self):
         # Initialization
         load_test_session()
         fit_content()
