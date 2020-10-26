@@ -1,5 +1,7 @@
 import setuptools
 
+print(f'Starting {__name__} module')
+
 # Nasty but effective way to set __version__
 __version__=None
 exec(open("py4cytoscape/_version.py").read())
