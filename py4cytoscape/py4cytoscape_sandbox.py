@@ -26,6 +26,9 @@ import os
 
 # Internal module convenience imports
 
+print(f'Starting {__name__} module')
+
+
 _default_sandbox = {} # Once a sandbox is explicitly defined, it'll override this default
 _default_sandbox_path = None
 PREDEFINED_SANDBOX_NAME = 'default_sandbox'

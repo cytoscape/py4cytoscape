@@ -34,6 +34,8 @@ import sys
 
 from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _DETAIL_LOG_NAME, _DETAIL_ENABLE_HTTP_CALLS, _SUMMARY_LOG_LEVEL, _SUMMARY_ENABLE_HTTP_CALLS, _DETAIL_ENABLE_HTTP_CONTENT, _SUMMARY_ENABLE_HTTP_CONTENT
 
+print(f'Starting {__name__} module')
+
 
 _detail_log_base = os.path.join(_DETAIL_LOG_DIR, _DETAIL_LOG_NAME)
 if not os.path.exists(_DETAIL_LOG_DIR): os.makedirs(_DETAIL_LOG_DIR)
