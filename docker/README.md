@@ -84,7 +84,7 @@ Then navigate to XQuartz > Preferences > Security  and tick the box 'Allow conne
 
 Check your ip address:
 ```
-IP=$(ifconfig en0 | grep inet | awk '{ print $2 }')
+IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | head -n 1 )
 ```
 Start `socat`:
 ```
@@ -94,9 +94,18 @@ an then start the container by adding the `-e DISPLAY=${IP}:0` argument.
 
 Complete example call: 
 ```
-IP=$(ifconfig en0 | grep inet | awk '{ print $2 }') && \
+IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | head -n 1 ) && \
 socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\" & \
 docker run -d -e DISPLAY=${IP}:0 -p 8787:8787 -p 8888:8888 \
 -v ~/py4cy-container:/home/py4cy --name py4cy-container \
 -it mpgagebioinformatics/py4cytoscape:latest
+```
+Then enter the container
+```
+docker exec -i -t py4cy-container /bin/bash
+```
+and
+```
+module load cytoscape
+cytoscape.sh
 ```
