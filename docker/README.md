@@ -48,7 +48,7 @@ Pass: `cyto`
 
 Once you have connected to the running container you can start `jupyter` with
 ```
-module load jupyterhub
+module load python
 jupyter notebook --ip=0.0.0.0
 ```
 A URL will be presented to you, and it should be pasted into your host's browser (Chrome  recommended).

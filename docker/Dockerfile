@@ -311,15 +311,22 @@ RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ'
     $SOFT/rlang/4.0.3/bin/Rscript $SOUR/jupyter.install.R && \
     rm -rf $SOUR/*'
 
-RUN echo "IRkernel::installspec(name = 'ir403', displayname = 'R 4.0.3')" > $SOUR/.install.jupyter.R.kernel.4.0.3 && \
-    /bin/bash -c 'source /etc/profile.d/modules.sh && \
+RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
     module load python && \
     module load rlang && \
     cd $SOUR && \
     git clone https://github.com/IRkernel/IRkernel.git && \
     $SOFT/rlang/4.0.3/bin/R CMD INSTALL -l $SOFT/rlang/4.0.3/lib/R/library IRkernel && \
-    $SOFT/rlang/4.0.3/bin/Rscript $SOUR/.install.jupyter.R.kernel.4.0.3 && \
     rm -rf $SOUR/*'
+
+RUN chown -R py4cy: /home/py4cy
+USER $NB_USER
+RUN echo "IRkernel::installspec(name = 'ir403', displayname = 'R 4.0.3')" > /home/$NB_USER/.install.jupyter.R.kernel.4.0.3 && \
+    /bin/bash -c 'source /etc/profile.d/modules.sh && \
+    module load python && \
+    $SOFT/rlang/4.0.3/bin/Rscript /home/$NB_USER/.install.jupyter.R.kernel.4.0.3 && \
+    rm -rf /home/$NB_USER/.install.jupyter.R.kernel.4.0.3'
+USER root
 
 ## Install rstudio server ##
 RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
@@ -345,8 +352,6 @@ RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
   echo "module load jre" >> $MODF/bioinformatics/cytoscape/3.7.2  && \
   echo "prepend-path PATH /usr/local/Cytoscape_v3.7.2" >> $MODF/bioinformatics/cytoscape/3.7.2' && \
   rm -rf ${SOUR}/*
-
-USER $NB_USER
 
 RUN mkdir /home/$NB_USER/py4cytoscape
 
