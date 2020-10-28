@@ -13,14 +13,14 @@ mkdir -p ~/py4cy-container
 
 * Start the container from the latest version of the image
 ```
-sudo docker run -d -p 8787:8787 -p 8888:8888 \
+sudo docker run -d --network=host \
 -v ~/py4cy-container:/home/py4cy --name py4cy-container \
 -it mpgagebioinformatics/py4cytoscape:latest
 ```
 
 * Alternatively you can start the container from a specific tag/version of the image
 ```
-sudo docker run -d -p 8787:8787 -p 8888:8888 \
+sudo docker run -d --network=host \
 -v ~/py4cy-container:/home/py4cy --name py4cy-container \
 -it mpgagebioinformatics/py4cytoscape:<tag>
 ```
@@ -84,7 +84,7 @@ Then navigate to XQuartz > Preferences > Security  and tick the box 'Allow conne
 
 Check your ip address:
 ```
-IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | head -n 1 )
+IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | grep -v ":" )
 ```
 Start `socat`:
 ```
@@ -92,13 +92,13 @@ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 ```
 an then start the container by adding the `-e DISPLAY=${IP}:0` argument. 
 
-Complete example call: 
+Complete example call:
 ```
-IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | head -n 1 ) && \
+IP=$(ifconfig en0 | grep inet | awk '{ print $2 }' | grep -v ":" ) && \
 socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\" & \
-docker run -d -e DISPLAY=${IP}:0 -p 8787:8787 -p 8888:8888 \
+docker run -d --network=host -e DISPLAY=${IP}:0 \
 -v ~/py4cy-container:/home/py4cy --name py4cy-container \
--it mpgagebioinformatics/py4cytoscape:latest
+-it mpgagebioinformatics/py4cytoscape:3.7.2
 ```
 Then enter the container
 ```
@@ -109,3 +109,42 @@ and
 module load cytoscape
 cytoscape.sh
 ```
+
+----
+
+## Development and Testing
+
+Start Cytoscape on you host computer. You can also try to use Cytoscape from inside the container but be aware it is a less stable environment.
+
+For testing py4cytoscape open a new terminal and get your host IP address, MAC example:
+```
+ifconfig en0 | grep inet | awk '{ print $2 }' | grep -v ":"
+```
+Start you container:
+```
+docker run -d --network=host -e DISPLAY=${IP}:0 \
+-v <path_to_py4cytoscape>:/home/py4cy/py4cytoscape --name py4cy-container \
+-it mpgagebioinformatics/py4cytoscape:latest
+```
+Enter the container:
+```
+docker exec -i -t py4cy-container /bin/bash
+```
+Load python:
+```
+module load python
+```
+Install py4cytoscape in developer mode:
+```
+cd pyt4cytoscape
+python setup.py develop
+```
+Run the tests:
+```
+cd tests
+export DEFAULT_BASE_URL='http://<YOUR_HOST_IP_ADDRESS>:1234/v1'
+source runalltests.bat 
+```
+
+
+
