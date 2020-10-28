@@ -286,6 +286,7 @@ RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
     echo "setenv PYTHONUSERBASE \$home/.software_container/.python/3.9.0/" >> $MODF/general/python/3.9.0 && \
     echo "exec /bin/mkdir -p \$home/.software_container/.python/3.9.0/pythonpath/site-packages" >> $MODF/general/python/3.9.0 && \
     echo "module load rlang/4.0.3" >> $MODF/general/python/3.9.0 && \
+    cd $SOFT/python/3.9.0/bin && ln -s python3 python && \
     module load python && \
     pip3 install jupyter' && \
     rm -rf ${SOUR}/*
@@ -340,7 +341,7 @@ RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
 
 # cytoscape
 RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
-  module load jre && \
+  module load jre/8.0.271 && \
   mkdir -p $SOFT/cytoscape/3.7.2 && \
   cd $SOFT/cytoscape/3.7.2 && wget  https://github.com/cytoscape/cytoscape/releases/download/3.7.2/Cytoscape_3_7_2_unix.sh && \
   bash Cytoscape_3_7_2_unix.sh -q && \
@@ -349,8 +350,37 @@ RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
   -p $MODF/bioinformatics/ \
   -v 3.7.2 \
   -d 3.7.2 && \
-  echo "module load jre" >> $MODF/bioinformatics/cytoscape/3.7.2  && \
+  echo "module load jre/8.0.271" >> $MODF/bioinformatics/cytoscape/3.7.2  && \
   echo "prepend-path PATH /usr/local/Cytoscape_v3.7.2" >> $MODF/bioinformatics/cytoscape/3.7.2' && \
+  rm -rf ${SOUR}/*
+
+
+RUN cd $SOUR && wget https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz && \
+    tar -xvzf openjdk-12.0.2_linux-x64_bin.tar.gz && \
+    mkdir -p $SOFT/jdk/12.0.2/bin && \
+    cd jdk-12.0.2 && \
+    cp -r * $SOFT/jdk/12.0.2/ && \
+    newmod.sh \
+    -s jdk \
+    -p $MODF/general/ \
+    -v 12.0.2 \
+    -d 15.0.1 && \
+    echo "setenv JAVA_HOME $SOFT/jdk/12.0.2" >> $MODF/general/jdk/12.0.2 && \
+    rm -rf $SOUR/*
+
+# cytoscape
+RUN /bin/bash -c 'source /etc/profile.d/modules.sh && \
+  module load jdk/12.0.2 && \
+  mkdir -p $SOFT/cytoscape/3.8.1 && \
+  cd $SOFT/cytoscape/3.8.1 && wget  https://github.com/cytoscape/cytoscape/releases/download/3.8.1/Cytoscape_3_8_1_unix.sh && \
+  bash Cytoscape_3_8_1_unix.sh -q && \
+  newmod.sh \
+  -s cytoscape \
+  -p $MODF/bioinformatics/ \
+  -v 3.8.1 \
+  -d 3.8.1 && \
+  echo "module load jdk/12.0.2" >> $MODF/bioinformatics/cytoscape/3.8.1  && \
+  echo "prepend-path PATH /usr/local/Cytoscape_v3.8.1" >> $MODF/bioinformatics/cytoscape/3.8.1' && \
   rm -rf ${SOUR}/*
 
 RUN mkdir /home/$NB_USER/py4cytoscape
