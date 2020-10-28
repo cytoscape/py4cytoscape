@@ -114,7 +114,7 @@ cytoscape.sh
 
 ## Development and Testing
 
-Start Cytoscape on you host computer. You can also try to use Cytoscape from inside the container but be aware it is a less stable environment.
+Start Cytoscape on your host computer. You can also try to use Cytoscape from inside the container as shown above but be aware it is a less stable environment.
 
 For testing py4cytoscape open a new terminal and get your host IP address, MAC example:
 ```
@@ -122,7 +122,7 @@ ifconfig en0 | grep inet | awk '{ print $2 }' | grep -v ":"
 ```
 Start you container:
 ```
-docker run -d --network=host -e DISPLAY=${IP}:0 \
+docker run -d --network=host \
 -v <path_to_py4cytoscape>:/home/py4cy/py4cytoscape --name py4cy-container \
 -it mpgagebioinformatics/py4cytoscape:latest
 ```
