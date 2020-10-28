@@ -1,0 +1,11 @@
+py4cytoscape.egg-info/dependency_links.txt
+py4cytoscape.egg-info/PKG-INFO
+py4cytoscape.egg-info/requires.txt
+py4cytoscape.egg-info/SOURCES.txt
+py4cytoscape.egg-info/top_level.txt
+py4cytoscape/__pycache__/
+test_utils/__pycache__/
+tests/cons
+tests/err
+tests/__pycache__/
+tests/logs/py4cytoscape.log
