@@ -9,3 +9,4 @@ tests/cons
 tests/err
 tests/__pycache__/
 tests/logs/py4cytoscape.log
+.eggs/
