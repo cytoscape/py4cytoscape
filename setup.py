@@ -23,9 +23,8 @@ setuptools.setup(
               'bioinformatics', 'graph', 'network'],
     packages=setuptools.find_packages( exclude=['docker*'] ),
     include_package_data=True,
+    setup_requires=['Cython','numpy'],
     install_requires=[
-        'Cython',
-        'numpy',
         'pandas',
         'networkx',
         'requests',
