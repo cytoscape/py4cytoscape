@@ -9,6 +9,8 @@ set up as part of py4cytoscape startup. However, the workflow can set different 
 them. A sandbox can contain both files and directories, and the user can transfer files between a sandbox and the
 workflow's native file system (e.g., a remote Notebook's server).
 
+If a sandbox is defined, all Cytoscape functions read and write files to it by default.
+
 Thus, is it possible to build workflows that don't depend on the structure of the Cytoscape workstation's file system.
 Such workflows can store workflow data files along with other workflow files on a remote Notebook server, then transfer
 them to a sandbox only when Cytoscape will need them. Conversely, when Cytoscape creates a file in a sandbox (e.g.,
@@ -19,7 +21,7 @@ to be directory that's current for the Python kernel. Alternatively, the workflo
 then move files in and out of it just as a remote Notebook would.
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        [Sandboxing](https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing) in the Concepts section in the py4cytoscape User Manual.
 """
 
 """Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
