@@ -239,7 +239,7 @@ py4cytoscape library:
 Jupyter Notebooks that run on *remote* (private or public) servers can use py4cytoscape to
 execute Cytoscape functions on your workstation via
 the `Jupyter-Bridge <https://github.com/cytoscape/jupyter-bridge>`_. To use the Jupyter-Bridge,
-you must create a cell at the beginning of your Notebook:
+you must create a different cell at the beginning of your Notebook:
 
 .. code:: python
 
@@ -271,7 +271,7 @@ use sandboxing in different situations.
 
 .. note:: In all cases, py4cytoscape calls the Cytoscape running on your *private workstation*. Cytoscape is not a full server, and can support exactly one Notebook running at a time -- multiple simultaneous Notebooks are not supported.
 
-.. note:: The Jupyter-Bridge does not require any changes to the remote Notebook server and can reach your Cytoscape workstation whether or not it's behind a firewall.
+.. note:: The Jupyter-Bridge can reach your Cytoscape workstation whether or not it's behind a firewall.
 
 
 Sandboxing
@@ -285,7 +285,7 @@ running on a remote server or on your Cytoscape workstation, you very likely **n
 For context, py4cytoscape functions (e.g., ``open_session()``, ``save_session()``
 and ``export_image()``) access files in either Cytoscape's current working directory or
 in a location given by a full path. When a non-Notebook Python workflow starts, its working directory
-is the Python kernels working directory, which may contain user data files. Calls to py4cytoscape functions
+is the Python kernel's working directory, which may contain user data files. Calls to py4cytoscape functions
 may contain paths relative to this directory, or may be full paths on the Cytoscape workstation.
 
 Full paths work well only as long as the workflow executes on the same workstation as
@@ -301,7 +301,7 @@ it was written. It raises a number of problems:
   system is inaccessible to the Cytoscape running on your workstation, there is no path the
   workflow can pass to make Cytoscape read or write those files.
 
-Sandboxing solves these by defining a dedicated folder on the Cytoscape workstation (in the
+Sandboxing solves these problems by defining a dedicated folder on the Cytoscape workstation (in the
 user's ``CytoscapeConfiguration/filetransfer`` folder); files
 read and written by Cytoscape are all contained with the folder (aka sandbox).
 Sandboxing functions allow files to be transferred
@@ -327,7 +327,7 @@ Cytoscape workstation, you can explicitly create the default sandbox. (See vigne
 .. note::
     By default, a sandbox is pre-loaded with a copy of Cytoscape's ``sampleData``
     files. This makes it easy for workflow writers to experiment on sample data. For example,
-    calling ``open_session('sampleData/sessions/Affinity Purification')`` opens a sample session
+    calling ``open_session('sampleData/sessions/Affinity Purification')`` opens a sandbox-based sample session
     provided with Cytoscape.
 
 A workflow can define any number of sandboxes and even switch between them.
@@ -348,7 +348,7 @@ current directory or as full (non-portable) paths.
     open_session('mySession')
     # ...
     export_image('myImage.png')
-    # ... do something with the .png
+    # ... use Python to do something with the .png
 
 or
 
@@ -357,7 +357,7 @@ or
     open_session('C:\Users\Me\Documents\CyFiles\mySession')
     # ...
     export_image('C:\Users\Me\Documents\CyFiles\myImage.png')
-    # ... do something with the .png
+    # ... use Python to do something with the .png
 
 When using full paths, this workflow is portable only to workstations that have their Cytoscape files in the
 ``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations.
@@ -384,16 +384,17 @@ or risk to the workstation's file system. Various Python-based libraries can pro
 .png after it is copied to the Notebook's file system.
 
 When calling sandbox functions, if you don't specify the name of a sandbox, the operation
-is performed on the "current sandbox".
+is performed on the "current sandbox", which is the ``default_sandbox`` folder or whatever sandbox you
+set by calling the ``sandbox_set()`` function.
 
 Sandbox functions and Notebook-based py4cytoscape functions don't accept full paths for files, as they
 would create non-portable code and pose a security risk to the Cytoscape workstation.
 
-**Vignette 3**: A workstation-based Python workflow accesses sandbox-based files
+**Vignette 3**: A workstation-based non-Notebook Python workflow accesses sandbox-based files
 
-Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder.
-By always maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the
-Cytoscape workstation file system), you get all of the benefits of sandboxing without having to specify non-portable
+Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder. You can
+choose to maintain your Cytoscape files in a sandbox folder (instead of elsewhere in the
+Cytoscape workstation file system). If you do this, you get all of the benefits of sandboxing without having to specify non-portable
 file paths.
 
 .. code:: python
