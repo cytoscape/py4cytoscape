@@ -118,7 +118,6 @@ To execute all tests that don't require user interaction, establish the environm
    set PYTHONPATH=..
 
 .. note::
-
    You must start Cytoscape *before* executing any tests.
 
 Run all test sub-suites::
