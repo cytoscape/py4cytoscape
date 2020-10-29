@@ -98,7 +98,7 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand'
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
@@ -142,7 +142,7 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
         {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox', 'existed': True}
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
@@ -210,7 +210,7 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand\\test.png', 'modifiedTime': '2020-09-24 14:10:08.0560', 'isFile': True}
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     try:
         return _sandbox_op(f'filetransfer getFileInfo', sandbox_name, file_name=file_name, base_url=base_url)
@@ -268,7 +268,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     try:
         with open(source_file, mode='rb') as file:
@@ -315,7 +315,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys'}
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     source_file = source_file.strip() if source_file else ''
     if not dest_file or not dest_file.strip():
@@ -367,7 +367,7 @@ def sandbox_remove_file(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL)
         {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys', 'existed': False}
 
     See Also:
-        Sandboxing in Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _sandbox_op(f'filetransfer removeFile', sandbox_name, file_name=file_name, base_url=base_url)
 
