@@ -21,11 +21,10 @@ setuptools.setup(
     license='MIT License',
     keywords=['data visualization', 'visualization', 'cytoscape',
               'bioinformatics', 'graph', 'network'],
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages( exclude=['docker*'] ),
     include_package_data=True,
+    setup_requires=['Cython','numpy'],
     install_requires=[
-        'Cython',
-        'numpy',
         'pandas',
         'networkx',
         'requests',
