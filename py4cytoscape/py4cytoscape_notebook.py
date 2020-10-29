@@ -26,7 +26,7 @@ import uuid
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
 
-print(f'Starting {__name__} module')
+# print(f'Starting {__name__} module')
 
 
 # Call CyREST as a remote service via Jupyter-bridge

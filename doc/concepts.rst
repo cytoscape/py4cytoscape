@@ -216,6 +216,7 @@ import it and call a test function:
 .. code:: python
 
     import sys
+    !{sys.executable} -m pip uninstall -y py4cytoscape
     !{sys.executable} -m pip install py4cytoscape
 
     import py4cytoscape as p4c
@@ -259,7 +260,14 @@ you must create a cell at the beginning of your Notebook:
 All of these scenarios will result in Jupyter Notebook that can call functions executed on the
 Cytoscape executing in your workstation. Note, though, that without an extra step, Cytoscape generally can't access
 files stored in a *remote* Notebook's file system, and a *remote* Notebook can't access files created
-by Cytoscape. See the `Sandboxing`_ section (below) for an explanation of the file sharing protocol.
+by Cytoscape.
+
+See the `Sandboxing`_ section (below) for an explanation of the file sharing protocol.
+
+See the `Sanity Test <https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test>`_ examples to see how to
+use sandboxing in different situations.
+
+.. note:: All Notebooks, whether running on a *local* or *remote* Jupyter server must use the Sandboxing protocol for sharing Notebook files with Cytoscape and vice-versa.
 
 .. note:: In all cases, py4cytoscape calls the Cytoscape running on your *private workstation*. Cytoscape is not a full server, and can support exactly one Notebook running at a time -- multiple simultaneous Notebooks are not supported.
 
@@ -270,18 +278,17 @@ Sandboxing
 ----------
 
 If you use py4cytoscape to create and run a Python workflow on the same workstation as
-your Cytoscape instance, you may not need sandbox features (but they may make your Python
-coding simpler). If you use py4cytoscape from a Jupyter Notebook running on a remote server,
-you very likely **need** sandboxing.
+your Cytoscape instance and not in a Jupyter Notebook, you may not need sandbox features
+(but they may make your Python coding simpler). If you use py4cytoscape from a Jupyter Notebook
+running on a remote server or on your Cytoscape workstation, you very likely **need** sandboxing.
 
 For context, py4cytoscape functions (e.g., ``open_session()``, ``save_session()``
 and ``export_image()``) access files in either Cytoscape's current working directory or
-in a location given by a full path. When Cytoscape starts, its working directory is the
-Cytoscape install directory, which has no write permissions and likely contains no user
-data files. Very quickly, a Python workflow author learns to pass file names
-qualified by full paths that are unique to the workstation.
+in a location given by a full path. When a non-Notebook Python workflow starts, its working directory
+is the Python kernels working directory, which may contain user data files. Calls to py4cytoscape functions
+may contain paths relative to this directory, or may be full paths on the Cytoscape workstation.
 
-This situation works well only as long as the workflow executes on the same workstation as
+Full paths work well only as long as the workflow executes on the same workstation as
 it was written. It raises a number of problems:
 
 * Workflows with hard-coded paths are not likely to be portable to other Cytoscape workstations,
@@ -305,6 +312,10 @@ will.
 
 A sandbox can contain both files and directories (which can contain files and directories, too).
 
+Sandboxing applies to Notebooks running either either on a remote Jupyter server *or* a Jupyter
+server running on the Cytoscape workstation. Thus, workflows written for one environment can work
+seamlessly on the other.
+
 A useful side effect of sandboxing is that workflows that use them stand little chance of
 inadvertantly (or maliciously) corrupting the Cytoscape workstation's file system. This
 safety further encourages sharing of workflows between collaboratating researchers.
@@ -315,16 +326,31 @@ Cytoscape workstation, you can explicitly create the default sandbox. (See vigne
 
 .. note::
     By default, a sandbox is pre-loaded with a copy of Cytoscape's ``sampleData``
-    files. This makes it easy for workflow writers to experiment on sample data.
+    files. This makes it easy for workflow writers to experiment on sample data. For example,
+    calling ``open_session('sampleData/sessions/Affinity Purification')`` opens a sample session
+    provided with Cytoscape.
 
 A workflow can define any number of sandboxes and even switch between them.
 This promotes modularity by facilitating the creation of different sub-workflows with
 some certainty that a sub-workflow's files aren't accidentally corrupted by other
 sub-workflows over time.
 
-**Vignette 1**: A workstation-based Python workflow calling Cytoscape to load a session and create a network image.
+See the `Sanity Test <https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test>`_ examples to see how to
+use sandboxing in different situations.
 
-Without sandboxing, the workflow must provide full (non-portable) paths to Cytoscape files.
+**Vignette 1**: A workstation-based non-Notebook Python workflow calling Cytoscape to load a session and create a network image.
+
+Without sandboxing, the workflow must specify Cytoscape files as either relative to the Python kernel's
+current directory or as full (non-portable) paths.
+
+.. code:: python
+
+    open_session('mySession')
+    # ...
+    export_image('myImage.png')
+    # ... do something with the .png
+
+or
 
 .. code:: python
 
@@ -333,23 +359,24 @@ Without sandboxing, the workflow must provide full (non-portable) paths to Cytos
     export_image('C:\Users\Me\Documents\CyFiles\myImage.png')
     # ... do something with the .png
 
-This workflow is portable only to workstations that have their Cytoscape files in the
-``C:\Users\Me\Documents\CyFiles``, which doesn't seem likely.
+When using full paths, this workflow is portable only to workstations that have their Cytoscape files in the
+``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations.
 
 **Vignette 2**: A Notebook-based version of Vignette 1.
 
-A sandbox is automatically created for Notebook-based workflows. The workflow must transfer
+A sandbox is automatically created for Notebook-based workflows whether they execute on a remote Jupyter server
+or a Jupyter server on the Cytoscape workstation. The workflow must transfer
 a session file from the Notebook's file system
 to the sandbox, call Cytoscape, and then transfer the result back to the Notebook's file
 system for further processing.
 
 .. code:: python
 
-    sandbox_send_to('data/mySession.cys') # copy session file from Notebook server to workstation
+    sandbox_send_to('./mySession.cys') # copy session file from Notebook directory to workstation
     open_session('mySession')
     # ...
     export_image('myImage.png')
-    sandbox_get_from('myImage.png', 'data/myImage.png') # copy image file to Notebook server
+    sandbox_get_from('myImage.png', './myImage.png') # copy image file to Notebook directory
     # ... do something with the .png
 
 This workflow can run on any Notebook server and Cytoscape workstation without knowledge of
@@ -359,11 +386,14 @@ or risk to the workstation's file system. Various Python-based libraries can pro
 When calling sandbox functions, if you don't specify the name of a sandbox, the operation
 is performed on the "current sandbox".
 
+Sandbox functions and Notebook-based py4cytoscape functions don't accept full paths for files, as they
+would create non-portable code and pose a security risk to the Cytoscape workstation.
+
 **Vignette 3**: A workstation-based Python workflow accesses sandbox-based files
 
 Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder.
 By always maintaining your Cytoscape files in a sandbox folder (instead of elsewhere in the
-workstation file system), you get all of the benefits of sandboxing without having to specify non-portable
+Cytoscape workstation file system), you get all of the benefits of sandboxing without having to specify non-portable
 file paths.
 
 .. code:: python
@@ -375,10 +405,11 @@ file paths.
     # ... do something with the .png
 
 If Cytoscape files reside in the sandbox *a priori*, no ``sandbox_send_to()`` or
-``sandbox_get_from()`` calls are needed. Note that to make this workflow run in a remote
-Notebook, you'll still have to add these calls (as in Vignette 2).
+``sandbox_get_from()`` calls are needed. Note that to make a standalone Python workflow run in a remote
+Notebook, you'll have to add sandbox calls (as in Vignette 2). Why not start by using sandboxes in anticipation
+of publishing a workflow as a Notebook?
 
-.. warning:: The ``reinitialize`` parameter is needed to prevent the ``sandbox_set()`` call from erasing the sandbox folder's contents, which is its default behavior.
+.. warning:: The ``reinitialize=False`` parameter is needed to prevent the ``sandbox_set()`` call from erasing the sandbox folder's contents, which is its default behavior.
 
 .. note::
     Sandbox functions allow the following operations on files and sandboxes:

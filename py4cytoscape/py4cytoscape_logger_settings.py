@@ -21,7 +21,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # Log level choices are here: https://docs.python.org/3/howto/logging.html#logging-levels
 
-print(f'Starting {__name__} module')
+# print(f'Starting {__name__} module')
 
 
 _SUMMARY_LOG_LEVEL = 'INFO' # 'DEBUG' to turn on, 'NOTSET' to turn off, 'INFO' to turn on just HTTP calls

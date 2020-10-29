@@ -36,7 +36,7 @@ from . import cytoscape_system
 from .exceptions import CyError
 from .py4cytoscape_logger import narrate
 
-print(f'Starting {__name__} module')
+# print(f'Starting {__name__} module')
 
 
 # ==============================================================================

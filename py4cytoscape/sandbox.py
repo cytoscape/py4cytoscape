@@ -15,9 +15,8 @@ them to a sandbox only when Cytoscape will need them. Conversely, when Cytoscape
 exporting an image), the workflow can transfer the file to workflow storage.
 
 A special case is when py4cytoscape is running on the same workstation as Cytoscape. The default sandbox is considered
-to be the whole workstation file system, and the workflow is responsible for providing full file paths to Cytoscape
-functions. Alternatively, the workflow could also define a sandbox, and then move files in and out of it just as a
-remote Notebook would.
+to be directory that's current for the Python kernel. Alternatively, the workflow could also define a sandbox, and
+then move files in and out of it just as a remote Notebook would.
 
     See Also:
         Sandboxing in Concepts section in the py4cytoscape User Manual.
@@ -61,8 +60,8 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
     """Set a new default sandbox, creating it if necessary.
 
     A sandbox is the root for the file system used for all file operations. When running standalone
-    on the same workstation as Cytoscape, the default sandbox is the entire file system on the
-    Cytoscape workstation. When running in a Notebook or remote server, the default sandbox is the
+    on the same workstation as Cytoscape, the default sandbox is the directory that's current for
+    the Python kernel. When running in a Notebook or remote server, the default sandbox is the
     'default_sandbox' created automatically under the under the ``filetransfer`` directory in the
     CytoscapeConfiguration directory. Naming a sandbox with this function creates a new
     sub-directory as a sibling to 'default_sandbox' and uses it for subsequent file operations.
