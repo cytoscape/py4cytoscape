@@ -21,7 +21,7 @@ to be directory that's current for the Python kernel. Alternatively, the workflo
 then move files in and out of it just as a remote Notebook would.
 
     See Also:
-        [Sandboxing](https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing) in the Concepts section in the py4cytoscape User Manual.
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
 """
 
 """Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
