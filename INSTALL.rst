@@ -1,6 +1,13 @@
 Install
 =======
 
+.. note::
+   This section pertains to executing Python from a command line, with the Python program importing ``py4cytoscape``
+   and then using its functions to call Cytoscape. If you intend to run Python in a Jupyter Notebook instead,
+   the installation instructions are much simpler, and can be found in the
+   `Jupyter Notebook section <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#jupyter-notebook>`_ of the
+   Concepts chapter. The section below doesn't apply to you.
+
 ``py4cytoscape`` requires Python 3.6 or later.  If you do not already
 have a Python environment configured on your computer, please see the
 instructions for installing the full `scientific Python stack
@@ -93,7 +100,6 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
    set PYTHONPATH=..
 
 .. note::
-
    You must start Cytoscape *before* executing any tests.
 
 The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing all
