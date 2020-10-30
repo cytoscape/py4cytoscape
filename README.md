@@ -41,6 +41,7 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 1. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
 1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
+1. Again, successfully execute all tests by using the tests/runalltests.bat file and the Sanity Test.
 
 Note that the user manual is automatically updated when Master files changes. You can find the manual [here](https://py4cytoscape.readthedocs.io/en/latest/).
 
