@@ -1257,7 +1257,7 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
         cyedges['target'] = [x[1] for x in src_trg]
 
     # Create a list of edges as tuples (src, targ, suid, attrs) with 'source' & 'target' removed from attrs
-    edges_dict = cyedges.to_dict(orient='record')
+    edges_dict = cyedges.to_dict(orient='records')
     e_bunch = [(row['source'],
                 row['target'],
                 row['SUID'],
@@ -1265,7 +1265,7 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
                 ) for row in edges_dict]
 
     # Create a list of nodes as tuples (name, attrs) with 'name' removed from attrs
-    nodes_dict = cynodes.to_dict(orient='record')
+    nodes_dict = cynodes.to_dict(orient='records')
     n_bunch = [(row['name'], {k: row[k]     for k in row if k not in {'name'}}) for row in nodes_dict]
 
     # Create the networkx graph modeled as directed edges with ability to have multiple edges connecting two nodes
