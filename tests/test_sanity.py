@@ -29,6 +29,12 @@ from test_utils import *
 
 
 class SanityTests(unittest.TestCase):
+
+    if os.environ.get('TESTS_FOLDER'):
+        path=os.environ.get('TESTS_FOLDER')+"/"
+    else:
+        path=""
+
     def setUp(self):
         close_session(False)
         pass
@@ -37,14 +43,14 @@ class SanityTests(unittest.TestCase):
         pass
 
     @print_entry_exit
-    def test_open_session(self):
+    def test_open_session(self,path=path):
         # Verify that the default network is loaded
         self.assertDictEqual(open_session(), {})
         self.assertEqual(get_network_count(), 1)
         self.assertEqual(get_network_name(), 'galFiltered.sif')
 
         # Verify that file opens if a direct filename is used
-        self.assertDictEqual(open_session(os.environ.get('TESTS_FOLDER')+'data/Affinity Purification.cys'), {})
+        self.assertDictEqual(open_session(path+'data/Affinity Purification.cys'), {})
         self.assertEqual(get_network_count(), 1)
         self.assertEqual(get_network_name(), 'HIV-human PPI')
 
@@ -84,10 +90,10 @@ class SanityTests(unittest.TestCase):
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
     @print_entry_exit
-    def test_import_network_from_file(self):
+    def test_import_network_from_file(self,path=path):
 
         # Verify that test network loads from test data directory
-        res = import_network_from_file(os.environ.get('TESTS_FOLDER')+'data/galFiltered.sif')
+        res = import_network_from_file(path+'data/galFiltered.sif')
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)
