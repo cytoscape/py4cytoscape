@@ -136,7 +136,7 @@ module load python
 ```
 Install py4cytoscape in developer mode:
 ```
-cd pyt4cytoscape
+cd py4cytoscape
 python setup.py develop --user
 ```
 Run the tests:
