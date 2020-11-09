@@ -21,6 +21,7 @@
 """
 
 
+import os
 import unittest
 import math
 
@@ -43,7 +44,7 @@ class SanityTests(unittest.TestCase):
         self.assertEqual(get_network_name(), 'galFiltered.sif')
 
         # Verify that file opens if a direct filename is used
-        self.assertDictEqual(open_session('data/Affinity Purification.cys'), {})
+        self.assertDictEqual(open_session(os.environ.get('TESTS_FOLDER')+'data/Affinity Purification.cys'), {})
         self.assertEqual(get_network_count(), 1)
         self.assertEqual(get_network_name(), 'HIV-human PPI')
 
@@ -86,7 +87,7 @@ class SanityTests(unittest.TestCase):
     def test_import_network_from_file(self):
 
         # Verify that test network loads from test data directory
-        res = import_network_from_file('data/galFiltered.sif')
+        res = import_network_from_file(os.environ.get('TESTS_FOLDER')+'data/galFiltered.sif')
         self.assertIsInstance(res['networks'], list)
         self.assertEqual(len(res['networks']), 1)
         self.assertIsInstance(res['views'], list)
