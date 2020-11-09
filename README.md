@@ -19,7 +19,7 @@ To understand the API structure and see calling examples, see the ``py4cytoscape
 
 For an explanation of ``py4cytoscape`` installation and testing, see the [INSTALL.rst](INSTALL.rst) file.
 
-## How run a simple workflow
+## How to run a simple workflow
 
 For a quick tutorial on how to build a workflow in Python and using ``py4cytoscape``, see
 https://py4cytoscape.readthedocs.io/en/latest/tutorials/index.html.
@@ -32,15 +32,16 @@ You can try ``py4cytoscape`` with a web browser only, without installing anythin
 For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.rst) file.
 
 ## How to build and release
-1. Check all sources (including tests) into Github, merge them into the Master branch, and make Master the current branch
+1. Create a new release file in doc/release to match the version number (e.g., release_0.0.1.rst) 
+1. Update the theme list in doc/release_log.rst and reference the release file you just created
+1. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
 1. Update the version number in both py4cytoscape/_version.py and build.bat
 1. If any API changes were made, be sure to update the [Automation API Definition](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690) and change the Automation API version in py4cytoscape/_version.py    
 1. Successfully execute all tests by using the tests/runalltests.bat file
-1. Execute liveness test (e.g., [Two-way Jupyter-Bridge test.ipynb](https://colab.research.google.com/drive/1bsCftHuxb2tQHL87AIgRcBgSRynoDIz3?usp=sharing)) on Google Colab
-1. Create a new release file in doc/release to match the version number (e.g., release_0.0.1.rst) 
-1. Update the theme list in doc/release_log.rst and reference the release file you just created
-1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
+1. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
+1. Again, successfully execute all tests by using the tests/runalltests.bat file and the Sanity Test. (Change Sanity Test to fetch ``py4cytoscape`` from PyPI instead of Github.)
+1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
 
 Note that the user manual is automatically updated when Master files changes. You can find the manual [here](https://py4cytoscape.readthedocs.io/en/latest/).
 

@@ -3,6 +3,23 @@
 Release Log
 ===========
 
+py4cytoscape 0.0.6
+------------------
+Release date: 30 Oct 2020
+
+* Made default directory for standalone Python the same as the Python kernel directory
+* Shortened delays that wait for Cytoscape to stabilize, removed NDEx function delays
+* Began docker support
+* Improved sandboxing and Jupyter Notebook documentation
+* Added shorter test (test_sanity) for quick installation verification
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.6.rst
+
+
 py4cytoscape 0.0.5
 ------------------
 Release date: 15 Oct 2020
