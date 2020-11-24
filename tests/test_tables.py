@@ -185,31 +185,54 @@ class TablesTests(unittest.TestCase):
     
     @print_entry_exit
     def test_load_table_data(self):
+
+        def check_values_added(table_column_names, table_key_name, test_data, data_key_name, data_value_name, table='node'):
+            data = get_table_columns(table=table)
+            self.assertEqual(len(table_column_names) + 2, len(data.columns))
+            self.assertIn(data_key_name, data.columns)
+            self.assertIn(data_value_name, data.columns)
+            added_data = data[data[table_key_name] == data[data_key_name]]
+            self.assertEqual(len(test_data.index), len(added_data.index))
+            verify_each_newcol_value = [added_data[added_data[data_key_name] == row[data_key_name]].iloc[0][data_value_name] == row[data_value_name]
+                                        for row_index, row in test_data.iterrows()]
+            self.assertNotIn(False, verify_each_newcol_value)
+
+
         # Initialization
         load_test_session()
-        column_names = get_table_column_names()
 
         # Verify that adding into rows that don't exist fails
         unrelated_data = df.DataFrame(data={'id': ['New1', 'New2', 'New3'], 'newcol': [1, 2, 3]})
         self.assertRaises(CyError, load_table_data, unrelated_data, data_key_column='id', table='node', table_key_column='name')
 
-        # Verify that adding into rows that do exist succeeds
-        test_data = df.DataFrame(data={'id': ['YDL194W', 'YDR277C', 'YBR043C'], 'newcol': [1, 2, 3]})
-        res = load_table_data(test_data, data_key_column='id', table='node', table_key_column='name')
+        # Verify that adding into node table rows that do exist succeeds ... checks that string-keys work
+        column_names_string_keyed = get_table_column_names()
+        test_data_string_keyed = df.DataFrame(data={'id': ['YDL194W', 'YDR277C', 'YBR043C'], 'newcol': [1, 2, 3]})
+        res = load_table_data(test_data_string_keyed, data_key_column='id', table='node', table_key_column='name')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
 
         # Verify that ID column and newcol were added, and that the newcols have values only for the named nodes
+        check_values_added(column_names_string_keyed, 'name', test_data_string_keyed, 'id', 'newcol')
+
+        # Given newcol values, use them as non-string keys to add yet another column
+        column_names_int_keyed = get_table_column_names()
+        test_data_int_keyed = df.DataFrame(data={'newcol_val': [1, 2, 3], 'derived': [100, 200, 300]})
+        res = load_table_data(test_data_int_keyed, data_key_column='newcol_val', table='node', table_key_column='newcol')
+        self.assertEqual(res, 'Success: Data loaded in defaultnode table')
+
+        # Verify that newcol_val column and derived were added, and that derived hase values only for the newcol nodes
+        check_values_added(column_names_int_keyed, 'newcol', test_data_int_keyed, 'newcol_val', 'derived')
+
+        # Verify that addign data into edge table rows that do exist succeeds
+        column_names_string_keyed = get_table_column_names(table='edge')
+        test_data_string_keyed = df.DataFrame(data={'id_e': ['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W', 'YPR145W (pp) YMR117C'], 'newcol_e': [1000, 2000, 3000]})
+        res = load_table_data(test_data_string_keyed, data_key_column='id_e', table='edge', table_key_column='name')
+        self.assertEqual(res, 'Success: Data loaded in defaultedge table')
+
+        # Verify that newcol_val column and derived were added, and that derived hase values only for the newcol nodes
+        check_values_added(column_names_string_keyed, 'name', test_data_string_keyed, 'id_e', 'newcol_e', table='edge')
+
         data = get_table_columns()
-        self.assertEqual(len(column_names) + 2, len(data.columns))
-        self.assertIn('id', data.columns)
-        self.assertIn('newcol', data.columns)
-        added_data = data[data['name'] == data['id']]
-        self.assertEqual(len(test_data.index), len(added_data.index))
-        verify_each_newcol_value = [added_data[added_data['id'] == row['id']].iloc[0]['newcol'] == row['newcol'] for
-                                    row_index, row in test_data.iterrows()]
-        self.assertNotIn(False, verify_each_newcol_value)
-
-
         self.assertRaises(CyError, load_table_data, data, table='bogus')
         self.assertRaises(CyError, load_table_data, data, namespace='bogus')
         self.assertRaises(CyError, load_table_data, data, network='bogus')

@@ -392,8 +392,8 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         raise CyError('Failed to load data. Please check data_key_column.')
 
     # verify that there is at least one key in the Cytoscape table that matches a key in the data
-    table_keys = table_key_column_values[table_key_column].values
-    filter = [key in table_keys for key in data[data_key_column]]
+    table_keys = table_key_column_values[table_key_column].astype(str).values
+    filter = [str(key) in table_keys     for key in data[data_key_column]]
     if not True in filter:
         raise CyError(f'Provided table key column "{table_key_column}" and data key column "{data_key_column}" do not contain any matches')
 
