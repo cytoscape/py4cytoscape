@@ -290,7 +290,7 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         [1022, [1099, 1100]]
     """
     if edge_names is None: return None
-    if isinstance(edge_names, str): edge_names = [edge_names]
+    if isinstance(edge_names, str) or isinstance(edge_names, int): edge_names = [edge_names]
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
 
     all_suids = df.index

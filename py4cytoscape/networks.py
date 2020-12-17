@@ -290,6 +290,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     """
     if get_network_count(base_url=base_url):
         cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
+        # TODO: This is horribly slow for large networks ... it gets the network in JS format and then digs out the name
         cy_network_names = [commands.cyrest_get(f'networks/{suid}', base_url=base_url)['data']['name'] for suid in
                             cy_networks_suids]
     else:
@@ -695,7 +696,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
     Notes: This function is kinda slow. It takes approximately 70ms per edge to return a result, e.g., 850 edges will take one minute.
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    if isinstance(edges, str): edges = [edges]
+    if isinstance(edges, str) or isinstance(edges, int): edges = [edges]
 
     def convert_edge_name_to_edge_info(edge_name):
         edge_suid = edge_name_to_edge_suid(edge_name, network, base_url=base_url)

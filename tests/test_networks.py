@@ -392,7 +392,7 @@ class NetworkTests(unittest.TestCase):
         # Initialization
         load_test_session()
 
-        def check_edge_info(edge_info, source_name, target_name, edge_name, betweenness):
+        def check_single_edge_info(edge_info, source_name, target_name, edge_name, betweenness):
             source_suid = node_name_to_node_suid(source_name)[0]
             target_suid = node_name_to_node_suid(target_name)[0]
             edge_suid = edge_name_to_edge_suid(edge_name)[0]
@@ -407,29 +407,40 @@ class NetworkTests(unittest.TestCase):
             self.assertEqual(edge_info['interaction'], 'pp')
             self.assertEqual(edge_info['EdgeBetweenness'], betweenness)
 
+        def check_list_edge_info(edge_list, expected_edge_list):
+            # Check edge list ... edges can be either names or SUIDs
+            res = get_edge_info(edge_list)
+            self.assertIsInstance(res, list)
+            self.assertEqual(len(res), len(expected_edge_list))
+            suid_list = []
+            for edge_info, expected_edge in zip(res, expected_edge_list):
+                check_single_edge_info(edge_info, expected_edge['source_name'], expected_edge['target_name'],
+                                       expected_edge['edge_name'], expected_edge['betweenness'])
+                suid_list.append(edge_info['SUID'])
+            return suid_list
+
+        def check_named_edge_info(edge_list, expected_edge_list):
+            # Check edge list ... assume it's edge names
+            suid_list = check_list_edge_info(edge_list, expected_edge_list)
+
+            # Check edge list ... use SUIDs for edges
+            check_list_edge_info(suid_list, expected_edge_list)
+
         # Verify that a string containing an edge returns valid edge information
-        res = get_edge_info('YDR277C (pp) YDL194W')
-        self.assertIsInstance(res, list)
-        self.assertEqual(len(res), 1)
-        check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
+        check_named_edge_info('YDR277C (pp) YDL194W', [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0}])
 
         # Verify that a list containing an edge returns valid edge information
-        res = get_edge_info(['YDR277C (pp) YDL194W'])
-        self.assertIsInstance(res, list)
-        self.assertEqual(len(res), 1)
-        check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
+        check_named_edge_info(['YDR277C (pp) YDL194W'], [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0}])
 
         # Verify that a list containing multiple edges returns valid edge information
-        res = get_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'])
-        self.assertIsInstance(res, list)
-        self.assertEqual(len(res), 2)
-        check_edge_info(res[0], 'YDR277C', 'YDL194W', 'YDR277C (pp) YDL194W', 496.0)
-        check_edge_info(res[1], 'YDR277C', 'YJR022W', 'YDR277C (pp) YJR022W', 988.0)
+        check_named_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'],
+                              [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0},
+                               {'source_name': 'YDR277C', 'target_name': 'YJR022W', 'edge_name': 'YDR277C (pp) YJR022W', 'betweenness': 988.0}])
 
         # Verify the error when a bad edge is requested
         self.assertRaises(CyError, get_edge_info, 'junk')
+        self.assertRaises(CyError, get_edge_info, -1)
 
-    
     @print_entry_exit
     def test_get_all_edges(self):
         # Initialization
