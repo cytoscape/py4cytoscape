@@ -384,14 +384,14 @@ def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE
     return True
 
 # ------------------------------------------------------------------------------
-def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL):
+def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
     """Checks to see if min supported versions of api and cytoscape are running.
 
     Extracts numerics from api and major cytoscape versions before making comparison.
 
     Args:
         cyrest (int): minimum CyREST version
-        cytoscape (float): minimum Cytoscape version
+        cytoscape (float or str): minimum Cytoscape version ... should be str if version > 3.9
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -400,11 +400,16 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
          None
 
     Raises:
-        none
+        CyRest: if required version is greater than current version
+        AttributeError: if required version can't be parsed
 
     Examples:
         >>> verify_supported_versions(1, 3.7)
+        >>> verify_supported_versions(1, '3.10')
     """
+    if caller is None: caller = sys._getframe(1).f_code.co_name
+    if isinstance(cytoscape, float): cytoscape = str(cytoscape)
+
     v = cytoscape_system.cytoscape_version_info(base_url=base_url)
     v_api_str = v['apiVersion']
     v_cy_str = v['cytoscapeVersion']
@@ -412,11 +417,21 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     v_cy_num = float(re.match('([0-9]+\\.[0-9]+)\\..*$', v_cy_str).group(1))
     nogo = None
 
+    # Check the CyREST version
     if cyrest > v_api_num:
         nogo = 'CyREST API version %d or greater is required. You are currently working with version %d.' % (cyrest, v_api_num)
 
-    if cytoscape > v_cy_num:
-        nogo = 'Cytoscape version %0.2g or greater is required. You are currently working with version %0.2g.' % (cytoscape, v_cy_num)
+    # Check the Cytoscape version
+    re_v_cytoscape = re.match('([0-9]+)\\.([0-9]+)\\..*$', v_cy_str)
+    v_cytoscape_major = int(re_v_cytoscape.group(1))
+    v_cytoscape_minor = int(re_v_cytoscape.group(2))
+
+    re_cytoscape = re.match('([0-9]+)\\.([0-9]+)*$', cytoscape)
+    required_cytoscape_major = int(re_cytoscape.group(1))
+    required_cytoscape_minor = int(re_cytoscape.group(2))
+
+    if required_cytoscape_major > v_cytoscape_major or (required_cytoscape_major == v_cytoscape_major and required_cytoscape_minor > v_cytoscape_minor):
+        nogo = f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
 
     if nogo: raise CyError(f'Function not run due to unsupported version: {nogo}')
 

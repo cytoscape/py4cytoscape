@@ -114,6 +114,16 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertEqual(edge_name_to_edge_suid(suids), suids)
         self.assertRaises(CyError, edge_name_to_edge_suid, names_with_none)
 
+    @print_entry_exit
+    def test_verify_supported_versions(self):
+        verify_supported_versions() # Function shouldn't have thrown an exception
+        self.assertRaises(CyError, verify_supported_versions, cyrest=2)
+        verify_supported_versions(cytoscape=3.7)
+        verify_supported_versions(cytoscape='3.7')
+        self.assertRaises(CyError, verify_supported_versions, cytoscape='3.200')
+        verify_supported_versions(cytoscape='2.7')
+        self.assertRaises(CyError, verify_supported_versions, cytoscape='4.0')
+        self.assertRaises(AttributeError, verify_supported_versions, cytoscape='complete trash')
 
 if __name__ == '__main__':
     unittest.main()
