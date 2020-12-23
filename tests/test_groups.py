@@ -94,49 +94,56 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that all nodes and edges produces right nodes, internal edges and external edges
         group_0 = create_group('group 0')['group']
-        check_group('group 0', lambda x: add_to_group(x, nodes='all', edges='all'), set(all_nodes) | {group_0},
-                    set(all_edges), set())
+        check_group('group 0',
+                    lambda x: add_to_group(x, nodes='all', edges='all'),
+                    expected_nodes=set(all_nodes) | {group_0},
+                    expected_internal_edges=set(all_edges),
+                    expected_external_edges=set())
 
-        # Create a group out of just 2 selected nodes
+        # Create group1 out of just 2 selected nodes
         select_nodes(selection_2_nodes['nodes'])
         group = create_group('group 1')
         group_id = group['group']
 
-        # Verify that adding a list of nodes by SUID produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: add_to_group(x, list(
-            set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))), set(selection_3_nodes['nodes']), set(),
-                    set(selection_3_nodes['edges']))
+        # Verify that adding a list of nodes (i.e., AHP1) by SUID produces right nodes, internal edges and external edges
+        check_group('group 1',
+                    lambda x: add_to_group(x, nodes = list(set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))),
+                    expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP1
+                    expected_internal_edges=set(),
+                    expected_external_edges=set(selection_3_nodes['edges']))
 
-        # Verify that adding a list of edges by SUID produces right nodes, internal edges and external edges ... and doesn't allow selected nodes (PEP12) in
+        # Verify that adding a list of edges by SUID produces right nodes, internal edges and external edges
         edge_GDS1_PFK27 = add_cy_edges(['YOR355W', 'YOL136C'])[0]['SUID']
         edge_GDS1_PEP12 = add_cy_edges(['YOR355W', 'YOR036W'])[0]['SUID']
         select_nodes(['PEP12'], by_col='COMMON')  # should not end up in group 1 ... verify to be sure
-        check_group('group 1', lambda x: add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]),
-                    set(selection_3_nodes['nodes']), {edge_GDS1_PFK27},
-                    set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
+        check_group('group 1',
+                    lambda x: add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]),
+                    expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP
+                    expected_internal_edges={edge_GDS1_PFK27},
+                    expected_external_edges=set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
 
         # Verify that adding a selected node (PEP12) produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: add_to_group(x),
-                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
-                    {edge_GDS1_PFK27, edge_GDS1_PEP12},
-                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
-                        selection_PEP12_node['edges']))
+        check_group('group 1',
+                    lambda x: add_to_group(x),
+                    expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
+                    expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
 
         # Verify that adding nothing at all produces right nodes, internal edges and external edges
         select_all_nodes()
         select_all_edges()
-        check_group('group 1', lambda x: add_to_group(x, nodes=[], edges=[]),
-                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
-                    {edge_GDS1_PFK27, edge_GDS1_PEP12},
-                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
-                        selection_PEP12_node['edges']))
+        check_group('group 1',
+                    lambda x: add_to_group(x, nodes=[], edges=[]),
+                    expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
+                    expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
 
         # Verify that adding a column by COMMON produces right nodes, internal edges and external edges
-        check_group('group 1', lambda x: add_to_group(x, nodes='COMMON:AHP1'),
-                    set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {
-                        selection_AHP1_node['nodes'][0]}, {edge_GDS1_PFK27, edge_GDS1_PEP12},
-                    set(selection_3_nodes['edges']) | set(selection_3_nodes['edges']) | set(
-                        selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
+        check_group('group 1',
+                    lambda x: add_to_group(x, nodes='COMMON:AHP1'),
+                    expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {selection_AHP1_node['nodes'][0]},
+                    expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
+                    expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
 
         self.assertRaises(CyError, add_to_group, 'group x', nodes='COMMON:AHP1', network='Bogus')
 
@@ -217,62 +224,92 @@ class GroupsTests(unittest.TestCase):
         check_group_info(group_1_suid, False)
         check_group_info(group_2_suid, False)
         check_group_info(group_3_suid, False)
-        verify(lambda: None, lambda: expand_group(), set(),
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group(),
+               op_res=set(),
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing all selected groups if none are selected
-        verify(lambda: None, lambda: collapse_group(), set(),
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group(),
+               op_res=set(),
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing a selected group doesn't affect others
-        verify(lambda: select_nodes([group_2_suid]), lambda: collapse_group(), {group_2_suid},
-               [(group_1_suid, False), (group_2_suid, True), (group_3_suid, False)])
-        verify(lambda: select_nodes([group_3_suid]), lambda: collapse_group(), {group_2_suid, group_3_suid},
-               [(group_1_suid, False), (group_2_suid, True), (group_3_suid, True)])
+        verify(pre_conditioning=lambda: select_nodes([group_2_suid]),
+               operation=lambda: collapse_group(),
+               op_res={group_2_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, True), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: select_nodes([group_3_suid]),
+               operation=lambda: collapse_group(),
+               op_res={group_2_suid, group_3_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify collapsing an unselected group doesn't affect others
-        verify(lambda: None, lambda: collapse_group('unselected'), {group_1_suid},
-               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group('unselected'),
+               op_res={group_1_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify that expanding selected groups doesn't affect others
-        verify(lambda: None, lambda: expand_group(), {group_2_suid, group_3_suid},
-               [(group_1_suid, True), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group(),
+               op_res={group_2_suid, group_3_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify that expanding unselected groups doesn't affect others
-        verify(lambda: None, lambda: expand_group('unselected'), {group_1_suid},
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group('unselected'),
+               op_res={group_1_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: collapse_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid},
-               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group(['Group 1', 'Group 2']),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: expand_group(['Group 1', 'Group 2']), {group_1_suid, group_2_suid},
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group(['Group 1', 'Group 2']),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: collapse_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
-               {group_1_suid, group_2_suid}, [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in list) doesn't affect the third
-        verify(lambda: None, lambda: expand_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
-               {group_1_suid, group_2_suid}, [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: collapse_group('Group 1,Group 2'), {group_1_suid, group_2_suid},
-               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group('Group 1,Group 2'),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
         # Verify expanding two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: expand_group('Group 1,Group 2'), {group_1_suid, group_2_suid},
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group('Group 1,Group 2'),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         # Verify collapsing all groups works
-        verify(lambda: None, lambda: collapse_group('all'), {group_1_suid, group_2_suid, group_3_suid},
-               [(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group('all'),
+               op_res={group_1_suid, group_2_suid, group_3_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, True)])
 
         # Verify expanding two specific groups (in string) doesn't affect the third
-        verify(lambda: None, lambda: expand_group('all'), {group_1_suid, group_2_suid, group_3_suid},
-               [(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group('all'),
+               op_res={group_1_suid, group_2_suid, group_3_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
         self.assertRaises(CyError, collapse_group, -1)
         self.assertRaises(CyError, expand_group, -1)
@@ -337,20 +374,33 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that test group has right nodes, internal edges and external edges
         group_0 = create_group('group 0', nodes=selection_GDS1_PFK27['nodes'])['group']
-        self._check_group_info('group 0', 'group 0', group_0, set(selection_GDS1_PFK27['nodes']), set(),
-                               set(selection_GDS1_PFK27['edges']))
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
 
         # Verify that removing GDS1 and its edges results in only PFK27 and its edges
-        self.assertDictEqual(remove_from_group('group 0', ['GDS1'], nodes_by_col='COMMON'), {})
-        self._check_group_info('group 0', 'group 0', group_0,
-                               set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(),
-                               set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))
+        self.assertDictEqual(remove_from_group('group 0', nodes=['GDS1'], nodes_by_col='COMMON'), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))
 
         # Verify that removing the PFK27 edges leaves only the PFK27 node
-        self.assertDictEqual(remove_from_group('group 0', nodes=[], edges=list(
-            set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))), {})
-        self._check_group_info('group 0', 'group 0', group_0,
-                               set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']), set(), set())
+        self.assertDictEqual(remove_from_group('group 0',
+                                               nodes=[],
+                                               edges=list(set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))),
+                             {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
 
         # Verify that operating on an unknown group does nothing
         self.assertDictEqual(remove_from_group('bogus group'), {})
