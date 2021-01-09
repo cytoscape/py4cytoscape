@@ -531,17 +531,29 @@ class StyleBypassesTests(unittest.TestCase):
             color_check = [name in cur_colors and cur_colors[name] == set_color     for cur, name in zip(cur_colors, all_names['name'])]
             self.assertFalse(False in color_check)
 
+        # Verify that a list of names gets the property set when property is a list of 1
         res = bypass_func(list(all_names['name']), ['#FF0000'], visual_property)
         check_bypass(res, '#FF0000')
 
+        # Verify that a string list of names gets the property set
+        res = bypass_func(','.join(list(all_names['name'])), ['#880000'], visual_property)
+        check_bypass(res, '#880000')
+
+        # Verify that a list of names gets the property set when property is a scalar
         res = bypass_func(list(all_names['name']), '#FF00FF', visual_property)
         check_bypass(res, '#FF00FF')
 
+        # Verify that a list of names gets the property set when property is a list of one value for each name
         res = bypass_func(list(all_names['name']), ['#0000FF'] * len(all_names.index), visual_property)
         check_bypass(res, '#0000FF')
 
+        # Verify that a list of SUIDs gets the property set
         res = bypass_func(list(all_names.index), ['#00FF00'], visual_property)
         check_bypass(res, '#00FF00')
+
+        # Verify that a string list of SUIDs gets the property set
+        res = bypass_func(str(list(all_names.index))[1:-1], ['#008800'], visual_property)
+        check_bypass(res, '#008800')
 
         # TODO: Figure out what this should return ... with None for node list
         # self.assertEqual(set_node_property_bypass(None, ['#FF0000'], visual_property), '')
@@ -573,10 +585,17 @@ class StyleBypassesTests(unittest.TestCase):
             color_check = [name in cur_colors and cur_colors[name] == set_color     for cur, name in zip(cur_colors, all_names['name'])]
             self.assertFalse(False in color_check)
 
-        # Verify that when all nodes have colors, supplying node names clears them all
+        # Verify that when all nodes have colors, supplying a list of node names clears them all
         res = bypass_func(list(all_names['name']), ['#FF0000'], visual_property)
         check_bypass(res, '#FF0000')
         self.assertDictEqual(clear_func(list(all_names['name']), visual_property), {'data': {}, 'errors': []})
+        reset_colors = getter_func(visual_property=visual_property)
+        self.assertDictEqual(reset_colors, orig_colors)
+
+        # Verify that when all nodes have colors, supplying a string list of node names clears them all
+        res = bypass_func(list(all_names['name']), ['#880000'], visual_property)
+        check_bypass(res, '#880000')
+        self.assertDictEqual(clear_func(','.join(list(all_names['name'])), visual_property), {'data': {}, 'errors': []})
         reset_colors = getter_func(visual_property=visual_property)
         self.assertDictEqual(reset_colors, orig_colors)
 
@@ -584,6 +603,13 @@ class StyleBypassesTests(unittest.TestCase):
         res = bypass_func(list(all_names['name']), ['#FF00CC'], visual_property)
         check_bypass(res, '#FF00CC')
         self.assertDictEqual(clear_func(list(all_names.index), visual_property),
+                             {'data': {}, 'errors': []})
+        self.assertDictEqual(getter_func(visual_property=visual_property), orig_colors)
+
+        # Verify that when all nodes have colors, supplying string list of node SUIDs clears them all
+        res = bypass_func(list(all_names['name']), ['#FF0088'], visual_property)
+        check_bypass(res, '#FF0088')
+        self.assertDictEqual(clear_func(str(list(all_names.index))[1:-1], visual_property),
                              {'data': {}, 'errors': []})
         self.assertDictEqual(getter_func(visual_property=visual_property), orig_colors)
 

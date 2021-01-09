@@ -126,7 +126,10 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
     """Select nodes in the network by SUID, name or other column values.
 
     Args:
-        nodes (list): List of node SUIDs, names or other column values
+        nodes (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``.
         by_col (str): Node table column to lookup up provide node values. Default is 'SUID'.
         preserve_current_selection (bool): Whether to maintain previously selected nodes.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -147,6 +150,12 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         {}
         >>> select_nodes(['RAP1'], by_col='COMMON')
         {'nodes': [107514], 'edges': []}
+        >>> select_nodes('RAP1, HIS4', by_col='COMMON')
+        {'nodes': [107514, 107511], 'edges': []}
+        >>> select_nodes([107514, 107511])
+        {'nodes': [107514, 107511], 'edges': []}
+        >>> select_nodes(107514])
+        {'nodes': [107514], 'edges': []}
 
     Note:
         In the return value, node list is the SUIDs of newly selected nodes
@@ -157,13 +166,15 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
     if not preserve_current_selection: clear_selection(type='nodes', network=suid, base_url=base_url)
 
     # TODO: See why R version works with empty nodes list (which should mean "all") or a node list (which is missing a close ")
-    if not nodes or len(nodes) == 0:
+    if not nodes or nodes == '':  # take care of case where nodes is empty
         node_list_str = ''
     else:
+        nodes = normalize_list(nodes)
+
         # create list of COL:VALUE that includes all requested nodes
-        node_list_str = by_col + ':' + str(nodes[0])
+        node_list_str = f'{by_col}:{nodes[0]}' # Allow leading or trailing blanks
         for n in range(1, len(nodes)):
-            node_list_str += ',' + by_col + ':' + str(nodes[n])
+            node_list_str += f',{by_col}:{nodes[n]}'
     res = commands.commands_post(f'network select network=SUID:"{suid}" nodeList="{node_list_str}"', base_url=base_url)
     return res
 
@@ -173,9 +184,6 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """Selects all nodes in a Cytoscape Network.
 
     Args:
-        nodes (list): List of node SUIDs, names or other column values
-        by_col (str): Node table column to lookup up provide node values. Default is 'SUID'.
-        preserve_current_selection (bool): Whether to maintain previously selected nodes.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -396,8 +404,11 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
     """Select edges in the network by SUID, name or other column values.
 
     Args:
-        edges (list): List of edge SUIDs, names or other column values
-        by.col (str): Edge table column to lookup up provide edge values. Default is 'SUID'.
+        edges (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``SUID`` column of the ``edge table`` unless
+            specified in ``edges_by_col``.
+        by_col (str): Edge table column to lookup up provide edge values. Default is 'SUID'.
         preserve_current_selection (bool): Whether to maintain previously selected edges.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -415,9 +426,15 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
     Examples:
         >>> select_edges(None)
         {}
-        >>> select_edges([103332], preserve_current_selection=False, network='My Network')
+        >>> select_edges([103332, 108034], preserve_current_selection=False, network='My Network')
         {'nodes': [], 'edges': [108033, 108034]}
+        >>> select_edges(103332, preserve_current_selection=False, network='My Network')
+        {'nodes': [], 'edges': [108033]}
+        >>> select_edges('YGL035C (pd) YIL162W', by_col='name', preserve_current_selection=False, network='My Network')
+        {'nodes': [], 'edges': [108033]}
         >>> select_edges(['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C'], by_col='name', preserve_current_selection=True, network=52)
+        {'nodes': [], 'edges': [108033, 108034, 108103]}
+        >>> select_edges('YGL035C (pd) YIL162W, YGL035C (pd) YLR044C, YNL216W (pd) YLR044C', by_col='name', preserve_current_selection=True, network=52)
         {'nodes': [], 'edges': [108033, 108034, 108103]}
 
     Note:
@@ -430,13 +447,15 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
 
     # TODO: See why R version works with empty nodes list (which should mean "all") or a node list (which is missing a close ")
     # TODO: Should edges default to None?
-    if not edges or len(edges) == 0:
+    if not edges or edges == '':
         edge_list_str = ''
     else:
+        edges = normalize_list(edges)
+
         # create list of COL:VALUE that includes all requested nodes
-        edge_list_str = by_col + ':' + str(edges[0])
+        edge_list_str = f'{by_col}:{edges[0]}'
         for n in range(1, len(edges)):
-            edge_list_str += ',' + by_col + ':' + str(edges[n])
+            edge_list_str += f',{by_col}:{edges[n]}'
     res = commands.commands_post(f'network select network=SUID:"{suid}" edgeList="{edge_list_str}"',
                                  base_url=base_url)
     return res

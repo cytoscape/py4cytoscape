@@ -92,8 +92,8 @@ class NetworkSelectionTests(unittest.TestCase):
         def _test_first_neighbors(direction, expected_selection):
             clear_selection()
             select_nodes(['RAP1'], by_col='COMMON')
-            first_neighbor_nodes = select_first_neighbors(direction=direction)['nodes'] if direction else \
-            select_first_neighbors()['nodes']
+            first_neighbor_nodes = select_first_neighbors(direction=direction)['nodes'] \
+                if direction else select_first_neighbors()['nodes']
             first_names = set(df_all_nodes[df_all_nodes.index.isin(first_neighbor_nodes)]['COMMON'])
             self.assertSetEqual(first_names, expected_selection)
 
@@ -123,6 +123,7 @@ class NetworkSelectionTests(unittest.TestCase):
         load_test_session()
         df_all_nodes = get_table_columns(columns='COMMON')
         all_suids = set(df_all_nodes.index)
+        all_suids_str = str(all_suids)[1:-1]
         suid_RAP1 = df_all_nodes[df_all_nodes['COMMON'] == 'RAP1'].index[0]
         suid_GCR1 = df_all_nodes[df_all_nodes['COMMON'] == 'GCR1'].index[0]
         suid_PDC1 = df_all_nodes[df_all_nodes['COMMON'] == 'PDC1'].index[0]
@@ -131,16 +132,78 @@ class NetworkSelectionTests(unittest.TestCase):
         # Verify that selecting no nodes reports that no nodes were selected
         self.assertDictEqual(select_nodes(None), {})
 
-        # Verify that all nodes are reported as selected
+        # Verify that all nodes in a SUID list are reported as selected
+        clear_selection()
         all_selected = select_nodes(list(all_suids))['nodes']
         self.assertSetEqual(all_suids, set(all_selected))
 
-        # Verify that only RAP1 is reported selected
+        # Verify that all nodes in a SUID string list are reported as selected
+        clear_selection()
+        all_selected = select_nodes(all_suids_str)['nodes']
+        self.assertSetEqual(all_suids, set(all_selected))
+
+        # Verify that only RAP1 is reported selected when RAP1 is in list
         clear_selection()
         nodes_selected = select_nodes(['RAP1'], by_col='COMMON')['nodes']
         self.assertSetEqual(set(nodes_selected), set([suid_RAP1]))
 
-        # Verify that only RAP1 and GCR1 are reported selected
+        # Verify that only RAP1 is reported selected when RAP1 is string
+        clear_selection()
+        nodes_selected = select_nodes('RAP1', by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1]))
+
+        # Verify that only RAP1 is reported selected when RAP1's SUID is in list
+        clear_selection()
+        nodes_selected = select_nodes([suid_RAP1])['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1]))
+
+        # Verify that only RAP1 is reported selected when RAP1's SUID is string
+        clear_selection()
+        nodes_selected = select_nodes(str(suid_RAP1))['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1]))
+
+        # Verify that only RAP1 is reported selected when RAP1's SUID is int
+        clear_selection()
+        nodes_selected = select_nodes(suid_RAP1)['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1]))
+
+        # Verify that only list of RAP1 and GCR1 are reported selected, and then
+        # Verify that adding list of PDC1 is reported selected and that RAP1 and GCR1 remain selected
+        clear_selection()
+        nodes_selected = select_nodes(['RAP1', 'GCR1'], by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1, suid_GCR1]))
+        nodes_selected = select_nodes(['PDC1'], by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_PDC1]))
+        self.assertSetEqual(set(get_selected_nodes(node_suids=True)), set([suid_RAP1, suid_GCR1, suid_PDC1]))
+
+        # Verify that only string list of RAP1 and GCR1 are reported selected, and then
+        # Verify that adding string of PDC1 is reported selected and that RAP1 and GCR1 remain selected
+        clear_selection()
+        nodes_selected = select_nodes('RAP1,GCR1', by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1, suid_GCR1]))
+        nodes_selected = select_nodes('PDC1', by_col='COMMON')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_PDC1]))
+        self.assertSetEqual(set(get_selected_nodes(node_suids=True)), set([suid_RAP1, suid_GCR1, suid_PDC1]))
+
+        # Verify that only list of RAP1 and GCR1 SUIDs are reported selected, and then
+        # Verify that adding list of PDC1 SUID is reported selected and that RAP1 and GCR1 remain selected
+        clear_selection()
+        nodes_selected = select_nodes([suid_RAP1, suid_GCR1])['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1, suid_GCR1]))
+        nodes_selected = select_nodes([suid_PDC1])['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_PDC1]))
+        self.assertSetEqual(set(get_selected_nodes(node_suids=True)), set([suid_RAP1, suid_GCR1, suid_PDC1]))
+
+        # Verify that only string list of RAP1 and GCR1 SUIDs are reported selected, and then
+        # Verify that adding PDC1 SUID is reported selected and that RAP1 and GCR1 remain selected
+        clear_selection()
+        nodes_selected = select_nodes(f'{suid_RAP1}, {suid_GCR1}')['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_RAP1, suid_GCR1]))
+        nodes_selected = select_nodes(str(suid_PDC1))['nodes']
+        self.assertSetEqual(set(nodes_selected), set([suid_PDC1]))
+        self.assertSetEqual(set(get_selected_nodes(node_suids=True)), set([suid_RAP1, suid_GCR1, suid_PDC1]))
+
+        # Verify that only list of RAP1 and GCR1 are reported selected
         clear_selection()
         nodes_selected = select_nodes(['RAP1', 'GCR1'], by_col='COMMON')['nodes']
         self.assertSetEqual(set(nodes_selected), set([suid_RAP1, suid_GCR1]))
@@ -281,27 +344,50 @@ class NetworkSelectionTests(unittest.TestCase):
     def test_select_edges(self):
         # Initialization
         load_test_session()
-        SINGLE_EDGE = ['YDR412W (pp) YPR119W']
+        SINGLE_EDGE_STR = 'YDR412W (pp) YPR119W'
+        SINGLE_EDGE = [SINGLE_EDGE_STR]
         single_edge_suid = edge_name_to_edge_suid(SINGLE_EDGE)  # expected edges
-        EDGE_LIST = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+        EDGE_LIST_STR = 'YGL035C (pd) YIL162W, YGL035C (pd) YLR044C, YNL216W (pd) YLR044C'
+        EDGE_LIST = [str.strip(x)   for x in str.split(EDGE_LIST_STR, ',')]
         edge_list_suids = edge_name_to_edge_suid(EDGE_LIST)  # expected edges
+        edge_list_suids_str = str(edge_list_suids)[1:-1]
 
         # Verify that selecting all edges works
         self.assertDictEqual(select_edges(None), {})
 
-        # Verify that selecting a single edge works
+        # Verify that selecting a single edge by SUID works
         selection = select_edges(single_edge_suid, preserve_current_selection=False)
         self.assertSetEqual(set(single_edge_suid), set(selection['edges']))
         self.assertListEqual(selection['nodes'], [])
 
-        # Verify that selecting multiple edge works, and that it adds to the previously selected edge
-        selection = select_edges(EDGE_LIST, by_col='name', preserve_current_selection=True)
+        # Verify that selecting multiple edges by SUID list works
+        selection = select_edges(edge_list_suids, preserve_current_selection=False)
         self.assertSetEqual(set(edge_list_suids), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
+
+        # Verify that selecting multiple edges by SUID string list works
+        selection = select_edges(edge_list_suids_str, preserve_current_selection=False)
+        self.assertSetEqual(set(edge_list_suids), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
+
+        # Verify that selecting single edge by name list works, and that it adds to the previously selected edge
+        selection = select_edges(SINGLE_EDGE, by_col='name', preserve_current_selection=True)
+        self.assertSetEqual(set(single_edge_suid), set(selection['edges']))
         self.assertListEqual(selection['nodes'], [])
         expected_edges = single_edge_suid.copy()
         expected_edges.extend(edge_list_suids)
         selected_edges = get_selected_edges(edge_suids=True)
         self.assertSetEqual(set(expected_edges), set(selected_edges))
+
+        # Verify that selecting multiple edges by name string list works
+        selection = select_edges(EDGE_LIST_STR, by_col='name', preserve_current_selection=False)
+        self.assertSetEqual(set(edge_list_suids), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
+
+        # Verify that selecting single edge by edge name string works
+        selection = select_edges(SINGLE_EDGE_STR, by_col='name', preserve_current_selection=False)
+        self.assertSetEqual(set(single_edge_suid), set(selection['edges']))
+        self.assertListEqual(selection['nodes'], [])
 
         self.assertRaises(CyError, select_edges, None, network='bogus')
 

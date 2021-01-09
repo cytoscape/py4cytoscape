@@ -182,17 +182,24 @@ class StyleValuesTests(unittest.TestCase):
         self.assertRaises(CyError, get_network_zoom, network='BogusNetwork')
 
     def _check_get_property(self, getter_func, names_param, table, visual_property, data_column, single_name, single_value):
+        # Create various flavors of parameter lists for getter_func, including lists and string lists of names and suids
         if data_column is None:
             all_names = get_table_columns(columns=['name'], table=table)
         else:
             all_names = get_table_columns(columns=['name', data_column], table=table)
         prop_param = {} if visual_property is None else {'visual_property': visual_property}
         all_names_param = {names_param: list(all_names['name'])}
+        all_names_str_param = {names_param: ','.join(list(all_names['name']))}
         all_suids_param = {names_param: list(all_names.index)}
+        all_suids_str_param = {names_param: str(list(all_names.index))[1:-1]}
         prop_names_params = all_names_param.copy()
         prop_names_params.update(prop_param)
+        prop_names_str_params = all_names_str_param.copy()
+        prop_names_str_params.update(prop_param)
         prop_suids_params = all_suids_param.copy()
         prop_suids_params.update(prop_param)
+        prop_suids_str_params = all_suids_str_param.copy()
+        prop_suids_str_params.update(prop_param)
         single_name_params = {names_param: single_name}
         single_name_params.update(prop_param)
 
@@ -204,13 +211,23 @@ class StyleValuesTests(unittest.TestCase):
             name_found = [name in name_value_dict and value == name_value_dict[name]     for name, value in zip(all_names['name'], all_names[data_column])]
             self.assertFalse(False in name_found)
 
-        # Verify that the same visual properties are returned when the nodes/edges are identified by name
+        # Verify that the same visual properties are returned when the nodes/edges are identified by name list
         by_name_dict = getter_func(**prop_names_params)
+        self.assertDictEqual(by_name_dict, name_value_dict)
+
+        # Verify that the same visual properties are returned when the nodes/edges are identified by string name list
+        by_name_dict = getter_func(**prop_names_str_params)
         self.assertDictEqual(by_name_dict, name_value_dict)
 
         # Verify that the same visual properties are returned when nodes/edges are identified by SUID
         # This means looking the SUID up in the all_names table, getting the name, and then using prior test's result
         by_suid_dict = getter_func(**prop_suids_params)
+        suid_found = [by_suid_dict[suid] == name_value_dict[all_names['name'][suid]]   for suid in by_suid_dict]
+        self.assertFalse(False in suid_found)
+
+        # Verify that the same visual properties are returned when nodes/edges are identified by string SUID list
+        # This means looking the SUID up in the all_names table, getting the name, and then using prior test's result
+        by_suid_dict = getter_func(**prop_suids_str_params)
         suid_found = [by_suid_dict[suid] == name_value_dict[all_names['name'][suid]]   for suid in by_suid_dict]
         self.assertFalse(False in suid_found)
 

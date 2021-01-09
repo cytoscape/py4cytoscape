@@ -39,11 +39,15 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
 
     Args:
         group_name (str): Specifies the name used to identify the group
-        nodes (list or str or None): List of node SUIDs, names, other column values, or keyword: selected,
-            unselected or all. Default is currently selected nodes.
+        nodes (list or str or int or None): List of nodes or keyword: selected, unselected or all. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID). Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``. If list is None, default is currently selected nodes.
         nodes_by_col (str): name of node table column corresponding to provided nodes list. Default is 'SUID'.
-        edges (list or str or None): List of edge SUIDs, names, other column values, or keyword: selected,
-            unselected or all. Default is currently selected edges.
+        edges (list or str or None): List of edges or keyword: selected, unselected or all. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID). Edge names should be found in the ``SUID`` column of the ``edge table`` unless
+            specified in ``edges_by_col``. If list is None, default is currently selected edges.
         edges_by_col (str): name of edge table column corresponding to provided edges list. Default is 'SUID'.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -63,16 +67,22 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
         {}
         >>> add_to_group('Group 1') # add all selected nodes and edges
         {}
-        >>> add_to_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON', edges=[]) # add all selected nodes and no edges
+        >>> add_to_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON', edges=[]) # add named nodes and no edges
+        {}
+        >>> add_to_group('Group 1', 'GDS1, SIP4, PDC1', nodes_by_col='COMMON', edges=[]) # add named nodes and no edges
+        {}
+        >>> add_to_group('Group 1', [1544, 1444, 1522], edges=[]) # add named nodes and no edges
+        {}
+        >>> add_to_group('Group 1', '1544, 1444, 1522', edges=[]) # add named nodes and no edges
         {}
         >>> add_to_group('Group 1', nodes='unselected', edges='unselected') # add all unselected nodes and edges
         {}
     """
     if isinstance(nodes, str) and nodes in {'all', 'selected', 'unselected'}: nodes_by_col = None
-    node_list = _prep_post_query_lists(nodes, nodes_by_col)
+    node_list = prep_post_query_lists(nodes, nodes_by_col)
 
     if isinstance(edges, str) and edges in {'all', 'selected', 'unselected'}: edges_by_col = None
-    edge_list = _prep_post_query_lists(edges, edges_by_col)
+    edge_list = prep_post_query_lists(edges, edges_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
@@ -111,8 +121,10 @@ def collapse_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
         {'groups': [95335, 95336]}
         >>> collapse_group(['SUID:95335', 'SUID:95336']) # collapse 2 groups
         {'groups': [95335, 95336]}
+        >>> collapse_group('SUID:95335,SUID:95336') # collapse 2 groups
+        {'groups': [95335, 95336]}
     """
-    group_list = _prep_post_query_lists(groups)
+    group_list = prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(f'group collapse groupList="{group_list}" network="SUID:{net_suid}"',
                                  base_url=base_url)
@@ -125,8 +137,10 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
 
     Args:
         group_name (str): The name used to identify and optionaly label the group
-        nodes (list or str or None): List of node SUIDs, names, other column values, or keyword: selected,
-            unselected or all. Default is currently selected nodes.
+        nodes (list or str or int or None): List of nodes or keyword: selected, unselected or all. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID). Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``. If list is None, default is currently selected nodes.
         nodes_by_col (str): name of node table column corresponding to provided nodes list. Default is 'SUID'.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -144,6 +158,10 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     Examples:
         >>> create_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON') # create group containing nodes by common name
         {'group': 95335}
+        >>> create_group('Group 1', 'GDS1, SIP4, PDC1', nodes_by_col='COMMON') # create group containing nodes by common name
+        {'group': 95335}
+        >>> create_group('Group 1', [1344, 1502, 1723]) # create group containing nodes by node SUID
+        {'group': 95335}
         >>> create_group('Group 1') # create group containing all selected nodes
         {'group': 95335}
         >>> create_group('Group 1', []) # create group with no nodes
@@ -154,7 +172,7 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
     # TODO: Determine whether group_name can be null ... Commands help says it can be optional
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
 
-    node_list = _prep_post_query_lists(nodes, nodes_by_col)
+    node_list = prep_post_query_lists(nodes, nodes_by_col)
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
         f'group create groupName="{group_name}" nodeList="{node_list}" network="SUID:{net_suid}"',
@@ -225,8 +243,10 @@ def expand_group(groups=None, network=None, base_url=DEFAULT_BASE_URL):
         {'groups': [95335, 95336]}
         >>> expand_group(['SUID:95335', 'SUID:95336']) # expand 2 groups
         {'groups': [95335, 95336]}
+        >>> expand_group('SUID:95335,SUID:95336') # expand 2 groups
+        {'groups': [95335, 95336]}
     """
-    group_list = _prep_post_query_lists(groups)
+    group_list = prep_post_query_lists(groups)
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
         f'group expand groupList="{group_list}" network="SUID:{net_suid}"', base_url=base_url)
@@ -317,11 +337,15 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
 
     Args:
         group_name (str): Specifies the name used to identify the group
-        nodes (list or str or None): List of node SUIDs, names, other column values, or keyword: selected,
-            unselected or all. Default is currently selected nodes.
+        nodes (list or str or int or None): List of nodes or keyword: selected, unselected or all. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID). Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``. If list is None, default is currently selected nodes.
         nodes_by_col (str): name of node table column corresponding to provided nodes list. Default is 'SUID'.
-        edges (list or str or None): List of edge SUIDs, names, other column values, or keyword: selected,
-            unselected or all. Default is currently selected edges.
+        edges (str or list or int or None): List of edges or keyword: selected, unselected or all. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID). Edge names should be found in the ``SUID`` column of the ``edge table`` unless
+            specified in ``edges_by_col``. If list is None, default is currently selected edges.
         edges_by_col (str): name of edge table column corresponding to provided edges list. Default is 'SUID'.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -339,6 +363,12 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
     Examples:
         >>> remove_from_group('Group 1', ['GDS1', 'SIP4', 'PDC1'], nodes_by_col='COMMON') # remove nodes by common name & all their edges
         {}
+        >>> remove_from_group('Group 1', 'GDS1, SIP4, PDC1', nodes_by_col='COMMON') # remove nodes by common name & all their edges
+        {}
+        >>> remove_from_group('Group 1', [76545, 75499, 80299]) # remove nodes by SUID & all their edges
+        {}
+        >>> remove_from_group('Group 1', 80299) # remove node by SUID & all its edges
+        {}
         >>> remove_from_group('Group 1') # remove all selected nodes and edges
         {}
         >>> remove_from_group('Group 1', nodes=[], edges=[78565, 79565]) # remove edges but not any nodes
@@ -347,10 +377,10 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
         {}
     """
     if isinstance(nodes, str) and nodes in {'all', 'selected', 'unselected'}: nodes_by_col = None
-    node_list = _prep_post_query_lists(nodes, nodes_by_col)
+    node_list = prep_post_query_lists(nodes, nodes_by_col)
 
     if isinstance(edges, str) and edges in {'all', 'selected', 'unselected'}: edges_by_col = None
-    edge_list = _prep_post_query_lists(edges, edges_by_col)
+    edge_list = prep_post_query_lists(edges, edges_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(
@@ -383,7 +413,11 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
     Examples:
         >>> delete_group(['Group 1', 'Group 2'], groups_by_col='shared name') # delete groups by name
         {'groups':[7970, 7980]}
+        >>> delete_group('Group 1,Group 2', groups_by_col='shared name') # delete groups by name
+        {'groups':[7970, 7980]}
         >>> delete_group([7970]) # delete groups by SUID
+        {'groups':[7970]}
+        >>> delete_group(7970) # delete groups by SUID
         {'groups':[7970]}
         >>> delete_group() # delete all selected groups
         {'groups':[7970, 7980]}
@@ -394,25 +428,10 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
         Group nodes are ungrouped but not deleted in Cytoscape 3.6.1
     """
     if isinstance(groups, str) and groups in {'all', 'selected', 'unselected'}: groups_by_col = None
-    group_list = _prep_post_query_lists(groups, groups_by_col)
+    group_list = prep_post_query_lists(groups, groups_by_col)
 
     net_suid = networks.get_network_suid(network, base_url=base_url)
     res = commands.commands_post(f'group ungroup nodeList="{group_list}" network="SUID:{net_suid}"', base_url=base_url)
     # TODO: The R implementation uses the groupList parameter, which conflicts with the command documentation
     return res
 
-
-# ------------------------------------------------------------------------------
-# Parses all the possible list types and keywords accepted by Commands API.
-# If column designation is supported, simply provide a column name; otherwise
-# it is assumed to not be supported and returns a simple list.
-def _prep_post_query_lists(cmd_list=None, cmd_by_col=None):
-    if cmd_list is None:
-        return "selected"  # need something here for edge selections to work
-    elif cmd_by_col and isinstance(cmd_list, list):
-        return ','.join([cmd_by_col + ':' + str(cmd) for cmd in cmd_list])
-    elif isinstance(cmd_list, list):
-        return ','.join(cmd_list)
-    else:
-        return cmd_list  # Note that this supposes the string is already a comma-separated list of COL:NAME ... and cmd_by_col is safely ignored
-# TODO: Verify that this produces the same thing as R would for all cases ... particularly for [], which should select nothing

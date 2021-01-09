@@ -65,7 +65,9 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     or nodes specified. To restore defaults and mappings, use ``clear_node_property_bypass()``.
 
     Args:
-        node_names (list): List of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_values (list): List of values to set, or single value
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
         bypass (bool): Whether to set permanent bypass value. Default is True
@@ -86,8 +88,14 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
         >>> node_names = list(get_table_columns(columns='name')['name'])
         >>> set_node_property_bypass(node_names, '#FF00FF', 'NODE_FILL_COLOR')
         ''
+        >>> set_node_property_bypass('YDL194W, YDR277C', '#FF00FF', 'NODE_FILL_COLOR')
+        ''
         >>> node_suids = list(get_table_columns(columns='name').index)
         >>> set_node_property_bypass(node_suids, ['#FF00FF'], 'NODE_FILL_COLOR', network='galFiltered.sif')
+        ''
+        >>> set_node_property_bypass('12755, 13877', '#FF00FF', 'NODE_FILL_COLOR')
+        ''
+        >>> set_node_property_bypass(12755, ['#FF00FF'], 'NODE_FILL_COLOR', network='galFiltered.sif')
         ''
 
     See Also:
@@ -130,7 +138,9 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
     style defaults or mappings.
 
     Args:
-        node_names (list): List of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
         bypass (bool): Whether to set permanent bypass value. Default is True
         network (SUID or str or None): Name or SUID of a network. Default is the
@@ -151,8 +161,14 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
         >>> node_names = list(get_table_columns(columns='name')['name'])
         >>> clear_node_property_bypass(node_names, 'NODE_FILL_COLOR')
         ''
+        >>> clear_node_property_bypass('YDL194W, YDR277C', 'NODE_FILL_COLOR')
+        ''
         >>> node_suids = list(get_table_columns(columns='name').index)
         >>> clear_node_property_bypass(node_suids, 'NODE_FILL_COLOR', network='galFiltered.sif')
+        ''
+        >>> clear_node_property_bypass('12755, 13877', 'NODE_FILL_COLOR')
+        ''
+        >>> clear_node_property_bypass(12755, 'NODE_FILL_COLOR', network='galFiltered.sif')
         ''
 
     See Also:
@@ -197,7 +213,9 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     or edges specified. To restore defaults and mappings, use ``clear_edge_property_bypass()``.
 
     Args:
-        edge_names (list): List of edgenames
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_values (list): List of values to set, or single value
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
         bypass (bool): Whether to set permanent bypass value. Default is True
@@ -218,8 +236,14 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
         >>> edge_names = list(get_table_columns(table='edge', columns='name')['name'])
         >>> set_edge_property_bypass(edge_names, '#FF00FF', 'EDGE_UNSELECTED_PAINT')
         {'data': {}, 'errors': []}
+        >>> set_edge_property_bypass('YDR277C (pp) YDL194W, YDR277C (pp) YJR022W', ['#FF00FF'], 'EDGE_UNSELECTED_PAINT')
+        {'data': {}, 'errors': []}
         >>> edge_suids = list(get_table_columns(table='edge', columns='name').index)
         >>> set_edge_property_bypass(edge_suids, ['#FF00FF'], 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
+        {'data': {}, 'errors': []}
+        >>> set_edge_property_bypass('12755, 13877', ['#FF00FF'], 'EDGE_UNSELECTED_PAINT')
+        {'data': {}, 'errors': []}
+        >>> set_edge_property_bypass(12755, '#FF00FF', 'EDGE_UNSELECTED_PAINT')
         {'data': {}, 'errors': []}
 
     See Also:
@@ -262,7 +286,9 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
     style defaults or mappings.
 
     Args:
-        edge_names (list): List of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
         bypass (bool): Whether to set permanent bypass value. Default is True
         network (SUID or str or None): Name or SUID of a network. Default is the
@@ -283,8 +309,14 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
         >>> edge_names = list(get_table_columns(table='edge', columns='name')['name'])
         >>> clear_edge_property_bypass(edge_names, 'EDGE_UNSELECTED_PAINT')
         {'data': {}, 'errors': []}
+        >>> clear_edge_property_bypass('YDR277C (pp) YDL194W, YDR277C (pp) YJR022W', 'EDGE_UNSELECTED_PAINT')
+        {'data': {}, 'errors': []}
         >>> edge_suids = list(get_table_columns(table='edge', columns='name').index)
         >>> clear_edge_property_bypass(edge_suids, 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
+        {'data': {}, 'errors': []}
+        >>> clear_edge_property_bypass('12755, 13877', 'EDGE_UNSELECTED_PAINT')
+        {'data': {}, 'errors': []}
+        >>> clear_edge_property_bypass(12755, 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
         {'data': {}, 'errors': []}
 
     See Also:
@@ -464,7 +496,9 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_colors (str or list): list of hex colors or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -484,12 +518,19 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
         ''
         >>> set_node_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
+        >>> set_node_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_color_bypass([1255, 1988], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_color_bypass('1255, 1988', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_color_bypass(1255, '#FF00FF', network='galFiltered.sif')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if isinstance(new_colors, str): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
@@ -506,7 +547,9 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_sizes (int or float or list): list of size values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -524,7 +567,15 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     Examples:
         >>> set_node_size_bypass(get_node_names(), 50)
         ''
+        >>> set_node_size_bypass('YDL194W, YBR043C', [150.5, 90.5], network='galFiltered.sif')
+        ''
         >>> set_node_size_bypass(['YDL194W', 'YBR043C'], [150.5, 90.5], network='galFiltered.sif')
+        ''
+        >>> set_node_size_bypass([1255, 1988], [150.5, 90.5], network='galFiltered.sif')
+        ''
+        >>> set_node_size_bypass('1255, 1988', [150.5, 90.5], network='galFiltered.sif')
+        ''
+        >>> set_node_size_bypass(1255, 150.5, network='galFiltered.sif')
         ''
 
     Note:
@@ -534,8 +585,7 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [
-        new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
     verify_dimensions('size', new_sizes)
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
@@ -552,7 +602,9 @@ def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFA
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_tooltip (str or list): list of size values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -572,6 +624,14 @@ def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFA
         ''
         >>> set_node_tooltip_bypass(['YDL194W', 'YBR043C'], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
         ''
+        >>> set_node_tooltip_bypass('YDL194W, YBR043C', ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_node_tooltip_bypass([1255, 1988], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_node_tooltip_bypass('1255, 1988', ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_node_tooltip_bypass(1255, 'One Tooltip', network='galFiltered.sif')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -590,7 +650,9 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_widths (int or float or list): list of width values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -610,14 +672,21 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
         ''
         >>> set_node_width_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
         ''
+        >>> set_node_width_bypass('YDL194W, YBR043C', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_width_bypass([1255, 1988], [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_width_bypass('1255, 1988', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_width_bypass(1255, 80)
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     style_dependencies.lock_node_dimensions(False)
 
-    if not isinstance(new_widths, list): new_widths = [
-        new_widths]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_widths, list): new_widths = [new_widths]
     verify_dimensions('width', new_widths)
 
     res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
@@ -634,7 +703,9 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_heights (int or float or list): list of height values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -654,14 +725,21 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
         ''
         >>> set_node_height_bypass(['YDL194W', 'YBR043C'], [80, 100.5], network='galFiltered.sif')
         ''
+        >>> set_node_height_bypass('YDL194W, YBR043C', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_height_bypass([1255, 1988], [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_height_bypass('1255, 1988', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_node_height_bypass(1255, 80)
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     style_dependencies.lock_node_dimensions(False)
 
-    if not isinstance(new_heights, list): new_heights = [
-        new_heights]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_heights, list): new_heights = [new_heights]
     verify_dimensions('height', new_heights)
 
     res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
@@ -678,7 +756,9 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_labels (str or list): list of label values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -698,6 +778,14 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
         ''
         >>> set_node_label_bypass(['YDL194W', 'YBR043C'], ['A', 'B'], network='galFiltered.sif')
         ''
+        >>> set_node_label_bypass('YDL194W, YBR043C', ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_bypass([1255, 1988], ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_bypass('1255, 1988', ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_bypass(1255, 'test label')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -716,7 +804,9 @@ def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFA
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_fonts (str or list): list of font values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -736,6 +826,14 @@ def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFA
         ''
         >>> set_node_font_face_bypass(['YDL194W', 'YBR043C'], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
         ''
+        >>> set_node_font_face_bypass('YDL194W, YBR043C', ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_node_font_face_bypass([1255, 1988], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_node_font_face_bypass('1255, 1988', ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_node_font_face_bypass(1255, 'Dialog.italic,plain,20')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -754,7 +852,9 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_sizes (int or float or list): list of font sizes or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -774,12 +874,19 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
         ''
         >>> set_node_font_size_bypass(['YDL194W', 'YBR043C'], [50, 100], network='galFiltered.sif')
         ''
+        >>> set_node_font_size_bypass('YDL194W, YBR043C', [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_node_font_size_bypass([1255, 1988], [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_node_font_size_bypass('1255, 1988', [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_node_font_size_bypass(1255, 20)
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [
-        new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
     verify_dimensions('size', new_sizes)
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network,
@@ -797,7 +904,9 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_colors (str or list):  list of hex colors, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -817,12 +926,19 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
         ''
         >>> set_node_label_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
+        >>> set_node_label_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_color_bypass([1255, 1988], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_color_bypass('1255, 1988', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_color_bypass(1255, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
@@ -840,7 +956,9 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_shapes (str or list):  List of shapes, or single value. See ``get_node_shapes()``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -860,12 +978,19 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
         ''
         >>> set_node_shape_bypass(['YDL194W', 'YBR043C'], ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
         ''
+        >>> set_node_shape_bypass('YDL194W, YBR043C', ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
+        ''
+        >>> set_node_shape_bypass([1255, 1988], ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
+        ''
+        >>> set_node_shape_bypass('1255, 1988', ['ROUND_RECTANGLE', 'OCTAGON'], network='galFiltered.sif')
+        ''
+        >>> set_node_shape_bypass(1255, 'ROUND_RECTANGLE')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [
-        new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
 
     if len(node_names) != len(new_shapes) and len(new_shapes) != 1:
         raise CyError(
@@ -898,7 +1023,9 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_sizes (int or float or list): list of size values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -918,12 +1045,19 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
         ''
         >>> set_node_border_width_bypass(['YDL194W', 'YBR043C'], [10, 20.5], network='galFiltered.sif')
         ''
+        >>> set_node_border_width_bypass('YDL194W, YBR043C', [10, 20.5], network='galFiltered.sif')
+        ''
+        >>> set_node_border_width_bypass([1255, 1988], [10, 20.5], network='galFiltered.sif')
+        ''
+        >>> set_node_border_width_bypass('1255, 1988', [10, 20.5], network='galFiltered.sif')
+        ''
+        >>> set_node_border_width_bypass(1255, 10)
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [
-        new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
     verify_dimensions('size', new_sizes)
 
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_BORDER_WIDTH', network=network, base_url=base_url)
@@ -940,7 +1074,9 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_colors (str or list): list of hex colors or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -960,12 +1096,19 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
         ''
         >>> set_node_border_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
+        >>> set_node_border_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_border_color_bypass([1255, 1988], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_border_color_bypass('1255, 1988', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_node_border_color_bypass(1255, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if isinstance(new_colors, str): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
@@ -982,7 +1125,9 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -998,16 +1143,23 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_node_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> set_node_opacity_bypass(get_node_names(), 128)
         ''
         >>> set_node_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_opacity_bypass('YDL194W, YBR043C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_opacity_bypass([1255, 1988], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_opacity_bypass('1255, 1988', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_opacity_bypass(1255, 128)
         ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     # TODO: Concerned about losing intermediate res results
@@ -1027,7 +1179,9 @@ def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_UR
     restoring any previously defined style defaults or mappings.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -1045,6 +1199,14 @@ def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_UR
         >>> clear_node_opacity_bypass(get_node_names())
         ''
         >>> clear_node_opacity_bypass(['YDL194W', 'YBR043C'], network='galFiltered.sif')
+        ''
+        >>> clear_node_opacity_bypass('YDL194W, YBR043C', network='galFiltered.sif')
+        ''
+        >>> clear_node_opacity_bypass([1255, 1988], network='galFiltered.sif')
+        ''
+        >>> clear_node_opacity_bypass('1255, 1988', network='galFiltered.sif')
+        ''
+        >>> clear_node_opacity_bypass(1255)
         ''
 
     See Also:
@@ -1067,7 +1229,9 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1083,16 +1247,23 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_node_fill_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> set_node_fill_opacity_bypass(get_node_names(), 128)
         ''
         >>> set_node_fill_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_fill_opacity_bypass('YDL194W, YBR043C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_fill_opacity_bypass([1255, 1988], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_fill_opacity_bypass('1255, 1988', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_fill_opacity_bypass(1255, 128)
         ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
@@ -1109,7 +1280,9 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1125,16 +1298,23 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_node_border_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> set_node_border_opacity_bypass(get_node_names(), 128)
         ''
         >>> set_node_border_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_border_opacity_bypass('YDL194W, YBR043C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_border_opacity_bypass([1255, 1988], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_border_opacity_bypass('1255, 1988', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_border_opacity_bypass(1255, 128)
         ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
@@ -1152,7 +1332,9 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
     ``clear_node_property_bypass()``, see examples.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1168,16 +1350,23 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_node_label_opacity_bypass(get_node_names(), '#FF00FF')
+        >>> set_node_label_opacity_bypass(get_node_names(), 128)
         ''
         >>> set_node_label_opacity_bypass(['YDL194W', 'YBR043C'], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_label_opacity_bypass('YDL194W, YBR043C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_label_opacity_bypass([1255, 1988], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_label_opacity_bypass('1255, 1988', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_node_label_opacity_bypass(1255, 128)
         ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network,
@@ -1234,7 +1423,9 @@ def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     can be used to set any visual property. To restore defaults and mappings, use ``unhide_nodes()`` or ``unhide_all()``.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -1252,6 +1443,14 @@ def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> hide_nodes(get_node_names())
         ''
         >>> hide_nodes(['YDL194W', 'YBR043C'], network='galFiltered.sif')
+        ''
+        >>> hide_nodes('YDL194W, YBR043C', network='galFiltered.sif')
+        ''
+        >>> hide_nodes([1255, 1988], network='galFiltered.sif')
+        ''
+        >>> hide_nodes('1255, 1988', network='galFiltered.sif')
+        ''
+        >>> hide_nodes(1255, network='galFiltered.sif')
         ''
 
     See Also:
@@ -1271,7 +1470,9 @@ def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
     clear any visual property.
 
     Args:
-        node_names (list): list of node names
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -1289,6 +1490,14 @@ def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> hide_nodes(get_node_names())
         ''
         >>> hide_nodes(['YDL194W', 'YBR043C'], network='galFiltered.sif')
+        ''
+        >>> hide_nodes('YDL194W, YBR043C', network='galFiltered.sif')
+        ''
+        >>> hide_nodes([1255, 1988], network='galFiltered.sif')
+        ''
+        >>> hide_nodes('1255, 1988', network='galFiltered.sif')
+        ''
+        >>> hide_nodes(1255)
         ''
 
     See Also:
@@ -1313,7 +1522,9 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1333,12 +1544,19 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
         ''
         >>> set_edge_opacity_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [128, 192], network='galFiltered.sif')
         ''
+        >>> set_edge_opacity_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_opacity_bypass([10288, 16300], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_opacity_bypass('10288, 16300', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_opacity_bypass(10288, 128)
+        ''
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     # TODO: Concerned about losing intermediate res results
@@ -1358,7 +1576,9 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_colors (str or list): list of hex colors or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1378,12 +1598,19 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
         ''
         >>> set_edge_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
+        >>> set_edge_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_edge_color_bypass([10288, 16300], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_edge_color_bypass('10288, 16300', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        ''
+        >>> set_edge_color_bypass(10288, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if isinstance(new_colors, str): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     # TODO: What to do about lost res?
@@ -1403,7 +1630,9 @@ def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_labels (str or list): list of label values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1423,6 +1652,14 @@ def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT
         ''
         >>> set_edge_label_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['A', 'B'], network='galFiltered.sif')
         ''
+        >>> set_edge_label_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_bypass([10288, 16300], ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_bypass('10288, 16300', ['A', 'B'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_bypass(10288, 'test label')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1441,7 +1678,9 @@ def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFA
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_fonts (str or list): list of font values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1461,6 +1700,14 @@ def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFA
         ''
         >>> set_edge_font_face_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
         ''
+        >>> set_edge_font_face_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_face_bypass([10288, 16300], ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_face_bypass('10288, 16300', ['Dialog.italic,plain,20', 'Dialog.bold,plain,10'], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_face_bypass(10288, 'Dialog.italic,plain,20')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1479,7 +1726,9 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_sizes (int or float or list): list of font sizes or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1499,12 +1748,19 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
         ''
         >>> set_edge_font_size_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [50, 100], network='galFiltered.sif')
         ''
+        >>> set_edge_font_size_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_size_bypass([10288, 16300], [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_size_bypass('10288, 16300', [50, 100], network='galFiltered.sif')
+        ''
+        >>> set_edge_font_size_bypass(10288, 20)
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [
-        new_sizes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
     verify_dimensions('size', new_sizes)
 
     res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network,
@@ -1522,7 +1778,9 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_colors (str or list):  list of hex colors, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1542,12 +1800,19 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
         ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
+        >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass(10288, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_LABEL_COLOR', network=network, base_url=base_url)
@@ -1565,7 +1830,9 @@ def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFA
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_tooltip (str or list): list of size values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1585,6 +1852,14 @@ def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFA
         ''
         >>> set_edge_tooltip_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
         ''
+        >>> set_edge_tooltip_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_edge_tooltip_bypass([10288, 16300], ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_edge_tooltip_bypass('10288, 16300', ['One Tooltip', 'Other Tooltip'], network='galFiltered.sif')
+        ''
+        >>> set_edge_tooltip_bypass(10288, 'Some Tooltip')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1603,7 +1878,9 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_widths (int or float or list): list of width values or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1623,13 +1900,20 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
         ''
         >>> set_edge_width_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [80, 100.5], network='galFiltered.sif')
         ''
+        >>> set_edge_width_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_edge_width_bypass([10288, 16300], [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_edge_width_bypass('10288, 16300', [80, 100.5], network='galFiltered.sif')
+        ''
+        >>> set_edge_width_bypass(10288, 80)
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
 
-    if not isinstance(new_widths, list): new_widths = [
-        new_widths]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_widths, list): new_widths = [new_widths]
     verify_dimensions('width', new_widths)
 
     res = set_edge_property_bypass(edge_names, new_widths, 'EDGE_WIDTH', network=network, base_url=base_url)
@@ -1646,7 +1930,9 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_styles (str or list):  List of styles, or single value.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1666,12 +1952,19 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
         ''
         >>> set_edge_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['SOLID', 'ZIGZAG'], network='galFiltered.sif')
         ''
+        >>> set_edge_shape_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['SOLID', 'ZIGZAG'], network='galFiltered.sif')
+        ''
+        >>> set_edge_shape_bypass([10288, 16300], ['SOLID', 'ZIGZAG'], network='galFiltered.sif')
+        ''
+        >>> set_edge_shape_bypass('10288, 16300', ['SOLID', 'ZIGZAG'], network='galFiltered.sif')
+        ''
+        >>> set_edge_shape_bypass(10288, 'SOLID')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_styles, list): new_styles = [
-        new_styles]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_styles, list): new_styles = [new_styles]
 
     for style in new_styles:
         if style not in styles.get_line_styles(base_url=base_url):
@@ -1692,7 +1985,9 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_shapes (str or list):  List of styles, or single value.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1712,12 +2007,19 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
         ''
         >>> set_edge_source_arrow_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
         ''
+        >>> set_edge_source_arrow_shape_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_source_arrow_shape_bypass([10288, 16300], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_source_arrow_shape_bypass('10288, 16300', ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_source_arrow_shape_bypass(10288, 'ARROW')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [
-        new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
@@ -1739,7 +2041,9 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_shapes (str or list):  List of styles, or single value.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1759,12 +2063,19 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
         ''
         >>> set_edge_target_arrow_shape_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
         ''
+        >>> set_edge_target_arrow_shape_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_target_arrow_shape_bypass([10288, 16300], ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_target_arrow_shape_bypass('10288, 16300', ['DIAMOND', 'CIRCLE'], network='galFiltered.sif')
+        ''
+        >>> set_edge_target_arrow_shape_bypass(10288, 'ARROW')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [
-        new_shapes]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
 
     for style in new_shapes:
         if style not in styles.get_arrow_shapes(base_url=base_url):
@@ -1786,7 +2097,9 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_colors (str or list):  list of hex colors, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1806,12 +2119,19 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
         ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
+        >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass(10288, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network,
@@ -1830,7 +2150,9 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_colors (str or list):  list of hex colors, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1850,12 +2172,19 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
         ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
+        >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_color_bypass(10288, '#FF00FF')
+        ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [
-        new_colors]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_colors, list): new_colors = [new_colors]
     verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network,
@@ -1874,7 +2203,9 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
     ``clear_edge_property_bypass()``, see examples.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         new_values (int or float or list): list of values to set, or single value
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -1890,16 +2221,23 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> set_edge_label_opacity_bypass(get_edge_names(), '#FF00FF')
+        >>> set_edge_label_opacity_bypass(get_edge_names(), 128)
         ''
         >>> set_edge_label_opacity_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_opacity_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_opacity_bypass([10288, 16300], [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_opacity_bypass('10288, 16300', [128, 192], network='galFiltered.sif')
+        ''
+        >>> set_edge_label_opacity_bypass(10288, 128)
         ''
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [
-        new_values]  # TODO: It looks like this should be happening everywhere?
+    if not isinstance(new_values, list): new_values = [new_values]
     verify_opacities(new_values)
 
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
@@ -1956,7 +2294,9 @@ def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     can be used to set any visual property. To restore defaults and mappings, use ``unhide_edges()`` or ``unhide_all()``.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -1974,6 +2314,14 @@ def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> hide_edges(get_edge_names())
         ''
         >>> hide_edges(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], network='galFiltered.sif')
+        ''
+        >>> hide_edges('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', network='galFiltered.sif')
+        ''
+        >>> hide_edges([10288, 16300], network='galFiltered.sif')
+        ''
+        >>> hide_edges('10288, 16300', network='galFiltered.sif')
+        ''
+        >>> hide_edges(10288)
         ''
 
     See Also:
@@ -1993,7 +2341,9 @@ def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     clear any visual property.
 
     Args:
-        edge_names (list): list of edge names
+        edge_names (str or list or int or None): List of edges as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -2011,6 +2361,14 @@ def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> unhide_edges(get_edge_names())
         ''
         >>> unhide_edges(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], network='galFiltered.sif')
+        ''
+        >>> unhide_edges('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', network='galFiltered.sif')
+        ''
+        >>> unhide_edges([10288, 16300], network='galFiltered.sif')
+        ''
+        >>> unhide_edges('10288, 16300', network='galFiltered.sif')
+        ''
+        >>> unhide_edges(10288)
         ''
 
     See Also:

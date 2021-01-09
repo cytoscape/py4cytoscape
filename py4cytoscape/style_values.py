@@ -46,7 +46,10 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
     """Get values for any node property of the specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -66,10 +69,16 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
         {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C', ...}
         >>> get_node_property(visual_property='NODE_LABEL', node_names=['YIL070C', 'YHR198C'])
         {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C'}
+        >>> get_node_property(visual_property='NODE_LABEL', node_names='YIL070C, YHR198C')
+        {'YIL070C': 'MAM33', 'YHR198C': 'YHR198C'}
         >>> get_node_property(visual_property='NODE_LABEL', node_names=[391173, 391172, 391175])
+        {391173: 'RPL11B', 391172: 'SXM1', 391175: 'MPT1'}
+        >>> get_node_property(visual_property='NODE_LABEL', node_names='391173, 391172, 391175')
         {391173: 'RPL11B', 391172: 'SXM1', 391175: 'MPT1'}
         >>> get_node_property(visual_property='NODE_LABEL', node_names='YER112W', network='galFiltered.sif')
         {'YER112W': 'LSM4'}
+        >>> get_node_property(visual_property='NODE_LABEL', node_names=391173, network='galFiltered.sif')
+        {391173: 'RPL11B'}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -85,8 +94,7 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
         node_props = {name: node['view'][0]['value'] for node, name in zip(res, node_names)}
         return node_props
     else:
-        if isinstance(node_names, str): node_names = [node_names]
-        # TODO: Should this be a split(',')
+        node_names = normalize_list(node_names)
         node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url)
         node_props = {node_name: commands.cyrest_get(
             f'networks/{net_suid}/views/{view_suid}/nodes/{node_suid}/{visual_property}', base_url=base_url)['value']
@@ -102,7 +110,10 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
     any default, mapping and bypass setting.
 
     Args:
-        edge_names (list): List of edge names or node SUIDs. Default is None for all edges.
+        edge_names (str or list or int or None): List of edges or None. If node list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``name`` column of the ``edge table``. If list is None,
+            default is all edges.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -122,8 +133,14 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         {'YJR022W (pp) YNL050C': 'pp', 'YKR026C (pp) YGL122C': 'pp', ...}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names=['YCL067C (pd) YIL015W', 'YCR084C (pp) YCL067C'])
         {'YCL067C (pd) YIL015W': 'pd', 'YCR084C (pp) YCL067C': 'pp'}
+        >>> get_edge_property(visual_property='EDGE_LABEL', edge_names='YCL067C (pd) YIL015W, YCR084C (pp) YCL067C')
+        {'YCL067C (pd) YIL015W': 'pd', 'YCR084C (pp) YCL067C': 'pp'}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names=[393222, 393223])
         {393222: 'pd', 393223: 'pp'}
+        >>> get_edge_property(visual_property='EDGE_LABEL', edge_names='393222, 393223')
+        {393222: 'pd', 393223: 'pp'}
+        >>> get_edge_property(visual_property='EDGE_LABEL', edge_names=393222)
+        {393222: 'pd'}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names='YDR277C (pp) YJR022W', network='galFiltered.sif')
         {'YDR277C (pp) YJR022W': 'pp'}
     """
@@ -141,8 +158,7 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         edge_props = {name: edge['view'][0]['value'] for edge, name in zip(res, edge_names)}
         return edge_props
     else:
-        if isinstance(edge_names, str): edge_names = [edge_names]
-        # TODO: Should this be a split(',')
+        edge_names = normalize_list(edge_names)
         edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url)
         edge_props = {edge_name: commands.cyrest_get(
             f'networks/{net_suid}/views/{view_suid}/edges/{edge_suid}/{visual_property}', base_url=base_url)['value']
@@ -200,7 +216,10 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual fill color of specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -219,8 +238,14 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3', ...}
         >>> get_node_color(['YOR215C', 'YBL026W', 'YOL149W'])
         {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3'}
+        >>> get_node_color('YOR215C, YBL026W, YOL149W')
+        {'YOR215C': '#FFFFEC', 'YBL026W': '#FCFDFE', 'YOL149W': '#FFFFE3'}
         >>> get_node_color([395406, 395407, 395404])
         {395406: '#FFFFEC', 395407: '#FCFDFE', 395404: '#FFFFE3'}
+        >>> get_node_color('395406, 395407, 395404')
+        {395406: '#FFFFEC', 395407: '#FCFDFE', 395404: '#FFFFE3'}
+        >>> get_node_color(395406)
+        {395406: '#FFFFEC'}
         >>> get_node_color(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': '#FFFFEC'}
     """
@@ -233,7 +258,10 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual size of specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -252,8 +280,14 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_size(['YOR215C', 'YBL026W', 'YOL149W'])
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        >>> get_node_size('YOR215C, YBL026W, YOL149W')
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_size([395406, 395407, 395404])
         {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_size('395406, 395407, 395404')
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_size(395406)
+        {395406: 50.0}
         >>> get_node_size(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 50.0}
     """
@@ -266,7 +300,10 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual width of specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -285,8 +322,14 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_width(['YOR215C', 'YBL026W', 'YOL149W'])
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        >>> get_node_width('YOR215C, YBL026W, YOL149W')
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_width([395406, 395407, 395404])
         {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_width('395406, 395407, 395404')
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_width(395406)
+        {395406: 50.0}
         >>> get_node_width(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 46.470588235294116}
     """
@@ -299,7 +342,10 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual height of specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -318,8 +364,14 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0, ...}
         >>> get_node_height(['YOR215C', 'YBL026W', 'YOL149W'])
         {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
+        >>> get_node_height('YOR215C, YBL026W, YOL149W')
+        {'YOR215C': 50.0, 'YBL026W': 50.0, 'YOL149W': 50.0}
         >>> get_node_height([395406, 395407, 395404])
         {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_height('395406, 395407, 395404')
+        {395406: 50.0, 395407: 50.0, 395404: 50.0}
+        >>> get_node_height(395406)
+        {395406: 50.0}
         >>> get_node_height(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 46.470588235294116}
     """
@@ -332,7 +384,10 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual x,y position of specified nodes.
 
     Args:
-        node_names (list): List of node names or node SUIDs. Default is None for all nodes.
+        nodes_names (str or list or int or None): List of nodes or None. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
+            default is all nodes.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -397,7 +452,10 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     """Retrieve the actual line width of specified edge.
 
     Args:
-        edge_names (list): List of edge names or edge SUIDs. Default is None for all edges.
+        edge_names (str or list or int or None): List of edges or None. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar node edge
+            or SUID. Edge names should be found in the ``name`` column of the ``edge table``. If list is None,
+            default is all edges.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -416,8 +474,14 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
         {'YLR197W (pp) YOR310C': 2.0, 'YIL074C (pp) YNL311C': 2.0, ...}
         >>> get_edge_line_width(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
         {'YHR084W (pd) YFL026W': 2.0, 'YHR084W (pd) YDR461W': 2.0, 'YMR255W (pp) YGL122C': 2.0}
+        >>> get_edge_line_width('YHR084W (pd) YFL026W, YHR084W (pd) YDR461W, YMR255W (pp) YGL122C')
+        {'YHR084W (pd) YFL026W': 2.0, 'YHR084W (pd) YDR461W': 2.0, 'YMR255W (pp) YGL122C': 2.0}
         >>> get_edge_line_width([421382, 421383, 421380])
         {421382: 2.0, 421383: 2.0, 421380: 2.0}
+        >>> get_edge_line_width('421382, 421383, 421380')
+        {421382: 2.0, 421383: 2.0, 421380: 2.0}
+        >>> get_edge_line_width(421382)
+        {421382: 2.0}
         >>> get_edge_line_width(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 2.0}
     """
@@ -430,7 +494,10 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual line color of specified edges.
 
     Args:
-        edge_names (list): List of edge names or edge SUIDs. Default is None for all edges.
+        edge_names (str or list or int or None): List of edges or None. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar node edge
+            or SUID. Edge names should be found in the ``name`` column of the ``edge table``. If list is None,
+            default is all edges.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -449,8 +516,14 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'YMR117C (pp) YCL032W': '#808080', 'YMR255W (pp) YGL122C': '#808080', 'YNL214W (pp) YGL153W': '#808080', ...}
         >>> get_edge_color(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
         {'YHR084W (pd) YFL026W': '#808080', 'YHR084W (pd) YDR461W': '#808080', 'YMR255W (pp) YGL122C': '#808080'}
+        >>> get_edge_color('YHR084W (pd) YFL026W, YHR084W (pd) YDR461W, YMR255W (pp) YGL122C')
+        {'YHR084W (pd) YFL026W': '#808080', 'YHR084W (pd) YDR461W': '#808080', 'YMR255W (pp) YGL122C': '#808080'}
         >>> get_edge_color([421382, 421383, 421380])
         {421382: '#808080', 421383: '#808080', 421380: '#808080'}
+        >>> get_edge_color('421382, 421383, 421380')
+        {421382: '#808080', 421383: '#808080', 421380: '#808080'}
+        >>> get_edge_color(421382)
+        {421382: '#808080'}
         >>> get_edge_color(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': '#808080'}
     """
@@ -463,7 +536,10 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
     """Retrieve the actual line style of specified edges.
 
     Args:
-        edge_names (list): List of edge names or edge SUIDs. Default is None for all edges.
+        edge_names (str or list or int or None): List of edges or None. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar node edge
+            or SUID. Edge names should be found in the ``name`` column of the ``edge table``. If list is None,
+            default is all edges.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -482,8 +558,14 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
         {'YMR117C (pp) YCL032W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID', 'YNL214W (pp) YGL153W': 'SOLID', ...}
         >>> get_edge_line_style(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
         {'YHR084W (pd) YFL026W': 'SOLID', 'YHR084W (pd) YDR461W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID'}
+        >>> get_edge_line_style('YHR084W (pd) YFL026W, YHR084W (pd) YDR461W, YMR255W (pp) YGL122C')
+        {'YHR084W (pd) YFL026W': 'SOLID', 'YHR084W (pd) YDR461W': 'SOLID', 'YMR255W (pp) YGL122C': 'SOLID'}
         >>> get_edge_line_style([421382, 421383, 421380])
         {421382: 'SOLID', 421383: 'SOLID', 421380: 'SOLID'}
+        >>> get_edge_line_style('421382, 421383, 421380')
+        {421382: 'SOLID', 421383: 'SOLID', 421380: 'SOLID'}
+        >>> get_edge_line_style(421382)
+        {421382: 'SOLID'}
         >>> get_edge_line_style(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 'SOLID'}
     """
@@ -496,7 +578,10 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
     """Retrieve the actual target arrow shape of specified edges.
 
     Args:
-        edge_names (list): List of edge names or edge SUIDs. Default is None for all edges.
+        edge_names (str or list or int or None): List of edges or None. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar node edge
+            or SUID. Edge names should be found in the ``name`` column of the ``edge table``. If list is None,
+            default is all edges.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -515,8 +600,14 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
         {'YMR117C (pp) YCL032W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE', 'YNL214W (pp) YGL153W': 'NONE', ...}
         >>> get_edge_target_arrow_shape(['YHR084W (pd) YFL026W', 'YHR084W (pd) YDR461W', 'YMR255W (pp) YGL122C'])
         {'YHR084W (pd) YFL026W': 'NONE', 'YHR084W (pd) YDR461W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE'}
+        >>> get_edge_target_arrow_shape('YHR084W (pd) YFL026W, YHR084W (pd) YDR461W, YMR255W (pp) YGL122C')
+        {'YHR084W (pd) YFL026W': 'NONE', 'YHR084W (pd) YDR461W': 'NONE', 'YMR255W (pp) YGL122C': 'NONE'}
         >>> get_edge_target_arrow_shape([421382, 421383, 421380])
         {421382: 'NONE', 421383: 'NONE', 421380: 'NONE'}
+        >>> get_edge_target_arrow_shape('421382, 421383, 421380')
+        {421382: 'NONE', 421383: 'NONE', 421380: 'NONE'}
+        >>> get_edge_target_arrow_shape(421382)
+        {421382: 'NONE'}
         >>> get_edge_target_arrow_shape(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 'NONE'}
     """

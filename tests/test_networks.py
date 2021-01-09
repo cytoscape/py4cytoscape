@@ -235,6 +235,9 @@ class NetworkTests(unittest.TestCase):
     def test_get_first_neighbors(self):
         # Initialization
         load_test_session()
+        df_all_nodes = get_table_columns(columns='name')
+        suid_YBR020W = df_all_nodes[df_all_nodes['name'] == 'YBR020W'].index[0]
+        suid_YGL035C = df_all_nodes[df_all_nodes['name'] == 'YGL035C'].index[0]
 
         test_select_nodes(['MIG1', 'GAL1'])
         self.assertSetEqual(set(get_first_neighbors(node_names=None, as_nested_list=False)), set(
@@ -261,6 +264,30 @@ class NetworkTests(unittest.TestCase):
         self.assertSetEqual(set(get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)), set(
             ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
              'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+
+        # Verify that regardless of selection, when a node string list is passed in, it's used
+        self.assertSetEqual(set(get_first_neighbors('YBR020W, YGL035C', as_nested_list=False)), set(
+            ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
+             'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+
+        # Verify that regardless of selection, when a single node string is passed in, it's used
+        self.assertSetEqual(set(get_first_neighbors('YBR020W', as_nested_list=False)),
+                            set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']))
+
+        # Verify that regardless of selection, when a SUID list is passed in, it's used
+        self.assertSetEqual(set(get_first_neighbors([suid_YBR020W, suid_YGL035C], as_nested_list=False)), set(
+            ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
+             'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+
+        # Verify that regardless of selection, when a SUID string list is passed in, it's used
+        self.assertSetEqual(set(get_first_neighbors(str([suid_YBR020W, suid_YGL035C])[1:-1], as_nested_list=False)), set(
+            ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', 'YBR019C', 'YBR020W',
+             'YKL109W', 'YKL074C', 'YDR009W', 'YDR146C']))
+
+        # Verify that regardless of selection, when a single SUID is passed in, it's used
+        self.assertSetEqual(set(get_first_neighbors(suid_YBR020W, as_nested_list=False)),
+                            set(['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']))
+
         self.assertIsNone(get_first_neighbors([], as_nested_list=False))
 
         # TODO: test case of node_names being a single (str) node
@@ -345,6 +372,23 @@ class NetworkTests(unittest.TestCase):
         self.assertEqual(len(res23x), 0)
         self.assertEqual(get_node_count(), start_node_count + 3)
 
+        # Re-initialize to try non-list node lists
+        load_test_session()
+
+        # Verify that one node is actually added
+        res1 = add_cy_nodes('newnode1', skip_duplicate_names=False)
+        self.assertEqual(len(res1), 1)
+        self.assertEqual(res1[0]['name'], 'newnode1')
+        self.assertEqual(get_node_count(), start_node_count + 1)
+
+        # Verify that two nodes are actually added
+        res23 = add_cy_nodes('newnode2, newnode3', skip_duplicate_names=False)
+        self.assertEqual(len(res23), 2)
+        self.assertEqual(res23[0]['name'], 'newnode2')
+        self.assertEqual(res23[1]['name'], 'newnode3')
+        self.assertEqual(get_node_count(), start_node_count + 3)
+
+
     
     @print_entry_exit
     def test_add_cy_edges(self):
@@ -426,13 +470,20 @@ class NetworkTests(unittest.TestCase):
             # Check edge list ... use SUIDs for edges
             check_list_edge_info(suid_list, expected_edge_list)
 
-        # Verify that a string containing an edge returns valid edge information
-        check_named_edge_info('YDR277C (pp) YDL194W', [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0}])
+            # Check edge list as a string instead of a named list
+            edge_list_str = edge_list[0]
+            for x in range(1, len(edge_list)):
+                edge_list_str += ',' + edge_list[x]
+            suid_list = check_list_edge_info(edge_list_str, expected_edge_list)
 
-        # Verify that a list containing an edge returns valid edge information
+            # Check edge list as a string of SUIDs instead of a named list
+            edge_list_suid_str = str(suid_list)[1:-1]
+            check_list_edge_info(edge_list_suid_str, expected_edge_list)
+
+        # Verify that a list containing an edge in a list returns valid edge information
         check_named_edge_info(['YDR277C (pp) YDL194W'], [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0}])
 
-        # Verify that a list containing multiple edges returns valid edge information
+        # Verify that a list containing multiple edges in a list returns valid edge information
         check_named_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'],
                               [{'source_name': 'YDR277C', 'target_name': 'YDL194W', 'edge_name': 'YDR277C (pp) YDL194W', 'betweenness': 496.0},
                                {'source_name': 'YDR277C', 'target_name': 'YJR022W', 'edge_name': 'YDR277C (pp) YJR022W', 'betweenness': 988.0}])
@@ -469,15 +520,53 @@ class NetworkTests(unittest.TestCase):
         load_test_session()
         base_suid = get_network_suid()
         base_name = get_network_name(base_suid)
+        node_common_list_4 = ['RAP1', 'HIS4', 'PDC1', 'RPL18A']
+        node_common_str_4 = ', '.join(node_common_list_4)
+        node_name_str_4 = 'YCL030C,YOL120C,YNL216W,YLR044C'
+        node_suid_list_4 = node_name_to_node_suid(node_name_str_4)
+        node_suid_str_4 = str(node_suid_list_4)[1:-1]
 
         # Verify that a creating a subnet containing all nodes produces a plausible copy
         self._check_cloned_network(create_subnetwork(nodes='all', network=base_suid), base_suid, base_name,
                                    get_node_count(base_suid), get_edge_count(base_suid))
 
-        # Verify that creating a subset subnet produces a plausible copy
+        # Verify that creating a subset subnet via list of common node names produces a plausible copy
         self._check_cloned_network(
-            create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON',
-                                           subnetwork_name=base_name + 'xx', network=base_suid), base_suid, base_name, 4, 3)
+            create_subnetwork(nodes=node_common_list_4, nodes_by_col='COMMON',
+                              subnetwork_name=base_name + 'xx', network=base_suid), base_suid, base_name, 4, 3)
+
+        # Verify that creating a subset subnet via string list of common node names produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes=node_common_str_4, nodes_by_col='COMMON',
+                              subnetwork_name=base_name + 'yy', network=base_suid), base_suid, base_name, 4, 3)
+
+        # Verify that creating a subset subnet via string list of node names produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes=node_name_str_4, nodes_by_col='name',
+                              subnetwork_name=base_name + 'qq', network=base_suid), base_suid, base_name, 4, 3)
+
+        # Verify that creating a subset subnet via single common node name produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes='RAP1', nodes_by_col='COMMON',
+                              subnetwork_name=base_name + 'zz', network=base_suid), base_suid, base_name, 1, 0)
+
+        # Verify that creating a subset subnet via list of node SUIDs produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes=node_suid_list_4,
+                              subnetwork_name=base_name + 'aa', network=base_suid), base_suid, base_name, 4, 3)
+
+        # Verify that creating a subset subnet via string list of node SUIDs produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes=node_suid_str_4,
+                              subnetwork_name=base_name + 'bb', network=base_suid), base_suid, base_name, 4, 3)
+
+        # Verify that creating a subset subnet via single node SUID produces a plausible copy
+        self._check_cloned_network(
+            create_subnetwork(nodes=node_suid_list_4[0],
+                              subnetwork_name=base_name + 'cc', network=base_suid), base_suid, base_name, 1, 0)
+
+        # TODO: Add tests that create subnet by specifying edges
+
 
     
     @print_entry_exit

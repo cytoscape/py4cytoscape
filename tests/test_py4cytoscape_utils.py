@@ -56,10 +56,27 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         suids_with_none.append(None)
 
         self.assertEqual(node_suid_to_node_name(None), None)
+
+        # Verify that list of node names is translated to the same list
         self.assertEqual(node_suid_to_node_name(node_names), node_names)
+
+        # Verify that string list of node names is translated to the same list
+        self.assertEqual(node_suid_to_node_name(', '.join(node_names)), node_names)
+
+        # Verify that single node name string is translated to itself
+        self.assertEqual(node_suid_to_node_name(node_names[0]), [node_names[0]])
+
+        # Verify that list of SUIDs is translated to right node names
+        self.assertEqual(node_suid_to_node_name(suids), node_names)
+
+        # Verify that string list of SUIDs is translated to right node names
+        self.assertEqual(node_suid_to_node_name(str(suids)[1:-1]), node_names)
+
+        # Verify that single SUID is translated to right node name
+        self.assertEqual(node_suid_to_node_name(suids[0]), [node_names[0]])
+
         self.assertRaises(CyError, node_suid_to_node_name, ['YBR043C', 'junk', 'YDR277C'])
         self.assertRaises(CyError, node_suid_to_node_name, suids_with_name)
-        self.assertEqual(node_suid_to_node_name(suids), node_names)
         self.assertRaises(CyError, node_suid_to_node_name, suids_with_none)
 
     @print_entry_exit
@@ -72,24 +89,80 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         values = list(suid_name_map.values)
         node_names = ['YBR043C', 'YPR145W', 'YDR277C']
         suids = [index[values.index(x)] for x in node_names]
+        suids_str = str(suids)[1:-1]
         suids_with_name = suids.copy()
         suids_with_name.append('YBR043C')
         names_with_none = node_names.copy()
         names_with_none.append(None)
 
         self.assertEqual(node_name_to_node_suid(None), None)
-        self.assertEqual(node_name_to_node_suid(node_names), suids)
-        self.assertRaises(CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C'])
-        self.assertRaises(CyError, node_name_to_node_suid, suids_with_name)
-        self.assertEqual(node_name_to_node_suid(suids), suids)
-        self.assertRaises(CyError, node_name_to_node_suid, names_with_none)
+        self.assertEqual(node_name_to_node_suid(node_names), suids) # try list of node names
+        self.assertEqual(node_name_to_node_suid(', '.join(node_names)), suids) # try string list of node names
+        self.assertEqual(node_name_to_node_suid(node_names[0]), [suids[0]]) # try just a single node name
+        self.assertRaises(CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C']) # try bad node name
+        self.assertRaises(CyError, node_name_to_node_suid, suids_with_name) # try comparing to known-incorrect list
+        self.assertEqual(node_name_to_node_suid(suids), suids) # try list of node SUIDs
+        self.assertRaises(CyError, node_name_to_node_suid, names_with_none) # try bad node SUID
+        self.assertEqual(node_name_to_node_suid(suids_str), suids) # try string list of node SUIDs
+        self.assertEqual(node_name_to_node_suid(suids[0]), [suids[0]]) # try just a single node SUID
 
-        suid_dup = add_cy_nodes(['YGR009C'], skip_duplicate_names=False)  # SUID 188
+        # Verify that a node SUID list is returned when there are two of the same-named nodes
+        suid_dup = add_cy_nodes(['YGR009C'], skip_duplicate_names=False)
         res = node_name_to_node_suid(['YGR009C'])
         self.assertIsInstance(res[0], list)
         self.assertEqual(len(res), 1)
         self.assertGreaterEqual(len(res[0]), 2)
         self.assertIn(suid_dup[0]['SUID'], res[0])
+
+    @print_entry_exit
+    def test_edge_suid_to_edge_name(self):
+        # Initialization
+        load_test_session()
+
+        suid_name_map = get_table_columns().loc[:, 'name']
+        index = list(suid_name_map.index)
+        values = list(suid_name_map.values)
+        node_names = ['YBR043C', 'YPR145W', 'YDR277C']
+        suids = [index[values.index(x)] for x in node_names]
+        suids_with_name = suids.copy()
+        suids_with_name.append('YBR043C')
+        suids_with_none = suids.copy()
+        suids_with_none.append(None)
+
+        suid_name_map = get_table_columns(table='edge').loc[:, 'name']
+        index = list(suid_name_map.index)
+        values = list(suid_name_map.values)
+        edge_name_str = 'YDR277C (pp) YDL194W, YDR277C (pp) YJR022W, YPR145W (pp) YMR117C'
+        edge_names = str.split(edge_name_str, ', ')
+        suids = [index[values.index(x)] for x in edge_names]
+        suids_with_name = suids.copy()
+        suids_with_name.append('YER054C (pp) YBR045C')
+        names_with_none = edge_names.copy()
+        names_with_none.append(None)
+
+        self.assertEqual(edge_suid_to_edge_name(None), None)
+
+        # Verify that list of edge names is translated to the same list
+        self.assertEqual(edge_suid_to_edge_name(edge_names), edge_names)
+
+        # Verify that string list of edge names is translated to the same list
+        self.assertEqual(edge_suid_to_edge_name(', '.join(edge_names)), edge_names)
+
+        # Verify that single edge name string is translated to itself
+        self.assertEqual(edge_suid_to_edge_name(edge_names[0]), [edge_names[0]])
+
+        # Verify that list of SUIDs is translated to right edge names
+        self.assertEqual(edge_suid_to_edge_name(suids), edge_names)
+
+        # Verify that string list of SUIDs is translated to right edge names
+        self.assertEqual(edge_suid_to_edge_name(str(suids)[1:-1]), edge_names)
+
+        # Verify that single SUID is translated to right edge name
+        self.assertEqual(edge_suid_to_edge_name(suids[0]), [edge_names[0]])
+
+        self.assertRaises(CyError, edge_suid_to_edge_name, ['YBR043C', 'junk', 'YDR277C'])
+        self.assertRaises(CyError, edge_suid_to_edge_name, suids_with_name)
+        self.assertRaises(CyError, edge_suid_to_edge_name, suids_with_none)
 
     @print_entry_exit
     def test_edge_name_to_edge_suid(self):
@@ -99,7 +172,8 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         suid_name_map = get_table_columns(table='edge').loc[:, 'name']
         index = list(suid_name_map.index)
         values = list(suid_name_map.values)
-        edge_names = ['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W', 'YPR145W (pp) YMR117C']
+        edge_name_str = 'YDR277C (pp) YDL194W, YDR277C (pp) YJR022W, YPR145W (pp) YMR117C'
+        edge_names = str.split(edge_name_str, ', ')
         suids = [index[values.index(x)] for x in edge_names]
         suids_with_name = suids.copy()
         suids_with_name.append('YER054C (pp) YBR045C')
@@ -107,11 +181,28 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         names_with_none.append(None)
 
         self.assertEqual(edge_name_to_edge_suid(None), None)
+
+        # Verify that list of edge names is translated to SUIDs
         self.assertEqual(edge_name_to_edge_suid(edge_names), suids)
+
+        # Verify that string list of edge names is translated to SUIDS
+        self.assertEqual(edge_name_to_edge_suid(', '.join(edge_names)), suids)
+
+        # Verify that single edge name is translated to its SUID
+        self.assertEqual(edge_name_to_edge_suid(edge_names[0]), [suids[0]])
+
+        # Verify that list of edge SUIDs is translated to same SUIDs
+        self.assertEqual(edge_name_to_edge_suid(suids), suids)
+
+        # Verify that string list of edge SUIDs is translated to SUIDS
+        self.assertEqual(edge_name_to_edge_suid(str(suids)[1:-1]), suids)
+
+        # Verify that single edge SUID is translated to its SUID
+        self.assertEqual(edge_name_to_edge_suid(suids[0]), [suids[0]])
+
         self.assertRaises(CyError, edge_name_to_edge_suid,
                           ['YDR277C (pp) YDL194W', 'junk', 'YPR145W (pp) YMR117C'])
         self.assertRaises(CyError, edge_name_to_edge_suid, suids_with_name)
-        self.assertEqual(edge_name_to_edge_suid(suids), suids)
         self.assertRaises(CyError, edge_name_to_edge_suid, names_with_none)
 
     @print_entry_exit

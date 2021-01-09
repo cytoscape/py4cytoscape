@@ -44,26 +44,45 @@ class GroupsTests(unittest.TestCase):
     def test_create_group(self):
         # Initialization
         load_test_session()
-        select_nodes(['GDS1', 'PFK27'], by_col='COMMON')
+        node_list_str = 'GDS1,PFK27'
+        node_list = str.split(node_list_str, ',')
+        suid_list = select_nodes(node_list, by_col='COMMON')['nodes']
+        suid_list_str = str(suid_list)[1:-1]
         selection = select_edges_adjacent_to_selected_nodes()
         clear_selection()
 
         # Create a group out of just 2 selected nodes
         select_nodes(selection['nodes'])
-        self._check_whole_group('group 1', lambda x: create_group(x), selection)
+        self._check_whole_group(group_name='group 1',
+                                group_create_func=lambda x: create_group(x),
+                                selection=selection)
 
-        # Create a group out of just 2 named nodes in a given column
-        self._check_whole_group('group 2',
-                                lambda x: create_group(x, nodes=['GDS1', 'PFK27'], nodes_by_col='COMMON'),
-                                selection)
+        # Create a group out of a list of just 2 named nodes in a given column
+        self._check_whole_group(group_name='group 2',
+                                group_create_func=lambda x: create_group(x, nodes=node_list, nodes_by_col='COMMON'),
+                                selection=selection)
 
-        # Create a group out of just 2 named nodes in a named column
-        self._check_whole_group('group 3', lambda x: create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'), selection)
+        # Create a group out of string list of just 2 named nodes in a named column
+        self._check_whole_group(group_name='group 3',
+                                group_create_func=lambda x: create_group(x, nodes=node_list_str, nodes_by_col='COMMON'),
+                                selection=selection)
 
         # Create a group with no name
-        self._check_whole_group('', lambda x: create_group(x, nodes='COMMON:GDS1,COMMON:PFK27'), selection)
+        self._check_whole_group(group_name='',
+                                group_create_func=lambda x: create_group(x, nodes=node_list_str, nodes_by_col='COMMON'),
+                                selection=selection)
 
-        self.assertRaises(CyError, create_group, 'group 4', nodes='COMMON:GDS1,COMMON:PFK27',
+        # Create a group out of a list of just 2 SUIDs
+        self._check_whole_group(group_name='group 4',
+                                group_create_func=lambda x: create_group(x, nodes=suid_list),
+                                selection=selection)
+
+        # Create a group out of string list of just 2 SUIDs
+        self._check_whole_group(group_name='group 5',
+                                group_create_func=lambda x: create_group(x, nodes=suid_list_str),
+                                selection=selection)
+
+        self.assertRaises(CyError, create_group, group_name='group 4', nodes=node_list_str, nodes_by_col='COMMON',
                           network='bogus')
 
     
@@ -95,19 +114,20 @@ class GroupsTests(unittest.TestCase):
         # Verify that all nodes and edges produces right nodes, internal edges and external edges
         group_0 = create_group('group 0')['group']
         check_group('group 0',
-                    lambda x: add_to_group(x, nodes='all', edges='all'),
+                    group_add_func=lambda x: add_to_group(x, nodes='all', edges='all'),
                     expected_nodes=set(all_nodes) | {group_0},
                     expected_internal_edges=set(all_edges),
                     expected_external_edges=set())
 
+        # Part 1 ... run tests using Python lists containing nodes and edges
         # Create group1 out of just 2 selected nodes
         select_nodes(selection_2_nodes['nodes'])
-        group = create_group('group 1')
-        group_id = group['group']
+        group_1 = create_group('group 1')
+        group_id_1 = group_1['group']
 
         # Verify that adding a list of nodes (i.e., AHP1) by SUID produces right nodes, internal edges and external edges
         check_group('group 1',
-                    lambda x: add_to_group(x, nodes = list(set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))),
+                    group_add_func=lambda x: add_to_group(x, nodes = list(set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))),
                     expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP1
                     expected_internal_edges=set(),
                     expected_external_edges=set(selection_3_nodes['edges']))
@@ -117,14 +137,14 @@ class GroupsTests(unittest.TestCase):
         edge_GDS1_PEP12 = add_cy_edges(['YOR355W', 'YOR036W'])[0]['SUID']
         select_nodes(['PEP12'], by_col='COMMON')  # should not end up in group 1 ... verify to be sure
         check_group('group 1',
-                    lambda x: add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]),
+                    group_add_func=lambda x: add_to_group(x, nodes=[], edges=[edge_GDS1_PFK27, edge_GDS1_PEP12]),
                     expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP
                     expected_internal_edges={edge_GDS1_PFK27},
                     expected_external_edges=set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
 
         # Verify that adding a selected node (PEP12) produces right nodes, internal edges and external edges
         check_group('group 1',
-                    lambda x: add_to_group(x),
+                    group_add_func=lambda x: add_to_group(x),
                     expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
                     expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
                     expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
@@ -133,19 +153,44 @@ class GroupsTests(unittest.TestCase):
         select_all_nodes()
         select_all_edges()
         check_group('group 1',
-                    lambda x: add_to_group(x, nodes=[], edges=[]),
+                    group_add_func=lambda x: add_to_group(x, nodes=[], edges=[]),
                     expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]},
                     expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
                     expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']))
 
         # Verify that adding a column by COMMON produces right nodes, internal edges and external edges
         check_group('group 1',
-                    lambda x: add_to_group(x, nodes='COMMON:AHP1'),
+                    group_add_func=lambda x: add_to_group(x, nodes='AHP1', nodes_by_col='COMMON'),
                     expected_nodes=set(selection_3_nodes['nodes']) | {selection_PEP12_node['nodes'][0]} | {selection_AHP1_node['nodes'][0]},
                     expected_internal_edges={edge_GDS1_PFK27, edge_GDS1_PEP12},
                     expected_external_edges=set(selection_3_nodes['edges']) | set(selection_PEP12_node['edges']) | set(selection_AHP1_node['edges']))
 
-        self.assertRaises(CyError, add_to_group, 'group x', nodes='COMMON:AHP1', network='Bogus')
+        # Part 2 ... do it all over again, but with comma-separated strings instead of Python lists
+        # Create group2 out of just 2 selected nodes
+        clear_selection()
+
+        select_nodes(selection_2_nodes['nodes'])
+        group_2 = create_group('group 2')
+        group_id_2 = group_2['group']
+
+        # Verify that adding a string list of nodes (i.e., AHP1) by SUID produces right nodes, internal edges and external edges
+        check_group('group 2',
+                    group_add_func=lambda x: add_to_group(x, nodes = str(set(selection_3_nodes['nodes']) - set(selection_2_nodes['nodes']))[1:-1]),
+                    expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP1
+                    expected_internal_edges={edge_GDS1_PFK27},
+                    expected_external_edges=set(selection_3_nodes['edges']) | {edge_GDS1_PEP12})
+
+        # Verify that adding a string list of edges by SUID produces right nodes, internal edges and external edges
+        edge_GDS1_AHP1 = add_cy_edges(['YOR355W', 'YLR109W'])[0]['SUID']
+        edge_GDS1_GCR1 = add_cy_edges(['YOR355W', 'YPL075W'])[0]['SUID']
+        select_nodes(['PEP12'], by_col='COMMON')  # should not end up in group 2 ... verify to be sure
+        check_group('group 2',
+                    group_add_func=lambda x: add_to_group(x, nodes=[], edges=str([edge_GDS1_AHP1, edge_GDS1_GCR1])[1:-1]),
+                    expected_nodes=set(selection_3_nodes['nodes']), # GDS1 & PFK27 & AHP
+                    expected_internal_edges={edge_GDS1_PFK27},
+                    expected_external_edges=set(selection_3_nodes['edges']) | {edge_GDS1_GCR1, edge_GDS1_PEP12, edge_GDS1_AHP1})
+
+        self.assertRaises(CyError, add_to_group, 'group x', nodes='AHP1', nodes_by_col='COMMON', network='Bogus')
 
     
     @print_entry_exit
@@ -181,16 +226,28 @@ class GroupsTests(unittest.TestCase):
         group_2_suid = create_group('', nodes=['PDC1', 'FBP1', 'CIN4'], nodes_by_col='COMMON')['group']
 
         # Verify that info for a real group accessed by group name is valid
-        self._check_group_info('Group 1', 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(),
-                               set(selection_GDS1_PFK27['edges']))
+        self._check_group_info(group='Group 1',
+                               expected_name='Group 1',
+                               expected_suid=group_1_suid,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
 
         # Verify that info for a real group accessed by group name is valid
-        self._check_group_info(group_1_suid, 'Group 1', group_1_suid, set(selection_GDS1_PFK27['nodes']), set(),
-                               set(selection_GDS1_PFK27['edges']))
+        self._check_group_info(group=group_1_suid,
+                               expected_name='Group 1',
+                               expected_suid=group_1_suid,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
 
         # Verify that info for an unnamed group group is valid
-        self._check_group_info('', '', group_2_suid, set(selection_PDC1_FBP1_CIN4['nodes']), set(),
-                               set(selection_PDC1_FBP1_CIN4['edges']))
+        self._check_group_info(group='',
+                               expected_name='',
+                               expected_suid=group_2_suid,
+                               expected_nodes=set(selection_PDC1_FBP1_CIN4['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_PDC1_FBP1_CIN4['edges']))
 
         self.assertRaises(CyError, get_group_info, -1)
         self.assertRaises(CyError, get_group_info, 'Bogus Group')
@@ -275,27 +332,39 @@ class GroupsTests(unittest.TestCase):
                op_res={group_1_suid, group_2_suid},
                post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
-        # Verify collapsing two specific groups (in list) doesn't affect the third
+        # Verify collapsing two specific groups (in SUID list) doesn't affect the third
         verify(pre_conditioning=lambda: None,
-               operation=lambda: collapse_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               operation=lambda: collapse_group([f'SUID:{group_1_suid}', f'SUID:{group_2_suid}']),
                op_res={group_1_suid, group_2_suid},
                post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
-        # Verify expanding two specific groups (in list) doesn't affect the third
+        # Verify expanding two specific groups (in SUID list) doesn't affect the third
         verify(pre_conditioning=lambda: None,
-               operation=lambda: expand_group(['SUID:' + str(group_1_suid), 'SUID:' + str(group_2_suid)]),
+               operation=lambda: expand_group([f'SUID:{group_1_suid}', f'SUID:{group_2_suid}']),
                op_res={group_1_suid, group_2_suid},
                post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
-        # Verify collapsing two specific groups (in string) doesn't affect the third
+        # Verify collapsing two specific groups (in string list) doesn't affect the third
         verify(pre_conditioning=lambda: None,
                operation=lambda: collapse_group('Group 1,Group 2'),
                op_res={group_1_suid, group_2_suid},
                post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
 
-        # Verify expanding two specific groups (in string) doesn't affect the third
+        # Verify expanding two specific groups (in string list) doesn't affect the third
         verify(pre_conditioning=lambda: None,
                operation=lambda: expand_group('Group 1,Group 2'),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
+
+        # Verify collapsing two specific groups (in SUID string list) doesn't affect the third
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: collapse_group(f'SUID:{group_1_suid}, SUID:{group_2_suid}'),
+               op_res={group_1_suid, group_2_suid},
+               post_state=[(group_1_suid, True), (group_2_suid, True), (group_3_suid, False)])
+
+        # Verify expanding two specific groups (in SUID string list) doesn't affect the third
+        verify(pre_conditioning=lambda: None,
+               operation=lambda: expand_group(f'SUID:{group_1_suid}, SUID:{group_2_suid}'),
                op_res={group_1_suid, group_2_suid},
                post_state=[(group_1_suid, False), (group_2_suid, False), (group_3_suid, False)])
 
@@ -343,21 +412,39 @@ class GroupsTests(unittest.TestCase):
 
         # Verify that cluster A goes into the right group
         group_a = create_group_by_column('Group A', 'Cluster', 'A')
-        self._check_group_info('Group A', 'Group A', group_a['group'], set(selection_GDS1_PFK27['nodes']), set(),
-                               set(selection_GDS1_PFK27['edges']))
+        self._check_group_info(group='Group A',
+                               expected_name='Group A',
+                               expected_suid=group_a['group'],
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
 
         # Verify that cluster B goes into the right group
         group_b = create_group_by_column('Group B', 'Cluster', 'B')
-        self._check_group_info('Group B', 'Group B', group_b['group'], set(selection_PDC1_FBP1_CIN4['nodes']), set(),
-                               set(selection_PDC1_FBP1_CIN4['edges']))
+        self._check_group_info(group='Group B',
+                               expected_name='Group B',
+                               expected_suid=group_b['group'],
+                               expected_nodes=set(selection_PDC1_FBP1_CIN4['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_PDC1_FBP1_CIN4['edges']))
 
         # Verify that when the value ('C') doesn't exist, an empty group is created
         group_c = create_group_by_column('Group C', 'Cluster', 'C')
-        self._check_group_info('Group C', 'Group C', group_c['group'], set(), set(), set())
+        self._check_group_info(group='Group C',
+                               expected_name='Group C',
+                               expected_suid=group_c['group'],
+                               expected_nodes=set(),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
 
         # Verify that when the column ('bogus') doesn't exist, an empty group is created
         group_d = create_group_by_column('Group D', 'bogus', 'C')
-        self._check_group_info('Group D', 'Group D', group_d['group'], set(), set(), set())
+        self._check_group_info(group='Group D',
+                               expected_name='Group D',
+                               expected_suid=group_d['group'],
+                               expected_nodes=set(),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
 
         self.assertRaises(CyError, create_group_by_column, 'Group 1', network='Bogus')
 
@@ -366,12 +453,14 @@ class GroupsTests(unittest.TestCase):
     def test_remove_from_group(self):
         # Initialization
         load_test_session()
-        select_nodes(['GDS1', 'PFK27'], by_col='COMMON')
+        suid_PFK27_list = select_nodes(['PFK27'], by_col='COMMON')['nodes']
+        select_nodes(['GDS1'], by_col='COMMON')['nodes']
         selection_GDS1_PFK27 = select_edges_adjacent_to_selected_nodes()
-        select_nodes(['GDS1'], by_col='COMMON', preserve_current_selection=False)
+        suid_GDS1_list = select_nodes(['GDS1'], by_col='COMMON', preserve_current_selection=False)['nodes']
         selection_GDS1_node = select_edges_adjacent_to_selected_nodes()
         clear_selection()
 
+        # Round 1: use lists of nodes and edges with remove_from_group()
         # Verify that test group has right nodes, internal edges and external edges
         group_0 = create_group('group 0', nodes=selection_GDS1_PFK27['nodes'])['group']
         self._check_group_info(group='group 0',
@@ -402,6 +491,95 @@ class GroupsTests(unittest.TestCase):
                                expected_internal_edges=set(),
                                expected_external_edges=set())
 
+        # Verify that removing PFK27 node leaves an empty group
+        self.assertDictEqual(remove_from_group('group 0', nodes=['PFK27'], nodes_by_col='COMMON'), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
+
+        # Round 2: use string lists of nodes and edges with remove_from_group
+        add_to_group('group 0', nodes=selection_GDS1_PFK27['nodes'])
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
+
+        # Verify that removing GDS1 and its edges results in only PFK27 and its edges
+        self.assertDictEqual(remove_from_group('group 0', nodes='GDS1', nodes_by_col='COMMON'), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))
+
+        # Verify that removing the PFK27 edges leaves only the PFK27 node
+        self.assertDictEqual(remove_from_group('group 0',
+                                               nodes=[],
+                                               edges=str(set(selection_GDS1_PFK27['edges']) - set(selection_GDS1_node['edges']))[1:-1]),
+                             {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
+
+        # Verify that removing PFK27 node leaves an empty group
+        self.assertDictEqual(remove_from_group('group 0', nodes='PFK27', nodes_by_col='COMMON'), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
+
+        # Round 3: use lists of node SUIDs and edges with remove_from_group
+        add_to_group('group 0', nodes=selection_GDS1_PFK27['nodes'])
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']))
+
+        # Verify that removing GDS1 and its edges results in only PFK27 and its edges
+        self.assertDictEqual(remove_from_group('group 0', nodes=suid_GDS1_list), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set(selection_GDS1_PFK27['edges']) - set(
+                                   selection_GDS1_node['edges']))
+
+        # Verify that removing the PFK27 edges leaves only the PFK27 node
+        self.assertDictEqual(remove_from_group('group 0',
+                                               nodes=[],
+                                               edges=str(set(selection_GDS1_PFK27['edges']) - set(
+                                                   selection_GDS1_node['edges']))[1:-1]),
+                             {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(selection_GDS1_PFK27['nodes']) - set(selection_GDS1_node['nodes']),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
+
+        # Verify that removing PFK27 node leaves an empty group
+        self.assertDictEqual(remove_from_group('group 0', nodes=suid_PFK27_list), {})
+        self._check_group_info(group='group 0',
+                               expected_name='group 0',
+                               expected_suid=group_0,
+                               expected_nodes=set(),
+                               expected_internal_edges=set(),
+                               expected_external_edges=set())
+
         # Verify that operating on an unknown group does nothing
         self.assertDictEqual(remove_from_group('bogus group'), {})
 
@@ -416,6 +594,7 @@ class GroupsTests(unittest.TestCase):
         selection = select_edges_adjacent_to_selected_nodes()
         clear_selection()
 
+        # Round 1
         # Create a group out of just 2 selected nodes
         select_nodes(selection['nodes'])
         group_1_suid = self._check_whole_group('group 1', lambda x: create_group(x), selection)
@@ -423,18 +602,19 @@ class GroupsTests(unittest.TestCase):
         group_3_suid = self._check_whole_group('group 3', lambda x: create_group(x), selection)
         self.assertSetEqual(set(list_groups()['groups']), {group_1_suid, group_2_suid, group_3_suid})
 
-        # Delete the first two groups (by name), leaving the third
+        # Delete the first two groups (by name list), leaving the third
         self.assertSetEqual(set(delete_group(['Group 1', 'Group 2'], groups_by_col='shared name')['groups']),
                             {group_1_suid, group_2_suid})
         self.assertSetEqual(set(list_groups()['groups']), {group_3_suid})
 
-        # Delete the last by SUID
+        # Delete the last by SUID list
         self.assertSetEqual(set(delete_group([group_3_suid])['groups']), {group_3_suid})
         self.assertSetEqual(set(list_groups()['groups']), set())
 
         # Try deleting the third group again, and verify that nothing is deleted
         self.assertSetEqual(set(delete_group([group_3_suid])['groups']), set())
 
+        # Round 2
         # Add all of the groups back in and select 2 of them, leaving one unselected
         select_nodes(selection['nodes'])
         group_1_suid = self._check_whole_group('group 1', lambda x: create_group(x), selection)
@@ -451,6 +631,7 @@ class GroupsTests(unittest.TestCase):
         self.assertSetEqual(set(delete_group(groups='unselected')['groups']), {group_3_suid})
         self.assertSetEqual(set(list_groups()['groups']), set())
 
+        # Round 3
         # Add all of the groups back in
         select_nodes(selection['nodes'])
         group_1_suid = self._check_whole_group('group 1', lambda x: create_group(x), selection)
@@ -460,6 +641,30 @@ class GroupsTests(unittest.TestCase):
 
         # Delete all groups, which should leave no group left
         self.assertSetEqual(set(delete_group(groups='all')['groups']), {group_1_suid, group_2_suid, group_3_suid})
+        self.assertSetEqual(set(list_groups()['groups']), set())
+
+        # Round 4
+        # Add all of the groups back in
+        select_nodes(selection['nodes'])
+        group_1_suid = self._check_whole_group('group 1', lambda x: create_group(x), selection)
+        group_2_suid = self._check_whole_group('group 2', lambda x: create_group(x), selection)
+        group_3_suid = self._check_whole_group('group 3', lambda x: create_group(x), selection)
+        self.assertSetEqual(set(list_groups()['groups']), {group_1_suid, group_2_suid, group_3_suid})
+
+        # Delete all groups by string list, which should leave no group left
+        self.assertSetEqual(set(delete_group(groups='Group 1, Group 2, Group 3', groups_by_col='shared name')['groups']), {group_1_suid, group_2_suid, group_3_suid})
+        self.assertSetEqual(set(list_groups()['groups']), set())
+
+        # Round 5
+        # Add all of the groups back in
+        select_nodes(selection['nodes'])
+        group_1_suid = self._check_whole_group('group 1', lambda x: create_group(x), selection)
+        group_2_suid = self._check_whole_group('group 2', lambda x: create_group(x), selection)
+        group_3_suid = self._check_whole_group('group 3', lambda x: create_group(x), selection)
+        self.assertSetEqual(set(list_groups()['groups']), {group_1_suid, group_2_suid, group_3_suid})
+
+        # Delete all groups by string SUID list, which should leave no group left
+        self.assertSetEqual(set(delete_group(groups=f'{group_1_suid}, {group_2_suid}, {group_3_suid}')['groups']), {group_1_suid, group_2_suid, group_3_suid})
         self.assertSetEqual(set(list_groups()['groups']), set())
 
         self.assertRaises(CyError, delete_group, network='bogus')

@@ -415,8 +415,9 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     """Returns a non-redundant list of first neighbors of the supplied list of nodes or current node selection.
 
     Args:
-        node_names (str or list or None): A ``list`` of node names from the ``name`` column of the ``node table``.
-            Default is currently selected nodes.
+        node_names (str or list or int or None): List of nodes (as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name or SUID). Node names should be found
+            in the ``name`` column of the ``node table``. Default is currently selected nodes.
         as_nested_list (bool): Whether to return lists of neighbors per query node.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
@@ -437,7 +438,15 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         [['YBR020W', ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']], ['YGL035C', ['YLR044C', 'YLR377C', ...]], ...]
         >>> get_first_neighbors(['YBR020W', 'YGL035C'], as_nested_list=False)
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
+        >>> get_first_neighbors('YBR020W, YGL035C'], as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
         >>> get_first_neighbors('YBR020W', as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']
+        >>> get_first_neighbors([515677, 515678], as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
+        >>> get_first_neighbors('515677, 515678', as_nested_list=False)
+        ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W', 'YLR044C', 'YLR377C', 'YIL162W', ... ]
+        >>> get_first_neighbors(515677, as_nested_list=False)
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']
 
     See Also:
@@ -446,10 +455,10 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
     # TODO: This looks very inefficient because for each node, the entire node table is fetched from Cytoscape and the neighbor list is de-dupped ... verify this and maybe do better
     if node_names is None:
         node_names = network_selection.get_selected_nodes(network=network, base_url=base_url)
-    elif isinstance(node_names, str):
-        node_names = [node_names]
+    else:
+        node_names = normalize_list(node_names)
 
-    if (node_names is None or len(node_names) == 0): return None
+    if node_names is None or len(node_names) == 0: return None
 
     net_suid = get_network_suid(network, base_url=base_url)
     neighbor_names = []
@@ -496,10 +505,13 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
     Examples:
         >>> add_cy_nodes(['newnode1', 'newnode2'], skip_duplicate_names=False)
         [{"name": "newnode1", "SUID": 1459}, {"name": "newnode2", "SUID": 1460}]
+        >>> add_cy_nodes('newnode1, newnode2', skip_duplicate_names=False)
+        [{"name": "newnode1", "SUID": 1459}, {"name": "newnode2", "SUID": 1460}]
         >>> add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
         [{"name": "newnode3", "SUID": 1460}]
     """
     net_suid = get_network_suid(network, base_url=base_url)
+    node_names = normalize_list(node_names)
     if skip_duplicate_names:
         all_nodes_list = get_all_nodes(net_suid, base_url=base_url)
         node_names = list(set(node_names) - set(all_nodes_list))
@@ -607,9 +619,10 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
 
     # Create list of all nodes in order presented
     # TODO: Find out what should happen if node name maps to multiple nodes
-    if len(source_target_list) == 2 and isinstance(source_target_list, list) and isinstance(source_target_list[0],
-                                                                                            str) and isinstance(
-        source_target_list[1], str):
+    if len(source_target_list) == 2 \
+            and isinstance(source_target_list, list) \
+            and isinstance(source_target_list[0], str) \
+            and isinstance(source_target_list[1], str):
         flat_source_target_list = source_target_list
     else:
         flat_source_target_list = [item for sublist in source_target_list for item in sublist]
@@ -664,6 +677,9 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
     """Returns source, target and edge table row values.
 
     Args:
+        edges (str or list or int): List of edges (as ``list`` of edge names or SUIDs,
+            comma-separated string of edge names or SUIDs, or scalar edge name or SUID. Edge names should be found
+            in the ``name`` column of the ``edge table``.
         edges (list): list of SUIDs or names of edges, i.e., values in the "name" column.
             Can also input single edge.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -681,10 +697,6 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> get_edge_info('YDR277C (pp) YDL194W')
-        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
-          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
-          'interaction': 'pp', 'EdgeBetweenness': 496.0}]
         >>> get_edge_info(['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W'])
         [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
           'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
@@ -692,11 +704,33 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
          {'source': 2919, 'target': 3220, 'SUID': 3249, 'shared name': 'YDR277C (pp) YJR022W',
           'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
           'interaction': 'pp', 'EdgeBetweenness': 988.0}]
+        >>> get_edge_info('YDR277C (pp) YDL194W, YDR277C (pp) YJR022W')
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0},
+         {'source': 2919, 'target': 3220, 'SUID': 3249, 'shared name': 'YDR277C (pp) YJR022W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 988.0}]
+        >>> get_edge_info('YDR277C (pp) YDL194W')
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0}]
+        >>> get_edge_info([3248, 3249])
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0},
+         {'source': 2919, 'target': 3220, 'SUID': 3249, 'shared name': 'YDR277C (pp) YJR022W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YJR022W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 988.0}]
+        >>> get_edge_info(3248)
+        [{'source': 2919, 'target': 2918, 'SUID': 3248, 'shared name': 'YDR277C (pp) YDL194W',
+          'shared interaction': 'pp', 'name': 'YDR277C (pp) YDL194W', 'selected': False,
+          'interaction': 'pp', 'EdgeBetweenness': 496.0}]
 
     Notes: This function is kinda slow. It takes approximately 70ms per edge to return a result, e.g., 850 edges will take one minute.
     """
     net_suid = get_network_suid(network, base_url=base_url)
-    if isinstance(edges, str) or isinstance(edges, int): edges = [edges]
+    edges = normalize_list(edges)
 
     def convert_edge_name_to_edge_info(edge_name):
         edge_suid = edge_name_to_edge_suid(edge_name, network, base_url=base_url)
@@ -779,9 +813,15 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     """Copies a subset of nodes and edges into a newly created subnetwork.
 
     Args:
-        nodes (list): list of node names or keyword: selected, unselected or all. Default is currently selected nodes.
+        nodes (str or list or int or None): List of nodes or keyword: selected, unselected or all. If node list:
+            ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``. If list is None, default is currently selected nodes.
         nodes_by_col (str): name of node table column corresponding to provided nodes list; default is 'SUID'
-        edges (list): list of edge names or keyword: selected, unselected or all. Default is currently selected edges.
+        edges (str or list or int or None): List of edges or keyword: selected, unselected or all. If edge list:
+            ``list`` of edge names or SUIDs, comma-separated string of edge names or SUIDs, or scalar edge name
+            or SUID. Edge names should be found in the ``SUID`` column of the ``edge table`` unless
+            specified in ``edges_by_col``. If list is None, default is currently selected edges.
         edges_by_col (str): name of edge table column corresponding to provided edges list; default is 'SUID'
         exclude_edges (bool): whether to exclude connecting edges; default is FALSE
         subnetwork_name (str): name of new subnetwork to be created; default is to add a numbered suffix to source network name
@@ -806,6 +846,10 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
         1477
         >>> create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx')
        1477
+        >>> create_subnetwork(nodes='RAP1, HIS4, PDC1, RPL18A', nodes_by_col='COMMON', subnetwork_name=base_name+'xx')
+       1477
+        >>> create_subnetwork(nodes=[1502, 1555, 1560, 1701], subnetwork_name=base_name+'xx')
+       1477
     """
     # TODO: Verify that node and edge names can't contain blanks or commas
     title = get_network_suid(network, base_url=base_url)
@@ -813,8 +857,8 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
     if isinstance(edges, str) and edges in ['all', 'selected', 'unselected']: edges_by_col = None
     json_sub = {'source': 'SUID:' + str(title), 'excludeEdges': exclude_edges,
-                'nodeList': _prep_post_query_lists(nodes, nodes_by_col),
-                'edgeList': _prep_post_query_lists(edges, edges_by_col)}
+                'nodeList': prep_post_query_lists(nodes, nodes_by_col),
+                'edgeList': prep_post_query_lists(edges, edges_by_col)}
     if not subnetwork_name is None: json_sub['networkName'] = subnetwork_name
 
     res = commands.cyrest_post('commands/network/create', body=json_sub, base_url=base_url)
@@ -1284,15 +1328,3 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # functions.
 # ------------------------------------------------------------------------------
 
-
-
-def _prep_post_query_lists(cmd_list=None, cmd_by_col=None):
-    if cmd_list is None:
-        cmd_list_ready = 'selected'
-    elif not cmd_by_col is None:
-        cmd_list_col = [cmd_by_col + ':' + cmd for cmd in cmd_list]
-        cmd_list_ready = ','.join(cmd_list_col)
-    else:
-        cmd_list_ready = cmd_list if isinstance(cmd_list, str) else ','.join(cmd_list)
-
-    return cmd_list_ready

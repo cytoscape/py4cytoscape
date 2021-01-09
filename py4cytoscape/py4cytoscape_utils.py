@@ -191,18 +191,27 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
         [1022]
         >>> node_name_to_node_suid(['YDR277C', 'YDL194W'], network='myNetwork')
         [1022, 1023]
+        >>> node_name_to_node_suid('YDR277C, YDL194W', network='myNetwork')
+        [1022, 1023]
+        >>> node_name_to_node_suid([1022, 1023], network='myNetwork')
+        [1022, 1023]
         >>> node_name_to_node_suid(['YDR277C', 'AXD206W'], network='myNetwork')
         [1022, [1099, 1100]]
     """
     if node_names is None: return None
-    # TODO: Should this be a simple conversion, or a split(',')??
-    if isinstance(node_names, str): node_names = [node_names]
+    node_names = normalize_list(node_names)
+
     df = tables.get_table_columns('node', ['name'], 'default', network=network, base_url=base_url)
 
+    # Check all node names to see if they're all valid SUIDs ... if so, we're already done
     all_suids = df.index
-    test_present = [x in all_suids for x in node_names]
-    if not False in test_present:
-        return node_names
+    try:
+        node_names = [int(node)  for node in node_names]
+        found_valid_suids = [node in all_suids   for node in node_names]
+        if False not in found_valid_suids:
+            return node_names
+    except:
+        pass
 
     # map all node names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
     node_suids = [list(df[df.name.eq(node_name)].index.values) for node_name in node_names]
@@ -238,20 +247,24 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
         ['YDR277C']
         >>> node_suid_to_node_name([1022, 1023], network='myNetwork')
         ['YDR277C', 'YDL194W']
+        >>> node_suid_to_node_name(['YDR277C', 'YDL194W'], network='myNetwork')
+        ['YDR277C', 'YDL194W']
+        >>> node_suid_to_node_name('YDR277C, YDL194W', network='myNetwork')
+        ['YDR277C', 'YDL194W']
     """
     if node_suids is None: return None
-    if isinstance(node_suids, str): node_suids = [node_suids]
+    node_suids = normalize_list(node_suids)
 
     df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
     all_names = df['name'].values
 
-    test_present = [x in all_names for x in node_suids]
+    test_present = [x in all_names   for x in node_suids]
     if not False in test_present:
         return node_suids
 
     all_suids_list = df.index.tolist()
     try:
-        # map all SUIDS into column names ... all SUIDS *must* be actual SUIDS
+        # map all SUIDS into column names ... all SUIDs *must* be actual SUIDs
         node_names = [all_names[all_suids_list.index(node_suid)] for node_suid in node_suids]
         return node_names
     except Exception as e:
@@ -284,19 +297,31 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
     Examples:
         >>> edge_name_to_edge_suid('YDR277C (pp) YDL194W')
         [1022]
+        >>> edge_name_to_edge_suid(1022)
+        [1022]
         >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
+        [1022, 1023]
+        >>> edge_name_to_edge_suid('YDR277C (pp) YDL194W, YDR277C (pp) YDR206W', network='myNetwork')
+        [1022, 1023]
+        >>> edge_name_to_edge_suid([1022, 1023], network='myNetwork')
         [1022, 1023]
         >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) AXD206W'], network='myNetwork')
         [1022, [1099, 1100]]
     """
     if edge_names is None: return None
-    if isinstance(edge_names, str) or isinstance(edge_names, int): edge_names = [edge_names]
+    edge_names = normalize_list(edge_names)
+
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
 
+    # Check all edge names to see if they're all valid SUIDs ... if so, we're already done
     all_suids = df.index
-    test_present = [x in all_suids for x in edge_names]
-    if not False in test_present:
-        return edge_names
+    try:
+        edge_names = [edge for edge in edge_names]
+        found_valid_suids = [edge in all_suids for edge in edge_names]
+        if False not in found_valid_suids:
+            return edge_names
+    except:
+        pass
 
     # map all edge names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
     edge_suids = [list(df[df.name.eq(edge_name)].index.values) for edge_name in edge_names]
@@ -331,22 +356,26 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
     Examples:
         >>> edge_suid_to_edge_name(1022)
         ['YDR277C (pp) YDL194W']
+        >>> edge_suid_to_edge_name('1022, 1023')
+        ['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W']
         >>> edge_suid_to_edge_name([1022, 1023], network='myNetwork')
+        ['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W']
+        >>> edge_suid_to_edge_name(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
         ['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W']
     """
     if edge_suids is None: return None
-    if isinstance(edge_suids, str): edge_suids = [edge_suids]
+    edge_suids = normalize_list(edge_suids)
 
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
     all_names = df['name'].values
 
-    test = [edge_suid in all_names for edge_suid in edge_suids]
+    test = [edge_suid in all_names   for edge_suid in edge_suids]
     if not False in test: return edge_suids  # the list already had valid names
 
     all_suids_list = df.index.tolist()
     try:
-        # map all SUIDS into column names ... all SUIDS *must* be actual SUIDS
-        edge_names = [all_names[all_suids_list.index(edge_suid)] for edge_suid in edge_suids]
+        # map all SUIDS into column names ... all SUIDs *must* be actual SUIDs
+        edge_names = [all_names[all_suids_list.index(edge_suid)]   for edge_suid in edge_suids]
         return edge_names
     except Exception as e:
         raise CyError(f'Invalid edge SUID in list: {edge_suids}')
@@ -414,7 +443,6 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     v_api_str = v['apiVersion']
     v_cy_str = v['cytoscapeVersion']
     v_api_num = int(re.match('v([0-9]+)$', v_api_str).group(1))
-    v_cy_num = float(re.match('([0-9]+\\.[0-9]+)\\..*$', v_cy_str).group(1))
     nogo = None
 
     # Check the CyREST version
@@ -434,6 +462,35 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
         nogo = f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
 
     if nogo: raise CyError(f'Function not run due to unsupported version: {nogo}')
+
+def normalize_list(entity):
+    # Return a Python list of strings given a Python list, a string list of strings, a string list of ints, or a scalar
+    if isinstance(entity, str):  # If it's a string, it could be names, SUIDs, or whatever
+        scalar_list = str.split(entity, ',')
+        try:
+            return [int(x)    for x in scalar_list] # for each entry, see if it's a number
+        except:
+            return [str.strip(x)   for x in scalar_list] # for each entry, get rid of leading/trialing spaces
+    elif not isinstance(entity, list):  # If it's not a string, it could be int, int64 or whatever
+        # Note that list could contain strings with leading/trailing spaces. Caller will likely think this is an error.
+        return [entity]
+    else:
+        return entity
+
+def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
+    # Return 'selected' or a comma-separated list of strings as either 'x,y,x' or 'col:x,col:y,col:z'
+    if cmd_list is None:
+        cmd_list_ready = 'selected'
+    else:
+        cmd_list_normal = normalize_list(cmd_list)
+        if cmd_by_col is None:
+            cmd_list_normal = [f'{cmd}'   for cmd in cmd_list_normal]
+        else:
+            cmd_list_normal = [f'{cmd_by_col}:{cmd}' for cmd in cmd_list_normal]
+        cmd_list_ready = ','.join(cmd_list_normal)
+
+    return cmd_list_ready
+
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
     """Append a command (if it exists) to a base URL.
