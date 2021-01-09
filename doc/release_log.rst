@@ -3,6 +3,21 @@
 Release Log
 ===========
 
+
+py4cytoscape 0.0.7
+------------------
+Release date: 08 Jan 2021
+
+* Compatibility of node, edge and group parameter with RCy3 formats
+* Improved verify_supported_versions parsing for Cytoscape 3.10 and beyond
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.6.rst
+
+
 py4cytoscape 0.0.6
 ------------------
 Release date: 30 Oct 2020

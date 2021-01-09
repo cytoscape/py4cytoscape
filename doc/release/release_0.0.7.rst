@@ -17,10 +17,8 @@ Highlights
 
 This themes for this release are:
 
-* Improved sandboxing and Jupyter Notebook documentation
-* Shortened execution delays
-* Docker support
-* More rational default directory for standalone Python execution
+* Compatibility of node, edge and group parameter with RCy3 formats
+* Improved verify_supported_versions parsing for Cytoscape 3.10 and beyond
 
 
 API Changes
@@ -43,5 +41,3 @@ Contributors to this release
 Pull requests merged in this release
 ------------------------------------
 
-#17 Jorge Boucas
-#18 Jorge Boucas
