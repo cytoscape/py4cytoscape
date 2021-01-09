@@ -678,7 +678,7 @@ def get_edge_info(edges, network=None, base_url=DEFAULT_BASE_URL):
 
     Args:
         edges (str or list or int): List of edges (as ``list`` of edge names or SUIDs,
-            comma-separated string of edge names or SUIDs, or scalar edge name or SUID. Edge names should be found
+            comma-separated string of edge names or SUIDs, or scalar edge name or SUID). Edge names should be found
             in the ``name`` column of the ``edge table``.
         edges (list): list of SUIDs or names of edges, i.e., values in the "name" column.
             Can also input single edge.
@@ -845,11 +845,11 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
         >>> create_subnetwork(edges='selected') # choose only nodes whose edges are selected, and include those edges
         1477
         >>> create_subnetwork(nodes=['RAP1', 'HIS4', 'PDC1', 'RPL18A'], nodes_by_col='COMMON', subnetwork_name=base_name+'xx')
-       1477
+        1477
         >>> create_subnetwork(nodes='RAP1, HIS4, PDC1, RPL18A', nodes_by_col='COMMON', subnetwork_name=base_name+'xx')
-       1477
+        1477
         >>> create_subnetwork(nodes=[1502, 1555, 1560, 1701], subnetwork_name=base_name+'xx')
-       1477
+        1477
     """
     # TODO: Verify that node and edge names can't contain blanks or commas
     title = get_network_suid(network, base_url=base_url)
