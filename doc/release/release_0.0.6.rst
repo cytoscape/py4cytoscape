@@ -41,5 +41,5 @@ Contributors to this release
 Pull requests merged in this release
 ------------------------------------
 
-#17 Jorge Boucas
-#18 Jorge Boucas
+- #17 Jorge Boucas
+- #18 Jorge Boucas

@@ -1,8 +1,6 @@
 Announcement: py4cytoscape 0.0.7
 --------------------------------
 
-*** In progress
-
 We're happy to announce the release of py4cytoscape 0.0.7!
 
 py4cytoscape is a Python package that communicates with `Cytoscape <https://cytoscape.org>`_
