@@ -15,7 +15,7 @@ Release date: 08 Jan 2021
 Release notes
 ~~~~~~~~~~~~~
 
-.. include:: release/release_0.0.6.rst
+.. include:: release/release_0.0.7.rst
 
 
 py4cytoscape 0.0.6
