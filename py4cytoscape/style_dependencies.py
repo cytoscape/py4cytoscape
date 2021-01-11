@@ -8,17 +8,17 @@ II. Specific functions for setting particular dependencies
 
 """Copyright 2020 The Cytoscape Consortium
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
 persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
@@ -65,7 +65,7 @@ def get_style_dependencies(style_name=None, base_url=DEFAULT_BASE_URL):
     """
     if style_name is None:
         style_name = 'default'
-        narrate(f'style_name not specified; accessing "default" style.')
+        narrate(f'style_name not specified, so accessing "default" style.')
 
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
@@ -107,7 +107,7 @@ def set_style_dependencies(style_name=None, dependencies={}, base_url=DEFAULT_BA
     """
     if style_name is None:
         style_name = 'default'
-        narrate(f'style_name not specified; updating "default" style.')
+        narrate(f'style_name not specified, so updating "default" style.')
 
     # launch error if visual style name is missing
     if style_name not in styles.get_visual_style_names(base_url=base_url):
