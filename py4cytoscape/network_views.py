@@ -99,7 +99,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
-    net_suid = get_network_suid()
+    net_suid = networks.get_network_suid()
     any_views = get_network_views(net_suid, base_url=base_url)
     if any_views is None:
         raise CyError(f'Network view does not exist for network "{network}"')
