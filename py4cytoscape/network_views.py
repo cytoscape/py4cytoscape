@@ -9,17 +9,17 @@ getting/setting node, edge and network visual properties via VIEW operations.
 
 """Copyright 2020 The Cytoscape Consortium
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
 persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
@@ -99,35 +99,15 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
-    if isinstance(network, str):
-        # network name (or "current") was provided, warn if multiple view
-        network_views = get_network_views(network, base_url=base_url)
-        if len(network_views) > 1:
-            narrate('Warning: This network has multiple views. Returning last.')
-        return network_views[-1]
-    elif isinstance(network, int):
-        # suid provided, but is it a network or a view?
-        net_suids = commands.cyrest_get('networks', base_url=base_url)
-        if network in net_suids:  # network SUID, warn if multiple view
-            network_views = get_network_views(network, base_url=base_url)
-            if len(network_views) > 1:
-                narrate('Warning: This network has multiple views. Returning last.')
-            return network_views[-1]
-        else:
-            view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
-            if network in view_suids:  # view SUID, return it
-                return network
-            else:
-                raise CyError(f'Network view does not exist for network "{network}"')
+    net_suid = get_network_suid()
+    any_views = get_network_views(net_suid, base_url=base_url)
+    if any_views is None:
+        raise CyError(f'Network view does not exist for network "{network}"')
+    elif len(any_views) > 1:
+        narrate('Warning: This network has multiple views. Returning last.')
+        return any_views[-1]
     else:
-        # use current network, return first view
-        # TODO: R sets this but never uses it ...is this an error?
-        network_title = 'current'
-        # warn if multiple views
-        network_views = get_network_views(network, base_url=base_url)
-        if len(network_views) > 1:
-            narrate(f'Warning: This network "{network}" has multiple views. Returning last.')
-        return network_views[-1]
+        return any_views[-1]
 
 
 @cy_log
