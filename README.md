@@ -55,6 +55,8 @@ Their main purpose is to verify that ``py4cytoscape`` functions either properly 
 that each function parameter has an intended affect in the context of one or more CyREST calls. The payoff is confidence 
 in ``py4cytoscape`` functions over both the immediate and long term. 
 
+Single tests or groups of tests can be executed from the command line per the [``py4cytoscape`` Installation instructions](INSTALL.rst).
+
 Surprising (but true!) general rules of thumb:
 
 * Creating a test for a ``py4cytoscape`` function may take between 2x and 5x the effort
