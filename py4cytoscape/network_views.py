@@ -9,17 +9,17 @@ getting/setting node, edge and network visual properties via VIEW operations.
 
 """Copyright 2020 The Cytoscape Consortium
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
 persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
@@ -73,21 +73,17 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the SUID of a network view.
-
     Args:
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
-
     Returns:
         int: SUID of the view for the network. The first (presummably only) view associated a network is returned.
-
     Raises:
         CyError: if network or view doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
-
     Examples:
         >>> get_network_view_suid()
         130223
@@ -95,41 +91,20 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         130223
         >>> get_network_view_suid(network='galFiltered.sif')
         130223
-
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
-    if isinstance(network, str):
-        # network name (or "current") was provided, warn if multiple view
-        network_views = get_network_views(network, base_url=base_url)
-        if len(network_views) > 1:
-            narrate('Warning: This network has multiple views. Returning last.')
-        return network_views[-1]
-    elif isinstance(network, int):
-        # suid provided, but is it a network or a view?
-        net_suids = commands.cyrest_get('networks', base_url=base_url)
-        if network in net_suids:  # network SUID, warn if multiple view
-            network_views = get_network_views(network, base_url=base_url)
-            if len(network_views) > 1:
-                narrate('Warning: This network has multiple views. Returning last.')
-            return network_views[-1]
-        else:
-            view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
-            if network in view_suids:  # view SUID, return it
-                return network
-            else:
-                raise CyError(f'Network view does not exist for network "{network}"')
+    net_suid = networks.get_network_suid(network)
+    any_views = get_network_views(net_suid, base_url=base_url)
+    if any_views is None:
+        raise CyError(f'Network view does not exist for network "{network}"')
+    elif len(any_views) > 1:
+        narrate('Warning: This network has multiple views. Returning last.')
+        return any_views[-1]
     else:
-        # use current network, return first view
-        # TODO: R sets this but never uses it ...is this an error?
-        network_title = 'current'
-        # warn if multiple views
-        network_views = get_network_views(network, base_url=base_url)
-        if len(network_views) > 1:
-            narrate(f'Warning: This network "{network}" has multiple views. Returning last.')
-        return network_views[-1]
+        return any_views[-1]
 
-
+ 
 @cy_log
 def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """Zoom and pan network view to maximize either height or width of current network window.

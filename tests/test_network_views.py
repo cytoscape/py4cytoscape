@@ -37,7 +37,7 @@ class NetworkViewsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
+
     @print_entry_exit
     def test_get_network_views(self):
         # Initialization
@@ -62,7 +62,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_network_views, 'bogus network')
 
-    
+
     @print_entry_exit
     def test_get_network_view_suid(self):
         # Initialization
@@ -84,13 +84,10 @@ class NetworkViewsTests(unittest.TestCase):
         # Verify that the view list for the original network is unchanged ... identify network by string
         self.assertEqual(check_view(get_network_view_suid('galFiltered.sif')), gal_filtered_view_suid)
 
-        # Verify that the view list for the original network is unchanged ... identify view by view suid
-        self.assertEqual(check_view(get_network_view_suid(gal_filtered_view_suid)), gal_filtered_view_suid)
-
         self.assertRaises(CyError, get_network_view_suid, 'bogus network')
         self.assertRaises(CyError, get_network_view_suid, -1)
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_fit_content(self):
@@ -122,7 +119,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, fit_content, network='bogus network')
 
-    
+
     @print_entry_exit
     def test_set_current_view(self):
         # Initialization
@@ -146,7 +143,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, set_current_network, network='bogus network')
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_image(self):
@@ -179,7 +176,7 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertRaises(CyError, export_image, 'output/test', type='PNG', resolution=600, units='inches',
                           height=10.7, width=3.5, zoom=500, network=gal_filtered_view)
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_level_of_detail(self):

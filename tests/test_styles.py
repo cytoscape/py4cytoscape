@@ -120,6 +120,39 @@ class StylesTests(unittest.TestCase):
                           mappings=[node_labels, node_fills, arrow_shapes, edge_width])
 
     @print_entry_exit
+    def test_get_current_style(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that using suid to get current style works
+        suid = get_network_suid()
+        use_suid_get_style = get_current_style(suid)
+        self.assertEqual(use_suid_get_style, 'galFiltered Style')
+
+        # Verify that using network name to get current style works
+        network_name = get_network_name()
+        use_network_name_get_style = get_current_style(network_name)
+        self.assertEqual(use_suid_get_style, 'galFiltered Style')
+
+        current_style = get_current_style()
+        # Verify that dafult style is galFiltered Style
+        self.assertEqual(current_style, 'galFiltered Style')
+
+        # Verify that changeing the styel to 'default'
+        set_visual_style('default')
+        default_style = get_current_style()
+        self.assertEqual(default_style, 'default')
+
+        # Verify that changeing the styel to 'Big Labels'
+        set_visual_style('Big Labels')
+        big_labels_style = get_current_style()
+        self.assertEqual(big_labels_style, 'Big Labels')
+
+        # Verify that trying to get a non-existent current style
+        self.assertRaises(CyError, get_current_style, network='Does not exist')
+        self.assertRaises(CyError, get_current_style, network=12345678)
+
+    @print_entry_exit
     def test_delete_visual_style(self):
         # Initialization
         load_test_session()
