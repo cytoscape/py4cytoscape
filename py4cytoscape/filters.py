@@ -37,7 +37,7 @@ from . import sandbox
 # External library imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, show_error
 from .py4cytoscape_tuning import CATCHUP_FILTER_SECS, MODEL_PROPAGATION_SECS
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 from .py4cytoscape_notebook import running_remote
@@ -367,12 +367,31 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
 
 
 def _create_filter_and_finish(cmd, cmd_body, hide, network, base_url):
-    res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
+    AUTO_APPLY_THRESHOLD = 100000
+    if check_supported_versions(cytoscape='3.9') is None:
+        cmd_body['apply'] = 'True'
+        res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
+    else:
+        # Before Cytoscape 3.9, the filter was automatically applied when it was created unless
+        # the total of nodes and edges was 100,000 or more. So, we create the filter and then
+        # apply it if it wasn't automatically applied already.
+        res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
+        if networks.get_node_count(network=network, base_url=base_url) \
+           + networks.get_edge_count(network=network, base_url=base_url) > AUTO_APPLY_THRESHOLD:
+            show_error('Warning -- Cytoscape version pre-3.9 in use ... explicitly applying filter')
+            res = commands.commands_post(
+                f'filter apply container="filter" name="{cmd_body["name"]}" network="{network}"',
+                base_url=base_url)
+
     return _check_selected(hide, network, base_url)
 
 
 def _check_selected(hide, network, base_url):
-    time.sleep(MODEL_PROPAGATION_SECS)  # Yikes! Have to wait a second for selection to settle!
+    if check_supported_versions(cytoscape='3.9'):
+        # This delay became unnecessary in Cytoscape 3.9
+        show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
+        time.sleep(MODEL_PROPAGATION_SECS)  # Yikes! Have to wait a second for selection to settle!
+
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
 
