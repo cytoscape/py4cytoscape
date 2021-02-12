@@ -66,7 +66,7 @@ class AppsTests(unittest.TestCase):
             False in [set(app_info).issuperset({'appName', 'version', 'description', 'status'}) for app_info in res])
         app_names = {app_info['appName'] for app_info in res}
         self.assertTrue(app_names.issuperset(
-            {'Biomart Web Service Client', 'copycatLayout', 'cyChart', 'MCODE', 'PSICQUIC Web Service Client',
+            {'Biomart Web Service Client', 'copycatLayout', 'cyChart', 'PSICQUIC Web Service Client',
              'Diffusion', 'cyREST', 'CyNDEx-2', 'Core Apps', 'cyBrowser', 'SBML Reader', 'PSI-MI Reader',
              'Network Merge', 'CyCL', 'BioPAX Reader', 'NetworkAnalyzer', 'ID Mapper', 'CX Support',
              'OpenCL Prefuse Layout', 'JSON Support'}))
