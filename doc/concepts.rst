@@ -417,6 +417,7 @@ of publishing a workflow as a Notebook?
         * ``sandbox_set()``: Create a new sandbox or makes another sandbox the "current sandbox"
         * ``sandbox_remove()``: Delete a sandbox and its files and directories
         * ``sandbox_send_to()``: Transfer a Notebook file to a sandbox
+        * ``sandbox_url_to()``: Transfer for a cloud-based file to a sandbox
         * ``sandbox_get_from()``: Transfer a sandbox file to the Notebook file system
         * ``sandbox_get_file_info()``: Get sandbox file metadata
         * ``sandbox_remove_file()``: Remove a sandbox file

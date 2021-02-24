@@ -23,6 +23,7 @@ then move files in and out of it just as a remote Notebook would.
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
 """
+from sphinx.addnodes import desc
 
 """Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
 
@@ -139,7 +140,7 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
         >>> sandbox_remove() # Valid only when running in Notebook or remotely or when explicitly set sandbox is current
         {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox', 'existed': True}
         >>> sandbox_set('mySand')
-        {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox', 'existed': True}
+        {'sandboxPath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand', 'existed': True}
 
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
@@ -247,6 +248,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
     Args:
         source_file (str): Name of file in the Python workflow's file system
         dest_file (str): Name of file to write (as absolute path or sandbox-relative path) ... if None, use file name in source_file
+        overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
@@ -265,7 +267,7 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
         >>> sandbox_send_to('myData01.csv', 'myData.csv', overwrite=True)
         {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
         >>> sandbox_send_to('myData01.csv', 'myData.csv', sandbox_name='mySand')
-        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\myData.csv'}
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand\\myData.csv'}
 
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
@@ -281,6 +283,49 @@ def sandbox_send_to(source_file, dest_file=None, overwrite=True, sandbox_name = 
         head, dest_file = os.path.split(source_file)
 
     return _sandbox_op(f'filetransfer toSandbox fileByteCount={len(file_content)} overwrite={overwrite} fileBase64="{file_content64}"', sandbox_name, file_name=dest_file, base_url=base_url)
+
+@cy_log
+def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):
+    """Transfer a cloud-based file to a sandbox.
+
+    The source URL identifies a file to be transferred to the named (or current) sandbox, overwriting an existing
+    file if one already exists. The ``dest_file`` can be an absolute path if the sandbox is the entire file
+    system (i.e., for standalone Python execution) or a path relative to the sandbox (i.e., for Notebook or
+    remote execution or if a sandbox was explicitly created).
+
+    Args:
+        source_url (str): URL addressing cloud file to download
+        dest_file (str): Name of file to write (as absolute path or sandbox-relative path)
+        overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
+        sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'filePath': <new file's absolute path in Cytoscape workstation>, 'fileByteCount': number of bytes read}
+
+    Raises:
+        CyError: if file name or URL is invalid
+        requests.exceptions.HTTPError: if can't connect to Cytoscape, Cytoscape returns an error, or sandbox is invalid
+
+    Examples:
+        >>> sandbox_url_to('https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0', 'test file')
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\test file', 'fileByteCount': 5536880}
+        >>> sandbox_url_to('https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0', 'test file', overwrite=True)
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\test file', 'fileByteCount': 5536880}
+        >>> sandbox_url_to('https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0', 'test file', sandbox_name='mySand')
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mysand\\test file', 'fileByteCount': 5536880}
+
+    See Also:
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
+    """
+    if not source_url:
+        raise CyError(f'Source URL cannot be null')
+    if not dest_file:
+        raise CyError(f'Destination file cannot be null')
+
+    return _sandbox_op(f'filetransfer urlToSandbox overwrite={overwrite} sourceURL={source_url}', sandbox_name, file_name=dest_file, base_url=base_url)
 
 @cy_log
 def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name = None, base_url=DEFAULT_BASE_URL):
@@ -362,9 +407,9 @@ def sandbox_remove_file(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL)
 
     Examples:
         >>> sandbox_remove_file('test.png')
-        {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\test.png', 'existed': True}
+        {'filePath': 'C:\\Users\\CyDeveloper\\default_sandbox\\test.png', 'existed': True}
         >>> sandbox_remove_file('mySamples/workspace.cys', sandbox_name='mySand')
-        {'filePath': 'C:\\Users\\CyDeveloper\\Cytofiles\\workspace.cys', 'existed': False}
+        {'filePath': 'C:\\Users\\CyDeveloper\\mySand\\mySamples\\workspace.cys', 'existed': False}
 
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
