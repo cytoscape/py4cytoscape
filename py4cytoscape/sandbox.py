@@ -290,11 +290,24 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
 
     The source URL identifies a file to be transferred to the named (or current) sandbox, overwriting an existing
     file if one already exists. The ``dest_file`` can be an absolute path if the sandbox is the entire file
-    system (i.e., for standalone Python execution) or a path relative to the sandbox (i.e., for Notebook or
+    system (i.e., for standalone Python execution), or it can be a path relative to the sandbox (i.e., for Notebook or
     remote execution or if a sandbox was explicitly created).
 
+    Supported URLs include:
+        Raw URL: URL directly references the file to download (e.g., http://tpsoft.com/museum_images/IBM%20PC.JPG
+        Dropbox: Use the standard Dropbox ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0)
+        GDrive: Use the standard Google Drive ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://drive.google.com/file/d/12sJaKQQbesF10xsrbgiNtUcqCQYY1YI3/view?usp=sharing)
+        OneDrive: Use the OneDrive web site to right click on the file, choose the
+			``Embed`` menu option, then copy the URL in the iframe's ``src`` parameter into the clipboard (e.g., https://onedrive.live.com/embed?cid=C357475E90DD89C4&resid=C357475E90DD89C4%217207&authkey=ACEU5LrVtI_jWTU)
+        GitHub: Use the GitHub web site to show the file or a link to it, and capture the URL in the clipboard (e.g., https://github.com/cytoscape/file-transfer-app/blob/master/test_data/GDS112_full.soft)
+
+        When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_to_url()``.
+
+        Note that GitHub enforces a limit on the size of a file that can be stored there. We advise that you take this
+        into account when choosing a cloud service for your files.
+
     Args:
-        source_url (str): URL addressing cloud file to download
+        source_url (str): URL addressing cloud file to download )
         dest_file (str): Name of file to write (as absolute path or sandbox-relative path)
         overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
