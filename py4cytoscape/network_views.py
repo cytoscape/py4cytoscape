@@ -73,17 +73,21 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the SUID of a network view.
+
     Args:
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
         int: SUID of the view for the network. The first (presummably only) view associated a network is returned.
+
     Raises:
         CyError: if network or view doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> get_network_view_suid()
         130223
@@ -91,6 +95,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         130223
         >>> get_network_view_suid(network='galFiltered.sif')
         130223
+
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
@@ -104,7 +109,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     else:
         return any_views[-1]
 
- 
+
 @cy_log
 def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """Zoom and pan network view to maximize either height or width of current network window.

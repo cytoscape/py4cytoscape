@@ -8,17 +8,17 @@ II. Specific functions for setting particular node, edge and network defaults
 
 """Copyright 2020 The Cytoscape Consortium
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
 persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
@@ -88,7 +88,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
 
     if style_name is None:
         style_name = 'default'
-        narrate(f'style_name not specified; updating "default" style.')
+        narrate(f'style_name not specified, so updating "default" style.')
 
     # process visual property, including common alternatives for vp names :)
     def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
@@ -124,7 +124,7 @@ def get_visual_property_default(property, style_name=None, base_url=DEFAULT_BASE
     """
     if style_name is None:
         style_name = 'default'
-        narrate(f'style_name not specified; accessing "default" style.')
+        narrate(f'style_name not specified, so accessing "default" style.')
 
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_get(f'styles/{style_name}/defaults/{property}', base_url=base_url)
@@ -157,7 +157,7 @@ def set_visual_property_default(style_string, style_name=None, base_url=DEFAULT_
     """
     if style_name is None:
         style_name = 'default'
-        narrate(f'style_name not specified; updating "default" style.')
+        narrate(f'style_name not specified, so updating "default" style.')
 
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,

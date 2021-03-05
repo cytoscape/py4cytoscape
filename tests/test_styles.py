@@ -132,18 +132,18 @@ class StylesTests(unittest.TestCase):
         # Verify that using network name to get current style works
         network_name = get_network_name()
         use_network_name_get_style = get_current_style(network_name)
-        self.assertEqual(use_suid_get_style, 'galFiltered Style')
+        self.assertEqual(use_network_name_get_style, 'galFiltered Style')
 
         current_style = get_current_style()
-        # Verify that dafult style is galFiltered Style
+        # Verify that defult style is galFiltered Style
         self.assertEqual(current_style, 'galFiltered Style')
 
-        # Verify that changeing the styel to 'default'
+        # Verify that changing the style to 'default'
         set_visual_style('default')
         default_style = get_current_style()
         self.assertEqual(default_style, 'default')
 
-        # Verify that changeing the styel to 'Big Labels'
+        # Verify that changing the style to 'Big Labels'
         set_visual_style('Big Labels')
         big_labels_style = get_current_style()
         self.assertEqual(big_labels_style, 'Big Labels')

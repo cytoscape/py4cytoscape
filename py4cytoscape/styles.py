@@ -31,6 +31,7 @@ import warnings
 from . import commands
 from . import networks
 from . import sandbox
+from . import network_views
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -395,19 +396,24 @@ def get_visual_property_names(base_url=DEFAULT_BASE_URL):
 @cy_log
 def get_current_style(network=None, base_url=DEFAULT_BASE_URL):
     """Get the current visual style applied to a network.
+
     Args:
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
                 If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
         str: Name of style
+
     Raises:
+        CyError: if style doesn't exist or network doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> get_current_style()
-        "dafault"
+        "default"
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_view_suid(net_suid, base_url=base_url)
