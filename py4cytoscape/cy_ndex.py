@@ -34,7 +34,7 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 
 @cy_log
-def import_network_from_ndex(ndex_id, username=None, password=None, access_key=None, ndex_url="http://ndexbio.org", ndex_version="v2", base_url=DEFAULT_BASE_URL):
+def import_network_from_ndex(ndex_id, username=None, password=None, access_key=None, base_url=DEFAULT_BASE_URL):
     """Import a network from the NDEx database into Cytoscape.
 
     Args:
@@ -42,8 +42,6 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
         username (str): NDEx account username; required for private content
         password (str): NDEx account password; required for private content
         access_key (str): NDEx accessKey; alternate acccess to private content
-        ndex_url (str): NDEX website url; Default is http://ndexbio.org
-        ndex_version(str): NDEX version number; Default is v2
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -64,10 +62,7 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
     Note:
         Importing a network that has recently been stored on NDEx may result in an error if NDEx has not finished indexing it. Lags can range from a few seconds to a few minutes.
     """
-    if re.search("^https?://", ndex_url) == None:
-        ndex_url = "".join(["http://", ndex_url])
-    server_Url = "/".join([ndex_url, ndex_version])
-    ndex_body = {'serverUrl': server_Url, 'uuid': ndex_id}
+    ndex_body = {'serverUrl': 'http://ndexbio.org/v2', 'uuid': ndex_id}
     if username is not None: ndex_body.update({'username': username})
     if password is not None: ndex_body.update({'password': password})
     if access_key is not None: ndex_body.update({'accessKey': access_key})
@@ -76,7 +71,7 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
     return res['data']['suid']
 
 @cy_log
-def export_network_to_ndex(username, password, is_public, network=None, metadata=None, ndex_url="http://ndexbio.org", ndex_version="v2", base_url=DEFAULT_BASE_URL):
+def export_network_to_ndex(username, password, is_public, network=None, metadata=None, base_url=DEFAULT_BASE_URL):
     """Send a copy of a Cytoscape network to NDEx as a new submission.
 
     Args:
@@ -86,8 +81,6 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         metadata (dict): A list of structured information describing the network
-        ndex_url (str): NDEX website url; Default is http://ndexbio.org
-        ndex_version(str): NDEX version number; Default is v2
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -108,11 +101,8 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
     Note:
         Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
-    if re.search("^https?://", ndex_url) == None:
-        ndex_url = "".join(["http://", ndex_url])
-    server_Url = "/".join([ndex_url, ndex_version])
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_post(f'networks/{suid}', body={'serverUrl': server_Url,
+    res = commands.cyrest_post(f'networks/{suid}', body={'serverUrl': 'http://ndexbio.org/v2',
                                                          'username': username,
                                                          'password': password,
                                                          'metadata': metadata,
@@ -121,7 +111,7 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
     return res['data']['uuid']
 
 @cy_log
-def update_network_in_ndex(username, password, is_public, network=None, metadata=None, ndex_url = "http://ndexbio.org", ndex_version = "v2", base_url=DEFAULT_BASE_URL):
+def update_network_in_ndex(username, password, is_public, network=None, metadata=None, base_url=DEFAULT_BASE_URL):
     """Update Network In NDEx.
 
     Update an existing network in NDEx, given a previously assoicaiated Cytoscape network, e.g., previously
@@ -134,8 +124,6 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         metadata (dict): A list of structured information describing the network
-        ndex_url (str): NDEX website url; Default is http://ndexbio.org
-        ndex_version(str): NDEX version number; Default is v2
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -156,11 +144,9 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
     Note:
         Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
-    if re.search("^https?://", ndex_url) == None:
-        ndex_url = "".join(["http://", ndex_url])
-    server_Url = "/".join([ndex_url, ndex_version])
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_put(f'networks/{suid}', body={'serverUrl': server_Url,
+
+    res = commands.cyrest_put(f'networks/{suid}', body={'serverUrl': 'http://ndexbio.org/v2',
                                                         'username': username,
                                                         'password': password,
                                                         'metadata': metadata,
