@@ -116,6 +116,11 @@ class CyNDExTests(unittest.TestCase):
         all_fetched_node_names = get_all_nodes(fetched_galFiltered_suid)
         self.assertSetEqual(set(all_fetched_node_names), set(all_node_names))
 
+        # Verify that bad credentials are caught
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, 'BogusUser', self._NDEX_PASSWORD)
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, self._NDEX_USERID, 'BogusPassword')
+        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, access_key='BogusKey')
+
         # Initialization for subdomain param
         load_test_session()
         sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url="http://test.ndexbio.org/", ndex_version="v2")
@@ -128,11 +133,6 @@ class CyNDExTests(unittest.TestCase):
         self.assertIsInstance(sub_fetched_galFiltered_suid, int)
         sub_all_fetched_node_names = get_all_nodes(sub_fetched_galFiltered_suid)
         self.assertSetEqual(set(sub_all_fetched_node_names), set(sub_all_node_names))
-
-        # Verify that bad credentials are caught
-        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, 'BogusUser', self._NDEX_PASSWORD)
-        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, self._NDEX_USERID, 'BogusPassword')
-        self.assertRaises(CyError, import_network_from_ndex, galFiltered_uuid, access_key='BogusKey')
 
 if __name__ == '__main__':
     unittest.main()
