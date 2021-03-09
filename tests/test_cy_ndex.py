@@ -71,6 +71,18 @@ class CyNDExTests(unittest.TestCase):
         self.assertRaises(CyError, get_network_ndex_id, network='BogusNetwork')
         self.assertRaises(CyError, export_network_to_ndex, self._NDEX_USERID, self._NDEX_PASSWORD, False, network='BogusNetwork')
 
+        # Initialization for subdomain param
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
+
+        # Verify that storing the first (and selected) network returns a UUID and it matches what's fetched separately
+        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        self.assertIsInstance(sub_galFiltered_uuid, str)
+        sub_fetched_galFiltered_uuid = get_network_ndex_id()
+        self.assertIsInstance(sub_fetched_galFiltered_uuid, str)
+        self.assertEqual(sub_galFiltered_uuid, sub_fetched_galFiltered_uuid)
+        time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
+
     @print_entry_exit
     def test_update_network_ndex_id(self):
         # TODO: Find out how to test isPublic and metadata
