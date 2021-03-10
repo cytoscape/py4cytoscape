@@ -99,9 +99,8 @@ class CyNDExTests(unittest.TestCase):
         self.assertIsInstance(updated_galFiltered_uuid, str)
         self.assertEqual(updated_galFiltered_uuid, galFiltered_uuid)
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
-
-        # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
         close_session(False)
+        # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
         fetched_galFiltered_suid = import_network_from_ndex(updated_galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD)
         self.assertIsInstance(fetched_galFiltered_suid, int)
         selected_nodes = get_selected_nodes(network=fetched_galFiltered_suid)
@@ -125,9 +124,9 @@ class CyNDExTests(unittest.TestCase):
         self.assertIsInstance(sub_updated_galFiltered_uuid, str)
         self.assertEqual(sub_updated_galFiltered_uuid, sub_galFiltered_uuid)
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
+        close_session(False)
 
         # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
-        close_session(False)
         sub_fetched_galFiltered_suid = import_network_from_ndex(sub_updated_galFiltered_uuid, self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         self.assertIsInstance(sub_fetched_galFiltered_suid, int)
         sub_selected_nodes = get_selected_nodes(network=sub_fetched_galFiltered_suid)
