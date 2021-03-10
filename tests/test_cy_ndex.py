@@ -34,7 +34,7 @@ class CyNDExTests(unittest.TestCase):
 
     _NDEX_USERID = 'cytoscape_test'
     _NDEX_PASSWORD = 'cytoscape_rocks'
-    _NDEX_TEST_USERID = 'cytoscape_test_server'
+    _NDEX_TEST_USERID = 'cytoscape_test'
     _NDEX_TEST_PASSWORD = 'cytoscape_rocks'
     _NDEX_SERVER_WAIT_SECS = 10
 
