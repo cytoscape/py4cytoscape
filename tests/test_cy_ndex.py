@@ -120,7 +120,7 @@ class CyNDExTests(unittest.TestCase):
 
         # Verify that the network (with all nodes selected) can be updated on NDEx and that the same UUID is returned
         sub_all_node_names = node_suid_to_node_name(select_all_nodes())
-        sub_updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url = "http://test.ndexbio.org", ndex_version = "v2")
+        sub_updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version = "v2")
         self.assertIsInstance(sub_updated_galFiltered_uuid, str)
         self.assertEqual(sub_updated_galFiltered_uuid, sub_galFiltered_uuid)
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
