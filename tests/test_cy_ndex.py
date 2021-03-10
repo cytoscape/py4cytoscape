@@ -34,6 +34,8 @@ class CyNDExTests(unittest.TestCase):
 
     _NDEX_USERID = 'cytoscape_test'
     _NDEX_PASSWORD = 'cytoscape_rocks'
+    _NDEX_TEST_USERID = 'cytoscape_test_server'
+    _NDEX_TEST_PASSWORD = 'cytoscape_rocks'
     _NDEX_SERVER_WAIT_SECS = 10
 
     @unittest.skip('Get_network_ndex_id returns the first network UUID regardless ... it should scan for the network SUID')
@@ -76,7 +78,7 @@ class CyNDExTests(unittest.TestCase):
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
         # Verify that storing the first (and selected) network returns a UUID and it matches what's fetched separately
-        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         self.assertIsInstance(sub_galFiltered_uuid, str)
         sub_fetched_galFiltered_uuid = get_network_ndex_id()
         self.assertIsInstance(sub_fetched_galFiltered_uuid, str)
@@ -114,19 +116,19 @@ class CyNDExTests(unittest.TestCase):
 
         # Initialization for subdomain param
         load_test_session()
-        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that the network (with all nodes selected) can be updated on NDEx and that the same UUID is returned
         sub_all_node_names = node_suid_to_node_name(select_all_nodes())
-        sub_updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url = "http://test.ndexbio.org", ndex_version = "v2")
+        sub_updated_galFiltered_uuid = update_network_in_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url = "http://test.ndexbio.org", ndex_version = "v2")
         self.assertIsInstance(sub_updated_galFiltered_uuid, str)
         self.assertEqual(sub_updated_galFiltered_uuid, sub_galFiltered_uuid)
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that when the network is reloaded, it still has all nodes selected and the same UUID
         close_session(False)
-        sub_fetched_galFiltered_suid = import_network_from_ndex(sub_updated_galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        sub_fetched_galFiltered_suid = import_network_from_ndex(sub_updated_galFiltered_uuid, self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         self.assertIsInstance(sub_fetched_galFiltered_suid, int)
         sub_selected_nodes = get_selected_nodes(network=sub_fetched_galFiltered_suid)
         self.assertSetEqual(set(sub_selected_nodes), set(sub_all_node_names))
@@ -154,13 +156,13 @@ class CyNDExTests(unittest.TestCase):
 
         # Initialization for subdomain param
         load_test_session()
-        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_USERID, self._NDEX_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        sub_galFiltered_uuid = export_network_to_ndex(self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, False, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         sub_all_node_names = get_all_nodes()
         close_session(False)
         time.sleep(self._NDEX_SERVER_WAIT_SECS) # Give NDEx a chance to file the network before asking for it again.
 
         # Verify that the network can be loaded from test server and it has the same nodes
-        sub_fetched_galFiltered_suid = import_network_from_ndex(galFiltered_uuid, self._NDEX_USERID, self._NDEX_PASSWORD, ndex_url="http://test.ndexbio.org", ndex_version="v2")
+        sub_fetched_galFiltered_suid = import_network_from_ndex(galFiltered_uuid, self._NDEX_TEST_USERID, self._NDEX_TEST_PASSWORD, ndex_url="http://test.ndexbio.org", ndex_version="v2")
         self.assertIsInstance(sub_fetched_galFiltered_suid, int)
         sub_all_fetched_node_names = get_all_nodes(sub_fetched_galFiltered_suid)
         self.assertSetEqual(set(sub_all_fetched_node_names), set(sub_all_node_names))
