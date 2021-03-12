@@ -1,0 +1,8 @@
+#Disease_id1 Disease_id2 Weight Interaction
+#This line blank intentionally
+10 20 102 red
+20 30 203 blue
+30 40 304 green
+20 40 204 yellow
+40 10 401 white
+

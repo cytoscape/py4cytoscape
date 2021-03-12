@@ -1164,6 +1164,8 @@ def import_network_from_file(file=None, tabular_params=None, base_url=DEFAULT_BA
         {'networks': [131481], 'views': [131850]}
         >>> import_network_from_file('data/yeastHighQuality.sif') # import a SIF-formatted network
         {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_file('data/disease.net.default.xlsx', tabular_params={}) # import an Excel file
+        {'networks': [131481], 'views': [131850]}
         >>> import_network_from_file('data/disease.net.default.txt', tabular_params={}) # import a tabular text file
         {'networks': [131481], 'views': [131850]}
         >>> import_network_from_file('data/disease.net.interaction.txt',
@@ -1184,7 +1186,7 @@ def import_network_from_file(file=None, tabular_params=None, base_url=DEFAULT_BA
         # TODO: Put double quotes around file
     else:
         get_param = lambda param_name, default: tabular_params[param_name] if param_name in tabular_params else default
-        first_row_as_column_names = get_param('firstRowAsColumn_names', False)
+        first_row_as_column_names = get_param('firstRowAsColumnNames', False)
         start_load_row = get_param('startLoadRow', 1)
         column_type_list = get_param('columnTypeList', 's,i,t')
         delimiters = get_param('delimiters', '\\,,\t') # use comma and tab by default

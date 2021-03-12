@@ -660,6 +660,7 @@ class NetworkTests(unittest.TestCase):
             df_table = df_table.set_index('name')
             df_expected = df.DataFrame(data=expected_table, columns=expected_table.keys())
             df_expected.set_index(key_name, inplace=True)
+            self.assertEqual(len(df_table.index), len(df_expected.index)) # must have the same number of entries
             for key in df_expected.index: # Verify that all expected values are in data table, not necessarily vice versa
                 actual_row = df_table.loc[key]
                 for expected_name, expected_value in df_expected.loc[key].items():
@@ -683,6 +684,19 @@ class NetworkTests(unittest.TestCase):
         # Verify that text network loads using default parameters
         close_session(False) # get a clean session to flush persistent node attributes
         verify_import_res(import_network_from_file('data/disease.net.default.txt', tabular_params={}))
+        df_node_data = get_table_columns()
+        expected_node_data = {'name': ["10", "20", "30", "40"]}
+        verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
+
+        df_edge_data = get_table_columns(table='edge')
+        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+                              'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
+                              'other junk': ['other junk', 'other junk', 'other junk', 'other junk', 'other junk']}
+        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'other junk', 'SUID'}, 'name')
+
+        # Verify that text network loads using default parameters
+        close_session(False) # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_file('data/disease.net.default.xlsx', tabular_params={}))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
