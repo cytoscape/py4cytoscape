@@ -1135,12 +1135,19 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
 
 @cy_log
-def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
+def import_network_from_file(file=None, tabular_params=None, base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
     Args:
         file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
             If None, a demo network file in SIF format is loaded.
+        tabular_params (dict): if None, file load assumes supported network format. If non-None, file load assumes
+            tabular formatted file type (e.g., csv, Excel, etc) and dict values customize the load.
+            ``firstRowAsColumnNames`` (bool): True if first row contributes column names but no data values
+            ``startLoadRow`` (int): 1-based row to start reading data ... after column name row, if present
+            ``columnTypeList`` (str): comma-separated map of column types ordered by column index
+            (e.g. "source,target,interaction,source attribute,target attribute,edge attribute,skip" or just "s,t,i,sa,ta,ea,x")
+            ``delimiters`` (str): comma-separated list of characters that can separate columns ... //, is a comma, /t is a tab
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -1149,22 +1156,60 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         dict: {"networks": [network suid], "views": [suid for views]} where networks and views lists have length 1
 
     Raises:
-        CyError: if file cannot be found or loaded
+        CyError: if file cannot be found or loaded, or if error in tabular_params list
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> import_network_from_file() # import demo network
         {'networks': [131481], 'views': [131850]}
-        >>> import_network_from_file('data/yeastHighQuality.sif')
+        >>> import_network_from_file('data/yeastHighQuality.sif') # import a SIF-formatted network
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_file('data/disease.net.default.txt', tabular_params={}) # import a tabular text file
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_file('data/disease.net.interaction.txt',
+        >>>                          tabular_params={'firstRowAsColumnNames': True,
+        >>>                                          'startLoadRow': 1,
+        >>>                                          'columnTypeList': 's,t,x,i',
+        >>>                                          'delimiters': ' '})
         {'networks': [131481], 'views': [131850]}
     """
     if file is None:
         file = 'sampleData/galFiltered.sif'
     else:
         file = get_abs_sandbox_path(file)
-    res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
-    # TODO: Fix R documentation to match what's really returned
-    # TODO: Put double quotes around file
+
+    if tabular_params is None:
+        res = commands.commands_post(f'network load file file="{file}"', base_url=base_url)
+        # TODO: Fix R documentation to match what's really returned
+        # TODO: Put double quotes around file
+    else:
+        get_param = lambda param_name, default: tabular_params[param_name] if param_name in tabular_params else default
+        first_row_as_column_names = get_param('firstRowAsColumn_names', False)
+        start_load_row = get_param('startLoadRow', 1)
+        column_type_list = get_param('columnTypeList', 's,i,t')
+        delimiters = get_param('delimiters', '\\,,\t') # use comma and tab by default
+
+        # As of 3.9, the column_type_list is sufficient for specifying the layout of a data line. However,
+        # per CYTOSCAPE-12764, pre-3.9 Cytoscape has trouble with the "interaction" tag. To accommodate all
+        # Cytoscape versions, we provide explicit indexes for source, target and interaction columns.
+        type_list = column_type_list.lower().split(',')
+        index_params = ''
+        if 's' in type_list:
+            index_params += f' indexColumnSourceInteraction="{type_list.index("s") + 1}"'
+        if 'source' in type_list:
+            index_params += f' indexColumnSourceInteraction="{type_list.index("source") + 1}"'
+        if 't' in type_list:
+            index_params += f' indexColumnTargetInteraction="{type_list.index("t") + 1}"'
+        if 'target' in type_list:
+            index_params += f' indexColumnTargetInteraction="{type_list.index("target") + 1}"'
+        if 'i' in type_list:
+            index_params += f' indexColumnTypeInteraction="{type_list.index("i") + 1}"'
+        if 'interaction' in type_list:
+            index_params += f' indexColumnTypeInteraction="{type_list.index("interaction") + 1}"'
+
+        res = commands.commands_post(
+            f'network import file file="{file}" firstRowAsColumnNames="{first_row_as_column_names}" startLoadRow="{start_load_row}"{index_params} columnTypeList="{column_type_list}" delimiters="{delimiters}"',
+            base_url=base_url)
 
     # should not be necessary, but is because "network load file" doesn't actually set the current network
     # until after it's done. So, without the sleep(), setting the current network will be superceded by
