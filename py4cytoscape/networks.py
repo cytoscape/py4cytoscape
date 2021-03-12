@@ -1177,6 +1177,8 @@ def import_network_from_file(file=None, tabular_params=None, base_url=DEFAULT_BA
     """
     if file is None:
         file = 'sampleData/galFiltered.sif'
+        if tabular_params is not None:
+            raise CyError('Cannot provide load parameters for demo network file')
     else:
         file = get_abs_sandbox_path(file)
 
