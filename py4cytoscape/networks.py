@@ -1143,11 +1143,11 @@ def import_network_from_file(file=None, tabular_params=None, base_url=DEFAULT_BA
             If None, a demo network file in SIF format is loaded.
         tabular_params (dict): if None, file load assumes supported network format. If non-None, file load assumes
             tabular formatted file type (e.g., csv, Excel, etc) and dict values customize the load.
-            ``firstRowAsColumnNames`` (bool): True if first row contributes column names but no data values
-            ``startLoadRow`` (int): 1-based row to start reading data ... after column name row, if present
+            ``firstRowAsColumnNames`` (bool): True if first row contributes column names but no data values; defaults to False
+            ``startLoadRow`` (int): 1-based row to start reading data ... after column name row, if present; defaults to 1
             ``columnTypeList`` (str): comma-separated map of column types ordered by column index
-            (e.g. "source,target,interaction,source attribute,target attribute,edge attribute,skip" or just "s,t,i,sa,ta,ea,x")
-            ``delimiters`` (str): comma-separated list of characters that can separate columns ... //, is a comma, /t is a tab
+            (e.g. "source,target,interaction,source attribute,target attribute,edge attribute,skip" or just "s,t,i,sa,ta,ea,x"); defaults to "s,i,t"
+            ``delimiters`` (str): comma-separated list of characters that can separate columns ... \\, is a comma, \t is a tab; defaults to '\\,,\t'
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
