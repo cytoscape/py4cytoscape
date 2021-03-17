@@ -142,7 +142,9 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
     if column not in tables.get_table_column_names(type[:4], base_url=base_url):
         raise CyError('Column "%s" does not exist in the "%s" table' % (column, type[:4]))
 
-    if predicate in ['BETWEEN', 'IS_NOT_BETWEEN']:
+    if predicate == "REGEX" and check_supported_versions(cytoscape='3.9'):
+        show_error('Warning -- Cytoscape version pre-3.9 in use ... REGEX filter may hang forever')
+    elif predicate in ['BETWEEN', 'IS_NOT_BETWEEN']:
         if not isinstance(criterion, list) or len(criterion) != 2:
             raise CyError('Criterion "{criterion}" must be a list of two numeric values, e.g., [0.5, 2.0]')
     elif predicate in ['GREATER_THAN', 'GREATER_THAN_OR_EQUAL']:
