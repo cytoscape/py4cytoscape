@@ -154,6 +154,11 @@ class FiltersTests(unittest.TestCase):
                           None,
                           all_edges_set - {'YGL035C (pd) YLR044C', 'YER179W (pp) YLR044C', 'YNL216W (pd) YLR044C'})
 
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('column filter 50x', lambda x: create_column_filter(x, 'COMMON', 'HIS', 'CONTAINS', apply=False),
+                          None, None)
+
         # TODO: Can't test "hide" parameter in create_column_filter because I can't deduce which nodes/edges are hidden
 
         # Verify that invalid forms fail
@@ -193,6 +198,11 @@ class FiltersTests(unittest.TestCase):
 
         # TODO: Can't test "hide" parameter in create_degree_filter because I can't deduce which nodes/edges are hidden
 
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('degree filter 4x', lambda x: create_degree_filter(x, [8, 10], 'BETWEEN', apply=False),
+                          None, None)
+
         # Verify that all bad filters are caught
         self.check_bad_filter('degree filter 10x', lambda x: create_degree_filter(x, [8, 10], 'BOGUS_PREDICATE'))
         self.assertRaises(CyError, create_degree_filter, 'degree filter 11x', [8], 'BETWEEN')
@@ -226,6 +236,12 @@ class FiltersTests(unittest.TestCase):
                           lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'],
                                                                        type='ANY'),
                           {'YGL035C', 'YNL216W', 'YLR362W', 'YPL248C'}, None)
+
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('composite filter 4x',
+                          lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'], apply=False),
+                          None, None)
 
         # Verify that there must be at least two filters
         self.assertRaises(CyError, create_composite_filter, 'bad filter', ['degree filter 1x'])

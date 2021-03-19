@@ -38,7 +38,7 @@ from . import sandbox
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, show_error
-from .py4cytoscape_tuning import CATCHUP_FILTER_SECS, MODEL_PROPAGATION_SECS
+from .py4cytoscape_tuning import CATCHUP_FILTER_SECS
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 from .py4cytoscape_notebook import running_remote
 
@@ -85,7 +85,7 @@ def apply_filter(filter_name='Default filter', hide=False, network=None, base_ur
 
 @cy_log
 def create_column_filter(filter_name, column, criterion, predicate, caseSensitive=False, anyMatch=True, type='nodes',
-                         hide=False, network=None, base_url=DEFAULT_BASE_URL):
+                         hide=False, network=None, base_url=DEFAULT_BASE_URL, *, apply=True):
     """Create Column Filter.
 
     Create a filter to control node or edge selection. Works on columns of boolean, string, numeric
@@ -113,6 +113,7 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -135,6 +136,8 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
         >>> create_column_filter('myFilter', 'isTarget', True , "IS", hide=True) # Filter on boolean column isTarget
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
         >>> create_column_filter('myFilter', 'Betweenness', [300, 600] , "BETWEEN", type='edges') # Filter edges
+        {'nodes': None, 'edges': [{'YPR119W (pd) YMR043W', 'YDR412W (pp) YPR119W'}]}
+        >>> create_column_filter('myFilter', 'Betweenness', [300, 600] , "BETWEEN", type='edges', apply=False) # Define filter
         {'nodes': None, 'edges': [{'YPR119W (pd) YMR043W', 'YDR412W (pp) YPR119W'}]}
     """
     networks.set_current_network(network, base_url=base_url)
@@ -175,12 +178,12 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
                 'parameters': {'criterion': criterion, 'columnName': column, 'predicate': predicate,
                                'caseSensitive': caseSensitive, 'anyMatch': anyMatch, 'type': type}}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
-    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, network, base_url)
+    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, apply, network, base_url)
 
 
 @cy_log
 def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type='ANY', hide=False, network=None,
-                         base_url=DEFAULT_BASE_URL):
+                         base_url=DEFAULT_BASE_URL, *, apply=True):
     """Create Degree Filter.
 
     Creates a filter to control node selection base on in/out degree.
@@ -196,6 +199,7 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -213,6 +217,8 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
         >>> create_column_filter('myFilter', [2, 5], hide=True) # filter for between 2 and 5 edges, and hide them
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
+        >>> create_column_filter('myFilter', [2, 5], apply=False) # define filter for between 2 and 5 edges, and hide them
+        {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
     """
     networks.set_current_network(network, base_url=base_url)
 
@@ -222,11 +228,11 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
     cmd_json = {'id': 'DegreeFilter',
                 'parameters': {'criterion': criterion, 'predicate': predicate, 'edgeType': edge_type}}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
-    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, network, base_url)
+    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, apply, network, base_url)
 
 
 @cy_log
-def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, network=None, base_url=DEFAULT_BASE_URL):
+def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, network=None, base_url=DEFAULT_BASE_URL, *, apply=True):
     """Combine filters to control node and edge selection based on previously created filters.
 
     Args:
@@ -239,6 +245,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
         dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
@@ -253,6 +260,8 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         >>> create_composite_filter('New Filter', ['degree filter 1x', 'column filter 10x'], type='ANY', network="My network")
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': [{'YPR119W (pd) YMR043W', 'YDR412W (pp) YPR119W'}]}
         >>> create_composite_filter('New Filter', ['degree filter 1x', 'degree filter 2x'], hide=True)
+        {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
+        >>> create_composite_filter('New Filter', ['degree filter 1x', 'degree filter 2x'], apply=False)
         {'nodes': ['YDR395W', 'YLR362W', 'YPL248C', 'YGL035C'], 'edges': None}
     """
     networks.set_current_network(network, base_url=base_url)
@@ -273,7 +282,7 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
 
     cmd_json = {'id': 'CompositeFilter', 'parameters': {'type': type}, 'transformers': trans_list}
     cmd_body = {'name': filter_name, 'json': json.dumps(cmd_json)}
-    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, network, base_url)
+    return _create_filter_and_finish('commands/filter/create', cmd_body, hide, apply, network, base_url)
 
 
 @cy_log
@@ -368,22 +377,25 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
     return res
 
 
-def _create_filter_and_finish(cmd, cmd_body, hide, network, base_url):
+def _create_filter_and_finish(cmd, cmd_body, hide, apply, network, base_url):
     AUTO_APPLY_THRESHOLD = 100000
     if check_supported_versions(cytoscape='3.9') is None:
-        cmd_body['apply'] = 'True'
+        cmd_body['apply'] = apply
         res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
     else:
         # Before Cytoscape 3.9, the filter was automatically applied when it was created unless
         # the total of nodes and edges was 100,000 or more. So, we create the filter and then
-        # apply it if it wasn't automatically applied already.
+        # consider applying it if it wasn't automatically applied already.
         res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
         if networks.get_node_count(network=network, base_url=base_url) \
            + networks.get_edge_count(network=network, base_url=base_url) > AUTO_APPLY_THRESHOLD:
-            show_error('Warning -- Cytoscape version pre-3.9 in use ... explicitly applying filter')
-            res = commands.commands_post(
-                f'filter apply container="filter" name="{cmd_body["name"]}" network="{network}"',
-                base_url=base_url)
+            if apply:
+                show_error('Warning -- Cytoscape version pre-3.9 in use ... explicitly applying filter')
+                res = commands.commands_post(
+                    f'filter apply container="filter" name="{cmd_body["name"]}" network="{network}"',
+                    base_url=base_url)
+        elif not apply:
+            raise CyError('Attempt to create but not apply filter in Cytoscape version pre-3.9 is not supported')
 
     return _check_selected(hide, network, base_url)
 
@@ -392,7 +404,7 @@ def _check_selected(hide, network, base_url):
     if check_supported_versions(cytoscape='3.9'):
         # This delay became unnecessary in Cytoscape 3.9
         show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
-        time.sleep(MODEL_PROPAGATION_SECS)  # Yikes! Have to wait a second for selection to settle!
+        time.sleep(CATCHUP_FILTER_SECS)  # Yikes! Have to wait a second for selection to settle!
 
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
