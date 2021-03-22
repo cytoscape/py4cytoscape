@@ -99,15 +99,35 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
-    net_suid = networks.get_network_suid(network)
-    any_views = get_network_views(net_suid, base_url=base_url)
-    if any_views is None:
-        raise CyError(f'Network view does not exist for network "{network}"')
-    elif len(any_views) > 1:
-        narrate('Warning: This network has multiple views. Returning last.')
-        return any_views[-1]
+    if isinstance(network, str):
+        # network name (or "current") was provided, warn if multiple view
+        network_views = get_network_views(network, base_url=base_url)
+        if len(network_views) > 1:
+            narrate('Warning: This network has multiple views. Returning last.')
+        return network_views[-1]
+    elif isinstance(network, int):
+        # suid provided, but is it a network or a view?
+        net_suids = commands.cyrest_get('networks', base_url=base_url)
+        if network in net_suids:  # network SUID, warn if multiple view
+            network_views = get_network_views(network, base_url=base_url)
+            if len(network_views) > 1:
+                narrate('Warning: This network has multiple views. Returning last.')
+            return network_views[-1]
+        else:
+            view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
+            if network in view_suids:  # view SUID, return it
+                return network
+            else:
+                raise CyError(f'Network view does not exist for network "{network}"')
     else:
-        return any_views[-1]
+        # use current network, return first view
+        # TODO: R sets this but never uses it ...is this an error?
+        network_title = 'current'
+        # warn if multiple views
+        network_views = get_network_views(network, base_url=base_url)
+        if len(network_views) > 1:
+            narrate(f'Warning: This network "{network}" has multiple views. Returning last.')
+        return network_views[-1]
 
 
 @cy_log
