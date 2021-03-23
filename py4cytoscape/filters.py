@@ -116,10 +116,10 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
         apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
-        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
+        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes; None if filter wasn't applied
 
     Raises:
-        CyError: if column doesn't exist in the table named by ``type``
+        CyError: if column doesn't exist in the table named by ``type`` or filter couldn't be applied
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -202,10 +202,10 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
-        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
+        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes; None if filter wasn't applied
 
     Raises:
-        CyError: if criterion is not list of two values
+        CyError: if criterion is not list of two values or filter couldn't be applied
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
@@ -248,10 +248,10 @@ def create_composite_filter(filter_name, filter_list, type='ALL', hide=False, ne
         apply (bool): True to execute filter immediately; False to define filter but not execute it
 
     Returns:
-        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes
+        dict: {'nodes': <node list>, 'edges': <edge list>} returns list of nodes and edges selected after filter executes; None if filter wasn't applied
 
     Raises:
-        CyError: if filter list contains less than one filter or has filters that don't exist
+        CyError: if filter list contains less than one filter or has filters that don't exist, or filter couldn't be applied
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
