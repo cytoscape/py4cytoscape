@@ -55,7 +55,7 @@ class CollectionsTests(unittest.TestCase):
     @print_entry_exit
     def test_get_collection_suid(self):
         # Verify that an error is raised when no collections exist
-        self.assertRaises(CyError, get_collection_suid, 'current')
+        self.assertRaises(Exception, get_collection_suid, 'current')
 
         # Initialization
         load_test_session()
@@ -75,7 +75,7 @@ class CollectionsTests(unittest.TestCase):
     @print_entry_exit
     def test_get_collection_name(self):
         # Verify that an error is raised when no collections exist
-        self.assertRaises(CyError, get_collection_name, None)
+        self.assertRaises(Exception, get_collection_name, None)
 
         # Initialization
         load_test_session()
@@ -94,7 +94,7 @@ class CollectionsTests(unittest.TestCase):
     @print_entry_exit
     def test_get_collection_networks(self):
         # Verify that an error is raised when no collections exist
-        self.assertRaises(CyError, get_collection_networks, None)
+        self.assertRaises(Exception, get_collection_networks, None)
 
         # Initialization
         load_test_session('data/Multiple Collections.cys')

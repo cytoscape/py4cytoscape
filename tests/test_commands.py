@@ -286,7 +286,7 @@ class CommandsTests(unittest.TestCase):
         res = command_run_file(CMD_FILE)  # Execute cmd to create a new session (i.e., no network)
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {})
-        self.assertRaises(CyError, get_network_suid)  # Check for there being no network anymore
+        self.assertRaises(Exception, get_network_suid)  # Check for there being no network anymore
 
         # Verify that bad commands are caught
         self.assertRaises(CyError, command_run_file, 'nosuchfile')
