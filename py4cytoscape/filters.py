@@ -309,7 +309,7 @@ def get_filter_list(base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
+def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL, *, overwrite_file=True):
     """Saves filters to file in JSON format.
 
     Args:
@@ -317,7 +317,8 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
-
+        overwrite_file (bool): False allows an error to be generated if the file already exists;
+            True allows Cytoscape to overwrite it without asking
     Returns:
         list: []
 
@@ -331,6 +332,8 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
         []
         >>> export_filters('test') # Saves all filters in file 'test.json'
         []
+        >>> export_filters('test', overwrite_file=False) # Save filters only if test.json doesn't already exist
+        []
     """
     ext = '.json'
 
@@ -338,7 +341,10 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL):
 
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
-        narrate('This file has been overwritten.')
+        if overwrite_file:
+            narrate('This file has been overwritten.')
+        else:
+            raise CyError(f'File "{filename}" already exists ... filters not saved.')
     full_filename = file_info['filePath']
 
     res = commands.commands_get(f'filter export file="{full_filename}"', base_url=base_url)

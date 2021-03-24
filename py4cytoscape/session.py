@@ -115,7 +115,7 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def save_session(filename=None, base_url=DEFAULT_BASE_URL):
+def save_session(filename=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=True):
     """Saves the current Cytoscape session as a CYS file.
 
     If no ``filename`` is provided, then it attempts to save to an existing CYS file associated with the session. If
@@ -128,6 +128,8 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        overwrite_file (bool): False allows an error to be generated if the file already exists;
+            True allows Cytoscape to overwrite it without asking
 
     Returns:
         dict: {} empty
@@ -143,6 +145,8 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
         {}
         >>> save_session() # Save current session back to the same file it was loaded from
         {}
+        >>> save_session('other.cys', overwrite_file=False) # Save session only if other.cys doesn't already exist
+        {}
     """
     if filename is None:
         filename = commands.cyrest_get('session/name', base_url=base_url)
@@ -155,6 +159,9 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL):
 
         file_info = sandbox.sandbox_get_file_info(filename)
         if len(file_info['modifiedTime']) and file_info['isFile']:
-            narrate('This file has been overwritten.')
+            if overwrite_file:
+                narrate('This file has been overwritten.')
+            else:
+                raise CyError(f'File "{filename}" already exists ... session not saved.')
 
         return commands.commands_post(f'session save as file="{get_abs_sandbox_path(filename)}"', base_url=base_url)

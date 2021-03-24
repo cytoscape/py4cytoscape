@@ -339,12 +339,25 @@ class FiltersTests(unittest.TestCase):
         self.assertSetEqual(set(get_filter_list()),
                             {'Default filter', 'Default filter 1', 'Default filter 2', 'degree filter 1x',
                              'degree filter 2x'})
-        os.remove(FILTER_FILE + FILTER_SUFFIX)
 
         # Verify that a filter file containing all types of filters is loaded
         load_test_session()
         self.assertListEqual(import_filters('data/All Predicates.filter'), [])
         self.assertSetEqual(set(get_filter_list()), {'Default filter', 'All Predicates'})
+
+        # Verify that a filters file can be overwritten
+        orig_written = os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime
+        export_filters(FILTER_FILE + FILTER_SUFFIX)
+        last_written = os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime
+        self.assertTrue(orig_written != last_written)
+
+        # Verify that an existing filters file is not overwritten if we forbid the overwrite
+        self.assertRaises(CyError, export_filters, FILTER_FILE + FILTER_SUFFIX, overwrite_file=False)
+        self.assertTrue(last_written, os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime)
+
+        # Verify that a new filters file is written whether or not overwrite is allowed
+        os.remove(FILTER_FILE + FILTER_SUFFIX)
+        export_filters(FILTER_FILE + FILTER_SUFFIX, overwrite_file=False)
 
     def check_result(self, filter_name, create_func, expected_nodes, expected_edges):
         self.assertNotIn(filter_name, get_filter_list())

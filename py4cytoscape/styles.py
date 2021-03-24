@@ -153,7 +153,7 @@ def delete_visual_style(style_name, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
-def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAULT_BASE_URL):
+def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
     """Save one or more visual styles to file.
 
     Args:
@@ -167,18 +167,21 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
-
+        overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
+            exists; True allows Cytoscape to overwrite it without asking
     Returns:
         dict: {'file': name of file written}
 
     Raises:
-        CyError: if the output file can't be created
+        CyError: if the output file can't be created, or if file exists and user opts to not overwrite it
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> export_visual_styles() # export the current style to styles.xml in the current directory
         {'file': 'C:\\Users\\CyDeveloper\\styles.xml'}
         >>> export_visual_styles('curstyle') # export the current style to curstyle.xml in the current directory
+        {'file': 'C:\\Users\\CyDeveloper\\curstyle.xml'}
+        >>> export_visual_styles('curstyle', overwrite_file=True) # overwrite any existing curstyle.xml file
         {'file': 'C:\\Users\\CyDeveloper\\curstyle.xml'}
         >>> export_visual_styles('curstyle', type='json') # export the current style in cytoscape.js format
         {'file': 'C:\\Users\\CyDeveloper\\curstyle.json'}
@@ -196,11 +199,13 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
 
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
-        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+        if overwrite_file:
+            sandbox.sandbox_remove_file(filename, base_url=base_url)
+        else:
+            narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
     cmd_string += f' OutputFile="{full_filename}"'
-    # TODO: Can't we create a parameter to delete the file first?
 
     res = commands.commands_post(cmd_string, base_url=base_url)
     return res

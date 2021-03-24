@@ -202,7 +202,12 @@ class NetworkTests(unittest.TestCase):
         # For this test, answer Cytoscape verification message to DISALLOW overwrite
         input('On on the following test, DISALLOW network overwrite')
         self.assertRaises(CyError, export_network)
-        os.remove('galFiltered.sif')
+#        os.remove('galFiltered.sif')
+
+        # Verify that a network can be overwritten without asking the user first
+        original_stat = os.stat(gal_filename)
+        export_network(filename=gal_filename, overwrite_file=True)
+        self.assertNotEqual(original_stat, os.stat(gal_filename))
 
     @print_entry_exit
     def test_delete_network(self):

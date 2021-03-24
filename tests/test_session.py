@@ -106,6 +106,14 @@ class SessionTests(unittest.TestCase):
         last_written = os.stat(OTHER_NAME_CYS).st_mtime
         self.assertTrue(orig_written != last_written)
 
+        # Verify that an existing session file is not overwritten if we forbid the overwrite
+        self.assertRaises(CyError, save_session, OTHER_NAME_CYS, overwrite_file=False)
+        self.assertTrue(last_written, os.stat(OTHER_NAME_CYS).st_mtime)
+
+        # Verify that a new session file is written whether or not overwrite is allowed
+        clean_session_file(OTHER_NAME_CYS)
+        save_session(OTHER_NAME_CYS, overwrite_file=False)
+
         # Verify that if a session was loaded from a file, saving to an empty filename refreshes the file
         open_session(OTHER_NAME_CYS)
         clean_session_file(OTHER_NAME_CYS)

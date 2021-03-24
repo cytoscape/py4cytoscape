@@ -300,7 +300,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
+def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
     """Export a network to one of mulitple file formats.
 
     Args:
@@ -313,16 +313,21 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
+            exists; True allows Cytoscape to overwrite it without asking
 
     Returns:
         dict: server JSON response
 
     Raises:
         ValueError: if server response has no JSON
+        CyError: if file exists and user opts to not overwrite it
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> export_network('/path/filename','SIF')
+        { 'data': {'file': 'C:\\Users\\CyDeveloper\\xx'}, 'errors': [] }
+        >>> export_network('/path/filename','SIF', overwrite_file=True) # overwrite file without first asking
         { 'data': {'file': 'C:\\Users\\CyDeveloper\\xx'}, 'errors': [] }
     """
     cmd = 'network export'  # a good start
@@ -347,7 +352,10 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
 
     file_info = sandbox.sandbox_get_file_info(filename)
     if len(file_info['modifiedTime']) and file_info['isFile']:
-        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+        if overwrite_file:
+            sandbox.sandbox_remove_file(filename, base_url=base_url)
+        else:
+            narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
     return commands.commands_post(f'{cmd} OutputFile="{full_filename}"', base_url=base_url)
@@ -1098,7 +1106,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                         body=json_network, base_url=base_url)
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
     # "vizmap apply" command below fails for lack of a valid view.
-    time.sleep(MODEL_PROPAGATION_SECS)
+    time.sleep(CATCHUP_NETWORK_SECS)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
