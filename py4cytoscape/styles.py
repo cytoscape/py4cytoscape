@@ -197,7 +197,7 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     ext = '.' + type.lower() + '$'
     if re.search(ext, filename.lower()) is None: filename += '.' + type.lower()
 
-    file_info = sandbox.sandbox_get_file_info(filename)
+    file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         if overwrite_file:
             sandbox.sandbox_remove_file(filename, base_url=base_url)

@@ -339,7 +339,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL, *, overwr
 
     if re.search(ext + '$', filename) is None: filename += ext
 
-    file_info = sandbox.sandbox_get_file_info(filename)
+    file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         if overwrite_file:
             narrate('This file has been overwritten.')
