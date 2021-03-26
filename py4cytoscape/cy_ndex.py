@@ -36,6 +36,7 @@ from .py4cytoscape_logger import cy_log
 @cy_log
 def import_network_from_ndex(ndex_id, username=None, password=None, access_key=None, ndex_url="http://ndexbio.org", ndex_version="v2", base_url=DEFAULT_BASE_URL):
     """Import a network from the NDEx database into Cytoscape.
+
     Args:
         ndex_id (str): Network ``externalId`` provided by NDEx. This is not the same as a Cytoscape SUID.
         username (str): NDEx account username; required for private content
@@ -46,16 +47,20 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
         int: SUID of imported network
+
     Raises:
         CyError: if credentials, NDEx ID or access_key are invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> import_network_from_ndex(galFiltered_uuid, 'userid', 'password')
         52
         >>> import_network_from_ndex(galFiltered_uuid, access_key=test_key)
         52
+
     Note:
         Importing a network that has recently been stored on NDEx may result in an error if NDEx has not finished indexing it. Lags can range from a few seconds to a few minutes.
     """
@@ -73,6 +78,7 @@ def import_network_from_ndex(ndex_id, username=None, password=None, access_key=N
 @cy_log
 def export_network_to_ndex(username, password, is_public, network=None, metadata=None, ndex_url="http://ndexbio.org", ndex_version="v2", base_url=DEFAULT_BASE_URL):
     """Send a copy of a Cytoscape network to NDEx as a new submission.
+
     Args:
         username (str): NDEx account username; required for private content
         password (str): NDEx account password; required for private content
@@ -85,16 +91,20 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
         str: NDEx identifier ``externalId`` for new submission
+
     Raises:
         CyError: if credentials or network are invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> export_network_to_ndex('userid', 'password', False)
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
         >>> export_network_to_ndex('userid', 'password', False, network='galFiltered.sif')
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
+
     Note:
         Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
@@ -113,8 +123,10 @@ def export_network_to_ndex(username, password, is_public, network=None, metadata
 @cy_log
 def update_network_in_ndex(username, password, is_public, network=None, metadata=None, ndex_url = "http://ndexbio.org", ndex_version = "v2", base_url=DEFAULT_BASE_URL):
     """Update Network In NDEx.
+
     Update an existing network in NDEx, given a previously assoicaiated Cytoscape network, e.g., previously
     exported to NDEx or imported from NDEx.
+
     Args:
         username (str): NDEx account username; required for private content
         password (str): NDEx account password; required for private content
@@ -127,16 +139,20 @@ def update_network_in_ndex(username, password, is_public, network=None, metadata
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
         str: NDEx identifier ``externalId`` for the updated submission
+
     Raises:
         CyError: if credentials or network are invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> update_network_in_ndex('userid', 'password', False)
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
         >>> update_network_in_ndex('userid', 'password', False, network='galFiltered.sif')
         '7bc2548c-9c93-11ea-aaef-0ac135e8bacf'
+
     Note:
         Storing a network on NDEx and then immediately retrieving it may result in an error if NDEx has not finished indexing the network. Lags can range from a few seconds to a few minutes.
     """
