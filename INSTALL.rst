@@ -57,13 +57,17 @@ instructions.
    as described in
    the `Jupyter Notebook <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#jupyter-notebook>`_ section.
 
-Install the development version (Python Console)
+Install the latest version (Python Console)
 ------------------------------------------------
 
 Install the *current* release of ``py4cytoscape`` with ``pip``::
 
    pip install python-igraph requests pandas networkx
    pip install py4cytoscape
+
+
+Install the development version (Python Console)
+------------------------------------------------
 
 To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
@@ -102,14 +106,17 @@ the ``py4cytoscape`` package directory. Then, establish the execution environmen
 .. note::
    You must start Cytoscape *before* executing any tests.
 
-The ``py4cytoscape`` test suite consists of a number of sub-suites. Executing all
-of them can take an hour or two, depending on your workstation. Executing just the
-sanity test takes only a few minutes::
+Executing just a sanity test takes only a few minutes::
 
     runsanitytests.bat
 
+You should be able to see Cytoscape load small networks and manipulate them.
+
 Deep testing (command line)
 ---------------------------
+
+The main ``py4cytoscape`` test suite consists of a number of sub-suites. Executing all
+of them can take an hour or two, depending on your workstation.
 
 To execute all tests that don't require user interaction, establish the environment (if you haven't already done so)::
 
