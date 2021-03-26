@@ -656,17 +656,17 @@ class NetworkTests(unittest.TestCase):
 
         # Verify that when no edges or nodes are passed in, an error occurs
         self.assertRaises(CyError, create_network_from_data_frames)
-    
+
     @print_entry_exit
-    def test_import_network_from_file(self):
+    def test_import_network_from_tabular_file(self):
 
         def verify_table(expected_table, df_table, table_columns, key_name):
             self.assertSetEqual(set(df_table), table_columns)
             df_table = df_table.set_index('name')
             df_expected = df.DataFrame(data=expected_table, columns=expected_table.keys())
             df_expected.set_index(key_name, inplace=True)
-            self.assertEqual(len(df_table.index), len(df_expected.index)) # must have the same number of entries
-            for key in df_expected.index: # Verify that all expected values are in data table, not necessarily vice versa
+            self.assertEqual(len(df_table.index), len(df_expected.index))  # must have the same number of entries
+            for key in df_expected.index:  # Verify that all expected values are in data table, not necessarily vice versa
                 actual_row = df_table.loc[key]
                 for expected_name, expected_value in df_expected.loc[key].items():
                     self.assertEqual(actual_row[expected_name], expected_value)
@@ -677,149 +677,172 @@ class NetworkTests(unittest.TestCase):
             self.assertIsInstance(res['views'], list)
             self.assertEqual(len(res['views']), 1)
 
-        # Verify that test network loads from test data directory
-        verify_import_res(import_network_from_file('data/galFiltered.sif'))
-
-        # Verify that default SIF network loads
-        verify_import_res(import_network_from_file())
-
-        # Verify that default SIF network loads
-        verify_import_res(import_network_from_file(tabular_params=None))
-
         # Verify that text network loads using default parameters
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.default.txt', tabular_params={}))
+        verify_import_res(import_network_from_tabular_file('data/disease.net.default.txt'))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
-                              'other junk': ['other junk', 'other junk', 'other junk', 'other junk', 'other junk']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'other junk', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
+            'other junk': ['other junk', 'other junk', 'other junk', 'other junk', 'other junk']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'other junk', 'SUID'},
+                     'name')
 
         # Verify that text network loads using default parameters
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.default.xlsx', tabular_params={}))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.default.xlsx'))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
-                              'other junk': ['other junk', 'other junk', 'other junk', 'other junk', 'other junk']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'other junk', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
+            'other junk': ['other junk', 'other junk', 'other junk', 'other junk', 'other junk']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'other junk', 'SUID'},
+                     'name')
 
         # Verify that a network having node and interaction attributes but no interaction types loads
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.no-interaction.txt',
-                                                   tabular_params={'firstRowAsColumnNames': True,
-                                                                   'startLoadRow': 1,
-                                                                   'columnTypeList': 's,t,ea,ta,sa',
-                                                                   'delimiters': ' '}
-                                       ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.no-interaction.txt',
+                                                           first_row_as_column_names=True,
+                                                           start_load_row=1,
+                                                           column_type_list='s,t,ea,ta,sa',
+                                                           delimiters=' '))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["1", "2", "3", "4"],
                               'Src_Wt': [1098, 2098, 3098, 4098],
                               'Targ_Wt': [1099, 2099, 3099, 4099]}
-        verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'Src_Wt', 'name', 'Targ_Wt', 'SUID'}, 'name')
+        verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'Src_Wt', 'name', 'Targ_Wt', 'SUID'},
+                     'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['4 (interacts with) 1', '1 (interacts with) 2', '2 (interacts with) 3', '3 (interacts with) 4', '2 (interacts with) 4'],
-                              'interaction': ['interacts with', 'interacts with', 'interacts with', 'interacts with', 'interacts with'],
-                              'Weight': [401, 102, 203, 304, 204]}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'Weight', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['4 (interacts with) 1', '1 (interacts with) 2', '2 (interacts with) 3', '3 (interacts with) 4',
+                     '2 (interacts with) 4'],
+            'interaction': ['interacts with', 'interacts with', 'interacts with', 'interacts with', 'interacts with'],
+            'Weight': [401, 102, 203, 304, 204]}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'Weight', 'SUID'}, 'name')
 
         # Verify that a network having interaction types and reversed source/target links but ignoring edge attributes loads
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.interaction.txt',
-                                                   tabular_params={'firstRowAsColumnNames': True,
-                                                                   'startLoadRow': 1,
-                                                                   'columnTypeList': 'target,source,x,interaction',
-                                                                   'delimiters': ' '}
-                                                   ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.interaction.txt',
+                                                           first_row_as_column_names=True,
+                                                           start_load_row=1,
+                                                           column_type_list='target,source,x,interaction',
+                                                           delimiters=' '))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['10 (white) 40', '20 (red) 10', '30 (blue) 20', '40 (green) 30', '40 (yellow) 20'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['10 (white) 40', '20 (red) 10', '30 (blue) 20', '40 (green) 30', '40 (yellow) 20'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
 
         # Verify a network having interaction types and normal source/target links in short form
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.interaction.txt',
-                                                   tabular_params={'firstRowAsColumnNames': True,
-                                                                   'startLoadRow': 1,
-                                                                   'columnTypeList': 's,t,x,i',
-                                                                   'delimiters': ' '}
-                                                   ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.interaction.txt',
+                                                           first_row_as_column_names=True,
+                                                           start_load_row=1,
+                                                           column_type_list='s,t,x,i',
+                                                           delimiters=' '))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
 
         # Verify a network having interaction types and normal source/target links in short form with extra header line
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.extra-header.txt',
-                                                   tabular_params={'firstRowAsColumnNames': True,
-                                                                   'startLoadRow': 2,
-                                                                   'columnTypeList': 's,t,x,i',
-                                                                   'delimiters': ' '}
-                                                   ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.extra-header.txt',
+                                                           first_row_as_column_names=True,
+                                                           start_load_row=2,
+                                                           column_type_list='s,t,x,i',
+                                                           delimiters=' '))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
 
         # Verify a network having interaction types and normal source/target links in short form with different delimiters
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.delimiters.txt',
-                                                   tabular_params={'firstRowAsColumnNames': True,
-                                                                   'startLoadRow': 1,
-                                                                   'columnTypeList': 's,t,x,i',
-                                                                   'delimiters': '\t,\\,,;'}
-                                                   ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.delimiters.txt',
+                                                           first_row_as_column_names=True,
+                                                           start_load_row=1,
+                                                           column_type_list='s,t,x,i',
+                                                           delimiters='\t,\\,,;'))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow']}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', 'SUID'}, 'name')
 
         # Verify a network having interaction types and normal source/target links in short form with no header
-        close_session(False) # get a clean session to flush persistent node attributes
-        verify_import_res(import_network_from_file('data/disease.net.no-header.txt',
-                                                   tabular_params={'firstRowAsColumnNames': False,
-                                                                   'startLoadRow': 1,
-                                                                   'columnTypeList': 's,t,ea,i',
-                                                                   'delimiters': ' '}
-                                                   ))
+        close_session(False)  # get a clean session to flush persistent node attributes
+        verify_import_res(import_network_from_tabular_file('data/disease.net.no-header.txt',
+                                                           first_row_as_column_names=False,
+                                                           start_load_row=1,
+                                                           column_type_list='s,t,ea,i',
+                                                           delimiters=' '))
         df_node_data = get_table_columns()
         expected_node_data = {'name': ["10", "20", "30", "40"]}
         verify_table(expected_node_data, df_node_data, {'selected', 'shared name', 'name', 'SUID'}, 'name')
 
         df_edge_data = get_table_columns(table='edge')
-        expected_edge_data = {'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
-                              'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
-                              '102': [401, 102, 203, 304, 204]}
-        verify_table(expected_edge_data, df_edge_data, {'shared interaction', 'selected', 'shared name', 'name', 'interaction', '102', 'SUID'}, 'name')
+        expected_edge_data = {
+            'name': ['40 (white) 10', '10 (red) 20', '20 (blue) 30', '30 (green) 40', '20 (yellow) 40'],
+            'interaction': ['white', 'red', 'blue', 'green', 'yellow'],
+            '102': [401, 102, 203, 304, 204]}
+        verify_table(expected_edge_data, df_edge_data,
+                     {'shared interaction', 'selected', 'shared name', 'name', 'interaction', '102', 'SUID'}, 'name')
 
-        self.assertRaises(CyError, import_network_from_file, 'data/disease.net.no-header.txt', {'delimiters': 'bogus'})
-        self.assertRaises(CyError, import_network_from_file, 'bogus', {})
+        self.assertRaises(CyError, import_network_from_tabular_file, 'data/disease.net.no-header.txt', delimiters='bogus')
+        self.assertRaises(CyError, import_network_from_tabular_file, 'bogus')
+
+    @print_entry_exit
+    def test_import_network_from_file(self):
+
+        # Verify that test network loads from test data directory
+        res = import_network_from_file('data/galFiltered.sif')
+        self.assertIsInstance(res['networks'], list)
+        self.assertEqual(len(res['networks']), 1)
+        self.assertIsInstance(res['views'], list)
+        self.assertEqual(len(res['views']), 1)
+
+        # Verify that default network loads
+        res = import_network_from_file()
+        self.assertIsInstance(res['networks'], list)
+        self.assertEqual(len(res['networks']), 1)
+        self.assertIsInstance(res['views'], list)
+        self.assertEqual(len(res['views']), 1)
+
+        self.assertRaises(CyError, import_network_from_file, 'bogus')
 
     
     @print_entry_exit

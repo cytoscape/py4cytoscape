@@ -57,7 +57,7 @@ Import/Export
    create_networkx_from_network
    export_network
    import_network_from_file
-
+   import_network_from_tabular_file
 
 .. _networkselection:
 
