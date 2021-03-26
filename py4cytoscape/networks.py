@@ -1152,7 +1152,7 @@ def import_network_from_tabular_file(file=None, first_row_as_column_names=False,
         start_load_row (int): 1-based row to start reading data ... after column name row, if present
         column_type_list (str): comma-separated map of column types ordered by column index
             (e.g. "source,target,interaction,source attribute,target attribute,edge attribute,skip" or just "s,t,i,sa,ta,ea,x"); defaults to "s,i,t"
-        delimiters (str): comma-separated list of characters that can separate columns ... \\, is a comma, \t is a tab
+        delimiters (str): comma-separated list of characters that can separate columns ... ``\\,`` is a comma, ``\t`` is a tab
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
