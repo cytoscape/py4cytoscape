@@ -8,7 +8,7 @@
 
 @time <nul
 
-rem python -m unittest 1>cons 2> err
-python -m unittest 2> err
+python -m unittest 1>cons 2> err
+rem python -m unittest 2> err
 @time <nul
 
