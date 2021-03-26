@@ -301,7 +301,7 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
 			``Embed`` menu option, then copy the URL in the iframe's ``src`` parameter into the clipboard (e.g., https://onedrive.live.com/embed?cid=C357475E90DD89C4&resid=C357475E90DD89C4%217207&authkey=ACEU5LrVtI_jWTU)
         GitHub: Use the GitHub web site to show the file or a link to it, and capture the URL in the clipboard (e.g., https://github.com/cytoscape/file-transfer-app/blob/master/test_data/GDS112_full.soft)
 
-        When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_to_url()``.
+        When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_url_to()``.
 
         Note that GitHub enforces a limit on the size of a file that can be stored there. We advise that you take this
         into account when choosing a cloud service for your files.
