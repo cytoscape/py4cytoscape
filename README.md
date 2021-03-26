@@ -2,7 +2,7 @@
 
 This project recreates the [R-based ``RCy3`` Cytoscape Automation library](https://github.com/cytoscape/RCy3) as a Python package. The idea is to allow a Cytoscape workflow to be written in one language (R or Python) and translated to another language (Python or R) without having to learn different Cytoscape interfaces. The previous Cytoscape Python interface ([Py2Cytoscape](https://github.com/cytoscape/py2cytoscape)) has different features than the Cytoscape R library, and is therefore deprecated.
 
-Additionally, this project attempts to maintain the same function signatures, return values, function implementation and module structure as the RCy3, thereby enabling smooth maintenance and evolution of both ``RCy3`` and ``py4cytoscape``.
+Additionally, this project attempts to maintain the same [function signatures](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690), return values, function implementation and module structure as the RCy3, thereby enabling smooth maintenance and evolution of both ``RCy3`` and ``py4cytoscape``.
 
 This project uses PyCharm because of its excellent code management and debugging features.
 
@@ -36,7 +36,8 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 1. Update the theme list in doc/release_log.rst and reference the release file you just created
 1. Update the version number in both py4cytoscape/_version.py and build.bat
 1. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
-1. If any API changes were made, be sure to update the [Automation API Definition](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690) and change the Automation API version in py4cytoscape/_version.py    
+1. If any API changes were made, be sure to update the [Automation API Definition](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690) and change the Automation API version in py4cytoscape/_version.py
+1. If any functions were added, be sure to add them to the appropriate .rst file in the References section of the document.    
 1. Successfully execute all tests by using the tests/runalltests.bat file
 1. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
