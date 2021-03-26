@@ -182,7 +182,75 @@ class TablesTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_table_column_types, 'edge', network='bogus')
 
-    
+    @print_entry_exit
+    def test_load_table_data_from_file(self):
+
+        def check_table(original_columns, new_column_name, key_values, table_name='node'):
+            # Make sure we get exactly the expected columns
+            self.assertSetEqual(set(get_table_column_names(table=table_name)), original_columns | {new_column_name})
+
+            # Make sure we get exactly the expected number of values in the new column
+            table = get_table_columns(table=table_name, columns=['name', new_column_name])
+            table.dropna(inplace=True)
+            table.set_index('name', inplace=True)
+            self.assertEqual(len(table.index), len(key_values))
+
+            # Make sure the new column values are as expected
+            for key, val in key_values:
+                self.assertEqual(table[new_column_name][key], val)
+
+        # Initialization
+        load_test_session()
+        node_column_names = set(get_table_column_names())
+        edge_column_names = set(get_table_column_names(table='edge'))
+
+
+        # Verify that a table with column headers can be loaded into the node table
+        res = load_table_data_from_file('data/defaultnode_table.tsv', first_row_as_column_names=True)
+        check_table(node_column_names, 'newcol', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with column headers can be loaded into the edge table
+        res = load_table_data_from_file('data/defaultedge_table.tsv', first_row_as_column_names=True, table='edge')
+        check_table(edge_column_names, 'newcol_e', [('YDR277C (pp) YDL194W', 1000), ('YDR277C (pp) YJR022W', 2000), ('YPR145W (pp) YMR117C', 3000)], table_name='edge')
+
+        # Verify that a spreadsheet with column headers can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.xlsx', first_row_as_column_names=True)
+        check_table(node_column_names, 'newcol', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with no header can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.no-header.tsv', first_row_as_column_names=False)
+        check_table(node_column_names, '1', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with extra lines at the beginning can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.extra-lines.tsv', first_row_as_column_names=False, start_load_row=4)
+        check_table(node_column_names, '1', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with different field delimiters can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.semi-delimiter.txt', first_row_as_column_names=False, delimiters=' ,;')
+        check_table(node_column_names, '1', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with values in a different order can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.backwards.tsv', first_row_as_column_names=True, data_key_column_index=2)
+        check_table(node_column_names, 'newcol', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        # Verify that a table with indexing on a different table column can be loaded into the node table
+        load_test_session()
+        res = load_table_data_from_file('data/defaultnode_table.COMMON.tsv', first_row_as_column_names=True, table_key_column='COMMON')
+        check_table(node_column_names, 'newcol', [('YDR277C', 2), ('YDL194W', 1), ('YBR043C', 3)])
+
+        self.assertRaises(CyError, load_table_data_from_file, 'bogus file name')
+        self.assertRaises(CyError, load_table_data_from_file, 'data/defaultnode_table.tsv', start_load_row=-1)
+        self.assertRaises(CyError, load_table_data_from_file, 'data/defaultnode_table.tsv', delimiters='bogus')
+        self.assertRaises(CyError, load_table_data_from_file, 'data/defaultnode_table.tsv', data_key_column_index='newcol')
+        self.assertRaises(CyError, load_table_data_from_file, 'data/defaultnode_table.tsv', data_key_column_index=-1)
+        self.assertRaises(CyError, load_table_data_from_file, 'data/defaultnode_table.tsv', table_key_column='bogus column')
+
+
     @print_entry_exit
     def test_load_table_data(self):
 
@@ -220,16 +288,16 @@ class TablesTests(unittest.TestCase):
         res = load_table_data(test_data_int_keyed, data_key_column='newcol_val', table='node', table_key_column='newcol')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
 
-        # Verify that newcol_val column and derived were added, and that derived hase values only for the newcol nodes
+        # Verify that newcol_val column and derived were added, and that derived has values only for the newcol nodes
         check_values_added(column_names_int_keyed, 'newcol', test_data_int_keyed, 'newcol_val', 'derived')
 
-        # Verify that addign data into edge table rows that do exist succeeds
+        # Verify that adding data into edge table rows that do exist succeeds
         column_names_string_keyed = get_table_column_names(table='edge')
         test_data_string_keyed = df.DataFrame(data={'id_e': ['YDR277C (pp) YDL194W', 'YDR277C (pp) YJR022W', 'YPR145W (pp) YMR117C'], 'newcol_e': [1000, 2000, 3000]})
         res = load_table_data(test_data_string_keyed, data_key_column='id_e', table='edge', table_key_column='name')
         self.assertEqual(res, 'Success: Data loaded in defaultedge table')
 
-        # Verify that newcol_val column and derived were added, and that derived hase values only for the newcol nodes
+        # Verify that newcol_val column and derived were added, and that derived has values only for the newcol nodes
         check_values_added(column_names_string_keyed, 'name', test_data_string_keyed, 'id_e', 'newcol_e', table='edge')
 
         data = get_table_columns()

@@ -413,7 +413,7 @@ def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE
     return True
 
 # ------------------------------------------------------------------------------
-def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
+def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
     """Checks to see if min supported versions of api and cytoscape are running.
 
     Extracts numerics from api and major cytoscape versions before making comparison.
@@ -426,17 +426,15 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         None
+         None or Str: Str is explanation if error was found: otherwise, None
 
     Raises:
-        CyRest: if required version is greater than current version
         AttributeError: if required version can't be parsed
 
     Examples:
-        >>> verify_supported_versions(1, 3.7)
-        >>> verify_supported_versions(1, '3.10')
+        >>> check_supported_versions(1, 3.7)
+        >>> check__supported_versions(1, '3.10')
     """
-    if caller is None: caller = sys._getframe(1).f_code.co_name
     if isinstance(cytoscape, float): cytoscape = str(cytoscape)
 
     v = cytoscape_system.cytoscape_version_info(base_url=base_url)
@@ -461,7 +459,37 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     if required_cytoscape_major > v_cytoscape_major or (required_cytoscape_major == v_cytoscape_major and required_cytoscape_minor > v_cytoscape_minor):
         nogo = f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
 
-    if nogo: raise CyError(f'Function not run due to unsupported version: {nogo}')
+    return nogo
+
+def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
+    """Throws exception if min supported versions of api and cytoscape are not running.
+
+    Extracts numerics from api and major cytoscape versions before making comparison.
+
+    Args:
+        cyrest (int): minimum CyREST version
+        cytoscape (float or str): minimum Cytoscape version ... should be str if version > 3.9
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         None
+
+    Raises:
+        CyError: if required version is greater than current version
+        AttributeError: if required version can't be parsed
+
+    Examples:
+        >>> verify_supported_versions(1, 3.7)
+        >>> verify_supported_versions(1, '3.10')
+    """
+    nogo = check_supported_versions(cyrest=cyrest, cytoscape=cytoscape, base_url=base_url)
+
+    if nogo:
+        if caller is None: caller = sys._getframe(1).f_code.co_name
+        raise CyError(f'Function not run due to unsupported version: {nogo}', caller=caller)
+
 
 def normalize_list(entity):
     # Return a Python list of strings given a Python list, a string list of strings, a string list of ints, or a scalar

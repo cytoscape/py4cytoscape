@@ -1,0 +1,6 @@
+10	red	20,other junk
+20	blue	30,other junk
+30	green	40,other junk
+20	yellow	40,other junk
+40	white	10,other junk
+

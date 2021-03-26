@@ -120,6 +120,39 @@ class StylesTests(unittest.TestCase):
                           mappings=[node_labels, node_fills, arrow_shapes, edge_width])
 
     @print_entry_exit
+    def test_get_current_style(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that using suid to get current style works
+        suid = get_network_suid()
+        use_suid_get_style = get_current_style(suid)
+        self.assertEqual(use_suid_get_style, 'galFiltered Style')
+
+        # Verify that using network name to get current style works
+        network_name = get_network_name()
+        use_network_name_get_style = get_current_style(network_name)
+        self.assertEqual(use_network_name_get_style, 'galFiltered Style')
+
+        current_style = get_current_style()
+        # Verify that defult style is galFiltered Style
+        self.assertEqual(current_style, 'galFiltered Style')
+
+        # Verify that changing the style to 'default'
+        set_visual_style('default')
+        default_style = get_current_style()
+        self.assertEqual(default_style, 'default')
+
+        # Verify that changing the style to 'Big Labels'
+        set_visual_style('Big Labels')
+        big_labels_style = get_current_style()
+        self.assertEqual(big_labels_style, 'Big Labels')
+
+        # Verify that trying to get a non-existent current style
+        self.assertRaises(CyError, get_current_style, network='Does not exist')
+        self.assertRaises(CyError, get_current_style, network=12345678)
+
+    @print_entry_exit
     def test_delete_visual_style(self):
         # Initialization
         load_test_session()
@@ -136,6 +169,8 @@ class StylesTests(unittest.TestCase):
         # Verify that trying to delete a non-existent style fails
         self.assertRaises(CyError, delete_visual_style, 'SolidCopy')
 
+    @unittest.skip("Can't run this test until CSD-399 is fixed")
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_get_current_style(self):
         # Initialization
@@ -194,7 +229,7 @@ class StylesTests(unittest.TestCase):
             self.assertTrue(os.path.exists(full_file))
             os.remove(res['file'])
 
-        # Verify that a file name is assume if none is provided
+        # Verify that a file name is assumed if none is provided
         check_write('styles', STYLE_SUFFIX, use_file=False, use_suffix=False)
 
         # Verify that a file suffix is added if none is provided for a style file
@@ -221,7 +256,21 @@ class StylesTests(unittest.TestCase):
         self.assertListEqual(import_visual_styles(all_file_name), ['galFiltered Style'])
         self.assertSetEqual(set(get_visual_style_names()), {'default', 'galFiltered Style'})
 
-        os.remove(all_file_name)
+        # Verify that the default overwrite behavior is to ask the user first, and no overwrite if decline
+        original_stat = os.stat(all_file_name)
+        input('Verify that Cytoscape gives a popup asking for permission to overwrite -- DECLINE permission')
+        self.assertRaises(CyError, export_visual_styles, all_file_name)
+        self.assertEqual(original_stat, os.stat(all_file_name))
+
+        # Verify that the default overwrite behavior is to ask user first, and overwrite occurs if accept
+        input('Verify that Cytoscape gives a popup asking for permission to overwrite -- ACCEPT permission')
+        export_visual_styles(all_file_name)
+        replaced_stat = os.stat(all_file_name)
+        self.assertNotEqual(original_stat, replaced_stat)
+
+        # Verify that when default overwrite behavior is overridden, overwrite occurs
+        export_visual_styles(all_file_name, overwrite_file=True)
+        self.assertNotEqual(replaced_stat, os.stat(all_file_name))
 
         # Verify that bogus files generate an exception
         self.assertRaises(CyError, export_visual_styles, '\\im/pos:*sible\\path\\bogus')

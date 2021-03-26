@@ -457,6 +457,87 @@ class SandboxTests(unittest.TestCase):
         default_sandbox_path = sandbox_set(None)
         check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
 
+    @print_entry_exit
+    def test_sandbox_url_to_remove(self):
+        _FROM_URL = 'https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0'
+        _FROM_URL_BYTES = 5536880
+        _ALT_FROM_URL = 'https://www.dropbox.com/s/8wc8o897tsxewt1/BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.2.105.mitab?dl=0'
+        _ALT_FROM_URL_BYTES = 166981992
+        _NESTED_DIR = '1/2/3/'
+        _ESCAPE_DIR = '1/../../../2/3/'
+
+        def check_url_to_result(res, sandbox_path, sandbox_name, file_name, expected_length):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath', 'fileByteCount'})
+            self.assertTrue(res['filePath'].startswith(sandbox_path))
+            self._verify_valid_sandbox_file(sandbox_name=sandbox_name, file_name=file_name, is_file=True)
+            self.assertEqual(os.path.getsize(res['filePath']), expected_length)
+
+        def check_remove_file(res, sandbox_path, existed):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath', 'existed'})
+            self.assertEqual(res['existed'], existed)
+            self.assertTrue(res['filePath'].startswith(sandbox_path))
+
+        def check_url_to_sandbox(sandbox_path, sandbox_name):
+            # Get rid of the sandbox test file if it already exists ... and verify empty remove either way
+            res = sandbox_get_file_info(_TEST_FILE)
+            if res['modifiedTime']:
+                check_remove_file(sandbox_remove_file(_TEST_FILE), sandbox_path, True)
+            check_remove_file(sandbox_remove_file(_TEST_FILE), sandbox_path, False)
+
+            # Verify that a file can be transferred to the sandbox
+            res = sandbox_url_to(_FROM_URL, _TEST_FILE)
+            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_URL_BYTES)
+
+            # Verify that the file can't be overwritten if we don't want it to be
+            self.assertRaises(CyError, sandbox_url_to, source_url=_ALT_FROM_URL, dest_file=_TEST_FILE,
+                              overwrite=False)
+            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_URL_BYTES)
+
+            # Verify that a different file can overwrite it if we allow it
+            res = sandbox_url_to(_ALT_FROM_URL, _TEST_FILE)
+            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _ALT_FROM_URL_BYTES)
+
+            # Verify that removing a file actually removes it, and removing twice is properly detected
+            res = sandbox_remove_file(file_name=_TEST_FILE, sandbox_name=sandbox_name)
+            check_remove_file(res, sandbox_path, True)
+            res = sandbox_remove_file(file_name=_TEST_FILE, sandbox_name=sandbox_name)
+            check_remove_file(res, sandbox_path, False)
+
+            # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
+            nested_test_file = _NESTED_DIR + _TEST_FILE
+            res = sandbox_url_to(_FROM_URL, nested_test_file)
+            check_url_to_result(res, sandbox_path, sandbox_name, nested_test_file, _FROM_URL_BYTES)
+            res = sandbox_remove_file(file_name=nested_test_file, sandbox_name=sandbox_name)
+            check_remove_file(res, sandbox_path, True)
+
+            # Verify that trying to send a non-existent file fails
+            self.assertRaises(Exception, sandbox_url_to, source_url=_FROM_URL)
+            self.assertRaises(CyError, sandbox_url_to, source_url='totally bogus', dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_url_to, source_url=None, dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_url_to, source_url='  ', dest_file=_TEST_FILE)
+            self.assertRaises(CyError, sandbox_url_to, source_url=_FROM_URL, dest_file=_TEST_FILE,
+                              sandbox_name='totally bogus')
+            self.assertRaises(CyError, sandbox_url_to, source_url=_FROM_URL, dest_file=_TEST_FILE,
+                              sandbox_name='/totally/bogus/sandbox')
+            self.assertRaises(CyError, sandbox_url_to, source_url=_FROM_URL, dest_file=_ESCAPE_DIR + _TEST_FILE)
+            self.assertRaises(CyError, sandbox_remove_file, file_name=None)
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='totally bogus')
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='/totally/bogus/sandbox')
+            self.assertRaises(CyError, sandbox_remove_file, file_name=_ESCAPE_DIR + _TEST_FILE)
+
+        # Check sending to empty sandbox (Cytoscape install directory)
+        default_sandbox_path = sandbox_set(PREDEFINED_SANDBOX_NAME)
+        self._verify_current_sandbox_is_preset()
+        check_url_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
+
+        # Check fetching from default sandbox (when Notebook is running)
+        reset_default_sandbox()
+        set_notebook_is_running(True) # Should cause default notebook to be created
+        default_sandbox_path = sandbox_set(None)
+        check_url_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
+
 
 
     def _verify_missing_sandbox_file(self, file_name='.'):

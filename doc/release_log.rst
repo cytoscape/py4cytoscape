@@ -4,6 +4,23 @@ Release Log
 ===========
 
 
+py4cytoscape 0.0.8
+------------------
+Release date: 26 Mar 2021
+
+* Added parameters in CyNDEX functions to support subdomains
+* Added apply= parameter in filter definition functions to support Cytoscape v3.9.0 separating apply from definition
+* Added overwrite_file parameter to export functions
+* Added Sandbox direct download from URL
+* Added functions for import network from tabular file & get current style, etc
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.8.rst
+
+
 py4cytoscape 0.0.7
 ------------------
 Release date: 08 Jan 2021

@@ -23,6 +23,7 @@
 import unittest
 from requests import HTTPError
 import time
+import pathlib
 from test_utils import *
 
 
@@ -37,7 +38,7 @@ class NetworkViewsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
+
     @print_entry_exit
     def test_get_network_views(self):
         # Initialization
@@ -62,7 +63,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_network_views, 'bogus network')
 
-    
+
     @print_entry_exit
     def test_get_network_view_suid(self):
         # Initialization
@@ -84,13 +85,10 @@ class NetworkViewsTests(unittest.TestCase):
         # Verify that the view list for the original network is unchanged ... identify network by string
         self.assertEqual(check_view(get_network_view_suid('galFiltered.sif')), gal_filtered_view_suid)
 
-        # Verify that the view list for the original network is unchanged ... identify view by view suid
-        self.assertEqual(check_view(get_network_view_suid(gal_filtered_view_suid)), gal_filtered_view_suid)
-
         self.assertRaises(CyError, get_network_view_suid, 'bogus network')
         self.assertRaises(CyError, get_network_view_suid, -1)
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_fit_content(self):
@@ -122,7 +120,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, fit_content, network='bogus network')
 
-    
+
     @print_entry_exit
     def test_set_current_view(self):
         # Initialization
@@ -146,7 +144,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         self.assertRaises(CyError, set_current_network, network='bogus network')
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_image(self):
@@ -160,26 +158,47 @@ class NetworkViewsTests(unittest.TestCase):
             self.assertIsInstance(export_res['file'], str)
             self.assertIsNotNone(export_res['file'])
 
+        def delete_first(filename, type=None):
+            type = f'.{type}' if type else ''
+            fname = pathlib.Path(filename + type)
+            if fname.exists(): fname.unlink()
+            return filename
+
         check_export(
-            export_image('output/test units-pixels height-1000 width-2000 zoom-500', type='JPEG', units='pixels',
+            export_image(delete_first('output/test units-pixels height-1000 width-2000 zoom-500', 'jpeg'), type='JPEG', units='pixels',
                                       height=1000, width=2000, zoom=200, network=None))
-        check_export(export_image('output/test', type='PDF', network=None))
-        check_export(export_image('output/test res-600 units-inches height-1.7 width-3.5 zoom-500', type='PNG',
+        check_export(export_image(delete_first('output/test', 'pdf'), type='PDF', network=None))
+        check_export(export_image(delete_first('output/test res-600 units-inches height-1.7 width-3.5 zoom-500', 'png'), type='PNG',
                                                resolution=600, units='inches', height=1.7, width=3.5, zoom=500,
                                                network=gal_filtered_view))
-        check_export(export_image('output/test', type='SVG', network=gal_filtered_view))
-        check_export(export_image('output/test', type='PS', network=gal_filtered_suid))
-        check_export(export_image('output/test alldefault', type='PNG', resolution=None, units=None, height=None,
+        check_export(export_image(delete_first('output/test', 'svg'), type='SVG', network=gal_filtered_view))
+        check_export(export_image(delete_first('output/test', 'ps'), type='PS', network=gal_filtered_suid))
+        check_export(export_image(delete_first('output/test alldefault', 'png'), type='PNG', resolution=None, units=None, height=None,
                                                width=None, zoom=None, network=gal_filtered_suid))
 
         input('Verify the export output files in the ./output folder by sight')
 
+        # Verify that the default overwrite behavior is to ask the user first, and no overwrite if decline
+        fname = pathlib.Path('output/test.pdf')
+        original_stat = fname.stat()
+        input('Verify that Cytoscape gives a popup asking for permission to overwrite -- DECLINE permission')
+        self.assertRaises(CyError, export_image, 'output/test', type='PDF', network=None)
+        self.assertEqual(original_stat, fname.stat())
+
+        # Verify that the default overwrite behavior is to ask user first, and overwrite occurs if accept
+        input('Verify that Cytoscape gives a popup asking for permission to overwrite -- ACCEPT permission')
+        check_export(export_image('output/test', type='PDF', network=None))
+        replaced_stat = fname.stat()
+        self.assertNotEqual(original_stat, replaced_stat)
+
+        # Verify that when default overwrite behavior is overridden, overwrite occurs
+        check_export(export_image('output/test', type='PDF', network=None, overwrite_file=True))
+        self.assertNotEqual(replaced_stat, fname.stat())
+
         # Verify that an unknown network is caught
         self.assertRaises(CyError, export_image, network='bogus')
-        self.assertRaises(CyError, export_image, 'output/test', type='PNG', resolution=600, units='inches',
-                          height=10.7, width=3.5, zoom=500, network=gal_filtered_view)
 
-    
+
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_level_of_detail(self):

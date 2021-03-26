@@ -21,6 +21,7 @@ Style Management
    get_visual_style_names
    import_visual_styles
    set_visual_style
+   get_current_style
 
 Visual Property Names and Values
 ================================

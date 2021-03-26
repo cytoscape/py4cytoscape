@@ -300,7 +300,7 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL):
+def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
     """Export a network to one of mulitple file formats.
 
     Args:
@@ -313,16 +313,21 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
+            exists; True allows Cytoscape to overwrite it without asking
 
     Returns:
         dict: server JSON response
 
     Raises:
         ValueError: if server response has no JSON
+        CyError: if file exists and user opts to not overwrite it
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> export_network('/path/filename','SIF')
+        { 'data': {'file': 'C:\\Users\\CyDeveloper\\xx'}, 'errors': [] }
+        >>> export_network('/path/filename','SIF', overwrite_file=True) # overwrite file without first asking
         { 'data': {'file': 'C:\\Users\\CyDeveloper\\xx'}, 'errors': [] }
     """
     cmd = 'network export'  # a good start
@@ -345,9 +350,12 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     ext = '.' + type.lower()
     if re.search(ext + '$', filename) is None: filename += ext
 
-    file_info = sandbox.sandbox_get_file_info(filename)
+    file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
-        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+        if overwrite_file:
+            sandbox.sandbox_remove_file(filename, base_url=base_url)
+        else:
+            narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
     return commands.commands_post(f'{cmd} OutputFile="{full_filename}"', base_url=base_url)
@@ -1098,7 +1106,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                         body=json_network, base_url=base_url)
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
     # "vizmap apply" command below fails for lack of a valid view.
-    time.sleep(MODEL_PROPAGATION_SECS)
+    time.sleep(CATCHUP_NETWORK_SECS)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1135,12 +1143,16 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
 
 @cy_log
-def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
+def import_network_from_tabular_file(file=None, first_row_as_column_names=False, start_load_row=1, column_type_list='s,i,t', delimiters='\\,,\t', base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
     Args:
-        file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
-            If None, a demo network file in SIF format is loaded.
+        file (str): Name of file in any of the supported tabular formats (e.g., csv, tsv, Excel, etc).
+        first_row_as_column_names (bool): True if first row contributes column names but no data values
+        start_load_row (int): 1-based row to start reading data ... after column name row, if present
+        column_type_list (str): comma-separated map of column types ordered by column index
+            (e.g. "source,target,interaction,source attribute,target attribute,edge attribute,skip" or just "s,t,i,sa,ta,ea,x"); defaults to "s,i,t"
+        delimiters (str): comma-separated list of characters that can separate columns ... \\, is a comma, \t is a tab
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -1149,9 +1161,70 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         dict: {"networks": [network suid], "views": [suid for views]} where networks and views lists have length 1
 
     Raises:
-        CyError: if file cannot be found or loaded
+        CyError: if file cannot be found or loaded, or if error in tabular_params list
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
+    Examples:
+        >>> import_network_from_tabular_file('data/yeastHighQuality.sif') # import a SIF-formatted network
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_tabular_file('data/disease.net.default.xlsx') # import an Excel file that has no header row
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_tabular_file('data/disease.net.default.txt') # import a text file that has no header row
+        {'networks': [131481], 'views': [131850]}
+        >>> import_network_from_tabular_file('data/disease.net.interaction.txt', # import ' '-delimited header row and data
+        >>>                                  first_row_as_column_names=True,
+        >>>                                  start_load_row=1,
+        >>>                                  column_type_list='s,t,x,i',
+        >>>                                  delimiters=' ')
+        {'networks': [131481], 'views': [131850]}
+    """
+    file = get_abs_sandbox_path(file)
+
+    # As of 3.9, the column_type_list is sufficient for specifying the layout of a data line. However,
+    # per CYTOSCAPE-12764, pre-3.9 Cytoscape has trouble with the "interaction" tag. To accommodate all
+    # Cytoscape versions, we provide explicit indexes for source, target and interaction columns.
+    type_list = column_type_list.lower().split(',')
+    index_params = ''
+    if 's' in type_list:
+        index_params += f' indexColumnSourceInteraction="{type_list.index("s") + 1}"'
+    if 'source' in type_list:
+        index_params += f' indexColumnSourceInteraction="{type_list.index("source") + 1}"'
+    if 't' in type_list:
+        index_params += f' indexColumnTargetInteraction="{type_list.index("t") + 1}"'
+    if 'target' in type_list:
+        index_params += f' indexColumnTargetInteraction="{type_list.index("target") + 1}"'
+    if 'i' in type_list:
+        index_params += f' indexColumnTypeInteraction="{type_list.index("i") + 1}"'
+    if 'interaction' in type_list:
+        index_params += f' indexColumnTypeInteraction="{type_list.index("interaction") + 1}"'
+
+    res = commands.commands_post(
+        f'network import file file="{file}" firstRowAsColumnNames="{first_row_as_column_names}" startLoadRow="{start_load_row}"{index_params} columnTypeList="{column_type_list}" delimiters="{delimiters}"',
+        base_url=base_url)
+
+    # should not be necessary, but is because "network load file" doesn't actually set the current network
+    # until after it's done. So, without the sleep(), setting the current network will be superceded by
+    # "network load file"'s own network. This is race condition that can be solved by "network load file"
+    # not returning until it's actually done.
+    # TODO: Fix this race condition
+    time.sleep(CATCHUP_NETWORK_SECS)
+
+    return res
+
+@cy_log
+def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
+    """Loads a network from specified file.
+    Args:
+        file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
+            If None, a demo network file in SIF format is loaded.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+    Returns:
+        dict: {"networks": [network suid], "views": [suid for views]} where networks and views lists have length 1
+    Raises:
+        CyError: if file cannot be found or loaded
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
     Examples:
         >>> import_network_from_file() # import demo network
         {'networks': [131481], 'views': [131850]}
@@ -1174,7 +1247,6 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     time.sleep(CATCHUP_NETWORK_SECS)
 
     return res
-
 
 # ==============================================================================
 # V. Network extraction

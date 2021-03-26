@@ -32,7 +32,7 @@ from . import networks
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, narrate
 from .exceptions import CyError
-
+from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 def __init__(self):
     pass
@@ -335,6 +335,68 @@ def get_table_column_types(table='node', namespace='default', network=None, base
 
     return col_types
 
+@cy_log
+def load_table_data_from_file(file, first_row_as_column_names=False, start_load_row=1, delimiters='\\,,\t', data_key_column_index=1, table='node', table_key_column='shared name', network=None, base_url=DEFAULT_BASE_URL):
+    """Loads data into Cytoscape tables from a tabular file.
+
+    This function loads data into Cytoscape node/edge/network
+    tables provided a common key, e.g., name. The tabular file
+    may or may not contain a list of column names as the first
+    row of the file. If not, Cytoscape will pick a name for each
+    column. The data rows can start right after the column name
+    row, or can be offset by some number of lines (which will be
+    ignored). The delimiter that separates column names or data
+    values can be specified. Existing columns with the same
+    names will keep original type but values will be overwritten.
+    Note that because the columns may or may not be named, the
+    column used as a key is specified by its ordinal position
+    amongst the other columns (i.e., the leftmost column is 1).
+
+    Args:
+        file (str): Name of tabular file in any of the supported formats (e.g., .txt, .csv, .xls, .tsv, etc)
+        first_row_as_column_names (bool): True if first row contributes column names but no data values; defaults to False
+        start_load_row (int): 1-based row to start reading data ... after column name row, if present; defaults to 1
+        delimiters (str): comma-separated list of characters that can separate columns ... \\, is a comma, \t is a tab; defaults to '\\,,\t'
+        data_key_column_index (int): 1-based column number in tabular file to use a merge key
+        table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
+        table_key_column (str): name of column in Cytoscape table to use as merge key ... must be a column in the root network (i.e., global to all networks in the collection)
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        list: SUIDs of tables merged into
+
+    Raises:
+        CyError: if network name or SUID doesn't exist, file doesn't exist, or other parameters are incorrect
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> load_table_data_from_file('data/defaultnode_table.xlsx', first_row_as_column_names=True)
+        {'mappedTables': [460222, 460260]}
+        >>> load_table_data_from_file('data/defaultedge_table.csv', first_row_as_column_names=True, table='edge')
+        {'mappedTables': [460222, 460260]}
+        >>> load_table_data_from_file('data/defaultnode_table.txt', first_row_as_column_names=True, data_key_column_index=2, table_key_column='COMMON')
+        {'mappedTables': [460222, 460260]}
+    """
+    file = get_abs_sandbox_path(file)
+
+    table = table.lower()
+    if table == 'node':
+        table = 'Node Table Columns'
+    elif table == 'edge':
+        table = 'Edge Table Columns'
+    elif table == 'network':
+        table = 'Network Table Columns'
+    else:
+        raise CyError(f'Unknown table type {table}; must be either "node", "edge" or "network"')
+
+    res = commands.commands_post(
+        f'table import file file="{file}" firstRowAsColumnNames="{first_row_as_column_names}" startLoadRow="{start_load_row}" delimiters="{delimiters}" keyColumnIndex="{data_key_column_index}" dataTypeTargetForNetworkCollection="{table}" keyColumnForMapping="{table_key_column}"',
+        base_url=base_url)
+    return res
 
 @cy_log
 def load_table_data(data, data_key_column='row.names', table='node', table_key_column='name', namespace='default',

@@ -185,7 +185,7 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
 # TODO: Need parameter to automatically overwrite file if it exists
 @cy_log
 def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
-                 network=None, base_url=DEFAULT_BASE_URL):
+                 network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
     """ Save the current network view as an image file.
 
     The image is cropped per the current view in Cytoscape. Consider applying :meth:`fit_content` prior to export.
@@ -207,18 +207,22 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
+            exists; True allows Cytoscape to overwrite it without asking
 
     Returns:
         dict:  {'file': name of file} contains absolute path to file that was written
 
     Raises:
-        CyError: if network or view doesn't exist
+        CyError: if network or view doesn't exist, or if file exists and user opts to not overwrite it
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> export_image('output/test', type='JPEG', units='pixels', height=1000, width=2000, zoom=200)
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpeg'}
         >>> export_image('output/test', type='PDF', network='My Network')
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.pdf'}
+        >>> export_image('output/test', type='PDF', overwrite_file=True) # overwrite any existing test.pdf
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.pdf'}
         >>> export_image(type='PNG', resolution=600, units='inches', height=1.7, width=3.5, zoom=500, network=13098)
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
@@ -242,9 +246,12 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     # TODO: If a lower case comparison is going to be done, shouldn't filename also be lower-case?
     if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
 
-    file_info = sandbox.sandbox_get_file_info(filename)
+    file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
-        narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+        if overwrite_file:
+            sandbox.sandbox_remove_file(filename, base_url=base_url)
+        else:
+            narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
     res = commands.commands_post(

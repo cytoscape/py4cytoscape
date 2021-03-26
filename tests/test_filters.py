@@ -154,6 +154,11 @@ class FiltersTests(unittest.TestCase):
                           None,
                           all_edges_set - {'YGL035C (pd) YLR044C', 'YER179W (pp) YLR044C', 'YNL216W (pd) YLR044C'})
 
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('column filter 50x', lambda x: create_column_filter(x, 'COMMON', 'HIS', 'CONTAINS', apply=False),
+                          None, None)
+
         # TODO: Can't test "hide" parameter in create_column_filter because I can't deduce which nodes/edges are hidden
 
         # Verify that invalid forms fail
@@ -193,6 +198,11 @@ class FiltersTests(unittest.TestCase):
 
         # TODO: Can't test "hide" parameter in create_degree_filter because I can't deduce which nodes/edges are hidden
 
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('degree filter 4x', lambda x: create_degree_filter(x, [8, 10], 'BETWEEN', apply=False),
+                          None, None)
+
         # Verify that all bad filters are caught
         self.check_bad_filter('degree filter 10x', lambda x: create_degree_filter(x, [8, 10], 'BOGUS_PREDICATE'))
         self.assertRaises(CyError, create_degree_filter, 'degree filter 11x', [8], 'BETWEEN')
@@ -226,6 +236,12 @@ class FiltersTests(unittest.TestCase):
                           lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'],
                                                                        type='ANY'),
                           {'YGL035C', 'YNL216W', 'YLR362W', 'YPL248C'}, None)
+
+        # Verify that defining a filter without applying it doesn't change the network
+        network_selection.clear_selection()
+        self.check_result('composite filter 4x',
+                          lambda x: create_composite_filter(x, ['degree filter 1x', 'degree filter 2x'], apply=False),
+                          None, None)
 
         # Verify that there must be at least two filters
         self.assertRaises(CyError, create_composite_filter, 'bad filter', ['degree filter 1x'])
@@ -323,12 +339,25 @@ class FiltersTests(unittest.TestCase):
         self.assertSetEqual(set(get_filter_list()),
                             {'Default filter', 'Default filter 1', 'Default filter 2', 'degree filter 1x',
                              'degree filter 2x'})
-        os.remove(FILTER_FILE + FILTER_SUFFIX)
 
         # Verify that a filter file containing all types of filters is loaded
         load_test_session()
         self.assertListEqual(import_filters('data/All Predicates.filter'), [])
         self.assertSetEqual(set(get_filter_list()), {'Default filter', 'All Predicates'})
+
+        # Verify that a filters file can be overwritten
+        orig_written = os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime
+        export_filters(FILTER_FILE + FILTER_SUFFIX)
+        last_written = os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime
+        self.assertTrue(orig_written != last_written)
+
+        # Verify that an existing filters file is not overwritten if we forbid the overwrite
+        self.assertRaises(CyError, export_filters, FILTER_FILE + FILTER_SUFFIX, overwrite_file=False)
+        self.assertTrue(last_written, os.stat(FILTER_FILE + FILTER_SUFFIX).st_mtime)
+
+        # Verify that a new filters file is written whether or not overwrite is allowed
+        os.remove(FILTER_FILE + FILTER_SUFFIX)
+        export_filters(FILTER_FILE + FILTER_SUFFIX, overwrite_file=False)
 
     def check_result(self, filter_name, create_func, expected_nodes, expected_edges):
         self.assertNotIn(filter_name, get_filter_list())
