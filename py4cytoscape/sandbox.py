@@ -295,10 +295,14 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
 
     Supported URLs include:
         Raw URL: URL directly references the file to download (e.g., http://tpsoft.com/museum_images/IBM%20PC.JPG
+
         Dropbox: Use the standard Dropbox ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0)
+
         GDrive: Use the standard Google Drive ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://drive.google.com/file/d/12sJaKQQbesF10xsrbgiNtUcqCQYY1YI3/view?usp=sharing)
+
         OneDrive: Use the OneDrive web site to right click on the file, choose the
 			``Embed`` menu option, then copy the URL in the iframe's ``src`` parameter into the clipboard (e.g., https://onedrive.live.com/embed?cid=C357475E90DD89C4&resid=C357475E90DD89C4%217207&authkey=ACEU5LrVtI_jWTU)
+
         GitHub: Use the GitHub web site to show the file or a link to it, and capture the URL in the clipboard (e.g., https://github.com/cytoscape/file-transfer-app/blob/master/test_data/GDS112_full.soft)
 
         When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_url_to()``.
