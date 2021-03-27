@@ -56,7 +56,8 @@ is partially historical, and now, mostly arbitrary.
 - Paul Shannon, GitHub: `paul-shannon <https://github.com/paul-shannon/>`_
 - Tanja Muetze, GitHub: `tmuetze <https://github.com/tmuetze>`_
 - Georgi Kolishkovski
-- David Otasek
+- David Otasek, GitHub: `dotasek <https://github.com/dotasek>`_
+- Yihang Xin, Github: `yihangx <https://github.com/yihangx>`_
 
 The `NetworkX <https://networkx.github.io/>`_ documentation is excellent, and we
 borrowed both wording and structure liberally.

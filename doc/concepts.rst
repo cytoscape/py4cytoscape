@@ -362,7 +362,7 @@ or
 When using full paths, this workflow is portable only to workstations that have their Cytoscape files in the
 ``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations.
 
-**Vignette 2**: A Notebook-based version of Vignette 1.
+**Vignette 2**: A Notebook-based version of Vignette 1 ... using data files on Jupyter server.
 
 A sandbox is automatically created for Notebook-based workflows whether they execute on a remote Jupyter server
 or a Jupyter server on the Cytoscape workstation. The workflow must transfer
@@ -390,7 +390,25 @@ set by calling the ``sandbox_set()`` function.
 Sandbox functions and Notebook-based py4cytoscape functions don't accept full paths for files, as they
 would create non-portable code and pose a security risk to the Cytoscape workstation.
 
-**Vignette 3**: A workstation-based non-Notebook Python workflow accesses sandbox-based files
+**Vignette 3**: A Notebook-based version of Vignette 1 ... using data files on a cloud service.
+
+This vignette is the same as Vignette 2, except the session file resides on a cloud service (i.e.,
+GitHub, Dropbox, OneDrive, Google Drive, or elsewhere). In this case, the workflow must transfer
+the file from the cloud service (instead of the Notebook's file system) to the sandbox, and then proceed
+as in Vignette 2.
+
+.. code:: python
+
+    # copy session file from cloud service to workstation
+    sandbox_url_to('https://www.dropbox.com/s/r15azh0xb534mu1/mySession.cys?dl=0')
+    open_session('mySession')
+    # ...
+    export_image('myImage.png')
+    sandbox_get_from('myImage.png', './myImage.png') # copy image file to Notebook directory
+    # ... do something with the .png
+
+
+**Vignette 4**: A workstation-based non-Notebook Python workflow accesses sandbox-based files
 
 Sandboxes are stored as directories under the user's ``CytoscapeConfiguration/filetransfer`` folder. You can
 choose to maintain your Cytoscape files in a sandbox folder (instead of elsewhere in the
