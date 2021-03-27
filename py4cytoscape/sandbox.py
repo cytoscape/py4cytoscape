@@ -308,7 +308,7 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
         into account when choosing a cloud service for your files
 
         When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_url_to()``.
-.
+
     Args:
         source_url (str): URL addressing cloud file to download )
         dest_file (str): Name of file to write (as absolute path or sandbox-relative path)
