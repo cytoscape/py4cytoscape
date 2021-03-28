@@ -11,8 +11,17 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
 
 .. image:: ../images/InstallingFileTransferApp.png
 
-3. Click on the ipynb file for the tutorial you would like to try. 
+3. Click on the following Colab link for the tutorial you would like to try. 
 
 `01. Overview of RCy3 ~25 min`_
 
 .. _01. Overview of RCy3 ~25 min: https://colab.research.google.com/drive/1KtCEIvMdNlaouZI5u6JaH0jvUGCCCRvs?usp=sharing
+
+Read only notebooks
+-------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   Overview-of-py4cytoscape.ipynb
+   
