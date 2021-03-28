@@ -23,5 +23,5 @@ Read only notebooks
 .. toctree::
    :maxdepth: 2
 
-   Overview-of-py4cytoscape.ipynb
+   Overview-of-py4cytoscape
    
