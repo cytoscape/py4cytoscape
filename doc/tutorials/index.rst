@@ -5,7 +5,7 @@ Tutorials
 
 You can try the following tutorials with Cytoscape Desktop + `Google Colab <https://colab.research.google.com/>`_.
 
-1. Launch Cytoscape Desktop.
+1. Install Cytoscape in your local desktop environment and launch it.
 
 2. Install FileTransfer App with Cytoscape App Manager (by clicking the ``Apps`` in the Cytoscape menu bar -> ``App Manager``..)
 
@@ -13,12 +13,12 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
 
 3. Click on the following Colab link for the tutorial you would like to try. 
 
-`01. Overview of RCy3 ~25 min`_
+`01. Overview of py4cytoscape ~25 min`_
 
-.. _01. Overview of RCy3 ~25 min: https://colab.research.google.com/drive/1KtCEIvMdNlaouZI5u6JaH0jvUGCCCRvs?usp=sharing
+.. _01. Overview of py4cytoscape ~25 min: https://colab.research.google.com/github/cytoscape/py4cytoscape/blob/docs_for_008/doc/tutorials/Overview-of-py4cytoscape.ipynb
 
-Read only notebooks
--------------------
+Read only docs (of the above notebook for Colab)
+------------------------------------------------
 
 .. toctree::
    :maxdepth: 2
