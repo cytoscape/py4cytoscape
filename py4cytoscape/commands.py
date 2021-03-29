@@ -335,7 +335,7 @@ def commands_help(cmd_string='help', base_url=DEFAULT_BASE_URL):
         ['disable', 'enable', 'information', 'install', 'list available', 'list disabled', ...]
     """
     try:
-        cmd_string = re.sub(r'help *', cmd_string, cmd_string)  # remove 'help ' if it's already in the request
+        cmd_string = re.sub(r'help *', '', cmd_string)  # remove 'help ' if it's already in the request
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
         r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'}, base_url=base_url)
         r.raise_for_status()

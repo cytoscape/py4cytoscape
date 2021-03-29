@@ -38,12 +38,10 @@ class CommandsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
     @print_entry_exit
     def test_cyrest_api(self):
         self.assertTrue(cyrest_api())
 
-    
     @print_entry_exit
     def test_cyrest_delete(self):
         # Initialization
@@ -69,11 +67,10 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'message': 'New session created.'})
 
-    
     @print_entry_exit
     def test_cyrest_get(self):
 
-#        running_remote(True)
+        #        running_remote(True)
 
         # Verify that starting a garbage collection returns a non-JSON result
         res = cyrest_get('gc', require_json=False)
@@ -93,7 +90,6 @@ class CommandsTests(unittest.TestCase):
         self.assertIsInstance(res['apiVersion'], str)
         self.assertIsInstance(res['cytoscapeVersion'], str)
 
-    
     @print_entry_exit
     def test_cyrest_post(self):
         # Initialization
@@ -103,7 +99,7 @@ class CommandsTests(unittest.TestCase):
 
         # Verify that adding a view returns a valid JSON result
         res = cyrest_delete('networks/' + str(get_network_suid()) + '/views',
-                                         require_json=False)  # Delete the existing view first
+                            require_json=False)  # Delete the existing view first
         self.assertEqual(res, '')
         res = cyrest_post('networks/' + str(get_network_suid()) + '/views')
         self.assertIsInstance(res, dict)
@@ -121,7 +117,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, cyrest_post, 'commands/command/echo', body={'message': 'Hi there'},
                           base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_cyrest_put(self):
         # Initialization
@@ -142,12 +137,10 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, cyrest_post, 'networks/views/currentNetworkView',
                           body={'networkViewSUID': view}, base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_commands_api(self):
         self.assertTrue(commands_api())
 
-    
     @print_entry_exit
     def test_commands_get(self):
         # Verify the expected return from common commands
@@ -168,21 +161,36 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, commands_get, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_get, '', base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_commands_help(self):
         # Verify the expected return from common commands
+        self._check_cy_result(commands_help(),
+                              ['analyzer', 'annotation', 'apps', 'command', 'cybrowser', 'cychart', 'diffusion', 'edge',
+                               'filetransfer', 'filter', 'group', 'idmapper', 'layout', 'network', 'node', 'session',
+                               'table', 'view', 'vizmap'], allow_subset=True)
+
+        self._check_cy_result(commands_help('help'),
+                              ['analyzer', 'annotation', 'apps', 'command', 'cybrowser', 'cychart', 'diffusion', 'edge',
+                               'filetransfer', 'filter', 'group', 'idmapper', 'layout', 'network', 'node', 'session',
+                               'table', 'view', 'vizmap'], allow_subset=True)
+
         self._check_cy_result(commands_help('apps'),
                               ['disable', 'enable', 'information', 'install', 'list available', 'list disabled',
                                'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status',
                                'uninstall', 'update'], allow_subset=True)
+
+        self._check_cy_result(commands_help('help apps'),
+                              ['disable', 'enable', 'information', 'install', 'list available', 'list disabled',
+                               'list installed', 'list uninstalled', 'list updates', 'open appstore', 'status',
+                               'uninstall', 'update'], allow_subset=True)
+
+        self._check_cy_result(commands_help('apps install'), ['app', 'file'], allow_subset=True)
 
         # Verify that bad commands are caught
         self.assertRaises(Exception, commands_help, 'bogus_junk')
         self.assertRaises(RequestException, commands_help, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_help, '', base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_commands_post(self):
         # Verify the expected return from common commands
@@ -196,7 +204,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, commands_post, '', base_url='http://totallybogus')
         self.assertRaises(RequestException, commands_post, '', base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_commands_run(self):
         # Initialization
@@ -214,7 +221,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, commands_run, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_run, '', base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_commands_echo(self):
         # Verify that the command returns what's sent to it
@@ -231,7 +237,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_echo, 'Hi there', base_url='http://totallybogus')
         self.assertRaises(RequestException, command_echo, 'Hi there', base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_command_open_dialog(self):
         # Verify that open dialog command fails ... it seems to be missing in the CyREST command set
@@ -241,7 +246,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_open_dialog, base_url='http://totallybogus')
         self.assertRaises(RequestException, command_open_dialog, base_url='http://yahoo.com')
 
-    
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_pause(self):
@@ -260,7 +264,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_pause, base_url='http://totallybogus')
         self.assertRaises(RequestException, command_pause, base_url='http://yahoo.com')
 
-    
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_quit(self):
@@ -274,7 +277,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_quit, base_url='http://totallybogus')
         self.assertRaises(RequestException, command_quit, base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_command_run_file(self):
         # Initialization
@@ -293,7 +295,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_run_file, CMD_FILE, base_url='http://totallybogus')
         self.assertRaises(RequestException, command_run_file, CMD_FILE, base_url='http://yahoo.com')
 
-    
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_command_sleep(self):
@@ -311,7 +312,6 @@ class CommandsTests(unittest.TestCase):
         self.assertRaises(RequestException, command_sleep, base_url='http://totallybogus')
         self.assertRaises(RequestException, command_sleep, base_url='http://yahoo.com')
 
-    
     @print_entry_exit
     def test_command_2_get_query(self):
 

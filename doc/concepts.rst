@@ -362,7 +362,7 @@ or
 When using full paths, this workflow is portable only to workstations that have their Cytoscape files in the
 ``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations.
 
-**Vignette 2**: A Notebook-based version of Vignette 1 ... data files on Jupyter server.
+**Vignette 2**: A Notebook-based version of Vignette 1 ... data files on a Jupyter server.
 
 A sandbox is automatically created for Notebook-based workflows whether they execute on a remote Jupyter server
 or a Jupyter server on the Cytoscape workstation. The workflow must transfer
