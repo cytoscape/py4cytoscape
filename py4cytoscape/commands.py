@@ -55,7 +55,9 @@ def __init__(self):
 def cyrest_api(base_url=DEFAULT_BASE_URL):
     """Open Swagger docs for CyREST API.
 
-    Opens swagger docs in default browser for a live instance of CyREST operations.
+    Opens Swagger docs in default browser for a live instance of CyREST operations.
+
+    Note that to open a Swagger window, you may need to configure your browser to allow pop-up windows.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -244,7 +246,9 @@ def cyrest_put(operation=None, parameters=None, body=None, base_url=DEFAULT_BASE
 def commands_api(base_url=DEFAULT_BASE_URL):
     """Open Swagger docs for CyREST Commands API.
 
-    Opens swagger docs in default browser for a live instance of Commands available via CyREST.
+    Opens Swagger docs in default browser for a live instance of Commands available via CyREST.
+
+    Note that to open a Swagger window, you may need to configure your browser to allow pop-up windows.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
