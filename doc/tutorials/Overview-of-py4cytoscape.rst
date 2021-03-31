@@ -431,41 +431,6 @@ py4cytoscape functions
 |                       | interface.            | dock_panel*           |
 +-----------------------+-----------------------+-----------------------+
 
-Open swagger docs for live instances of CyREST API and Commands API:
-
-.. code:: python
-
-    p4c.cyrest_api()
-
-.. code:: python
-
-    p4c.commands_api()
-
-List available commands and arguments in Python. Use “help” to list top
-level:
-
-.. code:: python
-
-    p4c.commands_help("help")
-
-List **network** commands. Note that “help” is optional:
-
-.. code:: python
-
-    p4c.commands_help("help network")
-
-List arguments for the **network select** command:
-
-.. code:: python
-
-    p4c.commands_help("help network select")
-
-That covers the basics of network manipulation. Check out the other
-vignettes for additional amd more complex examples. And when you are
-ready to work with some real data, check out the other basic and
-advanced R tutorials,
-https://github.com/cytoscape/cytoscape-automation/tree/master/for-scripters/Python.
-
 More examples
 -------------
 
