@@ -19,6 +19,7 @@ This themes for this release are:
 * Support Cytoscape v3.9 separation of filter definition from execution
 * Enable export functions to avoid popping a confirmation dialog
 * Enable cloud files to be downloaded directly to Sandbox
+* Fixes that allow commands_help to work
 
 Many of these themes support the definition and execution of the GangSu workflows.
 
