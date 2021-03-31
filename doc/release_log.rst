@@ -13,6 +13,7 @@ Release date: 26 Mar 2021
 * Added overwrite_file parameter to export functions
 * Added Sandbox direct download from URL
 * Added functions for import network from tabular file & get current style, etc
+* Fixes that allow commands_help to work
 
 
 Release notes
