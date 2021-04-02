@@ -13,9 +13,9 @@ V. Network extraction
 VI. Internal functions
 
 Note:
-     Go to ``network_selection`` for all selection-related functions
+     See the ``network_selection`` section for all selection-related functions.
 
-     See the `Utils` section for functions that convert node and edge names to SUIDs, and vice versa.
+     See the ``Utils`` section for functions that convert node and edge names to SUIDs, and vice versa.
 """
 
 """Copyright 2020 The Cytoscape Consortium
