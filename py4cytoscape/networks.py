@@ -14,6 +14,8 @@ VI. Internal functions
 
 Note:
      Go to network_selection.py for all selection-related functions
+
+     See the `Utils`_ section for functions that convert node and edge names to SUIDs, and vice versa.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -183,7 +185,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
         >>> get_network_name('galFiltered.sif') # verify that current network is galFiltered.sif
         galFiltered.sif
 
-    Notes:
+    Note:
         Together with getNetworkSuid, this function attempts to handle all
         of the multiple ways we support network referencing (e.g., title, SUID,
         'current', and NULL). These functions are then used by all other functions
