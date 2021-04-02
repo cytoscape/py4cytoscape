@@ -13,7 +13,7 @@ V. Network extraction
 VI. Internal functions
 
 Note:
-     See the ``network_selection`` section for all selection-related functions.
+     See the ``Network Selection`` section for all selection-related functions.
 
      See the ``Utils`` section for functions that convert node and edge names to SUIDs, and vice versa.
 """
