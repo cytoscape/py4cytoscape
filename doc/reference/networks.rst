@@ -9,6 +9,9 @@ Basic Networks
 
 .. automodule:: py4cytoscape.networks
 
+.. note::
+   See the `Utils`_ section for functions that convert node and edge names to SUIDs, and vice versa.
+
 Nodes
 =====
 .. autosummary::

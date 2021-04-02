@@ -1146,6 +1146,10 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 def import_network_from_tabular_file(file=None, first_row_as_column_names=False, start_load_row=1, column_type_list='s,i,t', delimiters='\\,,\t', base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
+    Notes:
+        To load a tabular file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``import_network_from_tabular_file`` to load it from there.
+
     Args:
         file (str): Name of file in any of the supported tabular formats (e.g., csv, tsv, Excel, etc).
         first_row_as_column_names (bool): True if first row contributes column names but no data values
@@ -1177,6 +1181,7 @@ def import_network_from_tabular_file(file=None, first_row_as_column_names=False,
         >>>                                  column_type_list='s,t,x,i',
         >>>                                  delimiters=' ')
         {'networks': [131481], 'views': [131850]}
+
     """
     file = get_abs_sandbox_path(file)
 
@@ -1214,6 +1219,11 @@ def import_network_from_tabular_file(file=None, first_row_as_column_names=False,
 @cy_log
 def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
+
+    Notes:
+        To load a network file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``import_network_from_file`` to load it from there.
+
     Args:
         file (str): Name of file in any of the supported formats (e.g., SIF, GML, xGMML, etc).
             If None, a demo network file in SIF format is loaded.
@@ -1222,9 +1232,11 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
     Returns:
         dict: {"networks": [network suid], "views": [suid for views]} where networks and views lists have length 1
+
     Raises:
         CyError: if file cannot be found or loaded
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> import_network_from_file() # import demo network
         {'networks': [131481], 'views': [131850]}

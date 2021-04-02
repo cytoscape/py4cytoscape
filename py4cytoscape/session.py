@@ -77,6 +77,10 @@ def open_session(file_location=None, base_url=DEFAULT_BASE_URL):
     Open a session file or URL. This will clear all networks, tables and styles associated with current
     session. Be sure to ``saveSession`` first.
 
+    Notes:
+        To load a session file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``open_session`` to load it from there.
+
     Args:
         file_location (str): File path or URL (with 'http' or 'https' prefix). Default is a sample session file.
         base_url (str): Ignore unless you need to specify a custom domain,
