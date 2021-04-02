@@ -13,9 +13,9 @@ V. Network extraction
 VI. Internal functions
 
 Note:
-     Go to network_selection.py for all selection-related functions
+     Go to ``network_selection`` for all selection-related functions
 
-     See the `Utils`_ section for functions that convert node and edge names to SUIDs, and vice versa.
+     See the `Utils` section for functions that convert node and edge names to SUIDs, and vice versa.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -186,10 +186,10 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
         galFiltered.sif
 
     Note:
-        Together with getNetworkSuid, this function attempts to handle all
+        Together with get_network_suid, this function attempts to handle all
         of the multiple ways we support network referencing (e.g., title, SUID,
         'current', and NULL). These functions are then used by all other functions
-        that take a "network" argument.
+        that take a ``network`` argument.
     """
     if isinstance(suid, str):
         # title provided
@@ -1148,7 +1148,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 def import_network_from_tabular_file(file=None, first_row_as_column_names=False, start_load_row=1, column_type_list='s,i,t', delimiters='\\,,\t', base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
-    Notes:
+    Note:
         To load a tabular file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
         the file to a sandbox, and then use ``import_network_from_tabular_file`` to load it from there.
 
@@ -1222,7 +1222,7 @@ def import_network_from_tabular_file(file=None, first_row_as_column_names=False,
 def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
     """Loads a network from specified file.
 
-    Notes:
+    Note:
         To load a network file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
         the file to a sandbox, and then use ``import_network_from_file`` to load it from there.
 

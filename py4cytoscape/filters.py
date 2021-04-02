@@ -358,6 +358,10 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
     Adds filters to whatever filters already exist, and renames filters where names already exist. Also executes
     each filter.
 
+    Note:
+        To load a filter file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``import_filters`` to load it from there.
+
     Args:
         filename (str): Path and name of the filters file to load.
         base_url (str): Ignore unless you need to specify a custom domain,

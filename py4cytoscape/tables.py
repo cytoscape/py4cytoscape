@@ -352,6 +352,10 @@ def load_table_data_from_file(file, first_row_as_column_names=False, start_load_
     column used as a key is specified by its ordinal position
     amongst the other columns (i.e., the leftmost column is 1).
 
+    Note:
+        To load a table file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``load_table_data_from_file`` to load it from there.
+
     Args:
         file (str): Name of tabular file in any of the supported formats (e.g., .txt, .csv, .xls, .tsv, etc)
         first_row_as_column_names (bool): True if first row contributes column names but no data values; defaults to False

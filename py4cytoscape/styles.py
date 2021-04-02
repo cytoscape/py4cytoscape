@@ -214,6 +214,10 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
 def import_visual_styles(filename="styles.xml", base_url=DEFAULT_BASE_URL):
     """Load styles from an XML file and returns the names of the loaded styles.
 
+    Note:
+        To load a style file from cloud storage, use the file's URL and the ``sandbox_url_to`` function to download
+        the file to a sandbox, and then use ``import_visual_styles`` to load it from there.
+
     Args:
         filename (str): Name of the style file to load. Only reads XML files. Default is "styles.xml".
         base_url (str): Ignore unless you need to specify a custom domain,
