@@ -61,21 +61,19 @@ So, in order to demonstrate data import, we first need to have a
 network. This command will import network files in any of the supported
 formats (e.g., SIF, GML, XGMML, etc).
 
-.. code:: python
-
-    !wget https://raw.githubusercontent.com/cytoscape/cytoscape-automation/master/for-scripters/Python/data/galFiltered.sif
-
 In order to import the “SIF” file into Cytoscape, it must be on the
 local machine where Cytoscape installed, not on Colab. So use the
-FileTransfer App to send the SIF file local file system from Colab.
+FileTransfer App to send the SIF file to your local file system from
+Colab.
 
-By the way, this operation is necessary even if you are using a local
-Jupyter Notebook instead of Colab. (This prevents reproducibility
-problems depending on the file path.)
+This operation is necessary even if you are using a local Jupyter
+Notebook instead of Colab. (This prevents reproducibility problems
+depending on the file path.)
 
 .. code:: python
 
-    p4c.sandbox_send_to("galFiltered.sif")
+    p4c.sandbox_url_to("https://raw.githubusercontent.com/cytoscape/cytoscape-automation/master/for-scripters/Python/data/galFiltered.sif", "galFiltered.sif")
+
 
 If you are using py4cytoscape in Jupyter Notebook,
 ``import_network_from_file`` will always try to read the file under the
@@ -100,12 +98,8 @@ file with gene expression data values keyed by yeast identifiers here:
 
 .. code:: python
 
-    !wget https://raw.githubusercontent.com/cytoscape/RCy3/master/inst/extdata/galExpData.csv
-
-.. code:: python
-
     import pandas as pd
-    data = pd.read_csv("galExpData.csv")
+    data = pd.read_csv("https://raw.githubusercontent.com/cytoscape/RCy3/master/inst/extdata/galExpData.csv")
 
 .. code:: python
 
