@@ -23,6 +23,7 @@
 import unittest
 import math
 import pandas as df
+from igraph import Graph
 import time
 import re
 import os
@@ -927,16 +928,41 @@ class NetworkTests(unittest.TestCase):
         compare_table(cynode_table, 'node', netx)
         compare_table(cyedge_table, 'edge', netx)
 
-    #   @skip
     @print_entry_exit
     def test_create_network_from_igraph(self):
+        # Test #1 -- round trip starting with igraph
+        actors = pd.DataFrame(data={'name': ["Alice", "Bob", "Cecil", "David", "Esmeralda"],
+                                    'age': [48, 33, 45, 34, 21],
+                                    'gender': ["F", "M", "F", "M", "F"]
+                                    })
+
+        relations = pd.DataFrame(data={'from': ["Bob", "Cecil", "Cecil", "David", "David", "Esmeralda"],
+                                       'to': ["Alice", "Bob", "Alice", "Alice", "Bob", "Alice"],
+                                       'same_dept': [False, False, True, False, False, True],
+                                       'friendship': [4, 5, 5, 2, 1, 1],
+                                       'advice': [4, 5, 5, 4, 2, 3],
+                                       'CytoName': ['Bob (interacts with) Alice', # for verifying Cytoscape network
+                                                    'Cecil (interacts with) Bob',
+                                                    'Cecil (interacts with) Alice',
+                                                    'David (interacts with) Alice',
+                                                    'David (interacts with) Bob',
+                                                    'Esmeralda (interacts with) Alice']
+                                       })
+
+        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors)
+        new_SUID = create_network_from_igraph(cur_igraph, 'My coworker iGraph')
+        self.assertEqual(get_network_name(new_SUID), 'My coworker iGraph')
+        new_igraph = create_igraph_from_network(new_SUID)
+
+        # Verify that all nodes in the new network are present along with their attributes.
+        self._check_igraph_attributes(cur_igraph.vs, new_igraph.vs)
+
+        # Verify that all edges in the new network are present along with their attributes.
+        self._check_igraph_attributes(cur_igraph.es, new_igraph.es, 'CytoName')
+
+        # Test #2 -- round trip starting with Cytoscape network
         # Initialization
         load_test_session()
-
-        # TODO: Consider allowing creation of a network from an empty igraph
-        # This will fail but probably should not ... create_network_from_igraph requires nodes and edges, but shouldn't
-        #        g = ig.Graph()
-        #        create_network_from_igraph(g)
 
         cur_igraph = create_igraph_from_network()
 
@@ -945,14 +971,10 @@ class NetworkTests(unittest.TestCase):
 
         self.assertEqual(get_network_name(new_SUID), 'From igraph')
 
-        # Verify that all nodes in the new network are present along with their attributes. This doesn't test
-        # whether there are extra attributes on the nodes ... there well may be because of the extra ``id`` attribute
-        # added by ``create_network_from_igraph()``.
+        # Verify that all nodes in the new network are present along with their attributes.
         self._check_igraph_attributes(cur_igraph.vs, new_igraph.vs)
 
-        # Verify that all edges in the new network are present along with their attributes. This doesn't test
-        # whether there are extra attributes on the edges ... there well may be because of the extra ``data.key`` attribute
-        # added by ``create_network_from_igraph()``.
+        # Verify that all edges in the new network are present along with their attributes.
         self._check_igraph_attributes(cur_igraph.es, new_igraph.es)
 
         # With the nodes and edges verified, see whether they're all connected the same
@@ -961,20 +983,19 @@ class NetworkTests(unittest.TestCase):
 #        self.assertTrue(cur_igraph.isomorphic(new_igraph))
 #        print('returning from isomorphic')
 
-    # @print_entry_exit
-    # def test_choke_memory(self):
-    #     # This is to show whether a memory leak occurs ... not part of the API tests
-    #     trial = 1
-    #     while True:
-    #         start = time.clock()
-    #         close_session(False)
-    #         closed_time = time.clock()
-    #         open_session()
-    #         print('trial: %5d, close_session seconds: %6.2f, open_session seconds: %6.2f' % (
-    #         trial, (closed_time - start), (time.clock() - closed_time)))
-    #         trial += 1
+        # Test #3
+    # TODO: Consider allowing creation of a network from an empty igraph
+    # This will fail but probably should not ... create_network_from_igraph requires nodes and edges, but shouldn't
+    #        g = ig.Graph()
+    #        create_network_from_igraph(g)
 
-    def _check_igraph_attributes(self, original_collection, new_collection):
+    def _check_igraph_attributes(self, original_collection, new_collection, orig_name='name'):
+        # Verify that all edges or vertices (and their attributes) in the igraph original_collection are present in the
+        # igraph new_collection. Note that there can be extra attributes in the new_collection,
+        # and that's OK. They're left there intentionally as a result of whatever process created the new_collection.
+        # For example, for vertices, there may be an extra ``id`` attribute. For edges, there could be a ``data.key``
+        # or ``source.original`` or ``target.original``.
+
         def vals_eq(name, e_cur_key, val1, val2):
             eq = type(val1) is type(val2) and \
                  ((val1 == val2) or \
@@ -984,9 +1005,9 @@ class NetworkTests(unittest.TestCase):
             return eq
 
         for orig in original_collection:
-            new = new_collection.find(name=orig['name'])
+            new = new_collection.find(name=orig[orig_name])
             self.assertFalse(
-                False in [vals_eq(orig['name'], e_cur_key, orig[e_cur_key], new[e_cur_key]) for e_cur_key in
+                False in [vals_eq(orig[orig_name], e_cur_key, orig[e_cur_key], new[e_cur_key]) for e_cur_key in
                           orig.attributes().keys()])
 
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):

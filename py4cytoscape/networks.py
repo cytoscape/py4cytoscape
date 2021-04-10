@@ -931,29 +931,45 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
     # TODO: Verify the undeclared parameter behaviors claimed in the R documents
     # TODO: Is this really faithful to the R implementation?
 
-    def attrs_present(entity_collection):
-        attrs = set()
-        for entity in entity_collection:
-            attrs |= set(entity.attributes().keys())
-        return attrs
+    def rename_dup_columns(col_list, col_name):
+        # See if a column name exists, and if so, rename all other same-name columns.
+        # Especially important for graphs that come with a ``source`` or ``target`` name
+        # created by get_edge_dataframe (which creates these columns) when these columns
+        # were already in the graph as a result of creating the graph from a Cytoscape
+        # network.
+        first_index = col_list.index(col_name)
+        replacement_name = col_name + '.original'
+        new_cols = [replacement_name if i != first_index and col_list[i] == col_name else col_list[i] for i in range(len(col_list))]
+        return new_cols
 
-    def copy_attrs_to_dataframe(entity_collection):
-        df = pd.DataFrame()
-        for col in attrs_present(entity_collection):
-            df[col] = entity_collection[col]
-        return df
-
-    node_df = copy_attrs_to_dataframe(igraph.vs)
-    edge_df = copy_attrs_to_dataframe(igraph.es)
-
-    # Make sure critical attributes are strings
+    # Get nodes as a table indexed by node number ... assume every node has at least a 'name' attribute as a string
+    node_df = ig.Graph.get_vertex_dataframe(igraph)
     node_df['name'] = node_df['name'].astype(str)
-    edge_df['source'] = edge_df['source'].astype(str)
-    edge_df['target'] = edge_df['target'].astype(str)
+
+    # Get edges as a table ... assume every edge has a 'source' and 'target' column as indexes into node table
+    edge_df = ig.Graph.get_edge_dataframe(igraph)
+    # Make sure interaction is a string
     if 'interaction' in edge_df.columns: edge_df['interaction'] = edge_df['interaction'].astype(str)
 
+    try:
+        # If the incoming graph contained a column named 'source' or 'target', rename them
+        edge_cols = rename_dup_columns(list(edge_df.columns), 'source')
+        edge_df.columns = rename_dup_columns(edge_cols, 'target')
+    except:
+        narrate('Edge table missing "source" or "target" attribute') # iGraph creates this df, so should never happen
+        edge_df = None
+
+    if edge_df is not None:
+        try:
+            # Convert edge 'source' and 'target' values from index into node table to actual node name
+            edge_df['source'] = edge_df['source'].apply(lambda x: node_df['name'][x])
+            edge_df['target'] = edge_df['target'].apply(lambda x: node_df['name'][x])
+        except:
+            narrate('Not all edge sources or targets resolve to vertex names') # iGraph creates this df, so should never happen
+            edge_df = None
+
     if len(node_df.index) == 0: node_df = None
-    if len(edge_df.index) == 0: edge_df = None
+    if edge_df is not None and len(edge_df.index) == 0: edge_df = None
 
     return create_network_from_data_frames(nodes=node_df, edges=edge_df, title=title, collection=collection,
                                            base_url=base_url, node_id_list='name')
