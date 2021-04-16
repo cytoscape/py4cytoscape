@@ -930,12 +930,13 @@ class NetworkTests(unittest.TestCase):
 
     @print_entry_exit
     def test_create_network_from_igraph(self):
-        # Test #1 -- round trip starting with igraph
         actors = pd.DataFrame(data={'name': ["Alice", "Bob", "Cecil", "David", "Esmeralda"],
                                     'age': [48, 33, 45, 34, 21],
                                     'gender': ["F", "M", "F", "M", "F"]
                                     })
 
+
+        # Test #1 -- round trip starting with non-multigraph igraph
         relations = pd.DataFrame(data={'from': ["Bob", "Cecil", "Cecil", "David", "David", "Esmeralda"],
                                        'to': ["Alice", "Bob", "Alice", "Alice", "Bob", "Alice"],
                                        'same_dept': [False, False, True, False, False, True],
@@ -960,7 +961,36 @@ class NetworkTests(unittest.TestCase):
         # Verify that all edges in the new network are present along with their attributes.
         self._check_igraph_attributes(cur_igraph.es, new_igraph.es, 'CytoName')
 
-        # Test #2 -- round trip starting with Cytoscape network
+        # Test #2 -- round trip starting with multigraph igraph
+        relations = pd.DataFrame(data={'from': ["Bob", "Cecil", "Cecil", "David", "David", "Esmeralda", "Bob", "Cecil", "Cecil"],
+                                       'to': ["Alice", "Bob", "Alice", "Alice", "Bob", "Alice", "Alice", "Bob", "Alice"],
+                                       'same_dept': [False, False, True, False, False, True, False, False, True],
+                                       'friendship': [4, 5, 5, 2, 1, 1, 104, 105, 105],
+                                       'advice': [4, 5, 5, 4, 2, 3, 204, 205, 205],
+                                       'CytoName': ['Bob (interacts with) Alice', # for verifying Cytoscape network
+                                                    'Cecil (interacts with) Bob',
+                                                    'Cecil (interacts with) Alice',
+                                                    'David (interacts with) Alice',
+                                                    'David (interacts with) Bob',
+                                                    'Esmeralda (interacts with) Alice',
+                                                    'Bob (interacts with) Alice',
+                                                    'Cecil (interacts with) Bob',
+                                                    'Cecil (interacts with) Alice',
+                                                    ]
+                                       })
+
+        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors)
+        new_SUID = create_network_from_igraph(cur_igraph, 'My multigraph coworker iGraph')
+        self.assertEqual(get_network_name(new_SUID), 'My multigraph coworker iGraph')
+        new_igraph = create_igraph_from_network(new_SUID)
+
+        # Verify that all nodes in the new network are present along with their attributes.
+        self._check_igraph_attributes(cur_igraph.vs, new_igraph.vs)
+
+        # Verify that all edges in the new network are present along with their attributes.
+        self._check_igraph_attributes(cur_igraph.es, new_igraph.es, 'CytoName')
+
+        # Test #3 -- round trip starting with Cytoscape network
         # Initialization
         load_test_session()
 
@@ -983,7 +1013,7 @@ class NetworkTests(unittest.TestCase):
 #        self.assertTrue(cur_igraph.isomorphic(new_igraph))
 #        print('returning from isomorphic')
 
-        # Test #3
+        # Test #4
     # TODO: Consider allowing creation of a network from an empty igraph
     # This will fail but probably should not ... create_network_from_igraph requires nodes and edges, but shouldn't
     #        g = ig.Graph()
@@ -995,20 +1025,44 @@ class NetworkTests(unittest.TestCase):
         # and that's OK. They're left there intentionally as a result of whatever process created the new_collection.
         # For example, for vertices, there may be an extra ``id`` attribute. For edges, there could be a ``data.key``
         # or ``source.original`` or ``target.original``.
+        #
+        # Note that this code also accounts for the possibility of multiple same-named nodes or edges (i.e.,
+        # multi-graphs) by searching for a match for an entire node/edge. At the end of this check, there should
+        # be no unmatched nodes/edges left.
 
-        def vals_eq(name, e_cur_key, val1, val2):
+        def vals_eq(val1, val2):
             eq = type(val1) is type(val2) and \
                  ((val1 == val2) or \
                   (type(val1) is float and math.isnan(val1) and math.isnan(val2)))
-            if not eq:
-                print('For ' + name + ', key ' + e_cur_key + ': ' + str(val1) + ' != ' + str(val2))
             return eq
 
+        # Create a map of node/edge names to attribute collections ... there may be multiple attribute collections
+        # if the node/edge exists more than once
+        new_name_to_attrs_map = {i['name']: [iSeq.attributes()    for iSeq in new_collection(name=i['name'])]
+                                 for i in new_collection}
+
+        # Verify that there is an entry in the new network for each entry in the original network
         for orig in original_collection:
-            new = new_collection.find(name=orig[orig_name])
-            self.assertFalse(
-                False in [vals_eq(orig[orig_name], e_cur_key, orig[e_cur_key], new[e_cur_key]) for e_cur_key in
-                          orig.attributes().keys()])
+            # Get the list of new network attribute collections for the current node/edge
+            new_item_list = new_name_to_attrs_map[orig[orig_name]]
+
+            # Search the attribute list for something that matches the attributes for the current node/edge
+            is_match = False
+            for i in range(len(new_item_list)):
+                new_attr_list = new_item_list[i]
+                is_match = not (False in [vals_eq(orig[e_cur_key], new_attr_list[e_cur_key])
+                                          for e_cur_key in orig.attributes().keys()])
+                if is_match:
+                    # Found a match ... remove the attribute collection so we know we've seen it
+                    new_item_list.pop(i)
+                    break
+            # After searching through the new node/edge's attributes, if we didn't find the original collection, bail out
+            self.assertTrue(is_match, f'Could not find match in new igraph for original igraph {orig_name} "{orig[orig_name]}"')
+
+        # Verify that there are no extra nodes/edges in the new collection
+        for name, attr_list in new_name_to_attrs_map.items():
+            self.assertListEqual(attr_list, [], f'New collection has extraneous "{name}"')
+
 
     def _check_cloned_network(self, subnet_suid, base_suid, base_name, base_nodes, base_edges):
         self.assertIsInstance(subnet_suid, int)
