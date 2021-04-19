@@ -475,8 +475,7 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
 
     for node_name in node_names:
         # get first neighbors for each node
-        node_suid = node_name_to_node_suid([node_name], net_suid, base_url=base_url)[0]
-        # TODO: Verify that this won't break if node_name_to_node_suid returns a list instead of a scalar ... I think it will break ... should we except??
+        node_suid = node_name_to_node_suid([node_name], net_suid, base_url=base_url, unique_list=True)[0]
 
         first_neighbors_suids = commands.cyrest_get(
             f'networks/{net_suid}/nodes/{node_suid}/neighbors', base_url=base_url)
@@ -1142,7 +1141,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                       zip(edges[source_id_list], edges[interaction_type_list], edges[target_id_list])]
         edges['name'] = edge_names
         # find out the SUID of each node so it can be used in a multigraph if needed
-        edges['data.key.column'] = edge_name_to_edge_suid(edge_names, network_suid, base_url=base_url)
+        edges['data.key.column'] = edge_name_to_edge_suid(edge_names, network_suid, base_url=base_url, unique_list=True)
 
         # if the edge list looks real, add the edge attributes (if any)
         if len(set(edges.columns) - set(['source', 'target', 'interaction', 'name', 'data.key.column'])) != 0:

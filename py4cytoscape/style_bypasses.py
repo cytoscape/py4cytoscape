@@ -103,7 +103,7 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
-    node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url)
+    node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url, unique_list=True)
 
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
@@ -184,7 +184,7 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
         raise CyError('"all" node_names is not yet supported by CyREST. Please provide a valid node list.')
 
     # TODO: Do we need to pass in net_suid ... other calls just let the function figure it out
-    node_suids = node_name_to_node_suid(node_names, network=net_suid, base_url=base_url)
+    node_suids = node_name_to_node_suid(node_names, network=net_suid, base_url=base_url, unique_list=True)
 
     if node_suids == []:
         res = {'data': {}, 'errors': []}
@@ -251,7 +251,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
-    edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url)
+    edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url, unique_list=True)
 
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
@@ -332,7 +332,7 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
         raise CyError('"all" edge_names is not yet supported by CyREST. Please provide a valid edge list.')
 
     # TODO: Do we need to pass in net_suid ... other calls just let the function figure it out
-    edge_suids = edge_name_to_edge_suid(edge_names, network=net_suid, base_url=base_url)
+    edge_suids = edge_name_to_edge_suid(edge_names, network=net_suid, base_url=base_url, unique_list=True)
 
     if edge_suids == []:
         res = {'data': {}, 'errors': []}

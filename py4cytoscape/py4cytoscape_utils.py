@@ -163,13 +163,17 @@ def verify_slot(slot):
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
         raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
 
-def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
+def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     """Translate one node name or a list of node names into a list of SUIDs.
 
-    List can contain a mixture of names and SUIDs. If it does, only the names are translated,
-    but all entries are returned. If the list contains all SUIDs and no names, the list is returned.
+    List can contain either names or SUIDs. If the list contains all SUIDs and no names, the list
+    is returned.
 
-    If a name maps to multiple SUIDs, a list of SUIDs are returned instead of a single SUID.
+    If a name occurs multiple times in the list and unique_list=True, a different SUID is returned
+    for each name instance, provided that the network has enough same-named edges. If not, an error is returned.
+
+    If a name occures multiple times but unique_list=False, a list of SUIDs is returned for each name instance. If there
+    is only one name, the SUID is returned as a scalar.
 
     Args:
         node_names (str or list): an node name or a list of node names
@@ -178,6 +182,7 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        unique_list (bool): True if duplicate node names refer to different nodes; False if it doesn't matter
 
     Returns:
          list: [<SUID or SUID list corresponding to each name>]
@@ -195,33 +200,13 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL):
         [1022, 1023]
         >>> node_name_to_node_suid([1022, 1023], network='myNetwork')
         [1022, 1023]
-        >>> node_name_to_node_suid(['YDR277C', 'AXD206W'], network='myNetwork')
-        [1022, [1099, 1100]]
+        >>> node_name_to_node_suid(['YDR277C', 'YDR277C'], network='myNetwork', unique_list=True)
+        [1022, 1024]
+        >>> node_name_to_node_suid(['YDR277C', 'YDR277C', 'YDL194W'], network='myNetwork')
+        [[1022, 1024], [1022, 1024], 1023]
     """
-    return _item_to_suid(node_names, 'node', network=network, base_url=base_url)
-    # if node_names is None: return None
-    # node_names = normalize_list(node_names)
-    #
-    # df = tables.get_table_columns('node', ['name'], 'default', network=network, base_url=base_url)
-    #
-    # # Check all node names to see if they're all valid SUIDs ... if so, we're already done
-    # all_suids = df.index
-    # try:
-    #     node_names = [int(node)  for node in node_names]
-    #     found_valid_suids = [node in all_suids   for node in node_names]
-    #     if False not in found_valid_suids:
-    #         return node_names
-    # except:
-    #     pass
-    #
-    # # map all node names into lists SUIDs ... for each node name, pick off an SUID in its list and return it
-    # node_name_to_suid_list = {node_name: list(df[df.name.eq(node_name)].index.values) for node_name in node_names}
-    # try:
-    #     suid_list = [node_name_to_suid_list[node_name].pop(0)   for node_name in node_names]
-    # except:
-    #     raise CyError(f'Invalid name in node name list: {node_names}')
-    #
-    # return suid_list
+    return _item_to_suid(node_names, 'node', network=network, base_url=base_url, unique_list=unique_list)
+
 
 def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
     """Translate one node SUID or a list of node SUIDs into a list of names.
@@ -273,13 +258,17 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
         raise CyError(f'Invalid node SUID in list: {node_suids}')
 
 
-def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
+def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     """Translate one edge name or a list of edge names into a list of SUIDs.
 
-    List can contain a mixture of names and SUIDs. If it does, only the names are translated,
-    but all entries are returned. If the list contains all SUIDs and no names, the list is returned.
+    List can contain either names or SUIDs. If the list contains all SUIDs and no names, the list
+    is returned.
 
-    If a name maps to multiple SUIDs, a list of SUIDs are returned instead of a single SUID.
+    If a name occurs multiple times in the list and unique_list=True, a different SUID is returned
+    for each name instance, provided that the network has enough same-named edges. If not, an error is returned.
+
+    If a name occures multiple times but unique_list=False, a list of SUIDs is returned for each name instance. If there
+    is only one name, the SUID is returned as a scalar.
 
     Args:
         edge_names (str or list): an edge name or a list of edge names
@@ -288,9 +277,10 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        unique_list (bool): True if duplicate edge names refer to different edges; False if it doesn't matter
 
     Returns:
-         list: [<SUID or SUID list corresponding to each name>]
+         list: [<SUID or SUID listcorresponding to each name>]
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -307,34 +297,12 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         [1022, 1023]
         >>> edge_name_to_edge_suid([1022, 1023], network='myNetwork')
         [1022, 1023]
-        >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) AXD206W'], network='myNetwork')
-        [1022, [1099, 1100]]
+        >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDL194W'], network='myNetwork', unique_list=True)
+        [1022, 1024]
+        >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
+        [[1022, 1024], [1022, 1024], 1023]
     """
-    return _item_to_suid(edge_names, 'edge', network=network, base_url=base_url)
-    # if edge_names is None: return None
-    # edge_names = normalize_list(edge_names)
-    #
-    # df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
-    #
-    # # Check all edge names to see if they're all valid SUIDs ... if so, we're already done
-    # all_suids = df.index
-    # try:
-    #     edge_names = [int(edge) for edge in edge_names]
-    #     found_valid_suids = [edge in all_suids for edge in edge_names]
-    #     if False not in found_valid_suids:
-    #         return edge_names
-    # except:
-    #     pass
-    #
-    # # map all edge names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
-    # edge_name_to_suid_list = {edge_name: list(df[df.name.eq(edge_name)].index.values) for edge_name in edge_names}
-    # try:
-    #     suid_list = [edge_name_to_suid_list[edge_name].pop(0) for edge_name in edge_names]
-    # except:
-    #     raise CyError(f'Invalid name in edge name list: {edge_names}')
-    #
-    # return suid_list
-
+    return _item_to_suid(edge_names, 'edge', network=network, base_url=base_url, unique_list=unique_list)
 
 
 def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
@@ -553,8 +521,8 @@ def build_url(base_url=DEFAULT_BASE_URL, command=None):
     else:
         return base_url
 
-def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL):
-    # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names
+def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
+    # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names if list is unique
     if item_names is None: return None
     item_names = normalize_list(item_names)
 
@@ -570,10 +538,14 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
     except:
         pass
 
-    # map all names into SUIDs ... all names *must* be actual names ... for names mapping to multiple SUIDs, return a SUID list
+    # map all names into SUIDs ... all names *must* be actual names
     item_name_to_suid_list = {item_name: list(df[df.name.eq(item_name)].index.values) for item_name in item_names}
     try:
-        suid_list = [item_name_to_suid_list[item_name].pop(0) for item_name in item_names]
+        if unique_list:
+            suid_list = [item_name_to_suid_list[item_name].pop(0) for item_name in item_names]
+        else:
+            suid_list = [item_name_to_suid_list[item_name] for item_name in item_names]
+            suid_list = [s[0] if len(s) <= 1 else s    for s in suid_list] # return scalar if len(list) = 1, blow up if len(list) = 0
     except:
         raise CyError(f'Invalid name in {table_name} name list: {item_names}')
 

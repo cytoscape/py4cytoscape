@@ -95,7 +95,7 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
         return node_props
     else:
         node_names = normalize_list(node_names)
-        node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url)
+        node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url, unique_list=True)
         node_props = {node_name: commands.cyrest_get(
             f'networks/{net_suid}/views/{view_suid}/nodes/{node_suid}/{visual_property}', base_url=base_url)['value']
                       for node_suid, node_name in zip(node_suids, node_names)}
@@ -159,7 +159,7 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         return edge_props
     else:
         edge_names = normalize_list(edge_names)
-        edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url)
+        edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url, unique_list=True)
         edge_props = {edge_name: commands.cyrest_get(
             f'networks/{net_suid}/views/{view_suid}/edges/{edge_suid}/{visual_property}', base_url=base_url)['value']
                       for edge_suid, edge_name in zip(edge_suids, edge_names)}

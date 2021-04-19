@@ -106,6 +106,7 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertEqual(node_name_to_node_suid(', '.join(node_names)), suids) # try string list of node names
         self.assertEqual(node_name_to_node_suid(node_names[0]), [suids[0]]) # try just a single node name
         self.assertRaises(CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C']) # try bad node name
+        self.assertRaises(CyError, node_name_to_node_suid, ['YBR043C', 'junk', 'YDR277C'], unique_list=True) # try bad node name
         self.assertRaises(CyError, node_name_to_node_suid, suids_with_name) # try comparing to known-incorrect list
         self.assertEqual(node_name_to_node_suid(suids), suids) # try list of node SUIDs
         self.assertRaises(CyError, node_name_to_node_suid, names_with_none) # try bad node SUID
@@ -115,19 +116,31 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         # Verify that when there are two of the same-named nodes, one of their SUIDs is returned if one node is queried
         suid_orig = index[values.index('YGR009C')]
         suid_dup = add_cy_nodes(['YGR009C'], skip_duplicate_names=False)[0]['SUID']
-        res = node_name_to_node_suid(['YGR009C'])
+        res = node_name_to_node_suid(['YGR009C'], unique_list=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         self.assertIn(res[0], {suid_orig, suid_dup})
 
         # Verify that when there are two of the same-named nodes, both of their SUIDs are returned if both nodes are queried
-        res = node_name_to_node_suid(['YGR009C', 'YGR009C'])
+        res = node_name_to_node_suid(['YGR009C', 'YGR009C'], unique_list=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 2)
         self.assertSetEqual(set(res), {suid_orig, suid_dup})
 
         # Verify that when there are two of the same-named nodes, an error occurs if we ask for three nodes
-        self.assertRaises(CyError, node_name_to_node_suid, ['YGR009C', 'YGR009C', 'YGR009C'])
+        self.assertRaises(CyError, node_name_to_node_suid, ['YGR009C', 'YGR009C', 'YGR009C'], unique_list=True)
+
+        # Verify that when there are two of the same-named nodes and node list is declared non-unique, a list of all same-named nodes is returned
+        res = node_name_to_node_suid(['YGR009C', 'YGR009C', 'YGR009C'], unique_list=False)
+        self.assertIsInstance(res, list)
+        self.assertEqual(len(res), 3)
+        for suid_list in res:
+            self.assertIsInstance(suid_list, list)
+            self.assertEqual(len(suid_list), 2)
+            self.assertSetEqual(set(suid_list), {suid_orig, suid_dup})
+
+        self.assertEqual(node_name_to_node_suid(node_names[0], unique_list=False), [suids[0]]) # try just a single node name, list declared non-unique
+
 
     @print_entry_exit
     def test_edge_suid_to_edge_name(self):
@@ -216,6 +229,8 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         # Verify that a bad edge name is caught
         self.assertRaises(CyError, edge_name_to_edge_suid,
                           ['YDR277C (pp) YDL194W', 'junk', 'YPR145W (pp) YMR117C'])
+        self.assertRaises(CyError, edge_name_to_edge_suid,
+                          ['YDR277C (pp) YDL194W', 'junk', 'YPR145W (pp) YMR117C'], unique_list=False)
 
         # Verify that a known-incorrect list (i.e., mix of SUIDs and names) is caught
         self.assertRaises(CyError, edge_name_to_edge_suid, suids_with_name)
@@ -235,19 +250,30 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         # Verify that when there are two of the same-named edges, one of their SUIDs is returned if one edge is queried
         suid_orig = index[values.index('YER054C (pp) YBR045C')]
         suid_dup = add_cy_edges(['YER054C', 'YBR045C'], edge_type='pp')[0]['SUID']
-        res = edge_name_to_edge_suid(['YER054C (pp) YBR045C'])
+        res = edge_name_to_edge_suid(['YER054C (pp) YBR045C'], unique_list=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         self.assertIn(res[0], {suid_orig, suid_dup})
 
         # Verify that when there are two of the same-named edges, both of their SUIDs are returned if both edges are queried
-        res = edge_name_to_edge_suid(['YER054C (pp) YBR045C', 'YER054C (pp) YBR045C'])
+        res = edge_name_to_edge_suid(['YER054C (pp) YBR045C', 'YER054C (pp) YBR045C'], unique_list=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 2)
         self.assertSetEqual(set(res), {suid_orig, suid_dup})
 
         # Verify that when there are two of the same-named edges, an error occurs if we ask for three edges
-        self.assertRaises(CyError, edge_name_to_edge_suid, ['YER054C (pp) YBR045C', 'YER054C (pp) YBR045C', 'YER054C (pp) YBR045C'])
+        self.assertRaises(CyError, edge_name_to_edge_suid, ['YER054C (pp) YBR045C', 'YER054C (pp) YBR045C', 'YER054C (pp) YBR045C'], unique_list=True)
+
+        # Verify that when there are two of the same-named nodes and node list is declared non-unique, a list of all same-named nodes is returned
+        res = edge_name_to_edge_suid(['YER054C (pp) YBR045C', 'YER054C (pp) YBR045C', 'YER054C (pp) YBR045C'], unique_list=False)
+        self.assertIsInstance(res, list)
+        self.assertEqual(len(res), 3)
+        for suid_list in res:
+            self.assertIsInstance(suid_list, list)
+            self.assertEqual(len(suid_list), 2)
+            self.assertSetEqual(set(suid_list), {suid_orig, suid_dup})
+
+        self.assertEqual(edge_name_to_edge_suid(edge_names[0], unique_list=False), [suids[0]]) # try just a single node name, list declared non-unique
 
 
 
