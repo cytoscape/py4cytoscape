@@ -879,7 +879,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
                                base_url=DEFAULT_BASE_URL):
     """Create a Cytoscape network from an igraph network.
 
-    Takes an igraph network and generates data frames for nodes and edges to
+    Takes an igraph network and generates dataframes for nodes and edges to
     send to the createNetwork function. Returns the network.suid and applies the perferred
     layout set in Cytoscape preferences.
 
@@ -916,8 +916,6 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
         >>> g.add_vertices(3)
         >>> g.vs['name'] = ['RAP1', 'HIS4', 'HIS3']
         >>> g.add_edges([(0, 1), (1, 2)])
-        >>> g.es['source'] = [g.vs[0]['name'], g.vs[1]['name']]
-        >>> g.es['target'] = [g.vs[1]['name'], g.vs[2]['name']]
         >>> g.es['interaction'] = ['enhances', 'inhibits']
         >>> create_network_from_igraph(g, 'new graph', 'my collection')
         138775
@@ -1286,8 +1284,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     """Create an igraph network from a Cytoscape network.
 
     Notes:
-        Takes a Cytoscape network and generates data frames for vertices and edges to send to the graph_from_data_frame
-        function. Nodes and edges from the Cytoscape network will be translated into vertices and edges in igraph.
+        Takes a Cytoscape network and translates it nodes and edges into vertices and edges in igraph.
         Associated table columns will also be passed to igraph as vertex and edge attributes. All networks are
         implicitly modeled as directed in Cytoscape. Round-trip conversion of an undirected network in igraph via
         ``createNetworkFromIgraph`` to Cytoscape and back to igraph will result in a directed network.
@@ -1352,7 +1349,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
     # add all edges and their nodes
     g.add_edges([(src, trg) for src, trg in zip(cyedges['source'], cyedges['target'])])
     # TODO: Find out why this rename happens ... is this an iGraph thing? ... how does the roundtrip work?
-    cyedges.rename({'source': 'from', 'target': 'to'})
+    # cyedges.rename(columns={'source': 'from', 'target': 'to'}, inplace=True)
     for col in cyedges.columns:
         if not col in ['SUID']: g.es[col] = list(cyedges[col])
 
