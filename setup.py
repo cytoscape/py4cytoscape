@@ -29,6 +29,7 @@ setuptools.setup(
         'networkx',
         'requests',
         'python-igraph',
+        'sphinx',
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
