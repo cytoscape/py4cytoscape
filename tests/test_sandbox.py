@@ -2,7 +2,6 @@
 
 """ Test functions in sandbox.py.
 """
-from cytoolz.itertoolz import remove
 
 """License:
     Copyright 2020 The Cytoscape Consortium
