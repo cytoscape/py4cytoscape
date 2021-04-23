@@ -166,7 +166,7 @@ class FiltersTests(unittest.TestCase):
                                                                        'BOGUS'))  # TODO: Can't we throw an exception instead of having to check this way?
         self.assertRaises(CyError, self.check_bad_filter, 'column filter 7x',
                           lambda x: create_column_filter(x, 'BOGUS_COLUMN', 'RAP1', 'BOGUS'))
-        self.check_bad_filter('column filter 7x',
+        self.assertRaises(CyError, self.check_bad_filter, 'column filter 7x',
                               lambda x: create_column_filter(x, 'COMMON', 'RAP1', 'BOGUS_PREDICATE'))
         self.assertRaises(CyError, create_column_filter, 'bad between 3', 'EdgeBetweenness', [18040.0, 18360.0, 99], "BETWEEN", type='edges')
         self.assertRaises(CyError, create_column_filter, 'bad between 1', 'EdgeBetweenness', [18040.0], "BETWEEN", type='edges')
