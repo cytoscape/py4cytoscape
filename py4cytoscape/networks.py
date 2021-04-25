@@ -978,7 +978,7 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
     """Create a Cytoscape network from a NetworkX graph.
 
     Args:
-        netx (MultiDiGraph): networkx MultiDiGraph object
+        netx (Graph, DiGraph, MultiGraph or MultiDiGraph): networkx object
         title (str): network name
         collection (str): network collection name
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -1004,8 +1004,8 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
     netx_node_list = [{**attrs, 'name': name}    for name, attrs in netx_nodes]
     node_df = pd.DataFrame.from_records(netx_node_list)
 
-    netx_edges = netx.out_edges(data=True, keys=True) # returns list of tuples (src, targ, suid, attrs)
-    netx_edge_list = [{**attrs, 'source': src, 'target': targ}    for src, targ, suid, attrs in netx_edges]
+    netx_edges = netx.edges(data=True) # returns list of tuples (src, targ, attrs)
+    netx_edge_list = [{**attrs, 'source': src, 'target': targ}    for src, targ, attrs in netx_edges]
     edge_df = pd.DataFrame.from_records(netx_edge_list)
 
     # TODO: This will blow if there are no edges or no nodes ... so will create_network_from_igraph() ... will R blow, too?

@@ -917,16 +917,41 @@ class NetworkTests(unittest.TestCase):
             self.assertTrue(orig_table_cols <= netx_table_cols)
 
             # Create a vector showing which new columns are the same as the original columns. Use .equals() to compare 'nan' properly.
-            s = [orig_table[col].equals(netx_table[col]) for col in orig_table_cols - {'SUID'}]
+            s = [orig_table[col].equals(netx_table[col])    for col in orig_table_cols - {'SUID'}]
             self.assertFalse(False in s)
 
         # Get the NetworkX for a known good network galFiltered.sif and send it to Cytoscape as a new network
-        netx = create_networkx_from_network()
-        netx_suid = create_network_from_networkx(netx)['networkSUID']
+        netx_multi_direct = create_networkx_from_network()
+        netx_suid = create_network_from_networkx(netx_multi_direct, title='NetworkX Multi Directed')['networkSUID']
         self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
+        compare_table(cynode_table, 'node', netx_multi_direct)
+        compare_table(cyedge_table, 'edge', netx_multi_direct)
 
-        compare_table(cynode_table, 'node', netx)
-        compare_table(cyedge_table, 'edge', netx)
+        # Copy the direct multinet into an undirected multinet and try again
+        netx_multi = netx_multi_direct.to_undirected()
+        netx_suid = create_network_from_networkx(netx_multi, title='NetworkX Multi Undirected')['networkSUID']
+        self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
+        compare_table(cynode_table, 'node', netx_multi) # Nodes should be the same
+        self.assertEqual(len(cyedge_table.index), networks.get_edge_count()) # Edge directions will be scrambled
+
+        # Create a simple undirected graph
+        next_simple = nx.Graph()
+        next_simple.add_edges_from([('California', 'Florida'), ('California', 'New York'), ('New York', 'Florida')])
+        netx_suid = create_network_from_networkx(next_simple, title='NetworkX Simple Undirected')['networkSUID']
+        self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
+        self.assertEqual(networks.get_node_count(), 3)
+        self.assertEqual(networks.get_edge_count(), 3)
+
+        # Create a simple directed graph
+        next_simple_direct = nx.DiGraph()
+        next_simple_direct.add_edges_from([('California', 'Florida'), ('California', 'New York'), ('New York', 'Florida'), ('Florida', 'New York')])
+        netx_suid = create_network_from_networkx(next_simple_direct, title='NetworkX Simple Directed')['networkSUID']
+        self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
+        self.assertEqual(networks.get_node_count(), 3)
+        self.assertEqual(networks.get_edge_count(), 4)
+
+
+
 
     @print_entry_exit
     def test_create_network_from_igraph(self):
