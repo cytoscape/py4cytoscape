@@ -380,6 +380,10 @@ py4cytoscape functions
 |                       | and setting view      | gle_graphics_details* |
 |                       | properties.           |                       |
 +-----------------------+-----------------------+-----------------------+
+| sandbox               | Control staging of    | *sandbox_send_to      |
+|                       | files when running    | sandbox_get_from      |
+|                       | scripts as Notebooks  | sandbox_url_to*       |
++-----------------------+-----------------------+-----------------------+
 | session               | Managing Cytoscape    | *open_session         |
 |                       | sessions, including   | save_session          |
 |                       | save, open and close. | close_session*        |
