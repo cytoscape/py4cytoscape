@@ -746,8 +746,7 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and
-            edge list is the SUIDs of deleted edges -- dict is {} if no edges were deleted
+         dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and edge list is the SUIDs of deleted edges -- dict is {} if no edges were deleted
 
     Raises:
         CyError: if network name or SUID doesn't exist
