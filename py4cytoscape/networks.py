@@ -1332,9 +1332,9 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
     # check for source and target columns ... if they're not present, dig them out of the full name
     if not {'source', 'target'} <= set(cyedges.columns):
-        src_trg = [re.split("\ \\(.*\\)\ ", x) for x in cyedges['name']]
+        src_trg = parse_edges(cyedges['name'])
         cyedges['source'] = [x[0] for x in src_trg]
-        cyedges['target'] = [x[1] for x in src_trg]
+        cyedges['target'] = [x[2] for x in src_trg]
 
     # set up iGraph vertices ... first create vertex by naming it, then pile on attributes
     # Tutorial: https://igraph.org/python/doc/tutorial/tutorial.html
@@ -1395,9 +1395,9 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
     # check for source and target columns ... if they're not present, dig them out of the full name
     if not {'source', 'target'} <= set(cyedges.columns):
-        src_trg = [re.split("\ \\(.*\\)\ ", x) for x in cyedges['name']]
+        src_trg = parse_edges(cyedges['name'])
         cyedges['source'] = [x[0] for x in src_trg]
-        cyedges['target'] = [x[1] for x in src_trg]
+        cyedges['target'] = [x[2] for x in src_trg]
 
     # Create a list of edges as tuples (src, targ, suid, attrs) with 'source' & 'target' removed from attrs
     edges_dict = cyedges.to_dict(orient='records')

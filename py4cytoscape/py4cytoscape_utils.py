@@ -163,7 +163,7 @@ def verify_slot(slot):
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
         raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
 
-def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
+def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, *, unique_list=False):
     """Translate one node name or a list of node names into a list of SUIDs.
 
     List can contain either names or SUIDs. If the list contains all SUIDs and no names, the list
@@ -258,7 +258,7 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
         raise CyError(f'Invalid node SUID in list: {node_suids}')
 
 
-def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
+def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, *, unique_list=False):
     """Translate one edge name or a list of edge names into a list of SUIDs.
 
     List can contain either names or SUIDs. If the list contains all SUIDs and no names, the list
@@ -493,6 +493,15 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
         cmd_list_ready = ','.join(cmd_list_normal)
 
     return cmd_list_ready
+
+def parse_edges(edge_list):
+    # Convert edge list into list of parts: ["xxx (pp) yyy", "zzz (pp) aaa"] into [("xxx", "pp", "yyy"), ("zzz", "pp", "aaa")]
+
+    def split_edge(edge):
+        res = re.match('(.*) \((.*)\) (.*)', edge)
+        return (res.group(1), res.group(2), res.group(3))
+
+    return [split_edge(x)   for x in edge_list]
 
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):

@@ -732,7 +732,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
 
 
 @cy_log
-def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
+def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL, *, ignore_direction=False):
     """Remove edges with duplicate names.
 
     Only considers cases with identical source, target, interaction and directionality. Duplicate edges are first
@@ -744,6 +744,7 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        ignore_direction (bool): True to treat x->y as equal to y->x
 
     Returns:
          dict: {'nodes': [node list], 'edges': [edge list]} where node list is always empty, and edge list is the SUIDs of deleted edges -- dict is {} if no edges were deleted
@@ -757,21 +758,49 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL):
         {}
         >>> delete_duplicate_edges(network='My Network')
         {'nodes': [], 'edges': [104432, 104431, ...]}
-        >>> delete_duplicate_edges(network=52)
+        >>> delete_duplicate_edges(network=52, ignore_direction=True)
         {'nodes': [], 'edges': [104432, 104431, ...]}
     """
+
+    def build_sorted_edge_equivalents(parsed_edge):
+        # Creates a tuple where first element is lexigraphically smaller than the second
+        if parsed_edge[0] < parsed_edge[2]:
+            forwards = f'{parsed_edge[0]} ({parsed_edge[1]}) {parsed_edge[2]}'
+            backwards = f'{parsed_edge[2]} ({parsed_edge[1]}) {parsed_edge[0]}'
+        else:
+            forwards = f'{parsed_edge[2]} ({parsed_edge[1]}) {parsed_edge[0]}'
+            backwards = f'{parsed_edge[0]} ({parsed_edge[1]}) {parsed_edge[2]}'
+        return (forwards, backwards)
+
+    def get_edge_suids(edge_name):
+        if edge_name is None:
+            return []
+        else:
+            try:
+                suid_list = edge_name_to_edge_suid(edge_name, network=net_suid, base_url=base_url)[0]
+                return suid_list if isinstance(suid_list, list) else [suid_list]
+            except:
+                return []
+
     net_suid = networks.get_network_suid(network, base_url=base_url)
     all_edges = networks.get_all_edges(net_suid, base_url=base_url)
 
-    # Find all edges that have exactly one duplicate, then create a list of all duplicates for that edge
-    edge_dict = dict.fromkeys(all_edges, 0)
-    dup_edge_suids = []
-    for edge in all_edges:
-        if edge_dict[edge] == 1:
-            edge_suids = edge_name_to_edge_suid(edge, network=net_suid, base_url=base_url)
-            dup_edge_suids.extend(edge_suids[0][1:])
-        edge_dict[edge] += 1
+    # If ignoring direction, adjust all_edges to a canonical ordering of source and target
+    if ignore_direction:
+        all_edges = [build_sorted_edge_equivalents(x)  for x in parse_edges(all_edges)]
+    else:
+        all_edges = [(x, None)  for x in all_edges]
 
+    # Find just the edges that duplicate other edges
+    edge_counter = dict.fromkeys(all_edges, 0)
+    for unique_edge in all_edges:
+        edge_counter[unique_edge] += 1
+    dup_edge_suids = [get_edge_suids(unique_edge[0]) + get_edge_suids(unique_edge[1])   for unique_edge in edge_counter if edge_counter[unique_edge] > 1]
+
+    # Create one list out of each edge's dup list, but leave one edge out so they're not all removed
+    dup_edge_suids = [edge_suid    for suid_list in dup_edge_suids    for edge_suid in suid_list[1:]]
+
+    # With the list of duplicate edges, select and delete them
     select_edges(dup_edge_suids, by_col='SUID', preserve_current_selection=False, network=net_suid, base_url=base_url)
     res = delete_selected_edges(network=net_suid, base_url=base_url)
     return res
