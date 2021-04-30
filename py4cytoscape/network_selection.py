@@ -761,6 +761,9 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL, *, ignore_di
         >>> delete_duplicate_edges(network=52, ignore_direction=True)
         {'nodes': [], 'edges': [104432, 104431, ...]}
     """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    all_edges = networks.get_all_edges(net_suid, base_url=base_url)
+    suid_to_name_map_df = tables.get_table_columns('edge', ['name'], 'default', network=net_suid, base_url=base_url)
 
     def build_sorted_edge_equivalents(parsed_edge):
         # Creates a tuple where first element is lexigraphically smaller than the second
@@ -777,13 +780,9 @@ def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL, *, ignore_di
             return []
         else:
             try:
-                suid_list = edge_name_to_edge_suid(edge_name, network=net_suid, base_url=base_url)[0]
-                return suid_list if isinstance(suid_list, list) else [suid_list]
+                return list(suid_to_name_map_df[suid_to_name_map_df.name.eq(edge_name)].index.values)
             except:
                 return []
-
-    net_suid = networks.get_network_suid(network, base_url=base_url)
-    all_edges = networks.get_all_edges(net_suid, base_url=base_url)
 
     # If ignoring direction, adjust all_edges to a canonical ordering of source and target
     if ignore_direction:
