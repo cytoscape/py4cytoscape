@@ -510,23 +510,23 @@ are widely regarded as aesthetic and visually effective.
 +-----------------+-----------------------------------+
 | Color Palette   | scheme_color Parameter            |
 +=================+===================================+
-| pastel2         | ``scheme_color_brewer_pastel2``   |
+| Brewer Pastel2  | ``scheme_color_brewer_pastel2``   |
 +-----------------+-----------------------------------+
-| pastel1         | ``scheme_color_brewer_pastel1``   |
+| Brewer Pastel1  | ``scheme_color_brewer_pastel1``   |
 +-----------------+-----------------------------------+
-| dark2           | ``scheme_color_brewer_dark2``     |
+| Brewer Dark2    | ``scheme_color_brewer_dark2``     |
 +-----------------+-----------------------------------+
-| accent          | ``scheme_color_brewer_accent``    |
+| Brewer Accent   | ``scheme_color_brewer_accent``    |
 +-----------------+-----------------------------------+
-| paired          | ``scheme_color_brewer_paired``    |
+| Brewer Paired   | ``scheme_color_brewer_paired``    |
 +-----------------+-----------------------------------+
-| set1            | ``scheme_color_brewer_set1``      |
+| Brewer Set1     | ``scheme_color_brewer_set1``      |
 +-----------------+-----------------------------------+
-| set2            | ``scheme_color_brewer_set2``      |
+| Brewer Set2     | ``scheme_color_brewer_set2``      |
 +-----------------+-----------------------------------+
-| set3            | ``scheme_color_brewer_set3``      |
+| Brewer Set3     | ``scheme_color_brewer_set3``      |
 +-----------------+-----------------------------------+
-| random          | ``scheme_color_random``           |
+| Random          | ``scheme_color_random``           |
 +-----------------+-----------------------------------+
 
 *   `pastel2` (as ``scheme_color_brewer_pastel2``)
@@ -619,8 +619,11 @@ Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping(
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
++-------------------------+----------------------------------+
 |                         | ``set_edge_font_size_mapping()`` |
++-------------------------+----------------------------------+
 |                         | ``set_edge_font_size_mapping()`` |
++-------------------------+----------------------------------+
 |                         | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 
