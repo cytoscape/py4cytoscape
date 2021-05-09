@@ -576,12 +576,12 @@ Use ``gen_node_height_map()`` when calling *node*-oriented height mapping functi
 
 Use ``gen_node_size_map()`` when calling *node*-oriented size mapping functions:
 
-*   ``set_node_font_size_mapping()``
-*   ``set_node_size_mapping()``
+# ``set_node_font_size_mapping()``
+# ``set_node_size_mapping()``
 
 Use ``gen_edge_size_map()`` when calling *edge*-oriented size mapping functions:
 
-*   ``set_edge_font_size_mapping()``
+- ``set_edge_font_size_mapping()``
 
 Use ``gen_edge_shape_map()`` when calling ``set_node_shape_mapping()``.
 
@@ -589,7 +589,20 @@ Use ``gen_edge_line_style_map()`` when calling ``set_edge_line_style_mapping()``
 
 Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping()`` or ``set_edge_target_arrow_shape_mapping()``.
 
++------------+------------+-----------+
+| Header 1   | Header 2   | Header 3  |
++============+============+===========+
+| body row 1 | column 2   | column 3  |
++------------+------------+-----------+
 
++-------------------------+----------------------------------+
+| Generator               | Style Function                   |
++=========================+==================================+
+| ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
++-------------------------+----------------------------------+
+| ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
+|                         | ``set_edge_font_size_mapping()`` |
++-------------------------+----------------------------------+
 
 
 
