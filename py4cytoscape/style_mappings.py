@@ -4,6 +4,7 @@
 
 I. General functions for creating and applying mappings for node, edge and network properties
 II. Specific functions for defining particular node, edge and network properties
+III. Functions for automatically mapping discrete values to colors, opacities, sizes, heights, widths and shapes
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -25,6 +26,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # External library imports
 import sys
 import time
+import colorbrewer
+import random
 
 # Internal module imports
 from . import networks
@@ -32,6 +35,7 @@ from . import commands
 from . import styles
 from . import style_defaults
 from . import style_dependencies
+from . import tables
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -1773,6 +1777,691 @@ def set_edge_tooltip_mapping(table_column, style_name=None, network=None, base_u
                                    network=network, base_url=base_url, table='edge', supported_mappings=['p'])
 
 
+# ==============================================================================
+# III. Discrete mapping generators
+# ------------------------------------------------------------------------------
+
+def scheme_color_random(value_count):
+    """Generate random color map of a given size
+
+    Args:
+        value_count (int): Count of random colors to return
+
+    Returns:
+        list: list of random colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    MAX_COLOR = 256 * 256 * 256
+    return [f'#{random.randint(0, MAX_COLOR):06X}'   for i in range(value_count)]
+
+def scheme_color_brewer_pastel2(value_count):
+    """Generate pastel2 Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'pastel2')
+
+def scheme_color_brewer_pastel1(value_count):
+    """Generate pastel1 Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'pastel1')
+
+def scheme_color_brewer_dark2(value_count):
+    """Generate pastel2 Dark2 palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'dark2')
+
+def scheme_color_brewer_accent(value_count):
+    """Generate accent Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'accent')
+
+def scheme_color_brewer_paired(value_count):
+    """Generate paired Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'paired')
+
+def scheme_color_brewer_set1(value_count):
+    """Generate set1 Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'set1')
+
+def scheme_color_brewer_set2(value_count):
+    """Generate set2 Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'set2')
+
+def scheme_color_brewer_set3(value_count):
+    """Generate set3 Brewer palette of a given size ... interpolate as needed
+
+    Args:
+        value_count (int): Count of colors to return
+
+    Returns:
+        list: list of colors
+
+    See Also:
+        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+    """
+    return _scheme_color_brewer(value_count, 'set3')
+
+def scheme_shapes(value_count):
+    """Generate list of node shapes of a given size
+
+    Args:
+        value_count (int): Count of shapes to return
+
+    Returns:
+        list: list of shapes
+
+    Raises:
+        CyError: if more shapes are requested than exist
+
+    See Also:
+        :meth:`gen_node_shape_map`
+    """
+    return _scheme_shapes(value_count, styles.get_node_shapes(), 'shapes')
+
+def scheme_line_styles(value_count):
+    """Generate list of line styles of a given size
+
+    Args:
+        value_count (int): Count of line styles to return
+
+    Returns:
+        list: list of line styles
+
+    Raises:
+        CyError: if more line styles are requested than exist
+
+    See Also:
+        :meth:`gen_edge_line_style_map`
+    """
+    return _scheme_shapes(value_count, styles.get_line_styles(), 'line styles')
+
+def scheme_arrow_shapes(value_count):
+    """Generate list of arrow shapes of a given size
+
+    Args:
+        value_count (int): Count of arrow shapes to return
+
+    Returns:
+        list: list of arrow shapes
+
+    Raises:
+        CyError: if more arrow shapes are requested than exist
+
+    See Also:
+        :meth:`gen_edge_arrow_map`
+    """
+    return _scheme_shapes(value_count, styles.get_arrow_shapes(), 'arrow shapes')
+
+def scheme_number_random(value_count, min_value, max_value):
+    """Generate list of random integers in a given range
+
+    Args:
+        value_count (int): Count of random integers to return
+        min_value (int): Minimum random integer to return
+        max_value (int): Maximum random integer to return
+
+    Returns:
+        list: list of random integers
+
+    See Also:
+        :meth:`gen_node_height_map`, :meth:`gen_node_opacity_map`, :meth:`gen_node_size_map`, :meth:`gen_node_width_map`, :meth:`gen_edge_opacity_map`, :meth:`gen_edge_size_map`, :meth:`gen_edge_width_map`
+    """
+    return [random.randint(min_value, max_value)   for i in range(value_count)]
+
+def scheme_number_series(value_count, start_value, step):
+    """Generate list of numbers in a given series
+
+    Args:
+        value_count (int): Count of numbers to return
+        start_value (int or float): First number to return
+        step (int or float): Increment between numbers in series
+
+    Returns:
+        list: list of numbers in the series
+
+    See Also:
+        :meth:`gen_node_height_map`, :meth:`gen_node_opacity_map`, :meth:`gen_node_size_map`, :meth:`gen_node_width_map`, :meth:`gen_edge_opacity_map`, :meth:`gen_edge_size_map`, :meth:`gen_edge_width_map`
+    """
+    return [start_value + i * step    for i in range(value_count)]
+
+# ==============================================================================
+# III.a Discrete mapping generators for colors
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_color_map(table_column,
+                       color_scheme,
+                       color_scheme_params={},
+                       default_color=None,
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate color map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        color_scheme (func): Name of function that returns a color list of a given length
+        color_scheme_params (dict): Collection of parameters needed by color scheme generator
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a color style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_color_map('newcol', scheme_color_brewer_accent, style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
+    """
+    return _gen_map('node', table_column, color_scheme, color_scheme_params, 'colors', 'default_color', default_color, style_name, network, base_url)
+
+@cy_log
+def gen_edge_color_map(table_column,
+                       color_scheme,
+                       color_scheme_params={},
+                       default_color=None,
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate color map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        color_scheme (func): Name of function that returns a color list of a given length
+        color_scheme_params (dict): Collection of parameters needed by color scheme generator
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a color style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_edge_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]}
+
+    See Also:
+        :meth:`set_edge_color_mapping`, :meth:`set_edge_label_color_mapping`, :meth:`set_edge_source_arrow_color_mapping`, :meth:`set_edge_target_arrow_color_mapping`
+    """
+    return _gen_map('edge', table_column, color_scheme, color_scheme_params, 'colors', 'default_color', default_color, style_name, network, base_url)
+
+# ==============================================================================
+# III.b Discrete mapping generators for opacities
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_opacity_map(table_column,
+                         number_scheme,
+                         number_scheme_params={},
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate opacity map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a opacity style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_opacity_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`
+    """
+    return _gen_map('node', table_column, number_scheme, number_scheme_params, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_opacity_map(table_column,
+                         number_scheme,
+                         number_scheme_params={},
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate opacity map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a opacity style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_opacity_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_label_opacity_mapping`, :meth:`set_edge_opacity_mapping`
+    """
+    return _gen_map('edge', table_column, number_scheme, number_scheme_params, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+
+# ==============================================================================
+# III.b Discrete mapping generators for widths
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_width_map(table_column,
+                       number_scheme,
+                       number_scheme_params={},
+                       default_number=None,
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate width map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): width value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_width_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_width_mapping`, :meth:`set_node_width_mapping`
+    """
+    return _gen_map('node', table_column, number_scheme, number_scheme_params, 'widths', 'default_width', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_width_map(table_column,
+                       number_scheme,
+                       number_scheme_params={},
+                       default_number=None,
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate width map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): width value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_width_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_line_width_mapping`
+    """
+    return _gen_map('edge', table_column, number_scheme, number_scheme_params, 'widths', 'default_width', default_number, style_name, network, base_url)
+
+# ==============================================================================
+# III.c Discrete mapping generators for heights
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_height_map(table_column,
+                        number_scheme,
+                        number_scheme_params={},
+                        default_number=None,
+                        style_name=None,
+                        network=None,
+                        base_url=DEFAULT_BASE_URL):
+    """Generate height map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): height value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_height_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_height_mapping`
+    """
+    return _gen_map('node', table_column, number_scheme, number_scheme_params, 'heights', 'default_height', default_number, style_name, network, base_url)
+
+# ==============================================================================
+# III.d Discrete mapping generators for sizes
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_size_map(table_column,
+                      number_scheme,
+                      number_scheme_params={},
+                      default_number=None,
+                      style_name=None,
+                      network=None,
+                      base_url=DEFAULT_BASE_URL):
+    """Generate size map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): size value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_size_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
+    """
+    return _gen_map('node', table_column, number_scheme, number_scheme_params, 'sizes', 'default_size', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_size_map(table_column,
+                      number_scheme,
+                      number_scheme_params={},
+                      default_number=None,
+                      style_name=None,
+                      network=None,
+                      base_url=DEFAULT_BASE_URL):
+    """Generate size map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        number_scheme_params (dict): Collection of parameters needed by opacity scheme generator
+        default_number (int): size value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_size_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_font_size_mapping`
+    """
+    return _gen_map('edge', table_column, number_scheme, number_scheme_params, 'sizes', 'default_size', default_number, style_name, network, base_url)
+
+# ==============================================================================
+# III.e Discrete mapping generators for shapes
+# ------------------------------------------------------------------------------
+
+@cy_log
+def gen_node_shape_map(table_column,
+                       default_shape=None,
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate shape map parameters for discrete values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        default_shape (str): shape name to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or if the number of discrete values exceed the number of available shapes
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_shape_map('newcol', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '1'], 'shapes': ['VEE', 'OCTAGON', 'HEXAGON'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+    See Also:
+        :meth:`set_node_shape_mapping`
+    """
+    return _gen_shape_map('node', table_column, scheme_shapes, {}, 'shapes', 'default_shape', default_shape, style_name, network, base_url)
+
+
+@cy_log
+def gen_edge_line_style_map(table_column,
+                            default_line_style='SOLID',
+                            style_name=None,
+                            network=None,
+                            base_url=DEFAULT_BASE_URL):
+    """Generate line style map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        default_line_style (str): line style name to set as default for all unmapped values (default is SOLID)
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or if the number of discrete values exceed the number of available line styles
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_line_style_map('interaction', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'line_styles': ['PARALLEL_LINES', 'SINEWAVE'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_line_style_mapping`
+    """
+    return _gen_shape_map('edge', table_column, scheme_line_styles, {}, 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
+
+@cy_log
+def gen_edge_arrow_map(table_column,
+                       default_shape='ARROW',
+                       style_name=None,
+                       network=None,
+                       base_url=DEFAULT_BASE_URL):
+    """Generate arrow shape map parameters for discrete values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        default_shape (str): arrow shape name to set as default for all unmapped values (default is ARROW)
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or if the number of discrete values exceed the number of available arrow styles
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_arrow_map('interaction', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'shapes': ['ARROW', 'T'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_source_arrow_shape_mapping`, :meth:`set_edge_target_arrow_shape_mapping`
+    """
+    return _gen_shape_map('edge', table_column, scheme_arrow_shapes, {}, 'shapes', 'default_shape', default_shape, style_name, network, base_url)
+
+
+
 # Check table column, create the visual property map, and update Cytoscape's copy of the visual property
 def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
                             style_name=None, network=None, base_url=DEFAULT_BASE_URL,
@@ -1806,3 +2495,109 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
 
     res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res
+
+# Taken from https://github.com/dsc/colorbrewer-python/blob/master/colorbrewer.py
+_QUALITATIVE = {'pastel2': colorbrewer.Pastel2,
+                'pastel1': colorbrewer.Pastel1,
+                'dark2': colorbrewer.Dark2,
+                'accent': colorbrewer.Accent,
+                'paired': colorbrewer.Paired,
+                'set1': colorbrewer.Set1,
+                'set2': colorbrewer.Set2,
+                'set3': colorbrewer.Set3}
+
+# Generate a brewer palette of a given size, and interpolate if there isn't a palette of the desired size
+def _scheme_color_brewer(value_count, palette_name):
+    palette_name = palette_name.lower()
+    if palette_name in _QUALITATIVE:
+        # Get the list of palettes available by this name
+        palette = _QUALITATIVE[palette_name]
+        # Get the list of palette lengths available for this palette
+        palette_lengths = sorted(palette.keys())
+        longest_palette = palette_lengths[-1]
+        if value_count <= longest_palette:
+            # We have the palette for this list of values already, except that if there are too few values,
+            # we take the colors from the smallest palette and call it a day
+            candidate_palette = palette[max(value_count, palette_lengths[0])][0:value_count]
+        else:
+            # There are more values than the largest palette, so interpolate by using the largest palette. To get
+            # m colors out of a p colored palette, suppose that the palette colors are in a series of points along a line.
+            # For each data value, march a fixed distance down the line ... whatever that distance is, mix the two
+            # closest colors in proportion to their proximity.
+            #
+            # Get the longest palette and the fixed distance, then initialize the interpolated palette
+            max_palette = palette[longest_palette]
+            per_color_increment = float(len(max_palette) - 1) / (value_count - 1)
+            candidate_palette = list(' ' * value_count)
+
+            # March through the original palette and mix colors to create interpolated palette
+            for entry in range(value_count):
+                # Find the next point on the palette line
+                real_index = entry * per_color_increment
+
+                # Find the palette entry immediately before and after it, and calculate the proportion each contributes
+                low_index = int(real_index)
+                high_index = min(int(real_index + 1), len(max_palette) - 1)
+                high_color_percent = real_index - low_index
+
+                # Get the previous and next colors as (red, green, blue) tuples
+                low_color_bound = max_palette[low_index]
+                high_color_bound = max_palette[high_index]
+
+                # Mix the two colors in proportion to their distance from current point, and return as tuple
+                candidate_palette[entry] = tuple(int(l * (1 - high_color_percent) + h * high_color_percent + 0.5)  for l,h in zip(low_color_bound, high_color_bound))
+
+        # Convert list of color tuples into list of hex values
+        return [f'#{c[0]:02X}{c[1]:02X}{c[2]:02X}'  for c in candidate_palette]
+    else:
+        raise CyError(f'Unknown Brewer palette "{palette_name}"')
+
+# Given a list of shapes, trim the list to a desired size
+def _scheme_shapes(value_count, shapes, shape_name):
+    if value_count > len(shapes):
+        raise CyError(f'Attempt to return {value_count} {shape_name}, but there are only {len(shapes)} {shape_name}')
+    return shapes[0:value_count]
+
+# Find the unique values in a column, map them to a desired target set, and return a dictionary of parameter values
+# suiteable for passing to style_mapping setter function
+def _gen_map(table,
+             table_column,
+             scheme,
+             scheme_params,
+             value_name,
+             default_name,
+             default_value,
+             style_name,
+             network,
+             base_url):
+    # Find out all of the values in the named column
+    df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
+
+    # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape)
+    df_freq = df_values[table_column].value_counts()
+
+    # Create the mapped values that correspond to the unique elements
+    src_values = [str(i)   for i in df_freq.index]
+    dst_values = scheme(len(src_values), **scheme_params)
+
+    return {'table_column': table_column, 'table_column_values': src_values, value_name: dst_values,
+            'mapping_type': 'd', default_name: default_value, 'style_name': style_name,
+            'network': network, 'base_url': base_url}
+
+# Find the unique values in a column, map them to desired target shapes, and return a dictionary of parameter values
+# suiteable for passing to style_mapping setter function
+def _gen_shape_map(table,
+                   table_column,
+                   scheme,
+                   scheme_params,
+                   value_name,
+                   default_name,
+                   default_value,
+                   style_name,
+                   network,
+                   base_url):
+    shape_map = _gen_map(table, table_column, scheme, scheme_params, value_name, default_name, default_value, style_name, network, base_url)
+    shape_map.pop('mapping_type')
+    return shape_map
+
+

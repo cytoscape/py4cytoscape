@@ -275,6 +275,18 @@ Node Style Mappings
    set_node_tooltip_mapping
    set_node_width_mapping
 
+Node Style Mapping Generators
+=============================
+.. autosummary::
+   :toctree: generated/
+
+   gen_node_color_map
+   gen_node_height_map
+   gen_node_opacity_map
+   gen_node_shape_map
+   gen_node_size_map
+   gen_node_width_map
+
 Edge Style Mappings
 ===================
 .. autosummary::
@@ -296,6 +308,38 @@ Edge Style Mappings
    set_edge_target_arrow_maping
    set_edge_target_arrow_shape_mapping
    set_edge_tooltip_mapping
+
+Edge Style Mapping Generators
+=============================
+.. autosummary::
+   :toctree: generated/
+
+   gen_edge_arrow_map
+   gen_edge_color_map
+   gen_edge_line_style_map
+   gen_edge_opacity_map
+   gen_edge_size_map
+   gen_edge_width_map
+
+Style Mapping Schemes for Generators
+====================================
+.. autosummary::
+   :toctree: generated/
+
+   scheme_arrow_shapes
+   scheme_color_brewer_pastel2
+   scheme_color_brewer_pastel1
+   scheme_color_brewer_dark2
+   scheme_color_brewer_accent
+   scheme_color_brewer_paired
+   scheme_color_brewer_set1
+   scheme_color_brewer_set2
+   scheme_color_brewer_set3
+   scheme_color_random
+   scheme_line_styles
+   scheme_number_random
+   scheme_number_series
+   scheme_shapes
 
 .. _stylevalues:
 

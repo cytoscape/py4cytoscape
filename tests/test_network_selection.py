@@ -520,11 +520,19 @@ class NetworkSelectionTests(unittest.TestCase):
     
     @print_entry_exit
     def test_delete_duplicate_edges(self):
-        # Initialization
-        load_test_session()
-        original_edge_count = get_edge_count()
         EDGE_TO_DUP = ['YNL216W (pd) YLR044C']
-        original_edge_suid = get_edge_info([EDGE_TO_DUP])[0]['SUID']
+        original_edge_count = 0
+        original_edge_suid = 0
+
+        def initialize_session():
+        # Initialization
+            load_test_session()
+            nonlocal original_edge_count
+            original_edge_count = get_edge_count()
+            nonlocal original_edge_suid
+            original_edge_suid = get_edge_info([EDGE_TO_DUP])[0]['SUID']
+
+        initialize_session()
 
         # Verify that when no edges are duplicated, no edges get deleted
         self.assertDictEqual(delete_duplicate_edges(), {})
@@ -538,13 +546,57 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertEqual(get_edge_count(), original_edge_count)
         original_edge_suid = (set([original_edge_suid, first_copy_edge_suid]) - set(edge_deleted_suids)).pop()
 
-        # Verify that duplicating an edge twice then deleting one of the same-name edges results in the original network
+        # Verify that duplicating an edge twice then deleting two of the same-name edges results in the original network
         first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         second_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         edge_deleted_suids = delete_duplicate_edges()['edges']
         self.assertEqual(len(edge_deleted_suids), 2)
         self.assertTrue(
             set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid, second_copy_edge_suid]))
+        self.assertEqual(get_edge_count(), original_edge_count)
+
+        # Verify that duplicating an edge four times (forward twice and backward twice) then deleting duplicates
+        # results in the original network plus one of the backward edges
+        forward_copy_edge_1_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        forward_copy_edge_2_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_1_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_2_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges()['edges']
+        self.assertEqual(len(edge_deleted_suids), 3)
+        self.assertEqual(len(set(edge_deleted_suids) & {original_edge_suid, forward_copy_edge_1_suid, forward_copy_edge_2_suid}), 2)
+        self.assertEqual(len(set(edge_deleted_suids) & {backward_copy_edge_1_suid, backward_copy_edge_2_suid}), 1)
+        self.assertEqual(get_edge_count(), original_edge_count + 1)
+
+        # Try adding in the two forward edges and two backward edges and deleting duplicates, ignoring direction ...
+        # This should result in just the original network
+        initialize_session() # Best to start over
+        forward_copy_edge_1_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        forward_copy_edge_2_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_1_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_2_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges(ignore_direction=True)['edges']
+        self.assertEqual(len(edge_deleted_suids), 4)
+        self.assertTrue(set(edge_deleted_suids) < {original_edge_suid, forward_copy_edge_1_suid, forward_copy_edge_2_suid, backward_copy_edge_1_suid, backward_copy_edge_2_suid})
+        self.assertEqual(get_edge_count(), original_edge_count)
+
+        # Verify that duplicating an edge twice (one forward and one backward) then deleting duplicates
+        # results in the original network plus the backward edge
+        initialize_session() # Best to start over
+        forward_copy_edge_1_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_1_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges()['edges']
+        self.assertEqual(len(edge_deleted_suids), 1)
+        self.assertEqual(len(set(edge_deleted_suids) & {forward_copy_edge_1_suid, original_edge_suid}), 1)
+        self.assertEqual(get_edge_count(), original_edge_count + 1)
+
+        # Try adding in the forward edge again and the single backward edge, deleting duplicates, ignoring direction ...
+        # This should result in just the original network
+        initialize_session() # Best to start over
+        forward_copy_edge_1_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
+        backward_copy_edge_1_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
+        edge_deleted_suids = delete_duplicate_edges(ignore_direction=True)['edges']
+        self.assertEqual(len(edge_deleted_suids), 2)
+        self.assertTrue(set(edge_deleted_suids) < {original_edge_suid, forward_copy_edge_1_suid, backward_copy_edge_1_suid})
         self.assertEqual(get_edge_count(), original_edge_count)
 
         self.assertRaises(CyError, delete_duplicate_edges, network='bogus')

@@ -29,6 +29,7 @@ setuptools.setup(
         'networkx',
         'requests',
         'python-igraph',
+        'colorbrewer'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
