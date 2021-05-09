@@ -507,6 +507,28 @@ The ``scheme_color_brewer_accent`` parameter is used to generate the specific ``
 Accent palette. You can choose between any of the 8 `Brewer Qualitative Palettes <https://colorbrewer2.org>`_, which
 are widely regarded as aesthetic and visually effective.
 
++-----------------+-----------------------------------+
+| Color Palette   | scheme_color Parameter            |
++=================+===================================+
+| pastel2         | ``scheme_color_brewer_pastel2``   |
++-----------------+-----------------------------------+
+| pastel1         | ``scheme_color_brewer_pastel1``   |
++-----------------+-----------------------------------+
+| dark2           | ``scheme_color_brewer_dark2``     |
++-----------------+-----------------------------------+
+| accent          | ``scheme_color_brewer_accent``    |
++-----------------+-----------------------------------+
+| paired          | ``scheme_color_brewer_paired``    |
++-----------------+-----------------------------------+
+| set1            | ``scheme_color_brewer_set1``      |
++-----------------+-----------------------------------+
+| set2            | ``scheme_color_brewer_set2``      |
++-----------------+-----------------------------------+
+| set3            | ``scheme_color_brewer_set3``      |
++-----------------+-----------------------------------+
+| random          | ``scheme_color_random``           |
++-----------------+-----------------------------------+
+
 *   `pastel2` (as ``scheme_color_brewer_pastel2``)
 *   `pastel1` (as ``scheme_color_brewer_pastel1``)
 *   `dark2` (as ``scheme_color_brewer_dark2``)
@@ -517,7 +539,7 @@ are widely regarded as aesthetic and visually effective.
 *   `set3` (as ``scheme_color_brewer_set3``)
 *   `random` (as ``scheme_color_random``)
 
-Additionally, you can generate random colors by using the ``scheme_color_random`` scheme.
+..note: You can generate random colors by using the ``scheme_color_random`` scheme.
 
 You can use a color value generator with any style mapping function that accepts a color map. Use ``gen_node_color_map()``
 when calling *node*-oriented color mapping functions:
@@ -589,11 +611,7 @@ Use ``gen_edge_line_style_map()`` when calling ``set_edge_line_style_mapping()``
 
 Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping()`` or ``set_edge_target_arrow_shape_mapping()``.
 
-+------------+------------+-----------+
-| Header 1   | Header 2   | Header 3  |
-+============+============+===========+
-| body row 1 | column 2   | column 3  |
-+------------+------------+-----------+
+
 
 +-------------------------+----------------------------------+
 | Generator               | Style Function                   |
@@ -601,6 +619,8 @@ Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping(
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
+|                         | ``set_edge_font_size_mapping()`` |
+|                         | ``set_edge_font_size_mapping()`` |
 |                         | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 
