@@ -503,7 +503,7 @@ is the equivalent of:
                            network=None,
                            base_url:'http://127.0.0.1:1234/v1')
 
-The ``scheme_color_brewer_accent`` parameter is used to generate the specific ``colors`` values according to predefined Brewer
+The ``scheme_color_brewer_accent`` parameter is used to generate the specific ``colors`` values according to the predefined Brewer
 Accent palette. You can choose between any of the 8 `Brewer Qualitative Palettes <https://colorbrewer2.org>`_, which
 are widely regarded as aesthetic and visually effective.
 
@@ -529,36 +529,68 @@ are widely regarded as aesthetic and visually effective.
 | Random          | ``scheme_color_random``           |
 +-----------------+-----------------------------------+
 
-
 .. note:: You can generate random colors by using the ``scheme_color_random`` scheme.
 
-You can use a color value generator with any style mapping function that accepts a color map. Use ``gen_node_color_map()``
-when calling *node*-oriented color mapping functions:
+Similarly, there are value generators for opacities, sizes, heights, widths and shapes, with variants for *node* and *edge* values.
 
-*   ``set_node_border_color_mapping()``
-*   ``set_node_color_mapping()``
-*   ``set_node_label_color_mapping()``
+You can use a *node* value generator with a *node* mapping function, and you
+can use an *edge* value generator with an *edge* mapping function.
 
-Use ``gen_edge_color_map()`` when calling *edge*-oriented color mapping functions:
++-------------------------------+-------------------------------------------+
+| Generator                     | Style Function                            |
++===============================+===========================================+
+| ``gen_node_color_map()``      | ``set_node_border_color_mapping()``       |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_color_mapping()``              |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_label_color_mapping()``        |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_color_map()``      | ``set_edge_color_mapping()``              |
++-------------------------------+-------------------------------------------+
+|                               | ``set_edge_label_color_mapping()``        |
++-------------------------------+-------------------------------------------+
+|                               | ``set_edge_source_arrow_color_mapping()`` |
++-------------------------------+-------------------------------------------+
+|                               | ``set_edge_target_arrow_color_mapping()`` |
++-------------------------------+-------------------------------------------+
+| ``gen_node_opacity_map()``    | ``set_node_border_opacity_mapping()``     |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_fill_opacity_mapping()``       |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_label_opacity_mapping()``      |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_opacity_map()``    | ``set_edge_label_opacity_mapping()``      |
++-------------------------------+-------------------------------------------+
+|                               | ``set_edge_opacity_mapping()``            |
++-------------------------------+-------------------------------------------+
+| ``gen_node_width_map()``      | ``set_node_border_width_mapping()``       |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_width_mapping()``              |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_width_map()``      | ``set_edge_line_width_mapping()``         |
++-------------------------------+-------------------------------------------+
+| ``gen_node_height_map()``     | ``set_node_height_mapping()``             |
++-------------------------------+-------------------------------------------+
+| ``gen_node_size_map()``       | ``set_node_font_size_mapping()``          |
++-------------------------------+-------------------------------------------+
+|                               | ``set_node_size_mapping()``               |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_size_map()``       | ``set_edge_font_size_mapping()``          |
++-------------------------------+-------------------------------------------+
+| ``gen_node_shape_map()``      | ``set_node_shape_mapping()``              |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_line_style_map()`` | ``set_edge_line_style_mapping()``         |
++-------------------------------+-------------------------------------------+
+| ``gen_edge_arrow_map()``      | ``set_edge_source_arrow_shape_mapping()`` |
++-------------------------------+-------------------------------------------+
+|                               | ``set_edge_target_arrow_shape_mapping()`` |
++-------------------------------+-------------------------------------------+
 
-*   ``set_edge_color_mapping()``
-*   ``set_edge_label_color_mapping()``
-*   ``set_edge_source_arrow_color_mapping()``
-*   ``set_edge_target_arrow_color_mapping()``
-
-Other value generators can be used in conjunction with various other style mapping functions, and for numerical mappings
-(e.g., height, width, size and opacity) you can choose random values or values in a series:
-
-*   `random` (as ``scheme_number_random``)
-*   `series` (as ``scheme_number_series``)
+Most value generators accept a ``scheme`` parameter that indicates how mapped values should be generated. While the color
+mapping functions accept a ``scheme_*`` (as described above), numeric generators accept the ``scheme_number_series`` and
+``scheme_number_random`` to mappings to serial or random values.
 
 .. note:: When using a numerical value generator, you must provide both a ``scheme_number_*`` parameter *and* a ``scheme_number_params`` dictionary, which contains range information.
-
-Use ``gen_node_opacity_map()`` when calling *node*-oriented opacity mapping functions:
-
-*   ``set_node_border_opacity_mapping()``
-*   ``set_node_fill_opacity_mapping()``
-*   ``set_node_label_opacity_mapping()``
 
 For example:
 
@@ -568,64 +600,15 @@ For example:
 
     set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_random, number_scheme_params={'min_value': 10, 'max_value': 120}, style_name='galFiltered Style'))
 
+Shape generators don't require a ``scheme`` parameter. For example:
 
-Use ``gen_edge_opacity_map()`` when calling *edge*-oriented opacity mapping functions:
+.. code:: python
 
-*   ``set_edge_label_opacity_mapping()``
-*   ``set_edge_opacity_mapping()``
+    set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
 
-Use ``gen_node_width_map()`` when calling *node*-oriented width mapping functions:
+    set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
 
-*   ``set_node_border_width_mapping()``
-*   ``set_node_width_mapping()``
-
-Use ``gen_edge_width_map()`` when calling *edge*-oriented width mapping functions:
-
-*   ``set_edge_line_width_mapping()``
-
-Use ``gen_node_height_map()`` when calling *node*-oriented height mapping functions:
-
-*   ``set_node_height_mapping()``
-
-Use ``gen_node_size_map()`` when calling *node*-oriented size mapping functions:
-
-# ``set_node_font_size_mapping()``
-# ``set_node_size_mapping()``
-
-Use ``gen_edge_size_map()`` when calling *edge*-oriented size mapping functions:
-
-- ``set_edge_font_size_mapping()``
-
-Use ``gen_edge_shape_map()`` when calling ``set_node_shape_mapping()``.
-
-Use ``gen_edge_line_style_map()`` when calling ``set_edge_line_style_mapping()``.
-
-Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping()`` or ``set_edge_target_arrow_shape_mapping()``.
-
-
-
-+-------------------------+-----------------------------------+
-| Generator               | Style Function                    |
-+=========================+===================================+
-| ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()``  |
-+-------------------------+-----------------------------------+
-| ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()``  |
-|                         |  ``set_edge_font_size_mapping()`` |
-|                         |  ``set_edge_font_size_mapping()`` |
-|                         |  ``set_edge_font_size_mapping()`` |
-|                         |  ``set_edge_font_size_mapping()`` |
-+-------------------------+-----------------------------------+
-|                         | ``set_edge_font_size_mapping()``  |
-+-------------------------+-----------------------------------+
-|                         | ``set_edge_font_size_mapping()``  |
-+-------------------------+-----------------------------------+
-|                         | ``set_edge_font_size_mapping()``  |
-+-------------------------+-----------------------------------+
-
-
-
-
-
+    set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
 
 
 
