@@ -529,17 +529,8 @@ are widely regarded as aesthetic and visually effective.
 | Random          | ``scheme_color_random``           |
 +-----------------+-----------------------------------+
 
-*   `pastel2` (as ``scheme_color_brewer_pastel2``)
-*   `pastel1` (as ``scheme_color_brewer_pastel1``)
-*   `dark2` (as ``scheme_color_brewer_dark2``)
-*   `accent` (as ``scheme_color_brewer_accent``)
-*   `paired` (as ``scheme_color_brewer_paired``)
-*   `set1` (as ``scheme_color_brewer_set1``)
-*   `set2` (as ``scheme_color_brewer_set2``)
-*   `set3` (as ``scheme_color_brewer_set3``)
-*   `random` (as ``scheme_color_random``)
 
-..note: You can generate random colors by using the ``scheme_color_random`` scheme.
+.. note:: You can generate random colors by using the ``scheme_color_random`` scheme.
 
 You can use a color value generator with any style mapping function that accepts a color map. Use ``gen_node_color_map()``
 when calling *node*-oriented color mapping functions:
@@ -619,6 +610,8 @@ Use ``gen_edge_arrow_map()`` when calling ``set_edge_source_arrow_shape_mapping(
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 | ``gen_edge_size_map()`` | ``set_edge_font_size_mapping()`` |
+|                         |                                  |
+|                         | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
 |                         | ``set_edge_font_size_mapping()`` |
 +-------------------------+----------------------------------+
