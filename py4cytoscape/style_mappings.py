@@ -364,8 +364,13 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         ''
         >>> set_node_border_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_node_border_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_color_map`, :doc:`Concepts <concepts>`
     """
     verify_hex_colors(colors)
 
@@ -410,8 +415,13 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
         ''
         >>> set_node_border_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_border_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_border_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_opacity_map`
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -462,8 +472,13 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
         ''
         >>> set_node_border_width_mapping('Degree', table_column_values=['1', '2'], widths=[5, 10], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_border_width_mapping(**gen_node_width_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_border_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_width_map`
     """
     verify_dimensions('width', widths)
 
@@ -506,8 +521,13 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_node_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_node_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_color_map`
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -556,8 +576,13 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_node_combo_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_combo_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_combo_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_opacity_map`
     """
     verify_opacities(opacities)
 
@@ -617,8 +642,13 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
         ''
         >>> set_node_fill_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_fill_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_opacity_map`
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -712,8 +742,13 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_node_font_size_mapping('Degree', table_column_values=['1', '2'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_font_size_mapping(**gen_node_size_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_size_map`
     """
     verify_dimensions('size', sizes)
 
@@ -755,8 +790,13 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
         ''
         >>> set_node_height_mapping('Degree', table_column_values=['1', '2'], sizes=[140, 190], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_height_mapping(**gen_node_height_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_height_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_height_map`
     """
     verify_dimensions('height', heights)
 
@@ -839,8 +879,13 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_node_label_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_node_label_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_node_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_color_map`
     """
     verify_hex_colors(colors)
 
@@ -884,8 +929,13 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_node_label_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_label_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_label_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_opacity_map`
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -933,6 +983,11 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
     Examples:
         >>> set_node_shape_mapping('Degree', table_column_values=['1', '2'], shapes=['TRIANGLE', 'OCTAGON'], default_shape='ELLIPSE', style_name='galFiltered Style')
         ''
+        >>> set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
+        ''
+
+    See Also:
+        :meth:`gen_node_shape_map`
     """
     # TODO: Verify shapes
 
@@ -975,8 +1030,13 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
         ''
         >>> set_node_size_mapping('Degree', table_column_values=['1', '2'], sizes=[60, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_size_mapping(**gen_node_size_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_size_mapping('PassthruCol', mapping_type='p', default_opacity=40, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_size_map`
     """
     verify_dimensions('size', sizes)
 
@@ -1057,8 +1117,13 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
         ''
         >>> set_node_width_mapping('Degree', table_column_values=['1', '2'], sizes=[140, 190], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_node_width_mapping(**gen_node_width_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_node_width_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_node_width_map`
     """
     verify_dimensions('width', widths)
 
@@ -1109,8 +1174,13 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_edge_color_mapping('EdgeBetweenness', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_edge_color_mapping('EdgeBetweennessColor', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1205,8 +1275,13 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_edge_font_size_mapping('interaction', table_column_values=['pp', 'pd'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_edge_font_size_mapping(**gen_edge_size_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_edge_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_size_map`
     """
     verify_dimensions('size', sizes)
 
@@ -1286,8 +1361,13 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_edge_label_color_mapping('interaction', ['pp', 'pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_edge_label_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_edge_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1331,8 +1411,13 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_edge_label_opacity_mapping('interaction', ['pp', 'pd'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_edge_label_opacity_mapping(**gen_edge_opacity_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_edge_label_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_opacity_map`
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
@@ -1380,6 +1465,11 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
     Examples:
         >>> set_edge_line_style_mapping('interaction', table_column_values=['pp','pd'], shapes=['ZIGZAG', 'SINEWAVE'], default_shape='EQUAL_DASH', style_name='galFiltered Style')
         ''
+        >>> set_edge_line_style_mapping(**gen_edge_line_style_map('interaction', style_name='galFiltered Style'))
+        ''
+
+    See Also:
+        :meth:`gen_edge_line_style_map`
     """
     # TODO: Validate line style
 
@@ -1423,8 +1513,13 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
         ''
         >>> set_edge_line_width_mapping('interaction', table_column_values=['pp','pd'], widths=[5, 10], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_edge_line_width_mapping(**gen_edge_width_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_edge_line_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_width_map`
     """
     verify_dimensions('width', widths)
 
@@ -1469,8 +1564,13 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
         ''
         >>> set_edge_opacity_mapping('interaction', table_column_values=['pp','pd'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
+        >>> set_edge_opacity_mapping(**gen_edge_opacity_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        ''
         >>> set_edge_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_opacity_map`
     """
     # TODO: This code checks the table_column ... the R code does not
 
@@ -1518,6 +1618,11 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
     Examples:
         >>> set_edge_target_arrow_maping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
+        >>> set_edge_target_arrow_maping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        ''
+
+    See Also:
+        :meth:`gen_edge_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1561,6 +1666,11 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
     Examples:
         >>> set_edge_source_arrow_mapping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
+        >>> set_edge_source_arrow_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        ''
+
+    See Also:
+        :meth:`gen_edge_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1607,8 +1717,13 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_target_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_edge_target_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1654,8 +1769,13 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_source_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
+        >>> set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        ''
         >>> set_edge_source_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
+
+    See Also:
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1697,12 +1817,14 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_target_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
+        >>> set_edge_source_arrow_target_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        ''
 
     Note:
         This is the same function as ``set_edge_target_arrow_mapping()``
 
     See also:
-        :meth:`set_edge_target_arrow_mapping`
+        :meth:`set_edge_arrow_mapping`
     """
     return set_edge_target_arrow_maping(table_column, table_column_values=table_column_values, shapes=shapes,
                                          default_shape=default_shape, style_name=style_name, network=network,
@@ -1737,12 +1859,15 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_shape_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
+        >>> set_edge_source_arrow_shape_mapping(gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        ''
 
     Note:
         This is the same function as ``set_edge_source_arrow_mapping()``
 
     See also:
-        :meth:`set_edge_source_arrow_mapping`
+        :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_arrow_map`
+
     """
     return set_edge_source_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
                                         default_shape=default_shape, style_name=style_name, network=network,
@@ -2109,7 +2234,7 @@ def gen_node_opacity_map(table_column,
         {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
-        :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`
+        :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`, :meth:`set_node_combo_opacity_mapping`
     """
     return _gen_map('node', table_column, number_scheme, number_scheme_params, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
 

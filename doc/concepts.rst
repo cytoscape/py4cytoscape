@@ -559,6 +559,8 @@ can use an *edge* value generator with an *edge* mapping function.
 +-------------------------------+-------------------------------------------+
 |                               | ``set_node_label_opacity_mapping()``      |
 +-------------------------------+-------------------------------------------+
+|                               | ``set_node_combo_opacity_mapping()``      |
++-------------------------------+-------------------------------------------+
 | ``gen_edge_opacity_map()``    | ``set_edge_label_opacity_mapping()``      |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_edge_opacity_mapping()``            |
@@ -596,9 +598,9 @@ For example:
 
 .. code:: python
 
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, scheme_number_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
 
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_random, number_scheme_params={'min_value': 10, 'max_value': 120}, style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_random, scheme_number_params={'min_value': 10, 'max_value': 120}, style_name='galFiltered Style'))
 
 Shape generators don't require a ``scheme`` parameter. For example:
 
