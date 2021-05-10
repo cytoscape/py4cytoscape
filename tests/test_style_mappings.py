@@ -940,55 +940,55 @@ class StyleMappingsTests(unittest.TestCase):
         load_test_session()
 
         # Verify that when the column doesn't exist, it's treated as a column with no values
-        no_map = gen_node_color_map('bogus column', scheme_color_brewer_accent)
+        no_map = gen_node_color_map('bogus column', scheme_color_brewer_accent())
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'colors': [], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        no_map = gen_edge_color_map('bogus column', scheme_color_brewer_accent)
+        no_map = gen_edge_color_map('bogus column', scheme_color_brewer_accent())
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'colors': [], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Create a column with one data value, and verify that the correct value and mapping are generated
         one_data = df.DataFrame(data={'id':['YBR043C'], 'newcol':[3]})
         load_table_data(one_data, data_key_column='id')
-        one_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        one_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(one_map, {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that when optional parameters are supplied, they are included in the generated dictionary
-        one_map = gen_node_color_map('newcol', scheme_color_brewer_accent, default_color='#00FF00', style_name='galFiltered Style', network='galFiltered.sif')
+        one_map = gen_node_color_map('newcol', scheme_color_brewer_accent(), default_color='#00FF00', style_name='galFiltered Style', network='galFiltered.sif')
         self.assertDictEqual(one_map, {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': '#00FF00', 'style_name': 'galFiltered Style', 'network': 'galFiltered.sif', 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add a data value so now there are two (but still under minimum palette threshold), and verify the correct values and mappings
         one_data = df.DataFrame(data={'id':['YDL194W'], 'newcol':[4]})
         load_table_data(one_data, data_key_column='id')
-        two_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        two_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(two_map, {'table_column': 'newcol', 'table_column_values': ['4', '3'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add a data value so now there are three (and now at minimum palette threshold), and verify the correct values and mappings
         one_data = df.DataFrame(data={'id':['YDR277C'], 'newcol':[5]})
         load_table_data(one_data, data_key_column='id')
-        three_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        three_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(three_map, {'table_column': 'newcol', 'table_column_values': ['5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add 5 data values so now there 8 (which is at maximum palette threshold), and verify the correct values and mappings
         five_data = df.DataFrame(data={'id':['YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W'], 'newcol':[6, 7, 8, 9, 10]})
         load_table_data(five_data, data_key_column='id')
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add 5 more data values so now there 8 (with 5 duplicates, which is still at maximum palette threshold), and verify that values and mappings don't change
         five_data = df.DataFrame(data={'id':['YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W'], 'newcol':[6, 7, 8, 9, 10]})
         load_table_data(five_data, data_key_column='id')
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add 1 more data values so now there 19 (with 5 duplicates, which forces palette interpolation), and verify that values and mappings are right
         one_data = df.DataFrame(data={'id':['YBR118W'], 'newcol':[50]})
         load_table_data(one_data, data_key_column='id')
-        nine_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        nine_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(nine_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '50', '5', '4', '3'], 'colors': ['#7FC97F', '#B6B1C9', '#EDBC9A', '#FEE792', '#9CB6A5', '#7D449E', '#E41865', '#B45C21', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Add 5 more data values so now there 14 (with 5 duplicates, which forces palette interpolation), and verify that values and mappings are right
         five_data = df.DataFrame(data={'id':['YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[100, 101, 102, 103, 104]})
         load_table_data(five_data, data_key_column='id')
-        fourteen_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        fourteen_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(fourteen_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '50', '104', '103', '102', '101', '100', '5', '4', '3'], 'colors': ['#7FC97F', '#A1BAAD', '#C3AFCE', '#E5B9A4', '#FDCA89', '#FEEC93', '#D1DD9E', '#668EAB', '#714BA1', '#D41287', '#DD2457', '#C3541F', '#96603B', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Initialization -- get a clean session back
@@ -999,73 +999,73 @@ class StyleMappingsTests(unittest.TestCase):
         load_table_data(eight_data, data_key_column='id')
 
         # Verify that Pastel2 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_pastel2)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_pastel2())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#B3E2CD', '#FDCDAC', '#CBD5E8', '#F4CAE4', '#E6F5C9', '#FFF2AE', '#F1E2CC', '#CCCCCC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Pastel1 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_pastel1)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_pastel1())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Dark2 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_dark2)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_dark2())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#1B9E77', '#D95F02', '#7570B3', '#E7298A', '#66A61E', '#E6AB02', '#A6761D', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Accent palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_accent())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Paired palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_paired)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_paired())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C', '#FB9A99', '#E31A1C', '#FDBF6F', '#FF7F00'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Set1 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set1)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set1())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Set2 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set2)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set2())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that Set3 palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set3)
+        eight_map = gen_node_color_map('newcol', scheme_color_brewer_set3())
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that random palette is available
-        eight_map = gen_node_color_map('newcol', scheme_color_random)
+        eight_map = gen_node_color_map('newcol', scheme_color_random())
         self.assertListEqual(eight_map['table_column_values'], ['8', '7', '6', '5', '4', '3', '2', '1'])
         self.assertEqual(len(eight_map['colors']), 8)
 
         # Verify that setting border color works as expected
-        set_node_border_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_node_border_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_PAINT', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
 
         # Verify that node border color works as expected
-        set_node_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_node_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
 
         # Verify that label border color works as expected
-        set_node_label_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_node_label_color_mapping(**gen_node_color_map('newcol', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_COLOR', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
 
         # Verify that setting edge color works as expected
-        set_edge_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_edge_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
 
         # Verify that setting edge label color works as expected
-        set_edge_label_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_edge_label_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_COLOR', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
 
         # Verify that setting target arrow color works as expected
-        set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
 
         # Verify that setting source arrow color works as expected
-        set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', scheme_color_brewer_accent(), style_name='galFiltered Style'))
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
-        self.assertRaises(CyError, gen_node_color_map, 'newcol', scheme_color_brewer_accent, network='bogus network')
-        self.assertRaises(CyError, gen_edge_color_map, 'interaction', scheme_color_brewer_accent, network='bogus network')
+        self.assertRaises(CyError, gen_node_color_map, 'newcol', scheme_color_brewer_accent(), network='bogus network')
+        self.assertRaises(CyError, gen_edge_color_map, 'interaction', scheme_color_brewer_accent(), network='bogus network')
 
     @print_entry_exit
     def test_gen_opacity_map(self):
@@ -1073,17 +1073,17 @@ class StyleMappingsTests(unittest.TestCase):
         load_test_session()
 
         # Verify that when the column doesn't exist, it's treated as a column with no values
-        no_map = gen_node_opacity_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_node_opacity_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'opacities': [], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        no_map = gen_edge_opacity_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_edge_opacity_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'opacities': [], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Create a column with eight data values, and verify that the correct values and mappings are generated for series & random
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
-        eight_map = gen_node_opacity_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        eight_map = gen_node_opacity_map('newcol', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_node_opacity_map('newcol', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_node_opacity_map('newcol', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['opacities']), 8)
 
         # Verify that each node opacity mapping works
@@ -1097,9 +1097,9 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'map': [{'key': '1', 'value': '240'}, {'key': '2', 'value': '220'}, {'key': '3', 'value': '200'}, {'key': '4', 'value': '180'}, {'key': '5', 'value': '160'}, {'key': '6', 'value': '140'}, {'key': '7', 'value': '120'}, {'key': '8', 'value': '100'}]})
 
         # Take advantage of edge interaction column already existing
-        two_map = gen_edge_opacity_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        two_map = gen_edge_opacity_map('interaction', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_edge_opacity_map('interaction', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_edge_opacity_map('interaction', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['opacities']), 2)
 
         # Verify that each edge opacity mapping works
@@ -1110,8 +1110,8 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TRANSPARENCY', 'map': [{'key': 'pp', 'value': '100'}, {'key': 'pd', 'value': '120'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
-        self.assertRaises(CyError, gen_node_opacity_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
-        self.assertRaises(CyError, gen_edge_opacity_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
+        self.assertRaises(CyError, gen_node_opacity_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
+        self.assertRaises(CyError, gen_edge_opacity_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
 
 
     @print_entry_exit
@@ -1120,17 +1120,17 @@ class StyleMappingsTests(unittest.TestCase):
         load_test_session()
 
         # Verify that when the column doesn't exist, it's treated as a column with no values
-        no_map = gen_node_width_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_node_width_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'widths': [], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        no_map = gen_edge_width_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_edge_width_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'widths': [], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Create a column with eight data values, and verify that the correct values and mappings are generated for series & random
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
-        eight_map = gen_node_width_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        eight_map = gen_node_width_map('newcol', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_node_width_map('newcol', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_node_width_map('newcol', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['widths']), 8)
 
         # Verify that each node width mapping works
@@ -1141,9 +1141,9 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_WIDTH', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
 
         # Take advantage of edge interaction column already existing
-        two_map = gen_edge_width_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        two_map = gen_edge_width_map('interaction', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_edge_width_map('interaction', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_edge_width_map('interaction', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['widths']), 2)
 
         # Verify that each edge width mapping works
@@ -1151,8 +1151,8 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_WIDTH', 'map': [{'key': 'pp', 'value': '100.0'}, {'key': 'pd', 'value': '120.0'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
-        self.assertRaises(CyError, gen_node_width_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
-        self.assertRaises(CyError, gen_edge_width_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
+        self.assertRaises(CyError, gen_node_width_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
+        self.assertRaises(CyError, gen_edge_width_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
 
     @print_entry_exit
     def test_gen_height_map(self):
@@ -1160,15 +1160,15 @@ class StyleMappingsTests(unittest.TestCase):
         load_test_session()
 
         # Verify that when the column doesn't exist, it's treated as a column with no values
-        no_map = gen_node_height_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_node_height_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'heights': [], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Create a column with eight data values, and verify that the correct values and mappings are generated for series & random
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
-        eight_map = gen_node_height_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        eight_map = gen_node_height_map('newcol', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_node_height_map('newcol', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_node_height_map('newcol', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['heights']), 8)
 
         # Verify that each node height mapping works
@@ -1176,7 +1176,7 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_HEIGHT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_HEIGHT', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
-        self.assertRaises(CyError, gen_node_height_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
+        self.assertRaises(CyError, gen_node_height_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
 
     @print_entry_exit
     def test_gen_size_map(self):
@@ -1184,17 +1184,17 @@ class StyleMappingsTests(unittest.TestCase):
         load_test_session()
 
         # Verify that when the column doesn't exist, it's treated as a column with no values
-        no_map = gen_node_size_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_node_size_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'sizes': [], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        no_map = gen_edge_size_map('bogus column', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        no_map = gen_edge_size_map('bogus column', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertDictEqual(no_map, {'table_column': 'bogus column', 'table_column_values': [], 'sizes': [], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Create a column with eight data values, and verify that the correct values and mappings are generated for series & random
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
-        eight_map = gen_node_size_map('newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        eight_map = gen_node_size_map('newcol', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_node_size_map('newcol', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_node_size_map('newcol', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['sizes']), 8)
 
         # Verify that each node size mapping works
@@ -1205,9 +1205,9 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SIZE', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
 
         # Take advantage of edge interaction column already existing
-        two_map = gen_edge_size_map('interaction', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style')
+        two_map = gen_edge_size_map('interaction', scheme_number_series(start_value=100, step=20), style_name='galFiltered Style')
         self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
-        random_map = gen_edge_size_map('interaction', scheme_number_random, number_scheme_params={'min_value': 30, 'max_value': 100}, style_name='galFiltered Style')
+        random_map = gen_edge_size_map('interaction', scheme_number_random(min_value=30, max_value=100), style_name='galFiltered Style')
         self.assertEqual(len(random_map['sizes']), 2)
 
         # Verify that each edge font size mapping works
@@ -1215,8 +1215,8 @@ class StyleMappingsTests(unittest.TestCase):
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_FONT_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'map': [{'key': 'pp', 'value': '100'}, {'key': 'pd', 'value': '120'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
-        self.assertRaises(CyError, gen_node_size_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
-        self.assertRaises(CyError, gen_edge_size_map, 'newcol', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, network='bogus network')
+        self.assertRaises(CyError, gen_node_size_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
+        self.assertRaises(CyError, gen_edge_size_map, 'newcol', scheme_number_series(start_value=100, step=20), network='bogus network')
 
     @print_entry_exit
     def test_gen_shapes_map(self):
@@ -1235,11 +1235,11 @@ class StyleMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_shape_map('newcol', style_name='galFiltered Style')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'shapes': ['VEE', 'OCTAGON', 'HEXAGON', 'ELLIPSE', 'RECTANGLE', 'TRIANGLE', 'PARALLELOGRAM', 'DIAMOND'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'shapes': ['OCTAGON', 'VEE', 'DIAMOND', 'TRIANGLE', 'PARALLELOGRAM', 'ROUND_RECTANGLE', 'RECTANGLE', 'HEXAGON'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that each shape mapping works
         set_node_shape_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': '1', 'value': 'DIAMOND'}, {'key': '2', 'value': 'PARALLELOGRAM'}, {'key': '3', 'value': 'TRIANGLE'}, {'key': '4', 'value': 'RECTANGLE'}, {'key': '5', 'value': 'ELLIPSE'}, {'key': '6', 'value': 'HEXAGON'}, {'key': '7', 'value': 'OCTAGON'}, {'key': '8', 'value': 'VEE'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': '1', 'value': 'HEXAGON'}, {'key': '2', 'value': 'RECTANGLE'}, {'key': '3', 'value': 'ROUND_RECTANGLE'}, {'key': '4', 'value': 'PARALLELOGRAM'}, {'key': '5', 'value': 'TRIANGLE'}, {'key': '6', 'value': 'DIAMOND'}, {'key': '7', 'value': 'VEE'}, {'key': '8', 'value': 'OCTAGON'}]})
 
         # Verify that when there are too many discrete values for the shape list, an error is generated
         four_data = df.DataFrame(data={'id':['YAL003W', 'YFL017C', 'YDR429C', 'YMR146C'], 'newcol':[100, 200, 300, 400]})
@@ -1248,19 +1248,19 @@ class StyleMappingsTests(unittest.TestCase):
 
         # Take advantage of edge interaction column already existing
         two_line_style_map = gen_edge_line_style_map('interaction', style_name='galFiltered Style')
-        self.assertDictEqual(two_line_style_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'line_styles': ['PARALLEL_LINES', 'SINEWAVE'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_line_style_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'line_styles': ['SINEWAVE', 'DOT'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         two_arrow_map = gen_edge_arrow_map('interaction', style_name='galFiltered Style')
-        self.assertDictEqual(two_arrow_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'shapes': ['ARROW', 'T'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_arrow_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'shapes': ['OPEN_DELTA', 'OPEN_SQUARE'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that each edge line style mapping works
         set_edge_line_style_mapping(**two_line_style_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LINE_TYPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LINE_TYPE', 'map': [{'key': 'pp', 'value': 'PARALLEL_LINES'}, {'key': 'pd', 'value': 'SINEWAVE'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LINE_TYPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LINE_TYPE', 'map': [{'key': 'pp', 'value': 'SINEWAVE'}, {'key': 'pd', 'value': 'DOT'}]})
 
         # Verify that each edge source/target arrow mapping works
         set_edge_source_arrow_shape_mapping(**two_arrow_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW'}, {'key': 'pd', 'value': 'T'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'OPEN_DELTA'}, {'key': 'pd', 'value': 'OPEN_SQUARE'}]})
         set_edge_target_arrow_shape_mapping(**two_arrow_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW'}, {'key': 'pd', 'value': 'T'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'OPEN_DELTA'}, {'key': 'pd', 'value': 'OPEN_SQUARE'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
         self.assertRaises(CyError, gen_node_shape_map, 'newcol', network='bogus network')
