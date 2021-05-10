@@ -370,7 +370,7 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         ''
 
     See Also:
-        :meth:`gen_node_color_map`, :doc:`Concepts <concepts>`
+        :meth:`gen_node_color_map`
     """
     verify_hex_colors(colors)
 
