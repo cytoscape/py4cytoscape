@@ -592,15 +592,15 @@ Most value generators accept a ``scheme`` parameter that indicates how mapped va
 mapping functions accept a ``scheme_*`` (as described above), numeric generators accept the ``scheme_number_series`` and
 ``scheme_number_random`` to mappings to serial or random values.
 
-.. note:: When using a numerical value generator, you must provide both a ``scheme_number_*`` parameter *and* a ``scheme_number_params`` dictionary, which contains range information.
+.. note:: When using a numerical value generator, you must provide both a ``scheme_number_*`` parameter *and* a ``number_scheme_params`` dictionary, which contains range information.
 
 For example:
 
 .. code:: python
 
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, scheme_number_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
 
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_random, scheme_number_params={'min_value': 10, 'max_value': 120}, style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_number_random, number_scheme_params={'min_value': 10, 'max_value': 120}, style_name='galFiltered Style'))
 
 Shape generators don't require a ``scheme`` parameter. For example:
 
