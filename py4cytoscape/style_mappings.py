@@ -1174,7 +1174,7 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_edge_color_mapping('EdgeBetweenness', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent, style_name='galFiltered Style'))
+        >>> set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness', scheme_color_brewer_accent, style_name='galFiltered Style'))
         ''
         >>> set_edge_color_mapping('EdgeBetweennessColor', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
