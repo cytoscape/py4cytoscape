@@ -1,0 +1,10 @@
+/*
+This is a workaround due to bug introduced by a change in Sphynx. Bullets stopped working.
+
+For an explanation of this workaround, see: https://github.com/readthedocs/sphinx_rtd_theme/issues/1145
+ */
+
+.rst-content section ul li {
+list-style:disc;
+margin-left:24px
+}
