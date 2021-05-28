@@ -37,11 +37,12 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 1. Update the version number in both py4cytoscape/_version.py and build.bat
 1. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
 1. If any API changes were made, be sure to update the [Automation API Definition](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690) and change the Automation API version in py4cytoscape/_version.py
-1. If any functions were added, be sure to add them to the appropriate .rst file in the References section of the document.    
+1. If any functions were added, be sure to add them to the appropriate .rst file in the References section of the document.
 1. Successfully execute all tests by using the tests/runalltests.bat file
 1. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
 1. Again, successfully execute all tests by using the tests/runalltests.bat file and the Sanity Test. (Change Sanity Test to fetch ``py4cytoscape`` from PyPI instead of Github.)
+1. Verify that the requirements.txt file in the docs directory correctly identifies all external dependencies.
 1. Check any/all changes to the [user manual](https://py4cytoscape.readthedocs.io/en/latest/) and fix them now. (Note that the manual is automatically re-compiled when changes are made to the Master branch in Github.)
 1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
 

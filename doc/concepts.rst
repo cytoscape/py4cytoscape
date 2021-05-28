@@ -458,7 +458,7 @@ Briefly:
 
 A `value generator <http://manual.cytoscape.org/en/stable/Styles.html#automatic-value-generators>`_ makes
 *discrete* mapping more convenient by creating automatic mappings between attribute values and visual styles.
-It automatically determines the unique values of a particular node or edge attribute, then allows you to choose
+It determines the unique values of a particular node or edge attribute, then allows you to choose
 a mapping to colors, sizes, opacities or shapes. For example, you can use a value generator to map a node with
 a `Degree` attribute having values 1, 10 and 20 to node fill colors of Red, Blue or Green ... or to a node size
 of 100, 150 or 200 ... or to circle, square or diamond shapes.
@@ -479,7 +479,7 @@ each to a different color in a Brewer palette:
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent(), style_name='galFiltered Style'))
 
 The general methodology is to use the value generator (e.g., ``gen_node_color_map()``) as the sole parameter to a
 style mapping function, binding it by using the Python ** operator. The color value
@@ -488,7 +488,7 @@ defaults for them. So,
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', scheme_color_brewer_accent(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent(), style_name='galFiltered Style'))
 
 is the equivalent of:
 
@@ -503,33 +503,33 @@ is the equivalent of:
                            network=None,
                            base_url:'http://127.0.0.1:1234/v1')
 
-The ``scheme_color_brewer_accent()`` parameter is used to generate the specific ``colors`` values according to the predefined Brewer
+The ``palette_color_brewer_Accent()`` parameter is used to generate the specific ``colors`` values according to the predefined Brewer
 Accent palette. You can choose between any of the 8 `Brewer Qualitative Palettes <https://colorbrewer2.org>`_, which
 are widely regarded as aesthetic and visually effective.
 
-+-----------------+-----------------------------------+
-| Color Palette   | scheme_color Parameter            |
-+=================+===================================+
-| Brewer Pastel2  | ``scheme_color_brewer_pastel2``   |
-+-----------------+-----------------------------------+
-| Brewer Pastel1  | ``scheme_color_brewer_pastel1``   |
-+-----------------+-----------------------------------+
-| Brewer Dark2    | ``scheme_color_brewer_dark2``     |
-+-----------------+-----------------------------------+
-| Brewer Accent   | ``scheme_color_brewer_accent``    |
-+-----------------+-----------------------------------+
-| Brewer Paired   | ``scheme_color_brewer_paired``    |
-+-----------------+-----------------------------------+
-| Brewer Set1     | ``scheme_color_brewer_set1``      |
-+-----------------+-----------------------------------+
-| Brewer Set2     | ``scheme_color_brewer_set2``      |
-+-----------------+-----------------------------------+
-| Brewer Set3     | ``scheme_color_brewer_set3``      |
-+-----------------+-----------------------------------+
-| Random          | ``scheme_color_random``           |
-+-----------------+-----------------------------------+
++-----------------+------------------------------------+
+| Color Palette   | palette_color Parameter            |
++=================+====================================+
+| Brewer Pastel2  | ``palette_color_brewer_Pastel2``   |
++-----------------+------------------------------------+
+| Brewer Pastel1  | ``palette_color_brewer_Pastel1``   |
++-----------------+------------------------------------+
+| Brewer Dark2    | ``palette_color_brewer_Dark2``     |
++-----------------+------------------------------------+
+| Brewer Accent   | ``palette_color_brewer_Accent``    |
++-----------------+------------------------------------+
+| Brewer Paired   | ``palette_color_brewer_Paired``    |
++-----------------+------------------------------------+
+| Brewer Set1     | ``palette_color_brewer_Set1``      |
++-----------------+------------------------------------+
+| Brewer Set2     | ``palette_color_brewer_Set2``      |
++-----------------+------------------------------------+
+| Brewer Set3     | ``palette_color_brewer_Set3``      |
++-----------------+------------------------------------+
+| Random          | ``palette_color_random``           |
++-----------------+------------------------------------+
 
-.. note:: You can generate random colors by using the ``scheme_color_random`` scheme.
+.. note:: You can generate random colors by using the ``palette_color_random`` scheme.
 
 Similarly, there are value generators for opacities, sizes, heights, widths and shapes, with variants for *node* and *edge* values.
 
@@ -588,9 +588,9 @@ can use an *edge* value generator with an *edge* mapping function.
 |                               | ``set_edge_target_arrow_shape_mapping()`` |
 +-------------------------------+-------------------------------------------+
 
-Most value generators accept a ``scheme`` parameter that indicates how mapped values should be generated. While the color
-mapping functions accept a ``scheme_*`` (as described above), numeric generators accept the ``scheme_number_series`` and
-``scheme_number_random`` to mappings to serial or random values. They accept parameters that determine the range of numbers
+Most value generators accept a ``palette`` or ``scheme`` parameter that indicates how mapped values should be generated. While the color
+mapping functions accept a ``palette_*`` (as described above), numeric generators accept the ``scheme_number_series`` and
+``scheme_number_random`` for mappings to serial or random values. They accept parameters that determine the range of numbers
 that are generated.
 
 .. note:: The default range generated by scheme_number_random() is 0..255, and the default series generated by scheme_number_series() is 0, 10, 20...

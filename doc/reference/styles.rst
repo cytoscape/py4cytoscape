@@ -321,25 +321,70 @@ Edge Style Mapping Generators
    gen_edge_size_map
    gen_edge_width_map
 
-Style Mapping Schemes for Generators
-====================================
+Schemes for Discrete Shape Generators
+=====================================
 .. autosummary::
    :toctree: generated/
 
    scheme_arrow_shapes
-   scheme_color_brewer_pastel2
-   scheme_color_brewer_pastel1
-   scheme_color_brewer_dark2
-   scheme_color_brewer_accent
-   scheme_color_brewer_paired
-   scheme_color_brewer_set1
-   scheme_color_brewer_set2
-   scheme_color_brewer_set3
-   scheme_color_random
    scheme_line_styles
    scheme_number_random
    scheme_number_series
    scheme_shapes
+
+Palettes for Discrete Color Generators
+======================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_Accent
+   palette_color_brewer_Dark2
+   palette_color_brewer_Paired
+   palette_color_brewer_Pastel1
+   palette_color_brewer_Pastel2
+   palette_color_brewer_Set1
+   palette_color_brewer_Set2
+   palette_color_brewer_Set3
+   palette_color_random
+
+Palettes for One-Tailed Continuous (Sequential) Color Generators
+================================================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_Blues
+   palette_color_brewer_BuGn
+   palette_color_brewer_BuPu
+   palette_color_brewer_GnBu
+   palette_color_brewer_Greens
+   palette_color_brewer_Greys
+   palette_color_brewer_Oranges
+   palette_color_brewer_OrRd
+   palette_color_brewer_PuBu
+   palette_color_brewer_PuBuGn
+   palette_color_brewer_RdPu
+   palette_color_brewer_PuRd
+   palette_color_brewer_Purples
+   palette_color_brewer_Reds
+   palette_color_brewer_YlGn
+   palette_color_brewer_YlGnBu
+   palette_color_brewer_YlOrBr
+   palette_color_brewer_YlOrRd
+
+Palettes for Two-Tailed Continuous (Diverging) Color Generators
+===============================================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_BrBG
+   palette_color_brewer_PiYG
+   palette_color_brewer_PRGn
+   palette_color_brewer_PuOr
+   palette_color_brewer_RdBu
+   palette_color_brewer_RdGy
+   palette_color_brewer_RdYlBu
+   palette_color_brewer_RdYlGn
+   palette_color_brewer_Spectral
 
 .. _stylevalues:
 
