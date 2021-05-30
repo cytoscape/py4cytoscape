@@ -365,13 +365,13 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         ''
         >>> set_node_border_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent, style_name='galFiltered Style'))
+        >>> set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
         ''
         >>> set_node_border_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_color_map`
+        :meth:`gen_node_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -522,13 +522,13 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_node_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent, style_name='galFiltered Style'))
+        >>> set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
         ''
         >>> set_node_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_color_map`
+        :meth:`gen_node_c_color_map`
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -880,13 +880,13 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_node_label_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_label_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent, style_name='galFiltered Style'))
+        >>> set_node_label_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
         ''
         >>> set_node_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_color_map`
+        :meth:`gen_node_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -984,11 +984,11 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
     Examples:
         >>> set_node_shape_mapping('Degree', table_column_values=['1', '2'], shapes=['TRIANGLE', 'OCTAGON'], default_shape='ELLIPSE', style_name='galFiltered Style')
         ''
-        >>> set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
+        >>> set_node_shape_mapping(**gen_node_d_shape_map('Degree', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_node_shape_map`
+        :meth:`gen_node_d_shape_map`
     """
     # TODO: Verify shapes
 
@@ -1175,13 +1175,13 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_edge_color_mapping('EdgeBetweenness', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_color_mapping(**gen_edge_c_color_map('EdgeBetweenness', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
         ''
         >>> set_edge_color_mapping('EdgeBetweennessColor', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_color_map`
+        :meth:`gen_edge_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1362,13 +1362,13 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_edge_label_color_mapping('interaction', ['pp', 'pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_label_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_label_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
         ''
         >>> set_edge_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_color_map`
+        :meth:`gen_edge_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1466,11 +1466,11 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
     Examples:
         >>> set_edge_line_style_mapping('interaction', table_column_values=['pp','pd'], shapes=['ZIGZAG', 'SINEWAVE'], default_shape='EQUAL_DASH', style_name='galFiltered Style')
         ''
-        >>> set_edge_line_style_mapping(**gen_edge_line_style_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_line_style_mapping(**gen_edge_d_line_style_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_line_style_map`
+        :meth:`gen_edge_d_line_style_map`
     """
     # TODO: Validate line style
 
@@ -1619,11 +1619,11 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
     Examples:
         >>> set_edge_target_arrow_maping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
-        >>> set_edge_target_arrow_maping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_target_arrow_maping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_arrow_map`
+        :meth:`gen_edge_d_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1667,11 +1667,11 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
     Examples:
         >>> set_edge_source_arrow_mapping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_arrow_map`
+        :meth:`gen_edge_d_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1718,13 +1718,13 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_target_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
         ''
         >>> set_edge_target_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_color_map`
+        :meth:`gen_edge_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1770,13 +1770,13 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_source_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
         ''
         >>> set_edge_source_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_color_map`
+        :meth:`gen_edge_c_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1818,7 +1818,7 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_target_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_target_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_target_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     Note:
@@ -1860,14 +1860,14 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_shape_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_shape_mapping(gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_shape_mapping(gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     Note:
         This is the same function as ``set_edge_source_arrow_mapping()``
 
     See also:
-        :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_arrow_map`
+        :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_d_arrow_map`
 
     """
     return set_edge_source_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
@@ -1902,6 +1902,45 @@ def set_edge_tooltip_mapping(table_column, style_name=None, network=None, base_u
     return _update_visual_property('EDGE_TOOLTIP', table_column, mapping_type='p', style_name=style_name,
                                    network=network, base_url=base_url, table='edge', supported_mappings=['p'])
 
+# Check table column, create the visual property map, and update Cytoscape's copy of the visual property
+def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
+                            style_name=None, network=None, base_url=DEFAULT_BASE_URL,
+                            supported_mappings=['c', 'd', 'p'], table='node'):
+    if range_map is not None: range_map = [str(x) for x in range_map]  # CyREST requires strings
+
+    # TODO: Added because all mappings need to do this. R code should probably adopt this, too
+    if not table_column_exists(table_column, table, network=network, base_url=base_url):
+        raise CyError(f'Table column "{table_column}" does not exist')
+
+    # perform mapping
+    mapping_type = _normalize_mapping(mapping_type, visual_prop_name, supported_mappings)
+    if mapping_type == 'c':
+        mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
+                                  network=network, base_url=base_url)
+    elif mapping_type == 'd':
+        mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
+                                  network=network, base_url=base_url)
+    elif mapping_type == 'p':
+        mvp = map_visual_property(visual_prop_name, table_column, 'p', network=network, base_url=base_url)
+    else:
+        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
+
+    res = update_style_mapping(style_name, mvp, base_url=base_url)
+    return res
+
+# Figure out which kind of mapping is being used
+def _normalize_mapping(mapping_type, visual_prop_name, supported_mappings):
+    if mapping_type in ['continuous', 'c', 'interpolate']:
+        mapping_type = 'c'
+    elif mapping_type in ['discrete', 'd', 'lookup']:
+        mapping_type = 'd'
+    elif mapping_type in ['passthrough', 'p']:
+        mapping_type = 'p'
+
+    if mapping_type in supported_mappings:
+        return mapping_type
+    else:
+        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
 
 # ==============================================================================
 # III.a Palettes and schemes for mapping generators
@@ -1916,395 +1955,395 @@ def palette_color_random():
         lambda: generates a list of random colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
     MAX_COLOR = 256 * 256 * 256
-    return lambda value_count, min_data, max_data: [f'#{random.randint(0, MAX_COLOR):06X}'   for i in range(value_count)]
+    return ('random', 'qualitative', lambda value_count: [f'#{random.randint(0, MAX_COLOR):06X}'   for i in range(value_count)])
 
-def palette_color_brewer_Pastel2():
+def palette_color_brewer_q_Pastel2():
     """Generate pastel2 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Pastel2)
+    return ('palette_color_brewer_q_Pastel2', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel2))
 
-def palette_color_brewer_Pastel1():
+def palette_color_brewer_q_Pastel1():
     """Generate pastel1 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Pastel1)
+    return ('palette_color_brewer_q_Pastel1', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel1))
 
-def palette_color_brewer_Dark2():
+def palette_color_brewer_q_Dark2():
     """Generate pastel2 Dark2 palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Dark2)
+    return ('palette_color_brewer_q_Dark2', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Dark2))
 
-def palette_color_brewer_Accent():
+def palette_color_brewer_q_Accent():
     """Generate accent Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Accent)
+    return ('palette_color_brewer_q_Accent', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Accent))
 
-def palette_color_brewer_Paired():
+def palette_color_brewer_q_Paired():
     """Generate paired Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Paired)
+    return ('palette_color_brewer_q_Paired', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Paired))
 
-def palette_color_brewer_Set1():
+def palette_color_brewer_q_Set1():
     """Generate set1 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Set1)
+    return ('palette_color_brewer_q_Set1', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set1))
 
-def palette_color_brewer_Set2():
+def palette_color_brewer_q_Set2():
     """Generate set2 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Set2)
+    return ('palette_color_brewer_q_Set2', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set2))
 
-def palette_color_brewer_Set3():
+def palette_color_brewer_q_Set3():
     """Generate set3 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Set3)
+    return ('palette_color_brewer_q_Set3', 'qualitative', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set3))
 
-def palette_color_brewer_YlGn():
+def palette_color_brewer_s_YlGn():
     """Generate YlGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.YlGn)
+    return ('palette_color_brewer_s_YlGn', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGn))
 
-def palette_color_brewer_YlGnBu():
+def palette_color_brewer_s_YlGnBu():
     """Generate YlGnBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.YlGnBu)
+    return ('palette_color_brewer_s_YlGnBu', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGnBu))
 
-def palette_color_brewer_GnBu():
+def palette_color_brewer_s_GnBu():
     """Generate GnBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.GnBu)
+    return ('palette_color_brewer_s_GnBu', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.GnBu))
 
-def palette_color_brewer_BuGn():
+def palette_color_brewer_s_BuGn():
     """Generate BuGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.BuGn)
+    return ('palette_color_brewer_s_BuGn', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuGn))
 
-def palette_color_brewer_PuBuGn():
+def palette_color_brewer_s_PuBuGn():
     """Generate PuBuGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PuBuGn)
+    return ('palette_color_brewer_s_PuBuGn', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBuGn))
 
-def palette_color_brewer_PuBu():
+def palette_color_brewer_s_PuBu():
     """Generate PuBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PuBu)
+    return ('palette_color_brewer_s_PuBu', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBu))
 
-def palette_color_brewer_BuPu():
+def palette_color_brewer_s_BuPu():
     """Generate BuPu Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.BuPu)
+    return ('palette_color_brewer_s_BuPu', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuPu))
 
-def palette_color_brewer_RdPu():
+def palette_color_brewer_s_RdPu():
     """Generate RdPu Brewer palette of a given size ... interpolate as needed ... best for one-tailed continuous
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.RdPu)
+    return ('palette_color_brewer_s_RdPu', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdPu))
 
-def palette_color_brewer_PuRd():
+def palette_color_brewer_s_PuRd():
     """Generate PuRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PuRd)
+    return ('palette_color_brewer_s_PuRd', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuRd))
 
-def palette_color_brewer_OrRd():
+def palette_color_brewer_s_OrRd():
     """Generate OrRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.OrRd)
+    return ('palette_color_brewer_s_OrRd', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.OrRd))
 
-def palette_color_brewer_YlOrRd():
+def palette_color_brewer_s_YlOrRd():
     """Generate YlOrRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.YlOrRd)
+    return ('palette_color_brewer_s_YlOrRd', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrRd))
 
-def palette_color_brewer_YlOrBr():
+def palette_color_brewer_s_YlOrBr():
     """Generate YlOrBr Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.YlOrBr)
+    return ('palette_color_brewer_s_YlOrBr', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrBr))
 
-def palette_color_brewer_Purples():
+def palette_color_brewer_s_Purples():
     """Generate Purples Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Purples)
+    return ('palette_color_brewer_s_Purples', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Purples))
 
-def palette_color_brewer_Blues():
+def palette_color_brewer_s_Blues():
     """Generate Blues Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Blues)
+    return ('palette_color_brewer_s_Blues', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Blues))
 
-def palette_color_brewer_Greens():
+def palette_color_brewer_s_Greens():
     """Generate Greens Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Greens)
+    return ('palette_color_brewer_s_Greens', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greens))
 
-def palette_color_brewer_Oranges():
+def palette_color_brewer_s_Oranges():
     """Generate Oranges Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Oranges)
+    return ('palette_color_brewer_s_Oranges', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Oranges))
 
-def palette_color_brewer_Reds():
+def palette_color_brewer_s_Reds():
     """Generate Reds Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Reds)
+    return ('palette_color_brewer_s_Reds', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Reds))
 
-def palette_color_brewer_Greys():
+def palette_color_brewer_s_Greys():
     """Generate Greys Brewer palette of a given size ... best for one-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Greys)
+    return ('palette_color_brewer_s_Greys', 'sequential', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greys))
 
-def palette_color_brewer_PuOr():
+def palette_color_brewer_d_PuOr():
     """Generate PuOr Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PuOr)
+    return ('palette_color_brewer_d_PuOr', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuOr))
 
-def palette_color_brewer_BrBG():
+def palette_color_brewer_d_BrBG():
     """Generate BrBG Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.BrBG)
+    return ('palette_color_brewer_d_BrBG', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.BrBG))
 
-def palette_color_brewer_PRGn():
+def palette_color_brewer_d_PRGn():
     """Generate PRGn Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PRGn)
+    return ('palette_color_brewer_d_PRGn', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PRGn))
 
-def palette_color_brewer_PiYG():
+def palette_color_brewer_d_PiYG():
     """Generate PiYG Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.PiYG)
+    return ('palette_color_brewer_d_PiYG', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.PiYG))
 
-def palette_color_brewer_RdBu():
+def palette_color_brewer_d_RdBu():
     """Generate RdBu Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.RdBu)
+    return ('palette_color_brewer_d_RdBu', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdBu))
 
-def palette_color_brewer_RdGy():
+def palette_color_brewer_d_RdGy():
     """Generate RdGy Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.RdGy)
+    return ('palette_color_brewer_d_RdGy', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdGy))
 
-def palette_color_brewer_RdYlBu():
+def palette_color_brewer_d_RdYlBu():
     """Generate RdYlBu Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.RdYlBu)
+    return ('palette_color_brewer_d_RdYlBu', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlBu))
 
-def palette_color_brewer_Spectral():
+def palette_color_brewer_d_Spectral():
     """Generate Spectral Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.Spectral)
+    return ('palette_color_brewer_d_Spectral', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.Spectral))
 
-def palette_color_brewer_RdYlGn():
+def palette_color_brewer_d_RdYlGn():
     """Generate RdYlGn Brewer palette of a given size ... best for two-tailed continuous mapping
 
     Returns:
         lambda: generates a list of colors
 
     See Also:
-        :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
+        :meth:`gen_node_c_color_map`, :meth:`gen_edge_c_color_map`
     """
-    return lambda value_count, min_data, max_data: _palette_color_brewer(value_count, colorbrewer.RdYlGn)
+    return ('palette_color_brewer_d_RdYlGn', 'divergent', lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlGn))
 
 
 def scheme_shapes():
@@ -2317,9 +2356,9 @@ def scheme_shapes():
         CyError: if more shapes are requested than exist
 
     See Also:
-        :meth:`gen_node_shape_map`
+        :meth:`gen_node_d_shape_map`
     """
-    return lambda value_count, min_data, max_data: _scheme_shapes(value_count, styles.get_node_shapes(), 'shapes')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_node_shapes(), 'shapes')
 
 def scheme_line_styles():
     """Generate list of line styles of a given size
@@ -2331,9 +2370,9 @@ def scheme_line_styles():
         CyError: if more line styles are requested than exist
 
     See Also:
-        :meth:`gen_edge_line_style_map`
+        :meth:`gen_edge_d_line_style_map`
     """
-    return lambda value_count, min_data, max_data: _scheme_shapes(value_count, styles.get_line_styles(), 'line styles')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_line_styles(), 'line styles')
 
 def scheme_arrow_shapes():
     """Generate list of arrow shapes of a given size
@@ -2345,9 +2384,9 @@ def scheme_arrow_shapes():
         CyError: if more arrow shapes are requested than exist
 
     See Also:
-        :meth:`gen_edge_arrow_map`
+        :meth:`gen_edge_d_arrow_map`
     """
-    return lambda value_count, min_data, max_data: _scheme_shapes(value_count, styles.get_arrow_shapes(), 'arrow shapes')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_arrow_shapes(), 'arrow shapes')
 
 def scheme_number_random(min_value=0, max_value=255):
     """Generate list of random integers in a given range
@@ -2362,7 +2401,7 @@ def scheme_number_random(min_value=0, max_value=255):
     See Also:
         :meth:`gen_node_height_map`, :meth:`gen_node_opacity_map`, :meth:`gen_node_size_map`, :meth:`gen_node_width_map`, :meth:`gen_edge_opacity_map`, :meth:`gen_edge_size_map`, :meth:`gen_edge_width_map`
     """
-    return lambda value_count, min_data, max_data: [random.randint(min_value, max_value)   for i in range(value_count)]
+    return lambda value_count: [random.randint(min_value, max_value)   for i in range(value_count)]
 
 def scheme_number_series(start_value=0, step=10):
     """Generate list of numbers in a given series
@@ -2377,7 +2416,7 @@ def scheme_number_series(start_value=0, step=10):
     See Also:
         :meth:`gen_node_height_map`, :meth:`gen_node_opacity_map`, :meth:`gen_node_size_map`, :meth:`gen_node_width_map`, :meth:`gen_edge_opacity_map`, :meth:`gen_edge_size_map`, :meth:`gen_edge_width_map`
     """
-    return lambda value_count, min_data, max_data: [start_value + i * step    for i in range(value_count)]
+    return lambda value_count: [start_value + i * step    for i in range(value_count)]
 
 
 def scheme_number_continuous(start_value=10, end_value=30):
@@ -2393,25 +2432,24 @@ def scheme_number_continuous(start_value=10, end_value=30):
     See Also:
         :meth:`gen_node_height_map`, :meth:`gen_node_opacity_map`, :meth:`gen_node_size_map`, :meth:`gen_node_width_map`, :meth:`gen_edge_opacity_map`, :meth:`gen_edge_size_map`, :meth:`gen_edge_width_map`
     """
-    return lambda value_count, min_data, max_data: [start_value, start_value + (end_value - start_value) / 2, end_value]
+    return lambda min_data, max_data: [start_value, start_value + (end_value - start_value) / 2, end_value]
 
 # ==============================================================================
 # III.b Mapping generators for colors
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_color_map(table_column,
-                       color_scheme,
-                       mapping_type='c',
-                       default_color=None,
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_node_d_color_map(table_column,
+                         palette,
+                         default_color=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate color map parameters for discrete or continuous values in a node table
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        color_scheme (func): Name of function that returns a color list of a given length
+        palette (func): Name of function that returns a color list of a given length
         mapping_type (str): continuous or discrete (c, d); default is continuous
         default_color (str): Hex color to set as default
         style_name (str): name for style
@@ -2429,22 +2467,21 @@ def gen_node_color_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_color_map('newcol', palette_color_brewer_Accent(), mapping_type='d', style_name='galFiltered Style')
+        >>> gen_node_c_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
         {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
     """
-    return _gen_map('node', table_column, color_scheme, mapping_type, 'colors', 'default_color', default_color, style_name, network, base_url)
+    return _gen_d_color_map('node', table_column, palette, default_color, style_name, network, base_url)
 
 @cy_log
-def gen_edge_color_map(table_column,
-                       color_scheme,
-                       mapping_type='c',
-                       default_color=None,
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_edge_d_color_map(table_column,
+                         color_scheme,
+                         default_color=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate color map parameters for discrete or continuous values in an edge table
 
     Args:
@@ -2467,26 +2504,99 @@ def gen_edge_color_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_color_map('interaction', palette_color_brewer_Accent(), mapping_type='d', style_name='galFiltered Style')
+        >>> gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
         {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_color_mapping`, :meth:`set_edge_label_color_mapping`, :meth:`set_edge_source_arrow_color_mapping`, :meth:`set_edge_target_arrow_color_mapping`
     """
-    return _gen_map('edge', table_column, color_scheme, mapping_type, 'colors', 'default_color', default_color, style_name, network, base_url)
+    return _gen_d_color_map('edge', table_column, color_scheme, default_color, style_name, network, base_url)
+
+@cy_log
+def gen_node_c_color_map(table_column,
+                         palette,
+                         default_color=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate color map parameters for discrete or continuous values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        palette (func): Name of function that returns a color list of a given length
+        mapping_type (str): continuous or discrete (c, d); default is continuous
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a color style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_c_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
+    """
+    return _gen_c_color_map('node', table_column, palette, default_color, style_name, network, base_url)
+
+@cy_log
+def gen_edge_c_color_map(table_column,
+                         color_scheme,
+                         default_color=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate color map parameters for discrete or continuous values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        color_scheme (func): Name of function that returns a color list of a given length
+        mapping_type (str): continuous or discrete (c, d); default is continuous
+        default_color (str): Hex color to set as default
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a color style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_color_mapping`, :meth:`set_edge_label_color_mapping`, :meth:`set_edge_source_arrow_color_mapping`, :meth:`set_edge_target_arrow_color_mapping`
+    """
+    return _gen_c_color_map('edge', table_column, color_scheme, default_color, style_name, network, base_url)
 
 # ==============================================================================
 # III.c Mapping generators for opacities
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_opacity_map(table_column,
-                         number_scheme=scheme_number_continuous(),
-                         mapping_type='c',
-                         default_number=None,
-                         style_name=None,
-                         network=None,
-                         base_url=DEFAULT_BASE_URL):
+def gen_node_d_opacity_map(table_column,
+                           number_scheme=scheme_number_series(),
+                           default_number=None,
+                           style_name=None,
+                           network=None,
+                           base_url=DEFAULT_BASE_URL):
     """Generate opacity map parameters for discrete or continuous values in a node table
 
     Args:
@@ -2515,22 +2625,56 @@ def gen_node_opacity_map(table_column,
     See Also:
         :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`, :meth:`set_node_combo_opacity_mapping`
     """
-    return _gen_map('node', table_column, number_scheme, mapping_type, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+    return _gen_d_map('node', table_column, number_scheme, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
 
 @cy_log
-def gen_edge_opacity_map(table_column,
-                         number_scheme=scheme_number_continuous(),
-                         mapping_type='c',
-                         default_number=None,
-                         style_name=None,
-                         network=None,
-                         base_url=DEFAULT_BASE_URL):
+def gen_node_c_opacity_map(table_column,
+                           number_scheme=scheme_number_continuous(),
+                           default_number=None,
+                           style_name=None,
+                           network=None,
+                           base_url=DEFAULT_BASE_URL):
+    """Generate opacity map parameters for discrete or continuous values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a opacity style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_opacity_map('newcol', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`, :meth:`set_node_combo_opacity_mapping`
+    """
+    return _gen_c_map('node', table_column, number_scheme, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_d_opacity_map(table_column,
+                           number_scheme=scheme_number_series(),
+                           default_number=None,
+                           style_name=None,
+                           network=None,
+                           base_url=DEFAULT_BASE_URL):
     """Generate opacity map parameters for discrete or continuous values in an edge table
 
     Args:
         table_column (str): Name of Cytoscape edge table column to map values from
         number_scheme (func): Name of function that returns an opacity list of a given length
-        mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): Opacity value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -2553,20 +2697,91 @@ def gen_edge_opacity_map(table_column,
     See Also:
         :meth:`set_edge_label_opacity_mapping`, :meth:`set_edge_opacity_mapping`
     """
-    return _gen_map('edge', table_column, number_scheme, mapping_type, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+    return _gen_d_map('edge', table_column, number_scheme, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_c_opacity_map(table_column,
+                           number_scheme=scheme_number_continuous(),
+                           default_number=None,
+                           style_name=None,
+                           network=None,
+                           base_url=DEFAULT_BASE_URL):
+    """Generate opacity map parameters for discrete or continuous values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): Opacity value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a opacity style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_opacity_map('interaction', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_label_opacity_mapping`, :meth:`set_edge_opacity_mapping`
+    """
+    return _gen_c_map('edge', table_column, number_scheme, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
 
 # ==============================================================================
 # III.d Mapping generators for widths
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_width_map(table_column,
-                       number_scheme=scheme_number_continuous(),
-                       mapping_type='c',
-                       default_number=None,
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_node_d_width_map(table_column,
+                         number_scheme=scheme_number_series(),
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate width map parameters for discrete or continuous values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): width value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_width_map('newcol', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_border_width_mapping`, :meth:`set_node_width_mapping`
+    """
+    return _gen_d_map('node', table_column, number_scheme, 'widths', 'default_width', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_node_c_width_map(table_column,
+                         number_scheme=scheme_number_continuous(),
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate width map parameters for discrete or continuous values in a node table
 
     Args:
@@ -2595,16 +2810,15 @@ def gen_node_width_map(table_column,
     See Also:
         :meth:`set_node_border_width_mapping`, :meth:`set_node_width_mapping`
     """
-    return _gen_map('node', table_column, number_scheme, mapping_type, 'widths', 'default_width', default_number, style_name, network, base_url)
+    return _gen_c_map('node', table_column, number_scheme, 'widths', 'default_width', default_number, style_name, network, base_url)
 
 @cy_log
-def gen_edge_width_map(table_column,
-                       number_scheme=scheme_number_continuous(),
-                       mapping_type='c',
-                       default_number=None,
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_edge_d_width_map(table_column,
+                         number_scheme=scheme_number_series(),
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate width map parameters for discrete or continuous values in an edge table
 
     Args:
@@ -2633,20 +2847,56 @@ def gen_edge_width_map(table_column,
     See Also:
         :meth:`set_edge_line_width_mapping`
     """
-    return _gen_map('edge', table_column, number_scheme, mapping_type, 'widths', 'default_width', default_number, style_name, network, base_url)
+    return _gen_d_map('edge', table_column, number_scheme, 'widths', 'default_width', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_c_width_map(table_column,
+                         number_scheme=scheme_number_continuous(),
+                         default_number=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
+    """Generate width map parameters for discrete or continuous values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        mapping_type (str): continuous or discrete (c, d); default is continuous
+        default_number (int): width value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_width_map('interaction', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_line_width_mapping`
+    """
+    return _gen_c_map('edge', table_column, number_scheme, 'widths', 'default_width', default_number, style_name, network, base_url)
 
 # ==============================================================================
 # III.e Mapping generators for heights
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_height_map(table_column,
-                        number_scheme=scheme_number_continuous(),
-                        mapping_type='c',
-                        default_number=None,
-                        style_name=None,
-                        network=None,
-                        base_url=DEFAULT_BASE_URL):
+def gen_node_d_height_map(table_column,
+                          number_scheme=scheme_number_series(),
+                          default_number=None,
+                          style_name=None,
+                          network=None,
+                          base_url=DEFAULT_BASE_URL):
     """Generate height map parameters for discrete or continuous values in a node table
 
     Args:
@@ -2675,20 +2925,55 @@ def gen_node_height_map(table_column,
     See Also:
         :meth:`set_node_height_mapping`
     """
-    return _gen_map('node', table_column, number_scheme, mapping_type, 'heights', 'default_height', default_number, style_name, network, base_url)
+    return _gen_d_map('node', table_column, number_scheme, 'heights', 'default_height', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_node_c_height_map(table_column,
+                          number_scheme=scheme_number_continuous(),
+                          default_number=None,
+                          style_name=None,
+                          network=None,
+                          base_url=DEFAULT_BASE_URL):
+    """Generate height map parameters for discrete or continuous values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): height value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_height_map('newcol', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_height_mapping`
+    """
+    return _gen_c_map('node', table_column, number_scheme, 'heights', 'default_height', default_number, style_name, network, base_url)
 
 # ==============================================================================
 # III.f Mapping generators for sizes
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_size_map(table_column,
-                      number_scheme=scheme_number_continuous(),
-                      mapping_type='c',
-                      default_number=None,
-                      style_name=None,
-                      network=None,
-                      base_url=DEFAULT_BASE_URL):
+def gen_node_d_size_map(table_column,
+                        number_scheme=scheme_number_series(),
+                        default_number=None,
+                        style_name=None,
+                        network=None,
+                        base_url=DEFAULT_BASE_URL):
     """Generate size map parameters for discrete or continuous values in a node table
 
     Args:
@@ -2717,22 +3002,56 @@ def gen_node_size_map(table_column,
     See Also:
         :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
     """
-    return _gen_map('node', table_column, number_scheme, mapping_type, 'sizes', 'default_size', default_number, style_name, network, base_url)
+    return _gen_d_map('node', table_column, number_scheme, 'sizes', 'default_size', default_number, style_name, network, base_url)
 
 @cy_log
-def gen_edge_size_map(table_column,
-                      number_scheme=scheme_number_continuous(),
-                      mapping_type='c',
-                      default_number=None,
-                      style_name=None,
-                      network=None,
-                      base_url=DEFAULT_BASE_URL):
+def gen_node_c_size_map(table_column,
+                        number_scheme=scheme_number_continuous(),
+                        default_number=None,
+                        style_name=None,
+                        network=None,
+                        base_url=DEFAULT_BASE_URL):
+    """Generate size map parameters for discrete or continuous values in a node table
+
+    Args:
+        table_column (str): Name of Cytoscape node table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): size value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_node_size_map('newcol', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
+    """
+    return _gen_c_map('node', table_column, number_scheme, 'sizes', 'default_size', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_d_size_map(table_column,
+                        number_scheme=scheme_number_series(),
+                        default_number=None,
+                        style_name=None,
+                        network=None,
+                        base_url=DEFAULT_BASE_URL):
     """Generate size map parameters for discrete or continuous values in an edge table
 
     Args:
         table_column (str): Name of Cytoscape edge table column to map values from
         number_scheme (func): Name of function that returns an opacity list of a given length
-        mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): size value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -2755,18 +3074,54 @@ def gen_edge_size_map(table_column,
     See Also:
         :meth:`set_edge_font_size_mapping`
     """
-    return _gen_map('edge', table_column, number_scheme, mapping_type, 'sizes', 'default_size', default_number, style_name, network, base_url)
+    return _gen_d_map('edge', table_column, number_scheme, 'sizes', 'default_size', default_number, style_name, network, base_url)
+
+@cy_log
+def gen_edge_c_size_map(table_column,
+                        number_scheme=scheme_number_continuous(),
+                        default_number=None,
+                        style_name=None,
+                        network=None,
+                        base_url=DEFAULT_BASE_URL):
+    """Generate size map parameters for discrete or continuous values in an edge table
+
+    Args:
+        table_column (str): Name of Cytoscape edge table column to map values from
+        number_scheme (func): Name of function that returns an opacity list of a given length
+        default_number (int): size value to set as default for all unmapped values
+        style_name (str): name for style
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+
+    Raises:
+        CyError: if network doesn't exist or mapping_type is unsupported
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> gen_edge_size_map('interaction', scheme_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+
+    See Also:
+        :meth:`set_edge_font_size_mapping`
+    """
+    return _gen_c_map('edge', table_column, number_scheme, 'sizes', 'default_size', default_number, style_name, network, base_url)
 
 # ==============================================================================
 # III.g Mapping generators for shapes
 # ------------------------------------------------------------------------------
 
 @cy_log
-def gen_node_shape_map(table_column,
-                       default_shape=None,
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_node_d_shape_map(table_column,
+                         default_shape=None,
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate shape map parameters for discrete values in a node table
 
     Args:
@@ -2787,21 +3142,21 @@ def gen_node_shape_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_shape_map('newcol', style_name='galFiltered Style')
+        >>> gen_node_d_shape_map('newcol', style_name='galFiltered Style')
         {'table_column': 'newcol', 'table_column_values': ['8', '7', '1'], 'shapes': ['VEE', 'OCTAGON', 'HEXAGON'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
     See Also:
         :meth:`set_node_shape_mapping`
     """
-    return _gen_shape_map('node', table_column, scheme_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
+    return _gen_d_shape_map('node', table_column, scheme_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
 
 @cy_log
-def gen_edge_line_style_map(table_column,
-                            default_line_style='SOLID',
-                            style_name=None,
-                            network=None,
-                            base_url=DEFAULT_BASE_URL):
+def gen_edge_d_line_style_map(table_column,
+                              default_line_style='SOLID',
+                              style_name=None,
+                              network=None,
+                              base_url=DEFAULT_BASE_URL):
     """Generate line style map parameters for discrete values in an edge table
 
     Args:
@@ -2822,20 +3177,20 @@ def gen_edge_line_style_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_line_style_map('interaction', style_name='galFiltered Style')
+        >>> gen_edge_d_line_style_map('interaction', style_name='galFiltered Style')
         {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'line_styles': ['PARALLEL_LINES', 'SINEWAVE'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_line_style_mapping`
     """
-    return _gen_shape_map('edge', table_column, scheme_line_styles(), 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
+    return _gen_d_shape_map('edge', table_column, scheme_line_styles(), 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
 
 @cy_log
-def gen_edge_arrow_map(table_column,
-                       default_shape='ARROW',
-                       style_name=None,
-                       network=None,
-                       base_url=DEFAULT_BASE_URL):
+def gen_edge_d_arrow_map(table_column,
+                         default_shape='ARROW',
+                         style_name=None,
+                         network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Generate arrow shape map parameters for discrete values in an edge table
 
     Args:
@@ -2856,55 +3211,13 @@ def gen_edge_arrow_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_arrow_map('interaction', style_name='galFiltered Style')
+        >>> gen_edge_d_arrow_map('interaction', style_name='galFiltered Style')
         {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'shapes': ['ARROW', 'T'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_source_arrow_shape_mapping`, :meth:`set_edge_target_arrow_shape_mapping`
     """
-    return _gen_shape_map('edge', table_column, scheme_arrow_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
-
-
-
-# Check table column, create the visual property map, and update Cytoscape's copy of the visual property
-def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
-                            style_name=None, network=None, base_url=DEFAULT_BASE_URL,
-                            supported_mappings=['c', 'd', 'p'], table='node'):
-    if range_map is not None: range_map = [str(x) for x in range_map]  # CyREST requires strings
-
-    # TODO: Added because all mappings need to do this. R code should probably adopt this, too
-    if not table_column_exists(table_column, table, network=network, base_url=base_url):
-        raise CyError(f'Table column "{table_column}" does not exist')
-
-    # perform mapping
-    mapping_type = _normalize_mapping(mapping_type, visual_prop_name, supported_mappings)
-    if mapping_type == 'c':
-        mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
-                                  network=network, base_url=base_url)
-    elif mapping_type == 'd':
-        mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
-                                  network=network, base_url=base_url)
-    elif mapping_type == 'p':
-        mvp = map_visual_property(visual_prop_name, table_column, 'p', network=network, base_url=base_url)
-    else:
-        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
-
-    res = update_style_mapping(style_name, mvp, base_url=base_url)
-    return res
-
-def _normalize_mapping(mapping_type, visual_prop_name, supported_mappings):
-    if mapping_type in ['continuous', 'c', 'interpolate']:
-        mapping_type = 'c'
-    elif mapping_type in ['discrete', 'd', 'lookup']:
-        mapping_type = 'd'
-    elif mapping_type in ['passthrough', 'p']:
-        mapping_type = 'p'
-
-    if mapping_type in supported_mappings:
-        return mapping_type
-    else:
-        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
-
+    return _gen_d_shape_map('edge', table_column, scheme_arrow_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
 # Generate a brewer palette of a given size, and interpolate if there isn't a palette of the desired size
 def _palette_color_brewer(value_count, palette):
@@ -2950,7 +3263,7 @@ def _palette_color_brewer(value_count, palette):
     return [f'#{c[0]:02X}{c[1]:02X}{c[2]:02X}'  for c in candidate_palette]
 
 # Given a list of shapes, trim the list to a desired size
-def _scheme_shapes(value_count, shapes, shape_name):
+def _scheme_d_shapes(value_count, shapes, shape_name):
     if value_count > len(shapes):
         raise CyError(f'Attempt to return {value_count} {shape_name}, but there are only {len(shapes)} {shape_name}')
     shapes.sort()
@@ -2958,72 +3271,163 @@ def _scheme_shapes(value_count, shapes, shape_name):
 
 # Find the unique values in a column, map them to a desired target set, and return a dictionary of parameter values
 # suitable for passing to style_mapping setter function
-def _gen_map(table,
-             table_column,
-             scheme,
-             mapping_type,
-             value_name,
-             default_name,
-             default_value,
-             style_name,
-             network,
-             base_url):
+def _gen_d_color_map(table,
+                     table_column,
+                     palette,
+                     default_value,
+                     style_name,
+                     network,
+                     base_url):
+    # Check palette and map values to colors
+    palette_func_name = palette[0]
+    palette_type = palette[1]
+    palette_func = palette[2]
 
+    if 'qualitative' not in palette_type:
+        narrate(f'Warning: {palette_func_name} is not a qualitative palette and may give poor results for a discrete mapping.')
+
+    return _gen_d_map(table, table_column, palette_func, 'colors', 'default_color', default_value, style_name, network, base_url)
+    # # Find out all of the values in the named column
+    # df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
+    #
+    # # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape)
+    # df_freq = df_values[table_column].value_counts()
+    #
+    # # Create the mapped values that correspond to the unique elements
+    # src_values = [str(i) for i in df_freq.index]
+    #
+    # dst_values = palette_func(len(src_values))
+    #
+    # return {'table_column': table_column, 'table_column_values': src_values, 'colors': dst_values,
+    #         'mapping_type': 'd', 'default_color': default_value, 'style_name': style_name,
+    #         'network': network, 'base_url': base_url}
+
+# Find the min/max values in a column, create a palette mapping, and return a dictionary of parameter values
+# suitable for passing to style_mapping setter function
+def _gen_c_color_map(table,
+                     table_column,
+                     palette,
+                     default_value,
+                     style_name,
+                     network,
+                     base_url):
     # Find out all of the values in the named column
     df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
 
-    # Start out with using preferred scheme
-    scheme_to_use = scheme[0] if type(scheme) is tuple else scheme
+    # Start out with using preferred palette (for continuous, there could be a one-tailed or two-tailed scheme)
+    palette_to_use = palette[0] if type(palette[0]) is tuple else palette
 
-    mapping_type = _normalize_mapping(mapping_type, value_name + ' generator', {'d', 'c'})
-    if mapping_type == 'd':
-        # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape)
-        df_freq = df_values[table_column].value_counts()
-
-        # Create the mapped values that correspond to the unique elements
-        src_values = [str(i)   for i in df_freq.index]
-        max_data = len(src_values) - 1
-        min_data = 0
-    elif mapping_type == 'c':
-        # For continuous, one tailed means all negative or all positive ... otherwise two-tailed with 0 in between
-        max_data = df_values[table_column].max()
-        min_data = df_values[table_column].min()
-        if type(max_data) in [int, float]:
-            if np.isnan(max_data):
-                raise CyError(f'Cannot perform continuous mapping on column "{table_column}", which is empty or does not exist')
-            if np.sign(min_data) == np.sign(max_data):
-                # One-tailed mapping ... btw: prefer sequential palette if color mapping
-                mid_data = min_data + (max_data - min_data) / 2
-                src_values = [min_data, mid_data, max_data]
-            else:
-                # Two-tailed mapping ... btw: prefer divergent palette if color mapping
-                max_max_data = max(abs(min_data), abs(max_data))
-                src_values = [-max_max_data, 0, max_max_data]
-                if type(scheme) is tuple and len(scheme) >= 2:
-                    scheme_to_use = scheme[1]
+    # For continuous, one tailed means all negative or all positive ... otherwise two-tailed with 0 in between
+    max_data = df_values[table_column].max()
+    min_data = df_values[table_column].min()
+    if type(max_data) in [int, float]:
+        if np.isnan(max_data):
+            min_data = 0
+            max_data = 1
+        if np.sign(min_data) == np.sign(max_data):
+            # One-tailed mapping ... btw: prefer sequential palette if color mapping
+            mid_data = min_data + (max_data - min_data) / 2
+            src_values = [min_data, mid_data, max_data]
+            best_palette = 'sequential'
+            map_type = 'one-tailed'
         else:
-            raise CyError(f'Cannot perform continuous mapping on column "{table_column}", which is not numeric')
+            # Two-tailed mapping ... btw: prefer divergent palette if color mapping
+            max_max_data = max(abs(min_data), abs(max_data))
+            src_values = [-max_max_data, 0, max_max_data]
+            if type(palette[0]) is tuple and len(palette) >= 2:
+                palette_to_use = palette[1]
+            best_palette = 'divergent'
+            map_type = 'two-tailed'
     else:
-        raise CyError(f'Unsupported mapping type "{mapping_type}"')
+        raise CyError(f'Cannot perform continuous mapping on column "{table_column}", which is not numeric')
 
-    dst_values = scheme_to_use(len(src_values), min_data, max_data)
-    return {'table_column': table_column, 'table_column_values': src_values, value_name: dst_values,
-            'mapping_type': mapping_type, default_name: default_value, 'style_name': style_name,
+    # Check palette and map values to colors
+    palette_func_name = palette_to_use[0]
+    palette_type = palette_to_use[1]
+    palette_func = palette_to_use[2]
+
+    if best_palette not in palette_type:
+        narrate(f'Warning: {palette_func_name} is not a {best_palette} palette and may give poor results for a {map_type} continuous mapping.')
+    dst_values = palette_func(len(src_values))
+
+    return {'table_column': table_column, 'table_column_values': src_values, 'colors': dst_values,
+            'mapping_type': 'c', 'default_color': default_value, 'style_name': style_name,
             'network': network, 'base_url': base_url}
 
 # Find the unique values in a column, map them to desired target shapes, and return a dictionary of parameter values
 # suiteable for passing to style_mapping setter function
-def _gen_shape_map(table,
-                   table_column,
-                   scheme,
-                   value_name,
-                   default_name,
-                   default_value,
-                   style_name,
-                   network,
-                   base_url):
-    shape_map = _gen_map(table, table_column, scheme, 'd', value_name, default_name, default_value, style_name, network, base_url)
+def _gen_d_shape_map(table,
+                     table_column,
+                     scheme,
+                     value_name,
+                     default_name,
+                     default_value,
+                     style_name,
+                     network,
+                     base_url):
+    shape_map = _gen_d_map(table, table_column, scheme, value_name, default_name, default_value, style_name, network, base_url)
     shape_map.pop('mapping_type')
     return shape_map
+
+# Find the unique values in a column, map them to a desired target set, and return a dictionary of parameter values
+# suitable for passing to style_mapping setter function
+def _gen_d_map(table,
+               table_column,
+               scheme,
+               value_name,
+               default_name,
+               default_value,
+               style_name,
+               network,
+               base_url):
+
+    # Find out all of the values in the named column
+    df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
+
+    # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape)
+    df_freq = df_values[table_column].value_counts()
+
+    # Create the mapped values that correspond to the unique elements
+    src_values = [str(i)   for i in df_freq.index]
+
+    dst_values = scheme(len(src_values))
+    return {'table_column': table_column, 'table_column_values': src_values, value_name: dst_values,
+            'mapping_type': 'd', default_name: default_value, 'style_name': style_name,
+            'network': network, 'base_url': base_url}
+
+
+# Find the unique values in a column, map them to a desired target set, and return a dictionary of parameter values
+# suitable for passing to style_mapping setter function
+def _gen_c_map(table,
+               table_column,
+               scheme,
+               value_name,
+               default_name,
+               default_value,
+               style_name,
+               network,
+               base_url):
+
+    # Find out all of the values in the named column
+    df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
+
+    # For continuous, create triple that contains min, mid, max
+    max_data = df_values[table_column].max()
+    min_data = df_values[table_column].min()
+    if type(max_data) in [int, float]:
+        if np.isnan(max_data):
+            min_data = 0
+            max_data = 1
+        mid_data = min_data + (max_data - min_data) / 2
+        src_values = [min_data, mid_data, max_data]
+    else:
+        raise CyError(f'Cannot perform continuous mapping on column "{table_column}", which is not numeric')
+
+    # Create map to min, mid, max values
+    dst_values = scheme(min_data, max_data)
+    return {'table_column': table_column, 'table_column_values': src_values, value_name: dst_values,
+            'mapping_type': 'c', default_name: default_value, 'style_name': style_name,
+            'network': network, 'base_url': base_url}
+
 
 

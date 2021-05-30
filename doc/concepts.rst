@@ -479,16 +479,16 @@ each to a different color in a Brewer palette:
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent(), style_name='galFiltered Style'))
 
-The general methodology is to use the value generator (e.g., ``gen_node_color_map()``) as the sole parameter to a
+The general methodology is to use the value generator (e.g., ``gen_node_c_color_map()``) as the sole parameter to a
 style mapping function, binding it by using the Python ** operator. The color value
 generators accept all of the same parameters as the color-oriented style mapping functions, and provides the same
 defaults for them. So,
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_Accent(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent(), style_name='galFiltered Style'))
 
 is the equivalent of:
 
@@ -503,28 +503,28 @@ is the equivalent of:
                            network=None,
                            base_url:'http://127.0.0.1:1234/v1')
 
-The ``palette_color_brewer_Accent()`` parameter is used to generate the specific ``colors`` values according to the predefined Brewer
+The ``palette_color_brewer_q_Accent()`` parameter is used to generate the specific ``colors`` values according to the predefined Brewer
 Accent palette. You can choose between any of the 8 `Brewer Qualitative Palettes <https://colorbrewer2.org>`_, which
 are widely regarded as aesthetic and visually effective.
 
 +-----------------+------------------------------------+
 | Color Palette   | palette_color Parameter            |
 +=================+====================================+
-| Brewer Pastel2  | ``palette_color_brewer_Pastel2``   |
+| Brewer Pastel2  | ``palette_color_brewer_q_Pastel2``   |
 +-----------------+------------------------------------+
-| Brewer Pastel1  | ``palette_color_brewer_Pastel1``   |
+| Brewer Pastel1  | ``palette_color_brewer_q_Pastel1``   |
 +-----------------+------------------------------------+
-| Brewer Dark2    | ``palette_color_brewer_Dark2``     |
+| Brewer Dark2    | ``palette_color_brewer_q_Dark2``     |
 +-----------------+------------------------------------+
-| Brewer Accent   | ``palette_color_brewer_Accent``    |
+| Brewer Accent   | ``palette_color_brewer_q_Accent``    |
 +-----------------+------------------------------------+
-| Brewer Paired   | ``palette_color_brewer_Paired``    |
+| Brewer Paired   | ``palette_color_brewer_q_Paired``    |
 +-----------------+------------------------------------+
-| Brewer Set1     | ``palette_color_brewer_Set1``      |
+| Brewer Set1     | ``palette_color_brewer_q_Set1``      |
 +-----------------+------------------------------------+
-| Brewer Set2     | ``palette_color_brewer_Set2``      |
+| Brewer Set2     | ``palette_color_brewer_q_Set2``      |
 +-----------------+------------------------------------+
-| Brewer Set3     | ``palette_color_brewer_Set3``      |
+| Brewer Set3     | ``palette_color_brewer_q_Set3``      |
 +-----------------+------------------------------------+
 | Random          | ``palette_color_random``           |
 +-----------------+------------------------------------+
@@ -539,13 +539,13 @@ can use an *edge* value generator with an *edge* mapping function.
 +-------------------------------+-------------------------------------------+
 | Generator                     | Style Function                            |
 +===============================+===========================================+
-| ``gen_node_color_map()``      | ``set_node_border_color_mapping()``       |
+| ``gen_node_c_color_map()``      | ``set_node_border_color_mapping()``       |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_node_color_mapping()``              |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_node_label_color_mapping()``        |
 +-------------------------------+-------------------------------------------+
-| ``gen_edge_color_map()``      | ``set_edge_color_mapping()``              |
+| ``gen_edge_c_color_map()``      | ``set_edge_color_mapping()``              |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_edge_label_color_mapping()``        |
 +-------------------------------+-------------------------------------------+
@@ -579,11 +579,11 @@ can use an *edge* value generator with an *edge* mapping function.
 +-------------------------------+-------------------------------------------+
 | ``gen_edge_size_map()``       | ``set_edge_font_size_mapping()``          |
 +-------------------------------+-------------------------------------------+
-| ``gen_node_shape_map()``      | ``set_node_shape_mapping()``              |
+| ``gen_node_d_shape_map()``      | ``set_node_shape_mapping()``              |
 +-------------------------------+-------------------------------------------+
-| ``gen_edge_line_style_map()`` | ``set_edge_line_style_mapping()``         |
+| ``gen_edge_d_line_style_map()`` | ``set_edge_line_style_mapping()``         |
 +-------------------------------+-------------------------------------------+
-| ``gen_edge_arrow_map()``      | ``set_edge_source_arrow_shape_mapping()`` |
+| ``gen_edge_d_arrow_map()``      | ``set_edge_source_arrow_shape_mapping()`` |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_edge_target_arrow_shape_mapping()`` |
 +-------------------------------+-------------------------------------------+
@@ -607,11 +607,11 @@ Shape generators don't require a ``scheme`` parameter. For example:
 
 .. code:: python
 
-    set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
+    set_node_shape_mapping(**gen_node_d_shape_map('Degree', style_name='galFiltered Style'))
 
-    set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_source_arrow_shape_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
 
-    set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_target_arrow_shape_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
 
 
 

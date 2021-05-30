@@ -280,10 +280,10 @@ Node Style Mapping Generators
 .. autosummary::
    :toctree: generated/
 
-   gen_node_color_map
+   gen_node_c_color_map
    gen_node_height_map
    gen_node_opacity_map
-   gen_node_shape_map
+   gen_node_d_shape_map
    gen_node_size_map
    gen_node_width_map
 
@@ -314,9 +314,9 @@ Edge Style Mapping Generators
 .. autosummary::
    :toctree: generated/
 
-   gen_edge_arrow_map
-   gen_edge_color_map
-   gen_edge_line_style_map
+   gen_edge_d_arrow_map
+   gen_edge_c_color_map
+   gen_edge_d_line_style_map
    gen_edge_opacity_map
    gen_edge_size_map
    gen_edge_width_map
@@ -337,54 +337,61 @@ Palettes for Discrete Color Generators
 .. autosummary::
    :toctree: generated/
 
-   palette_color_brewer_Accent
-   palette_color_brewer_Dark2
-   palette_color_brewer_Paired
-   palette_color_brewer_Pastel1
-   palette_color_brewer_Pastel2
-   palette_color_brewer_Set1
-   palette_color_brewer_Set2
-   palette_color_brewer_Set3
+   palette_color_brewer_q_Accent
+   palette_color_brewer_q_Dark2
+   palette_color_brewer_q_Paired
+   palette_color_brewer_q_Pastel1
+   palette_color_brewer_q_Pastel2
+   palette_color_brewer_q_Set1
+   palette_color_brewer_q_Set2
+   palette_color_brewer_q_Set3
    palette_color_random
+
+Schemes for Continuous Range Generators
+=======================================
+.. autosummary::
+   :toctree: generated/
+
+   scheme_number_continuous
 
 Palettes for One-Tailed Continuous (Sequential) Color Generators
 ================================================================
 .. autosummary::
    :toctree: generated/
 
-   palette_color_brewer_Blues
-   palette_color_brewer_BuGn
-   palette_color_brewer_BuPu
-   palette_color_brewer_GnBu
-   palette_color_brewer_Greens
-   palette_color_brewer_Greys
-   palette_color_brewer_Oranges
-   palette_color_brewer_OrRd
-   palette_color_brewer_PuBu
-   palette_color_brewer_PuBuGn
-   palette_color_brewer_RdPu
-   palette_color_brewer_PuRd
-   palette_color_brewer_Purples
-   palette_color_brewer_Reds
-   palette_color_brewer_YlGn
-   palette_color_brewer_YlGnBu
-   palette_color_brewer_YlOrBr
-   palette_color_brewer_YlOrRd
+   palette_color_brewer_s_Blues
+   palette_color_brewer_s_BuGn
+   palette_color_brewer_s_BuPu
+   palette_color_brewer_s_GnBu
+   palette_color_brewer_s_Greens
+   palette_color_brewer_s_Greys
+   palette_color_brewer_s_Oranges
+   palette_color_brewer_s_OrRd
+   palette_color_brewer_s_PuBu
+   palette_color_brewer_s_PuBuGn
+   palette_color_brewer_s_RdPu
+   palette_color_brewer_s_PuRd
+   palette_color_brewer_s_Purples
+   palette_color_brewer_s_Reds
+   palette_color_brewer_s_YlGn
+   palette_color_brewer_s_YlGnBu
+   palette_color_brewer_s_YlOrBr
+   palette_color_brewer_s_YlOrRd
 
 Palettes for Two-Tailed Continuous (Diverging) Color Generators
 ===============================================================
 .. autosummary::
    :toctree: generated/
 
-   palette_color_brewer_BrBG
-   palette_color_brewer_PiYG
-   palette_color_brewer_PRGn
-   palette_color_brewer_PuOr
-   palette_color_brewer_RdBu
-   palette_color_brewer_RdGy
-   palette_color_brewer_RdYlBu
-   palette_color_brewer_RdYlGn
-   palette_color_brewer_Spectral
+   palette_color_brewer_d_BrBG
+   palette_color_brewer_d_PiYG
+   palette_color_brewer_d_PRGn
+   palette_color_brewer_d_PuOr
+   palette_color_brewer_d_RdBu
+   palette_color_brewer_d_RdGy
+   palette_color_brewer_d_RdYlBu
+   palette_color_brewer_d_RdYlGn
+   palette_color_brewer_d_Spectral
 
 .. _stylevalues:
 
