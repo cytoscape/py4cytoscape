@@ -45,39 +45,31 @@ Node Style Mapping Generators
 .. autosummary::
    :toctree: generated/
 
-   gen_node_c_color_map
-   gen_node_c_height_map
-   gen_node_c_opacity_map
-   gen_node_c_size_map
-   gen_node_c_width_map
-   gen_node_d_color_map
-   gen_node_d_height_map
-   gen_node_d_opacity_map
-   gen_node_d_shape_map
-   gen_node_d_size_map
-   gen_node_d_width_map
+   gen_node_color_map
+   gen_node_height_map
+   gen_node_opacity_map
+   gen_node_shape_map
+   gen_node_size_map
+   gen_node_width_map
 
 Edge Style Mapping Generators
 =============================
 .. autosummary::
    :toctree: generated/
 
-   gen_edge_c_color_map
-   gen_edge_c_opacity_map
-   gen_edge_c_size_map
-   gen_edge_c_width_map
-   gen_edge_d_arrow_map
-   gen_edge_d_color_map
-   gen_edge_d_line_style_map
-   gen_edge_d_opacity_map
-   gen_edge_d_size_map
-   gen_edge_d_width_map
+   gen_edge_arrow_map
+   gen_edge_color_map
+   gen_edge_line_style_map
+   gen_edge_opacity_map
+   gen_edge_size_map
+   gen_edge_width_map
 
-Schemes for Discrete Shape Generators
-=====================================
+Schemes for Discrete Shape and Numeric Generators
+=================================================
 .. autosummary::
    :toctree: generated/
 
+   scheme_c_number_continuous
    scheme_d_arrow_shapes
    scheme_d_line_styles
    scheme_d_number_random
@@ -98,13 +90,6 @@ Palettes for Discrete (Qualitative) Color Generators
    palette_color_brewer_q_Set2
    palette_color_brewer_q_Set3
    palette_color_random
-
-Schemes for Continuous Range Generators
-=======================================
-.. autosummary::
-   :toctree: generated/
-
-   scheme_c_number_continuous
 
 Palettes for One-Tailed Continuous (Sequential) Color Generators
 ================================================================

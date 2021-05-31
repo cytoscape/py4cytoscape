@@ -579,11 +579,11 @@ can use an *edge* value generator with an *edge* mapping function.
 +-------------------------------+-------------------------------------------+
 | ``gen_edge_size_map()``       | ``set_edge_font_size_mapping()``          |
 +-------------------------------+-------------------------------------------+
-| ``gen_node_d_shape_map()``      | ``set_node_shape_mapping()``              |
+| ``gen_node_shape_map()``      | ``set_node_shape_mapping()``              |
 +-------------------------------+-------------------------------------------+
-| ``gen_edge_d_line_style_map()`` | ``set_edge_line_style_mapping()``         |
+| ``gen_edge_line_style_map()`` | ``set_edge_line_style_mapping()``         |
 +-------------------------------+-------------------------------------------+
-| ``gen_edge_d_arrow_map()``      | ``set_edge_source_arrow_shape_mapping()`` |
+| ``gen_edge_arrow_map()``      | ``set_edge_source_arrow_shape_mapping()`` |
 +-------------------------------+-------------------------------------------+
 |                               | ``set_edge_target_arrow_shape_mapping()`` |
 +-------------------------------+-------------------------------------------+
@@ -607,11 +607,11 @@ Shape generators don't require a ``scheme`` parameter. For example:
 
 .. code:: python
 
-    set_node_shape_mapping(**gen_node_d_shape_map('Degree', style_name='galFiltered Style'))
+    set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
 
-    set_edge_source_arrow_shape_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
 
-    set_edge_target_arrow_shape_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
 
 
 

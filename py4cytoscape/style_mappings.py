@@ -981,11 +981,11 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
     Examples:
         >>> set_node_shape_mapping('Degree', table_column_values=['1', '2'], shapes=['TRIANGLE', 'OCTAGON'], default_shape='ELLIPSE', style_name='galFiltered Style')
         ''
-        >>> set_node_shape_mapping(**gen_node_d_shape_map('Degree', style_name='galFiltered Style'))
+        >>> set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_node_d_shape_map`
+        :meth:`gen_node_shape_map`
     """
     # TODO: Verify shapes
 
@@ -1463,11 +1463,11 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
     Examples:
         >>> set_edge_line_style_mapping('interaction', table_column_values=['pp','pd'], shapes=['ZIGZAG', 'SINEWAVE'], default_shape='EQUAL_DASH', style_name='galFiltered Style')
         ''
-        >>> set_edge_line_style_mapping(**gen_edge_d_line_style_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_line_style_mapping(**gen_edge_line_style_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_d_line_style_map`
+        :meth:`gen_edge_line_style_map`
     """
     # TODO: Validate line style
 
@@ -1616,11 +1616,11 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
     Examples:
         >>> set_edge_target_arrow_maping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
-        >>> set_edge_target_arrow_maping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_target_arrow_maping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_d_arrow_map`
+        :meth:`gen_edge_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1664,11 +1664,11 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
     Examples:
         >>> set_edge_source_arrow_mapping('interaction', table_column_values=['pp','pd'], shapes=['CIRCLE', 'ARROW'], default_shape='NONE', style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     See Also:
-        :meth:`gen_edge_d_arrow_map`
+        :meth:`gen_edge_arrow_map`
     """
     # TODO: Validate shape
 
@@ -1815,7 +1815,7 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_target_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_target_mapping(**gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_target_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     Note:
@@ -1857,14 +1857,14 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_shape_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_shape_mapping(gen_edge_d_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_shape_mapping(gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     Note:
         This is the same function as ``set_edge_source_arrow_mapping()``
 
     See also:
-        :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_d_arrow_map`
+        :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_arrow_map`
 
     """
     return set_edge_source_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
@@ -1910,7 +1910,7 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
         raise CyError(f'Table column "{table_column}" does not exist')
 
     # perform mapping
-    mapping_type = _normalize_mapping(mapping_type, visual_prop_name, supported_mappings)
+    mapping_type = normalize_mapping(mapping_type, visual_prop_name, supported_mappings)
     if mapping_type == 'c':
         mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
                                   network=network, base_url=base_url)
@@ -1924,20 +1924,6 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
 
     res = update_style_mapping(style_name, mvp, base_url=base_url)
     return res
-
-# Figure out which kind of mapping is being used
-def _normalize_mapping(mapping_type, visual_prop_name, supported_mappings):
-    if mapping_type in ['continuous', 'c', 'interpolate']:
-        mapping_type = 'c'
-    elif mapping_type in ['discrete', 'd', 'lookup']:
-        mapping_type = 'd'
-    elif mapping_type in ['passthrough', 'p']:
-        mapping_type = 'p'
-
-    if mapping_type in supported_mappings:
-        return mapping_type
-    else:
-        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
 
 
 

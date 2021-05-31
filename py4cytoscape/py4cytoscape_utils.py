@@ -530,6 +530,21 @@ def build_url(base_url=DEFAULT_BASE_URL, command=None):
     else:
         return base_url
 
+
+# Figure out which kind of visual style mapping is being used
+def normalize_mapping(mapping_type, visual_prop_name, supported_mappings):
+    if mapping_type in ['continuous', 'c', 'interpolate']:
+        mapping_type = 'c'
+    elif mapping_type in ['discrete', 'd', 'lookup']:
+        mapping_type = 'd'
+    elif mapping_type in ['passthrough', 'p']:
+        mapping_type = 'p'
+
+    if mapping_type in supported_mappings:
+        return mapping_type
+    else:
+        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
+
 def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names if list is unique
     if item_names is None: return None
