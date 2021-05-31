@@ -50,10 +50,10 @@ def cyPalette(name='set1'):
         name (str): name of a set of colors (e.g., 'set1', 'burd')
 
     Returns:
-         list: list of color values in the palette
+         list: list of color values in the cy_palette
 
     Raises:
-        KeyError: if palette name is invalid
+        KeyError: if cy_palette name is invalid
 
     Examples:
         >>> cyPalette()

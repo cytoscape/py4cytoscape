@@ -312,7 +312,7 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         columns (list): List of node column names to be displayed, in order.
         type (str): Type of bar chart: GROUPED (default), STACKED, HEAT_STRIPS, or UP_DOWN
         colors (list): List of colors to be matched with columns or with range, depending on type. Default is a
-            set of colors from an appropriate Brewer palette.
+            set of colors from an appropriate Brewer cy_palette.
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         orientation (str): HORIZONTAL or VERTICAL (default).
         col_axis (bool): Show axis with column labels. Default is False.
@@ -390,7 +390,7 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
     Args:
         columns (list): List of node column names to be displayed, in order.
         colors (list): List of colors to be matched with columns or with range, depending on type. Default is a
-            set of colors from an appropriate Brewer palette.
+            set of colors from an appropriate Brewer cy_palette.
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         orientation (str): HORIZONTAL or VERTICAL (default).
         col_axis (bool): Show axis with column labels. Default is False.
@@ -457,7 +457,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
     Args:
         columns (list): List of node column names to be displayed, in order.
         colors (list): List of colors to be matched with columns or with range, depending on type. Default is a
-            set of colors from an appropriate Brewer palette.
+            set of colors from an appropriate Brewer cy_palette.
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         orientation (str): HORIZONTAL (default) or VERTICAL.
         range_axis (bool): Show axis with range of values. Default is False.
@@ -525,7 +525,7 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
     Args:
         columns (list): List of node column names to be displayed, in order.
         colors (list): List of colors to be matched with columns or with range, depending on type. Default is a
-            set of colors from an appropriate Brewer palette.
+            set of colors from an appropriate Brewer cy_palette.
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         line_width (float): Width of chart line. Default is 1.0.
         range_axis (bool): Show axis with range of values. Default is False.
@@ -590,7 +590,7 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
     Args:
         columns (list): List of node column names to be displayed, in order.
         colors (list): List of colors to be matched with columns or with range, depending on type. Default is a
-            set of colors from an appropriate Brewer palette.
+            set of colors from an appropriate Brewer cy_palette.
         start_angle (float): Angle to start filling pie. Default is 0.0.
         slot (int): Which custom graphics slot to modify. Slots 1-9 are available for independent charts, gradients
             and images. Default is 1.

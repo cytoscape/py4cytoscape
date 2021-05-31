@@ -35,6 +35,7 @@ from .user_interface import *
 from .network_views import *
 from .styles import *
 from .style_mappings import *
+from .style_auto_mappings import *
 from .style_defaults import *
 from .style_values import *
 from .style_dependencies import *

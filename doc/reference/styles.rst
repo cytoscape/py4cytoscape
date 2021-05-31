@@ -33,6 +33,118 @@ Visual Property Names and Values
    get_node_shapes
    get_visual_property_names
 
+.. _styleautomappings:
+
+Style Automatic Mappings
+------------------------
+
+.. automodule:: py4cytoscape.style_auto_mappings
+
+Node Style Mapping Generators
+=============================
+.. autosummary::
+   :toctree: generated/
+
+   gen_node_c_color_map
+   gen_node_c_height_map
+   gen_node_c_opacity_map
+   gen_node_c_size_map
+   gen_node_c_width_map
+   gen_node_d_color_map
+   gen_node_d_height_map
+   gen_node_d_opacity_map
+   gen_node_d_shape_map
+   gen_node_d_size_map
+   gen_node_d_width_map
+
+Edge Style Mapping Generators
+=============================
+.. autosummary::
+   :toctree: generated/
+
+   gen_edge_c_color_map
+   gen_edge_c_opacity_map
+   gen_edge_c_size_map
+   gen_edge_c_width_map
+   gen_edge_d_arrow_map
+   gen_edge_d_color_map
+   gen_edge_d_line_style_map
+   gen_edge_d_opacity_map
+   gen_edge_d_size_map
+   gen_edge_d_width_map
+
+Schemes for Discrete Shape Generators
+=====================================
+.. autosummary::
+   :toctree: generated/
+
+   scheme_d_arrow_shapes
+   scheme_d_line_styles
+   scheme_d_number_random
+   scheme_d_number_series
+   scheme_d_shapes
+
+Palettes for Discrete (Qualitative) Color Generators
+====================================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_q_Accent
+   palette_color_brewer_q_Dark2
+   palette_color_brewer_q_Paired
+   palette_color_brewer_q_Pastel1
+   palette_color_brewer_q_Pastel2
+   palette_color_brewer_q_Set1
+   palette_color_brewer_q_Set2
+   palette_color_brewer_q_Set3
+   palette_color_random
+
+Schemes for Continuous Range Generators
+=======================================
+.. autosummary::
+   :toctree: generated/
+
+   scheme_c_number_continuous
+
+Palettes for One-Tailed Continuous (Sequential) Color Generators
+================================================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_s_Blues
+   palette_color_brewer_s_BuGn
+   palette_color_brewer_s_BuPu
+   palette_color_brewer_s_GnBu
+   palette_color_brewer_s_Greens
+   palette_color_brewer_s_Greys
+   palette_color_brewer_s_Oranges
+   palette_color_brewer_s_OrRd
+   palette_color_brewer_s_PuBu
+   palette_color_brewer_s_PuBuGn
+   palette_color_brewer_s_RdPu
+   palette_color_brewer_s_PuRd
+   palette_color_brewer_s_Purples
+   palette_color_brewer_s_Reds
+   palette_color_brewer_s_YlGn
+   palette_color_brewer_s_YlGnBu
+   palette_color_brewer_s_YlOrBr
+   palette_color_brewer_s_YlOrRd
+
+Palettes for Two-Tailed Continuous (Diverging) Color Generators
+===============================================================
+.. autosummary::
+   :toctree: generated/
+
+   palette_color_brewer_d_BrBG
+   palette_color_brewer_d_PiYG
+   palette_color_brewer_d_PRGn
+   palette_color_brewer_d_PuOr
+   palette_color_brewer_d_RdBu
+   palette_color_brewer_d_RdGy
+   palette_color_brewer_d_RdYlBu
+   palette_color_brewer_d_RdYlGn
+   palette_color_brewer_d_Spectral
+
 .. _stylebypasses:
 
 Style Bypasses
@@ -275,18 +387,6 @@ Node Style Mappings
    set_node_tooltip_mapping
    set_node_width_mapping
 
-Node Style Mapping Generators
-=============================
-.. autosummary::
-   :toctree: generated/
-
-   gen_node_c_color_map
-   gen_node_height_map
-   gen_node_opacity_map
-   gen_node_d_shape_map
-   gen_node_size_map
-   gen_node_width_map
-
 Edge Style Mappings
 ===================
 .. autosummary::
@@ -308,90 +408,6 @@ Edge Style Mappings
    set_edge_target_arrow_maping
    set_edge_target_arrow_shape_mapping
    set_edge_tooltip_mapping
-
-Edge Style Mapping Generators
-=============================
-.. autosummary::
-   :toctree: generated/
-
-   gen_edge_d_arrow_map
-   gen_edge_c_color_map
-   gen_edge_d_line_style_map
-   gen_edge_opacity_map
-   gen_edge_size_map
-   gen_edge_width_map
-
-Schemes for Discrete Shape Generators
-=====================================
-.. autosummary::
-   :toctree: generated/
-
-   scheme_arrow_shapes
-   scheme_line_styles
-   scheme_number_random
-   scheme_number_series
-   scheme_shapes
-
-Palettes for Discrete Color Generators
-======================================
-.. autosummary::
-   :toctree: generated/
-
-   palette_color_brewer_q_Accent
-   palette_color_brewer_q_Dark2
-   palette_color_brewer_q_Paired
-   palette_color_brewer_q_Pastel1
-   palette_color_brewer_q_Pastel2
-   palette_color_brewer_q_Set1
-   palette_color_brewer_q_Set2
-   palette_color_brewer_q_Set3
-   palette_color_random
-
-Schemes for Continuous Range Generators
-=======================================
-.. autosummary::
-   :toctree: generated/
-
-   scheme_number_continuous
-
-Palettes for One-Tailed Continuous (Sequential) Color Generators
-================================================================
-.. autosummary::
-   :toctree: generated/
-
-   palette_color_brewer_s_Blues
-   palette_color_brewer_s_BuGn
-   palette_color_brewer_s_BuPu
-   palette_color_brewer_s_GnBu
-   palette_color_brewer_s_Greens
-   palette_color_brewer_s_Greys
-   palette_color_brewer_s_Oranges
-   palette_color_brewer_s_OrRd
-   palette_color_brewer_s_PuBu
-   palette_color_brewer_s_PuBuGn
-   palette_color_brewer_s_RdPu
-   palette_color_brewer_s_PuRd
-   palette_color_brewer_s_Purples
-   palette_color_brewer_s_Reds
-   palette_color_brewer_s_YlGn
-   palette_color_brewer_s_YlGnBu
-   palette_color_brewer_s_YlOrBr
-   palette_color_brewer_s_YlOrRd
-
-Palettes for Two-Tailed Continuous (Diverging) Color Generators
-===============================================================
-.. autosummary::
-   :toctree: generated/
-
-   palette_color_brewer_d_BrBG
-   palette_color_brewer_d_PiYG
-   palette_color_brewer_d_PRGn
-   palette_color_brewer_d_PuOr
-   palette_color_brewer_d_RdBu
-   palette_color_brewer_d_RdGy
-   palette_color_brewer_d_RdYlBu
-   palette_color_brewer_d_RdYlGn
-   palette_color_brewer_d_Spectral
 
 .. _stylevalues:
 
