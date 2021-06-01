@@ -2,9 +2,9 @@
 
 """Functions for defining automatic MAPPINGS between table column values and visual properties, organized into sections:
 
-I. Palettes for color mapping generators
-II. Schemes for discrete and numerical mapping generators
-III. Functions for automatically mapping discrete values to colors, opacities, sizes, heights, widths and shapes
+* I. Palettes for color mapping generators
+* II. Schemes for discrete and numerical mapping generators
+* III. Functions for automatically mapping discrete values to colors, opacities, sizes, heights, widths and shapes
 
 See style_mappings for manual mapping generation
 """
@@ -737,7 +737,7 @@ def gen_node_opacity_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return an opacity list of a given length
         mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): Opacity value to set as default for all unmapped values
         style_name (str): name for style
@@ -789,7 +789,7 @@ def gen_edge_opacity_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape edge table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return an opacity list of a given length
         default_number (int): Opacity value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -844,7 +844,7 @@ def gen_node_width_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return a width list of a given length
         default_number (int): width value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -895,7 +895,7 @@ def gen_edge_width_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape edge table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return an width list of a given length
         mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): width value to set as default for all unmapped values
         style_name (str): name for style
@@ -951,7 +951,7 @@ def gen_node_height_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return a height list of a given length
         mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): height value to set as default for all unmapped values
         style_name (str): name for style
@@ -962,7 +962,7 @@ def gen_node_height_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to a height style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist, or mapping_type is unsupported, or number_scheme doesn't match mapping_type
@@ -1007,7 +1007,7 @@ def gen_node_size_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return a size list of a given length
         mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): size value to set as default for all unmapped values
         style_name (str): name for style
@@ -1018,7 +1018,7 @@ def gen_node_size_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to a size style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist, or mapping_type is unsupported, or number_scheme doesn't match mapping_type
@@ -1059,7 +1059,7 @@ def gen_edge_size_map(table_column,
 
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
-        number_scheme (dict or tuple): Descriptor for functions that return an opacity list of a given length
+        number_scheme (dict or func): Descriptor for functions that return a size list of a given length
         default_number (int): size value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -1069,7 +1069,7 @@ def gen_edge_size_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to a size style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist, or mapping_type is unsupported, or number_scheme doesn't match mapping_type
@@ -1113,7 +1113,7 @@ def gen_node_shape_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to a shape style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist or if the number of discrete values exceed the number of available shapes
@@ -1148,7 +1148,7 @@ def gen_edge_line_style_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to a line style style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist or if the number of discrete values exceed the number of available line styles
@@ -1182,7 +1182,7 @@ def gen_edge_arrow_map(table_column,
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict: Collection of parameter values suitable for passing to a width style_mappings setter function
+        dict: Collection of parameter values suitable for passing to an arrow style_mappings setter function
 
     Raises:
         CyError: if network doesn't exist or if the number of discrete values exceed the number of available arrow styles

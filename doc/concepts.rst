@@ -445,7 +445,7 @@ of publishing a workflow as a Notebook?
 Value Generators
 ----------------
 
-You can set visual graph attributes (e.g., color, size, opacity and shapes) according to attributes assigned to
+You can set visual graph attributes (e.g., color, size, opacity and shapes) according to attribute data assigned to
 nodes or edges by using Style Mapping functions such as ``set_node_color_mapping()`` or ``set_node_size_mapping()``.
 As described in the `Cytoscape Manual <http://manual.cytoscape.org/en/stable/Styles.html#how-mappings-work>`_, there
 are three different ways to map node or edge attributes to visual attributes.
@@ -453,12 +453,12 @@ are three different ways to map node or edge attributes to visual attributes.
 Briefly:
 
 * *continuous* mappings map a range of values to a color gradient or a range of sizes, opacities et al
-* *discrete* mappings allow specific values to map to specific colors or sizes, opacities et al
+* *discrete* mappings allow specific values to map to specific colors, sizes, opacities et al
 * *passthrough* mappings allow node or edge labels to be taken from node or edge attributes
 
 A `value generator <http://manual.cytoscape.org/en/stable/Styles.html#automatic-value-generators>`_ makes
 *discrete* or *continuous* mappings more convenient by automatically mapping attribute data values to visual attributes.
-It first determines the unique values of a particular node or edge attribute, then allows you to choose
+It first determines the unique data values for a given node or edge attribute, then allows you to choose
 a mapping to colors, sizes, opacities or shapes. For example, you can use a value generator to map a node with
 a `Degree` attribute having values 1, 10 and 20 to node fill colors of Red, Blue or Green ... or to a node size
 of 100, 150 or 200 ... or to circle, square or diamond shapes.
@@ -467,24 +467,32 @@ Essentially, a *value generator* spares you from having to know both the specifi
 the specifics of the visual attributes to display ... it lets you focus on whether to render the attribute as a color,
 size, opacity or shape.
 
-For example, to set a node's fill color based on its Degree attribute using a style mapping function, you could use the
-longhand (without value generator) where you know the unique Degree values in advance and choose specific colors to
+For example, to set a node's fill color based on its `Degree` attribute using a *discrete* style mapping function, you could use the
+longhand (without value generator) where you know the unique `Degree` values in advance and choose specific colors to
 represent them:
 
 .. code:: python
 
-    set_node_color_mapping('Degree', ['1', '10', '20'], ['#FF0000', '#00FF00', '#0000FF], mapping_type='d', style_name='galFiltered Style')
+    set_node_color_mapping('Degree',
+                           ['1', '10', '20'],
+                           ['#FF0000', '#00FF00', '#0000FF],
+                           mapping_type='d',
+                           style_name='galFiltered Style')
 
-.. note:: For color-oriented visual attributes, py4cytoscape offers a wide range of `Brewer palettes <https://colorbrewer2.org>`_, which are widely regarded as aesthetic and visually effective.
-
-Instead, you could use a color value generator that determines the unique Degree values and assigns
-each to a different color in a `Brewer palette <https://colorbrewer2.org>`_. The following example shows *discrete*
-mapping, where specific values are mapped to specific colors or visual attributes.
+Instead, you could use a color value generator that determines the unique `Degree` values and assigns
+each to a different color in a `Brewer palette <https://colorbrewer2.org>`_:
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', mapping_type='d', style_name='galFiltered Style'))
-    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree',
+                                                mapping_type='d',
+                                                style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree',
+                                                palette_color_brewer_q_Accent(),
+                                                mapping_type='d',
+                                                style_name='galFiltered Style'))
+
+.. note:: For color-oriented visual attributes, py4cytoscape offers a wide range of `Brewer palettes <https://colorbrewer2.org>`_, which are widely regarded as aesthetic and visually effective.
 
 The first form uses a default Brewer palette (Set2), and the second form shows how you can choose a different Brewer palette (Accent).
 
@@ -494,37 +502,47 @@ To map attributes to a gradient of colors, sizes, opacities, etc, use *continuou
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', style_name='galFiltered Style'))
-    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_s_YlGn(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree',
+                                                style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree',
+                                                palette_color_brewer_s_YlGn(),
+                                                style_name='galFiltered Style'))
 
 The first form uses a default Brewer palette (GnBu), and the second form shows how you can choose a different Brewer palette (YlGn).
 
 .. note:: Brewer palettes appropriate for *continuous* mappings of same-signed values are called *sequential* palettes, and are distinguished in py4cytoscape by the "_s_" in the palette name.
 
-.. note:: Brewer palettes appropriate for *continuous* mappings of different-signed values are called *divergent* palettes, and are distinguished in py4cytoscape by the "_d_" in the palette name.
+.. note:: Brewer palettes appropriate for *continuous* mappings of mixed-signed values are called *divergent* palettes, and are distinguished in py4cytoscape by the "_d_" in the palette name.
 
-It's likely that the 'Degree' would have only positive values, so a *sequential* Brewer palette would be appropriate.
+It's likely that the `Degree` attribute would have only positive values, so a *sequential* Brewer palette would be appropriate.
 When the distribution of attribute data values isn't known in advance, you can provide both a sequential and divergent
 palette and let py4cytoscape choose between them based on the data values it finds:
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Expressed', style_name='galFiltered Style'))
-    set_node_color_mapping(**gen_node_color_map('Expressed', (palette_color_brewer_s_YlGn(), palette_color_brewer_d_Spectral()), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Expressed',
+                                                style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Expressed',
+                                                (palette_color_brewer_s_YlGn(), palette_color_brewer_d_Spectral()),
+                                                style_name='galFiltered Style'))
 
 The first form uses default sequential and divergent palettes (GnBu and RdYlBu), and the second form shows how to use
-a tuple to specify the sequential and divergent palettes to use.
+a tuple to specify which sequential and divergent palettes to use.
 
 The general methodology is to use the value generator (e.g., ``gen_node_color_map()``) as the sole parameter to a
 style mapping function, binding it by using the Python ** operator. py4cytoscape provides color generators (for use with
-color mapping functions (e.g., ``set_node_color_mapping()``), opacity generators (for use with opacity mapping functions (e.g., ``set_node_opacity_mapping()``), and other generators (e.g., size, width, height, shapes).
+color mapping functions (e.g., ``set_node_color_mapping()``), opacity generators (for use with opacity mapping
+functions (e.g., ``set_node_opacity_mapping()``), and other generators (e.g., size, width, height, shapes).
 
 Each generator accepts all of the same parameters as the corresponding style mapping functions, and provides the same
 defaults for them. So,
 
 .. code:: python
 
-    set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_q_Accent(), style_name='galFiltered Style'))
+    set_node_color_mapping(**gen_node_color_map('Degree',
+                                                 palette_color_brewer_q_Accent(),
+                                                 mapping_type='d',
+                                                 style_name='galFiltered Style'))
 
 is the equivalent of:
 
@@ -555,20 +573,37 @@ Examples of non-color mappings that use ranges and random distributions include:
 
 .. code:: python
 
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', mapping_type='d', style_name='galFiltered Style'))
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style'))
-    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_random(min_value=10, max_value=120), mapping_type='d', style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree',
+                                                         mapping_type='d',
+                                                         style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree',
+                                                         scheme_d_number_series(start_value=100, step=20),
+                                                         mapping_type='d',
+                                                         style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree',
+                                                         scheme_d_number_random(min_value=10, max_value=120),
+                                                         mapping_type='d',
+                                                         style_name='galFiltered Style'))
+    set_node_fill_opacity_mapping(**gen_node_opacity_map('Expressed',
+                                                         scheme_c_number_continuous(start_value=50, end_value=200),
+                                                         style_name='galFiltered Style'))
 
 Note that the default value generator for a numeric attribute is scheme_d_number_series(start_value=0, step=10). The default
 range for a random distribution is 0..255.
+
+Note that the last form shows a *continuous* mapping where the node opacity is set to range from 50 to 200, depending on
+the value of the `Expressed` attribute. The normal range defaults to 10..30.
 
 Shape generators don't require a ``scheme`` parameter, and automatically have a ``mapping_type`` of 'd'. For example:
 
 .. code:: python
 
-    set_node_shape_mapping(**gen_node_shape_map('Degree', style_name='galFiltered Style'))
+    set_node_shape_mapping(**gen_node_shape_map('Degree',
+                                                style_name='galFiltered Style'))
 
-    set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction',
+                                                             style_name='galFiltered Style'))
 
-    set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+    set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction',
+                                                             style_name='galFiltered Style'))
 

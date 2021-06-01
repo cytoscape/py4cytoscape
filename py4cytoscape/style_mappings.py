@@ -764,9 +764,9 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_node_font_size_mapping('Degree', table_column_values=['1', '2'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_font_size_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        >>> set_node_font_size_mapping(**gen_node_size_map('Degree', mapping_type='d'))
         ''
-        >>> set_node_font_size_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
+        >>> set_node_font_size_mapping(**gen_node_size_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
@@ -814,9 +814,9 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
         ''
         >>> set_node_height_mapping('Degree', table_column_values=['1', '2'], sizes=[140, 190], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_height_mapping(**gen_node_width_map('Degree', mapping_type='d'))
+        >>> set_node_height_mapping(**gen_node_height_map('Degree', mapping_type='d'))
         ''
-        >>> set_node_height_mapping(**gen_node_width_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
+        >>> set_node_height_mapping(**gen_node_height_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_height_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
@@ -1066,9 +1066,9 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
         ''
         >>> set_node_size_mapping('Degree', table_column_values=['1', '2'], sizes=[60, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_size_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        >>> set_node_size_mapping(**gen_node_size_map('Degree', mapping_type='d'))
         ''
-        >>> set_node_size_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
+        >>> set_node_size_mapping(**gen_node_size_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_size_mapping('PassthruCol', mapping_type='p', default_opacity=40, style_name='galFiltered Style')
         ''
@@ -1323,9 +1323,9 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_edge_font_size_mapping('interaction', table_column_values=['pp', 'pd'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_edge_font_size_mapping(**gen_edge_opacity_map('interaction', mapping_type='d'))
+        >>> set_edge_font_size_mapping(**gen_edge_size_map('interaction', mapping_type='d'))
         ''
-        >>> set_edge_font_size_mapping(**gen_edge_opacity_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
+        >>> set_edge_font_size_mapping(**gen_edge_size_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_edge_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
@@ -1929,7 +1929,7 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
     Examples:
         >>> set_edge_source_arrow_shape_mapping('interaction', table_column_values=['pp','pd'], shapes=['DIAMOND', 'CIRCLE'], style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_shape_mapping(gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_shape_mapping(**gen_edge_arrow_map('interaction', style_name='galFiltered Style'))
         ''
 
     Note:
