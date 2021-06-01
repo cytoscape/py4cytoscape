@@ -2,9 +2,9 @@
 
 """Functions for defining automatic MAPPINGS between table column values and visual properties, organized into sections:
 
-* I. Palettes for color mapping generators
-* II. Schemes for discrete and numerical mapping generators
-* III. Functions for automatically mapping discrete values to colors, opacities, sizes, heights, widths and shapes
+I. Palettes for color mapping generators
+II. Schemes for discrete and numerical mapping generators
+III. Functions for automatically mapping discrete values to colors, opacities, sizes, heights, widths and shapes
 
 See style_mappings for manual mapping generation
 """

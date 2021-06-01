@@ -492,11 +492,11 @@ each to a different color in a `Brewer palette <https://colorbrewer2.org>`_:
                                                 mapping_type='d',
                                                 style_name='galFiltered Style'))
 
-.. note:: For color-oriented visual attributes, py4cytoscape offers a wide range of `Brewer palettes <https://colorbrewer2.org>`_, which are widely regarded as aesthetic and visually effective.
-
 The first form uses a default Brewer palette (Set2), and the second form shows how you can choose a different Brewer palette (Accent).
 
-.. note:: Brewer palettes appropriate for discrete mappings are called *qualititive* palettes, and are distinguished in py4cytoscape by the "_q_" in the palette name.
+.. note:: For color-oriented visual attributes, py4cytoscape offers a wide range of `Brewer palettes <https://colorbrewer2.org>`_, which are widely regarded as aesthetic and visually effective.
+
+.. note:: Brewer palettes appropriate for *discrete* mappings are called *qualititive* palettes, and are distinguished in py4cytoscape by the "_q_" in the palette name.
 
 To map attributes to a gradient of colors, sizes, opacities, etc, use *continuous* mapping:
 
