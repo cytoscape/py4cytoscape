@@ -362,13 +362,21 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
         ''
         >>> set_node_border_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
+        >>> set_node_border_color_mapping(**gen_node_color_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_border_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_node_border_color_mapping(**gen_node_color_map('AverageShortestPathLength'))
+        ''
+        >>> set_node_border_color_mapping(**gen_node_color_map('AverageShortestPathLength', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_node_border_color_mapping(**gen_node_color_map('AverageShortestPathLength', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_node_border_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_c_color_map`
+        :meth:`gen_node_color_map`
     """
     verify_hex_colors(colors)
 
@@ -413,7 +421,9 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
         ''
         >>> set_node_border_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_border_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_border_opacity_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_border_opacity_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_border_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -470,7 +480,9 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
         ''
         >>> set_node_border_width_mapping('Degree', table_column_values=['1', '2'], widths=[5, 10], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_border_width_mapping(**gen_node_width_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_border_width_mapping(**gen_node_width_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_border_width_mapping(**gen_node_width_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_border_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
@@ -519,13 +531,21 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_node_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
+        >>> set_node_color_mapping(**gen_node_color_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_node_color_mapping(**gen_node_color_map('AverageShortestPathLength'))
+        ''
+        >>> set_node_color_mapping(**gen_node_color_map('AverageShortestPathLength', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_node_color_mapping(**gen_node_color_map('AverageShortestPathLength', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_node_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_c_color_map`
+        :meth:`gen_node_color_map`
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -574,7 +594,9 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_node_combo_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_combo_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_combo_opacity_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_combo_opacity_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_combo_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -640,7 +662,9 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
         ''
         >>> set_node_fill_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_fill_opacity_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_fill_opacity_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_fill_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -740,7 +764,9 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_node_font_size_mapping('Degree', table_column_values=['1', '2'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_font_size_mapping(**gen_node_size_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_font_size_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_font_size_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
@@ -788,7 +814,9 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
         ''
         >>> set_node_height_mapping('Degree', table_column_values=['1', '2'], sizes=[140, 190], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_height_mapping(**gen_node_height_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_height_mapping(**gen_node_width_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_height_mapping(**gen_node_width_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_height_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
@@ -877,13 +905,21 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_node_label_color_mapping('Degree', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_node_label_color_mapping(**gen_node_c_color_map('Degree', palette_color_brewer_q_Accent, style_name='galFiltered Style'))
+        >>> set_node_label_color_mapping(**gen_node_color_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_label_color_mapping(**gen_node_color_map('Degree', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_node_label_color_mapping(**gen_node_color_map('AverageShortestPathLength'))
+        ''
+        >>> set_node_label_color_mapping(**gen_node_color_map('AverageShortestPathLength', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_node_label_color_mapping(**gen_node_color_map('AverageShortestPathLength', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_node_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_node_c_color_map`
+        :meth:`gen_node_color_map`
     """
     verify_hex_colors(colors)
 
@@ -927,7 +963,9 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_node_label_opacity_mapping('Degree', table_column_values=['1', '2'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_label_opacity_mapping(**gen_node_opacity_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_label_opacity_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_label_opacity_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_label_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -1028,7 +1066,9 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
         ''
         >>> set_node_size_mapping('Degree', table_column_values=['1', '2'], sizes=[60, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_size_mapping(**gen_node_size_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_size_mapping(**gen_node_opacity_map('Degree', mapping_type='d'))
+        ''
+        >>> set_node_size_mapping(**gen_node_opacity_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_size_mapping('PassthruCol', mapping_type='p', default_opacity=40, style_name='galFiltered Style')
         ''
@@ -1115,7 +1155,9 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
         ''
         >>> set_node_width_mapping('Degree', table_column_values=['1', '2'], sizes=[140, 190], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_node_width_mapping(**gen_node_width_map('Degree', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_node_width_mapping(**gen_node_width_map('degree', mapping_type='d'))
+        ''
+        >>> set_node_width_mapping(**gen_node_width_map('AverageShortestPathLength', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_node_width_mapping('PassthruCol', mapping_type='p', default_size=120, style_name='galFiltered Style')
         ''
@@ -1172,13 +1214,21 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
         ''
         >>> set_edge_color_mapping('EdgeBetweenness', ['1', '2'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_color_mapping(**gen_edge_c_color_map('EdgeBetweenness', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_color_mapping(**gen_node_color_map('Degree', mapping_type='d'))
+        ''
+        >>> set_edge_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness'))
+        ''
+        >>> set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_edge_color_mapping('EdgeBetweennessColor', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_c_color_map`
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1273,7 +1323,9 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
         ''
         >>> set_edge_font_size_mapping('interaction', table_column_values=['pp', 'pd'], sizes=[40, 90], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_edge_font_size_mapping(**gen_edge_size_map('interaction', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_edge_font_size_mapping(**gen_edge_opacity_map('interaction', mapping_type='d'))
+        ''
+        >>> set_edge_font_size_mapping(**gen_edge_opacity_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_edge_font_size_mapping('PassthruCol', mapping_type='p', default_size=20, style_name='galFiltered Style')
         ''
@@ -1359,13 +1411,19 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
         ''
         >>> set_edge_label_color_mapping('interaction', ['pp', 'pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_label_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_label_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_edge_label_color_mapping(**gen_edge_color_map('EdgeBetweenness'))
+        ''
+        >>> set_edge_label_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_edge_label_color_mapping(**gen_edge_color_map('EdgeBetweenness', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_edge_label_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_c_color_map`
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1409,7 +1467,9 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
         ''
         >>> set_edge_label_opacity_mapping('interaction', ['pp', 'pd'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_edge_label_opacity_mapping(**gen_edge_opacity_map('interaction', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_edge_label_opacity_mapping(**gen_edge_opacity_map('interaction', mapping_type='d'))
+        ''
+        >>> set_edge_label_opacity_mapping(**gen_edge_opacity_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_edge_label_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -1511,7 +1571,9 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
         ''
         >>> set_edge_line_width_mapping('interaction', table_column_values=['pp','pd'], widths=[5, 10], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_edge_line_width_mapping(**gen_edge_width_map('interaction', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_edge_line_width_mapping(**gen_edge_width_map('interaction', mapping_type='d'))
+        ''
+        >>> set_edge_line_width_mapping(**gen_edge_width_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_edge_line_width_mapping('PassthruCol', mapping_type='p', default_width=3, style_name='galFiltered Style')
         ''
@@ -1562,7 +1624,9 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
         ''
         >>> set_edge_opacity_mapping('interaction', table_column_values=['pp','pd'], opacities=[50, 100], mapping_type='d', style_name='galFiltered Style')
         ''
-        >>> set_edge_opacity_mapping(**gen_edge_opacity_map('interaction', scheme_d_number_series, number_scheme_params={'start_value': 100, 'step': 20}, style_name='galFiltered Style'))
+        >>> set_edge_opacity_mapping(**gen_edge_opacity_map('interaction', mapping_type='d'))
+        ''
+        >>> set_edge_opacity_mapping(**gen_edge_opacity_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style'))
         ''
         >>> set_edge_opacity_mapping('PassthruCol', mapping_type='p', default_opacity=225, style_name='galFiltered Style')
         ''
@@ -1715,13 +1779,21 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_target_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_target_arrow_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', mapping_type='d'))
+        ''
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d'))
+        ''
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('EdgeBetweenness'))
+        ''
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues()))
+        ''
+        >>> set_edge_target_arrow_color_mapping(**gen_edge_color_map('EdgeBetweenness', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
         ''
         >>> set_edge_target_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_c_color_map`
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 
@@ -1767,13 +1839,13 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
         ''
         >>> set_edge_source_arrow_color_mapping('interaction', ['pp','pd'], ['#FFFF00', '#00FF00'], 'd', style_name='galFiltered Style')
         ''
-        >>> set_edge_source_arrow_color_mapping(**gen_edge_c_color_map('interaction', palette_color_brewer_q_Accent, mapping_type='d', style_name='galFiltered Style'))
+        >>> set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d'))
         ''
         >>> set_edge_source_arrow_color_mapping('ColorCol', mapping_type='p', default_color='#654321', style_name='galFiltered Style')
         ''
 
     See Also:
-        :meth:`gen_edge_c_color_map`
+        :meth:`gen_edge_color_map`
     """
     verify_hex_colors(colors)
 

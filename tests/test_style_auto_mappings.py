@@ -236,6 +236,19 @@ class StyleAutoMappingsTests(unittest.TestCase):
             # Verify that a continuous mapping can't be done when the column is non-numeric
             self.assertRaises(CyError, gen_node_color_map, 'name', palette_color_brewer_s_Blues(), style_name='galFiltered Style')
 
+            # Verify that edge mapping generation for discrete and continuous 1-tailed edges work as expected
+            edge_map = gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d')
+            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            edge_map = gen_edge_color_map('interaction', mapping_type='d')
+            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#66C2A5', '#FC8D62'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            edge_map = gen_edge_color_map('EdgeBetweenness')
+            self.assertDictEqual(edge_map, {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#E0F3DB', '#A8DDB5', '#43A2CA'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            edge_map = gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues())
+            self.assertDictEqual(edge_map, {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#DEEBF7', '#9ECAE1', '#3182BD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            edge_map = gen_edge_color_map('EdgeBetweenness', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
+            self.assertDictEqual(edge_map, {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#DEEBF7', '#9ECAE1', '#3182BD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+
             # Verify that setting border color works as expected for discrete and continuous
             set_node_border_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_PAINT', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})

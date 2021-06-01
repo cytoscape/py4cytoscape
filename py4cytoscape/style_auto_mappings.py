@@ -644,8 +644,12 @@ def gen_node_color_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_color_map('newcol', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#66C2A5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', default_color='#00FF00', style_name='galFiltered Style', network='galFiltered.sif')
+        {'table_column': 'newcol', 'table_column_values': ['3'], 'colors': ['#7FC97F'], 'mapping_type': 'd', 'default_color': '#00FF00', 'style_name': 'galFiltered Style', 'network': 'galFiltered.sif', 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_color_map('newcol', style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E0F3DB', '#A8DDB5', '#43A2CA'], 'mapping_type': 'c', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
@@ -693,8 +697,16 @@ def gen_edge_color_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_color_map('interaction', mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#66C2A5', '#FC8D62'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_color_map('EdgeBetweenness')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#E0F3DB', '#A8DDB5', '#43A2CA'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues())
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#DEEBF7', '#9ECAE1', '#3182BD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_color_map('EdgeBetweenness', (palette_color_brewer_s_Blues(), palette_color_brewer_d_BrBG()))
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#DEEBF7', '#9ECAE1', '#3182BD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_color_mapping`, :meth:`set_edge_label_color_mapping`, :meth:`set_edge_source_arrow_color_mapping`, :meth:`set_edge_target_arrow_color_mapping`
@@ -743,8 +755,14 @@ def gen_node_opacity_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_opacity_map('newcol', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_opacity_map('newcol', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'opacities': [0, 10, 20], 'mapping_type': 'd', 'default_opacity': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_opacity_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'opacities': [100, 120, 140], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_opacity_map('newcol')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'opacities': [10, 20.0, 30], 'mapping_type': 'c', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_opacity_map('newcol', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'opacities': [100, 150.0, 200], 'mapping_type': 'c', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`, :meth:`set_node_combo_opacity_mapping`
@@ -788,8 +806,14 @@ def gen_edge_opacity_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_opacity_map('interaction', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        >>> gen_edge_opacity_map('interaction', mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [0, 10], 'mapping_type': 'd', 'default_opacity': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_opacity_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
         {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_opacity_map('EdgeBetweenness')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'opacities': [10, 20.0, 30], 'mapping_type': 'c', 'default_opacity': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_opacity_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'opacities': [100, 150.0, 200], 'mapping_type': 'c', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_label_opacity_mapping`, :meth:`set_edge_opacity_mapping`
@@ -837,8 +861,14 @@ def gen_node_width_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_width_map('newcol', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_width_map('newcol', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'widths': [0, 10, 20], 'mapping_type': 'd', 'default_width': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_width_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'widths': [100, 120, 140], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_width_map('newcol')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'widths': [10, 20.0, 30], 'mapping_type': 'c', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_width_map('newcol', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'widths': [100, 150.0, 200], 'mapping_type': 'c', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_border_width_mapping`, :meth:`set_node_width_mapping`
@@ -883,8 +913,14 @@ def gen_edge_width_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_edge_width_map('interaction', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
+        >>> gen_edge_width_map('interaction', mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [0, 10], 'mapping_type': 'd', 'default_width': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_width_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
         {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_width_map('EdgeBetweenness')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'widths': [10, 20.0, 30], 'mapping_type': 'c', 'default_width': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_width_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'widths': [100, 150.0, 200], 'mapping_type': 'c', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_edge_line_width_mapping`
@@ -933,8 +969,14 @@ def gen_node_height_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_height_map('newcol', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_height_map('newcol', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'heights': [0, 10, 20], 'mapping_type': 'd', 'default_height': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_height_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'heights': [100, 120, 140], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_height_map('newcol')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'heights': [10, 20.0, 30], 'mapping_type': 'c', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_height_map('newcol', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'heights': [100, 150.0, 200], 'mapping_type': 'c', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_height_mapping`
@@ -983,8 +1025,14 @@ def gen_node_size_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_size_map('newcol', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_sizes_map('newcol', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'sizes': [0, 10, 20], 'mapping_type': 'd', 'default_size': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_sizes_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
+        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6'], 'sizes': [100, 120, 140], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_sizes_map('newcol')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'sizes': [10, 20.0, 30], 'mapping_type': 'c', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_node_sizes_map('newcol', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'sizes': [100, 150.0, 200], 'mapping_type': 'c', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
@@ -1028,8 +1076,14 @@ def gen_edge_size_map(table_column,
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> gen_node_size_map('newcol', scheme_d_number_series(start_value=100, step=20), mapping_type='d', style_name='galFiltered Style')
-        {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_size_map('interaction', mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [0, 10], 'mapping_type': 'd', 'default_size': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_size_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
+        {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_size_map('EdgeBetweenness')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'sizes': [10, 20.0, 30], 'mapping_type': 'c', 'default_size': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
+        >>> gen_edge_size_map('EdgeBetweenness', scheme_c_number_continuous(100, 200), style_name='galFiltered Style')
+        {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'sizes': [100, 150.0, 200], 'mapping_type': 'c', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'}
 
     See Also:
         :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
