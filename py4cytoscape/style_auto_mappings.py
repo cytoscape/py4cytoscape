@@ -654,8 +654,8 @@ def gen_node_color_map(table_column,
     See Also:
         :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
 
+    See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
-
     """
     return _gen_color_map('node', table_column, palette, mapping_type, default_color, style_name, network, base_url)
 
@@ -713,6 +713,9 @@ def gen_edge_color_map(table_column,
 
     See Also:
         :meth:`set_edge_color_mapping`, :meth:`set_edge_label_color_mapping`, :meth:`set_edge_source_arrow_color_mapping`, :meth:`set_edge_target_arrow_color_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_color_map('edge', table_column, palette, mapping_type, default_color, style_name, network, base_url)
 
@@ -769,6 +772,9 @@ def gen_node_opacity_map(table_column,
 
     See Also:
         :meth:`set_node_border_opacity_mapping`, :meth:`set_node_fill_opacity_mapping`, :meth:`set_node_label_opacity_mapping`, :meth:`set_node_combo_opacity_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('node', table_column, number_scheme, mapping_type, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
 
@@ -820,6 +826,9 @@ def gen_edge_opacity_map(table_column,
 
     See Also:
         :meth:`set_edge_label_opacity_mapping`, :meth:`set_edge_opacity_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('edge', table_column, number_scheme, mapping_type, 'opacities', 'default_opacity', default_number, style_name, network, base_url)
 
@@ -875,6 +884,9 @@ def gen_node_width_map(table_column,
 
     See Also:
         :meth:`set_node_border_width_mapping`, :meth:`set_node_width_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('node', table_column, number_scheme, mapping_type, 'widths', 'default_width', default_number, style_name, network, base_url)
 
@@ -927,6 +939,9 @@ def gen_edge_width_map(table_column,
 
     See Also:
         :meth:`set_edge_line_width_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('edge', table_column, number_scheme, mapping_type, 'widths', 'default_width', default_number, style_name, network, base_url)
 
@@ -983,6 +998,9 @@ def gen_node_height_map(table_column,
 
     See Also:
         :meth:`set_node_height_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('node', table_column, number_scheme, mapping_type, 'heights', 'default_height', default_number, style_name, network, base_url)
 
@@ -1039,6 +1057,9 @@ def gen_node_size_map(table_column,
 
     See Also:
         :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('node', table_column, number_scheme, mapping_type, 'sizes', 'default_size', default_number, style_name, network, base_url)
 
@@ -1090,6 +1111,9 @@ def gen_edge_size_map(table_column,
 
     See Also:
         :meth:`set_node_font_size_mapping`, :meth:`set_node_size_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_map('edge', table_column, number_scheme, mapping_type, 'sizes', 'default_size', default_number, style_name, network, base_url)
 
@@ -1128,6 +1152,9 @@ def gen_node_shape_map(table_column,
 
     See Also:
         :meth:`set_node_shape_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_d_shape_map('node', table_column, scheme_d_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
@@ -1163,6 +1190,9 @@ def gen_edge_line_style_map(table_column,
 
     See Also:
         :meth:`set_edge_line_style_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return _gen_d_shape_map('edge', table_column, scheme_d_line_styles(), 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
 

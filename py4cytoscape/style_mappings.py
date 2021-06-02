@@ -377,6 +377,9 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
 
     See Also:
         :meth:`gen_node_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -430,6 +433,9 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
 
     See Also:
         :meth:`gen_node_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -489,6 +495,9 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
 
     See Also:
         :meth:`gen_node_width_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('width', widths)
 
@@ -546,6 +555,9 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
 
     See Also:
         :meth:`gen_node_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -603,6 +615,9 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
 
     See Also:
         :meth:`gen_node_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_opacities(opacities)
 
@@ -671,6 +686,9 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
 
     See Also:
         :meth:`gen_node_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Moved to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -773,6 +791,9 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
 
     See Also:
         :meth:`gen_node_size_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('size', sizes)
 
@@ -823,6 +844,9 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
 
     See Also:
         :meth:`gen_node_height_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('height', heights)
 
@@ -920,6 +944,9 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
 
     See Also:
         :meth:`gen_node_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -972,6 +999,9 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
 
     See Also:
         :meth:`gen_node_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
@@ -1024,6 +1054,9 @@ def set_node_shape_mapping(table_column, table_column_values=None, shapes=None, 
 
     See Also:
         :meth:`gen_node_shape_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Verify shapes
 
@@ -1075,6 +1108,9 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
 
     See Also:
         :meth:`gen_node_size_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('size', sizes)
 
@@ -1164,6 +1200,9 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
 
     See Also:
         :meth:`gen_node_width_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('width', widths)
 
@@ -1229,6 +1268,9 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
 
     See Also:
         :meth:`gen_edge_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -1332,6 +1374,9 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
 
     See Also:
         :meth:`gen_edge_size_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('size', sizes)
 
@@ -1424,6 +1469,9 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
 
     See Also:
         :meth:`gen_edge_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -1476,6 +1524,9 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
 
     See Also:
         :meth:`gen_edge_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Moved check to _update_style_mapping
     #    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
@@ -1528,6 +1579,9 @@ def set_edge_line_style_mapping(table_column, table_column_values=None, line_sty
 
     See Also:
         :meth:`gen_edge_line_style_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Validate line style
 
@@ -1580,6 +1634,9 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
 
     See Also:
         :meth:`gen_edge_width_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_dimensions('width', widths)
 
@@ -1633,6 +1690,9 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
 
     See Also:
         :meth:`gen_edge_opacity_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: This code checks the table_column ... the R code does not
 
@@ -1685,6 +1745,9 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
 
     See Also:
         :meth:`gen_edge_arrow_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Validate shape
 
@@ -1733,6 +1796,9 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
 
     See Also:
         :meth:`gen_edge_arrow_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     # TODO: Validate shape
 
@@ -1794,6 +1860,9 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
 
     See Also:
         :meth:`gen_edge_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -1846,6 +1915,9 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
 
     See Also:
         :meth:`gen_edge_color_map`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     verify_hex_colors(colors)
 
@@ -1895,6 +1967,9 @@ def set_edge_target_arrow_shape_mapping(table_column, table_column_values=None, 
 
     See also:
         :meth:`set_edge_arrow_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return set_edge_target_arrow_maping(table_column, table_column_values=table_column_values, shapes=shapes,
                                          default_shape=default_shape, style_name=style_name, network=network,
@@ -1938,6 +2013,9 @@ def set_edge_source_arrow_shape_mapping(table_column, table_column_values=None, 
     See also:
         :meth:`set_edge_source_arrow_mapping`, :meth:`gen_edge_arrow_map`
 
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
     return set_edge_source_arrow_mapping(table_column, table_column_values=table_column_values, shapes=shapes,
                                         default_shape=default_shape, style_name=style_name, network=network,
