@@ -653,6 +653,10 @@ def gen_node_color_map(table_column,
 
     See Also:
         :meth:`set_node_border_color_mapping`, :meth:`set_node_color_mapping`, :meth:`set_node_label_color_mapping`
+
+    See Also:
+        `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
+
     """
     return _gen_color_map('node', table_column, palette, mapping_type, default_color, style_name, network, base_url)
 
