@@ -46,18 +46,18 @@ Contributors to this release
 
 Pull requests merged in this release
 ------------------------------------
-#46 by Kozo Nishida
-#47 by Kozo Nishida
-#48 by Kozo Nishida
-#50 by Kozo Nishida
-#51 by Kozo Nishida
+- #46 by Kozo Nishida
+- #47 by Kozo Nishida
+- #48 by Kozo Nishida
+- #50 by Kozo Nishida
+- #51 by Kozo Nishida
 
 Issues closed in this release
 ------------------------------------
 
-#41 by Alex Pico
-#43 by Barry Demchak
-#45 by Kozo Nishida
-#49 by Jiafi
+- #41 by Alex Pico
+- #43 by Barry Demchak
+- #45 by Kozo Nishida
+- #49 by Jiafi
 
 
