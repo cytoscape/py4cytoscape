@@ -4,6 +4,24 @@ Release Log
 ===========
 
 
+py4cytoscape 0.0.9
+------------------
+Release date: 3 Jun 2021
+
+* Updated documentation and tutorials
+* Reworked iGraph support to track RCy3 implementation
+* Added iGraph support for Graph, DiGraph, MultiGraph, MultiDiGraph
+* Updated node/edge-to-suid functions to allow detection of multiple copies of a node/edge
+* Enabled delete_duplicate_edges to ignore edge direction
+* Added support for discrete and continuous value generators (as gen* functions in new style_auto_mappers module)
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.9.rst
+
+
 py4cytoscape 0.0.8
 ------------------
 Release date: 26 Mar 2021
