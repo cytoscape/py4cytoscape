@@ -23,7 +23,7 @@ then move files in and out of it just as a remote Notebook would.
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
 """
-from sphinx.addnodes import desc
+# from sphinx.addnodes import desc
 
 """Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
 
