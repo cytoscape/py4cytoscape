@@ -8,4 +8,4 @@ sphinx_autodoc_typehints
 sphinx_rtd_theme
 nbsphinx
 ipykernel
-git+git://github.com/cytoscape/py4cytoscape.git@0.0.9
+
