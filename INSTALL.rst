@@ -62,7 +62,7 @@ Install the latest version (Python Console)
 
 Install the *current* release of ``py4cytoscape`` with ``pip``::
 
-   pip install python-igraph requests pandas networkx
+   pip install python-igraph requests pandas networkx colorbrewer
    pip install py4cytoscape
 
 
@@ -72,7 +72,7 @@ Install the development version (Python Console)
 To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
-   pip install python-igraph requests pandas networkx
+   pip install python-igraph requests pandas networkx colorbrewer
    git clone git://github.com/cytoscape/py4cytoscape
 
 Verify Cytoscape connection
