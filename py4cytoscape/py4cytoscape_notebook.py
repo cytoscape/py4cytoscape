@@ -209,9 +209,7 @@ def check_running_remote():
 
 def get_browser_client_js(debug_bridge=False):
     global _CHANNEL
-    print('Channel was ' + str(_CHANNEL))
     _CHANNEL = uuid.uuid4() # Get a new channel because Colab won't unload/reload py4cytoscape module
-    print('New channel is ' + str(_CHANNEL))
     try:
         # Prepend channel number of client Javascript so it can communicate with this process via Jupyter-bridge
         r = requests.get(
