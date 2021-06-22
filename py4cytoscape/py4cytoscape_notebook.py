@@ -58,7 +58,6 @@ class SpoofResponse:
 
 # Create a unique channel that identifies this process so other processes don't mix up messages
 _CHANNEL = uuid.uuid4()
-print('New channel: ' + str(_CHANNEL))
 
 # Get the name of the Jupyter-bridge server
 _JUPYTER_BRIDGE_URL = os.environ.get('JUPYTER_BRIDGE_URL', 'https://jupyter-bridge.cytoscape.org')
@@ -209,6 +208,8 @@ def check_running_remote():
     return _running_remote
 
 def get_browser_client_js(debug_bridge=False):
+    global _CHANNEL
+    _CHANNEL = uuid.uuid4() # Get a new channel because Colab won't unload/reload py4cytoscape module
     try:
         # Prepend channel number of client Javascript so it can communicate with this process via Jupyter-bridge
         r = requests.get(
