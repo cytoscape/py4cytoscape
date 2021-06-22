@@ -58,7 +58,7 @@ class SpoofResponse:
 
 # Create a unique channel that identifies this process so other processes don't mix up messages
 _CHANNEL = uuid.uuid4()
-print('New channel: ' + _CHANNEL)
+print('New channel: ' + str(_CHANNEL))
 
 # Get the name of the Jupyter-bridge server
 _JUPYTER_BRIDGE_URL = os.environ.get('JUPYTER_BRIDGE_URL', 'https://jupyter-bridge.cytoscape.org')
