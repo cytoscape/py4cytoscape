@@ -22,8 +22,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # print(f'Starting {__name__} module')
 
 
-CATCHUP_FILTER_SECS = 1
-MODEL_PROPAGATION_SECS = 2
+CATCHUP_FILTER_SECS = 0 # 1
+MODEL_PROPAGATION_SECS = 0 #2
 CATCHUP_NETWORK_SECS = 10 # 2 # with a new Cytoscape instance, 2 would be OK for galFiltered ... on an older instance, need more time
 
 def set_catchup_filter_secs(delay_secs):
