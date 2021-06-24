@@ -220,6 +220,13 @@ def get_browser_client_js(debug_bridge=False):
                       f' {r.text}'
         if debug_bridge:
             inject_code = f'var showDebug = true; \n\n' + inject_code
+        debug_code = "if (typeof Channel === 'undefined') { \n\n" \
+                     "    console.log('NEW CHANNEL IN USE'); \n\n " \
+                     "} \n\n" \
+                     "else { \n\n" \
+                     "    console.log('OVERRIDE CHANNEL' + Channel); \n\n" \
+                     "} \n\n"
+        inject_code = debug_code + inject_code
         return inject_code
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
