@@ -227,6 +227,7 @@ def get_browser_client_js(debug_bridge=False):
                      "    console.log('OVERRIDE CHANNEL' + Channel); \n\n" \
                      "} \n\n"
         inject_code = debug_code + inject_code
+        print('injected code:\n' + inject_code)
         return inject_code
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
