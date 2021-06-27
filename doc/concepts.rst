@@ -280,7 +280,11 @@ or the py4cytoscape in Github branch 0.0.10, use the following:
 .. code:: python
 
     _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape'
+
 or
+
+.. code:: python
+
     _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape@0.0.10'
 
 .. note:: The Jupyter-Bridge can reach your Cytoscape workstation whether or not it's behind a firewall.
