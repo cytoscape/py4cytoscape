@@ -6,9 +6,9 @@ researchers to write reproducible sequences of network manipulations, visualizat
 and analyses. py4cytoscape includes functions that accomplish network operations
 common to many kinds of workflows. Using py4cytoscape, a Python application can:
 
-- load a network (from a file, from the NDEx or STRING repositories, or from local Python variables)
-- operate on the network
-- retrieve results
+* load a network (from a file, from the NDEx or STRING repositories, or from local Python variables)
+* operate on the network
+* retrieve results
 
 The Python application can perform several rounds of network analysis and results retrieval,
 and mix visualization and analyses with existing Python libraries. Finally, it can
