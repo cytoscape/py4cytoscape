@@ -1,4 +1,3 @@
-sphinx==3.5.4
 pandas
 networkx
 requests
