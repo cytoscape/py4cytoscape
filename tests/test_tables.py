@@ -2,6 +2,7 @@
 
 """ Test functions in tables.py.
 """
+import numpy as np
 
 """License:
     Copyright 2020 The Cytoscape Consortium
@@ -299,6 +300,29 @@ class TablesTests(unittest.TestCase):
 
         # Verify that newcol_val column and derived were added, and that derived has values only for the newcol nodes
         check_values_added(column_names_string_keyed, 'name', test_data_string_keyed, 'id_e', 'newcol_e', table='edge')
+
+        # Verify that adding a column with a null works properly, and that adding columns of different types does, too
+        # While we're at it, eyeball the running time to see that it's not crazy slow
+        test_data_suid_name = get_table_columns(columns=['SUID', 'name'])
+        test_data_suid_name['IntCol'] = test_data_suid_name['SUID']
+        test_data_suid_name['StrCol'] = test_data_suid_name['SUID']
+        test_data_suid_name['FloatCol'] = test_data_suid_name['SUID']
+        test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str, 'FloatCol': np.float})
+        suid_YBL079W = test_data_suid_name.index[test_data_suid_name.name == 'YBL079W'][0]
+        del test_data_suid_name['name']
+        test_data_suid_name.set_value(suid_YBL079W, 'FloatCol', np.nan)
+        res = load_table_data(test_data_suid_name, data_key_column='SUID', table_key_column='SUID')
+        self.assertEqual(res, 'Success: Data loaded in defaultnode table')
+        # Make sure that Cytoscape got all of the column types and values right, including the NAN
+        t = get_table_columns(columns=['SUID', 'IntCol', 'StrCol', 'FloatCol'])
+        for suid, intcol, strcol, floatcol in zip(t['SUID'], t['IntCol'], t['StrCol'], t['FloatCol']):
+            str_suid = str(suid)
+            self.assertEqual(str_suid, str(intcol))
+            self.assertEqual(str_suid, strcol)
+            if suid == suid_YBL079W:
+                self.assertTrue(np.isnan(floatcol))
+            else:
+                self.assertEqual(str_suid, str(int(floatcol)))
 
         data = get_table_columns()
         self.assertRaises(CyError, load_table_data, data, table='bogus')
