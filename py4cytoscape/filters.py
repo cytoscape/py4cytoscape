@@ -411,10 +411,11 @@ def _create_filter_and_finish(cmd, cmd_body, hide, apply, network, base_url):
 
 
 def _check_selected(hide, network, base_url):
-    if check_supported_versions(cytoscape='3.9'):
+#    if check_supported_versions(cytoscape='3.9'):
         # This delay became unnecessary in Cytoscape 3.9
-        show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
-        time.sleep(CATCHUP_FILTER_SECS)  # Yikes! Have to wait a second for selection to settle!
+#        show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
+#        time.sleep(CATCHUP_FILTER_SECS)  # Yikes! Have to wait a second for selection to settle!
+    time.sleep(CATCHUP_FILTER_SECS)
 
     sel_nodes = network_selection.get_selected_nodes(network=network, base_url=base_url)
     sel_edges = network_selection.get_selected_edges(network=network, base_url=base_url)
