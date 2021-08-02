@@ -327,8 +327,21 @@ class NetworkSelectionTests(unittest.TestCase):
     def test_select_nodes_connected_by_selected_edges(self):
         # Initialization
         load_test_session()
+        SINGLE_NODE = ['RAP1']
+        TWO_NODES = ['RAP1', 'MIG1']
         COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
         SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+
+        # Verify that selecting no nodes and then calculating connected edges returns the expected result
+        self.assertIsNone(select_edges_connecting_selected_nodes())
+
+        # Verify that selecting a single node yields no edges
+        single_selected_nodes = select_nodes(SINGLE_NODE, by_col='COMMON')['nodes']
+        self.assertIsNone(select_edges_connecting_selected_nodes())
+
+        # Verify that selecting two unconnected nodes yields no edges
+        single_selected_nodes = select_nodes(TWO_NODES, by_col='COMMON')['nodes']
+        self.assertIsNone(select_edges_connecting_selected_nodes())
 
         # Select some nodes and verify that the expected edges are selected
         selected_nodes = select_nodes(COMMON_NODES, by_col='COMMON')['nodes']

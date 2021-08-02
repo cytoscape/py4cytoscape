@@ -159,7 +159,22 @@ class FiltersTests(unittest.TestCase):
         self.check_result('column filter 50x', lambda x: create_column_filter(x, 'COMMON', 'HIS', 'CONTAINS', apply=False),
                           None, None)
 
+
         # TODO: Can't test "hide" parameter in create_column_filter because I can't deduce which nodes/edges are hidden
+        # Verify that a filter that hides selections at least doesn't crash
+        network_selection.clear_selection()
+        self.check_result('column filter 51x', lambda x: create_column_filter(x, 'COMMON', 'HIS', 'CONTAINS', hide=True),
+                          {'YBR248C', 'YOR202W', 'YCL030C'}, None)
+        self.check_result('column filter 52x', lambda x: create_column_filter(x, 'COMMON', 'BOGUS', 'CONTAINS', hide=True),
+                          None, None)
+        self.check_result('column filter 53x',
+                          lambda x: create_column_filter(x, 'EdgeBetweenness', [18040.0, 18360.0], 'BETWEEN',
+                                                                    type='edges', hide=True), None,
+                          {'YPR119W (pd) YMR043W', 'YDR412W (pp) YPR119W'})
+        self.check_result('column filter 54x',
+                          lambda x: create_column_filter(x, 'EdgeBetweenness', [-18040.0, -18360.0], 'BETWEEN',
+                                                                    type='edges', hide=True), None, None)
+
 
         # Verify that invalid forms fail
         self.check_bad_filter('', lambda x: create_column_filter(x, 'COMMON', 'RAP1',

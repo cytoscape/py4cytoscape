@@ -104,6 +104,7 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
     node_suids = node_name_to_node_suid(node_names, network=network, base_url=base_url, unique_list=True)
+    if node_suids is None: return ''
 
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
@@ -252,6 +253,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
     edge_suids = edge_name_to_edge_suid(edge_names, network=network, base_url=base_url, unique_list=True)
+    if edge_suids is None: return ''
 
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects

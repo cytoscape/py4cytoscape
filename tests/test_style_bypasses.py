@@ -259,6 +259,9 @@ class StyleBypassesTests(unittest.TestCase):
         load_test_session()
         nodes = get_all_nodes()[0:2] # Get 2 nodes
 
+        # Verify that attempting to hide no nodes doesn't crash
+        self.assertEqual(hide_selected_nodes(), '')
+
         # Verify that nodes that are selected and hidden are actually hidden
         select_nodes(nodes, by_col='name')
         orig_visible = get_node_property(nodes, 'NODE_VISIBLE')
@@ -364,6 +367,9 @@ class StyleBypassesTests(unittest.TestCase):
         # Initialization
         load_test_session()
         edges = get_all_edges()[0:2] # Get 2 edges
+
+        # Verify that when no edges are selected, the function doesn't crash
+        self.assertEqual(hide_selected_edges(), '')
 
         # Verify that edges that are selected and hidden are actually hidden
         select_edges(edges, by_col='name')
