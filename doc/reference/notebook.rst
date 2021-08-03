@@ -1,12 +1,12 @@
 .. _apps:
 
-*******
-Sandbox
-*******
+********
+Notebook
+********
 
 .. automodule:: py4cytoscape.notebook
 
-Sandbox
+Notebook
 -------
 .. autosummary::
    :toctree: generated/

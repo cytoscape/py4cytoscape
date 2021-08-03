@@ -27,7 +27,7 @@ os.environ['SPHINX_BUILD'] = 'TRUE'
 # -- Project information -----------------------------------------------------
 
 project = 'py4cytoscape'
-copyright = f"2018-{date.today().year}, The Cytoscape Consortium"
+copyright = f"2021-{date.today().year}, The Cytoscape Consortium"
 author = 'Barry Demchak'
 
 import py4cytoscape
