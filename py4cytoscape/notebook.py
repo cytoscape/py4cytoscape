@@ -58,10 +58,16 @@ def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=
         [130223]
     """
     if get_notebook_is_running():
+        # Add suffix if one is not supplied ... preserve sandbox subdirectory if one is provided
+        if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
+
+        # Create network image file in sandbox
         image_file = network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
                                                 network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
         print(str(image_file))
-        res = sandbox.sandbox_get_from(image_file, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
+
+        # Transfer sandbox version of image to local storage so notebook can see it
+        res = sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
         print(str(res))
 
         from IPython import display
