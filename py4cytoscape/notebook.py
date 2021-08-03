@@ -58,9 +58,11 @@ def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=
         [130223]
     """
     if get_notebook_is_running():
-        network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
-                               network=network, base_url=base_url, overwrite_file=overwrite_file)
-        sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
+        image_file = network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
+                                                network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
+        print(str(image_file))
+        res = sandbox.sandbox_get_from(image_file, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
+        print(str(res))
 
         from IPython import display
         return display.Image(filename)
