@@ -34,28 +34,39 @@ from .py4cytoscape_notebook import get_notebook_is_running
 @cy_log
 def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
                            sandbox_name=None, network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=True):
-    """Retrieve list of network view SUIDs.
+    """Show network view in notebook output.
 
     Args:
-        network (str or SUID or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        filename (str): Full path or path relavtive to current working directory, in addition to the name of the file.
+            Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
+        type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
+        resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
+            width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600.
+        units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
+            The possible values are: pixels (default), inches.
+        height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
+        width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
+        zoom (float): The zoom value to proportionally scale the image. The default value is 100.0. Valid only for bitmap
+            formats, such as PNG and JPEG
+        sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
+        network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
+            If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
+            exists; True allows Cytoscape to overwrite it without asking
 
     Returns:
-        list: [list of SUIDs of views] where the list has length 1
+        object: iPython.display.Image class instance
 
     Raises:
-        CyError: if network doesn't exist
+        CyError: if network doesn't exist or the file cannot be written
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> get_network_views()
-        [130223]
-        >>> get_network_views(51)
-        [130223]
-        >>> get_network_views(network='galFiltered.sif')
-        [130223]
+        >>> show_image_in_notebook()
+        >>> show_image_in_notebook('imagex', type='JPG')
     """
     if get_notebook_is_running():
         # Add suffix if one is not supplied ... preserve sandbox subdirectory if one is provided
@@ -64,11 +75,9 @@ def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=
         # Create network image file in sandbox
         image_file = network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
                                                 network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
-        print(str(image_file))
 
         # Transfer sandbox version of image to local storage so notebook can see it
         res = sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
-        print(str(res))
 
         from IPython import display
         return display.Image(filename)
