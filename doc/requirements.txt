@@ -3,6 +3,7 @@ pandas
 networkx
 requests
 colorbrewer
+chardet
 python-igraph
 sphinx_autodoc_typehints
 sphinx_rtd_theme
