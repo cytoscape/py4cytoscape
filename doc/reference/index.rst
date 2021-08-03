@@ -19,6 +19,7 @@ Reference
    groups
    layouts
    networks
+   notebook
    sandbox
    session
    styles

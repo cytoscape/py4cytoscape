@@ -32,8 +32,8 @@ from .py4cytoscape_logger import cy_log
 from .py4cytoscape_notebook import get_notebook_is_running
 
 @cy_log
-def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
-                           sandbox_name=None, network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=True):
+def notebook_show_image(filename='image', type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
+                        sandbox_name=None, network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=True):
     """Show network view in notebook output.
 
     Args:
@@ -65,19 +65,19 @@ def show_image_in_notebook(filename='image', type='PNG', resolution=None, units=
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> show_image_in_notebook()
-        >>> show_image_in_notebook('imagex', type='JPG')
+        >>> notebook_show_image()
+        >>> notebook_show_image('imagex', type='JPG')
     """
     if get_notebook_is_running():
         # Add suffix if one is not supplied ... preserve sandbox subdirectory if one is provided
         if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
 
         # Create network image file in sandbox
-        image_file = network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
-                                                network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
+        network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
+                                   network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
 
         # Transfer sandbox version of image to local storage so notebook can see it
-        res = sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
+        sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
 
         from IPython import display
         return display.Image(filename)
