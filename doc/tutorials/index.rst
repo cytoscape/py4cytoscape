@@ -11,11 +11,13 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
 
 .. image:: ../images/InstallingFileTransferApp.png
 
-3. Click on the following Colab link for the tutorial you would like to try. 
+3. Click on the "Open in Colab" badge in the tutorial below.
 
 .. toctree::
    :maxdepth: 2
 
    Overview-of-py4cytoscape
+   Cytoscape-and-iGraph
    Importing-data
+   Custom-Graphics
    Filtering-Networks
