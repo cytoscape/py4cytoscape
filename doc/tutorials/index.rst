@@ -19,5 +19,6 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
    Overview-of-py4cytoscape
    Cytoscape-and-iGraph
    Importing-data
+   Identifier-mapping
    Custom-Graphics
    Filtering-Networks
