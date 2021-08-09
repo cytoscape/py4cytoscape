@@ -11,21 +11,14 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
 
 .. image:: ../images/InstallingFileTransferApp.png
 
-3. Click on the following Colab link for the tutorial you would like to try. 
-
-`01. Overview of py4cytoscape ~25 min`_
-
-`02. Importing data ~5 min`_
-
-.. _01. Overview of py4cytoscape ~25 min: https://colab.research.google.com/github/cytoscape/py4cytoscape/blob/master/doc/tutorials/Overview-of-py4cytoscape.ipynb
-
-.. _02. Importing data ~5 min: https://colab.research.google.com/github/cytoscape/py4cytoscape/blob/master/doc/tutorials/Importing-data.ipynb
-
-Read only docs (of the above notebook for Colab)
-------------------------------------------------
+3. Click on the "Open in Colab" badge in the tutorial below.
 
 .. toctree::
    :maxdepth: 2
 
    Overview-of-py4cytoscape
+   Cytoscape-and-iGraph
    Importing-data
+   Identifier-mapping
+   Custom-Graphics
+   Filtering-Networks
