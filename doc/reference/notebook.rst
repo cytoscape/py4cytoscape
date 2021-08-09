@@ -7,7 +7,7 @@ Notebook
 .. automodule:: py4cytoscape.notebook
 
 Notebook
--------
+--------
 .. autosummary::
    :toctree: generated/
 
