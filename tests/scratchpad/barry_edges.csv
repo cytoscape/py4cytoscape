@@ -1,0 +1,5 @@
+"source","target","interaction","name","selected","shared interaction","shared name","width","color"
+Node 1,Node 4,interacts with,"Node 1 (interacts with) Node 4","false",interacts with,"Node 1 (interacts with) Node 4",143.4,#FFC0CB
+Node 1,Node 3,interacts with,"Node 1 (interacts with) Node 3","false",interacts with,"Node 1 (interacts with) Node 3",143.4,#FFC0CB
+Node 3,Node 4,interacts with,"Node 3 (interacts with) Node 4","false",interacts with,"Node 3 (interacts with) Node 4",143.4,#FFC0CB
+Node 3,Node 2,interacts with,"Node 3 (interacts with) Node 2","false",interacts with,"Node 3 (interacts with) Node 2",143.4,#FFC0CB

@@ -62,7 +62,7 @@ Install the latest version (Python Console)
 
 Install the *current* release of ``py4cytoscape`` with ``pip``::
 
-   pip install python-igraph requests pandas networkx colorbrewer
+   pip install python-igraph requests pandas networkx colorbrewer chardet decorator
    pip install py4cytoscape
 
 
