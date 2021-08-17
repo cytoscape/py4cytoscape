@@ -71,6 +71,9 @@ def _scheme(scheme_type):
 def palette_color_random():
     """Generate random color map of a given size
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of random colors
 
@@ -81,416 +84,557 @@ def palette_color_random():
     return lambda value_count: [f'#{random.randint(0, MAX_COLOR):06X}'   for i in range(value_count)]
 
 @_palette('qualitative')
-def palette_color_brewer_q_Pastel2():
+def palette_color_brewer_q_Pastel2(reverse=False):
     """Generate pastel2 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel2)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel2, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Pastel1():
+def palette_color_brewer_q_Pastel1(reverse=False):
     """Generate pastel1 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel1)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel1, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Dark2():
+def palette_color_brewer_q_Dark2(reverse=False):
     """Generate pastel2 Dark2 palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Dark2)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Dark2, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Accent():
+def palette_color_brewer_q_Accent(reverse=False):
     """Generate accent Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Accent)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Accent, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Paired():
+def palette_color_brewer_q_Paired(reverse=False):
     """Generate paired Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Paired)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Paired, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Set1():
+def palette_color_brewer_q_Set1(reverse=False):
     """Generate set1 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set1)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set1, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Set2():
+def palette_color_brewer_q_Set2(reverse=False):
     """Generate set2 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set2)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set2, reverse)
 
 @_palette('qualitative')
-def palette_color_brewer_q_Set3():
+def palette_color_brewer_q_Set3(reverse=False):
     """Generate set3 Brewer palette of a given size ... interpolate as needed ... best for discrete mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set3)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set3, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_YlGn():
+def palette_color_brewer_s_YlGn(reverse=False):
     """Generate YlGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGn)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGn, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_YlGnBu():
+def palette_color_brewer_s_YlGnBu(reverse=False):
     """Generate YlGnBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGnBu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGnBu, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_GnBu():
+def palette_color_brewer_s_GnBu(reverse=False):
     """Generate GnBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.GnBu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.GnBu, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_BuGn():
+def palette_color_brewer_s_BuGn(reverse=False):
     """Generate BuGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuGn)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuGn, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_PuBuGn():
+def palette_color_brewer_s_PuBuGn(reverse=False):
     """Generate PuBuGn Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBuGn)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBuGn, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_PuBu():
+def palette_color_brewer_s_PuBu(reverse=False):
     """Generate PuBu Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBu, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_BuPu():
+def palette_color_brewer_s_BuPu(reverse=False):
     """Generate BuPu Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuPu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuPu, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_RdPu():
+def palette_color_brewer_s_RdPu(reverse=False):
     """Generate RdPu Brewer palette of a given size ... interpolate as needed ... best for one-tailed continuous
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdPu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdPu, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_PuRd():
+def palette_color_brewer_s_PuRd(reverse=False):
     """Generate PuRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuRd)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuRd, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_OrRd():
+def palette_color_brewer_s_OrRd(reverse=False):
     """Generate OrRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.OrRd)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.OrRd, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_YlOrRd():
+def palette_color_brewer_s_YlOrRd(reverse=False):
     """Generate YlOrRd Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrRd)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrRd, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_YlOrBr():
+def palette_color_brewer_s_YlOrBr(reverse=False):
     """Generate YlOrBr Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrBr)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrBr, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Purples():
+def palette_color_brewer_s_Purples(reverse=False):
     """Generate Purples Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Purples)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Purples, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Blues():
+def palette_color_brewer_s_Blues(reverse=False):
     """Generate Blues Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Blues)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Blues, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Greens():
+def palette_color_brewer_s_Greens(reverse=False):
     """Generate Greens Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greens)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greens, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Oranges():
+def palette_color_brewer_s_Oranges(reverse=False):
     """Generate Oranges Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Oranges)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Oranges, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Reds():
+def palette_color_brewer_s_Reds(reverse=False):
     """Generate Reds Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Reds)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Reds, reverse)
 
 @_palette('sequential')
-def palette_color_brewer_s_Greys():
+def palette_color_brewer_s_Greys(reverse=False):
     """Generate Greys Brewer palette of a given size ... best for one-tailed continuous mapping
 
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greys)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greys, reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_PuOr():
+def palette_color_brewer_d_PuOr(reverse=False):
     """Generate PuOr Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuOr)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuOr, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_BrBG():
+def palette_color_brewer_d_BrBG(reverse=False):
     """Generate BrBG Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BrBG)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BrBG, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_PRGn():
+def palette_color_brewer_d_PRGn(reverse=False):
     """Generate PRGn Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PRGn)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PRGn, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_PiYG():
+def palette_color_brewer_d_PiYG(reverse=False):
     """Generate PiYG Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PiYG)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PiYG, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_RdBu():
+def palette_color_brewer_d_RdBu(reverse=False):
     """Generate RdBu Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdBu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdBu, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_RdGy():
+def palette_color_brewer_d_RdGy(reverse=False):
     """Generate RdGy Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdGy)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdGy, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_RdYlBu():
+def palette_color_brewer_d_RdYlBu(reverse=False):
     """Generate RdYlBu Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlBu)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlBu, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_Spectral():
+def palette_color_brewer_d_Spectral(reverse=False):
     """Generate Spectral Brewer palette of a given size ... best for two-tailed continuous mapping
 
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
+
     Returns:
         lambda: generates a list of colors
 
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Spectral)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Spectral, not reverse)
 
 @_palette('divergent')
-def palette_color_brewer_d_RdYlGn():
+def palette_color_brewer_d_RdYlGn(reverse=False):
     """Generate RdYlGn Brewer palette of a given size ... best for two-tailed continuous mapping
+
+    Note that this palette is reversed as compared to the standard Brewer Color palette. This
+    enables negative attribute values to skew toward not-red and positive attribute values to skew toward red,
+    as is customary in biology. To use the standard Brewer Color palette instead, pass reverse=True.
+
+    Args:
+        reverse: order the colors backward as compared to standard Brewer palette
 
     Returns:
         lambda: generates a list of colors
@@ -498,7 +642,7 @@ def palette_color_brewer_d_RdYlGn():
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlGn)
+    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlGn, not reverse)
 
 
 # ==============================================================================
@@ -1231,7 +1375,7 @@ def gen_edge_arrow_map(table_column,
     return _gen_d_shape_map('edge', table_column, scheme_d_arrow_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
 # Generate a brewer palette of a given size, and interpolate if there isn't a palette of the desired size
-def _palette_color_brewer(value_count, palette):
+def _palette_color_brewer(value_count, palette, reverse):
     # Get the list of palette lengths available for this palette
     # A palette is a list of color lists tuned for the number of colors needed. For example,
     # palette A may have 3:[color1, color2, color3] and 4:[color1, color2, color3, color4]. If
@@ -1242,6 +1386,7 @@ def _palette_color_brewer(value_count, palette):
         # We have the palette for this list of values already, except that if there are too few values,
         # we take the colors from the smallest palette and call it a day
         candidate_palette = palette[max(value_count, palette_lengths[0])][0:value_count]
+        if reverse: candidate_palette.reverse()
     else:
         # There are more values than the largest palette, so interpolate by using the largest palette. To get
         # m colors out of a p colored palette, suppose that the palette colors are in a series of points along a line.
@@ -1250,6 +1395,7 @@ def _palette_color_brewer(value_count, palette):
         #
         # Get the longest palette and the fixed distance, then initialize the interpolated palette
         max_palette = palette[longest_palette]
+        if reverse: max_palette.reverse()
         per_color_increment = float(len(max_palette) - 1) / (value_count - 1)
         candidate_palette = list(' ' * value_count)
 
