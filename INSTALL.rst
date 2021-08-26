@@ -73,7 +73,13 @@ To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
    pip install python-igraph requests pandas networkx colorbrewer
-   git clone git://github.com/cytoscape/py4cytoscape
+   pip install git+https://github.com/cytoscape/py4cytoscape.git
+   
+To install the py4cytoscape branch (for example 0.0.10) version, instead
+of ``pip install py4cytoscape``, use::
+
+   pip install python-igraph requests pandas networkx colorbrewer
+   pip install git+https://github.com/cytoscape/py4cytoscape.git@0.0.10
 
 Verify Cytoscape connection
 ---------------------------
