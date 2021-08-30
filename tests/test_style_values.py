@@ -80,7 +80,7 @@ class StyleValuesTests(unittest.TestCase):
         # Initialization
         load_test_session()
 
-        self._check_get_property(get_node_size, 'node_names', 'node', None, None, 'YER112W', 50.0)
+        self._check_get_property(get_node_size, 'node_names', 'node', None, None, 'YER112W', 46.470588235294116)
 
     @print_entry_exit
     def test_get_node_width(self):

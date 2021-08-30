@@ -4,6 +4,23 @@ Release Log
 ===========
 
 
+py4cytoscape 0.0.10
+-------------------
+Release date: 31 Aug 2021
+
+* Updated documentation and tutorials
+* Made set_*_property_bypass more resilient to null node/edge lists
+* For Notebook support, improved startup code and added notebook_show_image() function
+* For color generators, added reverse= parameter and made divergent palettes automatically reversed
+* Fixed filter and style bypass functions to not crash when there are no selected nodes
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.10.rst
+
+
 py4cytoscape 0.0.9
 ------------------
 Release date: 3 Jun 2021

@@ -299,11 +299,11 @@ class SandboxTests(unittest.TestCase):
     @print_entry_exit
     def test_sandbox_from(self):
         _FROM_FILE_NAME = 'data/Styles Demo.cys'
-        _FROM_FILE_BYTES = 2548166
         _FROM_FILE_NAME_SANDBOX = 'sampleData/sessions/Styles Demo.cys'
+        _FROM_FILE_BYTES = os.path.getsize(_FROM_FILE_NAME) #   2918612 # 3.8.2 file was 2548166
         _ALT_FROM_FILE_NAME = 'data/Import & Save.cys'
-        _ALT_FROM_FILE_BYTES = 2410184
         _ALT_FROM_FILE_NAME_SANDBOX = 'sampleData/sessions/Import & Save.cys'
+        _ALT_FROM_FILE_BYTES = os.path.getsize(_ALT_FROM_FILE_NAME) # 2410184
         _LOCAL_DEST_FILE_NAME = _TEST_FILE
 
         def check_from_result(res, sandbox_path, expected_length, expected_file_name=_LOCAL_DEST_FILE_NAME):
