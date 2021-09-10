@@ -285,7 +285,7 @@ class StylesTests(unittest.TestCase):
         self.assertSetEqual(set(get_visual_style_names()),
                             {'Universe', 'Marquee', 'Big Labels', 'BioPAX_SIF', 'Ripple', 'Metallic', 'default black',
                              'galFiltered Style', 'Nested Network Style', 'Minimal', 'BioPAX', 'Solid', 'default',
-                             'Custom Graphics Style', 'Directed', 'Sample1', 'Box', 'size_rank'})
+                             'Custom Graphics Style', 'Directed', 'Sample1', 'Box'})
 
     @print_entry_exit
     def test_set_visual_style(self):
