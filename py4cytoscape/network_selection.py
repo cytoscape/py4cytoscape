@@ -652,7 +652,7 @@ def select_edges_connecting_selected_nodes(network=None, base_url=DEFAULT_BASE_U
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         dict: {'nodes': [node list], 'edges': [edge list]}
+         dict: {'nodes': [node list], 'edges': [edge list]} or None if no selected nodes
     Raises:
         CyError: if network name or SUID doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error

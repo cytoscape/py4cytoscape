@@ -203,6 +203,7 @@ class StylesTests(unittest.TestCase):
         # Verify that trying to get a non-existent current style
         self.assertRaises(CyError, get_current_style, network='Does not exist')
 
+    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
     def test_export_import_visual_styles(self):
         # Initialization

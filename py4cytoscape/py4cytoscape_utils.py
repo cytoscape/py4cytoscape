@@ -185,7 +185,7 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, 
         unique_list (bool): True if duplicate node names refer to different nodes; False if it doesn't matter
 
     Returns:
-         list: [<SUID or SUID list corresponding to each name>]
+         list: [<SUID or SUID list corresponding to each name>] or None if node_names is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -223,7 +223,7 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         list: [<name corresponding to each SUID>]
+         list: [<name corresponding to each SUID>] or None if node_suids is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -280,7 +280,7 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, 
         unique_list (bool): True if duplicate edge names refer to different edges; False if it doesn't matter
 
     Returns:
-         list: [<SUID or SUID listcorresponding to each name>]
+         list: [<SUID or SUID listcorresponding to each name>] or None if edge_names is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -320,7 +320,7 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         list: [<name corresponding to each SUID>]
+         list: [<name corresponding to each SUID>] or None if edge_suids is None
 
     Raises:
         CyError: if network name or SUID doesn't exist

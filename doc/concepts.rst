@@ -225,7 +225,7 @@ function:
     import py4cytoscape as p4c
     p4c.cytoscape_version_info()
 
-Alternatively, you can create a Notebook cell to directly install the py4cytoscape library, and then
+Alternatively, you can create a Notebook cell to install the py4cytoscape library, and then
 import it and call a test function:
 
 .. code:: python
@@ -251,24 +251,45 @@ py4cytoscape library:
 
 .. note:: To get Jupyter to recognize a py4cytoscape library different from the one first used by your Notebook, you may need to restart the Python kernel -- see your Jupyter Notebook documentation.
 
+If you intend to develop your Notebook on your Cytoscape workstation but deploy it on a *remote* Jupyter server
+(including Google Colab), you may want to use the Jupyter initialization strategy described in the next
+section instead of simply importing py4cytoscape directly.
+
 Remote Jupyter Notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jupyter Notebooks (including Google Colab) that run on *remote* (private or public) servers can use py4cytoscape to
 execute Cytoscape functions on your workstation via
 the `Jupyter-Bridge <https://github.com/cytoscape/jupyter-bridge>`_. To use the Jupyter-Bridge,
-you must create and execute a different cell at the beginning of your Notebook:
+you must create and execute an initialization cell at the beginning of your Notebook:
 
 .. code:: python
 
     import requests
 
     exec(requests.get("https://raw.githubusercontent.com/cytoscape/jupyter-bridge/master/client/p4c_init.py").text)
-    IPython.display.Javascript(browser_client_js) # Start browser client
+
+    IPython.display.Javascript(_PY4CYTOSCAPE_BROWSER_CLIENT_JS) # Start browser client
+
+.. warning:: The ``IPython.display.Javascript()`` call must be the last line in the initialization cell. It cannot be part of a if-then or try-except block, and no other line can follow it.
+
+By default, this loads py4cytoscape from the PyPI repository. You can specify a different version of py4cytoscape by
+setting the _PY4CYTOSCAPE variable *before* the ``exec()`` call. For example, to load the most recent unreleased py4cytoscape
+or the py4cytoscape in Github branch 0.0.10, use the following:
+
+.. code:: python
+
+    _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape'
+
+or
+
+.. code:: python
+
+    _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape@0.0.10'
 
 .. note:: The Jupyter-Bridge can reach your Cytoscape workstation whether or not it's behind a firewall.
 
-.. note:: The Jupyter-Bridge can be used for Notebooks running on the same workstation as Cytoscape, which enables local development of workflows that will execute remotely.
+.. note:: The Jupyter-Bridge can be used for Notebooks running on the same workstation as Cytoscape, which enables local development of workflows that will execute remotely, though at the cost of some execution speed.
 
 Sandboxing
 ----------

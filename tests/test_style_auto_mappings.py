@@ -114,109 +114,216 @@ class StyleAutoMappingsTests(unittest.TestCase):
             eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
             load_table_data(eight_data, data_key_column='id')
 
-            # Verify that Pastel2 palette is available
+            # Verify that Pastel2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Pastel2(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#B3E2CD', '#FDCDAC', '#CBD5E8', '#F4CAE4', '#E6F5C9', '#FFF2AE', '#F1E2CC', '#CCCCCC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Pastel2(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#CCCCCC', '#F1E2CC', '#FFF2AE', '#E6F5C9', '#F4CAE4', '#CBD5E8', '#FDCDAC', '#B3E2CD'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Pastel1 palette is available
+            # Verify that Pastel1 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Pastel1(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Pastel1(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FDDAEC', '#E5D8BD', '#FFFFCC', '#FED9A6', '#DECBE4', '#CCEBC5', '#B3CDE3', '#FBB4AE'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Dark2 palette is available
+            # Verify that Dark2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Dark2(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#1B9E77', '#D95F02', '#7570B3', '#E7298A', '#66A61E', '#E6AB02', '#A6761D', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Dark2(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#666666', '#A6761D', '#E6AB02', '#66A61E', '#E7298A', '#7570B3', '#D95F02', '#1B9E77'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Accent palette is available
+            # Verify that Accent palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Accent(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#666666', '#BF5B17', '#F0027F', '#386CB0', '#FFFF99', '#FDC086', '#BEAED4', '#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Paired palette is available
+            # Verify that Paired palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Paired(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C', '#FB9A99', '#E31A1C', '#FDBF6F', '#FF7F00'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Paired(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FF7F00', '#FDBF6F', '#E31A1C', '#FB9A99', '#33A02C', '#B2DF8A', '#1F78B4', '#A6CEE3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Set1 palette is available
+            # Verify that Set1 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set1(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set1(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#F781BF', '#A65628', '#FFFF33', '#FF7F00', '#984EA3', '#4DAF4A', '#377EB8', '#E41A1C'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Set2 palette is available
+            # Verify that Set2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set2(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set2(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#B3B3B3', '#E5C494', '#FFD92F', '#A6D854', '#E78AC3', '#8DA0CB', '#FC8D62', '#66C2A5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Set3 palette is available
+            # Verify that Set3 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set3(), mapping_type='d')
             self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set3(reverse=True), mapping_type='d')
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FCCDE5', '#B3DE69', '#FDB462', '#80B1D3', '#FB8072', '#BEBADA', '#FFFFB3', '#8DD3C7'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Blues palette is available and 1-tailed mapping is calculated
+            # Verify that Blues palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Blues())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#DEEBF7', '#9ECAE1', '#3182BD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Blues(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#3182BD', '#9ECAE1', '#DEEBF7'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that BuGn palette is available and 1-tailed mapping is calculated
+            # Verify that BuGn palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_BuGn())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E5F5F9', '#99D8C9', '#2CA25F'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_BuGn(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#2CA25F', '#99D8C9', '#E5F5F9'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that BuPu palette is available and 1-tailed mapping is calculated
+            # Verify that BuPu palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_BuPu())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E0ECF4', '#9EBCDA', '#8856A7'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_BuPu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#8856A7', '#9EBCDA', '#E0ECF4'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that GnBu palette is available and 1-tailed mapping is calculated
+            # Verify that GnBu palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_GnBu())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E0F3DB', '#A8DDB5', '#43A2CA'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_GnBu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#43A2CA', '#A8DDB5', '#E0F3DB'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Greens palette is available and 1-tailed mapping is calculated
+            # Verify that Greens palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Greens())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E5F5E0', '#A1D99B', '#31A354'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Greens(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#31A354', '#A1D99B', '#E5F5E0'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Greys palette is available and 1-tailed mapping is calculated
+            # Verify that Greys palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Greys())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#F0F0F0', '#BDBDBD', '#636363'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Greys(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#636363', '#BDBDBD', '#F0F0F0'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Oranges palette is available and 1-tailed mapping is calculated
+            # Verify that Oranges palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Oranges())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FEE6CE', '#FDAE6B', '#E6550D'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Oranges(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E6550D', '#FDAE6B', '#FEE6CE'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that OrRd palette is available and 1-tailed mapping is calculated
+            # Verify that OrRd palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_OrRd())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FEE8C8', '#FDBB84', '#E34A33'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_OrRd(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E34A33', '#FDBB84', '#FEE8C8'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that PuBu palette is available and 1-tailed mapping is calculated
+            # Verify that PuBu palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_PuBu())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#ECE7F2', '#A6BDDB', '#2B8CBE'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_PuBu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#2B8CBE', '#A6BDDB', '#ECE7F2'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that PuBuGn palette is available and 1-tailed mapping is calculated
+            # Verify that PuBuGn palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_PuBuGn())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#ECE2F0', '#A6BDDB', '#1C9099'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_PuBuGn(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#1C9099', '#A6BDDB', '#ECE2F0'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that RdPu palette is available and 1-tailed mapping is calculated
+            # Verify that RdPu palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_RdPu())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FDE0DD', '#FA9FB5', '#C51B8A'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_RdPu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#C51B8A', '#FA9FB5', '#FDE0DD'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that PuRd palette is available and 1-tailed mapping is calculated
+            # Verify that PuRd palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_PuRd())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E7E1EF', '#C994C7', '#DD1C77'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_PuRd(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#DD1C77', '#C994C7', '#E7E1EF'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Purples palette is available and 1-tailed mapping is calculated
+            # Verify that Purples palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Purples())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#EFEDF5', '#BCBDDC', '#756BB1'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Purples(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#756BB1', '#BCBDDC', '#EFEDF5'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that Reds palette is available and 1-tailed mapping is calculated
+            # Verify that Reds palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Reds())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FEE0D2', '#FC9272', '#DE2D26'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_Reds(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#DE2D26', '#FC9272', '#FEE0D2'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that YlGn palette is available and 1-tailed mapping is calculated
+            # Verify that YlGn palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_YlGn())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#F7FCB9', '#ADDD8E', '#31A354'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_YlGn(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#31A354', '#ADDD8E', '#F7FCB9'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that YlGnBu palette is available and 1-tailed mapping is calculated
+            # Verify that YlGnBu palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_YlGnBu())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#EDF8B1', '#7FCDBB', '#2C7FB8'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_YlGnBu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#2C7FB8', '#7FCDBB', '#EDF8B1'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that YlOrBr palette is available and 1-tailed mapping is calculated
+            # Verify that YlOrBr palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_YlOrBr())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FFF7BC', '#FEC44F', '#D95F0E'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_YlOrBr(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#D95F0E', '#FEC44F', '#FFF7BC'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
-            # Verify that YlOrRd palette is available and 1-tailed mapping is calculated
+            # Verify that YlOrRd palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_YlOrRd())
             self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FFEDA0', '#FEB24C', '#F03B20'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_s_YlOrRd(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#F03B20', '#FEB24C', '#FFEDA0'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that PuOr palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_PuOr())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#998EC3', '#F7F7F7', '#F1A340'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_PuOr(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#F1A340', '#F7F7F7', '#998EC3'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that BrBG palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_BrBG())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#5AB4AC', '#F5F5F5', '#D8B365'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_BrBG(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#D8B365', '#F5F5F5', '#5AB4AC'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that PRGn palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_PRGn())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#7FBF7B', '#F7F7F7', '#AF8DC3'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_PRGn(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#AF8DC3', '#F7F7F7', '#7FBF7B'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that PiYG palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_PiYG())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#A1D76A', '#F7F7F7', '#E9A3C9'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_PiYG(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#E9A3C9', '#F7F7F7', '#A1D76A'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that RdBu palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_RdBu())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#67A9CF', '#F7F7F7', '#EF8A62'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_RdBu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#EF8A62', '#F7F7F7', '#67A9CF'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that RdGy palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_RdGy())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#999999', '#FFFFFF', '#EF8A62'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_RdGy(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#EF8A62', '#FFFFFF', '#999999'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that RdYlBu palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_RdYlBu())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#91BFDB', '#FFFFBF', '#FC8D59'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_RdYlBu(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FC8D59', '#FFFFBF', '#91BFDB'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that Spectral palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_Spectral())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#99D594', '#FFFFBF', '#FC8D59'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_Spectral(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FC8D59', '#FFFFBF', '#99D594'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
+            # Verify that RdYlGn palette (and reverse) is available and is used when it's the only choice provided
+            continuous_map = gen_node_color_map('newcol', palette_color_brewer_d_RdYlGn())
+            self.assertDictEqual(continuous_map, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#91CF60', '#FFFFBF', '#FC8D59'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            continuous_map_rev = gen_node_color_map('newcol', palette_color_brewer_d_RdYlGn(reverse=True))
+            self.assertDictEqual(continuous_map_rev, {'table_column': 'newcol', 'table_column_values': [1, 4.5, 8], 'colors': ['#FC8D59', '#FFFFBF', '#91CF60'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+
 
             # Verify that random palette is available
             eight_map = gen_node_color_map('newcol', palette_color_random(), mapping_type='d')
@@ -302,15 +409,15 @@ class StyleAutoMappingsTests(unittest.TestCase):
             zero_data = df.DataFrame(data={'id':['YER056CA'], 'newcol':[0]})
             load_table_data(zero_data, data_key_column='id')
             set_node_color_mapping(**gen_node_color_map('newcol', (palette_color_brewer_s_Blues(), palette_color_brewer_d_Spectral()), style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -8.0, 'lesser': '#FC8D59', 'equal': '#FC8D59', 'greater': '#FC8D59'}, {'value': 0.0, 'lesser': '#FFFFBF', 'equal': '#FFFFBF', 'greater': '#FFFFBF'}, {'value': 8.0, 'lesser': '#99D594', 'equal': '#99D594', 'greater': '#99D594'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -8.0, 'lesser': '#99D594', 'equal': '#99D594', 'greater': '#99D594'}, {'value': 0.0, 'lesser': '#FFFFBF', 'equal': '#FFFFBF', 'greater': '#FFFFBF'}, {'value': 8.0, 'lesser': '#FC8D59', 'equal': '#FC8D59', 'greater': '#FC8D59'}]})
 
             # Verify that when no palette is given, the correct palette is chosen for two-tailed treatment
             palette_map = gen_node_color_map('newcol', style_name='galFiltered Style')
-            self.assertDictEqual(palette_map, {'table_column': 'newcol', 'table_column_values': [-8, 0, 8], 'colors': ['#FC8D59', '#FFFFBF', '#91BFDB'], 'mapping_type': 'c', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(palette_map, {'table_column': 'newcol', 'table_column_values': [-8, 0, 8], 'colors': ['#91BFDB', '#FFFFBF', '#FC8D59'], 'mapping_type': 'c', 'default_color': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that when divergent palette is only palette given, we get valid result if data is two-tailed
             set_node_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_d_Spectral(), style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -8.0, 'lesser': '#FC8D59', 'equal': '#FC8D59', 'greater': '#FC8D59'}, {'value': 0.0, 'lesser': '#FFFFBF', 'equal': '#FFFFBF', 'greater': '#FFFFBF'}, {'value': 8.0, 'lesser': '#99D594', 'equal': '#99D594', 'greater': '#99D594'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -8.0, 'lesser': '#99D594', 'equal': '#99D594', 'greater': '#99D594'}, {'value': 0.0, 'lesser': '#FFFFBF', 'equal': '#FFFFBF', 'greater': '#FFFFBF'}, {'value': 8.0, 'lesser': '#FC8D59', 'equal': '#FC8D59', 'greater': '#FC8D59'}]})
 
             # Verify that when sequential palette is used on two-tailed data, it's allowed, but warning is given
             set_node_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))

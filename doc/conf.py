@@ -27,7 +27,7 @@ os.environ['SPHINX_BUILD'] = 'TRUE'
 # -- Project information -----------------------------------------------------
 
 project = 'py4cytoscape'
-copyright = f"2018-{date.today().year}, The Cytoscape Consortium"
+copyright = f"2021-{date.today().year}, The Cytoscape Consortium"
 author = 'Barry Demchak'
 
 import py4cytoscape
@@ -63,6 +63,8 @@ add_module_names = False
 napoleon_use_param = True
 # If true, generates autosummaries
 autosummary_generate = True
+# If true, allow errors (e.g., in tutorials) to not stop documentation build
+nbsphinx_allow_errors = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

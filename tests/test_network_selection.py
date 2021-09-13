@@ -327,8 +327,21 @@ class NetworkSelectionTests(unittest.TestCase):
     def test_select_nodes_connected_by_selected_edges(self):
         # Initialization
         load_test_session()
+        SINGLE_NODE = ['RAP1']
+        TWO_NODES = ['RAP1', 'MIG1']
         COMMON_NODES = ['RAP1', 'PDC1', 'MIG1', 'SUC2']
         SELECTED_EDGES = ['YGL035C (pd) YIL162W', 'YGL035C (pd) YLR044C', 'YNL216W (pd) YLR044C']
+
+        # Verify that selecting no nodes and then calculating connected edges returns the expected result
+        self.assertIsNone(select_edges_connecting_selected_nodes())
+
+        # Verify that selecting a single node yields no edges
+        single_selected_nodes = select_nodes(SINGLE_NODE, by_col='COMMON')['nodes']
+        self.assertIsNone(select_edges_connecting_selected_nodes())
+
+        # Verify that selecting two unconnected nodes yields no edges
+        single_selected_nodes = select_nodes(TWO_NODES, by_col='COMMON')['nodes']
+        self.assertIsNone(select_edges_connecting_selected_nodes())
 
         # Select some nodes and verify that the expected edges are selected
         selected_nodes = select_nodes(COMMON_NODES, by_col='COMMON')['nodes']
@@ -536,24 +549,24 @@ class NetworkSelectionTests(unittest.TestCase):
 
         # Verify that when no edges are duplicated, no edges get deleted
         self.assertDictEqual(delete_duplicate_edges(), {})
-        self.assertEqual(get_edge_count(), original_edge_count)
+        self.assertEqual(get_edge_count(), original_edge_count, '1: No edges deleted')
 
         # Verify that duplicating an edge then deleting one of the same-name edges results in the original network
         first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         edge_deleted_suids = delete_duplicate_edges()['edges']
-        self.assertEqual(len(edge_deleted_suids), 1)
+        self.assertEqual(len(edge_deleted_suids), 1, '2: One edge deleted')
         self.assertTrue(set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid]))
-        self.assertEqual(get_edge_count(), original_edge_count)
+        self.assertEqual(get_edge_count(), original_edge_count, '3: Original edge count')
         original_edge_suid = (set([original_edge_suid, first_copy_edge_suid]) - set(edge_deleted_suids)).pop()
 
         # Verify that duplicating an edge twice then deleting two of the same-name edges results in the original network
         first_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         second_copy_edge_suid = add_cy_edges(['YNL216W', 'YLR044C'], edge_type='pd')[0]['SUID']
         edge_deleted_suids = delete_duplicate_edges()['edges']
-        self.assertEqual(len(edge_deleted_suids), 2)
+        self.assertEqual(len(edge_deleted_suids), 2, '4: Two edges')
         self.assertTrue(
             set(edge_deleted_suids) < set([original_edge_suid, first_copy_edge_suid, second_copy_edge_suid]))
-        self.assertEqual(get_edge_count(), original_edge_count)
+        self.assertEqual(get_edge_count(), original_edge_count, '5: Original edge count')
 
         # Verify that duplicating an edge four times (forward twice and backward twice) then deleting duplicates
         # results in the original network plus one of the backward edges
@@ -562,10 +575,10 @@ class NetworkSelectionTests(unittest.TestCase):
         backward_copy_edge_1_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
         backward_copy_edge_2_suid = add_cy_edges(['YLR044C', 'YNL216W'], edge_type='pd')[0]['SUID']
         edge_deleted_suids = delete_duplicate_edges()['edges']
-        self.assertEqual(len(edge_deleted_suids), 3)
-        self.assertEqual(len(set(edge_deleted_suids) & {original_edge_suid, forward_copy_edge_1_suid, forward_copy_edge_2_suid}), 2)
-        self.assertEqual(len(set(edge_deleted_suids) & {backward_copy_edge_1_suid, backward_copy_edge_2_suid}), 1)
-        self.assertEqual(get_edge_count(), original_edge_count + 1)
+        self.assertEqual(len(edge_deleted_suids), 3, '6: Three edges')
+        self.assertEqual(len(set(edge_deleted_suids) & {original_edge_suid, forward_copy_edge_1_suid, forward_copy_edge_2_suid}), 2, '7: Forward edges')
+        self.assertEqual(len(set(edge_deleted_suids) & {backward_copy_edge_1_suid, backward_copy_edge_2_suid}), 1, '8: Backward edges')
+        self.assertEqual(get_edge_count(), original_edge_count + 1, '9: Additional edge')
 
         # Try adding in the two forward edges and two backward edges and deleting duplicates, ignoring direction ...
         # This should result in just the original network

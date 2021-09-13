@@ -412,7 +412,7 @@ def _create_filter_and_finish(cmd, cmd_body, hide, apply, network, base_url):
 
 def _check_selected(hide, network, base_url):
     if check_supported_versions(cytoscape='3.9'):
-        # This delay became unnecessary in Cytoscape 3.9
+    # This delay became unnecessary in Cytoscape 3.9
         show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
         time.sleep(CATCHUP_FILTER_SECS)  # Yikes! Have to wait a second for selection to settle!
 
@@ -422,9 +422,9 @@ def _check_selected(hide, network, base_url):
     if hide:
         res = style_bypasses.unhide_all(network=network, base_url=base_url)
         # TODO: Ignore return result res??
-        if len(sel_nodes) != 0:
+        if sel_nodes is not None and len(sel_nodes) != 0:
             res= style_bypasses.hide_nodes(network_selection.invert_node_selection(network=network, base_url=base_url)['nodes'])
-        if len(sel_edges) != 0:
+        if sel_edges is not None and len(sel_edges) != 0:
             res = style_bypasses.hide_edges(network_selection.invert_edge_selection(network=network, base_url=base_url)['edges'])
 
     return {'nodes': sel_nodes, 'edges': sel_edges}

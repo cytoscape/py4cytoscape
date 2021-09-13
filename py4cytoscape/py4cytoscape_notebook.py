@@ -57,7 +57,7 @@ class SpoofResponse:
                 u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
 
 # Create a unique channel that identifies this process so other processes don't mix up messages
-_CHANNEL = uuid.uuid4()
+_CHANNEL = None
 
 # Get the name of the Jupyter-bridge server
 _JUPYTER_BRIDGE_URL = os.environ.get('JUPYTER_BRIDGE_URL', 'https://jupyter-bridge.cytoscape.org')
@@ -208,6 +208,8 @@ def check_running_remote():
     return _running_remote
 
 def get_browser_client_js(debug_bridge=False):
+    global _CHANNEL
+    _CHANNEL = uuid.uuid4() # Get a new channel here ... each new browser client works on a fresh channel
     try:
         # Prepend channel number of client Javascript so it can communicate with this process via Jupyter-bridge
         r = requests.get(
