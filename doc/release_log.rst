@@ -6,7 +6,7 @@ Release Log
 
 py4cytoscape 0.0.10
 -------------------
-Release date: 31 Aug 2021
+Release date: 13 Sep 2021
 
 * Updated documentation and tutorials
 * Made set_*_property_bypass more resilient to null node/edge lists
