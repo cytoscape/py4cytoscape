@@ -46,6 +46,7 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 1. Again, successfully execute all tests by using the tests/runalltests.bat file, Gang Su workflows and the Sanity Test. (Change Sanity Test to fetch ``py4cytoscape`` from PyPI instead of Github.)
 1. Check any/all changes to the [user manual](https://py4cytoscape.readthedocs.io/en/latest/) and fix them now. (Note that the manual is automatically re-compiled when changes are made to the Master branch in Github.)
 1. Create a new Github tag (in the Releases section on the far right of the Github GUI)
+1. Start a branch to contain the next round of py4cytoscape changes.
 
 ## Test Suites
 
