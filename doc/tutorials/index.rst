@@ -7,7 +7,7 @@ You can try the following tutorials with Cytoscape Desktop + `Google Colab <http
 
 1. Install Cytoscape in your local desktop environment and launch it.
 
-2. Install FileTransfer App with Cytoscape App Manager (by clicking the ``Apps`` in the Cytoscape menu bar -> ``App Manager``..)
+2. If you're using Cytoscape 3.8.2 or earlier, install FileTransfer App with Cytoscape App Manager (by clicking the ``Apps`` in the Cytoscape menu bar -> ``App Manager``..)
 
 .. image:: ../images/InstallingFileTransferApp.png
 
