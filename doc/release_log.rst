@@ -4,9 +4,9 @@ Release Log
 ===========
 
 
-py4cytoscape 0.0.10
+py4cytoscape 0.0.11
 -------------------
-Release date: 13 Sep 2021
+Release date: 15 Sep 2021
 
 * Updated documentation and tutorials
 * Made set_*_property_bypass more resilient to null node/edge lists
@@ -18,8 +18,13 @@ Release date: 13 Sep 2021
 Release notes
 ~~~~~~~~~~~~~
 
-.. include:: release/release_0.0.10.rst
+.. include:: release/release_0.0.11.rst
 
+
+py4cytoscape 0.0.10
+-------------------
+
+Cancelled
 
 py4cytoscape 0.0.9
 ------------------
