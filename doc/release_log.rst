@@ -10,7 +10,7 @@ Release date: 13 Sep 2021
 
 * Updated documentation and tutorials
 * Made set_*_property_bypass more resilient to null node/edge lists
-* For Notebook support, improved startup code and added notebook_show_image() function
+* For Notebook support, improved startup code and added notebook_show_image(), notebook_export_show_image() functions
 * For color generators, added reverse= parameter and made divergent palettes automatically reversed
 * Fixed filter and style bypass functions to not crash when there are no selected nodes
 

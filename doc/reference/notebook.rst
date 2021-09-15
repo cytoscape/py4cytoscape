@@ -11,4 +11,5 @@ Notebook
 .. autosummary::
    :toctree: generated/
 
+   notebook_export_show_image
    notebook_show_image

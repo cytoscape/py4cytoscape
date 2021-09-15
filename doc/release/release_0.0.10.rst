@@ -26,7 +26,7 @@ API Changes
 
 * Added reverse= parameter for Value Generators
 * Automatically reverse color sequence for divergent palettes
-* Added notebook_show_image() function for Notebook execution
+* Added notebook_show_image(), notebook_export_show_image() functions for Notebook execution
 
 Deprecations
 ------------
