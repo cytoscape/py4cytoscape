@@ -39,9 +39,9 @@ def notebook_export_show_image(filename='image', type='PNG', resolution=None, un
     Export a network view to an image file, then upload the file to the notebook file system and display the image.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to the name of the file.
+        filename (str): Full path or path relative to current working directory, in addition to the name of the file.
             File is used to save image of network view so it can be transferred to the notebook file system and displayed.
-            Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
+            Extension is automatically added based on the ``type`` argument.
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
             width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600.
@@ -84,9 +84,9 @@ def notebook_show_image(filename, type='PNG', sandbox_name=None, network=None, b
     Upload an existing image file to the notebook file system and display the image.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to the name of the file.
+        filename (str): Full path or path relative to current working directory, in addition to the name of the file.
             File must already exist, and will be transferred to the notebook file system and displayed.
-            Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
+            Extension is automatically added based on the ``type`` argument.
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
@@ -120,7 +120,7 @@ def _export_show_image(export_first, filename='image', type='PNG', resolution=No
         # Create network image file in sandbox
         if export_first:
             network_views.export_image(filename=filename, type=type, resolution=resolution, units=units, height=height, width=width, zoom=zoom,
-                                       network=network, base_url=base_url, overwrite_file=overwrite_file)['file']
+                                       network=network, base_url=base_url, overwrite_file=overwrite_file)
 
         # Transfer sandbox version of image to local storage so notebook can see it
         sandbox.sandbox_get_from(filename, overwrite=overwrite_file, sandbox_name=sandbox_name, base_url=base_url)
