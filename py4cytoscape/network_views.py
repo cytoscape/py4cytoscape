@@ -206,7 +206,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     The image is cropped per the current view in Cytoscape. Consider applying :meth:`fit_content` prior to export.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to the name of the file.
+        filename (str): Full path or path relative to current working directory, in addition to the name of the file.
             Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected

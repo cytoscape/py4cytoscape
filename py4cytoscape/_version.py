@@ -22,7 +22,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # This is the official version of this library. Change it here, and the build and documentation
 # should pick it up automatically.
 
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 
 # This reflects the reference API this module meets
 _automation_api_version = '1.3.0'
