@@ -275,7 +275,7 @@ you must create and execute an initialization cell at the beginning of your Note
 
 By default, this loads py4cytoscape from the PyPI repository. You can specify a different version of py4cytoscape by
 setting the _PY4CYTOSCAPE variable *before* the ``exec()`` call. For example, to load the most recent unreleased py4cytoscape
-or the py4cytoscape in Github branch 0.0.10, use the following:
+or the py4cytoscape in Github branch 0.0.11, use the following:
 
 .. code:: python
 
@@ -285,7 +285,7 @@ or
 
 .. code:: python
 
-    _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape@0.0.10'
+    _PY4CYTOSCAPE = 'git+https://github.com/cytoscape/py4cytoscape@0.0.11'
 
 .. note:: The Jupyter-Bridge can reach your Cytoscape workstation whether or not it's behind a firewall.
 
