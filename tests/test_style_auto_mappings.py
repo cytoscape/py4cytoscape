@@ -74,6 +74,8 @@ class StyleAutoMappingsTests(unittest.TestCase):
             one_data = df.DataFrame(data={'id':['YDL194W'], 'newcol':[4]})
             load_table_data(one_data, data_key_column='id')
             two_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
+            # Fails on Mac because ordering of table_column_values is different. This is because there's no defined
+            # order of values when their frequency count is the same.
             self.assertDictEqual(two_map, {'table_column': 'newcol', 'table_column_values': ['4', '3'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add a data value so now there are three (and now at minimum cy_palette threshold), and verify the correct values and mappings

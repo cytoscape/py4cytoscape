@@ -310,6 +310,7 @@ class StyleBypassesTests(unittest.TestCase):
     @print_entry_exit
     def test_set_edge_font_face_bypass(self):
 
+        # Fails on Mac because there is no Dialog.italic font
         self._check_edge_bypass(set_edge_font_face_bypass, 'Dialog.italic,plain,20', 'Dialog.bold,bold,10', None, None, 'EDGE_LABEL_FONT_FACE')
 
     @print_entry_exit

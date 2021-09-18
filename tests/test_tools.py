@@ -195,22 +195,22 @@ class ToolsTests(unittest.TestCase):
         def check_merge(new_suid, new_title, node_count=9, edge_count=10,
                         extra_node_props={}, extra_edge_props={}, extra_network_props={},
                         merged_nodes=BASIC_MERGED_NODES, merged_edges=BASIC_MERGED_EDGES):
-            self.assertEqual(get_network_name(suid=new_suid), new_title)
-            self.assertEqual(get_node_count(network=new_suid), node_count)
-            self.assertEqual(get_edge_count(network=new_suid), edge_count)
+            self.assertEqual(get_network_name(suid=new_suid), new_title, 'Check title')
+            self.assertEqual(get_node_count(network=new_suid), node_count, 'Check node count')
+            self.assertEqual(get_edge_count(network=new_suid), edge_count, 'Check edge count')
             if node_count:
-                self.assertEqual(set(get_all_nodes(network=new_suid)), merged_nodes)
+                self.assertEqual(set(get_all_nodes(network=new_suid)), merged_nodes, 'Check all nodes')
             if edge_count:
-                self.assertSetEqual(set(get_all_edges(network=new_suid)), merged_edges)
+                self.assertSetEqual(set(get_all_edges(network=new_suid)), merged_edges, 'Check all edges')
             actual_nodes = BASIC_MERGED_NODE_PROPS.copy()
             actual_nodes.update(extra_node_props)
             actual_edges = BASIC_MERGED_EDGE_PROPS.copy()
             actual_edges.update(extra_edge_props)
             actual_networks = BASIC_MERGED_NETWORK_PROPS.copy()
             actual_networks.update(extra_network_props)
-            self.assertDictEqual(get_table_column_types('node', network=new_suid), actual_nodes)
-            self.assertDictEqual(get_table_column_types('edge', network=new_suid), actual_edges)
-            self.assertDictEqual(get_table_column_types('network', network=new_suid), actual_networks)
+            self.assertDictEqual(get_table_column_types('node', network=new_suid), actual_nodes, 'Check column types')
+            self.assertDictEqual(get_table_column_types('edge', network=new_suid), actual_edges, 'Check edge types')
+            self.assertDictEqual(get_table_column_types('network', network=new_suid), actual_networks, 'Check network types')
 
         # Setup: clean out previous test
         close_session(False)
