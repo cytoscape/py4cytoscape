@@ -74,39 +74,37 @@ class StyleAutoMappingsTests(unittest.TestCase):
             one_data = df.DataFrame(data={'id':['YDL194W'], 'newcol':[4]})
             load_table_data(one_data, data_key_column='id')
             two_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            # Fails on Mac because ordering of table_column_values is different. This is because there's no defined
-            # order of values when their frequency count is the same.
-            self.assertDictEqual(two_map, {'table_column': 'newcol', 'table_column_values': ['4', '3'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(two_map, {'table_column': 'newcol', 'table_column_values': ['3', '4'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add a data value so now there are three (and now at minimum cy_palette threshold), and verify the correct values and mappings
             one_data = df.DataFrame(data={'id':['YDR277C'], 'newcol':[5]})
             load_table_data(one_data, data_key_column='id')
             three_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(three_map, {'table_column': 'newcol', 'table_column_values': ['5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(three_map, {'table_column': 'newcol', 'table_column_values': ['3', '4', '5'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add 5 data values so now there 8 (which is at maximum cy_palette threshold), and verify the correct values and mappings
             five_data = df.DataFrame(data={'id':['YFR014C', 'YGR136W', 'YDL023C', 'YBR170C', 'YGR074W'], 'newcol':[6, 7, 8, 9, 10]})
             load_table_data(five_data, data_key_column='id')
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['3', '4', '5', '6', '7', '8', '9', '10'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add 5 more data values so now there 8 (with 5 duplicates, which is still at maximum cy_palette threshold), and verify that values and mappings don't change
             five_data = df.DataFrame(data={'id':['YER079W', 'YDL215C', 'YIL045W', 'YPR041W', 'YOR120W'], 'newcol':[6, 7, 8, 9, 10]})
             load_table_data(five_data, data_key_column='id')
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '5', '4', '3'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['3', '4', '5', '6', '7', '8', '9', '10'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add 1 more data values so now there 19 (with 5 duplicates, which forces cy_palette interpolation), and verify that values and mappings are right
             one_data = df.DataFrame(data={'id':['YBR118W'], 'newcol':[50]})
             load_table_data(one_data, data_key_column='id')
             nine_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(nine_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '50', '5', '4', '3'], 'colors': ['#7FC97F', '#B6B1C9', '#EDBC9A', '#FEE792', '#9CB6A5', '#7D449E', '#E41865', '#B45C21', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(nine_map, {'table_column': 'newcol', 'table_column_values': ['3', '4', '5', '50', '6', '7', '8', '9', '10'], 'colors': ['#7FC97F', '#B6B1C9', '#EDBC9A', '#FEE792', '#9CB6A5', '#7D449E', '#E41865', '#B45C21', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Add 5 more data values so now there 14 (with 5 duplicates, which forces cy_palette interpolation), and verify that values and mappings are right
             five_data = df.DataFrame(data={'id':['YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[100, 101, 102, 103, 104]})
             load_table_data(five_data, data_key_column='id')
             fourteen_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(fourteen_map, {'table_column': 'newcol', 'table_column_values': ['10', '9', '8', '7', '6', '50', '104', '103', '102', '101', '100', '5', '4', '3'], 'colors': ['#7FC97F', '#A1BAAD', '#C3AFCE', '#E5B9A4', '#FDCA89', '#FEEC93', '#D1DD9E', '#668EAB', '#714BA1', '#D41287', '#DD2457', '#C3541F', '#96603B', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(fourteen_map, {'table_column': 'newcol', 'table_column_values':['3', '4', '5', '50', '100', '101', '102', '103', '104', '6', '7', '8', '9', '10'], 'colors': ['#7FC97F', '#A1BAAD', '#C3AFCE', '#E5B9A4', '#FDCA89', '#FEEC93', '#D1DD9E', '#668EAB', '#714BA1', '#D41287', '#DD2457', '#C3541F', '#96603B', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         def verify_palettes():
             # Initialization -- get a clean session back
@@ -118,51 +116,51 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
             # Verify that Pastel2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Pastel2(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#B3E2CD', '#FDCDAC', '#CBD5E8', '#F4CAE4', '#E6F5C9', '#FFF2AE', '#F1E2CC', '#CCCCCC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#B3E2CD', '#FDCDAC', '#CBD5E8', '#F4CAE4', '#E6F5C9', '#FFF2AE', '#F1E2CC', '#CCCCCC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Pastel2(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#CCCCCC', '#F1E2CC', '#FFF2AE', '#E6F5C9', '#F4CAE4', '#CBD5E8', '#FDCDAC', '#B3E2CD'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#CCCCCC', '#F1E2CC', '#FFF2AE', '#E6F5C9', '#F4CAE4', '#CBD5E8', '#FDCDAC', '#B3E2CD'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Pastel1 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Pastel1(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Pastel1(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FDDAEC', '#E5D8BD', '#FFFFCC', '#FED9A6', '#DECBE4', '#CCEBC5', '#B3CDE3', '#FBB4AE'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#FDDAEC', '#E5D8BD', '#FFFFCC', '#FED9A6', '#DECBE4', '#CCEBC5', '#B3CDE3', '#FBB4AE'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Dark2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Dark2(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#1B9E77', '#D95F02', '#7570B3', '#E7298A', '#66A61E', '#E6AB02', '#A6761D', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#1B9E77', '#D95F02', '#7570B3', '#E7298A', '#66A61E', '#E6AB02', '#A6761D', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Dark2(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#666666', '#A6761D', '#E6AB02', '#66A61E', '#E7298A', '#7570B3', '#D95F02', '#1B9E77'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#666666', '#A6761D', '#E6AB02', '#66A61E', '#E7298A', '#7570B3', '#D95F02', '#1B9E77'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Accent palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#7FC97F', '#BEAED4', '#FDC086', '#FFFF99', '#386CB0', '#F0027F', '#BF5B17', '#666666'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Accent(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#666666', '#BF5B17', '#F0027F', '#386CB0', '#FFFF99', '#FDC086', '#BEAED4', '#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#666666', '#BF5B17', '#F0027F', '#386CB0', '#FFFF99', '#FDC086', '#BEAED4', '#7FC97F'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Paired palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Paired(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C', '#FB9A99', '#E31A1C', '#FDBF6F', '#FF7F00'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C', '#FB9A99', '#E31A1C', '#FDBF6F', '#FF7F00'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Paired(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FF7F00', '#FDBF6F', '#E31A1C', '#FB9A99', '#33A02C', '#B2DF8A', '#1F78B4', '#A6CEE3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#FF7F00', '#FDBF6F', '#E31A1C', '#FB9A99', '#33A02C', '#B2DF8A', '#1F78B4', '#A6CEE3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Set1 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set1(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set1(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#F781BF', '#A65628', '#FFFF33', '#FF7F00', '#984EA3', '#4DAF4A', '#377EB8', '#E41A1C'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#F781BF', '#A65628', '#FFFF33', '#FF7F00', '#984EA3', '#4DAF4A', '#377EB8', '#E41A1C'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Set2 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set2(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#66C2A5', '#FC8D62', '#8DA0CB', '#E78AC3', '#A6D854', '#FFD92F', '#E5C494', '#B3B3B3'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set2(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#B3B3B3', '#E5C494', '#FFD92F', '#A6D854', '#E78AC3', '#8DA0CB', '#FC8D62', '#66C2A5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#B3B3B3', '#E5C494', '#FFD92F', '#A6D854', '#E78AC3', '#8DA0CB', '#FC8D62', '#66C2A5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Set3 palette (and reverse) is available
             eight_map = gen_node_color_map('newcol', palette_color_brewer_q_Set3(), mapping_type='d')
-            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3', '#FDB462', '#B3DE69', '#FCCDE5'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             eight_map_rev = gen_node_color_map('newcol', palette_color_brewer_q_Set3(reverse=True), mapping_type='d')
-            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'colors': ['#FCCDE5', '#B3DE69', '#FDB462', '#80B1D3', '#FB8072', '#BEBADA', '#FFFFB3', '#8DD3C7'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(eight_map_rev, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'colors': ['#FCCDE5', '#B3DE69', '#FDB462', '#80B1D3', '#FB8072', '#BEBADA', '#FFFFB3', '#8DD3C7'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
             # Verify that Blues palette (and reverse) is available and 1-tailed mapping is calculated
             continuous_map = gen_node_color_map('newcol', palette_color_brewer_s_Blues())
@@ -329,7 +327,7 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
             # Verify that random palette is available
             eight_map = gen_node_color_map('newcol', palette_color_random(), mapping_type='d')
-            self.assertListEqual(eight_map['table_column_values'], ['8', '7', '6', '5', '4', '3', '2', '1'])
+            self.assertListEqual(eight_map['table_column_values'], ['1', '2', '3', '4', '5', '6', '7', '8'])
             self.assertEqual(len(eight_map['colors']), 8)
 
         def verify_setters_and_continuous():
@@ -347,9 +345,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
             # Verify that edge mapping generation for discrete and continuous 1-tailed edges work as expected
             edge_map = gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d')
-            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'colors': ['#7FC97F', '#BEAED4'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             edge_map = gen_edge_color_map('interaction', mapping_type='d')
-            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'colors': ['#66C2A5', '#FC8D62'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+            self.assertDictEqual(edge_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'colors': ['#66C2A5', '#FC8D62'], 'mapping_type': 'd', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             edge_map = gen_edge_color_map('EdgeBetweenness')
             self.assertDictEqual(edge_map, {'table_column': 'EdgeBetweenness', 'table_column_values': [2.0, 9591.11110001, 19180.22220002], 'colors': ['#E0F3DB', '#A8DDB5', '#43A2CA'], 'mapping_type': 'c', 'default_color': None, 'style_name': None, 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
             edge_map = gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues())
@@ -360,43 +358,43 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
             # Verify that setting border color works as expected for discrete and continuous
             set_node_border_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_PAINT', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_PAINT', 'map': [{'key': '1', 'value': '#7FC97F'}, {'key': '2', 'value': '#BEAED4'}, {'key': '3', 'value': '#FDC086'}, {'key': '4', 'value': '#FFFF99'}, {'key': '5', 'value': '#386CB0'}, {'key': '6', 'value': '#F0027F'}, {'key': '7', 'value': '#BF5B17'}, {'key': '8', 'value': '#666666'}]})
             set_node_border_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_PAINT'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_PAINT', 'points': [{'value': 1.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 4.5, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 8.0, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that node border color works as expected for discrete and continuous
             set_node_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'map': [{'key': '1', 'value': '#7FC97F'}, {'key': '2', 'value': '#BEAED4'}, {'key': '3', 'value': '#FDC086'}, {'key': '4', 'value': '#FFFF99'}, {'key': '5', 'value': '#386CB0'}, {'key': '6', 'value': '#F0027F'}, {'key': '7', 'value': '#BF5B17'}, {'key': '8', 'value': '#666666'}]})
             set_node_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_FILL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': 1.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 4.5, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 8.0, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that label border color works as expected for discrete and continuous
             set_node_label_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_COLOR', 'map': [{'key': '1', 'value': '#666666'}, {'key': '2', 'value': '#BF5B17'}, {'key': '3', 'value': '#F0027F'}, {'key': '4', 'value': '#386CB0'}, {'key': '5', 'value': '#FFFF99'}, {'key': '6', 'value': '#FDC086'}, {'key': '7', 'value': '#BEAED4'}, {'key': '8', 'value': '#7FC97F'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_COLOR', 'map': [{'key': '1', 'value': '#7FC97F'}, {'key': '2', 'value': '#BEAED4'}, {'key': '3', 'value': '#FDC086'}, {'key': '4', 'value': '#FFFF99'}, {'key': '5', 'value': '#386CB0'}, {'key': '6', 'value': '#F0027F'}, {'key': '7', 'value': '#BF5B17'}, {'key': '8', 'value': '#666666'}]})
             set_node_label_color_mapping(**gen_node_color_map('newcol', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_COLOR', 'points': [{'value': 1.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 4.5, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 8.0, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that setting edge color works as expected for discrete and continuous
             set_edge_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#BEAED4'}, {'key': 'pd', 'value': '#7FC97F'}]})
             set_edge_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_UNSELECTED_PAINT'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_UNSELECTED_PAINT', 'points': [{'value': 2.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 9591.11110001, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 19180.22220002, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that setting edge label color works as expected for discrete and continuous
             set_edge_label_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_COLOR', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_COLOR'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_COLOR', 'map': [{'key': 'pp', 'value': '#BEAED4'}, {'key': 'pd', 'value': '#7FC97F'}]})
             set_edge_label_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_COLOR'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_LABEL_COLOR', 'points': [{'value': 2.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 9591.11110001, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 19180.22220002, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that setting target arrow color works as expected for discrete and continuous
             set_edge_target_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#BEAED4'}, {'key': 'pd', 'value': '#7FC97F'}]})
             set_edge_target_arrow_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_UNSELECTED_PAINT'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'points': [{'value': 2.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 9591.11110001, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 19180.22220002, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
             # Verify that setting source arrow color works as expected for discrete and continuous
             set_edge_source_arrow_color_mapping(**gen_edge_color_map('interaction', palette_color_brewer_q_Accent(), mapping_type='d', style_name='galFiltered Style'))
-            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#7FC97F'}, {'key': 'pd', 'value': '#BEAED4'}]})
+            self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_UNSELECTED_PAINT'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'map': [{'key': 'pp', 'value': '#BEAED4'}, {'key': 'pd', 'value': '#7FC97F'}]})
             set_edge_source_arrow_color_mapping(**gen_edge_color_map('EdgeBetweenness', palette_color_brewer_s_Blues(), style_name='galFiltered Style'))
             self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_UNSELECTED_PAINT'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'points': [{'value': 2.0, 'lesser': '#DEEBF7', 'equal': '#DEEBF7', 'greater': '#DEEBF7'}, {'value': 9591.11110001, 'lesser': '#9ECAE1', 'equal': '#9ECAE1', 'greater': '#9ECAE1'}, {'value': 19180.22220002, 'lesser': '#3182BD', 'equal': '#3182BD', 'greater': '#3182BD'}]})
 
