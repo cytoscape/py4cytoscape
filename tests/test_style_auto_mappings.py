@@ -454,9 +454,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_opacity_map('newcol', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'opacities': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         eight_map = gen_node_opacity_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'opacities': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_node_opacity_map('newcol', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['opacities']), 8)
 
@@ -468,17 +468,17 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each node opacity mapping works for both discrete and continuous
         set_node_border_opacity_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'map': [{'key': '1', 'value': '240'}, {'key': '2', 'value': '220'}, {'key': '3', 'value': '200'}, {'key': '4', 'value': '180'}, {'key': '5', 'value': '160'}, {'key': '6', 'value': '140'}, {'key': '7', 'value': '120'}, {'key': '8', 'value': '100'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'map': [{'key': '1', 'value': '100'}, {'key': '2', 'value': '120'}, {'key': '3', 'value': '140'}, {'key': '4', 'value': '160'}, {'key': '5', 'value': '180'}, {'key': '6', 'value': '200'}, {'key': '7', 'value': '220'}, {'key': '8', 'value': '240'}]})
         set_node_border_opacity_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_TRANSPARENCY'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'points': [{'value': 1.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 4.5, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 8.0, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
         set_node_fill_opacity_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_TRANSPARENCY', 'map': [{'key': '1', 'value': '240'}, {'key': '2', 'value': '220'}, {'key': '3', 'value': '200'}, {'key': '4', 'value': '180'}, {'key': '5', 'value': '160'}, {'key': '6', 'value': '140'}, {'key': '7', 'value': '120'}, {'key': '8', 'value': '100'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_TRANSPARENCY', 'map': [{'key': '1', 'value': '100'}, {'key': '2', 'value': '120'}, {'key': '3', 'value': '140'}, {'key': '4', 'value': '160'}, {'key': '5', 'value': '180'}, {'key': '6', 'value': '200'}, {'key': '7', 'value': '220'}, {'key': '8', 'value': '240'}]})
         set_node_fill_opacity_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_TRANSPARENCY'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_TRANSPARENCY', 'points': [{'value': 1.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 4.5, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 8.0, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
         set_node_label_opacity_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'map': [{'key': '1', 'value': '240'}, {'key': '2', 'value': '220'}, {'key': '3', 'value': '200'}, {'key': '4', 'value': '180'}, {'key': '5', 'value': '160'}, {'key': '6', 'value': '140'}, {'key': '7', 'value': '120'}, {'key': '8', 'value': '100'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'map': [{'key': '1', 'value': '100'}, {'key': '2', 'value': '120'}, {'key': '3', 'value': '140'}, {'key': '4', 'value': '160'}, {'key': '5', 'value': '180'}, {'key': '6', 'value': '200'}, {'key': '7', 'value': '220'}, {'key': '8', 'value': '240'}]})
         set_node_label_opacity_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_TRANSPARENCY'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'points': [{'value': 1.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 4.5, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 8.0, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
@@ -488,9 +488,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Take advantage of edge interaction column already existing
         two_map = gen_edge_opacity_map('interaction', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [0, 10], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'opacities': [0, 10], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         two_map = gen_edge_opacity_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'opacities': [100, 120], 'mapping_type': 'd', 'default_opacity': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_edge_opacity_map('interaction', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['opacities']), 2)
 
@@ -502,12 +502,12 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each edge opacity mapping works for both discrete and continuous
         set_edge_label_opacity_mapping(**two_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'map': [{'key': 'pp', 'value': '100'}, {'key': 'pd', 'value': '120'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'map': [{'key': 'pp', 'value': '120'}, {'key': 'pd', 'value': '100'}]})
         set_edge_label_opacity_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_TRANSPARENCY'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'points': [{'value': 2.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 9591.11110001, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 19180.22220002, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
         set_edge_opacity_mapping(**two_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TRANSPARENCY', 'map': [{'key': 'pp', 'value': '100'}, {'key': 'pd', 'value': '120'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TRANSPARENCY'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TRANSPARENCY', 'map': [{'key': 'pp', 'value': '120'}, {'key': 'pd', 'value': '100'}]})
         set_edge_opacity_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TRANSPARENCY'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_TRANSPARENCY', 'points': [{'value': 2.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 9591.11110001, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 19180.22220002, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
@@ -541,9 +541,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_width_map('newcol', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'widths': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         eight_map = gen_node_width_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'widths': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_node_width_map('newcol', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['widths']), 8)
 
@@ -555,12 +555,12 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each node width mapping works for both discrete and continuous
         set_node_border_width_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_WIDTH', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_WIDTH', 'map': [{'key': '1', 'value': '100.0'}, {'key': '2', 'value': '120.0'}, {'key': '3', 'value': '140.0'}, {'key': '4', 'value': '160.0'}, {'key': '5', 'value': '180.0'}, {'key': '6', 'value': '200.0'}, {'key': '7', 'value': '220.0'}, {'key': '8', 'value': '240.0'}]})
         set_node_border_width_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_BORDER_WIDTH'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_BORDER_WIDTH', 'points': [{'value': 1.0, 'lesser': '10.0', 'equal': '10.0', 'greater': '10.0'}, {'value': 4.5, 'lesser': '20.0', 'equal': '20.0', 'greater': '20.0'}, {'value': 8.0, 'lesser': '30.0', 'equal': '30.0', 'greater': '30.0'}]})
 
         set_node_width_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_WIDTH', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_WIDTH', 'map': [{'key': '1', 'value': '100.0'}, {'key': '2', 'value': '120.0'}, {'key': '3', 'value': '140.0'}, {'key': '4', 'value': '160.0'}, {'key': '5', 'value': '180.0'}, {'key': '6', 'value': '200.0'}, {'key': '7', 'value': '220.0'}, {'key': '8', 'value': '240.0'}]})
         set_node_width_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_WIDTH'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_WIDTH', 'points': [{'value': 1.0, 'lesser': '10.0', 'equal': '10.0', 'greater': '10.0'}, {'value': 4.5, 'lesser': '20.0', 'equal': '20.0', 'greater': '20.0'}, {'value': 8.0, 'lesser': '30.0', 'equal': '30.0', 'greater': '30.0'}]})
 
@@ -570,9 +570,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Take advantage of edge interaction column already existing
         two_map = gen_edge_width_map('interaction', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [0, 10], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'widths': [0, 10], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         two_map = gen_edge_width_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'widths': [100, 120], 'mapping_type': 'd', 'default_width': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_edge_width_map('interaction', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['widths']), 2)
 
@@ -584,7 +584,7 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each edge width mapping works for both discrete and continuous
         set_edge_line_width_mapping(**two_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_WIDTH', 'map': [{'key': 'pp', 'value': '100.0'}, {'key': 'pd', 'value': '120.0'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_WIDTH'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_WIDTH', 'map': [{'key': 'pp', 'value': '120.0'}, {'key': 'pd', 'value': '100.0'}]})
         set_edge_line_width_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_WIDTH'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_WIDTH', 'points': [{'value': 2.0, 'lesser': '10.0', 'equal': '10.0', 'greater': '10.0'}, {'value': 9591.11110001, 'lesser': '20.0', 'equal': '20.0', 'greater': '20.0'}, {'value': 19180.22220002, 'lesser': '30.0', 'equal': '30.0', 'greater': '30.0'}]})
 
@@ -611,9 +611,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_height_map('newcol', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'heights': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         eight_map = gen_node_height_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'heights': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_height': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_node_height_map('newcol', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['heights']), 8)
 
@@ -625,7 +625,7 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each node height mapping works for both discrete and continuous
         set_node_height_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_HEIGHT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_HEIGHT', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_HEIGHT'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_HEIGHT', 'map': [{'key': '1', 'value': '100.0'}, {'key': '2', 'value': '120.0'}, {'key': '3', 'value': '140.0'}, {'key': '4', 'value': '160.0'}, {'key': '5', 'value': '180.0'}, {'key': '6', 'value': '200.0'}, {'key': '7', 'value': '220.0'}, {'key': '8', 'value': '240.0'}]})
         set_node_height_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_HEIGHT'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_HEIGHT', 'points': [{'value': 1.0, 'lesser': '10.0', 'equal': '10.0', 'greater': '10.0'}, {'value': 4.5, 'lesser': '20.0', 'equal': '20.0', 'greater': '20.0'}, {'value': 8.0, 'lesser': '30.0', 'equal': '30.0', 'greater': '30.0'}]})
 
@@ -656,9 +656,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_size_map('newcol', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'sizes': [0, 10, 20, 30, 40, 50, 60, 70], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         eight_map = gen_node_size_map('newcol', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'sizes': [100, 120, 140, 160, 180, 200, 220, 240], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_node_size_map('newcol', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['sizes']), 8)
 
@@ -670,12 +670,12 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each node size mapping works for both discrete and continuous
         set_node_font_size_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_FONT_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_FONT_SIZE', 'map': [{'key': '1', 'value': '240'}, {'key': '2', 'value': '220'}, {'key': '3', 'value': '200'}, {'key': '4', 'value': '180'}, {'key': '5', 'value': '160'}, {'key': '6', 'value': '140'}, {'key': '7', 'value': '120'}, {'key': '8', 'value': '100'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_FONT_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_FONT_SIZE', 'map': [{'key': '1', 'value': '100'}, {'key': '2', 'value': '120'}, {'key': '3', 'value': '140'}, {'key': '4', 'value': '160'}, {'key': '5', 'value': '180'}, {'key': '6', 'value': '200'}, {'key': '7', 'value': '220'}, {'key': '8', 'value': '240'}]})
         set_node_font_size_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_LABEL_FONT_SIZE'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_LABEL_FONT_SIZE', 'points': [{'value': 1.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 4.5, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 8.0, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
         set_node_size_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SIZE', 'map': [{'key': '1', 'value': '240.0'}, {'key': '2', 'value': '220.0'}, {'key': '3', 'value': '200.0'}, {'key': '4', 'value': '180.0'}, {'key': '5', 'value': '160.0'}, {'key': '6', 'value': '140.0'}, {'key': '7', 'value': '120.0'}, {'key': '8', 'value': '100.0'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SIZE', 'map': [{'key': '1', 'value': '100.0'}, {'key': '2', 'value': '120.0'}, {'key': '3', 'value': '140.0'}, {'key': '4', 'value': '160.0'}, {'key': '5', 'value': '180.0'}, {'key': '6', 'value': '200.0'}, {'key': '7', 'value': '220.0'}, {'key': '8', 'value': '240.0'}]})
         set_node_size_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SIZE'), {'mappingType': 'continuous', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SIZE', 'points': [{'value': 1.0, 'lesser': '10.0', 'equal': '10.0', 'greater': '10.0'}, {'value': 4.5, 'lesser': '20.0', 'equal': '20.0', 'greater': '20.0'}, {'value': 8.0, 'lesser': '30.0', 'equal': '30.0', 'greater': '30.0'}]})
 
@@ -685,9 +685,9 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Take advantage of edge interaction column already existing
         two_map = gen_edge_size_map('interaction', style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [0, 10], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'sizes': [0, 10], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         two_map = gen_edge_size_map('interaction', scheme_d_number_series(start_value=100, step=20), style_name='galFiltered Style', mapping_type='d')
-        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'sizes': [100, 120], 'mapping_type': 'd', 'default_size': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         random_map = gen_edge_size_map('interaction', scheme_d_number_random(min_value=30, max_value=100), style_name='galFiltered Style', mapping_type='d')
         self.assertEqual(len(random_map['sizes']), 2)
 
@@ -699,7 +699,7 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Verify that each edge font size mapping works for both discrete and continuous
         set_edge_font_size_mapping(**two_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_FONT_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'map': [{'key': 'pp', 'value': '100'}, {'key': 'pd', 'value': '120'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_FONT_SIZE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'map': [{'key': 'pp', 'value': '120'}, {'key': 'pd', 'value': '100'}]})
         set_edge_font_size_mapping(**continuous_map)
         self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LABEL_FONT_SIZE'), {'mappingType': 'continuous', 'mappingColumn': 'EdgeBetweenness', 'mappingColumnType': 'Double', 'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'points': [{'value': 2.0, 'lesser': '10', 'equal': '10', 'greater': '10'}, {'value': 9591.11110001, 'lesser': '20', 'equal': '20', 'greater': '20'}, {'value': 19180.22220002, 'lesser': '30', 'equal': '30', 'greater': '30'}]})
 
@@ -730,11 +730,11 @@ class StyleAutoMappingsTests(unittest.TestCase):
         eight_data = df.DataFrame(data={'id':['YDL194W', 'YDR277C', 'YBR043C', 'YKR026C', 'YGL122C', 'YGR218W', 'YGL097W', 'YOR204W'], 'newcol':[1, 2, 3, 4, 5, 6, 7, 8]})
         load_table_data(eight_data, data_key_column='id')
         eight_map = gen_node_shape_map('newcol', style_name='galFiltered Style')
-        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['8', '7', '6', '5', '4', '3', '2', '1'], 'shapes': ['DIAMOND', 'ELLIPSE', 'HEXAGON', 'OCTAGON', 'PARALLELOGRAM', 'RECTANGLE', 'ROUND_RECTANGLE', 'TRIANGLE'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(eight_map, {'table_column': 'newcol', 'table_column_values': ['1', '2', '3', '4', '5', '6', '7', '8'], 'shapes': ['DIAMOND', 'ELLIPSE', 'HEXAGON', 'OCTAGON', 'PARALLELOGRAM', 'RECTANGLE', 'ROUND_RECTANGLE', 'TRIANGLE'], 'default_shape': None, 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that each shape mapping works
         set_node_shape_mapping(**eight_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': '1', 'value': 'TRIANGLE'}, {'key': '2', 'value': 'ROUND_RECTANGLE'}, {'key': '3', 'value': 'RECTANGLE'}, {'key': '4', 'value': 'PARALLELOGRAM'}, {'key': '5', 'value': 'OCTAGON'}, {'key': '6', 'value': 'HEXAGON'}, {'key': '7', 'value': 'ELLIPSE'}, {'key': '8', 'value': 'DIAMOND'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='NODE_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'newcol', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': '1', 'value': 'DIAMOND'}, {'key': '2', 'value': 'ELLIPSE'}, {'key': '3', 'value': 'HEXAGON'}, {'key': '4', 'value': 'OCTAGON'}, {'key': '5', 'value': 'PARALLELOGRAM'}, {'key': '6', 'value': 'RECTANGLE'}, {'key': '7', 'value': 'ROUND_RECTANGLE'}, {'key': '8', 'value': 'TRIANGLE'}]})
 
         # Verify that when there are too many discrete values for the shape list, an error is generated
         four_data = df.DataFrame(data={'id':['YAL003W', 'YFL017C', 'YDR429C', 'YMR146C'], 'newcol':[100, 200, 300, 400]})
@@ -743,19 +743,19 @@ class StyleAutoMappingsTests(unittest.TestCase):
 
         # Take advantage of edge interaction column already existing
         two_line_style_map = gen_edge_line_style_map('interaction', style_name='galFiltered Style')
-        self.assertDictEqual(two_line_style_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'line_styles': ['BACKWARD_SLASH', 'CONTIGUOUS_ARROW'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_line_style_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'line_styles': ['BACKWARD_SLASH', 'CONTIGUOUS_ARROW'], 'default_line_style': 'SOLID', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
         two_arrow_map = gen_edge_arrow_map('interaction', style_name='galFiltered Style')
-        self.assertDictEqual(two_arrow_map, {'table_column': 'interaction', 'table_column_values': ['pp', 'pd'], 'shapes': ['ARROW', 'ARROW_SHORT'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
+        self.assertDictEqual(two_arrow_map, {'table_column': 'interaction', 'table_column_values': ['pd', 'pp'], 'shapes': ['ARROW', 'ARROW_SHORT'], 'default_shape': 'ARROW', 'style_name': 'galFiltered Style', 'network': None, 'base_url': 'http://127.0.0.1:1234/v1'})
 
         # Verify that each edge line style mapping works
         set_edge_line_style_mapping(**two_line_style_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LINE_TYPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LINE_TYPE', 'map': [{'key': 'pp', 'value': 'BACKWARD_SLASH'}, {'key': 'pd', 'value': 'CONTIGUOUS_ARROW'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_LINE_TYPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_LINE_TYPE', 'map': [{'key': 'pp', 'value': 'CONTIGUOUS_ARROW'}, {'key': 'pd', 'value': 'BACKWARD_SLASH'}]})
 
         # Verify that each edge source/target arrow mapping works
         set_edge_source_arrow_shape_mapping(**two_arrow_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW'}, {'key': 'pd', 'value': 'ARROW_SHORT'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_SOURCE_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_SOURCE_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW_SHORT'}, {'key': 'pd', 'value': 'ARROW'}]})
         set_edge_target_arrow_shape_mapping(**two_arrow_map)
-        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW'}, {'key': 'pd', 'value': 'ARROW_SHORT'}]})
+        self.assertDictEqual(get_style_mapping(style_name='galFiltered Style', visual_prop='EDGE_TARGET_ARROW_SHAPE'), {'mappingType': 'discrete', 'mappingColumn': 'interaction', 'mappingColumnType': 'String', 'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'map': [{'key': 'pp', 'value': 'ARROW_SHORT'}, {'key': 'pd', 'value': 'ARROW'}]})
 
         # Verify that when the network doesn't exist, an appropriate error is returned
         self.assertRaises(CyError, gen_node_shape_map, 'newcol', network='bogus network')
