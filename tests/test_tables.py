@@ -310,7 +310,8 @@ class TablesTests(unittest.TestCase):
         test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str, 'FloatCol': np.float})
         suid_YBL079W = test_data_suid_name.index[test_data_suid_name.name == 'YBL079W'][0]
         del test_data_suid_name['name']
-        test_data_suid_name.set_value(suid_YBL079W, 'FloatCol', np.nan)
+        test_data_suid_name.at[suid_YBL079W, 'FloatCol'] = np.nan # used to be set_value, but it was deprecated
+#        test_data_suid_name.set_value(suid_YBL079W, 'FloatCol', np.nan)
         res = load_table_data(test_data_suid_name, data_key_column='SUID', table_key_column='SUID')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
         # Make sure that Cytoscape got all of the column types and values right, including the NAN

@@ -53,6 +53,10 @@ Pull requests merged in this release
 - #61 by Kozo Nishida
 - #63 by Kozo Nishida
 - #64 by Kozo Nishida
+- #65 by Kozo Nishida
+- #66 by Kozo Nishida
+- #68 by Kozo Nishida
+
 
 Issues closed in this release
 ------------------------------------

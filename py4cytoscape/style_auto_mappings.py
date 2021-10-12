@@ -1579,8 +1579,14 @@ def _map_values(table, table_column, scheme_func, value_name, default_name, defa
     # Find out all of the values in the named column
     df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
 
-    # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape)
+    # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape) ... guarantee the order by sorting
     df_freq = df_values[table_column].value_counts()
+    if len(df_freq) > 1:
+        # df_values rows aren't left in a predictable order, so that means the color assignments will vary from
+        # run to run. To make this consistent and testable, we sort all values within the same frequency count.
+        # To do this, we turn the frequency series into a dataframe then sort first on frequency count and then
+        # on value.
+        df_freq = df_freq.to_frame().rename_axis('index').sort_values(by=[table_column, 'index'], ascending=[True, True])
 
     # Create the mapped values that correspond to the unique elements
     src_values = [str(i)   for i in df_freq.index]
