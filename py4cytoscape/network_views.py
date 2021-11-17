@@ -164,6 +164,46 @@ def fit_content(selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
+def create_view(network=None, base_url=DEFAULT_BASE_URL):
+    """Create a network view.
+
+    For large networks some views are not created by default.  This function creates a view
+    if a default one does not already exist.
+
+    Args:
+        network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
+            If a network view SUID is provided, then it is validated and returned.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        int: SUID of the view for the network. The first (presummably only) view associated a network is returned.
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_view()
+        11
+        >>> create_view(51, selected_only=True)
+        11
+        >>> create_view(network='galFiltered.sif')
+        11
+    """
+    net_parm = ""
+    if isinstance(network, str):
+        net_parm = str
+    elif isinstance(network, int):
+        net_parm = f"SUID:{network}"
+    else:
+        net_parm = "current"
+    res = commands.commands_post(f'view create network="{net_parm}"', base_url=base_url)
+    return res
+
+
+@cy_log
 def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     """Set which network view is "current".
 
