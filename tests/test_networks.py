@@ -588,8 +588,7 @@ class NetworkTests(unittest.TestCase):
         edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
 
         # Verify that a network can be created containing dataframe encoding both nodes and edges
-        res = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
-        suid_1 = res['networkSUID']
+        suid_1 = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
         self.assertEqual(get_network_name(suid_1), 'From node & edge dataframe')
         self.assertEqual(get_node_count(suid_1), 4)
         self.assertEqual(get_edge_count(suid_1), 4)
@@ -611,9 +610,8 @@ class NetworkTests(unittest.TestCase):
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a network can be created from a dataframe containing just edges
-        res = create_network_from_data_frames(edges=edges, collection='Another collection',
+        suid_2 = create_network_from_data_frames(edges=edges, collection='Another collection',
                                                            title='From just edge dataframe')
-        suid_2 = res['networkSUID']
         self.assertEqual(get_network_name(suid_2), 'From just edge dataframe')
         self.assertEqual(get_node_count(suid_2), 4)
         self.assertEqual(get_edge_count(suid_2), 4)
@@ -635,9 +633,8 @@ class NetworkTests(unittest.TestCase):
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a disconnected network can be created from a dataframe containing just nodes
-        res = create_network_from_data_frames(nodes=nodes, collection='A third collection',
+        suid_3 = create_network_from_data_frames(nodes=nodes, collection='A third collection',
                                                            title='From just nodes dataframe')
-        suid_3 = res['networkSUID']
         self.assertEqual(get_network_name(suid_3), 'From just nodes dataframe')
         self.assertEqual(get_node_count(suid_3), 4)
         self.assertEqual(get_edge_count(suid_3), 0)

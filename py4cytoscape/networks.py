@@ -1118,10 +1118,30 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # call Cytoscape to create this network and return the SUID
     network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection},
-                                        body=json_network, base_url=base_url)
+                                        body=json_network, base_url=base_url)['networkSUID']
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
-    # "vizmap apply" command below fails for lack of a valid view.
-    time.sleep(CATCHUP_NETWORK_SECS)
+    # "vizmap apply" command below fails for lack of a valid view. The first failure occurs
+    # when the network_suid can't be fetched for load_table_data()
+    CATCHUP_NETWORK_TIMEOUT_SECS = 60
+    CATCHUP_NETWORK_SECS = 2
+    def _delay_until_stable(f, timeout_secs=CATCHUP_NETWORK_TIMEOUT_SECS):
+        catchup_network_timeout = time.time() + timeout_secs
+        is_stable = False
+        while not is_stable and time.time() < catchup_network_timeout:
+            try:
+                is_stable = f()
+            except:
+                is_stable = False
+            if not is_stable:
+                print(f'Sleeping for {CATCHUP_NETWORK_SECS} seconds')
+                time.sleep(CATCHUP_NETWORK_SECS)
+        if not is_stable:
+            raise CyError("Timeout")
+
+#    time.sleep(10)
+#    from . import network_views
+#    _delay_until_stable(lambda x: get_network_suid(network_suid, base_url=base_url) != 0 and network_views.get_network_view_suid(network_suid, base_url=base_url) != 0)
+
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1147,10 +1167,12 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                    network=network_suid, base_url=base_url)
 
     narrate('Applying default style...')
-    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
+#    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
+    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) or True)
 
     narrate('Applying preferred layout')
-    layouts.layout_network(network=network_suid)
+ #   layouts.layout_network(network=network_suid)
+    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) or True)
 
     # TODO: Verify that attribute types are properly set in Cytoscape
 
