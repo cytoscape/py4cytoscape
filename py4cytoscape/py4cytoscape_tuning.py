@@ -24,7 +24,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 CATCHUP_FILTER_SECS = 0 # 1
 MODEL_PROPAGATION_SECS = 0 #2
-CATCHUP_NETWORK_SECS = 10 # 2 # with a new Cytoscape instance, 2 would be OK for galFiltered ... on an older instance, need more time
+CATCHUP_NETWORK_SECS = 2 # How long to sleep between network operation retries
+CATCHUP_NETWORK_TIMEOUT_SECS = 60 # How long to keep retrying network operation
 
 def set_catchup_filter_secs(delay_secs):
     global CATCHUP_FILTER_SECS
@@ -37,5 +38,9 @@ def set_model_propagation_secs(delay_secs):
 def set_catchup_network_secs(delay_secs):
     global CATCHUP_NETWORK_SECS
     CATCHUP_NETWORK_SECS = delay_secs
+
+def set_catchup_network_timeout_secs(delay_secs):
+    global CATCHUP_NETWORK_TIMEOUT_SECS
+    CATCHUP_NETWORK_TIMEOUT_SECS = delay_secs
 
 

@@ -57,7 +57,7 @@ from . import sandbox
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS
+from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS, CATCHUP_NETWORK_TIMEOUT_SECS
 from .exceptions import CyError
 from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
@@ -1120,28 +1120,8 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection},
                                         body=json_network, base_url=base_url)['networkSUID']
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
-    # "vizmap apply" command below fails for lack of a valid view. The first failure occurs
-    # when the network_suid can't be fetched for load_table_data()
-    CATCHUP_NETWORK_TIMEOUT_SECS = 60
-    CATCHUP_NETWORK_SECS = 2
-    def _delay_until_stable(f, timeout_secs=CATCHUP_NETWORK_TIMEOUT_SECS):
-        catchup_network_timeout = time.time() + timeout_secs
-        is_stable = False
-        while not is_stable and time.time() < catchup_network_timeout:
-            try:
-                is_stable = f()
-            except:
-                is_stable = False
-            if not is_stable:
-                print(f'Sleeping for {CATCHUP_NETWORK_SECS} seconds')
-                time.sleep(CATCHUP_NETWORK_SECS)
-        if not is_stable:
-            raise CyError("Timeout")
-
-#    time.sleep(10)
-#    from . import network_views
-#    _delay_until_stable(lambda x: get_network_suid(network_suid, base_url=base_url) != 0 and network_views.get_network_view_suid(network_suid, base_url=base_url) != 0)
-
+    # "vizmap apply" command below fails for lack of a valid view. So, we'll retry
+    # the problem operations until they succeed (see _delay_until_stable() calls below)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1168,11 +1148,13 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     narrate('Applying default style...')
 #    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
-    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) or True)
+    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) or True,
+                        'apply vizmap')
 
     narrate('Applying preferred layout')
  #   layouts.layout_network(network=network_suid)
-    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) or True)
+    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) or True,
+                        'layout network')
 
     # TODO: Verify that attribute types are properly set in Cytoscape
 
@@ -1448,3 +1430,16 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # functions.
 # ------------------------------------------------------------------------------
 
+def _delay_until_stable(attempt_op, error_text):
+    catchup_network_timeout = time.time() + CATCHUP_NETWORK_TIMEOUT_SECS
+    is_stable = False
+    while not is_stable and time.time() < catchup_network_timeout:
+        try:
+            is_stable = attempt_op()
+        except:
+            is_stable = False
+        if not is_stable:
+#                print(f'Sleeping for {CATCHUP_NETWORK_SECS} seconds')
+            time.sleep(CATCHUP_NETWORK_SECS)
+    if not is_stable:
+        raise CyError(f'Timeout trying to {error_text}')
