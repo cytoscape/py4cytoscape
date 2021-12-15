@@ -1124,8 +1124,8 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     # the problem operations until they succeed (see _delay_until_stable() calls below)
 
     # Keep cycling until Cytoscape is able to return table information ... safe after that
-    _delay_until_stable(lambda: get_network_suid(network_suid, base_url=base_url) or True,
-                        'verifying network SUID')
+    _delay_until_stable(lambda: get_network_suid(network_suid, base_url=base_url) is not None,
+                        'verifying network SUID', vote_count=10)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1151,11 +1151,11 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                    network=network_suid, base_url=base_url)
 
     narrate('Applying default style...')
-    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) or True,
+    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) is not None,
                         'apply vizmap')
 
     narrate('Applying preferred layout')
-    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) or True,
+    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) is not None,
                         'layout network')
 
     # TODO: Verify that attribute types are properly set in Cytoscape
@@ -1432,12 +1432,16 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # functions.
 # ------------------------------------------------------------------------------
 
-def _delay_until_stable(attempt_op, error_text):
+def _delay_until_stable(attempt_op, error_text, vote_count=1):
     catchup_network_timeout = time.time() + CATCHUP_NETWORK_TIMEOUT_SECS
     is_stable = False
     while not is_stable and time.time() < catchup_network_timeout:
         try:
+            votes = 1
             is_stable = attempt_op()
+            while votes < vote_count and is_stable:
+                votes += 1
+                is_stable = attempt_op()
         except:
             is_stable = False
         if not is_stable:
