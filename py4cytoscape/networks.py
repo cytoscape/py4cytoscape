@@ -1124,8 +1124,8 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     # the problem operations until they succeed (see _delay_until_stable() calls below)
 
     # Keep cycling until Cytoscape is able to return table information ... safe after that
-    _delay_until_stable(lambda: commands.cyrest_get(f'networks/{network_suid}/tables/defaultnetwork/columns', base_url=base_url) or True,
-                        'fetching network table columns')
+    _delay_until_stable(lambda: get_network_suid(network_suid, base_url=base_url) or True,
+                        'verifying network SUID')
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
