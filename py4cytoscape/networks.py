@@ -1123,6 +1123,10 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
     # "vizmap apply" command below fails for lack of a valid view. So, we'll retry
     # the problem operations until they succeed (see _delay_until_stable() calls below)
 
+    # Keep cycling until Cytoscape is able to return table information ... safe after that
+    _delay_until_stable(lambda: commands.cyrest_get(f'networks/{network_suid}/tables/defaultnetwork/columns', base_url=base_url) or True,
+                        'fetching network table columns')
+
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
 
@@ -1147,12 +1151,10 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                    network=network_suid, base_url=base_url)
 
     narrate('Applying default style...')
-#    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
     _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) or True,
                         'apply vizmap')
 
     narrate('Applying preferred layout')
- #   layouts.layout_network(network=network_suid)
     _delay_until_stable(lambda: layouts.layout_network(network=network_suid) or True,
                         'layout network')
 
