@@ -164,6 +164,7 @@ To execute all sub-suites::
 To execute a single test (e.g., test_get_app_information) in a single sub-suite::
 
    python -m unittest test_apps.AppsTests.test_get_app_information
+   python -m unittest test_tools.ToolsTests.test_network_merge
 
 .. note::
    To send test output to a file, redirect stderr and console::
