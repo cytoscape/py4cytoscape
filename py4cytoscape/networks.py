@@ -986,16 +986,16 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        Dict: {'networkSUID': 31766}
+        int: The ``SUID`` of the new network
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> n = create_network_from_networkx(netx)
-        {'networkSUID': 31766}
-        >>> n = create_network_from_networkx(netx, 'Cool Networkx', 'Collection of Cool Networks')
-        {'networkSUID': 31766}
+        >>> create_network_from_networkx(netx)
+        31766
+        >>> create_network_from_networkx(netx, 'Cool Networkx', 'Collection of Cool Networks')
+        31766
 
     See Also:
         :meth:`create_networkx_from_network`

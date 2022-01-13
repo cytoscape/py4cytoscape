@@ -68,7 +68,7 @@ class SanityTests(unittest.TestCase):
 
         # Verify that a network can be created containing dataframe encoding both nodes and edges
         res = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
-        suid_1 = res['networkSUID']
+        suid_1 = res
         self.assertEqual(get_network_name(suid_1), 'From node & edge dataframe')
         self.assertEqual(get_node_count(suid_1), 4)
         self.assertEqual(get_edge_count(suid_1), 4)
@@ -179,7 +179,7 @@ class SanityTests(unittest.TestCase):
 
         # Get the NetworkX for a known good network galFiltered.sif and send it to Cytoscape as a new network
         netx = create_networkx_from_network()
-        netx_suid = create_network_from_networkx(netx)['networkSUID']
+        netx_suid = create_network_from_networkx(netx)
         self.assertEqual(netx_suid, get_network_suid())  # Verify that the new network is the selected network
 
         compare_table(cynode_table, 'node', netx)
