@@ -5,6 +5,9 @@
 I. Perform layout functions
 II. Get layout properties
 III. Set layout properties
+
+Note that yFiles layouts are not available due to licensing restrictions with yWorks,
+the owner of yFiles.
 """
 
 """Copyright 2020 The Cytoscape Consortium
@@ -103,6 +106,8 @@ def layout_network(layout_name=None, network=None, base_url=DEFAULT_BASE_URL):
 
     Run ``getLayoutNames`` to list available layouts.
 
+    Note that yFiles layouts are not available due to licensing restrictions with yWorks, the owner of yFiles.
+
     Args:
         layout_name (str): Name of the layout (with optional parameters). If not specified,
             then the preferred layout set in the Cytoscape UI is applied.
@@ -191,6 +196,8 @@ def get_layout_names(base_url=DEFAULT_BASE_URL):
     """Retrieve the names of the currently supported layout algorithms.
 
     These may be used in subsequent calls to the ``layout_network`` function.
+
+    Note that yFiles layouts are not available due to licensing restrictions with yWorks, the owner of yFiles.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
