@@ -75,6 +75,24 @@ def cyPalette(name='set1'):
     return PALETTES[name]
 
 # ------------------------------------------------------------------------------
+def verify_brightness_contrast(bc):
+    """Validate and provide user feedback when brightness or contrast is required input.
+
+    Args:
+        bc (int or float): a number between 0 and 100
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if value is invalid
+
+    Examples:
+        >>> verify_brightness_contrast(77)
+    """
+    if not (isinstance(bc, float) or isinstance(bc, int)) or bc < -100 or bc > 100:
+        raise CyError(f'"{bc}" is invalid. Value must be between -100 and 100).', caller=sys._getframe(1).f_code.co_name)
+
 def verify_hex_color(color):
     """Validate and provide user feedback when hex color codes is required input.
 
@@ -115,6 +133,24 @@ def verify_hex_colors(colors):
     for color in colors:
         verify_hex_color(color)
 
+def verify_opacity(opacity):
+    """Validate and provide user feedback when opacity is required input.
+
+    Args:
+        opacity (int or float): a number between 0 and 100
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if opacity is invalid
+
+    Examples:
+        >>> verify_opacity(77)
+    """
+    if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 100:
+        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 100).', caller=sys._getframe(1).f_code.co_name)
+
 def verify_opacities(opacities):
     """Validate and provide user feedback when opacity is required input.
 
@@ -135,8 +171,7 @@ def verify_opacities(opacities):
     if not isinstance(opacities, list):  opacities = [opacities]
 
     for opacity in opacities:
-        if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 255:
-            raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 255).', caller=sys._getframe(1).f_code.co_name)
+        verify_opacity(opacity)
 
 def verify_dimensions(dimension, sizes):
     """Validate and provide user feedback when dimensions is required input.
@@ -203,6 +238,26 @@ def verify_positive(number):
         raise CyError(f'Value must be a positive number.', caller=sys._getframe(1).f_code.co_name)
     if number <= 0:
         raise CyError(f'{number} is invalid. Number must be positive', caller=sys._getframe(1).f_code.co_name)
+
+def verify_non_negative(number):
+    """Validate and provide user feedback when a non-negative number is required input.
+
+    Args:
+        number (int or float): a number greater than or equal to 0
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if number is invalid
+
+    Examples:
+        >>> verify_non_negative(5)
+    """
+    if not (isinstance(number, float) or isinstance(number, int)):
+        raise CyError(f'Value must be a non-negative number.', caller=sys._getframe(1).f_code.co_name)
+    if number <= 0:
+        raise CyError(f'{number} is invalid. Number must be greater than or equal to 0', caller=sys._getframe(1).f_code.co_name)
 
 def verify_font_style(style):
     """Validate and provide user feedback when font style is required input.
