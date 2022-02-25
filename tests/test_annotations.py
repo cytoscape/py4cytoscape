@@ -462,6 +462,194 @@ class AppsTests(unittest.TestCase):
         # Verify that bad z-order is detected
         self.assertRaises(CyError, add_annotation_shape, z_order='bogus')
 
+    @print_entry_exit
+    def test_delete_annotation(self):
+        # Initialize
+        load_test_session()
+
+        # Verify that creating an annotation then deleting it by UUID works
+        res = add_annotation_text(name='ann1', text='ann1 text')
+        delete_annotation(names=res['uuid'])
+        res = get_annotation_list()
+        self.assertListEqual(res, [])
+
+        # Verify that creating an annotation then deleting it by name works
+        res = add_annotation_text(name='ann2', text='ann2 text')
+        delete_annotation(names='ann2')
+        res = get_annotation_list()
+        self.assertListEqual(res, [])
+
+        # Verify that creating 3 annotations and deleting two by name works
+        res_a = add_annotation_text(name='ann3a', text='ann3a text')
+        res_b = add_annotation_text(name='ann3b', text='ann3b text')
+        res_c = add_annotation_text(name='ann3c', text='ann3c text')
+        delete_annotation(names=['ann3a', 'ann3c'])
+        res = get_annotation_list()
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0]['uuid'], res_b['uuid']) # Compare UUIDs only because z-order may change
+
+        # Verify that creating 3 annotations and deleting two by UUID works
+        res_a = add_annotation_text(name='ann3a', text='ann3a text')
+        res_c = add_annotation_text(name='ann3c', text='ann3c text')
+        delete_annotation(names=[res_b['uuid'], res_c['uuid']])
+        res = get_annotation_list()
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0]['uuid'], res_a['uuid']) # Compare UUIDs only because z-order may change
+
+        # We would try deleting a non-existent annotation, but Cytoscape doesn't return an error for this
+
+        # Verify check for null names list
+        self.assertRaises(CyError, delete_annotation)
+
+    @print_entry_exit
+    def test_group_annotation(self):
+        EXPECTED_GROUP_KEYS = {'canvas', 'rotation', 'name', 'x', 'y', 'z', 'type', 'uuid', 'memberUUIDs'}
+
+        # Initialize
+        gal_filtered_suid, yeast_high_quality_suid = self._load_2_networks()
+
+        res_a = add_annotation_text(name='ann3a', text='ann3a text')
+        res_b = add_annotation_text(name='ann3b', text='ann3b text')
+        res_c = add_annotation_text(name='ann3c', text='ann3c text')
+        res_d = add_annotation_text(name='ann3d', text='ann3d text')
+        res_e = add_annotation_text(name='ann3e', text='ann3e text')
+        res_f = add_annotation_text(name='ann3f', text='ann3f text')
+        res_g = add_annotation_text(name='ann3g', text='ann3g text')
+        res_h = add_annotation_text(name='ann3h', text='ann3h text')
+        res_i = add_annotation_text(name='ann3i', text='ann3i text')
+        res_j = add_annotation_text(name='ann3j', text='ann3j text')
+        res_k = add_annotation_text(name='ann3k', text='ann3k text')
+        res_l = add_annotation_text(name='ann3l', text='ann3l text')
+        res_m = add_annotation_text(name='ann3m', text='ann3m text')
+        res_n = add_annotation_text(name='ann3n', text='ann3n text')
+
+        # Verify that a group can be created from a list of UUIDs
+        group_1_uuids_list = [res_a['uuid'], res_b['uuid'], res_c['uuid']]
+        res_1 = group_annotation(group_1_uuids_list)
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_1.keys())))
+        self.assertSetEqual(set(group_1_uuids_list), set(res_1['memberUUIDs'].split(',')))
+
+        # Verify that a group can be created from a list of names
+        group_2_names_list = [res_d['name'], res_e['name'], res_f['name']]
+        group_2_uuids_list = [res_d['uuid'], res_e['uuid'], res_f['uuid']]
+        res_2 = group_annotation(group_2_names_list, network=gal_filtered_suid)
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_2.keys())))
+        self.assertSetEqual(set(group_2_uuids_list), set(res_2['memberUUIDs'].split(',')))
+
+        # Verify that a group can be created from a comma-separated list of UUIDs
+        group_3_uuids_list = [res_g['uuid'], res_h['uuid'], res_i['uuid']]
+        res_3 = group_annotation(','.join(group_3_uuids_list))
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_3.keys())))
+        self.assertSetEqual(set(group_3_uuids_list), set(res_3['memberUUIDs'].split(',')))
+
+        # Verify that a group can be created from a comma-separated list of names
+        group_4_names_list = [res_j['name'], res_k['name'], res_l['name']]
+        group_4_uuids_list = [res_j['uuid'], res_k['uuid'], res_l['uuid']]
+        res_4 = group_annotation(','.join(group_4_names_list), network=gal_filtered_suid)
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_4.keys())))
+        self.assertSetEqual(set(group_4_uuids_list), set(res_4['memberUUIDs'].split(',')))
+
+        # Verify that a group can be created from a single UUID
+        group_5_uuids_list = [res_m['uuid']]
+        res_5 = group_annotation(group_5_uuids_list[0])
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_5.keys())))
+        self.assertSetEqual(set(group_5_uuids_list), set(res_5['memberUUIDs'].split(',')))
+
+        # Verify that a group can be created from a single name
+        group_6_names_list = [res_n['name']]
+        group_6_uuids_list = [res_n['uuid']]
+        res_6 = group_annotation(group_6_names_list[0], network=gal_filtered_suid)
+        self.assertTrue(EXPECTED_GROUP_KEYS.issubset(set(res_6.keys())))
+        self.assertSetEqual(set(group_6_uuids_list), set(res_6['memberUUIDs'].split(',')))
+
+        # Verify that none of the groups were added to the yeast network
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 20)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+
+        # Verify that adding a group to the yeast network doesn't appear in the current network
+        res_o = add_annotation_text(network=yeast_high_quality_suid, name='ann3o', text='ann3o text')
+        group_annotation(res_o['name'], network=yeast_high_quality_suid)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 20)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 2)
+
+        # Verify that errors are caught
+        self.assertRaises(CyError, group_annotation)
+        self.assertRaises(CyError, group_annotation, 'junk')
+        self.assertRaises(CyError, group_annotation, ['junk'])
+        self.assertRaises(CyError, group_annotation, '')
+        self.assertRaises(CyError, group_annotation, [])
+
+    @print_entry_exit
+    def test_ungroup_annotation(self):
+        # Initialize
+        gal_filtered_suid, yeast_high_quality_suid = self._load_2_networks()
+
+        # Create test annotations
+        res_a = add_annotation_text(name='ann3a', text='ann3a text')
+        res_b = add_annotation_text(name='ann3b', text='ann3b text')
+        res_c = add_annotation_text(name='ann3c', text='ann3c text')
+        res_d = add_annotation_text(name='ann3d', text='ann3d text')
+        res_e = add_annotation_text(name='ann3e', text='ann3e text')
+        res_f = add_annotation_text(name='ann3f', text='ann3f text')
+        self.assertEqual(len(get_annotation_list()), 6)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+
+        # Create a test group in default network, group it, and then ungroup it by UUID
+        res_group = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']])
+        self.assertEqual(len(get_annotation_list()), 7)
+        ungroup_annotation(res_group['uuid'])
+        self.assertEqual(len(get_annotation_list()), 6)
+
+        # Create a test group in default network, group it, and then ungroup it by name
+        res_group = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']])
+        self.assertEqual(len(get_annotation_list()), 7)
+        ungroup_annotation(res_group['name'])
+        self.assertEqual(len(get_annotation_list()), 6)
+
+        # Create a test group in named network, group it, and then ungroup it by UUID ... verify yeast network not affected
+        res_group = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']], network=gal_filtered_suid)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 7)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+        ungroup_annotation(res_group['uuid'], network=gal_filtered_suid)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 6)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+
+        # Create a test group in named network, group it, and then ungroup it by name ... verify yeast network not affected
+        res_group = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']], network=gal_filtered_suid)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 7)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+        ungroup_annotation(res_group['name'], network=gal_filtered_suid)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 6)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 0)
+
+        # Try creating a group in the Yeast network, and verify that it doesn't affect galFiltered network
+        res_g = add_annotation_text(name='ann3g', text='ann3g text', network=yeast_high_quality_suid)
+        res_h = add_annotation_text(name='ann3h', text='ann3h text', network=yeast_high_quality_suid)
+        res_i = add_annotation_text(name='ann3i', text='ann3i text', network=yeast_high_quality_suid)
+        res_group = group_annotation([res_g['uuid'], res_h['uuid'], res_i['uuid']], network=yeast_high_quality_suid)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 4)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 6)
+        ungroup_annotation(res_group['uuid'], network=yeast_high_quality_suid)
+        self.assertEqual(len(get_annotation_list(network=yeast_high_quality_suid)), 3)
+        self.assertEqual(len(get_annotation_list(network=gal_filtered_suid)), 6)
+
+        # Create two test groups in default network, group them, and then ungroup them by UUID
+        res_group_1 = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']])
+        res_group_2 = group_annotation([res_d['uuid'], res_e['uuid'], res_f['uuid']])
+        self.assertEqual(len(get_annotation_list()), 8)
+        ungroup_annotation([res_group_1['uuid'], res_group_2['uuid']])
+        self.assertEqual(len(get_annotation_list()), 6)
+
+        # Create two test groups in default network, group them, and then ungroup them by name
+        res_group_1 = group_annotation([res_a['uuid'], res_b['uuid'], res_c['uuid']])
+        res_group_2 = group_annotation([res_d['uuid'], res_e['uuid'], res_f['uuid']])
+        self.assertEqual(len(get_annotation_list()), 8)
+        ungroup_annotation([res_group_1['name'], res_group_2['name']])
+        self.assertEqual(len(get_annotation_list()), 6)
+
+        # Verify that errors are caught
+        self.assertRaises(CyError, ungroup_annotation)
+
     def _check_expected_values(self, target, expected_values):
         for k, v in expected_values.items():
             self.assertEqual(v, target[k], f'key={k} expected={v} actual={target[k]}')

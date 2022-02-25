@@ -353,6 +353,39 @@ def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, a
 
     return res
 
+@cy_log
+def delete_annotation(names=None, base_url=DEFAULT_BASE_URL):
+    """Delete Annotation
+
+    Remove an annotation from the current network view in Cytoscape
+
+    Args:
+        names (UUID or str or list): Single UUID or str, or list of UUIDs or str
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if invalid name list
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_annotation('ann1')
+        >>> delete_annotation(['ann1', 'ann2'])
+        >>> delete_annotation(['016a4af1-69bc-4b99-8183-d6f118847f96', '016a4af1-69bc-4b99-8183-d6f118847f97'])
+    """
+
+    if names is None:
+        raise CyError(f'Must provide the UUID (or list of UUIDs) to delete')
+
+    if isinstance(names, str):  # If it's a string, force it into a list
+        names = [names]
+
+    for ann in names:
+        res = commands.commands_post(f'annotation delete uuidOrName="{ann}"', base_url=base_url)
 
 @cy_log
 def get_annotation_list(network=None, base_url=DEFAULT_BASE_URL):
@@ -383,6 +416,84 @@ def get_annotation_list(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post(cmd_string, base_url=base_url)
 
     return res
+
+@cy_log
+def group_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Group Annotation
+
+    Group annotation from the network view in Cytoscape
+
+    Args:
+        names (UUID or str or list): Single UUID or str, or list of UUIDs or str
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if invalid name list
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> group_annotation(['016a4af1-69bc-4b99-8183-d6f118847f96', '016a4af1-69bc-4b99-8183-d6f118847f97'])
+        {'canvas': 'foreground', 'rotation': '0.0', 'name': 'Group 1', 'x': '2449.0', 'y': '1882.0', 'z': '0', 'type': 'org.cytoscape.view.presentation.annotations.GroupAnnotation', 'uuid': '303ac590-495b-44a9-8743-0a8c13e22e6f', 'memberUUIDs': '016a4af1-69bc-4b99-8183-d6f118847f96,016a4af1-69bc-4b99-8183-d6f118847f97'}
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation group', network, base_url)  # a good start
+
+    if names is None:
+        raise CyError(f'Must provide the UUID (or list of UUIDs) to group')
+
+    if isinstance(names, list):  # If it's a list, make a string out of it
+        names = ', '.join(names)
+
+    res = commands.commands_post(f'{cmd_string} annotationlist="{names}"', base_url=base_url)
+
+    if len(res) == 0:
+        raise CyError(f'Error while grouping {names}')
+    return res
+
+@cy_log
+def ungroup_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Ungroup Annotation group
+
+    Ungroup annotation group from the network view in Cytoscape
+
+    Args:
+        names (UUID or str or list): Single UUID or str, or list of UUIDs or str
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if invalid name list
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> ungroup_annotation(['016a4af1-69bc-4b99-8183-d6f118847f96', '016a4af1-69bc-4b99-8183-d6f118847f97'])
+        >>> ungroup_annotation('016a4af1-69bc-4b99-8183-d6f118847f96', network='galFiltered.sif')
+        >>> ungroup_annotation('016a4af1-69bc-4b99-8183-d6f118847f96', network=59945)
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation ungroup', network, base_url)  # a good start
+
+    if names is None:
+        raise CyError(f'Must provide the UUID (or list of UUIDs) to ungroup')
+
+    if isinstance(names, str):  # If it's a string, force it into a list
+        names = [names]
+
+    for ann in names:
+        commands.commands_post(f'{cmd_string} uuidOrName="{ann}"', base_url=base_url)
+
+#-------------------------------------------------------------------
 
 def _build_base_cmd_string(base_command, network, base_url):
     net_SUID = networks.get_network_suid(network, base_url=base_url)
