@@ -22,9 +22,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # External library imports
-# import base64
-# import os
-# import time
 import re
 
 # Internal module imports
@@ -36,10 +33,11 @@ from . import styles
 from . import sandbox
 
 # Internal module convenience imports
-# from .exceptions import CyError
-# from .py4cytoscape_sandbox import *
+from .exceptions import CyError
+from .py4cytoscape_sandbox import *
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+
 
 @cy_log
 def add_annotation_text(text=None, x_pos=None, y_pos=None, font_size=None, font_family=None, font_style=None,
@@ -110,12 +108,13 @@ def add_annotation_text(text=None, x_pos=None, y_pos=None, font_size=None, font_
 
     return res
 
+
 @cy_log
 def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=None, font_family=None, font_style=None,
-                        color=None, angle=None, type=None, custom_shape=None, fill_color=None, opacity=None,
-                        border_thickness=None, border_color=None, border_opacity=None, height=None, width=None,
-                        name=None, canvas=None, z_order=None, network=None,
-                        base_url=DEFAULT_BASE_URL):
+                                color=None, angle=None, type=None, custom_shape=None, fill_color=None, opacity=None,
+                                border_thickness=None, border_color=None, border_opacity=None, height=None, width=None,
+                                name=None, canvas=None, z_order=None, network=None,
+                                base_url=DEFAULT_BASE_URL):
     """Add Bounded Text Annotation
 
     Adds a bounded text annotation to a Cytoscape network view. The object will also be added to the
@@ -158,7 +157,7 @@ def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=Non
         >>> add_annotation_bounded_text(text='ann1')
         {'edgeThickness': '1.0', 'canvas': 'foreground', 'fillOpacity': '100.0', 'color': '#000000', 'rotation': '0.0', 'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation', 'fontStyle': 'plain', 'uuid': '250660b5-f371-48a6-9942-bdacacf1ec8a', 'shapeType': 'RECTANGLE', 'edgeColor': '#000000', 'fontFamily': 'Arial', 'edgeOpacity': '100.0', 'name': 'ann1', 'x': '2449.9784057344455', 'width': '34.6953125', 'y': '1882.9888145962157', 'z': '0', 'fontSize': '12', 'text': 'ann1', 'height': '21.798828125'}
         >>> add_annotation_bounded_text(text='ann3', x_pos=100, y_pos=200, font_size=25, font_family='Courier New', font_style='bold', color='#F0F0F0', angle=45, type='ELLIPSE', custom_shape=None, fill_color='#A0A0A0', opacity=50, border_thickness=2, border_color='#0F0F0F', border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
-        {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0', 'color': '#F0F0F0', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation', 'fontStyle': 'bold', 'uuid': '5578e7b1-7edf-4588-824f-72d9dccfb215', 'fillColor': '#A0A0A0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F', 'fontFamily': 'Courier New', 'edgeOpacity': '75.0', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'fontSize': '25', 'text': 'ann3', 'height': '30.0'}
+        {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0', 'color': '#F0F0F0', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation', 'fontStyle': 'bold', 'uuid': 'fbf6c4e1-7b28-4274-9ce0-a0b7f5618a51', 'fillColor': '#A0A0A0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F', 'fontFamily': 'Courier New', 'edgeOpacity': '75.0', 'name': 'ann1 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'fontSize': '25', 'text': 'ann1', 'height': '30.0'}
     """
 
     cmd_string, net_SUID = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
@@ -199,11 +198,12 @@ def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=Non
 
     return res
 
+
 @cy_log
 def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=None, brightness=None, contrast=None,
                          border_thickness=None, border_color=None, border_opacity=None, height=None, width=None,
-                        name=None, canvas=None, z_order=None, network=None,
-                        base_url=DEFAULT_BASE_URL):
+                         name=None, canvas=None, z_order=None, network=None,
+                         base_url=DEFAULT_BASE_URL):
     """Add Image Annotation
 
     Adds an image annotation to a Cytoscape network view. The object will also be added to the
@@ -277,8 +277,10 @@ def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=N
 
     return res
 
+
 @cy_log
-def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, angle=None, fill_color=None, opacity=None,
+def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, angle=None, fill_color=None,
+                         opacity=None,
                          border_thickness=None, border_color=None, border_opacity=None, height=None, width=None,
                          name=None, canvas=None, z_order=None, network=None,
                          base_url=DEFAULT_BASE_URL):
@@ -353,6 +355,7 @@ def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, a
 
     return res
 
+
 @cy_log
 def delete_annotation(names=None, base_url=DEFAULT_BASE_URL):
     """Delete Annotation
@@ -387,6 +390,7 @@ def delete_annotation(names=None, base_url=DEFAULT_BASE_URL):
     for ann in names:
         res = commands.commands_post(f'annotation delete uuidOrName="{ann}"', base_url=base_url)
 
+
 @cy_log
 def get_annotation_list(network=None, base_url=DEFAULT_BASE_URL):
     """Get Annotation List
@@ -416,6 +420,7 @@ def get_annotation_list(network=None, base_url=DEFAULT_BASE_URL):
     res = commands.commands_post(cmd_string, base_url=base_url)
 
     return res
+
 
 @cy_log
 def group_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
@@ -456,6 +461,7 @@ def group_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
         raise CyError(f'Error while grouping {names}')
     return res
 
+
 @cy_log
 def ungroup_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Ungroup Annotation group
@@ -493,7 +499,395 @@ def ungroup_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
     for ann in names:
         commands.commands_post(f'{cmd_string} uuidOrName="{ann}"', base_url=base_url)
 
-#-------------------------------------------------------------------
+
+@cy_log
+def update_annotation_text(text=None, annotation_name=None, x_pos=None, y_pos=None, font_size=None, font_family=None,
+                           font_style=None, color=None, angle=None, name=None, canvas=None, z_order=None, network=None,
+                           base_url=DEFAULT_BASE_URL):
+    """Update Text Annotation
+
+    Updates a text annotation in a Cytoscape network view. The object will also be updated in the
+    Annotation Panel in the GUI.
+
+    Args:
+        text (str): The text to be displayed
+        annotation_name (UUID or str): Name of annotation by UUID or name
+        x_pos (int): X position in pixels from left; default is center of current view
+        y_pos (int): Y position in pixels from top; default is center of current view
+        font_size (int): Numeric value; default is 12
+        font_family (str): Font family; default is Arial
+        font_style (str): Font style; default is none
+        color (str): hexadecimal color; default is #000000 (black)
+        angle (float): Angle of text orientation; default is 0.0 (horizontal)
+        name (str): Name of annotation object; default is "Text"
+        canvas (str): Canvas to display annotation, i.e., foreground (default) or background
+        z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if network name doesn't exist or error in parameter value
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> update_annotation_text(annotation_name='ann1', angle=100)
+        {'canvas': 'foreground', 'color': '#000000', 'rotation': '100.0', 'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation', 'fontStyle': 'plain', 'uuid': '8bd8c125-6d13-4b5e-8cf9-9e1c631efd6d', 'fontFamily': 'Arial', 'name': 'ann1', 'x': '2449.9784057344455', 'y': '1882.9888145962157', 'z': '0', 'fontSize': '12', 'text': 'ann1'}
+        >>> update_annotation_text(annotation_name='8bd8c125-6d13-4b5e-8cf9-9e1c631efd6d', angle=-100)
+        {'canvas': 'foreground', 'color': '#000000', 'rotation': '-100.0', 'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation', 'fontStyle': 'plain', 'uuid': '8bd8c125-6d13-4b5e-8cf9-9e1c631efd6d', 'fontFamily': 'Arial', 'name': 'ann1', 'x': '2449.9784057344455', 'y': '1882.9888145962157', 'z': '0', 'fontSize': '12', 'text': 'ann1'}
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation update text', network, base_url)  # a good start
+
+    # add type
+    cmd_string += f' type="org.cytoscape.view.presentation.annotations.TextAnnotation"'
+
+    # text to add
+    cmd_string += _get_text_cmd_string(text, optional=True)
+
+    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+
+    # x and y position
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+
+    # optional params
+    cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
+
+    cmd_string += _get_color_cmd_string(color)
+
+    cmd_string += _get_angle_cmd_string(angle)
+
+    cmd_string += _get_name_cmd_string(name, network, base_url)
+
+    cmd_string += _get_canvas_cmd_string(canvas)
+
+    cmd_string += _get_z_order_cmd_string(z_order)
+
+    # execute command
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res
+
+
+@cy_log
+def update_annotation_bounded_text(text=None, annotation_name=None, x_pos=None, y_pos=None, font_size=None,
+                                   font_family=None, font_style=None, color=None, angle=None, type=None,
+                                   custom_shape=None, fill_color=None, opacity=None, border_thickness=None,
+                                   border_color=None, border_opacity=None, height=None, width=None, name=None,
+                                   canvas=None, z_order=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Update Bounded Text Annotation
+
+    Updates a bounded text annotation in a Cytoscape network view. The object will also be updated in the
+    Annotation Panel in the GUI.
+
+    Args:
+        text (str): The text to be displayed
+        annotation_name (UUID or str): Name of annotation by UUID or name
+        x_pos (int): X position in pixels from left; default is center of current view
+        y_pos (int): Y position in pixels from top; default is center of current view
+        font_size (int): Numeric value; default is 12
+        font_family (str): Font family; default is Arial
+        font_style (str): Font style; default is none
+        color (str): hexadecimal color; default is #000000 (black)
+        angle (float): Angle of text orientation; default is 0.0 (horizontal)
+        type (str): The type of the shape, default is RECTANGLE. Seee get_node_shapes() for valid options
+        custom_shape (str): If a custom shape, this is the text of the shape
+        fill_color (str): hexadecimal color; default is #000000 (black)
+        opacity (int): Opacity of fill color. Must be an integer between 0 and 100; default is 100
+        border_thickness (int): non-negative integer
+        border_color (str): hexadecimal color; default is #000000 (black)
+        border_opacity (int): Integer between 0 and 100; default is 100
+        height (int): Height of bounding shape; default is based on text height
+        width (int) Width of bounding shape; default is based on text length
+        name (str): Name of annotation object; default is "Text"
+        canvas (str): Canvas to display annotation, i.e., foreground (default) or background
+        z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if network name doesn't exist or error in parameter value
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> add_annotation_bounded_text(text='ann1')
+        {'edgeThickness': '1.0', 'canvas': 'foreground', 'fillOpacity': '100.0', 'color': '#000000', 'rotation': '0.0', 'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation', 'fontStyle': 'plain', 'uuid': '802ec033-66d4-49f6-81c2-9b550649dbe2', 'shapeType': 'RECTANGLE', 'edgeColor': '#000000', 'fontFamily': 'Arial', 'edgeOpacity': '100.0', 'name': 'ann1', 'x': '2449.9784057344455', 'width': '34.6953125', 'y': '1882.9888145962157', 'z': '0', 'fontSize': '12', 'text': 'ann1', 'height': '21.798828125'}
+        >>> add_annotation_bounded_text(text='ann1', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
+                                        font_style='bold', color='#F0F0F0', angle=45, type='ELLIPSE',
+                                        custom_shape=None, fill_color='#A0A0A0', opacity=50, border_thickness=2,
+                                        border_color='#0F0F0F', border_opacity=75, height=30, width=31,
+                                        name='ann1 name', canvas='background')
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
+
+    # text to add
+    cmd_string += _get_text_cmd_string(text, optional=True)
+
+    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+
+    # x and y position
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+
+    # optional params
+    cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
+
+    cmd_string += _get_color_cmd_string(color)
+
+    cmd_string += _get_angle_cmd_string(angle)
+
+    cmd_string += _get_type_cmd_string(type)
+
+    cmd_string += _get_custom_shape_cmd_string(custom_shape)
+
+    cmd_string += _get_fill_color_cmd_string(fill_color)
+
+    cmd_string += _get_opacity_cmd_string(opacity)
+
+    cmd_string += _get_border_cmd_string(border_thickness, border_color, border_opacity)
+
+    cmd_string += _get_height_width_cmd_string(height, width)
+
+    cmd_string += _get_name_cmd_string(name, network, base_url)
+
+    cmd_string += _get_canvas_cmd_string(canvas)
+
+    cmd_string += _get_z_order_cmd_string(z_order)
+
+    # execute command
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res
+
+
+@cy_log
+def update_annotation_shape(type=None, custom_shape=None, annotation_name=None, x_pos=None, y_pos=None, angle=None,
+                            fill_color=None, opacity=None, border_thickness=None, border_color=None,
+                            border_opacity=None, height=None, width=None, name=None, canvas=None, z_order=None,
+                            network=None, base_url=DEFAULT_BASE_URL):
+    """Update Shape Annotation
+
+    Updates a shape annotation in a Cytoscape network view. The object will also be updated in the
+    Annotation Panel in the GUI.
+
+    Args:
+        type (str): The type of the shape, default is RECTANGLE. See get_node_shapes() for valid options.
+        custom_shape (str): If a custom shape, this is the text of the shape
+        annotation_name (UUID or str): Name of annotation by UUID or name
+        x_pos (int): X position in pixels from left; default is center of current view
+        y_pos (int): Y position in pixels from top; default is center of current view
+        angle (float): Angle of text orientation; default is 0.0 (horizontal)
+        fill_color (str): hexadecimal color; default is #000000 (black)
+        opacity (int): Opacity of fill color. Must be an integer between 0 and 100; default is 100
+        border_thickness (int): non-negative integer
+        border_color (str): hexadecimal color; default is #000000 (black)
+        border_opacity (int): Integer between 0 and 100; default is 100
+        height (int): Height of bounding shape; default is based on text height
+        width (int) Width of bounding shape; default is based on text length
+        name (str): Name of annotation object; default is "Text"
+        canvas (str): Canvas to display annotation, i.e., foreground (default) or background
+        z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if network name doesn't exist or error in parameter value
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> update_annotation_shape(annotation_name='ann1 name', name='new name')
+        {'edgeThickness': '1.0', 'canvas': 'foreground', 'fillOpacity': '100.0', 'rotation': '0.0', 'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation', 'uuid': '8233e035-d116-4048-9bfb-62334a500829', 'shapeType': 'RECTANGLE', 'edgeColor': '#000000', 'edgeOpacity': '100.0', 'name': 'new name', 'x': '2449.9784057344455', 'width': '100.0', 'y': '1882.9888145962157', 'z': '0', 'height': '100.0'}
+        >>> update_annotation_shape(type='DIAMOND', custom_shape=None, annotation_name='new name', x_pos=101, y_pos=202, angle=90, fill_color='#F0F0F1', opacity=51, border_thickness=3, border_color='#0F0F0E', border_opacity=76, height=31, width=32, name='ann1a name', canvas='background')
+        {'edgeThickness': '3.0', 'canvas': 'background', 'fillOpacity': '51.0', 'rotation': '90.0', 'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation', 'uuid': 'eba7198e-2cba-48d7-bc8b-273ee4b26831', 'fillColor': '#F0F0F1', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0E', 'edgeOpacity': '76.0', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '202.0', 'z': '0', 'height': '31.0'}
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation update shape', network, base_url)  # a good start
+
+    cmd_string += _get_type_cmd_string(type)
+
+    cmd_string += _get_custom_shape_cmd_string(custom_shape)
+
+    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+
+    # x and y position
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+
+    # optional params
+    cmd_string += _get_angle_cmd_string(angle)
+
+    cmd_string += _get_fill_color_cmd_string(fill_color)
+
+    cmd_string += _get_opacity_cmd_string(opacity)
+
+    cmd_string += _get_border_cmd_string(border_thickness, border_color, border_opacity)
+
+    cmd_string += _get_height_width_cmd_string(height, width)
+
+    cmd_string += _get_name_cmd_string(name, network, base_url)
+
+    cmd_string += _get_canvas_cmd_string(canvas)
+
+    cmd_string += _get_z_order_cmd_string(z_order)
+
+    # execute command
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res
+
+
+@cy_log
+def update_annotation_image(url=None, annotation_name=None, x_pos=None, y_pos=None, angle=None,
+                            opacity=None, brightness=None, contrast=None, border_thickness=None,
+                            border_color=None, border_opacity=None, height=None, width=None,
+                            name=None, canvas=None, z_order=None, network=None,
+                            base_url=DEFAULT_BASE_URL):
+    """Update Image Annotation
+
+    Updates an image annotation in a Cytoscape network view. The object will also be updated in the
+    Annotation Panel in the GUI.
+
+    Args:
+        url (str): URL or path to image file. File paths can be absolute or relative to current working directory or sandbox. URLs must start with http:// or https://.
+        annotation_name (UUID or str): Name of annotation by UUID or name
+        x_pos (int): X position in pixels from left; default is center of current view
+        y_pos (int): Y position in pixels from top; default is center of current view
+        angle (float): Angle of text orientation; default is 0.0 (horizontal)
+        opacity (int): Opacity of fill color. Must be an integer between 0 and 100; default is 100
+        brightness (int): Image brightness. Must be an integer between -100 and 100; default is 0.
+        contrast (int): Image contrast. Must be an integer between -100 and 100; default is 0.
+        border_thickness (int): non-negative integer
+        border_color (str): hexadecimal color; default is #000000 (black)
+        border_opacity (int): Integer between 0 and 100; default is 100
+        height (int): Height of bounding shape; default is based on text height
+        width (int) Width of bounding shape; default is based on text length
+        name (str): Name of annotation object; default is "Text"
+        canvas (str): Canvas to display annotation, i.e., foreground (default) or background
+        z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if network name doesn't exist or error in parameter value
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> update_annotation_image(url='https://www.ucsd.edu/_resources/img/logo_UCSD.png', annotation_name='ann1 name')
+        {'edgeThickness': '1.0', 'canvas': 'foreground', 'rotation': '0.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'd5e1e147-7515-4255-a0d2-4047a9514313', 'URL': 'https://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#000000', 'brightness': '0', 'edgeOpacity': '100.0', 'contrast': '0', 'name': 'ann1 name', 'x': '2449.9784057344455', 'width': '500.0', 'y': '1882.9888145962157', 'z': '0', 'opacity': '1.0', 'height': '100.0'}
+        >>> update_annotation_image(url='http://www.ucsd.edu/_resources/img/logo_UCSD.png', annotation_name='ann1 name', x_pos=101, y_pos=201, angle=90, opacity=51, brightness=61, contrast=71, border_thickness=3, border_color='#0F0F0E', border_opacity=76, height=31, width=32, name='ann1a name', canvas='foreground')
+        {'edgeThickness': '3.0', 'canvas': 'foreground', 'rotation': '90.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'b3435db0-2468-408f-a9ef-d4232ed5ea56', 'URL': 'http://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0E', 'brightness': '61', 'edgeOpacity': '76.0', 'contrast': '71', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '201.0', 'z': '0', 'opacity': '0.51', 'height': '31.0'}
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation update image', network, base_url)  # a good start
+
+    # add type
+    cmd_string += f' type="org.cytoscape.view.presentation.annotations.ImageAnnotation"'
+
+    # Image to add
+    cmd_string += _get_url_cmd_string(url, optional=True)
+
+    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+
+    # x and y position
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+
+    # optional params
+    cmd_string += _get_angle_cmd_string(angle)
+
+    cmd_string += _get_opacity_cmd_string(opacity)
+
+    cmd_string += _get_brightness_contrast_cmd_string(brightness, contrast)
+
+    cmd_string += _get_border_cmd_string(border_thickness, border_color, border_opacity)
+
+    cmd_string += _get_height_width_cmd_string(height, width)
+
+    cmd_string += _get_name_cmd_string(name, network, base_url)
+
+    cmd_string += _get_canvas_cmd_string(canvas)
+
+    cmd_string += _get_z_order_cmd_string(z_order)
+
+    # execute command
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res
+
+
+@cy_log
+def update_group_annotation(name=None, annotation_name=None, x_pos=None, y_pos=None, angle=None, opacity=None,
+                            canvas=None, z_order=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Update Group Annotation
+
+    Updates a group annotation, changing the given properties.
+
+    Args:
+        name (UUID or str): Single UUID or str naming group object
+        annotation_name (UUID or str): Name of annotation by UUID or name
+        x_pos (int): X position in pixels from left; default is center of current view
+        y_pos (int): Y position in pixels from top; default is center of current view
+        angle (float): Angle of text orientation; default is 0.0 (horizontal)
+        canvas (str): Canvas to display annotation, i.e., foreground (default) or background
+        z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: A named list of annotation properties, including UUID
+
+    Raises:
+        CyError: if invalid name
+        requests.exceptions.HTTPError: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> update_group_annotation(annotation_name='Group 1', angle=180)
+        {'canvas': 'foreground', 'rotation': '180.0', 'name': 'Group 1', 'x': '2450.0', 'y': '1883.0', 'z': '0', 'type': 'org.cytoscape.view.presentation.annotations.GroupAnnotation', 'uuid': 'b9bf3184-3c5a-4e8b-9651-4bc4403af158', 'memberUUIDs': 'bb3061c5-d8d5-4fca-ac5c-9b7bf8fb9fd0,32f89c1d-e987-4867-9b8a-787aaac6e165,ec73aad8-b00b-4f4d-9361-a4b93f70c8f8'}
+        >>> update_group_annotation(name='2c0a77f8-a6d0-450d-b6ee-1bfe3c8f8aea', annotation_name=group_uuid, x_pos=101, y_pos=201, angle=180, canvas='foreground')
+        {'canvas': 'foreground', 'rotation': '180.0', 'name': 'Group 1', 'x': '101.0', 'y': '201.0', 'z': '0', 'type': 'org.cytoscape.view.presentation.annotations.GroupAnnotation', 'uuid': '2c0a77f8-a6d0-450d-b6ee-1bfe3c8f8aea', 'memberUUIDs': '8872c2f6-42ad-4b6a-8fb9-1d1b13da504d,2c830227-7f6a-4e58-bbef-2070f1b5a603,8d04e34d-86b8-486f-9927-581184cbe03e'}
+    """
+
+    cmd_string, net_SUID = _build_base_cmd_string('annotation update group', network, base_url)  # a good start
+
+    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+
+    # x and y position
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+
+    # optional params
+    cmd_string += _get_angle_cmd_string(angle)
+
+    cmd_string += _get_name_cmd_string(name, network, base_url)
+
+    cmd_string += _get_canvas_cmd_string(canvas)
+
+    cmd_string += _get_z_order_cmd_string(z_order)
+
+    # execute command
+    res = commands.commands_post(cmd_string, base_url=base_url)
+
+    return res
+
+# -------------------------------------------------------------------
 
 def _build_base_cmd_string(base_command, network, base_url):
     net_SUID = networks.get_network_suid(network, base_url=base_url)
@@ -504,12 +898,14 @@ def _build_base_cmd_string(base_command, network, base_url):
 
     return base_command, net_SUID
 
+
 def _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url):
     if x_pos is None:
         x_pos = style_values.get_network_center(net_SUID, base_url=base_url)['x']
     if y_pos is None:
         y_pos = style_values.get_network_center(net_SUID, base_url=base_url)['y']
     return f' x="{x_pos}" y="{y_pos}"'
+
 
 def _get_type_cmd_string(type):
     if type is None:
@@ -524,6 +920,7 @@ def _get_type_cmd_string(type):
             type = 'V'
         return f' type="{type}"'
 
+
 def _get_z_order_cmd_string(z_order):
     if z_order is None:
         return ''
@@ -532,12 +929,14 @@ def _get_z_order_cmd_string(z_order):
             raise CyError(f'{z_order} is invalid. Z order must be a number.')
         return f' z="{z_order}"'
 
+
 def _get_canvas_cmd_string(canvas):
     if canvas is None:
         return ''
     else:
         verify_canvas(canvas)
         return f' canvas="{canvas}"'
+
 
 def _get_name_cmd_string(name, network, base_url):
     if name is None:
@@ -547,6 +946,7 @@ def _get_name_cmd_string(name, network, base_url):
         all_names = [x['name'] for x in all_annotations]
         verify_unique(name, all_names)
         return f' newName="{name}"'
+
 
 def _get_height_width_cmd_string(height, width):
     if height is None:
@@ -562,6 +962,7 @@ def _get_height_width_cmd_string(height, width):
         width_cmd = f' width="{width}"'
 
     return height_cmd + width_cmd
+
 
 def _get_border_cmd_string(border_thickness, border_color, border_opacity):
     if border_thickness is None:
@@ -584,12 +985,14 @@ def _get_border_cmd_string(border_thickness, border_color, border_opacity):
 
     return border_thickness_cmd + border_color_cmd + border_opacity_cmd
 
+
 def _get_opacity_cmd_string(opacity):
     if opacity is None:
         return ''
     else:
         verify_opacity(opacity)
         return f' opacity="{opacity}"'
+
 
 def _get_fill_color_cmd_string(fill_color):
     if fill_color is None:
@@ -598,6 +1001,7 @@ def _get_fill_color_cmd_string(fill_color):
         verify_hex_color(fill_color)
         return f' fillColor="{fill_color}"'
 
+
 def _get_angle_cmd_string(angle):
     if angle is None:
         return ''
@@ -605,11 +1009,13 @@ def _get_angle_cmd_string(angle):
         rotation = normalize_rotation(angle)
         return f' angle="{rotation}"'
 
+
 def _get_custom_shape_cmd_string(custom_shape):
     if custom_shape is None:
         return ''
     else:
         return f' customShape="{custom_shape}"'
+
 
 def _get_brightness_contrast_cmd_string(brightness, contrast):
     if brightness is None:
@@ -626,12 +1032,17 @@ def _get_brightness_contrast_cmd_string(brightness, contrast):
 
     return brightness_cmd + contrast_cmd
 
-def _get_url_cmd_string(url):
+def _get_url_cmd_string(url, optional=False):
     if url is None:
-        raise CyError(f'URL or path to image file must be provided.')
+        if optional:
+            return ''
+        else:
+            raise CyError(f'URL or path to image file must be provided.')
+
     if re.search('^http[s]*://', url) == None:
         url = sandbox.get_abs_sandbox_path(url)
     return f' url="{url}"'
+
 
 def _get_font_cmd_string(font_size, font_family, font_style):
     if font_size is None:
@@ -653,6 +1064,7 @@ def _get_font_cmd_string(font_size, font_family, font_style):
 
     return font_size_cmd + font_family_cmd + font_style_cmd
 
+
 def _get_color_cmd_string(color):
     if color is None:
         return ''
@@ -660,7 +1072,14 @@ def _get_color_cmd_string(color):
         verify_hex_color(color)
         return f' color="{color}"'
 
-def _get_text_cmd_string(text):
-    if text is None:
+
+def _get_text_cmd_string(text, optional=False):
+    if text is None and not optional:
         raise CyError("Must provide the text string to add.")
-    return f' text="{text}"'
+    return '' if text is None else f' text="{text}"'
+
+
+def _get_annotation_name_cmd_string(annotation_name):
+    if annotation_name is None:
+        raise CyError("Must provide the UUID (or list of UUIDs) to group")
+    return f' uuidOrName="{annotation_name}"'
