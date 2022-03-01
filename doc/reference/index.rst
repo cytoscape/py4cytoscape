@@ -10,6 +10,7 @@ Reference
    :maxdepth: 2
 
    apps
+   annotations
    collections
    commands
    cy_ndex
