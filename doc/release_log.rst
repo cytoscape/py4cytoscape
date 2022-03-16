@@ -4,7 +4,7 @@ Release Log
 ===========
 
 
-py4cytoscape 0.0.12
+py4cytoscape 1.2.0
 -------------------
 Release date: 4 Mar 2022
 
@@ -14,7 +14,7 @@ Release date: 4 Mar 2022
 Release notes
 ~~~~~~~~~~~~~
 
-.. include:: release/release_0.0.12.rst
+.. include:: release/release_1.2.0.rst
 
 py4cytoscape 0.0.11
 -------------------
