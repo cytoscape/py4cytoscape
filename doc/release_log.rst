@@ -4,6 +4,18 @@ Release Log
 ===========
 
 
+py4cytoscape 0.0.12
+-------------------
+Release date: 4 Mar 2022
+
+* Added annotation functions (mirroring new Cytoscape Annotation features)
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_0.0.12.rst
+
 py4cytoscape 0.0.11
 -------------------
 Release date: 11 Oct 2021

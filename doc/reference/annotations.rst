@@ -23,6 +23,7 @@ Grouping
 
    group_annotation
    ungroup_annotation
+   update_group_annotation
 
 Maintaining
 -----------
@@ -41,4 +42,4 @@ Updating
    update_annotation_bounded_text
    update_annotation_shape
    update_annotation_image
-   update_group_annotation
+
