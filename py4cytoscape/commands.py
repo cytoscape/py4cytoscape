@@ -734,15 +734,16 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
                 raise CyError(message, caller=caller)
     else:
         # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
-        # we should never get here if we're running a notebook or remote configuration.
+        # we should never get here if we're running a remote configuration.
         #
-        # Either way, we consider the Cytoscape installation directory to be the sandbox because that's what the
-        # Cytoscape current directory is when Cytoscape executes ... the same place an unqualified file name would
-        # resolve to if Cytoscape were to be saving a file. For the sake of testing and consistency, we need to
-        # find out what that path is and return it as part of the sandbox descriptor.
+        # But if we are running remotely, we find out what sandbox is running.
+        #
+        # If we are running on the Cytoscape workstation, we want to find out whether a sandbox is defined, and if so,
+        # what it is. If no sandbox is defined, the entire workstation file system is the sandbox. If a sandbox is
+        # defined, the caller will consider the file name to be relative to it.
         default_sandbox_path = get_default_sandbox_path()
         if default_sandbox_path is None:
-            if get_notebook_is_running():
+            if running_remote():
                 try:
                     r = requester('POST', f'{base_url}/commands/filetransfer/getFileInfo',
                                   json={'sandboxName': None, 'fileName': '.'},
@@ -757,7 +758,7 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
                     default_sandbox_path = None
                     narrate('Warning: FileTransfer app is not available, so sandbox operations will fail')
             else:
-                default_sandbox_path = os.getcwd()
+                default_sandbox_path = os.getcwd() # Running on the Cytoscape workstation
 
         new_sandbox = set_current_sandbox(None, default_sandbox_path)
 
@@ -765,17 +766,17 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     return new_sandbox
 
 def _get_default_sandbox():
-    # Figure out what the default sandbox should be, depending on whether a Notebook is running or we're on the Cytoscape workstation
+    # Figure out what the default sandbox should be, depending on whether we're running remote or on the Cytoscape workstation
     default = get_default_sandbox()
     if len(default) == 0:
-        # There hasn't been a default sandbox calculated yet ... create a new default to reflect Notebook and remote
+        # There hasn't been a default sandbox calculated yet ... create a new default to reflect whether remote
         # execution. This determination is deferred until now (instead of occurring when Python execution first starts)
         # so as to give the user some flexibility regarding when Cytoscape needs to be started ... this allows
         # Cytoscape to be started only before the user issues the first command.
-        if get_notebook_is_running() or running_remote():
+        if running_remote():
             default = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
         else:
-            default = sandbox_initializer(sandboxName=None)  # for local execution not under a Notebook
+            default = sandbox_initializer(sandboxName=None)  # for execution on Cytoscape workstation
         set_default_sandbox(**default)
     return default
 
