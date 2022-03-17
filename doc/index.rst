@@ -74,7 +74,15 @@ Free Software
 -------------
 
 py4cytoscape is free software; you can redistribute it and/or modify it under the
-terms of the :ref:`License`.  We welcome contributions. Join us on `GitHub <https://github.com/bdemchak/py4cytoscape>`_.
+terms of the :ref:`License`.  We welcome contributions. Join us on `GitHub <https://github.com/cytoscape/py4cytoscape>`_.
+
+Support
+-------
+
+The py4cytoscape team welcomes questions posted as `GitHub issues <https://github.com/cytoscape/py4cytoscape/issues>`_.
+
+Please note that someone may have already had the same question that has already been answered. You may find an instant
+answer to your question by perusing both open and closed issues.
 
 History
 -------
