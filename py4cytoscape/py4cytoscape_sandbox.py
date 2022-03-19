@@ -53,7 +53,7 @@ def sandbox_initializer(**new_sandbox):
     return sandbox
 
 def set_default_sandbox(**new_sandbox):
-    # Set and return the sandbox properties to be used as a default, probably based on whether a Notebook is running
+    # Set and return the sandbox properties to be used as a default, probably based on whether running remote
     global _default_sandbox
     _default_sandbox = sandbox_initializer(init=new_sandbox)
     return _default_sandbox

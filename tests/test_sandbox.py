@@ -2,6 +2,7 @@
 
 """ Test functions in sandbox.py.
 """
+import os
 
 """License:
     Copyright 2020 The Cytoscape Consortium
@@ -58,10 +59,10 @@ class SandboxTests(unittest.TestCase):
         self.assertRaises(CyError, sandbox_set, '/windows/system32')
 
     @print_entry_exit
-    def test_sandbox_set_remove_standalone(self):
-        # This tests that common/casual set/remove options on sandboxes work when running standalone Python
+    def test_sandbox_set_remove(self):
+        # This tests that common/casual set/remove options on sandboxes work when running on Cytoscape workstation
 
-        # Verify that setting an empty sandbox really creates one that points to Cytoscape program directory
+        # Verify that setting an empty sandbox really creates one that points to Python kernel current directory
         sandbox = sandbox_set(None)
         sandbox1 = self._verify_sandbox_is_native_filesystem()
         self.assertEqual(sandbox, sandbox1)
@@ -117,8 +118,8 @@ class SandboxTests(unittest.TestCase):
 
 
     @print_entry_exit
-    def test_sandbox_set_remove_standalone_multiple(self):
-        # This tests that multiple sandboxes are managed properly when running Python standalone. The hardest part of
+    def test_sandbox_set_remove_multiple(self):
+        # This tests that multiple sandboxes are managed properly when running on Cytoscape workstatoin. The hardest part of
         # this is to make sure that when the current sandbox is deleted, we fall back to the native Cytoscape file system.
 
         def check_sandbox_files(test_file, alt_file):
@@ -163,69 +164,10 @@ class SandboxTests(unittest.TestCase):
         self.assertEqual(empty_sandbox, empty1_sandbox)
 
     @print_entry_exit
-    def test_sandbox_set_remove_notebook(self):
-        # This tests that the default sandbox is created when in a notebook or remote execution. We make sure that
-        # if the current sandbox gets deleted, we fall back to the default sandbox. And we make sure that if the
-        # default sandbox is deleted, we re-create it before trying to use it.
-
-        set_notebook_is_running(True) # Should cause default notebook to be created
-
-        # Verify that setting an empty sandbox resolves to the pre-created sandbox
-        default_sandbox = sandbox_set(None)
-        default_sandbox1 = self._verify_current_sandbox_is_preset()
-        self.assertEqual(default_sandbox, default_sandbox1)
-
-        # Remove the default sandbox and verify that it's actually removed
-        self._remove_sandbox_and_verify(None, True, default_sandbox)
-        self.assertFalse(os.path.exists(default_sandbox))
-
-        # Verify that the slightest operation causes the default sandbox to be re-created ... in this case, a get_file_info
-        default_sandbox1 = self._verify_current_sandbox_is_preset()
-
-        # Verify that deleting it erases it. Verify that even deleting the sandbox causes it to be re-created before
-        # it's then deleted ... and then verify that the slightest operation also causes it to be automatically re-created
-        self._remove_sandbox_and_verify(None, True, default_sandbox)
-        self.assertFalse(os.path.exists(default_sandbox))
-        self._remove_sandbox_and_verify(None, True, default_sandbox)
-        self.assertFalse(os.path.exists(default_sandbox))
-        default_sandbox1 = self._verify_current_sandbox_is_preset() # side effect of looking: create default sandbox first
-
-        # Create a new sandbox and verify that it's not the default.
-        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
-        self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
-        self.assertNotEqual(default_sandbox, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(), test_sandbox) # Verify that the new sandbox exists and it's the current sandbox
-
-        # Verify that deleting the new sandbox causes the default sandbox to become current again ... and without messing up the default sandbox
-        self._remove_sandbox_and_verify(None, True, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
-
-        # Create the new sandbox again and verify that it's not the default.
-        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
-        self._verify_sandbox_path(test_sandbox, _TEST_SANDBOX_NAME)
-        self.assertNotEqual(default_sandbox, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(),
-                         test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
-
-        # Verify that deleting the default sandbox leaves the new sandbox as the current sandbox
-        self._remove_sandbox_and_verify(PREDEFINED_SANDBOX_NAME, True, default_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(),
-                         test_sandbox)  # Verify that the new sandbox exists and it's the current sandbox
-
-        # Next ... verify that the default sandbox gets created once the new sandbox is deleted
-        self._remove_sandbox_and_verify(None, True, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
-        self._write_file(default_sandbox)
-
-        # With the default sandbox being current, verify that deleting the new sandbox again leaves the default as current
-        self._remove_sandbox_and_verify(_TEST_SANDBOX_NAME, False, test_sandbox)
-        self.assertEqual(self._verify_valid_sandbox_file(), default_sandbox)
-        self.assertEqual(os.path.isfile(os.path.join(default_sandbox, _TEST_FILE)), True)
-
-    @print_entry_exit
-    def test_sandbox_file_info_standalone(self):
-        # Verify that the Cytoscape install directory is returned when asking for '.' during standalone Python execution
+    def test_sandbox_file_info(self):
+        # Verify that the Python kernel current directory is returned when asking for '.' during standalone Python execution
         empty_sandbox = self._verify_sandbox_is_native_filesystem()
+        os.path.samefile(empty_sandbox, os.getcwd())
 
         # Verify that a non-existent file name returns an empty modifiedTime
         no_such_file = self._verify_missing_sandbox_file('complete garbage name')
@@ -236,51 +178,13 @@ class SandboxTests(unittest.TestCase):
         # Verify that an existing directory returns a modifiedTime and valid info
         dir_file = self._verify_valid_sandbox_file(file_name='data/')
 
-        # Verify that a sandbox can have files in subdirectories
+        # Verify that can be files in subdirectories
         gal_filtered_file = self._verify_valid_sandbox_file(file_name='data/Yeast Perturbation.cys', is_file=True)
 
-        # Verify that a file outside of the Cytoscape install directory (i.e., anywhere) is allowed (... this isn't
-        # allowed in a strict sandboxing mode like notebooks and remote execution gets)
+        # Verify that a file outside of the current directory (i.e., anywhere) is allowed (... this isn't
+        # allowed in a strict sandboxing mode remote execution gets)
         parent_dir = self._verify_missing_sandbox_file('../../fooled')
         root_dir = self._verify_valid_sandbox_file(file_name='/')
-
-        # Verify that a file can be found in a named sandbox, including using all forms of the "current sandbox" name
-        test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
-        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=_TEST_SANDBOX_NAME, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
-        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
-        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name=None, file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
-        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
-        gal_filtered_file = self._verify_valid_sandbox_file(sandbox_name="   ", file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
-        self.assertTrue(gal_filtered_file.startswith(test_sandbox))
-
-        # Verify that null file names always fail
-        self.assertRaises(CyError, sandbox_get_file_info, file_name=None)
-        self.assertRaises(CyError, sandbox_get_file_info, file_name='')
-        self.assertRaises(CyError, sandbox_get_file_info, file_name='  ')
-
-    @print_entry_exit
-    def test_sandbox_file_info_notebook(self):
-        set_notebook_is_running(True) # Should cause default notebook to be created
-
-        # Verify that the Cytoscape install directory is returned when asking for '.' during standalone Python execution
-        default_sandbox = self._verify_valid_sandbox_file()
-        self._verify_sandbox_path(default_sandbox, sandbox_name=PREDEFINED_SANDBOX_NAME)
-
-        # Verify that a non-existent file name returns an empty modifiedTime
-        no_such_file = self._verify_missing_sandbox_file('complete garbage name')
-
-        # Verify that a non-existent directory name returns an empty modifiedTime
-        no_such_file = self._verify_missing_sandbox_file('garbage/')
-
-        # Verify that an existing directory returns a modifiedTime and valid info
-        dir_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/')
-
-        # Verify that a sandbox can have files in subdirectories
-        gal_filtered_file = self._verify_valid_sandbox_file(file_name='sampleData/sessions/Yeast Perturbation.cys', is_file=True)
-
-        # Verify that a file outside of the Cytoscape install directory (i.e., anywhere) is disllowed (... this is
-        # allowed in a standalone Python mode)
-        self.assertRaises(CyError, sandbox_get_file_info, file_name='../../fooled')
 
         # Verify that a file can be found in a named sandbox, including using all forms of the "current sandbox" name
         test_sandbox = sandbox_set(_TEST_SANDBOX_NAME)
@@ -354,12 +258,6 @@ class SandboxTests(unittest.TestCase):
         # Check fetching from empty sandbox (Cytoscape install directory)
         empty_sandbox_path = self._verify_sandbox_is_native_filesystem()
         check_from_sandbox(empty_sandbox_path)
-
-        # Check fetching from default sandbox (when Notebook is running)
-        reset_default_sandbox()
-        set_notebook_is_running(True) # Should cause default notebook to be created
-        default_sandbox_path = sandbox_set(None)
-        check_from_sandbox(default_sandbox_path, from_file_name=_FROM_FILE_NAME_SANDBOX, alt_from_file_name=_ALT_FROM_FILE_NAME_SANDBOX)
 
     @print_entry_exit
     def test_sandbox_to_remove(self):
@@ -445,15 +343,9 @@ class SandboxTests(unittest.TestCase):
             self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='/totally/bogus/sandbox')
             self.assertRaises(CyError, sandbox_remove_file, file_name=_ESCAPE_DIR + _TEST_FILE)
 
-        # Check sending to empty sandbox (Cytoscape install directory)
+        # Check sending to empty sandbox (Python kernel current directory)
         default_sandbox_path = sandbox_set(PREDEFINED_SANDBOX_NAME)
         self._verify_current_sandbox_is_preset()
-        check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
-
-        # Check fetching from default sandbox (when Notebook is running)
-        reset_default_sandbox()
-        set_notebook_is_running(True) # Should cause default notebook to be created
-        default_sandbox_path = sandbox_set(None)
         check_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
 
     @print_entry_exit
@@ -526,17 +418,10 @@ class SandboxTests(unittest.TestCase):
             self.assertRaises(CyError, sandbox_remove_file, file_name=_TEST_FILE, sandbox_name='/totally/bogus/sandbox')
             self.assertRaises(CyError, sandbox_remove_file, file_name=_ESCAPE_DIR + _TEST_FILE)
 
-        # Check sending to empty sandbox (Cytoscape install directory)
+        # Check sending to empty sandbox (Python kernel directory)
         default_sandbox_path = sandbox_set(PREDEFINED_SANDBOX_NAME)
         self._verify_current_sandbox_is_preset()
         check_url_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
-
-        # Check fetching from default sandbox (when Notebook is running)
-        reset_default_sandbox()
-        set_notebook_is_running(True) # Should cause default notebook to be created
-        default_sandbox_path = sandbox_set(None)
-        check_url_to_sandbox(default_sandbox_path, PREDEFINED_SANDBOX_NAME)
-
 
 
     def _verify_missing_sandbox_file(self, file_name='.'):
