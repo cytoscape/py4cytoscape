@@ -676,6 +676,7 @@ class AppsTests(unittest.TestCase):
                                           'x': '101.0', 'y': '201.0', 'fontSize': '26', 'text': 'ann1a'})
 
         # Verify that nothing in the yeast network changed
+        # Warning ... this can fail if Cytoscape mixes up annotations ... see CSD-678
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
         self.assertDictEqual(res, res_yeast_ann1)
 

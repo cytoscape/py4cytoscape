@@ -868,7 +868,7 @@ def update_group_annotation(name=None, annotation_name=None, x_pos=None, y_pos=N
 
     cmd_string, net_SUID = _build_base_cmd_string('annotation update group', network, base_url)  # a good start
 
-    cmd_string += _get_annotation_name_cmd_string(annotation_name)
+    cmd_string += _get_annotation_name_cmd_string(annotation_name, 'Must provide the UUID or name of group')
 
     # x and y position
     cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
@@ -1079,7 +1079,7 @@ def _get_text_cmd_string(text, optional=False):
     return '' if text is None else f' text="{text}"'
 
 
-def _get_annotation_name_cmd_string(annotation_name):
+def _get_annotation_name_cmd_string(annotation_name, error_text='Must provide the UUID or name'):
     if annotation_name is None:
-        raise CyError("Must provide the UUID (or list of UUIDs) to group")
+        raise CyError(error_text)
     return f' uuidOrName="{annotation_name}"'

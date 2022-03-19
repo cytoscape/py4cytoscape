@@ -19,7 +19,8 @@ from test_utils import *
 class MyTestCase(unittest.TestCase):
     def setUp(self):
         try:
-            delete_all_networks()
+            # delete_all_networks()
+            pass
         except:
             pass
 
@@ -28,6 +29,23 @@ class MyTestCase(unittest.TestCase):
 
     @print_entry_exit
     def test_ui(self):
+        print('should go to tests')
+        print(export_network('foo'))
+        print('should set up tests directory')
+        print(sandbox_set(None))
+        print(export_network('foo'))
+        try:
+            print(export_network('c:\\foo.blob'))
+        except:
+            pass
+        print('should go to sandbox mine')
+        print(sandbox_set('mine'))
+        print(export_network('foo'))
+        try:
+            print(export_network('c:\\foo.blob'))
+        except:
+            pass
+
         nodes = pd.read_csv('nodes_COAD.tsv', sep='\t')
         edges = pd.read_csv('edges_COAD.tsv', sep='\t')
 
