@@ -45,6 +45,13 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
+- #40 by kyxhik
+- #54 by pkzerel
+- #67 by Kozo Nishida
+- #71 by Nilsoberg2
+- #73 by Barry Demchak
+- #75 by Barry Demchak
+- #76 by Yihang Xin
 - #77 by Eirinland
 
 
