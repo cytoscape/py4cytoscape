@@ -133,11 +133,11 @@ def verify_hex_colors(colors):
     for color in colors:
         verify_hex_color(color)
 
-def verify_opacity(opacity):
+def verify_opacity(opacity, max_opacity=100):
     """Validate and provide user feedback when opacity is required input.
 
     Args:
-        opacity (int or float): a number between 0 and 100
+        opacity (int or float): a number between 0 and a max
 
     Returns:
         None
@@ -148,8 +148,8 @@ def verify_opacity(opacity):
     Examples:
         >>> verify_opacity(77)
     """
-    if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 100:
-        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 100).', caller=sys._getframe(1).f_code.co_name)
+    if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > max_opacity:
+        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and {max_opacity}).', caller=sys._getframe(1).f_code.co_name)
 
 def verify_opacities(opacities):
     """Validate and provide user feedback when opacity is required input.
@@ -171,7 +171,7 @@ def verify_opacities(opacities):
     if not isinstance(opacities, list):  opacities = [opacities]
 
     for opacity in opacities:
-        verify_opacity(opacity)
+        verify_opacity(opacity, max_opacity=255)
 
 def verify_dimensions(dimension, sizes):
     """Validate and provide user feedback when dimensions is required input.
