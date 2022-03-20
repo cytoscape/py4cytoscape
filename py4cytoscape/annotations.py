@@ -79,7 +79,7 @@ def add_annotation_text(text=None, x_pos=None, y_pos=None, font_size=None, font_
         {'canvas': 'foreground', 'color': '#000000', 'rotation': '41.0', 'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation', 'fontStyle': 'plain', 'uuid': '293eeee1-b7e1-4d6b-bcf8-fd17fd2a2e5c', 'fontFamily': 'Arial', 'name': 'Text', 'x': '2168.2290309432974', 'y': '1823.4642987952689', 'z': '0', 'fontSize': '14', 'text': 'Text'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation add text', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation add text', network, base_url)  # a good start
 
     # add type
     cmd_string += f' type="org.cytoscape.view.presentation.annotations.TextAnnotation"'
@@ -88,7 +88,7 @@ def add_annotation_text(text=None, x_pos=None, y_pos=None, font_size=None, font_
     cmd_string += _get_text_cmd_string(text)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
@@ -160,13 +160,13 @@ def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=Non
         {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0', 'color': '#F0F0F0', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation', 'fontStyle': 'bold', 'uuid': 'fbf6c4e1-7b28-4274-9ce0-a0b7f5618a51', 'fillColor': '#A0A0A0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F', 'fontFamily': 'Courier New', 'edgeOpacity': '75.0', 'name': 'ann1 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'fontSize': '25', 'text': 'ann1', 'height': '30.0'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
 
     # text to add
     cmd_string += _get_text_cmd_string(text)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
@@ -244,7 +244,7 @@ def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=N
         {'edgeThickness': '2.0', 'canvas': 'background', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'a67674cf-f787-4b7c-bae5-3a6b00a2f00c', 'URL': 'https://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0F', 'brightness': '60', 'edgeOpacity': '75.0', 'contrast': '70', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'opacity': '0.5', 'height': '30.0'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation add image', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation add image', network, base_url)  # a good start
 
     # add type
     cmd_string += f' type="org.cytoscape.view.presentation.annotations.ImageAnnotation"'
@@ -253,7 +253,7 @@ def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=N
     cmd_string += _get_url_cmd_string(url)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_angle_cmd_string(angle)
@@ -324,14 +324,14 @@ def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, a
         {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation', 'uuid': '5a590eec-5281-44d2-9e51-1a4476381cf1', 'fillColor': '#F0F0F0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F', 'edgeOpacity': '75.0', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'height': '30.0'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation add shape', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation add shape', network, base_url)  # a good start
 
     cmd_string += _get_type_cmd_string(type)
 
     cmd_string += _get_custom_shape_cmd_string(custom_shape)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_angle_cmd_string(angle)
@@ -415,7 +415,7 @@ def get_annotation_list(network=None, base_url=DEFAULT_BASE_URL):
         [{'canvas': 'foreground', 'color': '#000000', 'rotation': '41.0', 'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation', 'fontStyle': 'plain', 'uuid': '92aafea6-0653-4df1-a017-cf3edfa5fdc8', 'fontFamily': 'Arial', 'name': 'TextExample', 'x': '2168', 'y': '1823', 'z': '0', 'fontSize': '14', 'text': 'Text'}, ...]
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation list', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation list', network, base_url)  # a good start
 
     res = commands.commands_post(cmd_string, base_url=base_url)
 
@@ -447,7 +447,7 @@ def group_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
         {'canvas': 'foreground', 'rotation': '0.0', 'name': 'Group 1', 'x': '2449.0', 'y': '1882.0', 'z': '0', 'type': 'org.cytoscape.view.presentation.annotations.GroupAnnotation', 'uuid': '303ac590-495b-44a9-8743-0a8c13e22e6f', 'memberUUIDs': '016a4af1-69bc-4b99-8183-d6f118847f96,016a4af1-69bc-4b99-8183-d6f118847f97'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation group', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation group', network, base_url)  # a good start
 
     if names is None:
         raise CyError(f'Must provide the UUID (or list of UUIDs) to group')
@@ -488,7 +488,7 @@ def ungroup_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
         >>> ungroup_annotation('016a4af1-69bc-4b99-8183-d6f118847f96', network=59945)
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation ungroup', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation ungroup', network, base_url)  # a good start
 
     if names is None:
         raise CyError(f'Must provide the UUID (or list of UUIDs) to ungroup')
@@ -541,7 +541,7 @@ def update_annotation_text(text=None, annotation_name=None, x_pos=None, y_pos=No
         {'canvas': 'foreground', 'color': '#000000', 'rotation': '-100.0', 'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation', 'fontStyle': 'plain', 'uuid': '8bd8c125-6d13-4b5e-8cf9-9e1c631efd6d', 'fontFamily': 'Arial', 'name': 'ann1', 'x': '2449.9784057344455', 'y': '1882.9888145962157', 'z': '0', 'fontSize': '12', 'text': 'ann1'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation update text', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation update text', network, base_url)  # a good start
 
     # add type
     cmd_string += f' type="org.cytoscape.view.presentation.annotations.TextAnnotation"'
@@ -552,7 +552,7 @@ def update_annotation_text(text=None, annotation_name=None, x_pos=None, y_pos=No
     cmd_string += _get_annotation_name_cmd_string(annotation_name)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
@@ -628,7 +628,7 @@ def update_annotation_bounded_text(text=None, annotation_name=None, x_pos=None, 
                                         name='ann1 name', canvas='background')
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation add bounded text', network, base_url)  # a good start
 
     # text to add
     cmd_string += _get_text_cmd_string(text, optional=True)
@@ -636,7 +636,7 @@ def update_annotation_bounded_text(text=None, annotation_name=None, x_pos=None, 
     cmd_string += _get_annotation_name_cmd_string(annotation_name)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_font_cmd_string(font_size, font_family, font_style)
@@ -715,7 +715,7 @@ def update_annotation_shape(type=None, custom_shape=None, annotation_name=None, 
         {'edgeThickness': '3.0', 'canvas': 'background', 'fillOpacity': '51.0', 'rotation': '90.0', 'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation', 'uuid': 'eba7198e-2cba-48d7-bc8b-273ee4b26831', 'fillColor': '#F0F0F1', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0E', 'edgeOpacity': '76.0', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '202.0', 'z': '0', 'height': '31.0'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation update shape', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation update shape', network, base_url)  # a good start
 
     cmd_string += _get_type_cmd_string(type)
 
@@ -724,7 +724,7 @@ def update_annotation_shape(type=None, custom_shape=None, annotation_name=None, 
     cmd_string += _get_annotation_name_cmd_string(annotation_name)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_angle_cmd_string(angle)
@@ -796,7 +796,7 @@ def update_annotation_image(url=None, annotation_name=None, x_pos=None, y_pos=No
         {'edgeThickness': '3.0', 'canvas': 'foreground', 'rotation': '90.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'b3435db0-2468-408f-a9ef-d4232ed5ea56', 'URL': 'http://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0E', 'brightness': '61', 'edgeOpacity': '76.0', 'contrast': '71', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '201.0', 'z': '0', 'opacity': '0.51', 'height': '31.0'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation update image', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation update image', network, base_url)  # a good start
 
     # add type
     cmd_string += f' type="org.cytoscape.view.presentation.annotations.ImageAnnotation"'
@@ -807,7 +807,7 @@ def update_annotation_image(url=None, annotation_name=None, x_pos=None, y_pos=No
     cmd_string += _get_annotation_name_cmd_string(annotation_name)
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_angle_cmd_string(angle)
@@ -866,12 +866,12 @@ def update_group_annotation(name=None, annotation_name=None, x_pos=None, y_pos=N
         {'canvas': 'foreground', 'rotation': '180.0', 'name': 'Group 1', 'x': '101.0', 'y': '201.0', 'z': '0', 'type': 'org.cytoscape.view.presentation.annotations.GroupAnnotation', 'uuid': '2c0a77f8-a6d0-450d-b6ee-1bfe3c8f8aea', 'memberUUIDs': '8872c2f6-42ad-4b6a-8fb9-1d1b13da504d,2c830227-7f6a-4e58-bbef-2070f1b5a603,8d04e34d-86b8-486f-9927-581184cbe03e'}
     """
 
-    cmd_string, net_SUID = _build_base_cmd_string('annotation update group', network, base_url)  # a good start
+    cmd_string, net_suid = _build_base_cmd_string('annotation update group', network, base_url)  # a good start
 
     cmd_string += _get_annotation_name_cmd_string(annotation_name, 'Must provide the UUID or name of group')
 
     # x and y position
-    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url)
+    cmd_string += _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url)
 
     # optional params
     cmd_string += _get_angle_cmd_string(angle)
@@ -890,20 +890,20 @@ def update_group_annotation(name=None, annotation_name=None, x_pos=None, y_pos=N
 # -------------------------------------------------------------------
 
 def _build_base_cmd_string(base_command, network, base_url):
-    net_SUID = networks.get_network_suid(network, base_url=base_url)
-    view_SUID = network_views.get_network_view_suid(net_SUID, base_url=base_url)
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    view_suid = network_views.get_network_view_suid(net_suid, base_url=base_url)
 
     # add view
-    base_command += f' view="SUID:{view_SUID}"'
+    base_command += f' view="SUID:{view_suid}"'
 
-    return base_command, net_SUID
+    return base_command, net_suid
 
 
-def _get_x_y_pos_cmd_string(x_pos, y_pos, net_SUID, base_url):
+def _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url):
     if x_pos is None:
-        x_pos = style_values.get_network_center(net_SUID, base_url=base_url)['x']
+        x_pos = style_values.get_network_center(net_suid, base_url=base_url)['x']
     if y_pos is None:
-        y_pos = style_values.get_network_center(net_SUID, base_url=base_url)['y']
+        y_pos = style_values.get_network_center(net_suid, base_url=base_url)['y']
     return f' x="{x_pos}" y="{y_pos}"'
 
 
