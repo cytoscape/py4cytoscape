@@ -22,6 +22,9 @@ API Changes
 -----------
 
 * Added annotation functions
+* Added create_view in network_views
+* Changed get_network_view_suid to return None instead of exception when network has no view
+* Changed get_network_views to return [] instead of exception when network has no view
 
 Deprecations
 ------------
@@ -39,7 +42,7 @@ Contributors to this release
 Pull requests merged in this release
 ------------------------------------
 
-
+- #72 by Nilsoberg2
 
 
 Issues closed in this release

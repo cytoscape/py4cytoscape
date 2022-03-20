@@ -44,37 +44,81 @@ class NetworkViewsTests(unittest.TestCase):
         # Initialization
         load_test_session()
 
-        def check_view_list(view_list):
-            self.assertIsInstance(view_list, list)
-            self.assertEqual(len(view_list), 1)
-            return view_list[0]
-
         # Verify that the view list for galFiltered looks right
-        gal_filtered_view_suid = check_view_list(get_network_views())
+        gal_filtered_view_suid = self._check_view_list(get_network_views())
 
         # Verify that the view list for a different network looks right
         yeast_suid, yeast_view_suid = load_test_network('data/yeastHighQuality.sif', make_current=False)
-        check_view_suid = check_view_list(get_network_views(network=yeast_suid))
+        check_view_suid = self._check_view_list(get_network_views(network=yeast_suid))
         self.assertEqual(yeast_view_suid, check_view_suid)
         self.assertNotEqual(gal_filtered_view_suid, yeast_view_suid)
 
         # Verify that the view list for the original network is unchanged
-        self.assertEqual(check_view_list(get_network_views('galFiltered.sif')), gal_filtered_view_suid)
+        self.assertEqual(self._check_view_list(get_network_views('galFiltered.sif')), gal_filtered_view_suid)
 
         self.assertRaises(CyError, get_network_views, 'bogus network')
 
 
     @print_entry_exit
+    def test_create_view(self):
+
+        def verify_layout(net_suid, expected_empty=False):
+            self._check_view_list(get_network_views(network=net_suid))
+
+            node_positions = get_node_position(all_nodes, network=net_suid)
+            laid_out_nodes = node_positions.loc[(node_positions['x'] != 0) & (node_positions['y'] != 0)]
+            self.assertEqual(len(laid_out_nodes.index) == 0, expected_empty)
+
+        # Initialization
+        load_test_session()
+        all_nodes = get_all_nodes()
+        yeast_suid, yeast_view_suid = load_test_network('data/yeastHighQuality.sif', make_current=False)
+        self._delete_view(yeast_suid)
+
+        # Get SUIDs for galFiltered network and verify there is a view
+        net_suid = get_network_suid()
+        self._check_view_list(get_network_views())
+
+        # Verify that creating a view without a layout leaves all nodes at (0, 0)
+        self._delete_view(net_suid)
+        gal_filtered_view_suid = create_view(layout=False)
+        verify_layout(net_suid, True)
+
+        # Verify that creating a view where one already exists just returns the existing view
+        self.assertEqual(gal_filtered_view_suid, create_view())
+
+        # Create a new view and do a layout, then verify that some nodes shift position
+        self._delete_view(net_suid)
+        gal_filtered_view_suid = create_view()
+        verify_layout(net_suid, False)
+
+        # Verify that creating galFiltered views hasn't added views to yeastHighQuality
+        self._check_view_list(get_network_views(network=yeast_suid), 0)
+
+        # Verify that creating a view in one network doesn't affect another network
+        self._delete_view(net_suid) # Both networks should have no views
+        create_view(network=yeast_suid)
+        self._check_view_list(get_network_views(network=yeast_suid), 1)
+        self._check_view_list(get_network_views(network=net_suid), 0)
+
+        self.assertRaises(CyError, create_view, network='bogus network')
+
+    @print_entry_exit
     def test_get_network_view_suid(self):
         # Initialization
         load_test_session()
+        net_suid = get_network_suid()
 
         def check_view(view_suid):
             self.assertIsInstance(view_suid, int)
             return view_suid
 
-        # Verify that the view list for galFiltered looks right ... identify network by "current"
+        # Verify that the view list for galFiltered looks right regardless of how the network is accessed
         gal_filtered_view_suid = check_view(get_network_view_suid())
+        self.assertEqual(get_network_view_suid(network=net_suid), gal_filtered_view_suid)
+        self.assertEqual(get_network_view_suid(network='galFiltered.sif'), gal_filtered_view_suid)
+        self.assertEqual(get_network_view_suid(network='current'), gal_filtered_view_suid)
+        self.assertEqual(get_network_view_suid(network=gal_filtered_view_suid), gal_filtered_view_suid)
 
         # Verify that the view suid for a different network looks right ... identify network by suid
         yeast_suid, yeast_view_suid = load_test_network('data/yeastHighQuality.sif', make_current=False)
@@ -84,6 +128,14 @@ class NetworkViewsTests(unittest.TestCase):
 
         # Verify that the view list for the original network is unchanged ... identify network by string
         self.assertEqual(check_view(get_network_view_suid('galFiltered.sif')), gal_filtered_view_suid)
+
+        # Delete view and make sure that None is returned for network view
+        self._delete_view(net_suid)
+        self.assertIsNone(get_network_view_suid())
+        self.assertIsNone(get_network_view_suid(network=net_suid))
+        self.assertIsNone(get_network_view_suid(network='galFiltered.sif'))
+        self.assertIsNone(get_network_view_suid(network='current'))
+        self.assertRaises(CyError, get_network_view_suid, gal_filtered_view_suid)
 
         self.assertRaises(CyError, get_network_view_suid, 'bogus network')
         self.assertRaises(CyError, get_network_view_suid, -1)
@@ -217,6 +269,17 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'message': 'Toggled Graphics level of details.'})
         input('Verify that level of detail has changed back')
+
+    def _check_view_list(self, view_list, expected_length=1):
+        self.assertIsInstance(view_list, list)
+        self.assertEqual(len(view_list), expected_length)
+        return view_list[0] if expected_length > 0 else None
+
+    def _delete_view(self, net_suid):
+        cyrest_delete(f'networks/{net_suid}/views', require_json=False)
+        self._check_view_list(get_network_views(network=net_suid), 0)
+
+
 
 
 if __name__ == '__main__':

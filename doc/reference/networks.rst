@@ -110,6 +110,7 @@ Views
 .. autosummary::
    :toctree: generated/
 
+   create_view
    export_image
    fit_content
    get_network_view_suid
