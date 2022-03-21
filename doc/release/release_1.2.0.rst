@@ -1,7 +1,7 @@
-Announcement: py4cytoscape 0.0.12
+Announcement: py4cytoscape 1.2.0
 ---------------------------------
 
-We're happy to announce the release of py4cytoscape 0.0.12!
+We're happy to announce the release of py4cytoscape 1.2.0!
 
 py4cytoscape is a Python package that communicates with `Cytoscape <https://cytoscape.org>`_
 via its `REST API <https://pubmed.ncbi.nlm.nih.gov/31477170/>`_, providing access to a set over 250 functions that
@@ -38,6 +38,7 @@ Contributors to this release
 - Yihang Xin
 - Alex Pico
 - Kozo Nishida
+- Nilsoberg2
 
 Pull requests merged in this release
 ------------------------------------
