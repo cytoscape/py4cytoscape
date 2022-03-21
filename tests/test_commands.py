@@ -53,7 +53,7 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertRaises(CyError, get_network_views)  # Behavior when there are no views
+        self.assertListEqual(get_network_views(), [])  # Behavior when there are no views
         self.assertRaises(RequestException, cyrest_delete, 'session',
                           base_url='http://totallybogus')  # test non-existent URL
         self.assertRaises(RequestException, cyrest_delete, 'session',
