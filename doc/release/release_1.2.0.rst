@@ -17,12 +17,15 @@ This themes for this release are:
 
 * Addition of annotation functions (per new Cytoscape features)
 * Changed default for sandboxing when running Notebook on local Workstation
+* Add new functions: create_view, select_all
+* Sped up select_all_nodes, select_all_edges
 
 API Changes
 -----------
 
 * Added annotation functions
 * Added create_view in network_views
+* Added select_all in network_selection
 * Changed get_network_view_suid to return None instead of exception when network has no view
 * Changed get_network_views to return [] instead of exception when network has no view
 

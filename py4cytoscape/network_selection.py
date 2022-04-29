@@ -79,6 +79,34 @@ def clear_selection(type='both', network=None, base_url=DEFAULT_BASE_URL):
 
     return res
 
+@cy_log
+def select_all(network=None, base_url=DEFAULT_BASE_URL):
+    """Selects all nodes and edges in a Cytoscape Network
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'nodes': [node list], 'edges': [edge list]} or {} for empty network
+
+    Raises:
+        CyError: if network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_all()
+        {'nodes': [370675, 370677, ...], 'edges': [371699, 371187, ...]}
+        >>> select_all(network=52)
+        {'nodes': [370675, 370677, ...], 'edges': [371699, 371187, ...]}
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post(f'network select network=SUID:"{net_suid}" nodeList="all" edgeList="all"')
+    return res
+
 
 # ==============================================================================
 # II. Node selection functions
@@ -209,11 +237,10 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
         :meth:`select_nodes`
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    all_node_SUIDs = commands.cyrest_get(f'networks/{suid}/nodes', base_url=base_url)
 
-    res = select_nodes(all_node_SUIDs)
+    res = commands.commands_post(f'network select SUID="{suid}" nodeList="all"')
+
     return res['nodes']
-    # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
 
 @cy_log
@@ -488,11 +515,10 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
         [104432, 104431, ...]
     """
     suid = networks.get_network_suid(network, base_url=base_url)
-    all_edge_SUIDs = commands.cyrest_get(f'networks/{suid}/edges', base_url=base_url)
 
-    res = select_edges(all_edge_SUIDs)
+    res = commands.commands_post(f'network select SUID="{suid}" edgeList="all"')
+
     return res['edges']
-    # TODO: Does the RCy3 code work? It's passing an unusual list to CyREST
 
 
 @cy_log

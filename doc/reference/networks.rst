@@ -76,6 +76,7 @@ Nodes
    get_selected_node_count
    get_selected_nodes
    invert_node_selection
+   select_all
    select_all_nodes
    select_first_neighbors
    select_nodes
@@ -93,6 +94,7 @@ Edges
    get_selected_edge_count
    get_selected_edges
    invert_edge_selection
+   select_all
    select_all_edges
    select_edges
    select_edges_adjacent_to_selected_nodes

@@ -417,6 +417,33 @@ class NetworkSelectionTests(unittest.TestCase):
 
         self.assertRaises(CyError, select_all_edges, network='bogus')
 
+    @print_entry_exit
+    def test_select_all(self):
+        # Try an empty network ... containing no nodes or edges
+        commands_post('network create empty')
+        selection = select_all()
+        self.assertIsInstance(selection, dict)
+        self.assertDictEqual(selection, {})
+
+        # Initialization
+        load_test_session()
+
+        # Find all nodes and edges
+        all_node_suids = node_name_to_node_suid(get_all_nodes())
+        all_edge_suids = edge_name_to_edge_suid(get_all_edges())
+
+        # Select all nodes and edges
+        selection = select_all()
+        self.assertIsInstance(selection, dict)
+        self.assertEqual(len(selection), 2)
+        self.assertSetEqual(set(selection.keys()), {'nodes', 'edges'})
+
+        # Verify that all nodes and edges get selected
+        self.assertSetEqual(set(all_node_suids), set(selection['nodes']))
+        self.assertSetEqual(set(all_edge_suids), set(selection['edges']))
+
+        self.assertRaises(CyError, select_all, network='bogus')
+
     
     @print_entry_exit
     def test_invert_edge_selection(self):
