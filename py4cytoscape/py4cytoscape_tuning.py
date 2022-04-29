@@ -24,7 +24,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 CATCHUP_FILTER_SECS = 0 # 1
 MODEL_PROPAGATION_SECS = 0 #2
-CATCHUP_NETWORK_SECS = 2 # How long to sleep between network operation retries
+CATCHUP_NETWORK_SECS = 4 # How long to sleep between network operation retries
 CATCHUP_NETWORK_TIMEOUT_SECS = 60 # How long to keep retrying network operation
 
 def set_catchup_filter_secs(delay_secs):
