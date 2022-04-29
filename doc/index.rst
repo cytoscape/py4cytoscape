@@ -42,6 +42,8 @@ Look to the :doc:`Concepts <concepts>` section to see read about important py4cy
 
 Note that py4cytoscape and RCy3 functions implement a common interface called the `Cytoscape Automation API Definition <https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit?usp=sharing>`_.
 
+A broad set of Cytoscape Automation samples and tutorials is available on the `Cytoscape Automation Wiki <https://github.com/cytoscape/cytoscape-automation/wiki>`_.
+
 Audience
 --------
 

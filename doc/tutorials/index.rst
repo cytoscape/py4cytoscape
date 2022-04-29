@@ -3,7 +3,9 @@
 Tutorials
 *********
 
-You can try the following tutorials with Cytoscape Desktop + `Google Colab <https://colab.research.google.com/>`_.
+A broad set of Cytoscape Automation samples and tutorials is available on the `Cytoscape Automation Wiki <https://github.com/cytoscape/cytoscape-automation/wiki>`_.
+
+You can also try the following tutorials with Cytoscape Desktop + `Google Colab <https://colab.research.google.com/>`_.
 
 1. Install Cytoscape in your local desktop environment and launch it.
 
