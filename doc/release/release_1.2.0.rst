@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Addition of annotation functions (per new Cytoscape features)
 * Changed default for sandboxing when running Notebook on local Workstation

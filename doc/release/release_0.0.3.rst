@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Add support for remote Notebook execution (via Jupyter-Bridge)
 * Sync with changes made to RCy3 since Jan 1, 2020

@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Enable access to NDEx subdomains
 * Support Cytoscape v3.9 separation of filter definition from execution
