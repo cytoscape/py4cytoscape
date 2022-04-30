@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Compatibility of node, edge and group parameter with RCy3 formats
 * Improved verify_supported_versions parsing for Cytoscape 3.10 and beyond

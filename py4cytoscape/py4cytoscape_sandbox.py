@@ -53,7 +53,7 @@ def sandbox_initializer(**new_sandbox):
     return sandbox
 
 def set_default_sandbox(**new_sandbox):
-    # Set and return the sandbox properties to be used as a default, probably based on whether a Notebook is running
+    # Set and return the sandbox properties to be used as a default, probably based on whether running remote
     global _default_sandbox
     _default_sandbox = sandbox_initializer(init=new_sandbox)
     return _default_sandbox
@@ -139,40 +139,37 @@ reset_default_sandbox() # Create a clean slate
      pre-sandbox behaviors of py4cytoscape functions. 
      
  (Raw Python, Remote Execution) - This means execution without a Notebook system. This case is unknown to us, so
-     handling it won't be prioritized. IMPLEMENTATION: Same as (Notebook Python, Local Execution).
+     handling it won't be prioritized. IMPLEMENTATION: Same as (Notebook Python, Remote Execution).
      
- (Notebook Python, Local Execution) - We assume that the workflow author intends that a Notebook be executable either
-     on a local or remote Notebook. The common case would be a sandbox, which should be created by py4cytoscape by
-     default. It's plausible that the workflow author would not intend portability to a remote Notebook, and would 
-     prefer to access files/paths unfiltered by a sandbox. This should be an easy choice to implement. IMPLEMENTATION:
-     Use default sandbox, but allow workflow author to easily opt for no sandbox early in the workflow.
-     
+ (Notebook Python, Local Execution) - The common case would be "no sandbox", the same as (Raw Python, Local Execution).
+     This is especially important for casual users and students running notebooks. For users that intend to develop
+     notebooks and execute them remotely, a sandbox can be manually created easily at the beginning of the workflow.
+     IMPLEMENTATION: same as (Raw Python, Local Execution). 
+   
  (Notebook Python, Remote Execution) - The common case would be "sandbox", though it is plausible (but unlikely) 
      that running without a sandbox would be useful (as would be the case where direct access to the Cytoscape
      workstation file system is preferred, and the Python workflow integrates with other Python workflows/libraries).
-     IMPLEMENTATION: Same as (Notebook Python, Local Execution).
-  
-  It's important for both Notebook Python cases to share the same default behavior because development of a Notebook
-  locally and then promoting it to remote execution enables the very important goal of shared or publishable workflows.
+     IMPLEMENTATION: Create a default sandbox and use it. Worry about the direct file system access case if it ever
+     comes up.
   
   As a practical matter, the following default sandbox logic would apply:
   
-  if on_notebook or remote_execution:
+  if remote_execution:
       set up pre-defined sandbox
-  else # Raw Python, Local Execution
-      don't use sandbox ... use kernel's CWD instead
+  else # Local Execution
+      don't use sandbox ... use kernel's CWD instead ... but allow workflow to create sandbox
 
   This logic would apply immediately before the first Cytoscape command (i.e., when py4Cytoscape determines whether
-  on_notebook and remote_execution). It can be pre-empted by explicitly declaring a sandbox (or no sandbox) at any
+  remote_execution). It can be pre-empted by explicitly declaring a sandbox (or no sandbox) at any
   time before or after the first Cytoscape command, and an explicit sandbox declaration overrules the default.
   
   Note that one would think that py4cytoscape should set up the sandbox as part of its module initialization. 
-  Similarly, one would think that at that time, a determination of whether a Notebook is running or is running on 
-  a remote server should be possible. It's true that determining Notebook-or-not is possible at module initialization,
-  but it's not possible to determine remote-or-not because that determination relies on Cytoscape having been started
-  on the workstation. (If it has been started, then accessing it directly 127.0.0.1 or via Jupyter-Bridge is possible
-  and necessary.) Because we allow the user to start Cytoscape after module initialization, the remote-or-not 
-  decision is deferred, too, and so is creation of the default sandbox (which relies on a Cytoscape connection).
+  Similarly, one would think that at that time, a determination of whether a Notebook is running on 
+  a remote server should be possible. It's not possible to determine remote-or-not because that determination 
+  relies on Cytoscape having been started on the workstation. (If it has been started, then accessing it 
+  directly 127.0.0.1 or via Jupyter-Bridge is possible and necessary.) Because we allow the user to start 
+  Cytoscape after module initialization, the remote-or-not decision is deferred, too, and so is creation of 
+  the default sandbox (which relies on a Cytoscape connection).
   
   So, the remote-or-not and sandbox initialization are carried out lazily upon execution of the first Cytoscape
   command. And it's also possible that the first Cytoscape command could be a sandbox_set() that changes the sandbox

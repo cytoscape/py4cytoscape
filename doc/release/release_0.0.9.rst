@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Improved documentation and tutorials
 * Improved iGraph support (consistent with RCy3)

@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Improved sandboxing and Jupyter Notebook documentation
 * Shortened execution delays

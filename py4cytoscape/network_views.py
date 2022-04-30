@@ -40,6 +40,43 @@ from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 @cy_log
+def create_view(layout=True, network=None, base_url=DEFAULT_BASE_URL):
+    """Create a network view if one does not already exist
+
+    Args:
+        layout (bool): If True, the preferred layout will be applied to the new view; otherwise, no layout will be applied.
+        network (str or SUID or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        int: SUID of the view for the network
+
+    Raises:
+        CyError: if network doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_view()
+        130223
+        >>> create_view(False)
+        130223
+        >>> create_view(network='galFiltered.sif')
+        130223
+    """
+    net_suid = networks.get_network_suid(network, base_url=base_url)
+    view_suid = get_network_view_suid(net_suid, base_url=base_url)
+
+    if view_suid:
+        return view_suid
+
+    res = commands.commands_post(f'view create network="SUID:{net_suid}" layout={layout}', base_url=base_url)
+    return res[0]['view']
+
+
+
+@cy_log
 def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve list of network view SUIDs.
 
@@ -50,7 +87,7 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        list: [list of SUIDs of views] where the list has length 1
+        list: [list of SUIDs of views] where the list has length 1 or 0 (for no views)
 
     Raises:
         CyError: if network doesn't exist
@@ -65,25 +102,30 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
         [130223]
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.cyrest_get(f'networks/{net_suid}/views', base_url=base_url)
-    # TODO: Note that we get a 404 exception here if there are no networks. Is that what we want?
-    return res
+    try:
+        return commands.cyrest_get(f'networks/{net_suid}/views', base_url=base_url)
+    except:
+        return []
 
 
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the SUID of a network view.
+
     Args:
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+
     Returns:
-        int: SUID of the view for the network. The first (presummably only) view associated a network is returned.
+        int or None: SUID of the view for the network, or None if no view. The first (presummably only) view associated a network is returned.
+
     Raises:
         CyError: if network or view doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
     Examples:
         >>> get_network_view_suid()
         130223
@@ -91,6 +133,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         130223
         >>> get_network_view_suid(network='galFiltered.sif')
         130223
+
     Dev Notes:
         analogous to getNetworkSuid, this function attempts to handle all of the multiple ways we support network view referencing (e.g., title, SUID, 'current', and NULL). These functions are then used by functions that take a "network" argument and requires a view SUID.
 """
@@ -99,7 +142,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         network_views = get_network_views(network, base_url=base_url)
         if len(network_views) > 1:
             narrate('Warning: This network has multiple views. Returning last.')
-        return network_views[-1]
+        return network_views[-1] if len(network_views) >= 1 else None
     elif isinstance(network, int):
         # suid provided, but is it a network or a view?
         net_suids = commands.cyrest_get('networks', base_url=base_url)
@@ -107,9 +150,13 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
             network_views = get_network_views(network, base_url=base_url)
             if len(network_views) > 1:
                 narrate('Warning: This network has multiple views. Returning last.')
-            return network_views[-1]
+            return network_views[-1] if len(network_views) >= 1 else None
         else:
-            view_suids = [get_network_views(x, base_url=base_url)[0] for x in net_suids]
+            view_suids = [] # Explicitly collect view_suids in case one network doesn't have any views
+            for x in net_suids:
+                network_view_suids = get_network_views(x, base_url=base_url)
+                if len(network_view_suids) > 0:
+                    view_suids.append(network_view_suids[0])
             if network in view_suids:  # view SUID, return it
                 return network
             else:
@@ -122,7 +169,7 @@ def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
         network_views = get_network_views(network, base_url=base_url)
         if len(network_views) > 1:
             narrate(f'Warning: This network "{network}" has multiple views. Returning last.')
-        return network_views[-1]
+        return network_views[-1] if len(network_views) >= 1 else None
 
 
 @cy_log

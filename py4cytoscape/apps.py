@@ -277,8 +277,12 @@ def open_app_store(app, base_url=DEFAULT_BASE_URL):
         {}
     """
     verify_supported_versions(1, 3.7, base_url=base_url)
-    res = commands.commands_post(f'apps open appstore app="{app}"', base_url=base_url)
-    return narrate(res)
+    available_app_names = {app_info['appName'] for app_info in get_available_apps(base_url=base_url)}
+    if app in available_app_names:
+        res = commands.commands_post(f'apps open appstore app="{app}"', base_url=base_url)
+        return narrate(res)
+    else:
+        raise CyError(f'name: {app} is not found in the Cytoscape App Store.')
 
 
 @cy_log

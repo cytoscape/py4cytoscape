@@ -128,6 +128,10 @@ class AppsTests(unittest.TestCase):
         BAD_APP_NAME = 'totaljunk'
         EMPTY_APP_NAME = ''
 
+        # Set up for test
+        install_app(APP_NAME)   # get app in case it's not already gotten
+        uninstall_app(APP_NAME) # get rid of app for sure
+
         # Verify that app list doesn't already contain the test app
         pre_install = get_installed_apps()
         pre_install_app_names = {app_info['appName'] for app_info in pre_install}
@@ -179,17 +183,15 @@ class AppsTests(unittest.TestCase):
     @print_entry_exit
     def test_open_app_store(self):
         # Initialization
-        APP_NAME = 'boundaryLayout'  # Some app that's unlikely to be already installed
+        APP_NAME = 'boundaryLayout'  # Some app that we know exists
         BAD_APP_NAME = 'totaljunk'
 
         self.assertDictEqual(open_app_store(APP_NAME), {})
         input('Verify that the app store page for ' + APP_NAME + ' is loaded')
 
-        self.assertDictEqual(open_app_store(BAD_APP_NAME), {})
-        input('Verify that an app store error page is loaded')
-
-        self.assertDictEqual(open_app_store(''), {})
-        input('Verify that the app store main page is loaded')
+        self.assertRaises(CyError, open_app_store, BAD_APP_NAME)
+        self.assertRaises(CyError, open_app_store, '')
+        self.assertRaises(CyError, open_app_store, None)
 
     
     @print_entry_exit

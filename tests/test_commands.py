@@ -53,7 +53,7 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertRaises(CyError, get_network_views)  # Behavior when there are no views
+        self.assertListEqual(get_network_views(), [])  # Behavior when there are no views
         self.assertRaises(RequestException, cyrest_delete, 'session',
                           base_url='http://totallybogus')  # test non-existent URL
         self.assertRaises(RequestException, cyrest_delete, 'session',
@@ -156,7 +156,6 @@ class CommandsTests(unittest.TestCase):
                               ['app: Network Merge, status: Installed'])
 
         # Verify that bad commands are caught
-        self.assertRaises(CyError, commands_get, 'apps status app="bogusjunk"')
         self.assertRaises(CyError, commands_get, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_get, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_get, '', base_url='http://yahoo.com')
@@ -199,7 +198,6 @@ class CommandsTests(unittest.TestCase):
                               {'appName': 'Network Merge', 'status': 'Installed'})
 
         # Verify that bad commands are caught
-        self.assertRaises(CyError, commands_post, 'apps status app="bogusjunk"')
         self.assertRaises(CyError, commands_post, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_post, '', base_url='http://totallybogus')
         self.assertRaises(RequestException, commands_post, '', base_url='http://yahoo.com')
@@ -216,7 +214,6 @@ class CommandsTests(unittest.TestCase):
 
         # Verify that bad commands are caught
         self.assertRaises(CyError, commands_run, 'total junk')
-        self.assertRaises(CyError, commands_run, 'apps status app="bogusjunk"')
         self.assertRaises(CyError, commands_run, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_run, '', base_url='http://totallybogus')
         self.assertRaises(Exception, commands_run, '', base_url='http://yahoo.com')

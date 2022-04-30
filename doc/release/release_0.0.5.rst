@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Improved sandboxing documentation
 * Updated test for Colab shell to track Colab internal evolution

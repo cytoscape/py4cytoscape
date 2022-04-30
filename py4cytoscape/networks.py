@@ -57,7 +57,7 @@ from . import sandbox
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS
+from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS, CATCHUP_NETWORK_TIMEOUT_SECS
 from .exceptions import CyError
 from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
@@ -986,16 +986,16 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        Dict: {'networkSUID': 31766}
+        int: The ``SUID`` of the new network
 
     Raises:
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> n = create_network_from_networkx(netx)
-        {'networkSUID': 31766}
-        >>> n = create_network_from_networkx(netx, 'Cool Networkx', 'Collection of Cool Networks')
-        {'networkSUID': 31766}
+        >>> create_network_from_networkx(netx)
+        31766
+        >>> create_network_from_networkx(netx, 'Cool Networkx', 'Collection of Cool Networks')
+        31766
 
     See Also:
         :meth:`create_networkx_from_network`
@@ -1118,10 +1118,14 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # call Cytoscape to create this network and return the SUID
     network_suid = commands.cyrest_post('networks', parameters={'title': title, 'collection': collection},
-                                        body=json_network, base_url=base_url)
+                                        body=json_network, base_url=base_url)['networkSUID']
     # TODO: There appears to be a race condition here ... the view isn't set for a while. Without an explicit delay, the
-    # "vizmap apply" command below fails for lack of a valid view.
-    time.sleep(CATCHUP_NETWORK_SECS)
+    # "vizmap apply" command below fails for lack of a valid view. So, we'll retry
+    # the problem operations until they succeed (see _delay_until_stable() calls below)
+
+    # Keep cycling until Cytoscape is able to return table information ... safe after that
+    _delay_until_stable(lambda: get_network_suid(network_suid, base_url=base_url) is not None,
+                        'verifying network SUID', vote_count=10)
 
     # drop the SUID column if one is present
     nodes = nodes.drop(['SUID'], axis=1, errors='ignore')
@@ -1147,10 +1151,12 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                                    network=network_suid, base_url=base_url)
 
     narrate('Applying default style...')
-    commands.commands_post('vizmap apply styles="default"', base_url=base_url)
+    _delay_until_stable(lambda: commands.commands_post('vizmap apply styles="default"', base_url=base_url) is not None,
+                        'apply vizmap')
 
     narrate('Applying preferred layout')
-    layouts.layout_network(network=network_suid)
+    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) is not None,
+                        'layout network')
 
     # TODO: Verify that attribute types are properly set in Cytoscape
 
@@ -1426,3 +1432,20 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
 # functions.
 # ------------------------------------------------------------------------------
 
+def _delay_until_stable(attempt_op, error_text, vote_count=1):
+    catchup_network_timeout = time.time() + CATCHUP_NETWORK_TIMEOUT_SECS
+    is_stable = False
+    while not is_stable and time.time() < catchup_network_timeout:
+        try:
+            votes = 1
+            is_stable = attempt_op()
+            while votes < vote_count and is_stable:
+                votes += 1
+                is_stable = attempt_op()
+        except:
+            is_stable = False
+        if not is_stable:
+#                print(f'Sleeping for {CATCHUP_NETWORK_SECS} seconds')
+            time.sleep(CATCHUP_NETWORK_SECS)
+    if not is_stable:
+        raise CyError(f'Timeout trying to {error_text}')

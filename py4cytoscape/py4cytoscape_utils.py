@@ -50,7 +50,7 @@ def cyPalette(name='set1'):
         name (str): name of a set of colors (e.g., 'set1', 'burd')
 
     Returns:
-         list: list of color values in the cy_palette
+        list: list of color values in the cy_palette
 
     Raises:
         KeyError: if cy_palette name is invalid
@@ -75,6 +75,42 @@ def cyPalette(name='set1'):
     return PALETTES[name]
 
 # ------------------------------------------------------------------------------
+def verify_brightness_contrast(bc):
+    """Validate and provide user feedback when brightness or contrast is required input.
+
+    Args:
+        bc (int or float): a number between 0 and 100
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if value is invalid
+
+    Examples:
+        >>> verify_brightness_contrast(77)
+    """
+    if not (isinstance(bc, float) or isinstance(bc, int)) or bc < -100 or bc > 100:
+        raise CyError(f'"{bc}" is invalid. Value must be between -100 and 100).', caller=sys._getframe(1).f_code.co_name)
+
+def verify_hex_color(color):
+    """Validate and provide user feedback when hex color codes is required input.
+
+    Args:
+        colors (str): a single value, which is a 6 digit hex value
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if color is invalid
+
+    Examples:
+        >>> verify_hex_color('#92C5DE')
+    """
+    if not color.startswith('#') or len(color) != 7:
+        raise CyError(f'"{color}" is not a valid hexadecimal color (has to begin with # and be 7 characters long, for example: #FF00FF).', caller=sys._getframe(1).f_code.co_name)
+
 def verify_hex_colors(colors):
     """Validate and provide user feedback when hex color codes (or a list of codes) are required input.
 
@@ -82,7 +118,7 @@ def verify_hex_colors(colors):
         colors (str or list): a single value or a list of colors, which are 6 digit hex values
 
     Returns:
-         None
+        None
 
     Raises:
         CyError: if color is invalid
@@ -95,8 +131,25 @@ def verify_hex_colors(colors):
     if not isinstance(colors, list): colors = [colors]
 
     for color in colors:
-        if not color.startswith('#') or len(color) != 7:
-            raise CyError(f'"{color}" is not a valid hexadecimal color (has to begin with # and be 7 characters long, for example: #FF00FF).', caller=sys._getframe(1).f_code.co_name)
+        verify_hex_color(color)
+
+def verify_opacity(opacity, max_opacity=100):
+    """Validate and provide user feedback when opacity is required input.
+
+    Args:
+        opacity (int or float): a number between 0 and a max
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if opacity is invalid
+
+    Examples:
+        >>> verify_opacity(77)
+    """
+    if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > max_opacity:
+        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and {max_opacity}).', caller=sys._getframe(1).f_code.co_name)
 
 def verify_opacities(opacities):
     """Validate and provide user feedback when opacity is required input.
@@ -105,7 +158,7 @@ def verify_opacities(opacities):
         opacities (int, float or list): a single value or a list of values, all of which are integers or floats
 
     Returns:
-         None
+        None
 
     Raises:
         CyError: if opacity is invalid
@@ -118,8 +171,7 @@ def verify_opacities(opacities):
     if not isinstance(opacities, list):  opacities = [opacities]
 
     for opacity in opacities:
-        if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > 255:
-            raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and 255).', caller=sys._getframe(1).f_code.co_name)
+        verify_opacity(opacity, max_opacity=255)
 
 def verify_dimensions(dimension, sizes):
     """Validate and provide user feedback when dimensions is required input.
@@ -129,7 +181,7 @@ def verify_dimensions(dimension, sizes):
         sizes (int, float or list): a single value or a list of values, all of which are integers or floats
 
     Returns:
-         None
+        None
 
     Raises:
         CyError: if size is invalid
@@ -152,7 +204,7 @@ def verify_slot(slot):
         slot (int or float): a slot number between 1 and 9
 
     Returns:
-         None
+        None
 
     Raises:
         CyError: if slot is invalid
@@ -162,6 +214,113 @@ def verify_slot(slot):
     """
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
         raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
+
+def verify_unique(value, existing_values):
+    if value in existing_values:
+        raise CyError(f'{value} is not unique. Please provide a unique value.', caller=sys._getframe(1).f_code.co_name)
+
+def verify_positive(number):
+    """Validate and provide user feedback when positive number is required input.
+
+    Args:
+        number (int or float): a number greater than 0
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if number is invalid
+
+    Examples:
+        >>> verify_positive(5)
+    """
+    if not (isinstance(number, float) or isinstance(number, int)):
+        raise CyError(f'Value must be a positive number.', caller=sys._getframe(1).f_code.co_name)
+    if number <= 0:
+        raise CyError(f'{number} is invalid. Number must be positive', caller=sys._getframe(1).f_code.co_name)
+
+def verify_non_negative(number):
+    """Validate and provide user feedback when a non-negative number is required input.
+
+    Args:
+        number (int or float): a number greater than or equal to 0
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if number is invalid
+
+    Examples:
+        >>> verify_non_negative(5)
+    """
+    if not (isinstance(number, float) or isinstance(number, int)):
+        raise CyError(f'Value must be a non-negative number.', caller=sys._getframe(1).f_code.co_name)
+    if number <= 0:
+        raise CyError(f'{number} is invalid. Number must be greater than or equal to 0', caller=sys._getframe(1).f_code.co_name)
+
+def verify_font_style(style):
+    """Validate and provide user feedback when font style is required input.
+
+    Args:
+        font_style (str): a font style ['plain', 'bold', 'italic', 'bolditalic']
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if style is invalid
+
+    Examples:
+        >>> verify_font_style('plain')
+    """
+    valid_styles = ['plain', 'bold', 'italic', 'bolditalic']
+    if style not in valid_styles:
+        raise CyError(f'{style} is invalid. Use {valid_styles}', caller=sys._getframe(1).f_code.co_name)
+
+def verify_canvas(canvas):
+    """Validate acceptable canvas
+
+    Args:
+        canvas (str): a canvas ['foreground', 'background']
+
+    Returns:
+        None
+
+    Raises:
+        CyError: if canvas is invalid
+
+    Examples:
+        >>> verify_canvas('foreground')
+    """
+    valid_canvases = ['foreground', 'background']
+    if canvas not in valid_canvases:
+        raise CyError(f'{canvas} is invalid. Use {valid_canvases}', caller=sys._getframe(1).f_code.co_name)
+
+
+def normalize_rotation(degree):
+    """Validates and fixes rotation values from -180 to +180 range to match GUI
+
+    Args:
+        degree (int or float): an angle in degrees
+
+    Returns:
+        int or float: angle normalized to [-180..+180]
+
+    Raises:
+        CyError: if angle is invalid
+
+    Examples:
+        >>> normalize_rotation(200)
+    """
+    if not (isinstance(degree, float) or isinstance(degree, int)):
+        raise CyError(f'Angle must be a number.', caller=sys._getframe(1).f_code.co_name)
+    while degree < -180:
+        degree += 360
+    while degree > 180:
+        degree -= 360
+    return degree
+
 
 def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, *, unique_list=False):
     """Translate one node name or a list of node names into a list of SUIDs.
@@ -185,7 +344,7 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, 
         unique_list (bool): True if duplicate node names refer to different nodes; False if it doesn't matter
 
     Returns:
-         list: [<SUID or SUID list corresponding to each name>] or None if node_names is None
+        list: [<SUID or SUID list corresponding to each name>] or None if node_names is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -223,7 +382,7 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         list: [<name corresponding to each SUID>] or None if node_suids is None
+        list: [<name corresponding to each SUID>] or None if node_suids is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -280,7 +439,7 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, 
         unique_list (bool): True if duplicate edge names refer to different edges; False if it doesn't matter
 
     Returns:
-         list: [<SUID or SUID listcorresponding to each name>] or None if edge_names is None
+        list: [<SUID or SUID listcorresponding to each name>] or None if edge_names is None
 
     Raises:
         CyError: if network name or SUID doesn't exist
@@ -370,7 +529,7 @@ def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-         bool: True if column exists, False if not
+        bool: True if column exists, False if not
 
     Raises:
         CyError: if table or network name or SUID doesn't exist

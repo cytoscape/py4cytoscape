@@ -4,9 +4,25 @@ Release Log
 ===========
 
 
+py4cytoscape 1.2.0
+-------------------
+Release date: 30 Apr 2022
+
+* Added annotation functions (mirroring new Cytoscape Annotation features)
+* When running Notebook on Cytoscape workstation, files now resolved to local file system (instead of automatic sandbox)
+* Added create_view and select_all functions, updated get_network_view_suid() and get_network_views() to coordinate
+* Sped up select_all_nodes, select_all_edges
+
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.2.0.rst
+
 py4cytoscape 0.0.11
 -------------------
-Release date: 15 Sep 2021
+Release date: 11 Oct 2021
 
 * Updated documentation and tutorials
 * Made set_*_property_bypass more resilient to null node/edge lists

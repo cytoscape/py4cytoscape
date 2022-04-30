@@ -13,7 +13,7 @@ Bioconductor available to R programmers.
 Highlights
 ----------
 
-This themes for this release are:
+The themes for this release are:
 
 * Improved documentation and tutorials
 * Improved Automatic value generators support for style mapping (consistent with RCy3)
@@ -53,6 +53,10 @@ Pull requests merged in this release
 - #61 by Kozo Nishida
 - #63 by Kozo Nishida
 - #64 by Kozo Nishida
+- #65 by Kozo Nishida
+- #66 by Kozo Nishida
+- #68 by Kozo Nishida
+
 
 Issues closed in this release
 ------------------------------------

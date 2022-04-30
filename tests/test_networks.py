@@ -588,8 +588,7 @@ class NetworkTests(unittest.TestCase):
         edges = df.DataFrame(data=edge_data, columns=['source', 'target', 'interaction', 'weight'])
 
         # Verify that a network can be created containing dataframe encoding both nodes and edges
-        res = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
-        suid_1 = res['networkSUID']
+        suid_1 = create_network_from_data_frames(nodes, edges, title='From node & edge dataframe')
         self.assertEqual(get_network_name(suid_1), 'From node & edge dataframe')
         self.assertEqual(get_node_count(suid_1), 4)
         self.assertEqual(get_edge_count(suid_1), 4)
@@ -611,9 +610,8 @@ class NetworkTests(unittest.TestCase):
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a network can be created from a dataframe containing just edges
-        res = create_network_from_data_frames(edges=edges, collection='Another collection',
+        suid_2 = create_network_from_data_frames(edges=edges, collection='Another collection',
                                                            title='From just edge dataframe')
-        suid_2 = res['networkSUID']
         self.assertEqual(get_network_name(suid_2), 'From just edge dataframe')
         self.assertEqual(get_node_count(suid_2), 4)
         self.assertEqual(get_edge_count(suid_2), 4)
@@ -635,9 +633,8 @@ class NetworkTests(unittest.TestCase):
                               'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
 
         # Verify that a disconnected network can be created from a dataframe containing just nodes
-        res = create_network_from_data_frames(nodes=nodes, collection='A third collection',
+        suid_3 = create_network_from_data_frames(nodes=nodes, collection='A third collection',
                                                            title='From just nodes dataframe')
-        suid_3 = res['networkSUID']
         self.assertEqual(get_network_name(suid_3), 'From just nodes dataframe')
         self.assertEqual(get_node_count(suid_3), 4)
         self.assertEqual(get_edge_count(suid_3), 0)
@@ -922,14 +919,14 @@ class NetworkTests(unittest.TestCase):
 
         # Get the NetworkX for a known good network galFiltered.sif and send it to Cytoscape as a new network
         netx_multi_direct = create_networkx_from_network()
-        netx_suid = create_network_from_networkx(netx_multi_direct, title='NetworkX Multi Directed')['networkSUID']
+        netx_suid = create_network_from_networkx(netx_multi_direct, title='NetworkX Multi Directed')
         self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
         compare_table(cynode_table, 'node', netx_multi_direct)
         compare_table(cyedge_table, 'edge', netx_multi_direct)
 
         # Copy the direct multinet into an undirected multinet and try again
         netx_multi = netx_multi_direct.to_undirected()
-        netx_suid = create_network_from_networkx(netx_multi, title='NetworkX Multi Undirected')['networkSUID']
+        netx_suid = create_network_from_networkx(netx_multi, title='NetworkX Multi Undirected')
         self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
         compare_table(cynode_table, 'node', netx_multi) # Nodes should be the same
         self.assertEqual(len(cyedge_table.index), networks.get_edge_count()) # Edge directions will be scrambled
@@ -937,7 +934,7 @@ class NetworkTests(unittest.TestCase):
         # Create a simple undirected graph
         next_simple = nx.Graph()
         next_simple.add_edges_from([('California', 'Florida'), ('California', 'New York'), ('New York', 'Florida')])
-        netx_suid = create_network_from_networkx(next_simple, title='NetworkX Simple Undirected')['networkSUID']
+        netx_suid = create_network_from_networkx(next_simple, title='NetworkX Simple Undirected')
         self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
         self.assertEqual(networks.get_node_count(), 3)
         self.assertEqual(networks.get_edge_count(), 3)
@@ -945,7 +942,7 @@ class NetworkTests(unittest.TestCase):
         # Create a simple directed graph
         next_simple_direct = nx.DiGraph()
         next_simple_direct.add_edges_from([('California', 'Florida'), ('California', 'New York'), ('New York', 'Florida'), ('Florida', 'New York')])
-        netx_suid = create_network_from_networkx(next_simple_direct, title='NetworkX Simple Directed')['networkSUID']
+        netx_suid = create_network_from_networkx(next_simple_direct, title='NetworkX Simple Directed')
         self.assertEqual(netx_suid, get_network_suid()) # Verify that the new network is the selected network
         self.assertEqual(networks.get_node_count(), 3)
         self.assertEqual(networks.get_edge_count(), 4)
@@ -1068,7 +1065,7 @@ class NetworkTests(unittest.TestCase):
         test_ig = ig.Graph.DataFrame(test_df, directed=False)
 
         # Send iGraph to Cytoscape ... note that Source and Target columns get added to edge attributes
-        test_suid = create_network_from_igraph(test_ig)['networkSUID']
+        test_suid = create_network_from_igraph(test_ig)
 
         # Get iGraph back from Cytoscape (with Source and Target columns)
         cytoscape_ig = create_igraph_from_network(test_suid)

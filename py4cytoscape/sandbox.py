@@ -3,22 +3,31 @@
 """Functions for performing file operations within a sandbox.
 
 A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed to be isolated
-from the whole file system. All file operations are carried out relative to the "current sandbox". Generally, a
-Notebook-based workflow doesn't have to do anything to set up a sandbox ... the default sandbox is automatically
-set up as part of py4cytoscape startup. However, the workflow can set different sandboxes, and can even switch between
-them. A sandbox can contain both files and directories, and the user can transfer files between a sandbox and the
-workflow's native file system (e.g., a remote Notebook's server).
+from the whole file system. All Python and Cytoscape file operations are carried out relative to the "current sandbox".
+Sandboxes primarily address file access issues when running workflows on a remote server (and accessing Cytoscape
+running on the workstation via Jupyter-Bridge).
 
-If a sandbox is defined, all Cytoscape functions read and write files to it by default.
+When running a workflow on the Cytoscape workstation (i.e., locally, not remotely), the entire workstation's file
+system would be directly accessible to the workflow, and sandboxing isn't an issue. Essentially, this
+acknowledges that the user has rightful and safe access to the file system (subject to normal file system
+permissions).
 
-Thus, is it possible to build workflows that don't depend on the structure of the Cytoscape workstation's file system.
-Such workflows can store workflow data files along with other workflow files on a remote Notebook server, then transfer
-them to a sandbox only when Cytoscape will need them. Conversely, when Cytoscape creates a file in a sandbox (e.g.,
-exporting an image), the workflow can transfer the file to workflow storage.
+When running a workflow on a remote server, accessing files local to the workflow's Python kernel isn't helpful
+because they're on a server that the workstation's Cytoscape can't reach. Additionaly, it's problematic to allow
+the Python kernel to access workstation files anyway because 1) errant notebooks could compromise workstation
+security, and 2) notebooks can't easily account for differences in various workstation file systems (e.g.,
+naming files in a Mac is different than in Windows).
 
-A special case is when py4cytoscape is running on the same workstation as Cytoscape. The default sandbox is considered
-to be directory that's current for the Python kernel. Alternatively, the workflow could also define a sandbox, and
-then move files in and out of it just as a remote Notebook would.
+Sandboxing solves this by creating a workstation directory that's guaranteed to exist. The notebook can create and
+access files within the sandbox (by using the sandbox_* functions in this module), and Cytoscape can do the same.
+When a workflow runs remotely, py4cytoscape automatically creates a default sandbox for this data flow.
+
+While workflows running on a Cytoscape workstation have access to the entire workstation file system, they can opt
+to use a sandbox instead. This allows workflows to be developed on a workstation, then moved to a remote server and
+executed there. (See the sandbox_set() function.)
+
+It's possible for a workflow to use the default sandbox or (instead) create a custom sandbox for the exclusive use
+of a workflow or family of workflows.
 
     See Also:
         `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
@@ -62,13 +71,16 @@ from .py4cytoscape_logger import cy_log
 def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEFAULT_BASE_URL):
     """Set a new default sandbox, creating it if necessary.
 
-    A sandbox is the root for the file system used for all file operations. When running standalone
-    on the same workstation as Cytoscape, the default sandbox is the directory that's current for
-    the Python kernel. When running in a Notebook or remote server, the default sandbox is the
+    A sandbox is the root for the file system used for all file operations. When running a workflow
+    from a command line or notebook on the same workstation as Cytoscape, the default sandbox is the
+    entire workstation file system, and the current directory is the same as the Python kernel's
+    default directory. When running a workflow on a remote server, the default sandbox is the
     'default_sandbox' created automatically under the under the ``filetransfer`` directory in the
-    CytoscapeConfiguration directory. Naming a sandbox with this function creates a new
-    sub-directory as a sibling to 'default_sandbox' and uses it for subsequent file operations.
-    Setting a None sandbox uses the default sandbox instead.
+    CytoscapeConfiguration directory. Naming a custom sandbox with this sandbox_set() function
+    creates a new sub-directory as a sibling to 'default_sandbox' and uses it for subsequent
+    file operations. Setting a None sandbox reverts to the workstation's file system when the
+    workflow is running on the Cytoscape workstation, and 'default_sandbox' when the workflow is
+    running remotely.
 
     Sandboxes are highly recommended as an aid to creating workflows that can be shared with
     others.
@@ -76,7 +88,7 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
     Args:
         sandbox_name (str): Name of new default sandbox. None means to use the original default
             sandbox (e.g., the whole file system for local execution, or 'default_sandbox' for
-            Notebook and remote execution). If new sandbox doesn't exist, it is created.
+            remote execution). If new sandbox doesn't exist, it is created.
         copy_samples (bool): True to copy the Cytoscape sampleData into the sandbox
         reinitialize (bool): True to delete sandbox contents (if any) if sandbox already exists
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -91,9 +103,9 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
         requests.exceptions.HTTPError: if can't connect to Cytoscape, Cytoscape returns an error, or sandbox can't be created
 
     Examples:
-        >>> sandbox_set(None) # When running standalone on the Cytoscape workstation
-        'C:\\Program Files\\Cytoscape_v3.8.1'
-        >>> sandbox_set(None) # When running in a Notebook
+        >>> sandbox_set(None) # When running on the Cytoscape workstation
+        'C:\\Users\\CyDeveloper\\PycharmProjects\\py4cytoscape\\tests\\scratchpad'
+        >>> sandbox_set(None) # When running on on a remote server
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox'
         >>> sandbox_set('mySand', copy_samples=False, reinitialize=False) # Keep prior sandbox contents
         'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\mySand'
@@ -104,8 +116,8 @@ def sandbox_set(sandbox_name, copy_samples=True, reinitialize=True, base_url=DEF
     if sandbox_name: sandbox_name = sandbox_name.strip()
 
     # If the sandbox_name is null, it means set to the default sandbox, which depends on the runtime configuration.
-    # If we're running standalone Python, null means to use the whole Cytoscape file system. If we're on a notebook
-    # or running remotely, it's the default sandbox name. Any runtime configuration is allowed to set a non-null
+    # If we're running on the Cytoscape workstation, null means to use the whole Cytoscape file system. If we're
+    # running remotely, it's the default sandbox name. Any runtime configuration is allowed to set a non-null
     # sandbox, and if it doesn't exist, it'll be created. Note that the copySamples and reinitialize parameters are
     # used only when the sandbox isn't the whole Cytoscape file system.
     sandbox_name, sandbox_path = commands.do_set_sandbox({'sandboxName': sandbox_name, 'copySamples': copy_samples, 'reinitialize': reinitialize}, base_url=base_url)
@@ -117,9 +129,9 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
 
     If the current sandbox is the entire file system on a Cytoscape workstation, trying to delete it
     is an error. Otherwise, deleting the current sandbox results in the default sandbox becoming the
-    new current sandbox. When running standalone on the same workstation as Cytoscape, the default
-    sandbox is the entire file system on the Cytoscape workstation. When running in a Notebook or
-    remote server, the default sandbox is the 'default_sandbox' created automatically under the
+    new current sandbox. When running on the same workstation as Cytoscape, the default
+    sandbox is the entire file system on the Cytoscape workstation. When running in a remote server,
+    the default sandbox is the 'default_sandbox' created automatically under the
     under the ``filetransfer`` directory in the CytoscapeConfiguration directory. If that sandbox is
     deleted, it will be re-created so that subsequent file operations can complete successfully.
 
@@ -176,14 +188,6 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
 @cy_log
 def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_URL):
     """Get metadata on file in sandbox (or entire sandbox).
-
-    If the current sandbox is the entire file system on a Cytoscape workstation, trying to delete it
-    is an error. Otherwise, deleting the current sandbox results in the default sandbox becoming the
-    new current sandbox. When running standalone on the same workstation as Cytoscape, the default
-    sandbox is the entire file system on the Cytoscape workstation. When running in a Notebook or
-    remote server, the default sandbox is the 'default_sandbox' created automatically under the
-    under the ``filetransfer`` directory in the CytoscapeConfiguration directory. If that sandbox is
-    deleted, it will be re-created so that subsequent file operations can complete successfully.
 
     Note that this function can be used to query either a file or a directory.
 
@@ -443,9 +447,8 @@ def _sandbox_op(command, sandbox_name, file_name=None, base_url=DEFAULT_BASE_URL
         # that either there is no sandbox set yet, or the entire raw Cytoscape file system is being used as a sandbox.
         # To resolve this, get the default sandbox, which is what the sandbox will be set to after it's initialized.
         # Even after all of that, the sandbox name could still be None, which means that the raw Cytoscape file system
-        # really is being used. This would be appropriate if we're running in a standalone Python environment instead
-        # of a remote execution or a local notebook. A standalone Python environment is still free to operate in a
-        # sandbox if it wants.
+        # really is being used. This would be appropriate if we're running in on the Cytoscape workstation. A
+        # Cytoscape workstation environment is still free to operate in a sandbox if it wants.
         #
         # Note that if the sandbox hasn't been initialized yet, it'll need to be created. This could happen because
         # the sandbox is *lazily* initialized. This gives the user the choice of starting Cytoscape before or after
@@ -457,9 +460,20 @@ def _sandbox_op(command, sandbox_name, file_name=None, base_url=DEFAULT_BASE_URL
         sandbox_name, sandbox_path = commands.do_initialize_sandbox(base_url=base_url)
 
     if sandbox_name:
+        # Either running remotely or a sandbox has been defined for local execution. Either way,
+        # use the sandbox and interpret the file_name as relative to the sandbox directory. This
+        # works well when file_name is a relative name. If it's absolute, it'll be appended to the
+        # sandbox directory name, which will create something unintelligible that will be trapped
+        # by the FileTransfer app.
         command += f' sandboxName="{sandbox_name}"'
     elif file_name:
-        file_name = os.path.join(sandbox_path, file_name)
+        # Running locally with no sandbox defined ... essentially passing through to the whole workstation
+        # file system. If the caller supplies an absolute path, use it ... otherwise, make it relative to
+        # the current sandbox (or kernel current working directory).
+        if os.path.isabs(file_name):
+            pass
+        else:
+            file_name = os.path.join(sandbox_path, file_name)
     if file_name: command += f' fileName="{file_name}"'
 
     res = commands.commands_post(command, base_url=base_url)
