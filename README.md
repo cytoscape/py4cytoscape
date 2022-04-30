@@ -44,7 +44,7 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 1. Verify that the setup.py file correctly identifies all external dependencies.
 1. Verify that changes to the [user manual]() are correct. Be sure to activate automatic ReadTheDocs [building](https://readthedocs.org/projects/py4cytoscape/versions/) for this new version. 
 1. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
-1. Successfully execute all tests by using the tests/runalltests.bat file
+1. Successfully execute all tests by using the tests/runalltests.bat and tests/runsanitytests.bat files
 1. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 1. Execute GangSu workflows (e.g., [Workflow1](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic%20protocol%201.ipynb) and [Workflow2](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic_protocol_2.ipynb#scrollTo=cZ9Gr2Pjnapm)) on Google Colab
 1. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
@@ -120,6 +120,6 @@ The test suite can be used in the following circumstances:
 ``py4cytoscape`` is released under the MIT License (see [LICENSE.rst](LICENSE.rst) file):
 
 ```
-    Copyright (c) 2018-2020 The Cytoscape Consortium
+    Copyright (c) 2018-2022 The Cytoscape Consortium
     Barry Demchak <bdemchak@ucsd.edu>
 ```
