@@ -25,6 +25,9 @@ For a quick tutorial on how to build a workflow in Python and using ``py4cytosca
 https://py4cytoscape.readthedocs.io/en/latest/tutorials/index.html.
 You can try ``py4cytoscape`` with a web browser only, without installing anything in your local environment.
 
+A broad set of Cytoscape Automation samples and tutorials is available on the [Cytoscape Automation Wiki](https://github.com/cytoscape/cytoscape-automation/wiki).
+
+
 ## How to configure logging
 
 ``py4cytoscape`` logging is based on the Python ``logging`` package, which is based on the Java ``logging`` framework. 
