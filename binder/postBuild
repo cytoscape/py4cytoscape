@@ -1,3 +1,0 @@
-#!/bin/bash
-wget https://github.com/cytoscape/cytoscape/releases/download/3.8.0/cytoscape-unix-3.8.0.tar.gz
-tar xf cytoscape-unix-3.8.0.tar.gz
