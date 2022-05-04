@@ -7,7 +7,5 @@ chardet
 python-igraph
 sphinx_autodoc_typehints
 sphinx_rtd_theme
-nbsphinx
 ipykernel
 decorator
-
