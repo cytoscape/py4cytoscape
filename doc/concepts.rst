@@ -197,13 +197,13 @@ Jupyter Notebooks can be executed on a number of platforms, including:
 
 * Your Cytoscape workstation (via `PyCharm <https://www.jetbrains.com/pycharm/>`_, `Anaconda <https://www.anaconda.com/>`_, and others)
 * Private Notebook servers (e.g., `GenePattern Notebook <https://notebook.genepattern.org>`_)
-* Public Notebook servers (e.g., `Google Collaboratory <https://colab.research.google.com/>`_)
+* Public Notebook servers (e.g., `Google Collaboratory <https://colab.research.google.com/>`_ and `JetBrains Datalore <https://datalore.jetbrains.com/>`_)
 
 In each case, your Jupyter Notebook can call py4cytoscape functions that are executed
 by Cytoscape running on your own workstation.
 
-Note that the file system accessible to a Notebook may be different from the file system Cytoscape can access. We highly
-recommend that your Notebook code use *sandboxing* techniques built into py4cytoscape when sharing files to be read by
+Note that when a Notebook executes on a server, the file system accessible to it is likely different from the file system Cytoscape can access. We highly
+recommend that your server-based Notebook code use *sandboxing* techniques built into py4cytoscape when sharing files to be read by
 Cytoscape or created by Cytoscape. See the `Sandboxing`_ section (below) for an explanation of the file sharing protocol.
 
 See the `Sanity Test <https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test>`_ examples to see how to
@@ -258,8 +258,8 @@ section instead of simply importing py4cytoscape directly.
 Remote Jupyter Notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Jupyter Notebooks (including Google Colab) that run on *remote* (private or public) servers can use py4cytoscape to
-execute Cytoscape functions on your workstation via
+Jupyter Notebooks (including Google Colab or JetBrains Datalore) that run on *remote* (private or public)
+servers can use py4cytoscape to execute Cytoscape functions on your workstation via
 the `Jupyter-Bridge <https://github.com/cytoscape/jupyter-bridge>`_. To use the Jupyter-Bridge,
 you must create and execute an initialization cell at the beginning of your Notebook:
 
@@ -295,8 +295,8 @@ Sandboxing
 ----------
 
 If you use py4cytoscape to create and run a Python workflow on the same workstation as
-your Cytoscape instance (either from the command line or in a Jupyter Notebook), you may not need sandbox features
-(but they may make your Python coding simpler). If you use py4cytoscape from a Jupyter Notebook
+your Cytoscape instance (either from the command line or in a Jupyter Notebook), you may not need sandbox features.
+If you use py4cytoscape from a Jupyter Notebook
 running on a remote server or on your Cytoscape workstation, you very likely **need** sandboxing.
 
 For context, py4cytoscape functions (e.g., ``open_session()``, ``save_session()``
@@ -311,7 +311,8 @@ it was written. It raises a number of problems:
 * Workflows with hard-coded paths are not likely to be portable to other Cytoscape workstations,
   which may have their own (different) file system layouts. This applies equally to both
   to workflows running on other Cytoscape workstations and those running in a remote Jupyter
-  Notebook server.
+  Notebook server. (For example: C:\users\Bob\CyFiles may be a valid path on Bob's Windows workstation,
+  but may not be valid on Carol's Windows or Mac workstation.)
 
 * To enable collaboration, workflows running on a remote Jupyter Notebook server likely
   prefer to store Cytoscape data and output on the Notebook server. As the server's file
@@ -337,7 +338,7 @@ A useful side effect of sandboxing is that workflows that use them stand little 
 inadvertantly (or maliciously) corrupting the Cytoscape workstation's file system. This
 safety further encourages sharing of workflows between collaboratating researchers.
 
-Remotely executing notebook workflows are automatically provisioned with a default sandbox (called
+Notebook workflows that execute remotely are automatically provisioned with a default sandbox (called
 ``default_sandbox``). To get the same effect with Python running on the
 Cytoscape workstation, you can explicitly create the default sandbox. (See vignettes below.)
 
@@ -377,9 +378,15 @@ or
     # ... use Python to do something with the .png
 
 When using full paths, this workflow is portable only to workstations that have their Cytoscape files in the
-``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations.
+``C:\Users\Me\Documents\CyFiles``, which doesn't seem like a good assumption for many workstations. Best to use
+either relative paths or sandboxing (see below) in this situation.
 
-**Vignette 2**: A remotely executing Notebook-based version of Vignette 1 ... data files on a Jupyter server.
+.. note::
+    If you have a Cytoscape file on a cloud resource (e.g., Dropbox), you can use the
+    import_file_from_url() function to fetch it onto your Cytoscape workstation and then
+    have Cytoscape read it. You don't need sandbox functions for this.
+
+**Vignette 2**: A remotely executing Notebook-based version of Vignette 1 ... data files are on a Jupyter server.
 
 A sandbox is automatically created for remote workflows. The workflow must transfer
 a session file from the Notebook's remote file system
@@ -397,7 +404,7 @@ system for further processing.
 
 This workflow can run on any Notebook server and Cytoscape workstation without knowledge of
 or risk to the workstation's file system. Various Python-based libraries can process the
-.png after it is copied to the Notebook's file system.
+.png after it is copied back to the Notebook's file system.
 
 When calling sandbox functions, if you don't specify the name of a sandbox, the operation
 is performed on the "current sandbox", which is the ``default_sandbox`` folder or whatever sandbox you
@@ -406,7 +413,7 @@ set by calling the ``sandbox_set()`` function.
 Sandbox functions don't accept full paths for files, as they
 would create non-portable code and pose a security risk to the Cytoscape workstation.
 
-**Vignette 3**: A remotely executing Notebook-based version of Vignette 1 ... data files on a cloud service.
+**Vignette 3**: A remotely executing Notebook-based version of Vignette 1 ... data files are on a cloud service.
 
 This vignette is the same as Vignette 2, except the session file resides on a cloud service (i.e.,
 GitHub, Dropbox, OneDrive, Google Drive, or elsewhere). In this case, the workflow must transfer
@@ -423,6 +430,10 @@ as in Vignette 2.
     sandbox_get_from('myImage.png', './myImage.png') # copy image file to Notebook directory
     # ... do something with the .png
 
+.. note::
+    If your Notebook is executing on the local Cytoscape workstation instead of a remote server,
+    you can use the import_file_from_url() function to fetch it onto your Cytoscape workstation and then
+    have Cytoscape read it. You don't need sandbox functions for this.
 
 **Vignette 4**: A workstation-based non-Notebook Python workflow accesses sandbox-based files
 

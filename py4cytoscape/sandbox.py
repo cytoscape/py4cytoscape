@@ -309,12 +309,12 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
         **GitHub**: Use the GitHub web site to show the file or a link to it, and capture the URL in the clipboard (e.g., https://github.com/cytoscape/file-transfer-app/blob/master/test_data/GDS112_full.soft)
 
         Note that GitHub enforces a limit on the size of a file that can be stored there. We advise that you take this
-        into account when choosing a cloud service for your files
+        into account when choosing a cloud service for your files.
 
         When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_url_to()``.
 
     Args:
-        source_url (str): URL addressing cloud file to download )
+        source_url (str): URL addressing cloud file to download
         dest_file (str): Name of file to write (as absolute path or sandbox-relative path)
         overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
