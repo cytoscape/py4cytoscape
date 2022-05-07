@@ -291,6 +291,10 @@ or
 
 .. note:: The Jupyter-Bridge can be used for Notebooks running on the same workstation as Cytoscape, which enables local development of workflows that will execute remotely, though at the cost of some execution speed.
 
+Note that remotely executing Notebooks can create files for Cytoscape to read, or
+can read files written by Cytoscape, but only by using the sandboxing functions
+described below.
+
 Sandboxing
 ----------
 

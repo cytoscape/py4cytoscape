@@ -473,6 +473,9 @@ def import_file_from_url(source_url, dest_file, overwrite=True, base_url=DEFAULT
 
         When you capture a URL in the clipboard, you should copy it into your program for use with this function.
 
+    This function is most useful for Notebooks running on the local Cytoscape workstation. For Notebooks
+    that could run on a remote server, consider using sandbox_url_to() and related sandbox functions.
+
     Args:
         source_url (str): URL addressing cloud file to download
         dest_file (str): Name of file to write (as Cytoscape-relative path, absolute file system path or sandbox-relative path)

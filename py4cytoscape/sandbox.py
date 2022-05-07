@@ -313,6 +313,10 @@ def sandbox_url_to(source_url, dest_file, overwrite=True, sandbox_name = None, b
 
         When you capture a URL in the clipboard, you should copy it into your program for use with ``sandbox_url_to()``.
 
+    This function is most useful for Notebooks executing on a remote server. For Notebooks running on the
+    local Cytoscape workstation, consider using the import_file_from_url() function if the Notebook is not
+    intended to ever run on a remote server.
+
     Args:
         source_url (str): URL addressing cloud file to download
         dest_file (str): Name of file to write (as absolute path or sandbox-relative path)

@@ -297,7 +297,7 @@ class ToolsTests(unittest.TestCase):
         _NESTED_DIR = '1/2/3/'
         _ESCAPE_DIR = '1/../1/2/3/'
 
-        def check_url_to_result(res, sandbox_path, sandbox_name, file_name, expected_length):
+        def check_url_to_result(res, sandbox_path, file_name, expected_length):
             self.assertIsInstance(res, dict)
             self.assertSetEqual(set(res.keys()), {'filePath', 'fileByteCount'})
             expected_file = os.path.join(sandbox_path, file_name)
@@ -305,29 +305,23 @@ class ToolsTests(unittest.TestCase):
             self.assertTrue(os.path.exists(expected_file))
             self.assertEqual(os.path.getsize(res['filePath']), expected_length)
 
-        def check_remove_file(res, sandbox_path, existed):
-            self.assertIsInstance(res, dict)
-            self.assertSetEqual(set(res.keys()), {'filePath', 'existed'})
-            self.assertEqual(res['existed'], existed)
-            self.assertTrue(res['filePath'].startswith(sandbox_path))
-
-        def check_url_to_local_dir(sandbox_path, sandbox_name):
+        def check_url_to_local_dir(sandbox_path):
             # Get rid of the local test file if it already exists
             if os.path.exists(_TEST_FILE):
                 os.remove(_TEST_FILE)
 
             # Verify that a file can be transferred to the sandbox
             res = import_file_from_url(_FROM_URL, _TEST_FILE)
-            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_URL_BYTES)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _FROM_URL_BYTES)
 
             # Verify that the file can't be overwritten if we don't want it to be
             self.assertRaises(CyError, import_file_from_url, source_url=_ALT_FROM_URL, dest_file=_TEST_FILE,
                               overwrite=False)
-            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _FROM_URL_BYTES)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _FROM_URL_BYTES)
 
             # Verify that a different file can overwrite it if we allow it
             res = import_file_from_url(_ALT_FROM_URL, _TEST_FILE)
-            check_url_to_result(res, sandbox_path, sandbox_name, _TEST_FILE, _ALT_FROM_URL_BYTES)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _ALT_FROM_URL_BYTES)
 
             # Get rid of the local test file if it already exists
             if os.path.exists(_TEST_FILE):
@@ -336,14 +330,14 @@ class ToolsTests(unittest.TestCase):
             # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
             nested_test_file = _NESTED_DIR + _TEST_FILE
             res = import_file_from_url(_FROM_URL, nested_test_file)
-            check_url_to_result(res, sandbox_path, sandbox_name, nested_test_file, _FROM_URL_BYTES)
+            check_url_to_result(res, sandbox_path, nested_test_file, _FROM_URL_BYTES)
             if os.path.exists(nested_test_file):
                 os.remove(nested_test_file)
 
             # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
             escaped_test_file = _ESCAPE_DIR + _TEST_FILE
             res = import_file_from_url(_FROM_URL, escaped_test_file)
-            check_url_to_result(res, sandbox_path, sandbox_name, escaped_test_file, _FROM_URL_BYTES)
+            check_url_to_result(res, sandbox_path, escaped_test_file, _FROM_URL_BYTES)
             if os.path.exists(escaped_test_file):
                 os.remove(escaped_test_file)
 
@@ -356,7 +350,7 @@ class ToolsTests(unittest.TestCase):
         # Check sending to empty sandbox (Python kernel directory)
         default_sandbox_path = sandbox_set(None) # Should be py4cytoscape test directory
         self.assertTrue(os.path.samefile(default_sandbox_path, os.getcwd()))
-        check_url_to_local_dir(default_sandbox_path, 'xxx')
+        check_url_to_local_dir(default_sandbox_path)
 
     def _cybrowser_windows(self, operation='show'):
 
