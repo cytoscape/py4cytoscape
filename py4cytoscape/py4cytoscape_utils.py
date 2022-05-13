@@ -721,7 +721,8 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
     except:
         pass
 
-    # map all names into SUIDs ... all names *must* be actual names
+    # map all names into SUIDs ... all names *must* be actual names ... and must be str() to match the 'name' column
+    item_names = [str(item_name)   for item_name in item_names]
     item_name_to_suid_list = {item_name: list(df[df.name.eq(item_name)].index.values) for item_name in item_names}
     try:
         if unique_list:
