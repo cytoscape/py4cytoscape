@@ -36,7 +36,7 @@ of a workflow or family of workflows.
 
 """Note that there is more detailed commentary and lower level functions in py4cytsocape_sandbox.py."""
 
-"""Copyright 2020 The Cytoscape Consortium
+"""Copyright 2020-2022 The Cytoscape Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
