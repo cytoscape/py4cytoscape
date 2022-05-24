@@ -25,5 +25,5 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 __version__ = "1.3.0"
 
 # This reflects the reference API this module meets
-_automation_api_version = '1.4.0'
+_automation_api_version = '1.5.0'
 

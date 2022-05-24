@@ -8,7 +8,10 @@ Install
    `Jupyter Notebook section <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#jupyter-notebook>`_ of the
    Concepts chapter. The section below doesn't apply to you.
 
-``py4cytoscape`` requires Python 3.6 or later.  If you do not already
+.. note::
+   The quickest and easiest way to see ``py4cytoscape`` in action is by following the Quick Start instructions.
+
+``py4cytoscape`` requires Python 3.9 or later.  If you do not already
 have a Python environment configured on your computer, please see the
 instructions for installing the full `scientific Python stack
 <https://scipy.org/install.html>`_.
@@ -72,19 +75,19 @@ Install the development version (Python Console)
 To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
-   pip install python-igraph requests pandas networkx colorbrewer
+   pip install python-igraph requests pandas networkx colorbrewer chardet decorator
    pip install git+https://github.com/cytoscape/py4cytoscape.git
    
 To install the py4cytoscape branch (for example 0.0.10) version, instead
 of ``pip install py4cytoscape``, use::
 
-   pip install python-igraph requests pandas networkx colorbrewer
+   pip install python-igraph requests pandas networkx colorbrewer chardet decorator
    pip install git+https://github.com/cytoscape/py4cytoscape.git@0.0.10
 
 Alternately, to install *a particular* py4cytoscape development version (e.g., 0.0.11), instead
 of ``pip install py4cytoscape``, use::
 
-   pip install python-igraph requests pandas networkx colorbrewer
+   pip install python-igraph requests pandas networkx colorbrewer chardet decorator
    git clone git://github.com/cytoscape/py4cytoscape@0.0.11
 
 Verify Cytoscape connection
@@ -102,7 +105,7 @@ This will import ``py4cytoscape`` into the Python namespace, print a (long) list
 of ``py4cytoscape`` entrypoints, and then demonstrate a connection to Cytoscape
 by collecting Cytoscape information.
 
-Testing (command line)
+Sanity Testing (command line)
 ----------------------
 
 ``py4cytoscape`` uses the Python ``unittest`` testing package. You can learn more
