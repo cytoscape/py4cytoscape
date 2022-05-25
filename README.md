@@ -17,14 +17,11 @@ To understand the API structure and see calling examples, see the ``py4cytoscape
 
 # Quick Start
 
-The quickest way to see ``py4cytoscape`` in action is to:
-1. Install and start [Cytoscape](https://cytoscape.org/download.html) on your workstation
-2. Start a Google Colab session and [load a sample workflow](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic%20protocol%201.ipynb#scrollTo=jMnno2stwRIC)
-3. Execute the workflow via Runtime | Run All or Ctrl+F9
+The quickest way to see ``py4cytoscape`` in action is via the [Overview of py4cytoscape](https://github.com/cytoscape/cytoscape-automation/blob/master/for-scripters/Python/Overview-of-py4cytoscape.ipynb) Jupyter-based workflow.
+
+You can avoid installing Python or ``py4cytoscape`` by clicking on the *Open in Colab* button, and running the Python workflow in the Google Cloud, though you will still have to install Cytoscape on your workstation. 
 
 You can follow the notes in the Jupyter Notebook as the workflow automates Cytoscape execution.
-
-Using Google Colab avoids your having to install a Jupyter Notebook or ``py4cytoscape`` on your own workstation.
  
 ## How to install and test
 

@@ -6,7 +6,7 @@ Building ``py4cytoscape``
 4. If any API changes were made, be sure to update the [Automation API Definition](https://docs.google.com/spreadsheets/d/1XLWsKxGLqcBWLzoW2y6HyAUU2jMXaEaWw7QLn3NE5nY/edit#gid=1999503690) and change the Automation API version in py4cytoscape/_version.py
 5. If any functions were added, be sure to add them to the appropriate .rst file in the References section of the document.
 6. Verify that the requirements.txt file in the docs directory correctly identifies all external dependencies.
-7. Verify that the setup.py file correctly identifies all external dependencies.
+7. Verify that the setup.py file correctly identifies all external dependencies. If any dependencies have changed, be sure to update the Install.rst file, too.
 8. Verify that changes to the [user manual]() are correct. Be sure to activate automatic ReadTheDocs [building](https://readthedocs.org/projects/py4cytoscape/versions/) for this new version.
 9. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
 10. Successfully execute all tests by using the tests/runalltests.bat and tests/runsanitytests.bat files
