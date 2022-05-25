@@ -127,6 +127,8 @@ Executing just a sanity test takes only a few minutes::
 
 You should be able to see Cytoscape load small networks and manipulate them.
 
+You can also try the Quick Start instructions in `Tutorials <https://py4cytoscape.readthedocs.io/en/latest/Tutorials.html#quick_start>`_ section.
+
 Deep testing (command line)
 ---------------------------
 
