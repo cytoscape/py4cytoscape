@@ -907,7 +907,7 @@ class AppsTests(unittest.TestCase):
         self._check_expected_values(res, {'edgeThickness': '4.0', 'canvas': 'background', 'fillOpacity': '52.0',
                                           'rotation': '135.0',
                                           'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
-                                          'fillColor': '#F0F0F2', 'edgeColor': '#0F0F0D',
+                                          'fillColor': '#F0F0F2', 'shapeType': 'OCTACTON', 'edgeColor': '#0F0F0D',
                                           'edgeOpacity': '77.0', 'name': 'ann1b name', 'x': '102.0', 'width': '33.0',
                                           'y': '203.0', 'z': '0', 'height': '32.0'})
 
