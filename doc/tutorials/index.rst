@@ -15,12 +15,14 @@ You can follow the notes in the Jupyter Notebook as the workflow automates Cytos
 General Tutorials
 -----------------
 
-A broad set of Cytoscape Automation samples and tutorials is available
+A broad set of Cytoscape Automation Jupyter notebooks are available
 on the `Cytoscape Automation for Python scripters <https://github.com/cytoscape/cytoscape-automation/tree/master/for-scripters/Python>`_.
 
-You can try the samples and tutorials not only on the (local Cytoscape + local Python environment)
-but also on the (local Cytoscape Desktop + remote `Google Colab <https://colab.research.google.com/>`_).
+We recommend you to try the `Overview-of-py4cytoscape.ipynb <https://github.com/cytoscape/cytoscape-automation/blob/master/for-scripters/Python/Overview-of-py4cytoscape.ipynb>`_ first.
 
-1. Install Cytoscape in your local desktop environment and launch it.
+You have two options to try the notebooks.
 
-2. Click on the "Open in Colab" badge in the samples and tutorials
+1. is (LOCAL Cytoscape + LOCAL Jupyter environment).
+2. is (LOCAL Cytoscape + REMOTE Jupyter environment [for example Google Colab]).
+
+If you want to try the latter, click on the "Open in Colab" badge at the top of each notebook (ipynb file).
