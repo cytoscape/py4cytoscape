@@ -3,7 +3,7 @@
 """Functions related to TOOLS found in the Tools Menu in Cytoscape.
 """
 
-"""Copyright 2020 The Cytoscape Consortium
+"""Copyright 2020-2022 The Cytoscape Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
@@ -24,6 +24,7 @@ import sys
 
 # Internal module imports
 from . import commands
+from . import sandbox
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -361,6 +362,7 @@ def diffusion_advanced(heat_column_name=None, time=None, base_url=DEFAULT_BASE_U
     return res
 
 
+@cy_log
 def merge_networks(sources=None,
                    title=None,
                    operation="union",
@@ -444,3 +446,58 @@ def merge_networks(sources=None,
     res = commands.commands_post(cmd_string, base_url=base_url)
 
     return res['SUID'] if 'SUID' in res else res
+
+@cy_log
+def import_file_from_url(source_url, dest_file, overwrite=True, base_url=DEFAULT_BASE_URL):
+    """Transfer a cloud-based file to the current Cytoscape directory.
+
+    The source URL identifies a file to be transferred from a cloud resource to either the
+    to the current Cytoscape directory (if executing on the Cytoscape workstation) or sandbox (if
+    executing on a remote server or a sandbox was explicitly created). If the destination file already
+    exists, it is overwritten. The ``dest_file`` can be an absolute path if the workflow is
+    executing on the local Cytoscape workstation.
+
+    Supported URLs include:
+        **Raw URL**: URL directly references the file to download (e.g., http://tpsoft.com/museum_images/IBM%20PC.JPG
+
+        **Dropbox**: Use the standard Dropbox ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0)
+
+        **GDrive**: Use the standard Google Drive ``Get Link`` feature to create the ``source_url`` link in the clipboard (e.g., https://drive.google.com/file/d/12sJaKQQbesF10xsrbgiNtUcqCQYY1YI3/view?usp=sharing)
+
+        **OneDrive**: Use the OneDrive web site to right click on the file, choose the ``Embed`` menu option, then copy the URL in the iframe's ``src`` parameter into the clipboard (e.g., https://onedrive.live.com/embed?cid=C357475E90DD89C4&resid=C357475E90DD89C4%217207&authkey=ACEU5LrVtI_jWTU)
+
+        **GitHub**: Use the GitHub web site to show the file or a link to it, and capture the URL in the clipboard (e.g., https://github.com/cytoscape/file-transfer-app/blob/master/test_data/GDS112_full.soft)
+
+        Note that GitHub enforces a limit on the size of a file that can be stored there. We advise that you take this
+        into account when choosing a cloud service for your files.
+
+        When you capture a URL in the clipboard, you should copy it into your program for use with this function.
+
+    This function is most useful for Notebooks running on the local Cytoscape workstation. For Notebooks
+    that could run on a remote server, consider using sandbox_url_to() and related sandbox functions.
+
+    Args:
+        source_url (str): URL addressing cloud file to download
+        dest_file (str): Name of file to write (as Cytoscape-relative path, absolute file system path or sandbox-relative path)
+        overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {'filePath': <new file's absolute path in Cytoscape workstation>, 'fileByteCount': number of bytes read}
+
+    Raises:
+        CyError: if file name or URL is invalid
+        requests.exceptions.HTTPError: if can't connect to Cytoscape, Cytoscape returns an error, or sandbox is invalid
+
+    Examples:
+        >>> import_file_from_url('https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0', 'test file')
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\test file', 'fileByteCount': 5536880}
+        >>> import_file_from_url('https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0', 'test file', overwrite=True)
+        {'filePath': 'C:\\Users\\CyDeveloper\\CytoscapeConfiguration\\filetransfer\\default_sandbox\\test file', 'fileByteCount': 5536880}
+
+    See Also:
+        `Sandboxing <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#sandboxing>`_ in the Concepts section in the py4cytoscape User Manual.
+    """
+    return sandbox.sandbox_url_to(source_url, dest_file, overwrite=overwrite, sandbox_name=None, base_url=base_url)

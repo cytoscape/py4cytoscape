@@ -3,7 +3,7 @@
 """ Centralized version name for py4cytoscape package
 """
 
-"""Copyright 2020 The Cytoscape Consortium
+"""Copyright 2020-2022 The Cytoscape Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
@@ -22,8 +22,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 # This is the official version of this library. Change it here, and the build and documentation
 # should pick it up automatically.
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 # This reflects the reference API this module meets
-_automation_api_version = '1.4.0'
+_automation_api_version = '1.5.0'
 

@@ -2,9 +2,10 @@
 
 """ Test functions in tools.py.
 """
+import os
 
 """License:
-    Copyright 2020 The Cytoscape Consortium
+    Copyright 2020-2022 The Cytoscape Consortium
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
     documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -284,6 +285,73 @@ class ToolsTests(unittest.TestCase):
         self.assertRaises(CyError, merge_networks, [])
         self.assertRaises(CyError, merge_networks, None)
 
+    @print_entry_exit
+    def test_import_file_from_url(self):
+        _TEST_SANDBOX_NAME = 'test_sandbox'
+        _TEST_FILE = 'test file'
+        _ALTTEST_SANDBOX_NAME = '.test.sandbox'
+        _FROM_URL = 'https://www.dropbox.com/s/r15azh0xb53smu1/GDS112_full.soft?dl=0'
+        _FROM_URL_BYTES = 5536880
+        _ALT_FROM_URL = 'https://www.dropbox.com/s/8wc8o897tsxewt1/BIOGRID-ORGANISM-Saccharomyces_cerevisiae-3.2.105.mitab?dl=0'
+        _ALT_FROM_URL_BYTES = 166981992
+        _NESTED_DIR = '1/2/3/'
+        _ESCAPE_DIR = '1/../1/2/3/'
+
+        def check_url_to_result(res, sandbox_path, file_name, expected_length):
+            self.assertIsInstance(res, dict)
+            self.assertSetEqual(set(res.keys()), {'filePath', 'fileByteCount'})
+            expected_file = os.path.join(sandbox_path, file_name)
+            self.assertTrue(os.path.samefile(res['filePath'], expected_file))
+            self.assertTrue(os.path.exists(expected_file))
+            self.assertEqual(os.path.getsize(res['filePath']), expected_length)
+
+        def check_url_to_local_dir(sandbox_path):
+            # Get rid of the local test file if it already exists
+            if os.path.exists(_TEST_FILE):
+                os.remove(_TEST_FILE)
+
+            # Verify that a file can be transferred to the sandbox
+            res = import_file_from_url(_FROM_URL, _TEST_FILE)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _FROM_URL_BYTES)
+
+            # Verify that the file can't be overwritten if we don't want it to be
+            self.assertRaises(CyError, import_file_from_url, source_url=_ALT_FROM_URL, dest_file=_TEST_FILE,
+                              overwrite=False)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _FROM_URL_BYTES)
+
+            # Verify that a different file can overwrite it if we allow it
+            res = import_file_from_url(_ALT_FROM_URL, _TEST_FILE)
+            check_url_to_result(res, sandbox_path, _TEST_FILE, _ALT_FROM_URL_BYTES)
+
+            # Get rid of the local test file if it already exists
+            if os.path.exists(_TEST_FILE):
+                os.remove(_TEST_FILE)
+
+            # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
+            nested_test_file = _NESTED_DIR + _TEST_FILE
+            res = import_file_from_url(_FROM_URL, nested_test_file)
+            check_url_to_result(res, sandbox_path, nested_test_file, _FROM_URL_BYTES)
+            if os.path.exists(nested_test_file):
+                os.remove(nested_test_file)
+
+            # Verify that a file can be written to a directory nested in the sandbox, with path to be created during write
+            escaped_test_file = _ESCAPE_DIR + _TEST_FILE
+            res = import_file_from_url(_FROM_URL, escaped_test_file)
+            check_url_to_result(res, sandbox_path, escaped_test_file, _FROM_URL_BYTES)
+            if os.path.exists(escaped_test_file):
+                os.remove(escaped_test_file)
+
+            # Verify that trying to send a non-existent file fails
+            self.assertRaises(Exception, import_file_from_url, source_url=_FROM_URL)
+            self.assertRaises(CyError, import_file_from_url, source_url='totally bogus', dest_file=_TEST_FILE)
+            self.assertRaises(CyError, import_file_from_url, source_url=None, dest_file=_TEST_FILE)
+            self.assertRaises(CyError, import_file_from_url, source_url='  ', dest_file=_TEST_FILE)
+
+        # Check sending to empty sandbox (Python kernel directory)
+        default_sandbox_path = sandbox_set(None) # Should be py4cytoscape test directory
+        self.assertTrue(os.path.samefile(default_sandbox_path, os.getcwd()))
+        check_url_to_local_dir(default_sandbox_path)
+
     def _cybrowser_windows(self, operation='show'):
 
         def check_browser_list(browser_list, expected_list):  # doesn't support duplicate ID keys
@@ -337,7 +405,6 @@ class ToolsTests(unittest.TestCase):
         self.assertIsInstance(show_result, dict)
         self.assertEqual(show_result['id'], window_def['id'])
         if not skip_verify: input('Verify that the "' + window_def[operation]['title'] + '" is visible; hit Enter')
-
 
 if __name__ == '__main__':
     unittest.main()

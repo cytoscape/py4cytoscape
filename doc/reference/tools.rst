@@ -33,4 +33,5 @@ Misc
    :toctree: generated/
 
    analyze_network
+   import_file_from_url
    merge_networks

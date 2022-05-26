@@ -4,6 +4,21 @@ Release Log
 ===========
 
 
+py4cytoscape 1.3.0
+-------------------
+Release date: 22 May 2022
+
+* Added import_file_from_url() function to improve cloud file download
+* Added Gang Su basic protocol 1 & 2 Jupyter Notebook demonstrations
+* Added network enrichment demonstration in local & remote Gang Su basic protocol 1
+* Moved tutorials to https://github.com/cytoscape/cytoscape-automation/wiki
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.3.0.rst
+
 py4cytoscape 1.2.0
 -------------------
 Release date: 30 Apr 2022
