@@ -1,0 +1,1286 @@
+Supporting Information Table 2. Network characteristics of diseases.						
+Disease ID	Name	Disorder class	Size (s)	Degree (k)	Class-degree (k)	Genes implicated (Entrez ID) [comma-deliminated]
+1	"17,20-lyase_deficiency"	Endocrine	1	0	0	CYP17A1 (1586)
+3	2-methyl-3-hydroxybutyryl-CoA_dehydrogenase_deficiency	Metabolic	1	0	0	HADH2 (3028)
+4	2-methylbutyrylglycinuria	Metabolic	1	0	0	ACADSB (36)
+5	"3-beta-hydroxysteroid_dehydrogenase,_type_II,_deficiency"	Metabolic	1	0	0	HSD3B2 (3284)
+6	3-hydroxyacyl-CoA_dehydrogenase_deficiency	Metabolic	1	0	0	HADHSC (3033)
+7	3-Methylcrotonyl-CoA_carboxylase_deficiency	Metabolic	2	0	0	"MCCC1 (56922), MCCC2 (64087)"
+8	3-methylglutaconic_aciduria	Metabolic	1	0	0	AUH (549)
+9	3-methylglutaconicaciduria	Metabolic	1	1	1	OPA3 (80207)
+10	3-M_syndrome	multiple	1	0	0	CUL7 (9820)
+12	6-mercaptopurine_sensitivity	Metabolic	1	0	0	TPMT (7172)
+13	Aarskog-Scott_syndrome	multiple	1	1	1	FGD1 (2245)
+14	Abacavir_hypersensitivity	Immunological	1	2	2	HLA-B (3106)
+15	ABCD_syndrome	multiple	1	2	1	EDNRB (1910)
+17	Abetalipoproteinemia	Metabolic	2	2	1	"MTP (4547), APOB (338)"
+18	Acampomelic_campolelic_dysplasia	Skeletal	1	1	1	SOX9 (6662)
+21	Acatalasemia	Hematological	1	0	0	CAT (847)
+22	Accelerated_tumor_formation	Cancer	1	0	0	MDM2 (4193)
+24	Achalasia-addisonianism-alacrimia_syndrome	multiple	1	0	0	AAAS (8086)
+25	Acheiropody	Skeletal	1	0	0	LMBR1 (64327)
+26	"Achondrogenesis-hypochondrogenesis,_type_II"	Bone	1	5	3	COL2A1 (1280)
+27	Achondrogenesis_Ib	Bone	1	3	3	SLC26A2 (1836)
+28	Achondroplasia	Skeletal	1	7	2	FGFR3 (2261)
+29	Achromatopsia	Ophthamological	3	1	1	"CNGA3 (1261), CNGB3 (54714), GNAT2 (2780)"
+30	"Acid-labile_subunit,_deficiency_of"	Endocrine	1	0	0	IGFALS (3483)
+31	Acquired_long_QT_syndrome	Cardiovascular	1	1	1	KCNH2 (3757)
+32	Acrocallosal_syndrome	multiple	1	3	1	GLI3 (2737)
+33	Acrocapitofemoral_dysplasia	Skeletal	1	1	1	IHH (3549)
+34	Acrodermatitis_enteropathica	Dermatological	1	0	0	SLC39A4 (55630)
+36	Acrokeratosis_verruciformis	Dermatological	1	1	1	ATP2A2 (488)
+38	Acromegaly	Endocrine	2	5	3	"GNAS (2778), SSTR5 (6755)"
+39	Acromesomelic_dysplasia	Skeletal	2	3	1	"GDF5 (8200), NPR2 (4882)"
+44	"Acyl-CoA_dehydrogenase,_deficiency_of"	Metabolic	3	0	0	"ACADL (33), ACADM (34), ACADS (35)"
+45	Adenocarcinoma	Cancer	4	8	3	"EGFR (1956), BRAF (673), ERBB2 (2064), PARK2 (5071)"
+46	"Adenoma,_periampullary"	Cancer	1	6	1	APC (324)
+47	Adenomas	Cancer	3	6	1	"MUTYH (4595), PLAG1 (5324), APC (324)"
+49	Adenosine_deaminase_deficiency	Immunological	1	1	1	ADA (100)
+50	Adenylosuccinase_deficiency	Metabolic	1	0	0	ADSL (158)
+52	Adiponectin_deficiency	Endocrine	1	0	0	ADIPOQ (9370)
+53	"Adrenal_hyperplasia,_congenital"	Endocrine	4	5	3	"CYP11B1 (1584), CYP21A2 (1589), POR (5447), NR0B1 (190)"
+54	Adrenocortical_carcinoma	Cancer	1	4	2	PRKAR1A (5573)
+55	Adrenocorticotropic_hormone_deficiency	Endocrine	1	0	0	TBX19 (9095)
+56	Adrenoleukodystrophy	Neurological	6	3	2	"ABCD1 (215), PEX10 (5192), PEX13 (5194), PEX1 (5189), PEX26 (55670), PEX5 (5830)"
+57	Adrenomyeloneuropathy	Metabolic	1	1	1	ABCD1 (215)
+58	Adult_i_phenotype	Hematological	1	1	1	GCNT2 (2651)
+59	ADULT_syndrome	multiple	1	5	1	TP73L (8626)
+60	Advanced_sleep_phase_syndrome	Neurological	1	0	0	PER2 (8864)
+61	Afibrinogenemia	Hematological	2	3	2	"FGA (2243), FGB (2244)"
+63	Agammaglobulinemia	Hematological	4	1	1	"IGHM (3507), IGLL1 (3543), LRRC8A (56262), BTK (695)"
+64	AGAT_deficiency	Metabolic	1	0	0	GATM (2628)
+65	Agenesis_of_the_corpus_callosum_with_peripheral_neuropathy	Neurological	1	0	0	SLC12A6 (9990)
+69	AICA-ribosiduria_due_to_ATIC_deficiency	Metabolic	1	0	0	ATIC (471)
+70	AIDS	Immunological	3	3	2	"KIR3DL1 (3811), IFNG (3458), CXCL12 (6387)"
+71	Alagille_syndrome	multiple	1	2	2	JAG1 (182)
+72	Albinism	Dermatological	3	1	0	"OCA2 (4948), TYR (7299), TYRP1 (7306)"
+74	Alcohol_dependence	Unclassified	1	4	2	HTR2A (3356)
+75	Alcoholism	Unclassified	1	0	0	GABRA2 (2555)
+76	Aldolase_A_deficiency	Metabolic	1	0	0	ALDOA (226)
+77	Aldosterone_to_renin_ratio_raised	Endocrine	1	2	2	CYP11B2 (1585)
+78	Aldosteronism	Endocrine	1	1	1	CYP11B1 (1584)
+79	Alexander_disease	multiple	2	2	1	"GFAP (2670), NDUFV1 (4723)"
+80	Alkaptonuria	Metabolic	1	0	0	HGD (3081)
+82	Allan-Herndon-Dudley_syndrome	Neurological	1	0	0	SLC16A2 (6567)
+83	Allergic_rhinitis	Immunological	1	1	1	IL13 (3596)
+85	Alopecia_universalis	Dermatological	1	1	1	HR (55806)
+86	Alpers_syndrome	Neurological	1	2	1	POLG (5428)
+87	Alpha-1-antichymotrypsin_deficiency	Respiratory	1	1	1	SERPINA3 (12)
+88	Alpha-actinin-3_deficiency	Muscular	1	1	1	ACTN3 (89)
+90	Alpha-methylacetoacetic_aciduria	Metabolic	1	0	0	ACAT1 (38)
+91	Alpha-methylacyl-CoA_racemase_deficiency	Metabolic	1	0	0	AMACR (23600)
+92	Alpha-thalassemia/mental_retardation_syndrome	Hematological	1	4	0	ATRX (546)
+94	Alport_syndrome	Renal	3	1	1	"COL4A5 (1287), COL4A3 (1285), COL4A4 (1286)"
+95	(null)	Neurological	1	0	0	ALMS1 (7840)
+96	Alternating_hemiplegia_of_childhood	Neurological	1	1	1	ATP1A2 (477)
+97	Alveolar_soft-part_sarcoma	Cancer	1	0	0	ASPSCR1 (79058)
+98	Alzheimer_disease	Neurological	12	15	9	"APP (351), APOE (348), PSEN2 (5664), APBB2 (323), NOS3 (4846), PLAU (5328), ACE (1636), MPO (4353), PAXIP1 (22976), A2M (2), BLMH (642), PSEN1 (5663)"
+99	Amelogenesis_imperfecta	Bone	4	2	1	"ENAM (10117), AMELX (265), DLX3 (1747), KLK4 (9622)"
+100	Amish_infantile_epilepsy_syndrome	Neurological	1	0	0	ST3GAL5 (8869)
+101	AMP_deaminase_deficiency	Hematological	1	0	0	AMPD3 (272)
+102	Amyloid_neuropathy	Neurological	1	3	3	TTR (7276)
+103	Amyloidosis	Neurological	6	11	6	"APOA1 (335), APP (351), GSN (2934), FGA (2243), LYZ (4069), TTR (7276)"
+104	Amyotrophic_lateral_sclerosis	Neurological	6	4	2	"VAPB (9217), SOD1 (6647), ALS2 (57679), DCTN1 (1639), NEFH (4744), PRPH (5630)"
+105	Analbuminemia	Hematological	1	1	1	ALB (213)
+107	"Analgesia_from_kappa-opioid_receptor_agonist,_female-specific"	Unclassified	1	3	2	MC1R (4157)
+108	Anderson_disease	Gastrointestinal	1	1	1	SAR1B (51128)
+109	Androgen_insensitivity	Endocrine	1	4	3	AR (367)
+110	Anemia	Hematological	9	3	1	"CDAN1 (146059), RPS19 (6223), PKLR (5313), NT5C3 (51251), RHAG (6005), SLC11A2 (4891), SPTB (6710), ALAS2 (212), ABCB7 (22)"
+113	Angelman_syndrome	Developmental	2	4	2	"MECP2 (4204), UBE3A (7337)"
+114	Angioedema	Immunological	2	0	0	"SERPING1 (710), XPNPEP2 (7512)"
+115	"Angiofibroma,_sporadic"	Endocrine	1	7	2	MEN1 (4221)
+117	Angiotensin_I-converting_enzyme	Endocrine	1	5	5	ACE (1636)
+118	Anhaptoglobinemia	Hematological	1	1	1	HP (3240)
+119	"Aniridia,_type_II"	Ophthamological	1	9	3	PAX6 (5080)
+121	Ankylosing_spoldylitis	Connective_tissue_disorder	1	2	2	HLA-B (3106)
+122	Anophthalmia	Ophthamological	1	0	0	SOX2 (6657)
+124	Anorexia_nervosa	Nutritional	1	4	2	HTR2A (3356)
+126	Anterior_segment_anomalies_and_cataract	Ophthamological	4	6	2	"EYA1 (2138), FOXE3 (2301), FOXC1 (2296), PITX3 (5309)"
+127	Antithrombin_III_deficiency	Hematological	1	0	0	SERPINC1 (462)
+128	Antley-Bixler_syndrome	Unclassified	1	2	2	POR (5447)
+129	Anxiety-related_personality_traits	Psychiatric	1	1	1	SLC6A4 (6532)
+130	Aortic_aneurysm	Cardiovascular	1	5	2	FBN1 (2200)
+131	Apert_syndrome	Connective_tissue_disorder	1	8	3	FGFR2 (2263)
+132	Aplasia_of_lacrimal_and_salivary_glands	Gastrointestinal	1	0	0	FGF10 (2255)
+133	Aplastic_anemia	Hematological	3	4	3	"IFNG (3458), TERC (7012), TERT (7015)"
+134	"Apnea,_postanesthetic"	Unclassified	1	0	0	BCHE (590)
+136	Apolipoprotein_deficiency	Metabolic	4	5	3	"APOA1 (335), APOA2 (336), APOC3 (345), APOH (350)"
+137	"Apparent_mineralocorticoid_excess,_hypertension_due_to"	Bone	1	1	1	HSD11B2 (3291)
+138	Aquaporin-1_deficiency	Unclassified	1	1	1	AQP1 (358)
+139	ARC_syndrome	Gastrointestinal	1	0	0	VPS33B (26276)
+140	Argininemia	Metabolic	2	0	0	"ARG1 (383), ASL (435)"
+142	Aromatase_deficiency	Metabolic	1	1	1	CYP19A1 (1588)
+143	Aromatic_L-amino_acid_decarboxylase_deficiency	Metabolic	1	0	0	DDC (1644)
+144	Arrhythmogenic_right_ventricular_dysplasia	Cardiovascular	3	5	2	"RYR2 (6262), DSP (1832), PKP2 (5318)"
+146	Arthrogryposis	Developmental	3	1	1	"TPM2 (7169), TNNI2 (7136), TNNT3 (7140)"
+147	Arthropathy	Bone	1	1	1	WISP3 (8838)
+150	Aspartylglucosaminuria	Metabolic	1	0	0	AGA (175)
+151	Asperger_syndrome	Psychiatric	2	2	2	"NLGN3 (54413), NLGN4X (57502)"
+153	Asthma	Respiratory	13	11	6	"PHF11 (51131), MS4A2 (2206), ALOX5 (240), ADRB2 (154), PTGDR (5729), GPR154 (387129), HNMT (3176), IL12B (3593), IL13 (3596), PLA2G7 (7941), SCGB3A2 (117156), TNF (7124), SCGB1A1 (7356)"
+154	Ataxia	Neurological	5	1	1	"ATCAY (85300), APTX (54840), CACNB4 (785), ALS4 (23064), TTPA (7274)"
+157	Ataxia-telangiectasia	Immunological	2	3	1	"ATM (472), MRE11A (4361)"
+160	Atelosteogenesis	Connective_tissue_disorder	2	5	2	"SLC26A2 (1836), FLNB (2317)"
+162	Athabaskan_brainstem_dysgenesis_syndrome	Neurological	1	1	1	HOXA1 (3198)
+163	Atherosclerosis	Cardiovascular	1	1	1	ALOX5 (240)
+164	Atopy	Immunological	5	3	3	"SPINK5 (11005), HAVCR1 (26762), PLA2G7 (7941), SELP (6403), IL4R (3566)"
+165	Atransferrinemia	Hematological	1	1	1	TF (7018)
+166	Atrial_fibrillation	Cardiovascular	5	5	1	"KCNE2 (9992), KCNQ1 (3784), GATA4 (2626), MYH6 (4624), NKX2-5 (1482)"
+167	Atrichia_with_papular_lesions	Dermatological	1	1	1	HR (55806)
+168	Atrioventricular_block	Cardiovascular	3	5	2	"NKX2-5 (1482), GJA1 (2697), CRELD1 (78987)"
+171	Attention-deficit_hyperactivity_disorder	Psychiatric	1	2	2	DRD5 (1816)
+173	Autism	Psychiatric	4	5	3	"GLO1 (2739), MECP2 (4204), NLGN3 (54413), NLGN4X (57502)"
+174	Autoimmune_disease	Immunological	4	4	1	"FAS (355), CASP10 (843), CASP8 (841), AIRE (326)"
+175	Autonomic_nervous_system_dysfunction	Psychiatric	1	0	0	DRD4 (1815)
+177	Axenfeld_anomaly	Ophthamological	1	4	1	FOXC1 (2296)
+178	Azoospermia	Endocrine	2	0	0	"USP9Y (8287), SYCP3 (50511)"
+180	Bamforth-Lazarus_syndrome	Endocrine	1	0	0	FOXE1 (2304)
+182	Bannayan-Riley-Ruvalcaba_syndrome	Unclassified	1	8	1	PTEN (5728)
+183	Bardet-Biedl_syndrome	multiple	8	1	1	"BBS1 (582), ARL6 (84100), BBS7 (55212), BBS2 (583), BBS4 (585), BBS5 (129880), MKKS (8195), TTC8 (123016)"
+184	Bare_lymphocyte_syndrome	Immunological	5	3	3	"TAPBP (6892), TAP2 (6891), CIITA (4261), RFX5 (5993), RFXAP (5994)"
+185	Barth_syndrome	multiple	1	2	1	TAZ (6901)
+186	Bart-Pumphrey_syndrome	multiple	1	5	2	GJB2 (2706)
+187	Bartter_syndrome	multiple	5	0	0	"SLC12A1 (6557), KCNJ1 (3758), CLCNKB (1188), BSND (7809), CLCNKA (1187)"
+188	Basal_cell_carcinoma	Cancer	4	5	3	"RASA1 (5921), PTCH2 (8643), PTCH (5727), SMO (6608)"
+190	"B-cell_non-Hodgkin_lymphoma,_high-grade"	Cancer	1	0	0	BCL7A (605)
+191	BCG_infection	Immunological	1	3	2	IFNGR1 (3459)
+192	Beare-Stevenson_cutis_gyrata_syndrome	multiple	1	8	4	FGFR2 (2263)
+193	Becker_muscular_dystrophy	Muscular	2	3	2	"DMD (1756), MYF6 (4618)"
+194	Beckwith-Wiedemann_syndrome	multiple	4	2	1	"CDKN1C (1028), H19 (283120), KCNQ1OT1 (10984), NSD1 (64324)"
+195	Benzene_toxicity	Unclassified	1	1	1	NQO1 (1728)
+196	Bernard-Soulier_syndrome	Hematological	3	1	1	"GP1BA (2811), GP1BB (2812), GP9 (2815)"
+197	"Beryllium_disease,_chronic"	Unclassified	1	0	0	HLA-DPB1 (3115)
+198	"Beta-2-adrenoreceptor_agonist,_reduced_response_to"	Unclassified	1	2	2	ADRB2 (154)
+199	Beta-ureidopropionase_deficiency	Metabolic	1	0	0	UPB1 (51733)
+200	Bethlem_myopathy	Muscular	3	1	1	"COL6A1 (1291), COL6A2 (1292), COL6A3 (1293)"
+201	Bietti_crystalline_corneoretinal_dystrophy	Ophthamological	1	0	0	CYP4V2 (285440)
+202	"Bile_acid_malabsorption,_primary"	Gastrointestinal	1	0	0	SLC10A2 (6555)
+203	Biotinidase_deficiency	Metabolic	1	0	0	BTD (686)
+204	Bipolar_disorder	Psychiatric	1	0	0	XBP1 (7494)
+205	Birt-Hogg-Dube_syndrome	Dermatological	1	3	2	FLCN (201163)
+207	Bladder_cancer	Cancer	4	15	2	"FGFR3 (2261), KRAS (3845), RB1 (5925), HRAS (3265)"
+208	Blau_syndrome	multiple	1	3	3	CARD15 (64127)
+209	Bleeding_disorder	Hematological	2	0	0	"TBXA2R (6915), P2RX1 (5023)"
+210	"Blepharophimosis,_epicanthus_inversus,_and_ptosis"	multiple	1	1	1	FOXL2 (668)
+211	Blepharospasm	Ophthamological	1	2	2	DRD5 (1816)
+212	Blood_group	Hematological	23	8	4	"ABO (28), LU (4059), AQP1 (358), DAF (1604), SLC4A1 (6521), DO (420), GYPC (2995), AQP3 (360), GCNT2 (2651), CD44 (960), KEL (3792), SLC14A1 (6563), CR1 (1378), ICAM4 (3386), FUT3 (2525), GYPA (2993), BSG (682), A4GALT (53947), B3GALT3 (8706), RHCE (6006), GYPB (2994), XG (7499), ACHE (43)"
+213	Bloom_syndrome	Cancer	1	0	0	BLM (641)
+214	Blue-cone_monochromacy	Ophthamological	2	1	1	"OPN1LW (5956), OPN1MW (2652)"
+216	Bombay_phenotype	Hematological	2	1	1	"FUT1 (2523), FUT2 (2524)"
+217	Bone_mineral_density_variability	Bone	1	6	3	LRP5 (4041)
+218	Borjeson-Forssman-Lehmann_syndrome	multiple	1	0	0	PHF6 (84295)
+220	Bosley-Salih-Alorainy_syndrome	Neurological	1	1	1	HOXA1 (3198)
+221	Bothnia_retinal_dystrophy	Ophthamological	1	3	1	RLBP1 (6017)
+224	Brachydactyly	Skeletal	5	6	1	"IHH (3549), BMPR1B (658), ROR2 (4920), GDF5 (8200), HOXD13 (3239)"
+225	Bradyopsia	Ophthamological	2	0	0	"R9AP (342880), RGS9 (8787)"
+226	Branchiootic_syndrome	Neurological	1	1	1	EYA1 (2138)
+228	Breast_cancer	Cancer	19	30	4	"CHEK2 (11200), PIK3CA (5290), PPM1D (8493), SLC22A18 (5002), TP53 (7157), BRCA1 (672), BRCA2 (675), TSG101 (7251), BRIP1 (83990), RAD54L (8438), CDH1 (999), AR (367), KRAS (3845), RB1CC1 (9821), PHB (5245), ATM (472), BARD1 (580), RAD51 (5888), XRCC3 (7517)"
+231	Brody_myopathy	Muscular	1	0	0	ATP2A1 (487)
+233	Bruck_syndrome	Unclassified	1	0	0	PLOD2 (5352)
+234	Brugada_syndrome	Cardiovascular	1	4	1	SCN5A (6331)
+235	Brunner_syndrome	Unclassified	1	0	0	MAOA (4128)
+237	Burkitt_lymphoma	Cancer	1	0	0	MYC (4609)
+238	Buschke-Ollendorff_syndrome	multiple	1	2	2	LEMD3 (23592)
+239	"Butterfly_dystrophy,_retinal"	Ophthamological	1	3	1	RDS (5961)
+240	Complementary_component_deficiency	Immunological	13	1	1	"C1QA (712), C1QB (713), C1QG (714), C1S (716), C2 (717), IF (3426), C3 (718), C4A (720), C4B (721), C6 (729), C7 (730), C8B (732), C9 (735)"
+252	Cafe-au-lait_spots	Cancer	2	8	1	"MSH2 (4436), MLH1 (4292)"
+253	Caffey_disease	Connective_tissue_disorder	1	4	2	COL1A1 (1277)
+254	"Calcinosis,_tumoral"	Bone	2	1	1	"FGF23 (8074), GALNT3 (2591)"
+255	Campomelic_dysplasia	Skeletal	1	1	1	SOX9 (6662)
+256	Camptodactyly-arthropathy-coxa_vara-pericarditis_syndrome	Skeletal	1	0	0	PRG4 (10216)
+257	Camurati-Engelmann_disease	Skeletal	1	0	0	TGFB1 (7040)
+258	Canavan_disease	Metabolic	1	0	0	ASPA (443)
+259	Cancer_susceptibility	Cancer	2	3	1	"FGFR4 (2264), MSH6 (2956)"
+261	Capillary_malformations	Cardiovascular	1	2	1	RASA1 (5921)
+262	Carbamoylphosphate_synthetase_I_deficiency	Metabolic	1	0	0	CPS1 (1373)
+263	Carbohydrate-deficient_glycoprotein_syndrome	Metabolic	3	0	0	"PMM2 (5373), MPI (4351), MGAT2 (4247)"
+264	Carboxypeptidase_N_deficiency	Hematological	1	0	0	CPN1 (1369)
+265	"Carcinoid_tumors,_intestinal"	Cancer	1	3	1	SDHD (6392)
+267	"Cardioencephalomyopathy,_fatal_infantile,_due_to_cytochrome_c_oxidase_deficiency"	Cardiovascular	1	0	0	SCO2 (9997)
+268	Cardiomyopathy	Cardiovascular	25	15	5	"MYL3 (4634), ACTC (70), MYH7 (4625), LMNA (4000), TNNT2 (7139), TTN (7273), DES (1674), EYA4 (2070), SGCD (6444), CSRP3 (8048), TCAP (8557), ABCC9 (10060), DMD (1756), MYL2 (4633), CAV3 (859), MYH6 (4624), TNNC1 (7134), TPM1 (7168), TNNI3 (7137), MYBPC3 (4607), COX15 (1355), MYLK2 (85366), PRKAG2 (51422), PLN (5350), TAZ (6901)"
+269	Carney_complex	multiple	2	5	2	"PRKAR1A (5573), MYH8 (4626)"
+271	Carnitine-acylcarnitine_translocase_deficiency	Metabolic	1	0	0	SLC25A20 (788)
+272	Carnitine_deficiency	Metabolic	1	0	0	SLC22A5 (6584)
+275	"Carpal_tunnel_syndrome,_familial"	Unclassified	1	3	2	TTR (7276)
+276	Cartilage-hair_hypoplasia	Skeletal	1	1	1	RMRP (6023)
+277	Cataract	Ophthamological	15	11	4	"CRYAA (1409), CRYBB2 (1415), PITX3 (5309), BFSP2 (8419), PAX6 (5080), CRYBA1 (1411), CRYGC (1420), LIM2 (3982), CRYGD (1421), HSF4 (3299), MIP (4284), CRYAB (1410), CRYBB1 (1414), GJA8 (2703), GJA3 (2700)"
+279	Cavernous_malformations_of_CNS_and_retina	Cardiovascular	1	2	1	KRIT1 (889)
+283	CD59_deficiency	Immunological	1	0	0	CD59 (966)
+284	"CD8_deficiency,_familial"	Immunological	1	0	0	CD8A (925)
+287	Central_hypoventilation_syndrome	Respiratory	5	8	4	"GDNF (2668), BDNF (627), EDN3 (1908), PHOX2B (8929), RET (5979)"
+289	Cerebellar_ataxia	Neurological	2	5	3	"CP (1356), CACNA1A (773)"
+291	Cerebral_amyloid_angiopathy	Neurological	2	3	2	"ABCA1 (19), CST3 (1471)"
+292	Cerebrooculofacioskeletal_syndrome	multiple	3	4	1	"ERCC2 (2068), ERCC5 (2073), ERCC6 (2074)"
+293	Cerebrotendinous_xanthomatosis	Metabolic	1	0	0	CYP27A1 (1593)
+294	"Cerebrovascular_disease,_occlusive"	Unclassified	1	1	1	SERPINA3 (12)
+295	Ceroid_lipofuscinosis	Neurological	1	1	1	PPT1 (5538)
+296	Ceroid-lipofuscinosis	Neurological	6	1	1	"TPP1 (1200), CLN3 (1201), CLN5 (1203), CLN6 (54982), CLN8 (2055), PPT1 (5538)"
+298	Cervical_carcinoma	Cancer	1	7	2	FGFR3 (2261)
+299	CETP_deficiency	Metabolic	1	2	2	CETP (1071)
+300	Chanarin-Dorfman_syndrome	Metabolic	1	0	0	ABHD5 (51099)
+301	Charcot-Marie-Tooth_disease	Neurological	18	5	3	"HSPB1 (3315), MPZ (4359), DNM2 (1785), HOXD10 (3236), GDAP1 (54332), PMP22 (5376), LITAF (9516), EGR2 (1959), NEFL (4747), KIF1B (23095), MFN2 (9927), RAB7 (7879), GARS (2617), MTMR2 (8898), SBF2 (81846), SH3TC2 (79628), NDRG1 (10397), GJB1 (2705)"
+302	CHARGE_syndrome	multiple	1	0	0	CHD7 (55636)
+303	Char_syndrome	multiple	1	0	0	TFAP2B (7021)
+304	Chediak-Higashi_syndrome	multiple	1	0	0	LYST (1130)
+305	Cherubism	Unclassified	1	0	0	SH3BP2 (6452)
+306	CHILD_syndrome	Developmental	1	0	0	NSDHL (50814)
+307	Chitotriosidase_deficiency	Metabolic	1	0	0	CHIT1 (1118)
+308	"Chloride_diarrhea,_congenital,_Finnish_type"	Gastrointestinal	1	0	0	SLC26A3 (1811)
+309	Cholelithiasis	Gastrointestinal	1	1	1	ABCB4 (5244)
+310	Cholestasis	Gastrointestinal	4	1	1	"ATP8B1 (5205), ABCB4 (5244), ABCB11 (8647), HSD3B7 (80270)"
+313	Cholesteryl_ester_storage_disease	Metabolic	1	1	1	LIPA (3988)
+314	Chondrocalcinosis	Connective_tissue_disorder	1	1	1	ANKH (56172)
+315	Chondrodysplasia_punctata	Connective_tissue_disorder	3	0	0	"GNPAT (8443), EBP (10682), ARSE (415)"
+316	Chondrosarcoma	Cancer	3	2	2	"EXT1 (2131), NR4A3 (8013), EWSR1 (2130)"
+318	"Chorea,_hereditary_benign"	Neurological	1	1	0	TITF1 (7080)
+319	Choreoacanthocytosis	Neurological	1	0	0	VPS13A (23230)
+320	"Choreoathetosis,_hypothyroidism,_and_respiratory_distress"	multiple	1	1	1	TITF1 (7080)
+323	Choroidal_dystrophy	Ophthamological	1	0	0	CHM (1121)
+326	Chromosome_22q13.3_deletion_syndrome	multiple	1	0	0	SHANK3 (85358)
+327	Chronic_granulomatous_disease	Immunological	4	0	0	"CYBA (1535), NCF1 (4687), NCF2 (4688), CYBB (1536)"
+328	Chudley-Lowry_syndrome	multiple	1	4	1	ATRX (546)
+329	"Chylomicronemia_syndrome,_familial"	Metabolic	1	2	1	LPL (4023)
+330	Chylomicron_retention_disease	Gastrointestinal	1	1	1	SAR1B (51128)
+331	Ciliary_dyskinesia	Respiratory	2	1	0	"DNAI1 (27019), DNAH5 (1767)"
+332	CINCA_syndrome	multiple	1	2	1	CIAS1 (114548)
+334	Cirrhosis	Gastrointestinal	3	0	0	"KRT18 (3875), KRT8 (3856), CIRH1A (84916)"
+335	Citrullinemia	Metabolic	2	0	0	"ASS (445), SLC25A13 (10165)"
+336	Cleft_palate	Developmental	3	4	3	"PVRL1 (5818), MSX1 (4487), TBX22 (50945)"
+337	Cleidocranial_dysplasia	Skeletal	1	1	1	RUNX2 (860)
+338	Coats_disease	Ophthamological	1	2	2	NDP (4693)
+339	Cockayne_syndrome	multiple	2	2	0	"ERCC8 (1161), ERCC6 (2074)"
+340	Codeine_sensitivity	Metabolic	1	1	1	CYP2D6 (1565)
+341	Coffin-Lowry_syndrome	multiple	1	1	1	RPS6KA3 (6197)
+342	Cohen_syndrome	multiple	1	0	0	VPS13B (157680)
+343	Colchicine_resistance	Unclassified	1	0	0	ABCB1 (5243)
+344	Cold-induced_autoinflammatory_syndrome	Immunological	1	2	0	CIAS1 (114548)
+345	"Coloboma,_ocular"	Ophthamological	2	11	3	"PAX6 (5080), SHH (6469)"
+346	Colon_cancer	Cancer	34	50	5	"RAD54B (25788), RAD54L (8438), BCL10 (8915), PTPN12 (5782), TGFBR2 (7048), SRC (6714), MLH3 (27030), PTPRJ (5795), ODC1 (4953), MUTYH (4595), AXIN2 (8313), BUB1B (701), EP300 (2033), PDGFRL (5157), PIK3CA (5290), TP53 (7157), APC (324), BAX (581), CTNNB1 (1499), DCC (1630), MCC (4163), NRAS (4893), MSH2 (4436), MLH1 (4292), PMS1 (5378), PMS2 (5395), MSH6 (2956), FGFR3 (2261), FLCN (201163), BRAF (673), DLC1 (10395), PLA2G2A (5320), CCND1 (595), BUB1 (699)"
+347	"Colonic_aganglionosis,_total,_with_small_bowel_involvement"	Gastrointestinal	1	4	3	RET (5979)
+348	Colorblindness	Ophthamological	3	1	1	"OPN1MW (2652), OPN1LW (5956), OPN1SW (611)"
+350	Combined_factor_V_and_VIII_deficiency	Hematological	1	0	0	LMAN1 (3998)
+351	"Complex_mitochondrial_respiratory_chain,_deficiency_of"	multiple	2	0	0	"NDUFS6 (4726), ATPAF2 (91647)"
+352	Cone_dystrophy	Ophthamological	7	6	1	"RPGR (6103), GUCA1A (2978), ABCA4 (24), AIPL1 (23746), GUCY2D (3000), RPGRIP1 (57096), CRX (1406)"
+354	Congenital_disorder_of_glycosylation	Metabolic	13	0	0	"ALG6 (29929), ALG3 (10195), DPM1 (8813), MPDU1 (9526), ALG12 (79087), ALG8 (79053), ALG2 (85365), ALG9 (79796), SLC35C1 (55343), B4GALT1 (2683), COG7 (91949), DPAGT1 (1798), ALG1 (56052)"
+355	Congestive_heart_failure	Cardiovascular	2	1	1	"ADRA2C (152), ADRB1 (153)"
+356	"Conjunctivitis,_ligneous"	Ophthamological	1	1	1	PLG (5340)
+357	Conotruncal_anomaly_face_syndrome	Cardiovascular	1	2	0	TBX1 (6899)
+358	"Contractural_arachnodactyly,_congenital"	Connective_tissue_disorder	1	0	0	FBN2 (2201)
+359	Convulsions	Neurological	1	1	0	MASS1 (84059)
+360	"COPD,_rate_of_decline_of_lung_function_in"	Respiratory	1	0	0	MMP1 (4312)
+361	Coproporphyria	Metabolic	1	1	1	CPOX (1371)
+362	Corneal_dystrophy	Ophthamological	7	7	3	"APOA1 (335), TGFBI (7045), TACSTD2 (4070), VSX1 (30813), COL8A2 (1296), PIP5K3 (200576), KERA (11081)"
+364	Cornelia_de_Lange_syndrome	Developmental	1	0	0	NIPBL (25836)
+365	Coronary_artery_disease	Cardiovascular	6	3	2	"MEF2A (4205), ABCA1 (19), KL (9365), PON1 (5444), PON2 (5445), MMP3 (4314)"
+366	"Corpus_callosum,_agenesis_of,_with_mental_retardation,_ocular_coloboma_and_micrognathia"	Neurological	1	0	0	IGBP1 (3476)
+367	Cortisol_resistance	Endocrine	1	0	0	NR3C1 (2908)
+368	Cortisone_reductase_deficiency	Metabolic	2	0	0	"H6PD (9563), HSD11B1 (3290)"
+369	Costello_syndrome	multiple	1	2	1	HRAS (3265)
+370	Coumarin_resistance	Hematological	1	1	1	CYP2A6 (1548)
+372	Cowden_disease	Cancer	2	9	2	"PTEN (5728), BMPR1A (657)"
+374	"CPT_deficiency,_hepatic"	Metabolic	2	1	1	"CPT1A (1374), CPT2 (1376)"
+376	"Cramps,_potassium-aggravated"	Muscular	1	5	3	SCN4A (6329)
+377	"Craniofacial_anomalies,_empty_sella_turcica,_corneal_endothelial_changes,_and_abnormal_retinal_and_auditory_bipolar_cells"	multiple	1	2	1	VSX1 (30813)
+378	Craniofacial-deafness-hand_syndrome	multiple	1	2	1	PAX3 (5077)
+379	Craniofacial-skeletal-dermatologic_dysplasia	multiple	1	8	4	FGFR2 (2263)
+380	Craniofrontonasal_dysplasia	Skeletal	1	0	0	EFNB1 (1947)
+382	Craniometaphyseal_dysplasia	Bone	1	1	1	ANKH (56172)
+383	Craniosynostosis	Skeletal	2	9	4	"FGFR2 (2263), MSX2 (4488)"
+384	CRASH_syndrome	multiple	1	2	1	L1CAM (3897)
+385	Creatine_phosphokinase	Metabolic	1	4	2	CAV3 (859)
+388	Creutzfeldt-Jakob_disease	Neurological	2	4	2	"PRNP (5621), HLA-DQB1 (3119)"
+389	Crigler-Najjar_syndrome	multiple	1	2	2	UGT1A1 (54658)
+390	Crohn_disease	Gastrointestinal	2	3	2	"CARD15 (64127), DLG5 (9231)"
+391	Crouzon_syndrome	Skeletal	2	15	4	"FGFR2 (2263), FGFR3 (2261)"
+392	Cryptorchidism	Renal	2	0	0	"LGR8 (122042), INSL3 (3640)"
+394	Currarino_syndrome	Skeletal	1	0	0	HLXB9 (3110)
+395	Cutis_laxa	Connective_tissue_disorder	3	5	3	"ELN (2006), FBLN5 (10516), ATP7A (538)"
+396	Cyclic_ichthyosis_with_epidermolytic_hyperkeratosis	Dermatological	1	4	1	KRT1 (3848)
+397	"Cylindromatosis,_familial"	Dermatological	1	0	0	CYLD (1540)
+398	Cystathioninuria	Metabolic	1	1	1	CTH (1491)
+399	Cystic_fibrosis	Respiratory	1	4	2	CFTR (1080)
+400	Cystinosis	Renal	1	0	0	CTNS (1497)
+401	Cystinuria	Renal	2	1	0	"SLC3A1 (6519), SLC7A9 (11136)"
+402	D-2-hydroxyglutaric_aciduria	Metabolic	1	0	0	MGC25181 (257054)
+404	Darier_disease	Dermatological	1	1	1	ATP2A2 (488)
+405	D-bifunctional_protein_deficiency	Metabolic	1	0	0	HSD17B4 (3295)
+406	Deafness	"Ear,Nose,Throat"	41	25	7	"EYA4 (2070), DIAPH1 (1729), MYO7A (4647), TECTA (7007), COL11A2 (1302), POU4F3 (5459), MYH9 (4627), ACTG1 (71), MYO6 (4646), GJB3 (2707), KCNQ4 (9132), GRHL2 (79977), GJB2 (2706), GJB6 (10804), TMC1 (117531), DSPP (1834), CRYM (1428), MYH14 (79784), DFNA5 (1687), COCH (1690), MYO1A (4640), TMPRSS3 (64699), CDH23 (64072), ATP2B2 (491), STRC (161497), USH1C (10083), OTOA (146183), PCDH15 (65217), CLDN14 (23562), MYO3A (53904), DFNB31 (25861), MYO15A (51168), ESPN (83715), SLC26A4 (5172), SLC26A5 (375611), TMIE (259236), OTOF (9381), JAG1 (182), KIAA1199 (57214), TIMM8A (1678), POU3F4 (5456)"
+407	Debrisoquine_sensitivity	Metabolic	1	1	1	CYP2D6 (1565)
+410	Dejerine-Sottas_disease	multiple	4	3	1	"PMP22 (5376), EGR2 (1959), PRX (57716), MPZ (4359)"
+411	Delayed_sleep_phase_syndrome	Psychiatric	1	0	0	AANAT (15)
+412	Dementia	Neurological	6	10	3	"ITM2B (9445), PSEN1 (5663), MAPT (4137), SNCA (6622), SNCB (6620), TNF (7124)"
+413	"Dengue_fever,_protection_against"	Immunological	1	0	0	CD209 (30835)
+414	"Dental_anomalies,_isolated"	Skeletal	1	1	1	RUNX2 (860)
+415	Dentatorubro-pallidoluysian_atrophy	Neurological	1	0	0	ATN1 (1822)
+416	Dent_disease	Renal	2	4	2	"CLCN5 (1184), OCRL (4952)"
+417	"Dentin_dysplasia,_type_II"	Bone	1	2	2	DSPP (1834)
+418	"Dentinogenesis_imperfecta,_Shields_type"	Bone	1	2	2	DSPP (1834)
+420	Denys-Drash_syndrome	Renal	1	4	2	WT1 (7490)
+422	Dermatofibrosarcoma_protuberans	Cancer	1	2	1	PDGFB (5155)
+424	De_Sanctis-Cacchione_syndrome	multiple	1	2	0	ERCC6 (2074)
+425	"Desmoid_disease,_hereditary"	Cancer	1	6	1	APC (324)
+426	Desmosterolosis	Metabolic	1	0	0	DHCR24 (1718)
+427	Diabetes_mellitus	Endocrine	27	24	11	"ABCC8 (6833), TCF1 (6927), SUMO4 (387082), PTPN22 (26191), INSR (3643), PPARG (5468), GCK (2645), GCGR (2642), GPD2 (2820), HNF4A (3172), IRS2 (8660), MAPK8IP1 (9479), NEUROD1 (4760), TCF2 (6928), IRS1 (3667), SLC2A2 (6514), SLC2A4 (6517), CAPN10 (11132), ENPP1 (5167), RETN (56729), PTF1A (256297), KCNJ11 (3767), AKT2 (208), IPF1 (3651), FOXP3 (50943), ACE (1636), VEGF (7422)"
+430	Diastrophic_dysplasia	Skeletal	1	3	2	SLC26A2 (1836)
+432	DiGeorge_syndrome	multiple	1	2	1	TBX1 (6899)
+433	Dihydropyrimidinuria	Metabolic	1	0	0	DPYS (1807)
+434	Dilated_cardiomyopathy_with_woolly_hair_and_keratoderma	multiple	1	4	2	DSP (1832)
+435	Dimethylglycine_dehydrogenase_deficiency	Metabolic	1	0	0	DMGDH (29958)
+438	"Disordered_steroidogenesis,_isolated"	Metabolic	1	2	2	POR (5447)
+439	Dissection_of_cervical_arteries	Connective_tissue_disorder	1	4	2	COL1A1 (1277)
+440	DNA_topoisomerase	Metabolic	2	0	0	"TOP1 (7150), TOP2A (7153)"
+441	Dopamine_beta-hydroxylase_deficiency	Metabolic	1	1	1	DBH (1621)
+443	Dosage-sensitive_sex_reversal	Endocrine	1	1	1	NR0B1 (190)
+444	Double-outlet_right_ventricle	Cardiovascular	1	2	1	CFC1 (55997)
+445	Down_syndrome	multiple	1	2	2	MTR (4548)
+446	Doyne_honeycomb_degeneration_of_retina	Ophthamological	1	0	0	EFEMP1 (2202)
+447	Drug_addiction	Psychiatric	1	0	0	FAAH (2166)
+449	Duane_syndrome	multiple	1	0	0	SALL4 (57167)
+450	Dubin-Johnson_syndrome	Metabolic	1	0	0	ABCC2 (1244)
+451	Duchenne_muscular_dystrophy	Muscular	1	2	2	DMD (1756)
+452	Dyggve-Melchior-Clausen_disease	multiple	1	1	1	DYM (54808)
+453	Dysalbuminemic_hyperthyroxinemia	Hematological	1	1	1	ALB (213)
+454	Dysautonomia	Neurological	1	0	0	IKBKAP (8518)
+455	Dyschromatosis	Dermatological	1	0	0	ADAR (103)
+456	Dyserythropoietic_anemia	Hematological	1	2	2	GATA1 (2623)
+457	Dysfibrinogenemia	Hematological	3	4	2	"FGA (2243), FGB (2244), FGG (2266)"
+458	Dyskeratosis	Dermatological	2	2	1	"DKC1 (1736), TERC (7012)"
+459	Dyslexia	Psychiatric	2	0	0	"DYX1C1 (161582), KIAA0319 (9856)"
+460	Dysprothrombinemia	Hematological	1	2	1	F2 (2147)
+461	"Dyssegmental_dysplasia,_Silverman-Handmaker_type"	Neurological	1	1	0	HSPG2 (3339)
+462	Dystonia	Neurological	6	2	2	"ATP1A3 (478), TOR1A (1861), GCH1 (2643), DRD2 (1813), SGCE (8910), DRD5 (1816)"
+463	Dystransthyretinemic_hyperthyroxinemia	Hematological	1	3	2	TTR (7276)
+465	EBD	Dermatological	1	3	1	COL7A1 (1294)
+466	Ectodermal_dysplasia	Dermatological	8	4	3	"EDA (1896), GJB6 (10804), EDARADD (128178), IKBKG (8517), NFKBIA (4792), EDAR (10913), PVRL1 (5818), PKP1 (5317)"
+467	Ectopia	Ophthamological	2	14	5	"FBN1 (2200), PAX6 (5080)"
+468	EEC_syndrome	Skeletal	1	5	1	TP73L (8626)
+470	Ehlers-Danlos_syndrome	Connective_tissue_disorder	9	7	3	"TNXB (7148), B4GALT7 (11285), COL1A1 (1277), COL5A1 (1289), COL5A2 (1290), COL3A1 (1281), PLOD1 (5351), COL1A2 (1278), ADAMTS2 (9509)"
+471	Elite_sprint_athletic_performance	Muscular	1	1	1	ACTN3 (89)
+472	Elliptocytosis	Hematological	4	6	2	"EPB41 (2035), SPTA1 (6708), SPTB (6710), SLC4A1 (6521)"
+473	Ellis-van_Creveld_syndrome	Skeletal	2	1	1	"EVC (2121), EVC2 (132884)"
+474	Emery-Dreifuss_muscular_dystrophy	Muscular	2	2	2	"EMD (2010), LMNA (4000)"
+475	Emphysema	Respiratory	1	1	1	SERPINA1 (5265)
+476	Encephalopathy	Neurological	2	0	0	"SERPINI1 (5274), COX10 (1352)"
+477	Enchondromatosis	Cancer	1	1	1	PTHR1 (5745)
+479	Endometrial_carcinoma	Cancer	4	14	3	"CDH1 (999), MSH3 (4437), MSH6 (2956), PTEN (5728)"
+481	Endotoxin_hyporesponsiveness	Immunological	1	0	0	TLR4 (7099)
+482	Endplate_acetylcholinesterase_deficiency	Neurological	1	0	0	COLQ (8292)
+483	Enhanced_S-cone_syndrome	Ophthamological	1	1	1	NR2E3 (10002)
+484	Enlarged_vestibular_aqueduct	"Ear,Nose,Throat"	1	2	1	SLC26A4 (5172)
+485	Enolase_deficiency	Metabolic	1	0	0	ENO3 (2027)
+487	Enterokinase_deficiency	Gastrointestinal	1	0	0	PRSS7 (5651)
+491	Eosinophil_peroxidase_deficiency	Hematological	1	0	0	EPX (8288)
+492	Epidermodysplasia_verruciformis	Dermatological	2	0	0	"EVER1 (11322), EVER2 (147138)"
+493	Epidermolysis_bullosa	Dermatological	11	9	3	"COL7A1 (1294), COL17A1 (1308), ITGB4 (3691), LAMA3 (3909), LAMB3 (3914), LAMC2 (3918), ITGA6 (3655), DSP (1832), KRT14 (3861), KRT5 (3852), PLEC1 (5339)"
+494	Epidermolytic_hyperkeratosis	Dermatological	3	5	1	"KRT10 (3858), KRT1 (3848), KRT9 (3857)"
+495	Epilepsy	Neurological	17	5	3	"KCNQ2 (3785), KCNQ3 (3786), GABRG2 (2566), CLCN2 (1181), JRK (8629), CACNB4 (785), SCN1A (6323), ME2 (4200), GABRA1 (2554), EPM2A (7957), NHLRC1 (378884), SLC25A22 (79751), CHRNA4 (1137), CHRNB2 (1141), LGI1 (9211), CSTB (1476), SYN1 (6853)"
+496	Epiphyseal_dysplasia	Bone	6	7	4	"COMP (1311), SLC26A2 (1836), COL9A3 (1299), MATN3 (4148), COL9A1 (1297), COL9A2 (1298)"
+497	Episodic_ataxia	Neurological	2	3	1	"KCNA1 (3736), CACNA1A (773)"
+498	"Epithelial_ovarian_cancer,_somatic"	Cancer	1	0	0	OPCML (4978)
+500	Epstein_syndrome	Hematological	1	4	2	MYH9 (4627)
+502	Erythermalgia	Neurological	1	0	0	SCN9A (6335)
+504	Erythremias	Hematological	2	5	1	"HBA1 (3039), HBB (3043)"
+505	Erythrocytosis	Hematological	2	4	1	"HBA2 (3040), EPOR (2057)"
+507	Erythrokeratoderma	Dermatological	3	2	1	"LOR (4014), GJB3 (2707), GJB4 (127534)"
+508	Esophageal_cancer	Cancer	4	2	2	"TGFBR2 (7048), RNF6 (6049), LZTS1 (11178), WWOX (51741)"
+509	Estrogen_resistance	Endocrine	1	2	2	ESR1 (2099)
+510	Ethylmalonic_encephalopathy	Metabolic	1	0	0	ETHE1 (23474)
+511	Ewing_sarcoma	Cancer	1	1	1	EWSR1 (2130)
+512	Exertional_myoglobinuria_due_to_deficiency_of_LDH-A	Metabolic	1	0	0	LDHA (3939)
+514	Exostoses	Bone	2	1	1	"EXT1 (2131), EXT2 (2132)"
+515	Exudative_vitreoretinopathy	Ophthamological	3	8	4	"FZD4 (8322), LRP5 (4041), NDP (4693)"
+516	Eye_anomalies	Ophthamological	1	9	3	PAX6 (5080)
+517	"Ezetimibe,_nonresponse_to"	Unclassified	1	0	0	NPC1L1 (29881)
+518	Fabry_disease	Metabolic	1	0	0	GLA (2717)
+519	Facioscapulohumeral_muscular_dystrophy	Muscular	1	0	0	FSHMD1A (2489)
+520	Factor_x_deficiency	Hematological	8	4	4	"CFH (3075), MCFD2 (90411), F7 (2155), F10 (2159), F11 (2160), F12 (2161), F13A1 (2162), F13B (2165)"
+522	Familial_Mediterranean_fever	Immunological	1	0	0	MEFV (4210)
+523	Fanconi_anemia	multiple	11	4	1	"FANCA (2175), FANCB (2187), FANCC (2176), BRCA2 (675), FANCD2 (2177), FANCE (2178), FANCF (2188), FANCG (2189), BRIP1 (83990), FANCL (55120), FANCM (57697)"
+524	Fanconi-Bickel_syndrome	Metabolic	1	1	1	SLC2A2 (6514)
+526	Farber_lipogranulomatosis	Metabolic	1	0	0	ASAH1 (427)
+527	"Fatty_liver,_acute,_of_pregnancy"	Metabolic	1	3	1	HADHA (3030)
+528	Favism	Metabolic	1	2	2	G6PD (2539)
+530	Fechtner_syndrome	multiple	1	4	2	MYH9 (4627)
+531	Feingold_syndrome	multiple	1	0	0	MYCN (4613)
+532	Fertile_eunuch_syndrome	Endocrine	1	1	1	GNRHR (2798)
+535	Fibrocalculous_pancreatic_diabetes	Gastrointestinal	1	2	1	SPINK1 (6690)
+537	Fibromatosisl	Connective_tissue_disorder	2	1	0	"SOS1 (6654), ANTXR2 (118429)"
+538	Fibrosis	Ophthamological	2	0	0	"KIF21A (55605), PHOX2A (401)"
+539	Fibular_hypoplasia_and_complex_brachydactyly	Skeletal	1	3	1	GDF5 (8200)
+540	Fish-eye_disease	Metabolic	1	1	1	LCAT (3931)
+541	Fish-odor_syndrome	Metabolic	1	0	0	FMO3 (2328)
+542	Fitzgerald_factor_deficiency	Hematological	1	2	1	KNG1 (3827)
+544	"Fluorouracil_toxicity,_sensitivity_to"	Metabolic	1	1	1	DPYD (1806)
+545	"Focal_cortical_dysplasia,_Taylor_balloon_cell_type"	Developmental	1	2	1	TSC1 (7248)
+546	"Follicle-stimulating_hormone_deficiency,_isolated"	Endocrine	1	0	0	FSHB (2488)
+547	Forebrain_defects	Neurological	1	0	0	TDGF1 (6997)
+548	Foveal_hypoplasia	Ophthamological	1	9	3	PAX6 (5080)
+549	"Foveomacular_dystrophy,_adult-onset,_with_choroidal_neovascularization"	Ophthamological	1	3	1	RDS (5961)
+550	Fragile_X_syndrome	Neurological	1	0	0	FMR1 (2332)
+551	Fraser_syndrome	multiple	2	0	0	"FRAS1 (80144), FREM2 (341640)"
+552	Frasier_syndrome	multiple	1	4	2	WT1 (7490)
+553	Friedreich_ataxia	Neurological	1	0	0	FXN (2395)
+554	Frontometaphyseal_dysplasia	Skeletal	1	3	2	FLNA (2316)
+555	Fructose-bisphosphatase_deficiency	Metabolic	1	0	0	FBP1 (2203)
+556	Fructose_intolerance	Metabolic	1	0	0	ALDOB (229)
+557	Fructosuria	Metabolic	1	0	0	KHK (3795)
+558	Fuchs_endothelial_corneal_dystrophy	Ophthamological	1	1	1	COL8A2 (1296)
+559	Fucosidosis	Metabolic	1	0	0	FUCA1 (2517)
+560	Fucosyltransferase-6_deficiency	Metabolic	1	0	0	FUT6 (2528)
+561	Fumarase_deficiency	Metabolic	1	2	1	FH (2271)
+562	Fundus_albipunctatus	Ophthamological	3	6	1	"RDH5 (5959), RLBP1 (6017), ABCA4 (24)"
+563	G6PD_deficiency	Metabolic	1	2	2	G6PD (2539)
+564	GABA-transaminase_deficiency	Metabolic	1	0	0	ABAT (18)
+565	Galactokinase_deficiency	Metabolic	1	0	0	GALK1 (2584)
+566	Galactose_epimerase_deficiency	Metabolic	1	0	0	GALE (2582)
+567	Galactosemia	Metabolic	1	0	0	GALT (2592)
+568	Galactosialidosis	Metabolic	1	0	0	PPGB (5476)
+570	GAMT_deficiency	Metabolic	1	0	0	GAMT (2593)
+571	Gardner_syndrome	Cancer	1	6	1	APC (324)
+572	Gastric_cancer	Cancer	10	27	7	"APC (324), IRF1 (3659), CDH1 (999), IL1B (3553), IL1RN (3557), CASP10 (843), ERBB2 (2064), FGFR2 (2263), KLF6 (1316), MUTYH (4595)"
+574	Gastrointestinal_stromal_tumor	Cancer	2	6	4	"KIT (3815), PDGFRA (5156)"
+575	Gaucher_disease	Metabolic	2	2	2	"GBA (2629), PSAP (5660)"
+576	Gaze_palsy	Neurological	1	0	0	ROBO3 (64221)
+578	Generalized_epilepsy	Neurological	2	0	0	"KCNMA1 (3778), SCN1B (6324)"
+580	Germ_cell_tumor	Cancer	2	9	3	"BCL10 (8915), KIT (3815)"
+581	Gerstmann-Straussler_disease	Neurological	1	4	2	PRNP (5621)
+582	Giant_axonal_neuropathy	Neurological	1	0	0	GAN (8139)
+583	Giant-cell_fibroblastoma	Cancer	1	2	1	PDGFB (5155)
+584	"Giant_platelet_disorder,_isolated"	Hematological	1	1	1	GP1BB (2812)
+586	Gilbert_syndrome	Metabolic	1	2	1	UGT1A1 (54658)
+587	Gitelman_syndrome	Renal	1	0	0	SLC12A3 (6559)
+588	Glanzmann_thrombasthenia	Hematological	2	0	0	"ITGA2B (3674), ITGB3 (3690)"
+589	Glaucoma	Ophthamological	4	2	2	"MYOC (4653), OPTN (10133), CYP1B1 (1545), OPA1 (4976)"
+590	Glioblastoma	Cancer	5	14	5	"MSH2 (4436), DMBT1 (1755), ERBB2 (2064), LGI1 (9211), PPARG (5468)"
+594	"Glomerulocystic_kidney_disease,_hypoplastic"	Renal	1	2	1	TCF2 (6928)
+596	Glomerulosclerosis	Renal	3	0	0	"ACTN4 (81), TRPC6 (7225), CD2AP (23607)"
+597	Glomuvenous_malformations	Cardiovascular	1	0	0	GLMN (11146)
+598	Glucocorticoid_deficiency	Endocrine	2	0	0	"MRAP (56246), MC2R (4158)"
+599	Glucose/galactose_malabsorption	Metabolic	1	0	0	SLC5A1 (6523)
+600	"Glucose_transport_defect,_blood-brain_barrier"	Metabolic	1	0	0	SLC2A1 (6513)
+601	Glucosidase_I_deficiency	Metabolic	1	0	0	GCS1 (7841)
+602	Glutamate_formiminotransferase_deficiency	Metabolic	1	0	0	FTCD (10841)
+603	Glutaricaciduria	Metabolic	4	0	0	"GCDH (2639), ETFA (2108), ETFB (2109), ETFDH (2110)"
+604	Glutathione_synthetase_deficiency	Metabolic	1	1	1	GSS (2937)
+607	Glycerol_kinase_deficiency	Metabolic	1	0	0	GK (2710)
+608	Glycine_encephalopathy	Metabolic	4	0	0	"AMT (275), GCSH (2653), GLDC (2731), GNMT (27232)"
+609	Glycogenosis	Metabolic	2	0	0	"PHKG2 (5261), PHKA2 (5256)"
+610	Glycogen_storage_disease	Metabolic	9	0	0	"G6PC (2538), SLC37A4 (2542), GAA (2548), LAMP2 (3920), AGL (178), GBE1 (2632), GYS2 (2998), PYGL (5836), PFKM (5213)"
+614	GM-gangliosidosis	Metabolic	3	3	1	"GLB1 (2720), GM2A (2760), HEXA (3073)"
+615	Gnthodiaphyseal_dysplasia	Bone	1	0	0	TMEM16E (203859)
+617	Goiter	Endocrine	2	5	1	"TPO (7173), TG (7038)"
+618	Goldberg-Shprintzen_megacolon_syndrome	multiple	1	0	0	KIAA1279 (26128)
+619	Gonadal_dysgenesis	Endocrine	2	0	0	"DHH (50846), SRY (6736)"
+622	GRACILE_syndrome	Metabolic	1	2	1	BCS1L (617)
+623	Graft-versus-host_disease	Immunological	1	2	2	IL10 (3586)
+624	Graves_disease	Endocrine	2	1	1	"CTLA4 (1493), GC (2638)"
+625	Greenberg_dysplasia	Skeletal	1	1	1	LBR (3930)
+626	Greig_cephalopolysyndactyly_syndrome	Skeletal	1	3	1	GLI3 (2737)
+627	Griscelli_syndrome	Dermatological	3	0	0	"MYO5A (4644), RAB27A (5873), MLPH (79083)"
+628	Growth_hormone	Endocrine	2	1	1	"GHRHR (2692), STAT5B (6777)"
+630	Guttmacher_syndrome	multiple	1	1	0	HOXA13 (3209)
+632	"Gyrate_atrophy_of_choroid_and_retina_with_ornithinemia,_B6_responsive_or_unresponsive"	Metabolic	1	0	0	OAT (4942)
+633	Hailey-Hailey_disease	Dermatological	1	0	0	ATP2C1 (27032)
+634	Haim-Munk_syndrome	multiple	1	2	1	CTSC (1075)
+638	Hand-foot-uterus_syndrome	multiple	1	1	0	HOXA13 (3209)
+639	Harderoporphyrinuria	Metabolic	1	1	1	CPOX (1371)
+640	HARP_syndrome	Metabolic	1	1	1	PANK2 (80025)
+641	Hartnup_disorder	Metabolic	1	0	0	SLC6A19 (340024)
+643	Hay-Wells_syndrome	multiple	1	5	1	TP73L (8626)
+644	HDL_cholesterol_level_QTL	Metabolic	2	5	4	"ABCA1 (19), ESR1 (2099)"
+646	"Hearing_loss,_low-frequency_sensorineural"	"Ear,Nose,Throat"	1	1	1	WFS1 (7466)
+647	Heart_block	Cardiovascular	1	4	1	SCN5A (6331)
+648	Heinz_body_anemia	Hematological	3	8	1	"HBA2 (3040), HBA1 (3039), HBB (3043)"
+649	HELLP_syndrome	Metabolic	1	3	1	HADHA (3030)
+650	"Hemangioblastoma,_cerebellar"	Cancer	1	4	2	VHL (7428)
+651	Hemangioma	Cancer	2	1	1	"FLT4 (2324), KDR (3791)"
+652	"Hematopoiesis,_cyclic"	Hematological	1	1	1	ELA2 (1991)
+653	"Hematuria,_familial_benign"	Renal	1	1	1	COL4A4 (1286)
+654	Heme_oxygenase-1_deficiency	Metabolic	1	0	0	HMOX1 (3162)
+656	"Hemiplegic_migraine,_familial"	Neurological	1	3	1	CACNA1A (773)
+657	Hemochromatosis	Metabolic	5	1	1	"HFE (3077), HAMP (57817), HFE2 (148738), TFR2 (7036), SLC40A1 (30061)"
+659	Hemoglobin_H_disease	Hematological	1	4	1	HBA2 (3040)
+660	Hemolytic_anemia	Hematological	10	8	3	"AK1 (203), SLC4A1 (6521), BPGM (669), G6PD (2539), GCLC (2729), GPI (2821), GSS (2937), HK1 (3098), PGK1 (5230), TPI1 (7167)"
+661	Hemolytic-uremic_syndrome	Hematological	1	3	3	CFH (3075)
+662	Hemophagocytic_lymphohistiocytosis	Hematological	2	0	0	"PRF1 (5551), UNC13D (201294)"
+663	Hemophilia	Hematological	2	1	1	"F8 (2157), F9 (2158)"
+664	Hemorrhagic_diathesis	Hematological	2	3	2	"SERPINA1 (5265), F5 (2153)"
+665	"Hemosiderosis,_systemic,_due_to_aceruloplasminemia"	Hematological	1	2	2	CP (1356)
+666	"Hepatic_failure,_early_onset,_and_neurologic_disorder"	Gastrointestinal	1	0	0	SCO1 (6341)
+668	Hepatic_adenoma	Cancer	8	16	3	"TCF1 (6927), CTNNB1 (1499), PDGFRL (5157), AXIN1 (8312), TP53 (7157), IGF2R (3482), MET (4233), CASP8 (841)"
+669	Hereditary_hemorrhagic_telangiectasia	Cardiovascular	2	0	0	"ENG (2022), ACVRL1 (94)"
+670	Hermansky-Pudlak_syndrome	multiple	7	0	0	"HPS1 (3257), HPS3 (84343), HPS4 (89781), HPS5 (11234), HPS6 (79803), AP3B1 (8546), DTNBP1 (84062)"
+675	Heterotaxy	multiple	2	2	2	"CFC1 (55997), ZIC3 (7547)"
+676	Heterotopia	Neurological	1	3	1	FLNA (2316)
+677	Hex_A_pseudodeficiency	Metabolic	1	2	1	HEXA (3073)
+679	High-molecular-weight_kininogen_deficiency	Hematological	1	2	1	KNG1 (3827)
+681	Hirschsprung_disease	Gastrointestinal	7	9	4	"EDN3 (1908), GDNF (2668), NRTN (4902), RET (5979), EDNRB (1910), ECE1 (1889), PHOX2B (8929)"
+682	Histidinemia	Metabolic	1	0	0	HAL (3034)
+683	Histiocytoma	Cancer	1	10	1	TP53 (7157)
+684	HIV	Immunological	4	2	2	"CCL5 (6352), IL10 (3586), CCR2 (1231), CCR5 (1234)"
+686	HMG-CoA_deficiency	Metabolic	2	0	0	"HMGCL (3155), HMGCS2 (3158)"
+688	Holocarboxylase_synthetase_deficiency	Metabolic	1	0	0	HLCS (3141)
+689	Holoprosencephaly	Developmental	5	4	3	"SIX3 (6496), SHH (6469), TGIF (7050), ZIC2 (7546), PTCH (5727)"
+696	Holt-Oram_syndrome	Developmental	1	0	0	TBX5 (6910)
+697	Homocysteine_plasma_level	Metabolic	1	1	1	CTH (1491)
+698	Homocystinuria	Metabolic	2	1	1	"CBS (875), MTHFR (4524)"
+699	"Homocystinuria-megaloblastic_anemia,_cbl_E_type"	Metabolic	1	1	1	MTRR (4552)
+701	Homozygous_2p16_deletion_syndrome	multiple	1	1	1	SLC3A1 (6519)
+702	Hoyeraal-Hreidarsson_syndrome	multiple	1	1	1	DKC1 (1736)
+703	HPFH	Hematological	3	5	1	"HBB (3043), HBG1 (3047), HBG2 (3048)"
+704	HPRT-related_gout	Metabolic	1	1	1	HPRT1 (3251)
+705	H._pylori_infection	Immunological	1	3	2	IFNGR1 (3459)
+708	Huntington_disease	Neurological	4	6	2	"HD (3064), PRNP (5621), JPH3 (57338), TBP (6908)"
+710	"Hyalinosis,_infantile_systemic"	multiple	1	1	1	ANTXR2 (118429)
+712	Hydrocephalus	Neurological	1	2	0	L1CAM (3897)
+716	Hyperalphalipoproteinemia	Metabolic	1	2	2	CETP (1071)
+717	Hyperammonemia	Metabolic	1	0	0	ALDH18A1 (5832)
+718	Hyperandrogenism	Endocrine	1	1	1	CYP21A2 (1589)
+719	Hyperapobetalipoproteinemia	Metabolic	1	0	0	PPARA (5465)
+720	Hyperbilirubinemia	Gastrointestinal	1	2	1	UGT1A1 (54658)
+721	Hypercalciuria	Renal	1	0	0	SAC (55811)
+723	Hypercholanemia	Gastrointestinal	3	1	1	"BAAT (570), EPHX1 (2052), TJP2 (9414)"
+724	Hypercholesterolemia	Metabolic	8	3	1	"APOB (338), LDLR (3949), PCSK9 (255738), LDLRAP1 (26119), EPHX2 (2053), APOA2 (336), C7orf16 (10842), ITIH4 (3700)"
+725	Hyperekplexia	Neurological	2	1	1	"GLRA1 (2741), GLRB (2743)"
+726	Hypereosinophilic_syndrome	Hematological	1	1	1	PDGFRA (5156)
+727	Hyperferritinemia-cataract_syndrome	Ophthamological	1	1	1	FTL (2512)
+728	Hyper-IgD_syndrome	Immunological	1	1	1	MVK (4598)
+731	Hyperinsulinism	Metabolic	1	2	1	GCK (2645)
+732	Hyperinsulinism-hyperammonemia_syndrome	Metabolic	1	0	0	GLUD1 (2746)
+733	Hyperkalemic_periodic_paralysis	Neurological	1	5	2	SCN4A (6329)
+734	Hyperkeratotic_cutaneous_capillary-venous_malformations_associated_with_cerebral_capillary_malformations	Neurological	1	2	2	KRIT1 (889)
+736	Hyperlipidemia	Metabolic	1	0	0	USF1 (7391)
+737	Hyperlipoproteinemia	Metabolic	2	3	3	"APOC2 (344), APOE (348)"
+738	Hyperlysinemia	Metabolic	1	0	0	AASS (10157)
+739	Hypermethioninemia	Metabolic	2	1	1	"MAT1A (4143), AHCY (191)"
+740	Hyperornithinemia-hyperammonemia-homocitrullinemia_syndrome	Metabolic	1	0	0	SLC25A15 (10166)
+741	"Hyperostosis,_endosteal"	Bone	1	6	3	LRP5 (4041)
+742	Hyperoxaluria	Metabolic	2	0	0	"AGXT (189), GRHPR (9380)"
+743	Hyperparathyroidism	Endocrine	3	9	2	"MEN1 (4221), CDC73 (79577), CASR (846)"
+746	Hyperphenylalaninemia	Metabolic	2	1	1	"PCBD1 (5092), PAH (5053)"
+748	Hyperproinsulinemia	Endocrine	1	1	1	INS (3630)
+749	Hyperprolinemia	Metabolic	2	1	1	"PRODH (5625), ALDH4A1 (8659)"
+750	Hyperproreninemia	Cardiovascular	1	1	1	REN (5972)
+751	Hyperprothrombinemia	Hematological	1	2	1	F2 (2147)
+752	Hypertension	Cardiovascular	12	9	7	"KCNMB1 (3779), NR3C2 (4306), AGTR1 (185), PTGIS (5740), ADD1 (118), AGT (183), ECE1 (1889), GNB3 (2784), RETN (56729), HSD11B2 (3291), NOS3 (4846), CYP3A5 (1577)"
+754	Hyperthroidism	Endocrine	1	2	2	TSHR (7253)
+755	Hyperthyroidism	Endocrine	1	3	1	TPO (7173)
+757	Hypertriglyceridemia	Metabolic	4	5	3	"APOA1 (335), APOA5 (116519), LIPI (149998), RP1 (6101)"
+758	Hypertrypsinemia	Gastrointestinal	1	4	3	CFTR (1080)
+759	Hyperuricemic_nephropathy	Renal	1	1	1	UMOD (7369)
+761	Hypoaldosteronism	Metabolic	1	2	2	CYP11B2 (1585)
+762	Hypoalphalipoproteinemia	Metabolic	1	4	3	APOA1 (335)
+763	Hypobetalipoproteinemia	Metabolic	1	2	1	APOB (338)
+764	Hypocalcemia	Endocrine	1	2	1	CASR (846)
+765	Hypocalciuric_hypercalcemia	Endocrine	1	2	1	CASR (846)
+766	Hypoceruloplasminemia	Metabolic	1	2	2	CP (1356)
+767	Hypochondroplasia	Skeletal	1	7	2	FGFR3 (2261)
+768	Hypochromic_microcytic_anemia	Hematological	1	4	1	HBA2 (3040)
+769	Hypodontia	Skeletal	2	3	2	"PAX9 (5083), MSX1 (4487)"
+770	Hypofibrinogenemia	Hematological	1	2	1	FGG (2266)
+771	Hypoglobulinemia_and_absent_B_cells	Immunological	1	0	0	BLNK (29760)
+772	Hypoglycemia	Metabolic	1	1	1	ABCC8 (6833)
+773	"Hypogonadism,_hypergonadotropic"	Endocrine	1	0	0	LHB (3972)
+774	Hypogonadotropic_hypogonadism	Endocrine	4	5	4	"GPR54 (84634), NELF (26012), GNRHR (2798), LHCGR (3973)"
+775	Hypohaptoglobinemia	Hematological	1	1	1	HP (3240)
+776	Hypokalemic_periodic_paralysis	Renal	3	7	3	"CACNA1S (779), KCNE3 (10008), SCN4A (6329)"
+777	"Hypolactasia,_adult_type"	Metabolic	2	1	1	"LCT (3938), MCM6 (4175)"
+778	Hypomagnesemia	Renal	3	0	0	"FXYD2 (486), CLDN16 (10686), TRPM6 (140803)"
+779	Hypoparathyroidism	Endocrine	2	0	0	"PTH (5741), GCM2 (9247)"
+780	Hypoparathyroidism-retardation-dysmorphism_syndrome	Endocrine	1	1	0	TBCE (6905)
+781	Hypoparathyroidism	Endocrine	1	0	0	GATA3 (2625)
+782	Hypophosphatasia	Metabolic	1	1	1	ALPL (249)
+783	Hypophosphatemia	Metabolic	2	3	1	"CLCN5 (1184), PHEX (5251)"
+784	Hypophosphatemic_rickets	Bone	1	1	1	FGF23 (8074)
+785	"Hypoplastic_enamel_pitting,_localized"	Connective_tissue_disorder	1	1	1	ENAM (10117)
+786	Hypoprothrombinemia	Hematological	1	2	1	F2 (2147)
+787	Hypothyroidism	Endocrine	7	5	2	"CTLA4 (1493), SLC5A5 (6528), DUOX2 (50506), PAX8 (7849), TSHR (7253), TG (7038), TSHB (7252)"
+788	Hypotrichosis	Dermatological	4	0	0	"CDH3 (1001), DSG4 (147409), SOX18 (54345), CDSN (1041)"
+791	Hypouricemia	Renal	1	0	0	SLC22A12 (116085)
+792	Hystrix-like_ichthyosis_with_deafness	multiple	1	5	2	GJB2 (2706)
+793	Ichthyosiform_erythroderma	Dermatological	3	2	1	"TGM1 (7051), ALOX12B (242), ALOXE3 (59344)"
+794	Ichthyosis	Dermatological	7	8	2	"KRT2A (3849), ICHTHYIN (348938), KRT10 (3858), ABCA12 (26154), KRT1 (3848), TGM1 (7051), STS (412)"
+795	ICOS_deficiency	Immunological	1	0	0	ICOS (29851)
+797	IgE_levels_QTL	Immunological	1	1	1	PHF11 (51131)
+798	IgG2_deficiency	Immunological	1	0	0	IGHG2 (3501)
+799	"IgG_receptor_I,_phagocytic,_familial_deficiency_of"	Immunological	1	0	0	FCGR1A (2209)
+801	Immunodeficiency-centromeric_instability-facial_anomalies_syndrome	multiple	1	0	0	DNMT3B (1789)
+802	Immunodeficiency	Immunological	6	0	0	"CD3E (916), CD3G (917), AICDA (57379), CD40 (958), UNG (7374), CD40LG (959)"
+803	"Immunodysregulation,_polyendocrinopathy,_and_enteropathy,_X-linked"	multiple	1	1	1	FOXP3 (50943)
+804	Immunoglobulin_A_deficiency	Immunological	1	0	0	TNFRSF13B (23495)
+805	Inclusion_body_myopathy	Muscular	3	2	2	"MYH2 (4620), GNE (10020), VCP (7415)"
+806	Incontinentia_pigmenti	Dermatological	1	1	1	IKBKG (8517)
+807	Infantile_spasm_syndrome	Neurological	1	5	1	ARX (170302)
+809	Infundibular_hypoplasia_and_hypopituitarism	Endocrine	1	1	1	SOX3 (6658)
+810	Inosine_triphosphatase_deficiency	Metabolic	1	0	0	ITPA (3704)
+811	Insensitivity_to_pain	Neurological	1	1	1	NTRK1 (4914)
+812	Insomnia	Psychiatric	2	4	1	"GABRB3 (2562), PRNP (5621)"
+814	Insulin_resistance	Metabolic	3	4	4	"PPARG (5468), PPP1R3A (5506), PTPN1 (5770)"
+816	"Interleukin-2_receptor,_alpha_chain,_deficiency_of"	Immunological	1	0	0	IL2RA (3559)
+817	Intervertebral_disc_disease	Neurological	2	1	1	"COL9A2 (1298), COL9A3 (1299)"
+819	Intrauterine_and_postnatal_growth_retardation	Developmental	2	0	0	"IGF1R (3480), IGF2 (3481)"
+820	Intrinsic_factor_deficiency	Hematological	1	0	0	GIF (2694)
+821	IRAK4_deficiency	Immunological	1	0	0	IRAK4 (51135)
+822	Iridogoniodysgenesis	Ophthamological	2	5	1	"FOXC1 (2296), PITX2 (5308)"
+823	Iris_hypoplasia_and_glaucoma	Ophthamological	1	4	1	FOXC1 (2296)
+824	Iron_overload/deficiency	Hematological	2	1	1	"TF (7018), FTH1 (2495)"
+825	Isolated_growth_hormone_deficiency	Endocrine	1	0	0	GH1 (2688)
+826	Isovaleric_acidemia	Metabolic	1	0	0	IVD (3712)
+827	Jackson-Weiss_syndrome	Skeletal	2	9	4	"FGFR1 (2260), FGFR2 (2263)"
+829	Jensen_syndrome	Neurological	1	2	2	TIMM8A (1678)
+830	Jervell_and_Lange-Nielsen_syndrome	multiple	2	2	1	"KCNE1 (3753), KCNQ1 (3784)"
+831	Joubert_syndrome	multiple	2	2	1	"NPHP1 (4867), AHI1 (54806)"
+832	Juberg-Marsidi_syndrome	multiple	1	4	1	ATRX (546)
+833	Juvenile_polyposis/hereditary_hemorrhagic_telangiectasia_syndrome	Cancer	1	2	1	SMAD4 (4089)
+835	"Kallikrein,_decreased_urinary_activity_of"	Renal	1	0	0	KLK1 (3816)
+836	Kallmann_syndrome	multiple	2	2	1	"FGFR1 (2260), KAL1 (3730)"
+837	Kanzaki_disease	Metabolic	1	1	1	NAGA (4668)
+838	Kaposi_sarcoma	Immunological	1	0	0	IL6 (3569)
+839	Kappa_light_chain_deficiency	Immunological	1	0	0	IGKC (3514)
+840	Kartagener_syndrome	multiple	3	2	2	"DNAH11 (8701), DNAH5 (1767), DNAI1 (27019)"
+841	Kenny-Caffey_syndrome-1	multiple	1	1	1	TBCE (6905)
+842	Keratitis	Ophthamological	1	9	3	PAX6 (5080)
+843	Keratitis-ichthyosis-deafness_syndrome	multiple	1	5	2	GJB2 (2706)
+844	Keratoconus	Ophthamological	1	2	1	VSX1 (30813)
+845	"Keratoderma,_palmoplantar,_with_deafness"	Dermatological	1	5	1	GJB2 (2706)
+847	Keratosis_palmoplantaria_striata	Dermatological	4	8	2	"SAT (6303), KRT1 (3848), DSG1 (1828), DSP (1832)"
+848	Ketoacidosis	Metabolic	1	0	0	OXCT1 (5019)
+849	Keutel_syndrome	multiple	1	0	0	MGP (4256)
+850	Kindler_syndrome	Dermatological	1	0	0	C20orf42 (55612)
+851	Kininogen_deficiency	Hematological	1	2	1	KNG1 (3827)
+853	Klippel-Trenaunay_syndrome	multiple	1	0	0	AGGF1 (55109)
+854	Kniest_dysplasia	Skeletal	1	5	4	COL2A1 (1280)
+855	Knobloch_syndrome	multiple	1	0	0	COL18A1 (80781)
+856	Krabbe_disease	Neurological	1	0	0	GALC (2581)
+857	L-2-hydroxyglutaric_aciduria	Metabolic	1	0	0	L2HGDH (79944)
+858	Lactate_dehydrogenase-B_deficiency	Metabolic	1	0	0	LDHB (3945)
+859	Lacticacidemia_due_to_PDX1_deficiency	Metabolic	1	0	0	PDHX (8050)
+862	Langer_mesomelic_dysplasia	Skeletal	1	2	1	SHOX (6473)
+863	Laron_dwarfism	Skeletal	1	1	1	GHR (2690)
+865	Larson_syndrome	Skeletal	1	2	2	FLNB (2317)
+868	Laryngoonychocutaneous_syndrome	multiple	1	1	1	LAMA3 (3909)
+869	Lathosterolosis	Metabolic	1	0	0	SC5DL (6309)
+870	LCHAD_deficiency	Metabolic	1	3	1	HADHA (3030)
+871	Lead_poisoning	Metabolic	1	1	1	ALAD (210)
+872	"Leanness,_inherited"	Nutritional	1	1	1	AGRP (181)
+873	Leber_congenital_amaurosis	Ophthamological	7	3	1	"CRB1 (23418), CRX (1406), RPGRIP1 (57096), RPE65 (6121), AIPL1 (23746), GUCY2D (3000), RDH12 (145226)"
+874	Left-right_axis_malformations	Developmental	2	0	0	"ACVR2B (93), LEFTY2 (7044)"
+875	Left_ventricular_noncompaction	Cardiovascular	1	0	0	DTNA (1837)
+876	Legionaire_disease	Immunological	1	0	0	TLR5 (7100)
+877	Leigh_syndrome	Neurological	12	6	2	"BCS1L (617), GCSL (2654), NDUFS3 (4722), NDUFS4 (4724), NDUFS7 (374291), NDUFS8 (4728), NDUFV1 (4723), SDHA (6389), SURF1 (6834), COX15 (1355), LRPPRC (10128), PDHA1 (5160)"
+878	Leiomyomatosis	Cancer	2	2	2	"FH (2271), COL4A6 (1288)"
+880	Leopard_syndrome	multiple	1	2	2	PTPN11 (5781)
+881	Leprechaunism	Developmental	1	2	1	INSR (3643)
+882	Leprosy	Immunological	1	2	2	PARK2 (5071)
+883	Leri-Weill_dyschondrosteosis	Skeletal	1	2	1	SHOX (6473)
+884	"Lesch-Nyhan_syndrome,"	Metabolic	1	1	1	HPRT1 (3251)
+886	Leukemia	Cancer	37	26	8	"TAL1 (6886), TAL2 (6887), FLT3 (2322), NBN (4683), ZNFN1A1 (10320), HOXD4 (3233), BCR (613), ARNT (405), KRAS (3845), GMPS (8833), MLLT10 (8028), ARHGEF12 (23365), PICALM (8301), CEBPA (1050), CHIC2 (26511), KIT (3815), LPP (4026), NPM1 (4869), NUP214 (8021), RUNX1 (861), WHSC1L1 (54904), MLLT11 (10962), NUMA1 (4926), ZBTB16 (7704), PML (5371), STAT5B (6777), ARL11 (115761), P2RX7 (5027), ARHGAP26 (23092), NF1 (4763), PTPN11 (5781), BCL2 (596), CCND1 (595), TRA@ (6955), GATA1 (2623), ABL1 (25), NQO1 (1728)"
+889	Leukocyte_adhesion_deficiency	Immunological	1	0	0	ITGB2 (3689)
+891	Leukoencephalopathy_with_vanishing_white_matter	Neurological	5	1	1	"EIF2B1 (1967), EIF2B2 (8892), EIF2B3 (8891), EIF2B5 (8893), EIF2B4 (8890)"
+894	Leydig_cell_adenoma	Cancer	1	4	3	LHCGR (3973)
+895	Lhermitte-Duclos_syndrome	Cancer	1	8	2	PTEN (5728)
+896	Liddle_syndrome	Renal	2	1	1	"SCNN1B (6338), SCNN1G (6340)"
+897	Li_Fraumeni_syndrome	Cancer	1	3	1	CDKN2A (1029)
+898	Li-Fraumeni_syndrome	Cancer	2	11	1	"TP53 (7157), CHEK2 (11200)"
+899	LIG4_syndrome	multiple	1	1	1	LIG4 (3981)
+901	Limb-mammary_syndrome	multiple	1	5	1	TP73L (8626)
+902	Lipodystrophy	Metabolic	5	8	7	"AGPAT2 (10555), BSCL2 (26580), LMNA (4000), PPARG (5468), PPARGC1A (10891)"
+903	Lipoid_adrenal_hyperplasia	Endocrine	2	0	0	"STAR (6770), CYP11A1 (1583)"
+904	Lipoma	Cancer	3	10	2	"HMGA2 (8091), LPP (4026), MEN1 (4221)"
+906	Lipoprotein_lipase_deficiency	Metabolic	1	2	1	LPL (4023)
+908	Lissencephaly	Neurological	4	6	1	"PAFAH1B1 (5048), RELN (5649), DCX (1641), ARX (170302)"
+909	Listeria_monocytogenes	Immunological	1	4	1	CDH1 (999)
+910	Loeys-Dietz_syndrome	Connective_tissue_disorder	2	2	1	"TGFBR1 (7046), TGFBR2 (7048)"
+911	Longevity	Developmental	2	2	1	"CETP (1071), AKAP10 (11216)"
+912	Long_QT_syndrome	Cardiovascular	7	7	1	"KCNQ1 (3784), KCNH2 (3757), SCN5A (6331), ANK2 (287), KCNE1 (3753), KCNE2 (9992), KCNJ2 (3759)"
+913	"Lower_motor_neuron_disease,_progressive,_without_sensory_symptoms"	Neurological	1	1	1	DCTN1 (1639)
+914	Lowe_syndrome	Metabolic	1	1	1	OCRL (4952)
+915	Low_renin_hypertension	Cardiovascular	1	2	2	CYP11B2 (1585)
+916	"LPA_deficiency,_congenital"	Metabolic	1	0	0	LPA (4018)
+917	Lumbar_disc_disease	Skeletal	1	0	0	CILP (8483)
+918	Lung_cancer	Cancer	4	6	1	"KRAS (3845), PPP2R1B (5519), SLC22A18 (5002), MAP3K8 (1326)"
+919	Lupus_erythematosus	Connective_tissue_disorder	1	0	0	FCGR2A (2212)
+920	Lymphangioleiomyomatosis	Respiratory	2	2	1	"TSC1 (7248), TSC2 (7249)"
+921	Lymphedema	Hematological	2	2	2	"FOXC2 (2303), FLT4 (2324)"
+925	Lymphoma	Cancer	10	14	2	"RAP1GDS1 (5910), ATM (472), BCL8 (606), BCL10 (8915), RAD54B (25788), RAD54L (8438), FCGR2B (2213), MAD1L1 (8379), MSH2 (4436), SH2D1A (4068)"
+930	Lynch_cancer_family_syndrome_II	Cancer	1	7	1	MSH2 (4436)
+931	Lysinuric_protein_intolerance	Metabolic	1	0	0	SLC7A7 (9056)
+933	Machado-Joseph_disease	Neurological	1	0	0	ATXN3 (4287)
+935	Macrocytic_anemia	Hematological	1	4	2	IRF1 (3659)
+936	Macrothrombocytopenia	Hematological	1	2	2	GATA1 (2623)
+937	Macular_degeneration	Ophthamological	5	7	4	"CFH (3075), HMCN1 (83872), FBLN5 (10516), CNGB3 (54714), RPGR (6103)"
+938	"Maculopathy,_bull's-eye"	Ophthamological	1	2	1	VMD2 (7439)
+939	Major_depressive_disorder	Psychiatric	1	0	0	FKBP5 (2289)
+940	Malaria	Immunological	5	6	4	"CD36 (948), ICAM1 (3383), TNF (7124), GYPC (2995), NOS2A (4843)"
+942	Malignant_hyperthermia_susceptibility	Neurological	2	3	3	"RYR1 (6261), CACNA1S (779)"
+943	Malonyl-CoA_decarboxylase_deficiency	Metabolic	1	0	0	MLYCD (23417)
+944	MALT_lymphoma	Cancer	1	0	0	MALT1 (10892)
+945	Mandibuloacral_dysplasia_with_type_B_lipodystrophy	multiple	1	1	1	ZMPSTE24 (10269)
+947	Mannosidosis	Metabolic	2	0	0	"MAN2B1 (4125), MANBA (4126)"
+948	Maple_syrup_urine_disease	Metabolic	4	1	1	"BCKDHA (593), BCKDHB (594), DBT (1629), GCSL (2654)"
+950	Marfan_syndrome	Connective_tissue_disorder	2	8	4	"FBN1 (2200), COL1A2 (1278)"
+952	Maroteaux-Lamy_syndrome	Metabolic	1	0	0	ARSB (411)
+953	Marshall_syndrome	multiple	1	1	0	COL11A1 (1301)
+955	MASA_syndrome	multiple	1	2	1	L1CAM (3897)
+956	MASP2_deficiency	Immunological	1	0	0	MASP2 (10747)
+957	MASS_syndrome	Connective_tissue_disorder	1	5	3	FBN1 (2200)
+958	Mast_cell_leukemia	Cancer	1	5	3	KIT (3815)
+959	Mastocytosis_with_associated_hematologic_disorder	Immunological	1	5	2	KIT (3815)
+960	Mast_syndrome	Neurological	1	0	0	SPG21 (51324)
+961	May-Hegglin_anomaly	Hematological	1	4	2	MYH9 (4627)
+962	McArdle_disease	Metabolic	1	0	0	PYGM (5837)
+963	McCune-Albright_syndrome	multiple	1	5	3	GNAS (2778)
+964	McKusick-Kaufman_syndrome	Developmental	1	1	0	MKKS (8195)
+965	McLeod_syndrome	Hematological	1	0	0	XK (7504)
+969	Medullary_cystic_kidney_disease	Renal	1	1	1	UMOD (7369)
+970	Medulloblastoma	Cancer	2	1	1	"PTCH2 (8643), SUFU (51684)"
+971	Meesmann_corneal_dystrophy	Ophthamological	2	0	0	"KRT12 (3859), KRT3 (3850)"
+973	"Megakaryoblastic_leukemia,_acute"	Cancer	1	0	0	MKL1 (57591)
+974	Megalencephalic_leukoencephalopathy_with_subcortical_cysts	Neurological	1	0	0	MLC1 (23209)
+975	Megaloblastic_anemia	Hematological	2	0	0	"CUBN (8029), AMN (81693)"
+978	Melanoma	Cancer	5	8	1	"CDK4 (1019), CDKN2A (1029), XRCC3 (7517), STK11 (6794), BRAF (673)"
+979	Meleda_disease	Dermatological	1	0	0	SLURP1 (57152)
+981	Melnick-Needles_syndrome	Skeletal	1	3	2	FLNA (2316)
+982	Melorheostosis_with_osteopoikilosis	Developmental	1	2	1	LEMD3 (23592)
+984	Memory_impairment	Neurological	1	2	2	BDNF (627)
+985	Meniere_disease	Neurological	1	1	1	COCH (1690)
+986	Meningioma	Cancer	4	12	2	"MN1 (4330), PTEN (5728), NF2 (4771), PDGFB (5155)"
+987	Meningococcal_disease	Immunological	1	1	1	MBL2 (4153)
+988	Menkes_disease	Neurological	1	2	1	ATP7A (538)
+990	Mental_retardation	Neurological	24	14	4	"PRSS12 (8492), CRBN (51185), NLGN4X (57502), MECP2 (4204), PAK3 (5063), IL1RAPL1 (11141), ARX (170302), SLC6A8 (6535), FTSJ1 (24140), ZNF81 (347344), TSPAN7 (7102), OPHN1 (4983), AFF2 (2334), SMCX (8242), GDI1 (2664), ACSL4 (2182), RPS6KA3 (6197), ARHGEF6 (9459), AGTR2 (186), FGD1 (2245), ZNF41 (7592), DLG3 (1741), SMS (6611), SOX3 (6658)"
+991	Mephenytoin_poor_metabolizer	Metabolic	1	2	1	CYP2C19 (1557)
+992	Merkel_cell_carcinoma	Cancer	1	3	1	SDHD (6392)
+993	Mesangial_sclerosis	Renal	1	4	2	WT1 (7490)
+995	Mesothelioma	Cancer	1	4	1	BCL10 (8915)
+996	Metachromatic_leukodystrophy	Neurological	2	2	1	"ARSA (410), PSAP (5660)"
+997	Metaphyseal_chondrodysplasia	Connective_tissue_disorder	3	3	2	"PTHR1 (5745), COL10A1 (1300), RMRP (6023)"
+999	Methemoglobinemia	Hematological	4	5	1	"CYB5 (1528), HBA1 (3039), HBB (3043), CYB5R3 (1727)"
+1001	"Methionine_adenosyltransferase_deficiency,_autosomal_recessive"	Metabolic	1	1	1	MAT1A (4143)
+1002	"Methylcobalamin_deficiency,_cblG_type"	Metabolic	1	2	1	MTR (4548)
+1003	Methylmalonate_semialdehyde_dehydrogenase_deficiency	Metabolic	1	0	0	ALDH6A1 (4329)
+1004	Methylmalonic_aciduria	Metabolic	3	0	0	"MUT (4594), MMAA (166785), MMAB (326625)"
+1005	Mevalonicaciduria	Metabolic	1	1	1	MVK (4598)
+1006	MHC_class_II_deficiency	Immunological	1	0	0	RFXANK (8625)
+1007	Microcephaly	Neurological	5	1	1	"SLC25A19 (60386), MCPH1 (79648), CDK5RAP2 (55755), ASPM (259266), CENPJ (55835)"
+1009	Microcoria-congenital_nephrosis_syndrome	Ophthamological	1	0	0	LAMB2 (3913)
+1011	Micropenis	Renal	1	4	3	LHCGR (3973)
+1012	Microphthalmia	Ophthamological	3	1	0	"CHX10 (338917), SIX6 (4990), BCOR (54880)"
+1013	Migraine	Neurological	4	7	5	"ATP1A2 (477), EDNRA (1909), ESR1 (2099), TNF (7124)"
+1014	Miller-Dieker_lissencephaly	multiple	1	0	0	YWHAE (7531)
+1016	Mitochondrial_complex_deficiency	multiple	7	3	2	"NDUFS1 (4719), NDUFS2 (4720), NDUFS4 (4724), NDUFV1 (4723), BCS1L (617), UQCRB (7381), SDHA (6389)"
+1018	Miyoshi_myopathy	Muscular	1	2	1	DYSF (8291)
+1020	MODY	Endocrine	6	6	5	"TCF2 (6928), INS (3630), HNF4A (3172), GCK (2645), TCF1 (6927), IPF1 (3651)"
+1022	Mohr-Tranebjaerg_syndrome	Neurological	1	2	2	TIMM8A (1678)
+1023	Molybdenum_cofactor_deficiency	Metabolic	3	0	0	"MOCS1 (4337), MOCS2 (4338), GPHN (10243)"
+1024	Monilethrix	Dermatological	2	0	0	"KRTHB1 (3887), KRTHB6 (3892)"
+1026	Morning_glory_disc_anomaly	Skeletal	1	9	2	PAX6 (5080)
+1028	Mowat-Wilson_syndrome	Developmental	1	0	0	ZFHX1B (9839)
+1029	Moyamoya_disease	Neurological	1	0	0	MYMY3 (493818)
+1030	Muckle-Wells_syndrome	multiple	1	2	1	CIAS1 (114548)
+1031	Mucoepidermoid_salivary_gland_carcinoma	Cancer	2	0	0	"MAML2 (84441), MECT1 (23373)"
+1032	Mucolipidosis	Metabolic	3	0	0	"GNPTAB (79158), GNPTG (84572), MCOLN1 (57192)"
+1033	Mucopolysaccharidosis	Metabolic	7	1	1	"IDUA (3425), IDS (3423), GALNS (2588), GLB1 (2720), GNS (2799), HYAL1 (3373), GUSB (2990)"
+1034	Muenke_syndrome	Skeletal	1	7	2	FGFR3 (2261)
+1035	Muir-Torre_syndrome	Cancer	2	8	1	"MLH1 (4292), MSH2 (4436)"
+1036	Mulibrey_nanism	multiple	1	0	0	TRIM37 (4591)
+1037	Multiple_endocrine_neoplasia	Cancer	2	11	4	"MEN1 (4221), RET (5979)"
+1038	Muscle-eye-brain_disease	multiple	1	0	0	POMGNT1 (55624)
+1039	Muscle_hypertrophy	Muscular	2	0	0	"PHKA1 (5255), GDF8 (2660)"
+1040	Muscular_dystrophy	Muscular	18	8	4	"FKRP (79147), LAMA2 (3908), LARGE (9215), FCMD (2218), MYOT (9499), CAPN3 (825), DYSF (8291), SGCG (6445), SGCA (6442), SGCB (6443), SGCD (6444), TCAP (8557), TRIM32 (22954), TTN (7273), POMT1 (10585), CAV3 (859), SEPN1 (57190), PLEC1 (5339)"
+1041	Myasthenia	Muscular	1	0	0	FIMG1 (8144)
+1042	Myasthenic_syndrome	Muscular	7	5	3	"SCN4A (6329), CHRNB1 (1140), CHRNE (1145), RAPSN (5913), CHAT (1103), CHRNA1 (1134), CHRND (1144)"
+1043	Mycobacterial_infection	Immunological	5	4	3	"IL12RB1 (3594), IFNGR1 (3459), IFNGR2 (3460), STAT1 (6772), SLC11A1 (6556)"
+1045	Myelodysplastic_syndrome	Muscular	3	4	2	"MDS1 (4197), ACSL6 (23305), IRF1 (3659)"
+1046	"Myelofibrosis,_idiopathic"	Hematological	1	2	1	JAK2 (3717)
+1047	Myelogenous_leukemia	Cancer	4	4	3	"ACSL6 (23305), IRF1 (3659), CBFB (865), CSF1R (1436)"
+1049	"Myelokathexis,_isolated"	Immunological	1	1	1	CXCR4 (7852)
+1050	"Myelomonocytic_leukemia,_chronic"	Cancer	1	1	1	PDGFRB (5159)
+1051	Myeloperoxidase_deficiency	Immunological	1	1	1	MPO (4353)
+1052	Myeloproliferative_disorder	Cancer	1	1	1	PDGFRB (5159)
+1053	Myoadenylate_deaminase_deficiency	Muscular	1	0	0	AMPD1 (270)
+1054	Myocardial_infarction	Cardiovascular	10	10	7	"F7 (2155), APOE (348), ACE (1636), ALOX5AP (241), LGALS2 (3957), LTA (4049), OLR1 (4973), THBD (7056), GCLM (2730), TNFSF4 (7292)"
+1055	Myoclonic_epilepsy	Neurological	3	6	1	"EFHC1 (114327), GABRG2 (2566), ARX (170302)"
+1056	Myoglobinuria/hemolysis_due_to_PGK_deficiency	Metabolic	1	1	1	PGK1 (5230)
+1057	Myokymia_with_neonatal_epilepsy	Neurological	1	1	1	KCNQ2 (3785)
+1058	Myoneurogastrointestinal_encephalomyopathy_syndrome	multiple	1	0	0	ECGF1 (1890)
+1059	Myopathy	Muscular	10	9	4	"ACTA1 (58), CRYAB (1410), MYF6 (4618), ITGA7 (3679), DES (1674), DYSF (8291), CAV3 (859), CPT2 (1376), PGAM2 (5224), MYH7 (4625)"
+1061	Myotilinopathy	Muscular	1	1	1	MYOT (9499)
+1062	Myotonia_congenita	Muscular	2	5	3	"SCN4A (6329), CLCN1 (1180)"
+1063	Myotonic_dystrophy	Muscular	2	0	0	"DMPK (1760), ZNF9 (7555)"
+1064	Myotubular_myopathy	Muscular	1	0	0	MTM1 (4534)
+1065	Myxoid_liposarcoma	Cancer	1	0	0	DDIT3 (1649)
+1066	"Myxoma,_intracardiac"	Cardiovascular	1	4	1	PRKAR1A (5573)
+1067	N-acetylglutamate_synthase_deficiency	Metabolic	1	0	0	NAGS (162417)
+1070	Nail-patella_syndrome	multiple	1	0	0	LMX1B (4010)
+1071	Nance-Horan_syndrome	Ophthamological	1	0	0	NHS (4810)
+1073	Narcolepsy	Psychiatric	1	0	0	HCRT (3060)
+1074	Nasopharyngeal_carcinoma	Cancer	1	10	1	TP53 (7157)
+1075	Nasu-Hakola_disease	Bone	2	0	0	"TREM2 (54209), TYROBP (7305)"
+1077	Naxos_disease	multiple	1	0	0	JUP (3728)
+1078	Nemaline_myopathy	Muscular	4	1	1	"TPM2 (7169), TPM3 (7170), NEB (4703), TNNT1 (7138)"
+1080	Nephrogenic_syndrome_of_inappropriate_antidiuresis	Renal	1	1	1	AVPR2 (554)
+1081	Nephrolithiasis	Renal	2	3	2	"CLCN5 (1184), ZNF365 (22891)"
+1082	Nephronophthisis	Renal	4	2	1	"INVS (27130), NPHP4 (261734), NPHP3 (27031), NPHP1 (4867)"
+1084	Nephropathy-hypertension	Renal	1	3	2	CFH (3075)
+1085	Nephropathy	Renal	1	0	0	CD151 (977)
+1087	Nephrotic_syndrome	Renal	2	0	0	"NPHS1 (4868), NPHS2 (7827)"
+1088	Netherton_syndrome	Dermatological	1	1	1	SPINK5 (11005)
+1090	"Neural_tube_defects,_maternal_risk_of"	Developmental	1	1	1	MTHFD1 (4522)
+1091	Neuroblastoma	Cancer	2	2	2	"NME1 (4830), PHOX2B (8929)"
+1092	Neurodegeneration	Neurological	1	1	1	PANK2 (80025)
+1093	Neuroectodermal_tumors	multiple	1	2	1	PMS2 (5395)
+1095	Neurofibromatosis	Cancer	1	4	1	NF1 (4763)
+1096	Neurofibromatosis-Noonan_syndrome	Cancer	1	4	1	NF1 (4763)
+1097	Neurofibromatosis	Cancer	3	13	1	"NF1 (4763), NF2 (4771), MSH2 (4436)"
+1098	Neurofibrosarcoma	Cancer	1	1	1	MXI1 (4601)
+1099	Neuropathy	Neurological	8	3	1	"EGR2 (1959), MPZ (4359), HSPB1 (3315), HSPB8 (26353), SPTLC1 (10558), NGFB (4803), HSN2 (378465), PMP22 (5376)"
+1101	Neutropenia	Hematological	4	4	2	"FCGR3A (2214), ELA2 (1991), GFI1 (2672), WAS (7454)"
+1102	Neutrophil_immunodeficiency_syndrome	Immunological	1	0	0	RAC2 (5880)
+1103	Nevo_syndrome	Connective_tissue_disorder	1	1	1	PLOD1 (5351)
+1104	"Nevus,_epidermal,_epidermolytic_hyperkeratotic_type"	Dermatological	1	2	1	KRT10 (3858)
+1105	Newfoundland_rod-cone_dystrophy	Ophthamological	1	3	1	RLBP1 (6017)
+1106	Nicotine_addiction	Psychiatric	3	2	2	"CYP2A6 (1548), CHRNA4 (1137), GPR51 (9568)"
+1107	Niemann-Pick_disease	Metabolic	3	0	0	"SMPD1 (6609), NPC1 (4864), NPC2 (10577)"
+1110	Night_blindness	Ophthamological	5	1	1	"GNAT1 (2779), NYX (60506), PDE6B (5158), CACNA1F (778), RHO (6010)"
+1111	Nijmegen_breakage_syndrome	multiple	1	1	1	NBN (4683)
+1112	Nonaka_myopathy	Muscular	1	2	2	GNE (10020)
+1113	Noncompaction_of_left_ventricular_myocardium	Cardiovascular	1	2	1	TAZ (6901)
+1114	Non-Hodgkin_lymphoma	Cancer	1	2	2	CASP10 (843)
+1115	Nonsmall_cell_lung_cancer	Cancer	3	7	3	"IRF1 (3659), EGFR (1956), BRAF (673)"
+1116	Noonan_syndrome	Developmental	1	2	1	PTPN11 (5781)
+1117	Norrie_disease	Neurological	1	2	1	NDP (4693)
+1118	Norum_disease	Metabolic	1	1	1	LCAT (3931)
+1119	"Norwalk_virus_infection,_resistance_to"	Immunological	1	1	1	FUT2 (2524)
+1122	"Nucleoside_phosphorylase_deficiency,_immunodeficiency_due_to"	Immunological	1	0	0	NP (4860)
+1126	Obesity	Nutritional	21	8	7	"POMC (5443), MC4R (4160), AKR1C2 (1646), NTRK2 (4915), AGRP (181), NR0B2 (8431), LEP (3952), LEPR (3953), PPARG (5468), SIM1 (6492), UCP3 (7352), MC3R (4159), SLC6A14 (11254), ADRB2 (154), ADRB3 (155), CART (9607), ENPP1 (5167), GHRL (51738), UCP1 (7350), UCP2 (7351), PCSK1 (5122)"
+1128	Obsessive-compulsive_disorder	Psychiatric	3	7	5	"SLC6A4 (6532), BDNF (627), HTR2A (3356)"
+1129	Occipital_horn_syndrome	multiple	1	2	2	ATP7A (538)
+1130	Ocular_albinism	Ophthamological	3	4	2	"GPR143 (4935), MC1R (4157), SLC45A2 (51151)"
+1132	Oculodentodigital_dysplasia	Skeletal	1	3	2	GJA1 (2697)
+1133	Oculofaciocardiodental_syndrome	multiple	1	1	1	BCOR (54880)
+1135	Oculopharyngeal_muscular_dystorphy	Muscular	1	0	0	PABPN1 (8106)
+1136	Odontohypophosphatasia	Bone	1	1	1	ALPL (249)
+1137	Oguchi_disease	Ophthamological	2	0	0	"SAG (6295), GRK1 (6011)"
+1138	Oligodendroglioma	Cancer	1	8	2	PTEN (5728)
+1139	Oligodontia	Skeletal	1	1	1	PAX9 (5083)
+1140	Oligodontia-colorectal_cancer_syndrome	Cancer	1	1	1	AXIN2 (8313)
+1141	Omenn_syndrome	Immunological	3	1	1	"DCLRE1C (64421), RAG1 (5896), RAG2 (5897)"
+1142	Opitz_G_syndrome	multiple	1	0	0	MID1 (4281)
+1143	Opremazole_poor_metabolizer	Metabolic	1	2	1	CYP2C19 (1557)
+1144	Optic_atrophy	Ophthamological	2	2	2	"OPA1 (4976), OPA3 (80207)"
+1145	Oral-facial-digital_syndrome	Skeletal	1	0	0	OFD1 (8481)
+1146	Ornithine_transcarbamylase_deficiency	Metabolic	1	0	0	OTC (5009)
+1147	Orofacial_cleft	Skeletal	1	2	1	IRF6 (3664)
+1148	Orolaryngeal_cancer	Cancer	1	3	1	CDKN2A (1029)
+1149	Oroticaciduria	Metabolic	1	0	0	UMPS (7372)
+1150	Orthostatic_intolerance	Cardiovascular	1	0	0	SLC6A2 (6530)
+1151	OSMED_syndrome	Bone	1	3	2	COL11A2 (1302)
+1152	Osseous_heteroplasia	Bone	1	5	2	GNAS (2778)
+1153	Ossification_of_the_posterior_longitudinal_spinal_ligaments	Connective_tissue_disorder	1	2	2	ENPP1 (5167)
+1154	Osteoarthritis	Connective_tissue_disorder	4	7	3	"MATN3 (4148), FRZB (2487), ASPN (54829), COL2A1 (1280)"
+1156	Osteogenesis_imperfecta	Bone	2	5	2	"COL1A2 (1278), COL1A1 (1277)"
+1157	Osteolysis	Bone	2	1	1	"TNFRSF11A (8792), MMP2 (4313)"
+1161	Osteopetrosis	Bone	4	6	3	"LRP5 (4041), CLCN7 (1186), OSTM1 (28962), TCIRG1 (10312)"
+1162	Osteopoikilosis	Bone	1	2	1	LEMD3 (23592)
+1163	Osteoporosis	Bone	6	12	5	"COL1A1 (1277), LRP5 (4041), CALCA (796), SLC34A1 (6569), COL1A2 (1278), CALCR (799)"
+1164	Osteoporosis-pseudoglioma_syndrome	Bone	1	6	3	LRP5 (4041)
+1165	Osteoporosis	Bone	1	0	0	PDLIM4 (8572)
+1166	Osteosarcoma	Cancer	2	11	1	"TP53 (7157), CHEK2 (11200)"
+1168	Otopalatodigital_syndrome	multiple	1	3	2	FLNA (2316)
+1170	Ovarian_cancer	Cancer	8	16	2	"BRCA1 (672), MSH2 (4436), PIK3CA (5290), MSH6 (2956), ERBB2 (2064), CDH1 (999), RRAS2 (22800), CTNNB1 (1499)"
+1171	Ovarioleukodystrophy	Neurological	3	1	1	"EIF2B2 (8892), EIF2B4 (8890), EIF2B5 (8893)"
+1172	Pachyonychia_congenita	Dermatological	4	2	1	"KRT17 (3872), KRT6B (3854), KRT16 (3868), KRT6A (3853)"
+1173	Paget_disease	Bone	3	1	1	"TNFRSF11B (4982), SQSTM1 (8878), TNFRSF11A (8792)"
+1174	Pallidopontonigral_degeneration	Neurological	1	3	1	MAPT (4137)
+1175	Pallister-Hall_syndrome	multiple	1	3	1	GLI3 (2737)
+1176	Palmoplantar_keratoderma	Dermatological	1	1	1	KRT16 (3868)
+1178	Pancreatic_cancer	Cancer	9	23	1	"ARMET (7873), BRCA2 (675), TP53 (7157), SMAD4 (4089), CDKN2A (1029), ACVR1B (91), STK11 (6794), KRAS (3845), RBBP8 (5932)"
+1179	Pancreatitis	Gastrointestinal	3	6	3	"PRSS1 (5644), SPINK1 (6690), CFTR (1080)"
+1183	Papillary_serous_carcinoma_of_the_peritoneum	Cancer	1	2	1	BRCA1 (672)
+1184	Papillon-Lefevre_syndrome	multiple	1	2	1	CTSC (1075)
+1186	Paragangliomas	Cancer	3	3	1	"SDHB (6390), SDHD (6392), SDHC (6391)"
+1188	Paramyotonia_congenita	Muscular	1	5	3	SCN4A (6329)
+1189	Parathyroid_adenoma	Cancer	2	7	2	"MEN1 (4221), CDC73 (79577)"
+1190	Parietal_foramina	Skeletal	2	1	1	"MSX2 (4488), ALX4 (60529)"
+1191	Parkes_Weber_syndrome	multiple	1	2	2	RASA1 (5921)
+1192	Parkinson_disease	Neurological	11	6	4	"NR4A2 (4929), SNCAIP (9627), TBP (6908), SNCA (6622), PARK7 (11315), LRRK2 (120892), PINK1 (65018), UCHL1 (7345), PARK2 (5071), DBH (1621), NDUFV2 (4729)"
+1195	Paroxysmal_kinesigenic_choreoathetosis	Neurological	1	0	0	MR-1 (25953)
+1196	Partington_syndrome	Neurological	1	5	1	ARX (170302)
+1198	PCWH	Neurological	1	2	0	SOX10 (6663)
+1199	Pelger-Huet_anomaly	Hematological	1	1	1	LBR (3930)
+1200	Pelizaeus-Merzbacher_disease	Neurological	1	1	1	PLP1 (5354)
+1201	(null)	Neurological	1	0	0	GJA12 (57165)
+1204	Pendred_syndrome	"Ear,Nose,Throat"	1	2	1	SLC26A4 (5172)
+1205	Perineal_hypospadias	Endocrine	1	4	3	AR (367)
+1206	"Periodic_fever,_familial"	Immunological	1	0	0	TNFRSF1A (7132)
+1207	Periodontitis	"Ear,Nose,Throat"	1	2	0	CTSC (1075)
+1209	Periventricular_heterotopia_with_microcephaly	Neurological	1	0	0	ARFGEF2 (10564)
+1210	Peroxisomal_biogenesis_disorder	multiple	2	0	0	"PEX6 (5190), PEX12 (5193)"
+1212	Persistent_Mullerian_duct_syndrome	Developmental	2	0	0	"AMH (268), AMHR2 (269)"
+1213	Peters_anomaly	Developmental	2	10	2	"PAX6 (5080), CYP1B1 (1545)"
+1214	Peutz-Jeghers_syndrome	Cancer	1	2	1	STK11 (6794)
+1215	Pfeiffer_syndrome	Skeletal	2	9	4	"FGFR1 (2260), FGFR2 (2263)"
+1216	Phenylketonuria	Metabolic	3	1	1	"PAH (5053), QDPR (5860), PTS (5805)"
+1217	Phenylthiocarbamide_tasting	"Ear,Nose,Throat"	1	0	0	TAS2R38 (5726)
+1218	Pheochromocytoma	Cancer	3	7	2	"SDHD (6392), VHL (7428), SDHB (6390)"
+1220	Phosphoglycerate_dehydrogenase_deficiency	Metabolic	1	0	0	PHGDH (26227)
+1221	Phosphoribosyl_pyrophosphate_synthetase-related_gout	Metabolic	1	0	0	PRPS1 (5631)
+1222	"Phosphorylase_kinase_deficiency_of_liver_and_muscle,_autosomal_recessive"	Metabolic	1	0	0	PHKB (5257)
+1223	Phosphoserine_phosphatase_deficiency	Metabolic	1	0	0	PSPH (5723)
+1225	Pick_disease	Neurological	1	2	1	PSEN1 (5663)
+1226	Piebaldism	Dermatological	1	5	2	KIT (3815)
+1227	"Pigmentation_of_hair,_skin,_and_eyes,_variation_in"	Dermatological	1	1	1	SLC45A2 (51151)
+1229	Pigmented_paravenous_chorioretinal_atrophy	Ophthamological	1	2	1	CRB1 (23418)
+1230	Pilomatricoma	Cancer	1	3	1	CTNNB1 (1499)
+1232	Pituitary_ACTH-secreting_adenoma	Cancer	3	6	3	"GNAI2 (2771), GNAS (2778), THRA (7067)"
+1233	Placental_abruption	Unclassified	1	3	2	NOS3 (4846)
+1234	Plasmin_inhibitor_deficiency	Hematological	1	0	0	SERPINF2 (5345)
+1235	Plasminogen_deficiency	Hematological	1	1	1	PLG (5340)
+1237	Platelet_defect/deficiency	Hematological	4	5	4	"PLA2G7 (7941), P2RY12 (64805), RUNX1 (861), CD36 (948)"
+1238	"Pneumonitis,_desquamative_interstitial"	Respiratory	1	2	1	SFTPC (6440)
+1239	"Pneumothorax,_primary_spontaneous"	Respiratory	1	3	2	FLCN (201163)
+1241	Polycystic_kidney_disease	Renal	4	0	0	"PKHD1 (5314), PKD1 (5310), PKD2 (5311), PKDTS (8132)"
+1242	Polycythemia	Hematological	2	6	2	"VHL (7428), JAK2 (3717)"
+1243	Polydactyly	Skeletal	1	3	1	GLI3 (2737)
+1244	Polymicrogyria	Neurological	1	0	0	GPR56 (9289)
+1245	Polyposis	Cancer	2	3	1	"BMPR1A (657), SMAD4 (4089)"
+1246	Popliteal_pterygium_syndrome	multiple	1	2	2	IRF6 (3664)
+1247	Porencephaly	Neurological	1	0	0	COL4A1 (1282)
+1249	Porphyria	Metabolic	6	2	1	"ALAD (210), HMBS (3145), UROS (7390), UROD (7389), HFE (3077), PPOX (5498)"
+1253	PPM-X_syndrome	Neurological	1	4	3	MECP2 (4204)
+1254	Prader-Willi_syndrome	multiple	2	0	0	"NDN (4692), SNRPN (6638)"
+1256	"Precocious_puberty,_male"	Developmental	1	4	4	LHCGR (3973)
+1257	Preeclampsia	Cardiovascular	3	3	3	"STOX1 (219736), EPHX1 (2052), AGT (183)"
+1259	Prekallikrein_deficiency	Hematological	1	0	0	KLKB1 (3818)
+1260	Premature_ovarian_failure	Renal	2	1	0	"DIAPH2 (1730), FOXL2 (668)"
+1261	Primary_lateral_sclerosis	Neurological	1	2	1	ALS2 (57679)
+1263	Prion_disease_with_protracted_course	Neurological	1	4	2	PRNP (5621)
+1265	Progressive_external_ophthalmoplegia_with_mitochondrial_DNA_deletions	Ophthamological	3	2	2	"PEO1 (56652), POLG (5428), SLC25A4 (291)"
+1266	Proguanil_poor_metabolizer	Metabolic	1	2	1	CYP2C19 (1557)
+1267	"Prolactinoma,_hyperparathyroidism,_carcinoid_syndrome"	Endocrine	1	7	2	MEN1 (4221)
+1268	Prolidase_deficiency	Connective_tissue_disorder	1	0	0	PEPD (5184)
+1270	Properdin_deficiency	Immunological	1	0	0	PFC (5199)
+1271	Propionicacidemia	Metabolic	2	0	0	"PCCA (5095), PCCB (5096)"
+1272	Prostate_cancer	Cancer	12	20	4	"RNASEL (6041), BRCA2 (675), PTEN (5728), AR (367), CHEK2 (11200), MSR1 (4481), EPHB2 (2048), KLF6 (1316), MAD1L1 (8379), ATBF1 (463), ELAC2 (60528), MXI1 (4601)"
+1273	Protein_S_deficiency	Hematological	1	0	0	PROS1 (5627)
+1274	Proteinuria	Renal	1	3	2	CLCN5 (1184)
+1276	Protoporphyria	Metabolic	1	0	0	FECH (2235)
+1277	Proud_syndrome	multiple	1	5	1	ARX (170302)
+1278	Pseudoachondroplasia	Skeletal	1	1	1	COMP (1311)
+1279	"Pseudohermaphroditism,_male"	Developmental	2	4	4	"HSD17B3 (3293), LHCGR (3973)"
+1281	Pseudohypoaldosteronism	Endocrine	6	2	2	"SCNN1A (6337), SCNN1B (6338), SCNN1G (6340), NR3C2 (4306), WNK4 (65266), WNK1 (65125)"
+1282	Pseudohypoparathyroidism	Endocrine	1	5	3	GNAS (2778)
+1283	Pseudovaginal_perineoscrotal_hypospadias	Unclassified	1	0	0	SRD5A2 (6716)
+1284	Pseudovitamin_D_deficiency_rickets_1	Bone	1	0	0	CYP27B1 (1594)
+1285	Pseudoxanthoma_elasticum	Connective_tissue_disorder	1	0	0	ABCC6 (368)
+1288	Psoraisis	Dermatological	2	3	2	"PSORS6 (63869), CARD15 (64127)"
+1291	Pulmonary_fibrosis	Respiratory	4	2	1	"CSF2RB (1439), SFTPC (6440), SFTPB (6439), SFTPA1 (6435)"
+1293	Pycnodysostosis	Skeletal	1	0	0	CTSK (1513)
+1294	"Pyloric_stenosis,_infantile_hypertrophic"	Developmental	1	0	0	NOS1 (4842)
+1295	"Pyogenic_sterile_arthritis,_pyoderma_gangrenosum,_and_acne"	Dermatological	1	0	0	PSTPIP1 (9051)
+1296	Pyropoikilocytosis	Hematological	1	2	1	SPTA1 (6708)
+1297	Pyruvate_dehydrogenase_deficiency	Metabolic	3	1	1	"PC (5091), PDHA1 (5160), PDHB (5162)"
+1298	Rabson-Mendenhall_syndrome	multiple	1	2	2	INSR (3643)
+1301	Radioulnar_synostosis_with_amegakaryocytic_thrombocytopenia	multiple	1	0	0	HOXA11 (3207)
+1303	RAPADILINO_syndrome	multiple	1	1	0	RECQL4 (9401)
+1304	Rapid_progression_to_AIDS_from_HIV1_infection	Immunological	1	0	0	CX3CR1 (1524)
+1305	Rapp-Hodgkin_syndrome	multiple	1	5	1	TP73L (8626)
+1306	Red_hair/fair_skin	Dermatological	1	3	3	MC1R (4157)
+1307	Refsum_disease	Neurological	5	3	1	"PEX7 (5191), PHYH (5264), PEX1 (5189), PEX26 (55670), PXMP3 (5828)"
+1308	Renal_cell_carcinoma	Cancer	7	8	4	"FLCN (201163), RNF139 (11236), OGG1 (4968), PRCC (5546), TFE3 (7030), MET (4233), VHL (7428)"
+1309	Renpenning_syndrome	Neurological	1	0	0	PQBP1 (10084)
+1311	Response_to_morphine-6-glucuronide	Neurological	1	0	0	OPRM1 (4988)
+1312	Resting_heart_rate	Cardiovascular	1	1	1	ADRB1 (153)
+1314	"Restrictive_dermopathy,_lethal"	Dermatological	1	1	0	ZMPSTE24 (10269)
+1315	Retinal_cone_dsytrophy	Ophthamological	4	1	1	"NRL (4901), PROM1 (8842), C1QTNF5 (114902), LRAT (9227)"
+1316	Retinitis_pigmentosa	Ophthamological	30	16	2	"IMPDH1 (3614), PRPF31 (26121), RP1 (6101), CRB1 (23418), PRPF8 (10594), TULP1 (7287), CA4 (762), PRPF3 (9129), ABCA4 (24), RPE65 (6121), RP2 (6102), CERKL (375298), NRL (4901), FSCN2 (25794), RPGR (6103), RHO (6010), RDS (5961), RP9 (6100), RLBP1 (6017), USH2A (7399), RGR (5995), CNGB1 (1258), CNGA1 (1259), PDE6A (5145), PDE6B (5158), ROM1 (6094), AIPL1 (23746), NR2E3 (10002), CRX (1406), MERTK (10461)"
+1317	Retinoblastoma	Cancer	1	1	1	RB1 (5925)
+1318	"Retinol_binding_protein,_deficiency_of"	Ophthamological	1	0	0	RBP4 (5950)
+1320	Retinoschisis	Ophthamological	1	0	0	RS1 (6247)
+1321	Rett_syndrome	Neurological	2	4	3	"MECP2 (4204), CDKL5 (6792)"
+1322	Rhabdoid_tumors	Cancer	1	0	0	SMARCB1 (6598)
+1323	Rhabdomyosarcoma	Cancer	4	4	1	"SLC22A18 (5002), FOXO1A (2308), PAX3 (5077), PAX7 (5081)"
+1324	Rheumatoid_arthritis	Connective_tissue_disorder	8	8	5	"IL10 (3586), CIITA (4261), NFKBIL1 (4795), PADI4 (23569), PTPN22 (26191), RUNX1 (861), SLC22A4 (6583), MIF (4282)"
+1325	Rhizomelic_chondrodysplasia_punctata	multiple	2	1	1	"PEX7 (5191), AGPS (8540)"
+1326	Rh-mod_syndrome	Hematological	1	1	1	RHAG (6005)
+1327	Rh-negative_blood_type	Hematological	2	1	1	"RHD (6007), RHCE (6006)"
+1329	Ribose_5-phosphate_isomerase_deficiency	Metabolic	1	0	0	RPIA (22934)
+1330	Rickets	Bone	2	0	0	"CYP2R1 (120227), VDR (7421)"
+1331	Rieger_syndrome	multiple	2	5	1	"FOXC1 (2296), PITX2 (5308)"
+1332	Ring_dermoid_of_cornea	Ophthamological	1	2	1	PITX2 (5308)
+1333	Rippling_muscle_disease	Muscular	1	4	3	CAV3 (859)
+1334	Roberts_syndrome	Developmental	1	0	0	ESCO2 (157570)
+1335	"Robinow_syndrome,_autosomal_recessive"	multiple	1	1	1	ROR2 (4920)
+1337	Rokitansky-Kuster-Hauser_syndrome	Developmental	1	0	0	WNT4 (54361)
+1338	Rothmund-Thomson_syndrome	multiple	1	1	0	RECQL4 (9401)
+1339	Roussy-Levy_syndrome	multiple	2	3	1	"MPZ (4359), PMP22 (5376)"
+1341	Rubenstein-Taybi_syndrome	multiple	2	1	1	"CREBBP (1387), EP300 (2033)"
+1344	Saethre-Chotzen_syndrome	Developmental	2	8	3	"FGFR2 (2263), TWIST1 (7291)"
+1345	Salivary_adenoma	Cancer	1	2	1	HMGA2 (8091)
+1346	Salla_disease	Metabolic	1	1	1	SLC17A5 (26503)
+1347	"Sandhoff_disease,_infantile,_juvenile,_and_adult_forms"	Metabolic	1	1	1	HEXB (3074)
+1348	Sanfilippo_syndrome	Metabolic	2	0	0	"SGSH (6448), NAGLU (4669)"
+1349	Sarcoidosis	Immunological	3	3	2	"CARD15 (64127), BTNL2 (56244), HLA-DRB1 (3123)"
+1350	"Sarcoma,_synovial"	Cancer	2	0	0	"SSX1 (6756), SSX2 (6757)"
+1352	"SARS,_progression_of"	Immunological	1	5	4	ACE (1636)
+1354	Schimke_immunoosseous_dysplasia	Connective_tissue_disorder	1	0	0	SMARCAL1 (50485)
+1355	Schindler_disease	Metabolic	1	1	1	NAGA (4668)
+1357	Schizencephaly	Neurological	1	0	0	EMX2 (2018)
+1359	Schizophrenia	Psychiatric	9	7	5	"DISC1 (27185), TAAR6 (319100), APP (351), COMT (1312), HTR2A (3356), RTN4R (65078), SYN2 (6854), ENTH (9685), PRODH (5625)"
+1360	Schwannomatosis	Cancer	1	2	1	NF2 (4771)
+1361	"Schwartz-Jampel_syndrome,_type_1"	multiple	1	1	1	HSPG2 (3339)
+1362	SCID	Immunological	1	0	0	JAK3 (3718)
+1363	Sclerosteosis	Skeletal	1	0	0	SOST (50964)
+1365	Scurvy	Nutritional	1	0	0	GULOP (2989)
+1366	Sea-blue_histiocyte_disease	Hematological	1	3	3	APOE (348)
+1367	Seasonal_affective_disorder	Psychiatric	1	4	3	HTR2A (3356)
+1368	Sebastian_syndrome	Hematological	1	4	2	MYH9 (4627)
+1369	Seckel_syndrome	Developmental	1	0	0	ATR (545)
+1370	Segawa_syndrome	Neurological	1	0	0	TH (7054)
+1371	Seizures	Neurological	1	0	0	SCN2A1 (6325)
+1372	Selective_T-cell_defect	Immunological	1	0	0	ZAP70 (7535)
+1373	Self-healing_collodion_baby	Dermatological	1	2	1	TGM1 (7051)
+1374	"SEMD,_Pakistani_type"	Connective_tissue_disorder	1	0	0	PAPSS2 (9060)
+1375	Senior-Loken_syndrome	Renal	3	2	1	"NPHP1 (4867), NPHP4 (261734), IQCB1 (9657)"
+1376	"Sensory_ataxic_neuropathy,_dysarthria,_and_ophthalmoparesis"	Ophthamological	1	2	2	POLG (5428)
+1377	Sepiapterin_reductase_deficiency	Metabolic	1	0	0	SPR (6697)
+1378	Sepsis	Immunological	2	4	3	"CASP12P1 (120329), TNF (7124)"
+1380	Septooptic_dysplasia	multiple	1	1	1	HESX1 (8820)
+1381	Sertoli-cell-only_syndrome	Renal	1	0	0	USP26 (83844)
+1383	Severe_combined_immunodeficiency	Immunological	8	4	2	"DCLRE1C (64421), RAG1 (5896), RAG2 (5897), ADA (100), PTPRC (5788), IL7R (3575), CD3D (915), IL2RG (3561)"
+1384	Sex_reversal	Unclassified	1	1	1	NR5A1 (2516)
+1385	Sezary_syndrome	Cancer	1	4	1	BCL10 (8915)
+1386	Shah-Waardenburg_syndrome	multiple	1	2	2	EDN3 (1908)
+1387	Short_stature	Skeletal	3	3	1	"GHR (2690), SHOX (6473), LHX4 (89884)"
+1388	Shprintzen-Goldberg_syndrome	multiple	1	5	3	FBN1 (2200)
+1389	Shwachman-Diamond_syndrome	multiple	1	0	0	SBDS (51119)
+1391	Sialidosis	Metabolic	2	1	1	"SLC17A5 (26503), NEU1 (4758)"
+1392	Sialuria	Metabolic	1	2	1	GNE (10020)
+1393	Sickle_cell_anemia	Hematological	1	5	1	HBB (3043)
+1394	Sick_sinus_syndrome	Cardiovascular	1	4	1	SCN5A (6331)
+1396	Silver_spastic_paraplegia_syndrome	Neurological	1	2	2	BSCL2 (26580)
+1397	Simpson-Golabi-Behmel_syndrome	multiple	1	1	1	GPC3 (2719)
+1398	Sitosterolemia	Metabolic	2	0	0	"ABCG5 (64240), ABCG8 (64241)"
+1399	Situs_ambiguus	Developmental	2	1	0	"NODAL (4838), DNAH11 (8701)"
+1400	Sjogren-Larsson_syndrome	Metabolic	1	0	0	ALDH3A2 (224)
+1401	Skin_fragility-woolly_hair_syndrome	Dermatological	1	4	2	DSP (1832)
+1403	Slow_acetylation	Metabolic	1	0	0	NAT2 (10)
+1404	"Slowed_nerve_conduction_velocity,_AD"	Neurological	1	0	0	ARHGEF10 (9639)
+1406	Small_patella_syndrome	Skeletal	1	0	0	TBX4 (9496)
+1408	SMED_Strudwick_type	Skeletal	1	5	4	COL2A1 (1280)
+1409	Smith-Fineman-Myers_syndrome	multiple	1	4	1	ATRX (546)
+1410	Smith-Lemli-Opitz_syndrome	multiple	1	0	0	DHCR7 (1717)
+1411	Smith-Magenis_syndrome	multiple	1	0	0	RAI1 (10743)
+1412	Smith-McCort_dysplasia	Skeletal	1	1	0	DYM (54808)
+1414	Solitary_median_maxillary_central_incisor	Skeletal	1	2	2	SHH (6469)
+1415	Somatotrophinoma	Endocrine	1	5	3	GNAS (2778)
+1416	Sorsby_fundus_dystrophy	Ophthamological	1	0	0	TIMP3 (7078)
+1417	Sotos_syndrome	Developmental	1	2	1	NSD1 (64324)
+1418	Spastic_ataxia/paraplegia	Neurological	9	3	1	"SACS (26278), ALS2 (57679), KIF5A (3798), HSPD1 (3329), PLP1 (5354), SPG3A (51062), SPAST (6683), NIPA1 (123606), SPG7 (6687)"
+1419	Specific_language_impairment_QTL	Neurological	1	0	0	FOXP2 (93986)
+1422	Spermatogenic_failure	Renal	1	0	0	DAZL (1618)
+1423	Spherocytosis	Hematological	5	6	2	"SPTB (6710), ANK1 (286), SLC4A1 (6521), EPB42 (2038), SPTA1 (6708)"
+1425	Spina_bifida	Developmental	3	4	2	"MTHFD1 (4522), MTR (4548), MTRR (4552)"
+1426	Spinal_muscular_atrophy	Muscular	7	9	4	"AR (367), VAPB (9217), SMN1 (6606), BSCL2 (26580), GARS (2617), HEXB (3074), IGHMBP2 (3508)"
+1428	Spinocereballar_ataxia	Neurological	13	5	1	"ATXN10 (25814), ATXN1 (6310), PPP2R2B (5521), PRKCG (5582), TBP (6908), ATXN2 (6311), SCA25 (338435), FGF14 (2259), PLEKHG4 (25894), CACNA1A (773), ATXN7 (6314), KLHL1AS (6315), TDP1 (55775)"
+1430	Split-hand/foot_malformation	Skeletal	2	5	1	"FBXW4 (6468), TP73L (8626)"
+1432	Spondylocarpotarsal_synostosis_syndrome	Skeletal	1	2	2	FLNB (2317)
+1433	Spondylocostal_dysostosis	Skeletal	2	0	0	"DLL3 (10683), MESP2 (145873)"
+1435	Spondyloepiphyseal_dysplasia	Skeletal	5	3	2	"MATN3 (4148), AGC1 (176), CHST3 (9469), TRAPPC2 (6399), WISP3 (8838)"
+1436	Spondylometaphyseal_dysplasia	Skeletal	1	1	1	COL10A1 (1300)
+1437	Squamous_cell_carcinoma	Cancer	3	1	1	"FAS (355), ING1 (3621), TNFRSF10B (8795)"
+1438	Stapes_ankylosis_syndrome_without_symphalangism	multiple	1	3	1	NOG (9241)
+1439	Stargardt_disease	Ophthamological	2	4	1	"ABCA4 (24), ELOVL4 (6785)"
+1440	Startle_disease	Neurological	1	1	1	GLRA1 (2741)
+1441	STAT1_deficiency	Unclassified	1	1	1	STAT1 (6772)
+1442	Statins	Metabolic	1	0	0	HMGCR (3156)
+1444	Steatocystoma_multiplex	Dermatological	1	1	1	KRT17 (3872)
+1445	Stem-cell_leukemia/lymphoma_syndrome	Cancer	1	0	0	ZNF198 (7750)
+1446	"Stevens-Johnson_syndrome,_carbamazepine-induced"	Dermatological	1	2	2	HLA-B (3106)
+1447	Stickler_syndrome	multiple	3	9	5	"COL2A1 (1280), COL11A1 (1301), COL11A2 (1302)"
+1449	Stomach_cancer	Cancer	1	5	1	KRAS (3845)
+1454	Stroke	Cardiovascular	2	1	1	"PDE4D (5144), ALOX5AP (241)"
+1455	Stuve-Wiedemann_syndrome/Schwartz-Jampel_type_2_syndrome	multiple	1	0	0	LIFR (3977)
+1456	Subcortical_laminar_heterotopia	Neurological	2	1	1	"DCX (1641), PAFAH1B1 (5048)"
+1457	Succinic_semialdehyde_dehydrogenase_deficiency	Metabolic	1	0	0	ALDH5A1 (7915)
+1458	Sucrose_intolerance	Metabolic	1	0	0	SI (6476)
+1459	Sudden_infant_death_with_dysgenesis_of_the_testes_syndrome	Unclassified	1	0	0	TSPYL1 (7259)
+1460	Sulfite_oxidase_deficiency	Metabolic	1	0	0	SUOX (6821)
+1461	"Superoxide_dismutase,_elevated_extracellular"	Unclassified	1	0	0	SOD3 (6649)
+1462	Supranuclear_palsy	Neurological	1	3	1	MAPT (4137)
+1463	Supravalvar_aortic_stenosis	Cardiovascular	1	2	1	ELN (2006)
+1464	Surfactant_deficiency	Respiratory	2	2	1	"ABCA3 (21), SFTPC (6440)"
+1465	Sutherland-Haan_syndrome-like	multiple	1	4	1	ATRX (546)
+1466	Sweat_chloride_elevation_without_CF	Unclassified	1	4	3	CFTR (1080)
+1467	"Symphalangism,_proximal"	Skeletal	1	3	1	NOG (9241)
+1468	Syndactyly	Skeletal	1	3	2	GJA1 (2697)
+1469	Synostoses_syndrome	multiple	1	3	1	NOG (9241)
+1470	Synpolydactyly	Skeletal	2	1	1	"FBLN1 (2192), HOXD13 (3239)"
+1471	Systemic_lupus_erythematosus	Immunological	4	2	2	"FASLG (356), DNASE1 (1773), PTPN22 (26191), PDCD1 (5133)"
+1472	Tall_stature	Skeletal	1	1	1	MCM6 (4175)
+1473	Tangier_disease	Metabolic	1	3	3	ABCA1 (19)
+1475	Tarsal-carpal_coalition_syndrome	Skeletal	1	3	1	NOG (9241)
+1476	Tauopathy_and_respiratory_failure	Neurological	1	3	1	MAPT (4137)
+1477	Tay-Sachs_disease	Metabolic	1	2	1	HEXA (3073)
+1478	T-cell_lymphoblastic_leukemia	Cancer	2	4	2	"BAX (581), ATM (472)"
+1480	"Temperature-sensitive_apoptosis,_cellular"	Unclassified	1	0	0	DAD1 (1603)
+1482	"Tetra-amelia,_autosomal_recessive"	multiple	1	0	0	WNT3 (7473)
+1483	Tetralogy_of_Fallot	Cardiovascular	3	4	2	"JAG1 (182), ZFPM2 (23414), NKX2-5 (1482)"
+1486	Thalassemias	Hematological	5	8	1	"HBA2 (3040), HBB (3043), HBD (3045), LCRB (387281), HBA1 (3039)"
+1490	"Thanatophoric_dysplasia,_types_I_and_II"	Skeletal	1	7	2	FGFR3 (2261)
+1491	Thiamine-responsive_megaloblastic_anemia_syndrome	Hematological	1	0	0	SLC19A2 (10560)
+1493	Thrombocythemia	Hematological	2	2	1	"JAK2 (3717), THPO (7066)"
+1494	Thrombocytopenia	Hematological	4	4	2	"MASTL (84930), MPL (4352), WAS (7454), F5 (2153)"
+1497	Thrombophilia	Hematological	9	7	3	"F5 (2153), SERPIND1 (3053), HRG (3273), PROC (5624), THBD (7056), FGB (2244), FGG (2266), CBS (875), ADAMTS13 (11093)"
+1502	Thymine-uraciluria	Metabolic	1	1	1	DPYD (1806)
+1503	Thyroid_carcinoma	Cancer	11	26	4	"TSHR (7253), TP53 (7157), MINPP1 (9562), PTEN (5728), HRAS (3265), GOLGA5 (9950), NCOA4 (8031), PCM1 (5108), PRKAR1A (5573), TRIM33 (51592), TRIM24 (8805)"
+1504	Thyrotoxic_periodic_paralysis	Endocrine	1	2	2	CACNA1S (779)
+1505	Thyrotropin-releasing_hormone_deficiency	Endocrine	1	0	0	TRHR (7201)
+1506	Thyroxine-binding_globulin_deficiency	Hematological	1	0	0	SERPINA7 (6906)
+1508	Tietz_syndrome	multiple	1	1	0	MITF (4286)
+1509	Timothy_syndrome	multiple	1	0	0	CACNA1C (775)
+1510	"Toenail_dystrophy,_isolated"	Dermatological	1	3	1	COL7A1 (1294)
+1511	Tolbutamide_poor_metabolizer	Unclassified	1	1	1	CYP2C9 (1559)
+1514	Townes-Brocks_syndrome	multiple	1	0	0	SALL1 (6299)
+1515	Transaldolase_deficiency	Metabolic	1	0	0	TALDO1 (6888)
+1516	Transcobalamin_II_deficiency	Hematological	1	0	0	TCN2 (6948)
+1518	Transient_bullous_of_the_newborn	Dermatological	1	3	1	COL7A1 (1294)
+1519	"Transposition_of_great_arteries,_dextro-looped"	Developmental	2	2	1	"CFC1 (55997), THRAP2 (23389)"
+1520	Treacher_Collins_mandibulofacial_dysostosis	Developmental	1	0	0	TCOF1 (6949)
+1521	"Tremor,_familial_essential"	Neurological	1	0	0	HS1BP3 (64342)
+1522	Trichodontoosseous_syndrome	multiple	1	1	1	DLX3 (1747)
+1524	Trichorhinophalangeal_syndrome	Developmental	1	0	0	TRPS1 (7227)
+1525	Trichothiodystrophy	Dermatological	4	2	1	"ERCC3 (2071), ERCC2 (2068), GTF2H5 (404672), C7orf11 (136647)"
+1526	Trifunctional_protein_deficiency	Metabolic	2	3	1	"HADHA (3030), HADHB (3032)"
+1528	Trismus-pseudocomptodactyly_syndrome	multiple	1	1	0	MYH8 (4626)
+1529	Tropical_calcific_pancreatitis	Gastrointestinal	1	2	1	SPINK1 (6690)
+1530	Troyer_syndrome	Neurological	1	0	0	SPG20 (23111)
+1533	Tuberculosis	Respiratory	2	6	2	"IFNGR1 (3459), IFNG (3458)"
+1534	Tuberous_sclerosis	multiple	3	5	4	"IFNG (3458), TSC1 (7248), TSC2 (7249)"
+1536	Turcot_syndrome	Cancer	3	9	1	"APC (324), MLH1 (4292), PMS2 (5395)"
+1538	"Twinning,_dizygotic"	Unclassified	1	3	2	FSHR (2492)
+1540	Tyrosinemia	Metabolic	3	0	0	"FAH (2184), TAT (6898), HPD (3242)"
+1542	Ullrich_congenital_muscular_dystrophy	Muscular	3	1	1	"COL6A1 (1291), COL6A3 (1293), COL6A2 (1292)"
+1543	Ulnar-mammary_syndrome	multiple	1	0	0	TBX3 (6926)
+1544	Unipolar_depression	Psychiatric	1	0	0	TPH2 (121278)
+1545	"Unna-Thost_disease,_nonepidermolytic"	Dermatological	1	4	1	KRT1 (3848)
+1550	Urolithiasise	Metabolic	2	1	1	"APRT (353), SLC34A1 (6569)"
+1551	Usher_syndrome	multiple	8	3	3	"MYO7A (4647), USH1C (10083), CDH23 (64072), PCDH15 (65217), USH1G (124590), USH2A (7399), USH3A (7401), MASS1 (84059)"
+1552	Uterine_leiomyoma	Cancer	1	2	1	HMGA2 (8091)
+1553	UV-induced_skin_damage	Dermatological	1	3	3	MC1R (4157)
+1554	van_Buchem_disease	Unclassified	1	6	2	LRP5 (4041)
+1555	VATER_association_with_hydrocephalus	multiple	1	8	2	PTEN (5728)
+1556	Velocardiofacial_syndrome	multiple	1	2	1	TBX1 (6899)
+1557	Venous_thrombosis	Cardiovascular	2	0	0	"TEK (7010), SERPINA10 (51156)"
+1558	Ventricular_tachycardia	Cardiovascular	3	2	2	"GNAI2 (2771), CASQ2 (845), RYR2 (6262)"
+1559	Vertical_talus	Skeletal	1	1	1	HOXD10 (3236)
+1562	Viral_infection	Immunological	2	1	1	"FCGR3A (2214), OAS1 (4938)"
+1563	Virilization	Developmental	1	1	1	CYP19A1 (1588)
+1565	Vitamin_K-dependent_coagulation_defect	Hematological	2	1	1	"VKORC1 (79001), GGCX (2677)"
+1566	Vitelliform_macular_dystrophy	Ophthamological	1	2	1	VMD2 (7439)
+1570	VLCAD_deficiency	Metabolic	1	0	0	ACADVL (37)
+1571	Vohwinkel_syndrome	multiple	2	6	2	"GJB2 (2706), LOR (4014)"
+1572	von_Hippel-Lindau_syndrome	Cancer	2	6	2	"CCND1 (595), VHL (7428)"
+1573	Waardenburg-Shah_syndrome	multiple	2	4	2	"EDNRB (1910), SOX10 (6663)"
+1574	Waardenburg_syndrome	multiple	4	4	2	"TYR (7299), MITF (4286), PAX3 (5077), SNAI2 (6591)"
+1575	Wagner_syndrome	Ophthamological	1	5	3	COL2A1 (1280)
+1576	WAGR_syndrome	multiple	1	4	2	WT1 (7490)
+1578	Walker-Warburg_syndrome	multiple	3	1	1	"FCMD (2218), POMT1 (10585), RAB3GAP1 (22930)"
+1580	Warfarin_resistance/sensitivity	Hematological	3	3	2	"VKORC1 (79001), CYP2C9 (1559), F9 (2158)"
+1581	Watson_syndrome	Cancer	1	4	1	NF1 (4763)
+1582	Weaver_syndrome	Developmental	1	2	1	NSD1 (64324)
+1583	Wegener_granulomatosis	Immunological	1	1	1	TAP2 (6891)
+1585	Weill-Marchesani_syndrome	Connective_tissue_disorder	2	5	3	"FBN1 (2200), ADAMTS10 (81794)"
+1586	Weissenbacher-Zweymuller_syndrome	Connective_tissue_disorder	1	3	2	COL11A2 (1302)
+1588	Werner_syndrome	multiple	1	0	0	WRN (7486)
+1589	Wernicke-Korsakoff_syndrome	Metabolic	1	0	0	TKT (7086)
+1590	Weyers_acrodental_dysostosis	Skeletal	1	1	1	EVC (2121)
+1591	WHIM_syndrome	Immunological	1	1	1	CXCR4 (7852)
+1592	White_sponge_nevus	Connective_tissue_disorder	2	0	0	"KRT13 (3860), KRT4 (3851)"
+1594	Williams-Beuren_syndrome	multiple	1	2	2	ELN (2006)
+1595	Wilms_tumor	Cancer	4	9	2	"BRCA2 (675), GPC3 (2719), POU6F2 (11281), WT1 (7490)"
+1596	Wilson_disease	Metabolic	1	0	0	ATP7B (540)
+1598	Wiskott-Aldrich_syndrome	Immunological	1	2	1	WAS (7454)
+1599	Witkop_syndrome	Developmental	1	2	2	MSX1 (4487)
+1600	Wolcott-Rallison_syndrome	Bone	1	0	0	EIF2AK3 (9451)
+1601	Wolff-Parkinson-White_syndrome	Cardiovascular	1	1	1	PRKAG2 (51422)
+1603	Wolfram_syndrome	Metabolic	1	1	1	WFS1 (7466)
+1604	Wolman_disease	Metabolic	1	1	1	LIPA (3988)
+1607	"Xanthinuria,_type_I"	Metabolic	1	0	0	XDH (7498)
+1608	Xeroderma_pigmentosum	Dermatological	8	2	1	"XPA (7507), ERCC3 (2071), XPC (7508), ERCC2 (2068), DDB2 (1643), ERCC4 (2072), ERCC5 (2073), POLH (5429)"
+1610	"X-inactivation,_familial_skewed"	Unclassified	1	0	0	XIST (7503)
+1611	XLA_and_isolated_growth_hormone_deficiency	Immunological	1	1	1	BTK (695)
+1613	Yellow_nail_syndrome	Immunological	1	1	1	FOXC2 (2303)
+1614	Yemenite_deaf-blind_hypopigmentation_syndrome	multiple	1	2	1	SOX10 (6663)
+1615	Zellweger_syndrome	multiple	11	2	1	"PEX1 (5189), PEX10 (5192), PEX13 (5194), PEX14 (5195), PEX26 (55670), PEX19 (5824), PEX5 (5830), ABCD3 (5825), PXMP3 (5828), PEX16 (9409), PEX3 (8504)"
+1617	Zlotogora-Ogur_syndrome	multiple	1	2	2	PVRL1 (5818)
+2053	Adrenal_adenoma	Cancer	1	7	2	MEN1 (4221)
+2054	Adrenal_cortical_carcinoma	Cancer	1	10	1	TP53 (7157)
+2055	Adrenocortical_insufficiency	Endocrine	1	1	1	NR5A1 (2516)
+2074	Alcohol_intolerance	Metabolic	1	0	0	ALDH2 (217)
+2112	"Aneurysm,_familial_arterial"	Unclassified	1	1	1	COL3A1 (1281)
+2174	Autoimmune_thyroid_disease	Endocrine	1	2	1	TG (7038)
+2188	Basal_cell_nevus_syndrome	multiple	1	2	2	PTCH (5727)
+2265	Carcinoid_tumor_of_lung	Cancer	1	7	2	MEN1 (4221)
+2287	Central_core_disease	Muscular	2	3	3	"RYR1 (6261), MYH7 (4625)"
+2291	Cerebral_arteriopathy_with_subcortical_infarcts_and_leukoencephalopathy	Cardiovascular	1	0	0	NOTCH3 (4854)
+2315	"Chondrodysplasia,_Grebe_type"	Skeletal	1	3	1	GDF5 (8200)
+2327	"Chronic_infections,_due_to_opsonin_defect"	Immunological	1	1	1	MBL2 (4153)
+2344	Cold-induced_sweating_syndrome	multiple	1	0	0	CRLF1 (9244)
+2350	Combined_hyperlipemia	Metabolic	1	2	1	LPL (4023)
+2354	Congenital_bilateral_absence_of_vas_deferens	Unclassified	1	4	3	CFTR (1080)
+2365	Coronary_spasms	Cardiovascular	1	3	3	NOS3 (4846)
+2385	"Creatine_deficiency_syndrome,_X-linked"	Neurological	1	1	1	SLC6A8 (6535)
+2427	Diabetes_insipidus	Endocrine	3	1	1	"AVPR2 (554), AQP2 (359), AVP (551)"
+2440	DNA_ligase_I_deficiency	multiple	1	0	0	LIG1 (3978)
+2584	Giant_cell_hepatitis	Gastrointestinal	1	0	0	CYP7B1 (9420)
+2628	Growth_retardation	Developmental	1	0	0	IGF1 (3479)
+2669	Hereditary_persistence_of_fetal_hemoglobin	Hematological	1	0	0	AFP (174)
+2785	Hypoplastic_left_heart_syndrome	Cardiovascular	1	3	2	GJA1 (2697)
+2903	Lipoid_proteinosis	Metabolic	1	0	0	ECM1 (1893)
+2937	Macular_dystrophy	Ophthamological	5	8	1	"CHST6 (4166), RDS (5961), ABCA4 (24), ELOVL4 (6785), VMD2 (7439)"
+2969	Medullary_thyroid_carcinoma	Cancer	2	5	4	"RET (5979), NTRK1 (4914)"
+3016	Mitochondrial_DNA_depletion_myopathy	Muscular	1	0	0	TK2 (7084)
+3037	Multiple_cutaneous_and_uterine_leiomyomata	Cancer	1	2	2	FH (2271)
+3079	Neonatal_ichthyosis-sclerosing_cholangitis_syndrome	multiple	1	0	0	CLDN1 (9076)
+3144	Optic_nerve_coloboma_with_renal_disease	multiple	1	1	1	PAX2 (5076)
+3171	Ovarian_dysgenesis	Endocrine	2	3	3	"FSHR (2492), BMP15 (9210)"
+3178	Pancreatic_agenesis	Gastrointestinal	1	2	1	IPF1 (3651)
+3195	Paroxysmal_nocturnal_hemoglobinuria	Hematological	1	0	0	PIGA (5277)
+3212	Persistent_hyperinsulinemic_hypoglycemia_of_infancy	Metabolic	1	1	1	KCNJ11 (3767)
+3229	"Pigmented_adrenocortical_disease,_primary_isolated"	Cancer	1	4	2	PRKAR1A (5573)
+3232	Pituitary_anomalies_with_holoprosencephaly-like_features	multiple	1	0	0	GLI2 (2736)
+3241	Polycystic_liver_disease	Gastrointestinal	2	0	0	"PRKCSH (5589), SEC63 (11231)"
+3260	Premature_chromosome_condensation_with_microcephaly_and_mental_retardation	Neurological	1	1	1	MCPH1 (79648)
+3308	Renal_glucosuria	Renal	1	0	0	SLC5A2 (6524)
+3419	Specific_granule_deficiency	Immunological	1	0	0	CEBPE (1053)
+3478	"T-cell_immunodeficiency,_congenital_alopecia,_and_nail_dystrophy"	Immunological	1	0	0	FOXN1 (8456)
+3503	Thyroid_hormone_resistance	Endocrine	2	3	1	"TPO (7173), THRB (7068)"
+3512	Total_iodide_organification_defect	Endocrine	1	3	1	TPO (7173)
+3554	van_der_Woude_syndrome	Developmental	1	2	1	IRF6 (3664)
+3558	"Ventricular_fibrillation,_idiopathic"	Cardiovascular	1	4	1	SCN5A (6331)
+3572	von_Willebrand_disease	Hematological	1	0	0	VWF (7450)
+4188	Basal_ganglia_disease	Neurological	2	1	1	"FTL (2512), SLC19A3 (80704)"
+4289	"Cerebellar_hypoplasia,_VLDLR-associated"	Neurological	1	0	0	VLDLR (7436)
+4291	Cerebral_cavernous_malformations	Neurological	3	2	2	"KRIT1 (889), CCM2 (83605), PDCD10 (11235)"
+4350	Combined_immunodeficiency	Immunological	2	2	1	"C6 (729), IL2RG (3561)"
+4354	Congenital_cataracts	Ophthamological	1	0	0	CTDP1 (9150)
+4666	Hepatic_lipase_deficiency	Metabolic	1	0	0	LIPC (3990)
+5016	Mitochondrial_DNA_depletion_syndrome	multiple	2	0	0	"SUCLA2 (8803), DGUOK (1716)"
+5037	Multiple_malignancy_syndrome	Cancer	1	10	1	TP53 (7157)
+5144	Optic_nerve_hypoplasia/aplasia	Ophthamological	1	9	3	PAX6 (5080)
+5170	Ovarian_hyperstimulation_syndrome	Endocrine	1	3	3	FSHR (2492)
+5232	Pituitary_hormone_deficiency	Endocrine	4	1	0	"POU1F1 (5449), PROP1 (5626), HESX1 (8820), LHX3 (8022)"
+5233	Placental_steroid_sulfatase_deficiency	Metabolic	1	1	1	STS (412)
+5291	"Pulmonary_hypertension,_familial_primary"	Cardiovascular	1	0	0	BMPR2 (659)
+5308	"Renal_hypoplasia,_isolated"	Renal	1	1	0	PAX2 (5076)
+6291	"Cerebral_dysgenesis,_neuropathy,_ichthyosis,_and_palmoplantar_keratoderma_syndrome"	Neurological	1	0	0	SNAP29 (9342)
+6350	Combined_oxidative_phosphorylation_deficiency	multiple	1	0	0	GFM1 (85476)
+7016	Mitochondrial_myopathy_and_sideroblastic_anemia	multiple	1	0	0	PUS1 (80324)
+7170	Ovarian_sex_cord_tumors	Cancer	1	3	2	FSHR (2492)
+7232	"Pituitary_tumor,_invasive"	Cancer	1	0	0	PRKCA (5578)
+7308	Renal_tubular_acidosis	Renal	5	4	1	"SLC4A1 (6521), ATP6V0A4 (50617), CA2 (760), SLC4A4 (8671), ATP6V1B1 (525)"
+8350	Combined_SAP_deficiency	Metabolic	1	2	2	PSAP (5660)
+9037	Multiple_myeloma	Cancer	2	1	0	"IRF4 (3662), LIG4 (3981)"
+9038	Multiple_sclerosis	Neurological	2	3	2	"CIITA (4261), PTPRC (5788)"
+9039	Multiple_sulfatase_deficiency	Metabolic	1	0	0	SUMF1 (285362)
+9308	Renal_tubular_dysgenesis	Renal	4	8	4	"ACE (1636), AGTR1 (185), AGT (183), REN (5972)"

@@ -1,0 +1,1780 @@
+"Supporing Information Table 3. Network characteristics of disease genes.
+Class of disease gene is assigned if all the implicated diseases are of same class, otherwise, it is assigned ""Grey."""						
+Entrez ID	Symbol	Disorder class	Size (s)	Degree (k)	Number of classes associated	Implicated diseases (Disease ID) [comma-deliminated]
+2	A2M	Neurological	1	11	1	Alzheimer_disease (98)
+10	NAT2	Metabolic	1	0	1	Slow_acetylation (1403)
+12	SERPINA3	Grey	2	0	1	"Alpha-1-antichymotrypsin_deficiency (87), Cerebrovascular_disease,_occlusive (294)"
+15	AANAT	Psychiatric	1	0	1	Delayed_sleep_phase_syndrome (411)
+18	ABAT	Metabolic	1	0	1	GABA-transaminase_deficiency (564)
+19	ABCA1	Grey	4	7	3	"Cerebral_amyloid_angiopathy (291), Coronary_artery_disease (365), HDL_cholesterol_level_QTL (644), Tangier_disease (1473)"
+21	ABCA3	Respiratory	1	1	1	Surfactant_deficiency (1464)
+22	ABCB7	Hematological	1	8	1	Anemia (110)
+24	ABCA4	Ophthamological	5	36	1	"Cone_dystrophy (352), Fundus_albipunctatus (562), Macular_dystrophy (2937), Retinitis_pigmentosa (1316), Stargardt_disease (1439)"
+25	ABL1	Cancer	1	36	1	Leukemia (886)
+28	ABO	Hematological	1	22	1	Blood_group (212)
+33	ACADL	Metabolic	1	2	1	"Acyl-CoA_dehydrogenase,_deficiency_of (44)"
+34	ACADM	Metabolic	1	2	1	"Acyl-CoA_dehydrogenase,_deficiency_of (44)"
+35	ACADS	Metabolic	1	2	1	"Acyl-CoA_dehydrogenase,_deficiency_of (44)"
+36	ACADSB	Metabolic	1	0	1	2-methylbutyrylglycinuria (4)
+37	ACADVL	Metabolic	1	0	1	VLCAD_deficiency (1570)
+38	ACAT1	Metabolic	1	0	1	Alpha-methylacetoacetic_aciduria (90)
+43	ACHE	Hematological	1	22	1	Blood_group (212)
+58	ACTA1	Muscular	1	9	1	Myopathy (1059)
+70	ACTC	Cardiovascular	1	24	1	Cardiomyopathy (268)
+71	ACTG1	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+81	ACTN4	Renal	1	2	1	Glomerulosclerosis (596)
+89	ACTN3	Muscular	2	0	1	"Alpha-actinin-3_deficiency (88), Elite_sprint_athletic_performance (471)"
+91	ACVR1B	Cancer	1	8	1	Pancreatic_cancer (1178)
+93	ACVR2B	Developmental	1	1	1	Left-right_axis_malformations (874)
+94	ACVRL1	Cardiovascular	1	1	1	Hereditary_hemorrhagic_telangiectasia (669)
+100	ADA	Immunological	2	7	1	"Adenosine_deaminase_deficiency (49), Severe_combined_immunodeficiency (1383)"
+103	ADAR	Dermatological	1	0	1	Dyschromatosis (455)
+118	ADD1	Cardiovascular	1	11	1	Hypertension (752)
+152	ADRA2C	Cardiovascular	1	1	1	Congestive_heart_failure (355)
+153	ADRB1	Cardiovascular	2	1	1	"Congestive_heart_failure (355), Resting_heart_rate (1312)"
+154	ADRB2	Grey	3	32	2	"Asthma (153), Beta-2-adrenoreceptor_agonist,_reduced_response_to (198), Obesity (1126)"
+155	ADRB3	Nutritional	1	20	1	Obesity (1126)
+158	ADSL	Metabolic	1	0	1	Adenylosuccinase_deficiency (50)
+174	AFP	Hematological	1	0	1	Hereditary_persistence_of_fetal_hemoglobin (2669)
+175	AGA	Metabolic	1	0	1	Aspartylglucosaminuria (150)
+176	AGC1	Skeletal	1	4	1	Spondyloepiphyseal_dysplasia (1435)
+178	AGL	Metabolic	1	8	1	Glycogen_storage_disease (610)
+181	AGRP	Nutritional	2	20	1	"Leanness,_inherited (872), Obesity (1126)"
+182	JAG1	Grey	3	42	3	"Alagille_syndrome (71), Deafness (406), Tetralogy_of_Fallot (1483)"
+183	AGT	Grey	3	15	2	"Hypertension (752), Preeclampsia (1257), Renal_tubular_dysgenesis (9308)"
+185	AGTR1	Grey	2	13	2	"Hypertension (752), Renal_tubular_dysgenesis (9308)"
+186	AGTR2	Neurological	1	23	1	Mental_retardation (990)
+189	AGXT	Metabolic	1	1	1	Hyperoxaluria (742)
+190	NR0B1	Endocrine	2	3	1	"Adrenal_hyperplasia,_congenital (53), Dosage-sensitive_sex_reversal (443)"
+191	AHCY	Metabolic	1	1	1	Hypermethioninemia (739)
+203	AK1	Hematological	1	9	1	Hemolytic_anemia (660)
+208	AKT2	Endocrine	1	26	1	Diabetes_mellitus (427)
+210	ALAD	Metabolic	2	5	1	"Lead_poisoning (871), Porphyria (1249)"
+212	ALAS2	Hematological	1	8	1	Anemia (110)
+213	ALB	Hematological	2	0	1	"Analbuminemia (105), Dysalbuminemic_hyperthyroxinemia (453)"
+215	ABCD1	Grey	2	5	2	"Adrenoleukodystrophy (56), Adrenomyeloneuropathy (57)"
+217	ALDH2	Metabolic	1	0	1	Alcohol_intolerance (2074)
+224	ALDH3A2	Metabolic	1	0	1	Sjogren-Larsson_syndrome (1400)
+226	ALDOA	Metabolic	1	0	1	Aldolase_A_deficiency (76)
+229	ALDOB	Metabolic	1	0	1	Fructose_intolerance (556)
+240	ALOX5	Grey	2	12	2	"Asthma (153), Atherosclerosis (163)"
+241	ALOX5AP	Cardiovascular	2	10	1	"Myocardial_infarction (1054), Stroke (1454)"
+242	ALOX12B	Dermatological	1	2	1	Ichthyosiform_erythroderma (793)
+249	ALPL	Grey	2	0	2	"Hypophosphatasia (782), Odontohypophosphatasia (1136)"
+265	AMELX	Bone	1	3	1	Amelogenesis_imperfecta (99)
+268	AMH	Developmental	1	1	1	Persistent_Mullerian_duct_syndrome (1212)
+269	AMHR2	Developmental	1	1	1	Persistent_Mullerian_duct_syndrome (1212)
+270	AMPD1	Muscular	1	0	1	Myoadenylate_deaminase_deficiency (1053)
+272	AMPD3	Hematological	1	0	1	AMP_deaminase_deficiency (101)
+275	AMT	Metabolic	1	3	1	Glycine_encephalopathy (608)
+286	ANK1	Hematological	1	4	1	Spherocytosis (1423)
+287	ANK2	Cardiovascular	1	6	1	Long_QT_syndrome (912)
+291	SLC25A4	Ophthamological	1	2	1	Progressive_external_ophthalmoplegia_with_mitochondrial_DNA_deletions (1265)
+323	APBB2	Neurological	1	11	1	Alzheimer_disease (98)
+324	APC	Cancer	7	42	1	"Adenoma,_periampullary (46), Adenomas (47), Colon_cancer (346), Desmoid_disease,_hereditary (425), Gardner_syndrome (571), Gastric_cancer (572), Turcot_syndrome (1536)"
+326	AIRE	Immunological	1	3	1	Autoimmune_disease (174)
+335	APOA1	Grey	5	17	3	"Amyloidosis (103), Apolipoprotein_deficiency (136), Corneal_dystrophy (362), Hypertriglyceridemia (757), Hypoalphalipoproteinemia (762)"
+336	APOA2	Metabolic	2	10	1	"Apolipoprotein_deficiency (136), Hypercholesterolemia (724)"
+338	APOB	Metabolic	3	8	1	"Abetalipoproteinemia (17), Hypercholesterolemia (724), Hypobetalipoproteinemia (763)"
+344	APOC2	Metabolic	1	1	1	Hyperlipoproteinemia (737)
+345	APOC3	Metabolic	1	3	1	Apolipoprotein_deficiency (136)
+348	APOE	Grey	4	20	4	"Alzheimer_disease (98), Hyperlipoproteinemia (737), Myocardial_infarction (1054), Sea-blue_histiocyte_disease (1366)"
+350	APOH	Metabolic	1	3	1	Apolipoprotein_deficiency (136)
+351	APP	Grey	3	24	2	"Alzheimer_disease (98), Amyloidosis (103), Schizophrenia (1359)"
+353	APRT	Metabolic	1	1	1	Urolithiasise (1550)
+355	FAS	Grey	2	5	2	"Autoimmune_disease (174), Squamous_cell_carcinoma (1437)"
+356	FASLG	Immunological	1	3	1	Systemic_lupus_erythematosus (1471)
+358	AQP1	Grey	2	22	1	"Aquaporin-1_deficiency (138), Blood_group (212)"
+359	AQP2	Endocrine	1	2	1	Diabetes_insipidus (2427)
+360	AQP3	Hematological	1	22	1	Blood_group (212)
+367	AR	Grey	5	33	3	"Androgen_insensitivity (109), Breast_cancer (228), Perineal_hypospadias (1205), Prostate_cancer (1272), Spinal_muscular_atrophy (1426)"
+368	ABCC6	Connective_tissue_disorder	1	0	1	Pseudoxanthoma_elasticum (1285)
+383	ARG1	Metabolic	1	1	1	Argininemia (140)
+401	PHOX2A	Ophthamological	1	1	1	Fibrosis (538)
+405	ARNT	Cancer	1	36	1	Leukemia (886)
+410	ARSA	Neurological	1	1	1	Metachromatic_leukodystrophy (996)
+411	ARSB	Metabolic	1	0	1	Maroteaux-Lamy_syndrome (952)
+412	STS	Grey	2	6	2	"Ichthyosis (794), Placental_steroid_sulfatase_deficiency (5233)"
+415	ARSE	Connective_tissue_disorder	1	2	1	Chondrodysplasia_punctata (315)
+420	DO	Hematological	1	22	1	Blood_group (212)
+427	ASAH1	Metabolic	1	0	1	Farber_lipogranulomatosis (526)
+435	ASL	Metabolic	1	1	1	Argininemia (140)
+443	ASPA	Metabolic	1	0	1	Canavan_disease (258)
+445	ASS	Metabolic	1	1	1	Citrullinemia (335)
+462	SERPINC1	Hematological	1	0	1	Antithrombin_III_deficiency (127)
+463	ATBF1	Cancer	1	11	1	Prostate_cancer (1272)
+471	ATIC	Metabolic	1	0	1	AICA-ribosiduria_due_to_ATIC_deficiency (69)
+472	ATM	Grey	4	28	2	"Ataxia-telangiectasia (157), Breast_cancer (228), Lymphoma (925), T-cell_lymphoblastic_leukemia (1478)"
+477	ATP1A2	Neurological	2	3	1	"Alternating_hemiplegia_of_childhood (96), Migraine (1013)"
+478	ATP1A3	Neurological	1	5	1	Dystonia (462)
+486	FXYD2	Renal	1	2	1	Hypomagnesemia (778)
+487	ATP2A1	Muscular	1	0	1	Brody_myopathy (231)
+488	ATP2A2	Dermatological	2	0	1	"Acrokeratosis_verruciformis (36), Darier_disease (404)"
+491	ATP2B2	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+525	ATP6V1B1	Renal	1	4	1	Renal_tubular_acidosis (7308)
+538	ATP7A	Grey	3	2	3	"Cutis_laxa (395), Menkes_disease (988), Occipital_horn_syndrome (1129)"
+540	ATP7B	Metabolic	1	0	1	Wilson_disease (1596)
+545	ATR	Developmental	1	0	1	Seckel_syndrome (1369)
+546	ATRX	Grey	5	0	2	"Alpha-thalassemia/mental_retardation_syndrome (92), Chudley-Lowry_syndrome (328), Juberg-Marsidi_syndrome (832), Smith-Fineman-Myers_syndrome (1409), Sutherland-Haan_syndrome-like (1465)"
+549	AUH	Metabolic	1	0	1	3-methylglutaconic_aciduria (8)
+551	AVP	Endocrine	1	2	1	Diabetes_insipidus (2427)
+554	AVPR2	Grey	2	2	2	"Diabetes_insipidus (2427), Nephrogenic_syndrome_of_inappropriate_antidiuresis (1080)"
+570	BAAT	Gastrointestinal	1	2	1	Hypercholanemia (723)
+580	BARD1	Cancer	1	18	1	Breast_cancer (228)
+581	BAX	Cancer	2	34	1	"Colon_cancer (346), T-cell_lymphoblastic_leukemia (1478)"
+582	BBS1	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+583	BBS2	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+585	BBS4	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+590	BCHE	Unclassified	1	0	0	"Apnea,_postanesthetic (134)"
+593	BCKDHA	Metabolic	1	3	1	Maple_syrup_urine_disease (948)
+594	BCKDHB	Metabolic	1	3	1	Maple_syrup_urine_disease (948)
+595	CCND1	Cancer	3	70	1	"Colon_cancer (346), Leukemia (886), von_Hippel-Lindau_syndrome (1572)"
+596	BCL2	Cancer	1	36	1	Leukemia (886)
+605	BCL7A	Cancer	1	0	1	"B-cell_non-Hodgkin_lymphoma,_high-grade (190)"
+606	BCL8	Cancer	1	9	1	Lymphoma (925)
+611	OPN1SW	Ophthamological	1	2	1	Colorblindness (348)
+613	BCR	Cancer	1	36	1	Leukemia (886)
+617	BCS1L	Grey	3	14	3	"GRACILE_syndrome (622), Leigh_syndrome (877), Mitochondrial_complex_deficiency (1016)"
+627	BDNF	Grey	3	6	3	"Central_hypoventilation_syndrome (287), Memory_impairment (984), Obsessive-compulsive_disorder (1128)"
+641	BLM	Cancer	1	0	1	Bloom_syndrome (213)
+642	BLMH	Neurological	1	11	1	Alzheimer_disease (98)
+657	BMPR1A	Cancer	2	2	1	"Cowden_disease (372), Polyposis (1245)"
+658	BMPR1B	Skeletal	1	4	1	Brachydactyly (224)
+659	BMPR2	Cardiovascular	1	0	1	"Pulmonary_hypertension,_familial_primary (5291)"
+668	FOXL2	Grey	2	1	2	"Blepharophimosis,_epicanthus_inversus,_and_ptosis (210), Premature_ovarian_failure (1260)"
+669	BPGM	Hematological	1	9	1	Hemolytic_anemia (660)
+672	BRCA1	Cancer	3	23	1	"Breast_cancer (228), Ovarian_cancer (1170), Papillary_serous_carcinoma_of_the_peritoneum (1183)"
+673	BRAF	Cancer	4	41	1	"Adenocarcinoma (45), Colon_cancer (346), Melanoma (978), Nonsmall_cell_lung_cancer (1115)"
+675	BRCA2	Grey	5	45	2	"Breast_cancer (228), Fanconi_anemia (523), Pancreatic_cancer (1178), Prostate_cancer (1272), Wilms_tumor (1595)"
+682	BSG	Hematological	1	22	1	Blood_group (212)
+686	BTD	Metabolic	1	0	1	Biotinidase_deficiency (203)
+695	BTK	Grey	2	3	2	"Agammaglobulinemia (63), XLA_and_isolated_growth_hormone_deficiency (1611)"
+699	BUB1	Cancer	1	33	1	Colon_cancer (346)
+701	BUB1B	Cancer	1	33	1	Colon_cancer (346)
+710	SERPING1	Immunological	1	1	1	Angioedema (114)
+712	C1QA	Immunological	1	12	1	Complementary_component_deficiency (240)
+713	C1QB	Immunological	1	12	1	Complementary_component_deficiency (240)
+714	C1QG	Immunological	1	12	1	Complementary_component_deficiency (240)
+716	C1S	Immunological	1	12	1	Complementary_component_deficiency (240)
+717	C2	Immunological	1	12	1	Complementary_component_deficiency (240)
+718	C3	Immunological	1	12	1	Complementary_component_deficiency (240)
+720	C4A	Immunological	1	12	1	Complementary_component_deficiency (240)
+721	C4B	Immunological	1	12	1	Complementary_component_deficiency (240)
+729	C6	Immunological	2	13	1	"Complementary_component_deficiency (240), Combined_immunodeficiency (4350)"
+730	C7	Immunological	1	12	1	Complementary_component_deficiency (240)
+732	C8B	Immunological	1	12	1	Complementary_component_deficiency (240)
+735	C9	Immunological	1	12	1	Complementary_component_deficiency (240)
+760	CA2	Renal	1	4	1	Renal_tubular_acidosis (7308)
+762	CA4	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+773	CACNA1A	Neurological	4	14	1	"Cerebellar_ataxia (289), Episodic_ataxia (497), Hemiplegic_migraine,_familial (656), Spinocereballar_ataxia (1428)"
+775	CACNA1C	multiple	1	0	1	Timothy_syndrome (1509)
+778	CACNA1F	Ophthamological	1	4	1	Night_blindness (1110)
+779	CACNA1S	Grey	3	3	3	"Hypokalemic_periodic_paralysis (776), Malignant_hyperthermia_susceptibility (942), Thyrotoxic_periodic_paralysis (1504)"
+785	CACNB4	Neurological	2	20	1	"Ataxia (154), Epilepsy (495)"
+788	SLC25A20	Metabolic	1	0	1	Carnitine-acylcarnitine_translocase_deficiency (271)
+796	CALCA	Bone	1	5	1	Osteoporosis (1163)
+799	CALCR	Bone	1	5	1	Osteoporosis (1163)
+825	CAPN3	Muscular	1	17	1	Muscular_dystrophy (1040)
+841	CASP8	Grey	2	10	2	"Autoimmune_disease (174), Hepatic_adenoma (668)"
+843	CASP10	Grey	3	12	2	"Autoimmune_disease (174), Gastric_cancer (572), Non-Hodgkin_lymphoma (1114)"
+845	CASQ2	Cardiovascular	1	2	1	Ventricular_tachycardia (1558)
+846	CASR	Endocrine	3	2	1	"Hyperparathyroidism (743), Hypocalcemia (764), Hypocalciuric_hypercalcemia (765)"
+847	CAT	Hematological	1	0	1	Acatalasemia (21)
+859	CAV3	Grey	5	44	3	"Cardiomyopathy (268), Creatine_phosphokinase (385), Muscular_dystrophy (1040), Myopathy (1059), Rippling_muscle_disease (1333)"
+860	RUNX2	Skeletal	2	0	1	"Cleidocranial_dysplasia (337), Dental_anomalies,_isolated (414)"
+861	RUNX1	Grey	3	46	3	"Leukemia (886), Platelet_defect/deficiency (1237), Rheumatoid_arthritis (1324)"
+865	CBFB	Cancer	1	3	1	Myelogenous_leukemia (1047)
+875	CBS	Grey	2	9	2	"Homocystinuria (698), Thrombophilia (1497)"
+889	KRIT1	Grey	3	2	2	"Cavernous_malformations_of_CNS_and_retina (279), Cerebral_cavernous_malformations (4291), Hyperkeratotic_cutaneous_capillary-venous_malformations_associated_with_cerebral_capillary_malformations (734)"
+915	CD3D	Immunological	1	7	1	Severe_combined_immunodeficiency (1383)
+916	CD3E	Immunological	1	5	1	Immunodeficiency (802)
+917	CD3G	Immunological	1	5	1	Immunodeficiency (802)
+925	CD8A	Immunological	1	0	1	"CD8_deficiency,_familial (284)"
+948	CD36	Grey	2	7	2	"Malaria (940), Platelet_defect/deficiency (1237)"
+958	CD40	Immunological	1	5	1	Immunodeficiency (802)
+959	CD40LG	Immunological	1	5	1	Immunodeficiency (802)
+960	CD44	Hematological	1	22	1	Blood_group (212)
+966	CD59	Immunological	1	0	1	CD59_deficiency (283)
+977	CD151	Renal	1	0	1	Nephropathy (1085)
+999	CDH1	Grey	5	33	2	"Breast_cancer (228), Endometrial_carcinoma (479), Gastric_cancer (572), Listeria_monocytogenes (909), Ovarian_cancer (1170)"
+1001	CDH3	Dermatological	1	3	1	Hypotrichosis (788)
+1019	CDK4	Cancer	1	4	1	Melanoma (978)
+1028	CDKN1C	multiple	1	3	1	Beckwith-Wiedemann_syndrome (194)
+1029	CDKN2A	Cancer	4	11	1	"Li_Fraumeni_syndrome (897), Melanoma (978), Orolaryngeal_cancer (1148), Pancreatic_cancer (1178)"
+1041	CDSN	Dermatological	1	3	1	Hypotrichosis (788)
+1050	CEBPA	Cancer	1	36	1	Leukemia (886)
+1053	CEBPE	Immunological	1	0	1	Specific_granule_deficiency (3419)
+1071	CETP	Grey	3	1	2	"CETP_deficiency (299), Hyperalphalipoproteinemia (716), Longevity (911)"
+1075	CTSC	Grey	3	0	2	"Haim-Munk_syndrome (634), Papillon-Lefevre_syndrome (1184), Periodontitis (1207)"
+1080	CFTR	Grey	5	2	2	"Congenital_bilateral_absence_of_vas_deferens (2354), Cystic_fibrosis (399), Hypertrypsinemia (758), Pancreatitis (1179), Sweat_chloride_elevation_without_CF (1466)"
+1103	CHAT	Muscular	1	6	1	Myasthenic_syndrome (1042)
+1118	CHIT1	Metabolic	1	0	1	Chitotriosidase_deficiency (307)
+1121	CHM	Ophthamological	1	0	1	Choroidal_dystrophy (323)
+1130	LYST	multiple	1	0	1	Chediak-Higashi_syndrome (304)
+1134	CHRNA1	Muscular	1	6	1	Myasthenic_syndrome (1042)
+1137	CHRNA4	Grey	2	18	2	"Epilepsy (495), Nicotine_addiction (1106)"
+1140	CHRNB1	Muscular	1	6	1	Myasthenic_syndrome (1042)
+1141	CHRNB2	Neurological	1	16	1	Epilepsy (495)
+1144	CHRND	Muscular	1	6	1	Myasthenic_syndrome (1042)
+1145	CHRNE	Muscular	1	6	1	Myasthenic_syndrome (1042)
+1161	ERCC8	multiple	1	1	1	Cockayne_syndrome (339)
+1180	CLCN1	Muscular	1	1	1	Myotonia_congenita (1062)
+1181	CLCN2	Neurological	1	16	1	Epilepsy (495)
+1184	CLCN5	Grey	4	3	2	"Dent_disease (416), Hypophosphatemia (783), Nephrolithiasis (1081), Proteinuria (1274)"
+1186	CLCN7	Bone	1	3	1	Osteopetrosis (1161)
+1187	CLCNKA	multiple	1	4	1	Bartter_syndrome (187)
+1188	CLCNKB	multiple	1	4	1	Bartter_syndrome (187)
+1200	TPP1	Neurological	1	5	1	Ceroid-lipofuscinosis (296)
+1201	CLN3	Neurological	1	5	1	Ceroid-lipofuscinosis (296)
+1203	CLN5	Neurological	1	5	1	Ceroid-lipofuscinosis (296)
+1231	CCR2	Immunological	1	3	1	HIV (684)
+1234	CCR5	Immunological	1	3	1	HIV (684)
+1244	ABCC2	Metabolic	1	0	1	Dubin-Johnson_syndrome (450)
+1258	CNGB1	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+1259	CNGA1	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+1261	CNGA3	Ophthamological	1	2	1	Achromatopsia (29)
+1277	COL1A1	Grey	5	12	2	"Caffey_disease (253), Dissection_of_cervical_arteries (439), Ehlers-Danlos_syndrome (470), Osteogenesis_imperfecta (1156), Osteoporosis (1163)"
+1278	COL1A2	Grey	4	13	2	"Ehlers-Danlos_syndrome (470), Marfan_syndrome (950), Osteogenesis_imperfecta (1156), Osteoporosis (1163)"
+1280	COL2A1	Grey	6	5	5	"Achondrogenesis-hypochondrogenesis,_type_II (26), Kniest_dysplasia (854), Osteoarthritis (1154), SMED_Strudwick_type (1408), Stickler_syndrome (1447), Wagner_syndrome (1575)"
+1281	COL3A1	Grey	2	8	1	"Aneurysm,_familial_arterial (2112), Ehlers-Danlos_syndrome (470)"
+1282	COL4A1	Neurological	1	0	1	Porencephaly (1247)
+1285	COL4A3	Renal	1	2	1	Alport_syndrome (94)
+1286	COL4A4	Renal	2	2	1	"Alport_syndrome (94), Hematuria,_familial_benign (653)"
+1287	COL4A5	Renal	1	2	1	Alport_syndrome (94)
+1288	COL4A6	Cancer	1	1	1	Leiomyomatosis (878)
+1289	COL5A1	Connective_tissue_disorder	1	8	1	Ehlers-Danlos_syndrome (470)
+1290	COL5A2	Connective_tissue_disorder	1	8	1	Ehlers-Danlos_syndrome (470)
+1291	COL6A1	Muscular	2	2	1	"Bethlem_myopathy (200), Ullrich_congenital_muscular_dystrophy (1542)"
+1292	COL6A2	Muscular	2	2	1	"Bethlem_myopathy (200), Ullrich_congenital_muscular_dystrophy (1542)"
+1293	COL6A3	Muscular	2	2	1	"Bethlem_myopathy (200), Ullrich_congenital_muscular_dystrophy (1542)"
+1294	COL7A1	Dermatological	4	10	1	"EBD (465), Epidermolysis_bullosa (493), Toenail_dystrophy,_isolated (1510), Transient_bullous_of_the_newborn (1518)"
+1296	COL8A2	Ophthamological	2	6	1	"Corneal_dystrophy (362), Fuchs_endothelial_corneal_dystrophy (558)"
+1297	COL9A1	Bone	1	5	1	Epiphyseal_dysplasia (496)
+1298	COL9A2	Grey	2	5	2	"Epiphyseal_dysplasia (496), Intervertebral_disc_disease (817)"
+1299	COL9A3	Grey	2	5	2	"Epiphyseal_dysplasia (496), Intervertebral_disc_disease (817)"
+1300	COL10A1	Grey	2	2	2	"Metaphyseal_chondrodysplasia (997), Spondylometaphyseal_dysplasia (1436)"
+1301	COL11A1	multiple	2	2	1	"Marshall_syndrome (953), Stickler_syndrome (1447)"
+1302	COL11A2	Grey	4	42	4	"Deafness (406), OSMED_syndrome (1151), Stickler_syndrome (1447), Weissenbacher-Zweymuller_syndrome (1586)"
+1308	COL17A1	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+1311	COMP	Grey	2	5	2	"Epiphyseal_dysplasia (496), Pseudoachondroplasia (1278)"
+1312	COMT	Psychiatric	1	8	1	Schizophrenia (1359)
+1316	KLF6	Cancer	2	20	1	"Gastric_cancer (572), Prostate_cancer (1272)"
+1326	MAP3K8	Cancer	1	3	1	Lung_cancer (918)
+1352	COX10	Neurological	1	1	1	Encephalopathy (476)
+1355	COX15	Grey	2	35	2	"Cardiomyopathy (268), Leigh_syndrome (877)"
+1356	CP	Grey	3	1	3	"Cerebellar_ataxia (289), Hemosiderosis,_systemic,_due_to_aceruloplasminemia (665), Hypoceruloplasminemia (766)"
+1369	CPN1	Hematological	1	0	1	Carboxypeptidase_N_deficiency (264)
+1371	CPOX	Metabolic	2	0	1	"Coproporphyria (361), Harderoporphyrinuria (639)"
+1373	CPS1	Metabolic	1	0	1	Carbamoylphosphate_synthetase_I_deficiency (262)
+1374	CPT1A	Metabolic	1	1	1	"CPT_deficiency,_hepatic (374)"
+1376	CPT2	Grey	2	10	2	"CPT_deficiency,_hepatic (374), Myopathy (1059)"
+1378	CR1	Hematological	1	22	1	Blood_group (212)
+1387	CREBBP	multiple	1	1	1	Rubenstein-Taybi_syndrome (1341)
+1406	CRX	Ophthamological	3	33	1	"Cone_dystrophy (352), Leber_congenital_amaurosis (873), Retinitis_pigmentosa (1316)"
+1409	CRYAA	Ophthamological	1	14	1	Cataract (277)
+1410	CRYAB	Grey	2	23	2	"Cataract (277), Myopathy (1059)"
+1411	CRYBA1	Ophthamological	1	14	1	Cataract (277)
+1414	CRYBB1	Ophthamological	1	14	1	Cataract (277)
+1415	CRYBB2	Ophthamological	1	14	1	Cataract (277)
+1420	CRYGC	Ophthamological	1	14	1	Cataract (277)
+1421	CRYGD	Ophthamological	1	14	1	Cataract (277)
+1428	CRYM	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+1436	CSF1R	Cancer	1	3	1	Myelogenous_leukemia (1047)
+1439	CSF2RB	Respiratory	1	3	1	Pulmonary_fibrosis (1291)
+1471	CST3	Neurological	1	1	1	Cerebral_amyloid_angiopathy (291)
+1476	CSTB	Neurological	1	16	1	Epilepsy (495)
+1482	NKX2-5	Cardiovascular	3	8	1	"Atrial_fibrillation (166), Atrioventricular_block (168), Tetralogy_of_Fallot (1483)"
+1491	CTH	Metabolic	2	0	1	"Cystathioninuria (398), Homocysteine_plasma_level (697)"
+1493	CTLA4	Endocrine	2	7	1	"Graves_disease (624), Hypothyroidism (787)"
+1497	CTNS	Renal	1	0	1	Cystinosis (400)
+1499	CTNNB1	Cancer	4	42	1	"Colon_cancer (346), Hepatic_adenoma (668), Ovarian_cancer (1170), Pilomatricoma (1230)"
+1513	CTSK	Skeletal	1	0	1	Pycnodysostosis (1293)
+1524	CX3CR1	Immunological	1	0	1	Rapid_progression_to_AIDS_from_HIV1_infection (1304)
+1528	CYB5	Hematological	1	3	1	Methemoglobinemia (999)
+1535	CYBA	Immunological	1	3	1	Chronic_granulomatous_disease (327)
+1536	CYBB	Immunological	1	3	1	Chronic_granulomatous_disease (327)
+1540	CYLD	Dermatological	1	0	1	"Cylindromatosis,_familial (397)"
+1545	CYP1B1	Grey	2	4	2	"Glaucoma (589), Peters_anomaly (1213)"
+1548	CYP2A6	Grey	2	2	2	"Coumarin_resistance (370), Nicotine_addiction (1106)"
+1557	CYP2C19	Metabolic	3	0	1	"Mephenytoin_poor_metabolizer (991), Opremazole_poor_metabolizer (1143), Proguanil_poor_metabolizer (1266)"
+1559	CYP2C9	Grey	2	2	1	"Tolbutamide_poor_metabolizer (1511), Warfarin_resistance/sensitivity (1580)"
+1565	CYP2D6	Metabolic	2	0	1	"Codeine_sensitivity (340), Debrisoquine_sensitivity (407)"
+1577	CYP3A5	Cardiovascular	1	11	1	Hypertension (752)
+1583	CYP11A1	Endocrine	1	1	1	Lipoid_adrenal_hyperplasia (903)
+1584	CYP11B1	Endocrine	2	3	1	"Adrenal_hyperplasia,_congenital (53), Aldosteronism (78)"
+1585	CYP11B2	Grey	3	0	3	"Aldosterone_to_renin_ratio_raised (77), Hypoaldosteronism (761), Low_renin_hypertension (915)"
+1586	CYP17A1	Endocrine	1	0	1	"17,20-lyase_deficiency (1)"
+1588	CYP19A1	Grey	2	0	2	"Aromatase_deficiency (142), Virilization (1563)"
+1589	CYP21A2	Endocrine	2	3	1	"Adrenal_hyperplasia,_congenital (53), Hyperandrogenism (718)"
+1593	CYP27A1	Metabolic	1	0	1	Cerebrotendinous_xanthomatosis (293)
+1594	CYP27B1	Bone	1	0	1	Pseudovitamin_D_deficiency_rickets_1 (1284)
+1603	DAD1	Unclassified	1	0	0	"Temperature-sensitive_apoptosis,_cellular (1480)"
+1604	DAF	Hematological	1	22	1	Blood_group (212)
+1618	DAZL	Renal	1	0	1	Spermatogenic_failure (1422)
+1621	DBH	Grey	2	10	2	"Dopamine_beta-hydroxylase_deficiency (441), Parkinson_disease (1192)"
+1629	DBT	Metabolic	1	3	1	Maple_syrup_urine_disease (948)
+1630	DCC	Cancer	1	33	1	Colon_cancer (346)
+1636	ACE	Grey	6	48	5	"Alzheimer_disease (98), Angiotensin_I-converting_enzyme (117), Diabetes_mellitus (427), Myocardial_infarction (1054), Renal_tubular_dysgenesis (9308), SARS,_progression_of (1352)"
+1639	DCTN1	Neurological	2	5	1	"Amyotrophic_lateral_sclerosis (104), Lower_motor_neuron_disease,_progressive,_without_sensory_symptoms (913)"
+1641	DCX	Neurological	2	3	1	"Lissencephaly (908), Subcortical_laminar_heterotopia (1456)"
+1643	DDB2	Dermatological	1	7	1	Xeroderma_pigmentosum (1608)
+1644	DDC	Metabolic	1	0	1	Aromatic_L-amino_acid_decarboxylase_deficiency (143)
+1646	AKR1C2	Nutritional	1	20	1	Obesity (1126)
+1649	DDIT3	Cancer	1	0	1	Myxoid_liposarcoma (1065)
+1674	DES	Grey	2	31	2	"Cardiomyopathy (268), Myopathy (1059)"
+1678	TIMM8A	Grey	3	40	2	"Deafness (406), Jensen_syndrome (829), Mohr-Tranebjaerg_syndrome (1022)"
+1687	DFNA5	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+1690	COCH	Grey	2	40	2	"Deafness (406), Meniere_disease (985)"
+1716	DGUOK	multiple	1	1	1	Mitochondrial_DNA_depletion_syndrome (5016)
+1717	DHCR7	multiple	1	0	1	Smith-Lemli-Opitz_syndrome (1410)
+1718	DHCR24	Metabolic	1	0	1	Desmosterolosis (426)
+1727	CYB5R3	Hematological	1	3	1	Methemoglobinemia (999)
+1728	NQO1	Grey	2	36	1	"Benzene_toxicity (195), Leukemia (886)"
+1729	DIAPH1	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+1730	DIAPH2	Renal	1	1	1	Premature_ovarian_failure (1260)
+1736	DKC1	Grey	2	1	2	"Dyskeratosis (458), Hoyeraal-Hreidarsson_syndrome (702)"
+1741	DLG3	Neurological	1	23	1	Mental_retardation (990)
+1747	DLX3	Grey	2	3	2	"Amelogenesis_imperfecta (99), Trichodontoosseous_syndrome (1522)"
+1755	DMBT1	Cancer	1	4	1	Glioblastoma (590)
+1756	DMD	Grey	3	25	2	"Becker_muscular_dystrophy (193), Cardiomyopathy (268), Duchenne_muscular_dystrophy (451)"
+1760	DMPK	Muscular	1	1	1	Myotonic_dystrophy (1063)
+1767	DNAH5	Grey	2	2	2	"Ciliary_dyskinesia (331), Kartagener_syndrome (840)"
+1773	DNASE1	Immunological	1	3	1	Systemic_lupus_erythematosus (1471)
+1785	DNM2	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+1789	DNMT3B	multiple	1	0	1	Immunodeficiency-centromeric_instability-facial_anomalies_syndrome (801)
+1798	DPAGT1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+1806	DPYD	Metabolic	2	0	1	"Fluorouracil_toxicity,_sensitivity_to (544), Thymine-uraciluria (1502)"
+1807	DPYS	Metabolic	1	0	1	Dihydropyrimidinuria (433)
+1811	SLC26A3	Gastrointestinal	1	0	1	"Chloride_diarrhea,_congenital,_Finnish_type (308)"
+1813	DRD2	Neurological	1	5	1	Dystonia (462)
+1815	DRD4	Psychiatric	1	0	1	Autonomic_nervous_system_dysfunction (175)
+1816	DRD5	Grey	3	5	3	"Attention-deficit_hyperactivity_disorder (171), Blepharospasm (211), Dystonia (462)"
+1822	ATN1	Neurological	1	0	1	Dentatorubro-pallidoluysian_atrophy (415)
+1828	DSG1	Dermatological	1	3	1	Keratosis_palmoplantaria_striata (847)
+1832	DSP	Grey	5	15	3	"Arrhythmogenic_right_ventricular_dysplasia (144), Dilated_cardiomyopathy_with_woolly_hair_and_keratoderma (434), Epidermolysis_bullosa (493), Keratosis_palmoplantaria_striata (847), Skin_fragility-woolly_hair_syndrome (1401)"
+1834	DSPP	Grey	3	40	2	"Deafness (406), Dentin_dysplasia,_type_II (417), Dentinogenesis_imperfecta,_Shields_type (418)"
+1836	SLC26A2	Grey	4	6	3	"Achondrogenesis_Ib (27), Atelosteogenesis (160), Diastrophic_dysplasia (430), Epiphyseal_dysplasia (496)"
+1837	DTNA	Cardiovascular	1	0	1	Left_ventricular_noncompaction (875)
+1861	TOR1A	Neurological	1	5	1	Dystonia (462)
+1889	ECE1	Grey	2	17	2	"Hirschsprung_disease (681), Hypertension (752)"
+1890	ECGF1	multiple	1	0	1	Myoneurogastrointestinal_encephalomyopathy_syndrome (1058)
+1893	ECM1	Metabolic	1	0	1	Lipoid_proteinosis (2903)
+1896	EDA	Dermatological	1	7	1	Ectodermal_dysplasia (466)
+1908	EDN3	Grey	3	7	3	"Central_hypoventilation_syndrome (287), Hirschsprung_disease (681), Shah-Waardenburg_syndrome (1386)"
+1909	EDNRA	Neurological	1	3	1	Migraine (1013)
+1910	EDNRB	Grey	3	7	2	"ABCD_syndrome (15), Hirschsprung_disease (681), Waardenburg-Shah_syndrome (1573)"
+1947	EFNB1	Skeletal	1	0	1	Craniofrontonasal_dysplasia (380)
+1956	EGFR	Cancer	2	4	1	"Adenocarcinoma (45), Nonsmall_cell_lung_cancer (1115)"
+1959	EGR2	Grey	3	22	2	"Charcot-Marie-Tooth_disease (301), Dejerine-Sottas_disease (410), Neuropathy (1099)"
+1967	EIF2B1	Neurological	1	4	1	Leukoencephalopathy_with_vanishing_white_matter (891)
+1991	ELA2	Hematological	2	3	1	"Hematopoiesis,_cyclic (652), Neutropenia (1101)"
+2006	ELN	Grey	3	2	3	"Cutis_laxa (395), Supravalvar_aortic_stenosis (1463), Williams-Beuren_syndrome (1594)"
+2010	EMD	Muscular	1	1	1	Emery-Dreifuss_muscular_dystrophy (474)
+2018	EMX2	Neurological	1	0	1	Schizencephaly (1357)
+2022	ENG	Cardiovascular	1	1	1	Hereditary_hemorrhagic_telangiectasia (669)
+2027	ENO3	Metabolic	1	0	1	Enolase_deficiency (485)
+2033	EP300	Grey	2	34	2	"Colon_cancer (346), Rubenstein-Taybi_syndrome (1341)"
+2035	EPB41	Hematological	1	3	1	Elliptocytosis (472)
+2038	EPB42	Hematological	1	4	1	Spherocytosis (1423)
+2048	EPHB2	Cancer	1	11	1	Prostate_cancer (1272)
+2052	EPHX1	Grey	2	4	2	"Hypercholanemia (723), Preeclampsia (1257)"
+2053	EPHX2	Metabolic	1	7	1	Hypercholesterolemia (724)
+2055	CLN8	Neurological	1	5	1	Ceroid-lipofuscinosis (296)
+2057	EPOR	Hematological	1	1	1	Erythrocytosis (505)
+2064	ERBB2	Cancer	4	21	1	"Adenocarcinoma (45), Gastric_cancer (572), Glioblastoma (590), Ovarian_cancer (1170)"
+2068	ERCC2	Grey	3	10	2	"Cerebrooculofacioskeletal_syndrome (292), Trichothiodystrophy (1525), Xeroderma_pigmentosum (1608)"
+2070	EYA4	Grey	2	64	2	"Cardiomyopathy (268), Deafness (406)"
+2071	ERCC3	Dermatological	2	9	1	"Trichothiodystrophy (1525), Xeroderma_pigmentosum (1608)"
+2072	ERCC4	Dermatological	1	7	1	Xeroderma_pigmentosum (1608)
+2073	ERCC5	Grey	2	8	2	"Cerebrooculofacioskeletal_syndrome (292), Xeroderma_pigmentosum (1608)"
+2074	ERCC6	multiple	3	3	1	"Cerebrooculofacioskeletal_syndrome (292), Cockayne_syndrome (339), De_Sanctis-Cacchione_syndrome (424)"
+2099	ESR1	Grey	3	4	3	"Estrogen_resistance (509), HDL_cholesterol_level_QTL (644), Migraine (1013)"
+2108	ETFA	Metabolic	1	3	1	Glutaricaciduria (603)
+2109	ETFB	Metabolic	1	3	1	Glutaricaciduria (603)
+2110	ETFDH	Metabolic	1	3	1	Glutaricaciduria (603)
+2121	EVC	Skeletal	2	1	1	"Ellis-van_Creveld_syndrome (473), Weyers_acrodental_dysostosis (1590)"
+2130	EWSR1	Cancer	2	2	1	"Chondrosarcoma (316), Ewing_sarcoma (511)"
+2131	EXT1	Grey	2	3	2	"Chondrosarcoma (316), Exostoses (514)"
+2132	EXT2	Bone	1	1	1	Exostoses (514)
+2138	EYA1	Grey	2	3	2	"Anterior_segment_anomalies_and_cataract (126), Branchiootic_syndrome (226)"
+2147	F2	Hematological	3	0	1	"Dysprothrombinemia (460), Hyperprothrombinemia (751), Hypoprothrombinemia (786)"
+2153	F5	Hematological	3	12	1	"Hemorrhagic_diathesis (664), Thrombocytopenia (1494), Thrombophilia (1497)"
+2155	F7	Grey	2	16	2	"Factor_x_deficiency (520), Myocardial_infarction (1054)"
+2157	F8	Hematological	1	1	1	Hemophilia (663)
+2158	F9	Hematological	2	3	1	"Hemophilia (663), Warfarin_resistance/sensitivity (1580)"
+2159	F10	Hematological	1	7	1	Factor_x_deficiency (520)
+2160	F11	Hematological	1	7	1	Factor_x_deficiency (520)
+2161	F12	Hematological	1	7	1	Factor_x_deficiency (520)
+2162	F13A1	Hematological	1	7	1	Factor_x_deficiency (520)
+2165	F13B	Hematological	1	7	1	Factor_x_deficiency (520)
+2166	FAAH	Psychiatric	1	0	1	Drug_addiction (447)
+2175	FANCA	multiple	1	10	1	Fanconi_anemia (523)
+2176	FANCC	multiple	1	10	1	Fanconi_anemia (523)
+2177	FANCD2	multiple	1	10	1	Fanconi_anemia (523)
+2178	FANCE	multiple	1	10	1	Fanconi_anemia (523)
+2182	ACSL4	Neurological	1	23	1	Mental_retardation (990)
+2184	FAH	Metabolic	1	2	1	Tyrosinemia (1540)
+2187	FANCB	multiple	1	10	1	Fanconi_anemia (523)
+2188	FANCF	multiple	1	10	1	Fanconi_anemia (523)
+2189	FANCG	multiple	1	10	1	Fanconi_anemia (523)
+2192	FBLN1	Skeletal	1	1	1	Synpolydactyly (1470)
+2200	FBN1	Grey	6	3	4	"Aortic_aneurysm (130), Ectopia (467), Marfan_syndrome (950), MASS_syndrome (957), Shprintzen-Goldberg_syndrome (1388), Weill-Marchesani_syndrome (1585)"
+2201	FBN2	Connective_tissue_disorder	1	0	1	"Contractural_arachnodactyly,_congenital (358)"
+2202	EFEMP1	Ophthamological	1	0	1	Doyne_honeycomb_degeneration_of_retina (446)
+2203	FBP1	Metabolic	1	0	1	Fructose-bisphosphatase_deficiency (555)
+2206	MS4A2	Respiratory	1	12	1	Asthma (153)
+2209	FCGR1A	Immunological	1	0	1	"IgG_receptor_I,_phagocytic,_familial_deficiency_of (799)"
+2212	FCGR2A	Connective_tissue_disorder	1	0	1	Lupus_erythematosus (919)
+2213	FCGR2B	Cancer	1	9	1	Lymphoma (925)
+2214	FCGR3A	Grey	2	4	2	"Neutropenia (1101), Viral_infection (1562)"
+2218	FCMD	Grey	2	18	2	"Muscular_dystrophy (1040), Walker-Warburg_syndrome (1578)"
+2235	FECH	Metabolic	1	0	1	Protoporphyria (1276)
+2243	FGA	Grey	3	7	2	"Afibrinogenemia (61), Amyloidosis (103), Dysfibrinogenemia (457)"
+2244	FGB	Hematological	3	9	1	"Afibrinogenemia (61), Dysfibrinogenemia (457), Thrombophilia (1497)"
+2245	FGD1	Grey	2	23	2	"Aarskog-Scott_syndrome (13), Mental_retardation (990)"
+2255	FGF10	Gastrointestinal	1	0	1	Aplasia_of_lacrimal_and_salivary_glands (132)
+2259	FGF14	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+2260	FGFR1	Grey	3	2	2	"Jackson-Weiss_syndrome (827), Kallmann_syndrome (836), Pfeiffer_syndrome (1215)"
+2261	FGFR3	Grey	8	37	2	"Achondroplasia (28), Bladder_cancer (207), Cervical_carcinoma (298), Colon_cancer (346), Crouzon_syndrome (391), Hypochondroplasia (767), Muenke_syndrome (1034), Thanatophoric_dysplasia,_types_I_and_II (1490)"
+2263	FGFR2	Grey	9	13	5	"Apert_syndrome (131), Beare-Stevenson_cutis_gyrata_syndrome (192), Craniofacial-skeletal-dermatologic_dysplasia (379), Craniosynostosis (383), Crouzon_syndrome (391), Gastric_cancer (572), Jackson-Weiss_syndrome (827), Pfeiffer_syndrome (1215), Saethre-Chotzen_syndrome (1344)"
+2264	FGFR4	Cancer	1	1	1	Cancer_susceptibility (259)
+2266	FGG	Hematological	3	9	1	"Dysfibrinogenemia (457), Hypofibrinogenemia (770), Thrombophilia (1497)"
+2271	FH	Grey	3	1	2	"Fumarase_deficiency (561), Leiomyomatosis (878), Multiple_cutaneous_and_uterine_leiomyomata (3037)"
+2289	FKBP5	Psychiatric	1	0	1	Major_depressive_disorder (939)
+2296	FOXC1	Grey	5	4	2	"Anterior_segment_anomalies_and_cataract (126), Axenfeld_anomaly (177), Iridogoniodysgenesis (822), Iris_hypoplasia_and_glaucoma (823), Rieger_syndrome (1331)"
+2301	FOXE3	Ophthamological	1	3	1	Anterior_segment_anomalies_and_cataract (126)
+2303	FOXC2	Grey	2	1	2	"Lymphedema (921), Yellow_nail_syndrome (1613)"
+2304	FOXE1	Endocrine	1	0	1	Bamforth-Lazarus_syndrome (180)
+2308	FOXO1A	Cancer	1	3	1	Rhabdomyosarcoma (1323)
+2316	FLNA	Grey	4	0	3	"Frontometaphyseal_dysplasia (554), Heterotopia (676), Melnick-Needles_syndrome (981), Otopalatodigital_syndrome (1168)"
+2317	FLNB	Grey	3	1	2	"Atelosteogenesis (160), Larson_syndrome (865), Spondylocarpotarsal_synostosis_syndrome (1432)"
+2322	FLT3	Cancer	1	36	1	Leukemia (886)
+2324	FLT4	Grey	2	2	2	"Hemangioma (651), Lymphedema (921)"
+2328	FMO3	Metabolic	1	0	1	Fish-odor_syndrome (541)
+2332	FMR1	Neurological	1	0	1	Fragile_X_syndrome (550)
+2334	AFF2	Neurological	1	23	1	Mental_retardation (990)
+2395	FXN	Neurological	1	0	1	Friedreich_ataxia (553)
+2487	FRZB	Connective_tissue_disorder	1	3	1	Osteoarthritis (1154)
+2488	FSHB	Endocrine	1	0	1	"Follicle-stimulating_hormone_deficiency,_isolated (546)"
+2489	FSHMD1A	Muscular	1	0	1	Facioscapulohumeral_muscular_dystrophy (519)
+2492	FSHR	Grey	4	1	2	"Ovarian_dysgenesis (3171), Ovarian_hyperstimulation_syndrome (5170), Ovarian_sex_cord_tumors (7170), Twinning,_dizygotic (1538)"
+2495	FTH1	Hematological	1	1	1	Iron_overload/deficiency (824)
+2512	FTL	Grey	2	1	2	"Basal_ganglia_disease (4188), Hyperferritinemia-cataract_syndrome (727)"
+2516	NR5A1	Grey	2	0	1	"Adrenocortical_insufficiency (2055), Sex_reversal (1384)"
+2517	FUCA1	Metabolic	1	0	1	Fucosidosis (559)
+2523	FUT1	Hematological	1	1	1	Bombay_phenotype (216)
+2524	FUT2	Grey	2	1	2	"Bombay_phenotype (216), Norwalk_virus_infection,_resistance_to (1119)"
+2525	FUT3	Hematological	1	22	1	Blood_group (212)
+2528	FUT6	Metabolic	1	0	1	Fucosyltransferase-6_deficiency (560)
+2538	G6PC	Metabolic	1	8	1	Glycogen_storage_disease (610)
+2539	G6PD	Grey	3	9	2	"Favism (528), G6PD_deficiency (563), Hemolytic_anemia (660)"
+2542	SLC37A4	Metabolic	1	8	1	Glycogen_storage_disease (610)
+2548	GAA	Metabolic	1	8	1	Glycogen_storage_disease (610)
+2554	GABRA1	Neurological	1	16	1	Epilepsy (495)
+2555	GABRA2	Unclassified	1	0	0	Alcoholism (75)
+2562	GABRB3	Psychiatric	1	1	1	Insomnia (812)
+2566	GABRG2	Neurological	2	18	1	"Epilepsy (495), Myoclonic_epilepsy (1055)"
+2581	GALC	Neurological	1	0	1	Krabbe_disease (856)
+2582	GALE	Metabolic	1	0	1	Galactose_epimerase_deficiency (566)
+2584	GALK1	Metabolic	1	0	1	Galactokinase_deficiency (565)
+2588	GALNS	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+2591	GALNT3	Bone	1	1	1	"Calcinosis,_tumoral (254)"
+2592	GALT	Metabolic	1	0	1	Galactosemia (567)
+2593	GAMT	Metabolic	1	0	1	GAMT_deficiency (570)
+2617	GARS	Grey	2	23	2	"Charcot-Marie-Tooth_disease (301), Spinal_muscular_atrophy (1426)"
+2623	GATA1	Grey	3	36	2	"Dyserythropoietic_anemia (456), Leukemia (886), Macrothrombocytopenia (936)"
+2625	GATA3	Endocrine	1	0	1	Hypoparathyroidism (781)
+2626	GATA4	Cardiovascular	1	4	1	Atrial_fibrillation (166)
+2628	GATM	Metabolic	1	0	1	AGAT_deficiency (64)
+2629	GBA	Metabolic	1	1	1	Gaucher_disease (575)
+2632	GBE1	Metabolic	1	8	1	Glycogen_storage_disease (610)
+2638	GC	Endocrine	1	1	1	Graves_disease (624)
+2639	GCDH	Metabolic	1	3	1	Glutaricaciduria (603)
+2642	GCGR	Endocrine	1	26	1	Diabetes_mellitus (427)
+2643	GCH1	Neurological	1	5	1	Dystonia (462)
+2645	GCK	Grey	3	27	2	"Diabetes_mellitus (427), Hyperinsulinism (731), MODY (1020)"
+2651	GCNT2	Hematological	2	22	1	"Adult_i_phenotype (58), Blood_group (212)"
+2652	OPN1MW	Ophthamological	2	2	1	"Blue-cone_monochromacy (214), Colorblindness (348)"
+2653	GCSH	Metabolic	1	3	1	Glycine_encephalopathy (608)
+2654	GCSL	Grey	2	14	2	"Leigh_syndrome (877), Maple_syrup_urine_disease (948)"
+2660	GDF8	Muscular	1	1	1	Muscle_hypertrophy (1039)
+2664	GDI1	Neurological	1	23	1	Mental_retardation (990)
+2668	GDNF	Grey	2	7	2	"Central_hypoventilation_syndrome (287), Hirschsprung_disease (681)"
+2670	GFAP	multiple	1	1	1	Alexander_disease (79)
+2672	GFI1	Hematological	1	3	1	Neutropenia (1101)
+2677	GGCX	Hematological	1	1	1	Vitamin_K-dependent_coagulation_defect (1565)
+2683	B4GALT1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+2688	GH1	Endocrine	1	0	1	Isolated_growth_hormone_deficiency (825)
+2690	GHR	Skeletal	2	2	1	"Laron_dwarfism (863), Short_stature (1387)"
+2692	GHRHR	Endocrine	1	1	1	Growth_hormone (628)
+2694	GIF	Hematological	1	0	1	Intrinsic_factor_deficiency (820)
+2697	GJA1	Grey	4	2	2	"Atrioventricular_block (168), Hypoplastic_left_heart_syndrome (2785), Oculodentodigital_dysplasia (1132), Syndactyly (1468)"
+2700	GJA3	Ophthamological	1	14	1	Cataract (277)
+2703	GJA8	Ophthamological	1	14	1	Cataract (277)
+2705	GJB1	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+2706	GJB2	Grey	6	41	3	"Bart-Pumphrey_syndrome (186), Deafness (406), Hystrix-like_ichthyosis_with_deafness (792), Keratitis-ichthyosis-deafness_syndrome (843), Keratoderma,_palmoplantar,_with_deafness (845), Vohwinkel_syndrome (1571)"
+2707	GJB3	Grey	2	42	2	"Deafness (406), Erythrokeratoderma (507)"
+2710	GK	Metabolic	1	0	1	Glycerol_kinase_deficiency (607)
+2717	GLA	Metabolic	1	0	1	Fabry_disease (518)
+2719	GPC3	Grey	2	3	2	"Simpson-Golabi-Behmel_syndrome (1397), Wilms_tumor (1595)"
+2720	GLB1	Metabolic	2	8	1	"GM-gangliosidosis (614), Mucopolysaccharidosis (1033)"
+2729	GCLC	Hematological	1	9	1	Hemolytic_anemia (660)
+2730	GCLM	Cardiovascular	1	9	1	Myocardial_infarction (1054)
+2731	GLDC	Metabolic	1	3	1	Glycine_encephalopathy (608)
+2736	GLI2	multiple	1	0	1	Pituitary_anomalies_with_holoprosencephaly-like_features (3232)
+2737	GLI3	Grey	4	0	2	"Acrocallosal_syndrome (32), Greig_cephalopolysyndactyly_syndrome (626), Pallister-Hall_syndrome (1175), Polydactyly (1243)"
+2739	GLO1	Psychiatric	1	3	1	Autism (173)
+2741	GLRA1	Neurological	2	1	1	"Hyperekplexia (725), Startle_disease (1440)"
+2743	GLRB	Neurological	1	1	1	Hyperekplexia (725)
+2746	GLUD1	Metabolic	1	0	1	Hyperinsulinism-hyperammonemia_syndrome (732)
+2760	GM2A	Metabolic	1	2	1	GM-gangliosidosis (614)
+2771	GNAI2	Grey	2	4	2	"Pituitary_ACTH-secreting_adenoma (1232), Ventricular_tachycardia (1558)"
+2778	GNAS	Grey	6	3	4	"Acromegaly (38), McCune-Albright_syndrome (963), Osseous_heteroplasia (1152), Pituitary_ACTH-secreting_adenoma (1232), Pseudohypoparathyroidism (1282), Somatotrophinoma (1415)"
+2779	GNAT1	Ophthamological	1	4	1	Night_blindness (1110)
+2780	GNAT2	Ophthamological	1	2	1	Achromatopsia (29)
+2784	GNB3	Cardiovascular	1	11	1	Hypertension (752)
+2798	GNRHR	Endocrine	2	3	1	"Fertile_eunuch_syndrome (532), Hypogonadotropic_hypogonadism (774)"
+2799	GNS	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+2811	GP1BA	Hematological	1	2	1	Bernard-Soulier_syndrome (196)
+2812	GP1BB	Hematological	2	2	1	"Bernard-Soulier_syndrome (196), Giant_platelet_disorder,_isolated (584)"
+2815	GP9	Hematological	1	2	1	Bernard-Soulier_syndrome (196)
+2820	GPD2	Endocrine	1	26	1	Diabetes_mellitus (427)
+2821	GPI	Hematological	1	9	1	Hemolytic_anemia (660)
+2908	NR3C1	Endocrine	1	0	1	Cortisol_resistance (367)
+2934	GSN	Neurological	1	5	1	Amyloidosis (103)
+2937	GSS	Grey	2	9	2	"Glutathione_synthetase_deficiency (604), Hemolytic_anemia (660)"
+2956	MSH6	Cancer	4	40	1	"Cancer_susceptibility (259), Colon_cancer (346), Endometrial_carcinoma (479), Ovarian_cancer (1170)"
+2978	GUCA1A	Ophthamological	1	6	1	Cone_dystrophy (352)
+2989	GULOP	Nutritional	1	0	1	Scurvy (1365)
+2990	GUSB	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+2993	GYPA	Hematological	1	22	1	Blood_group (212)
+2994	GYPB	Hematological	1	22	1	Blood_group (212)
+2995	GYPC	Grey	2	26	2	"Blood_group (212), Malaria (940)"
+2998	GYS2	Metabolic	1	8	1	Glycogen_storage_disease (610)
+3000	GUCY2D	Ophthamological	2	9	1	"Cone_dystrophy (352), Leber_congenital_amaurosis (873)"
+3028	HADH2	Metabolic	1	0	1	2-methyl-3-hydroxybutyryl-CoA_dehydrogenase_deficiency (3)
+3030	HADHA	Metabolic	4	1	1	"Fatty_liver,_acute,_of_pregnancy (527), HELLP_syndrome (649), LCHAD_deficiency (870), Trifunctional_protein_deficiency (1526)"
+3032	HADHB	Metabolic	1	1	1	Trifunctional_protein_deficiency (1526)
+3033	HADHSC	Metabolic	1	0	1	3-hydroxyacyl-CoA_dehydrogenase_deficiency (6)
+3034	HAL	Metabolic	1	0	1	Histidinemia (682)
+3039	HBA1	Hematological	4	6	1	"Erythremias (504), Heinz_body_anemia (648), Methemoglobinemia (999), Thalassemias (1486)"
+3040	HBA2	Hematological	5	5	1	"Erythrocytosis (505), Heinz_body_anemia (648), Hemoglobin_H_disease (659), Hypochromic_microcytic_anemia (768), Thalassemias (1486)"
+3043	HBB	Hematological	6	8	1	"Erythremias (504), Heinz_body_anemia (648), HPFH (703), Methemoglobinemia (999), Sickle_cell_anemia (1393), Thalassemias (1486)"
+3045	HBD	Hematological	1	4	1	Thalassemias (1486)
+3047	HBG1	Hematological	1	2	1	HPFH (703)
+3048	HBG2	Hematological	1	2	1	HPFH (703)
+3053	SERPIND1	Hematological	1	8	1	Thrombophilia (1497)
+3060	HCRT	Psychiatric	1	0	1	Narcolepsy (1073)
+3064	HD	Neurological	1	3	1	Huntington_disease (708)
+3073	HEXA	Metabolic	3	2	1	"GM-gangliosidosis (614), Hex_A_pseudodeficiency (677), Tay-Sachs_disease (1477)"
+3074	HEXB	Grey	2	6	2	"Sandhoff_disease,_infantile,_juvenile,_and_adult_forms (1347), Spinal_muscular_atrophy (1426)"
+3075	CFH	Grey	4	11	3	"Factor_x_deficiency (520), Hemolytic-uremic_syndrome (661), Macular_degeneration (937), Nephropathy-hypertension (1084)"
+3077	HFE	Metabolic	2	9	1	"Hemochromatosis (657), Porphyria (1249)"
+3081	HGD	Metabolic	1	0	1	Alkaptonuria (80)
+3098	HK1	Hematological	1	9	1	Hemolytic_anemia (660)
+3106	HLA-B	Grey	3	0	3	"Abacavir_hypersensitivity (14), Ankylosing_spoldylitis (121), Stevens-Johnson_syndrome,_carbamazepine-induced (1446)"
+3110	HLXB9	Skeletal	1	0	1	Currarino_syndrome (394)
+3115	HLA-DPB1	Unclassified	1	0	0	"Beryllium_disease,_chronic (197)"
+3119	HLA-DQB1	Neurological	1	1	1	Creutzfeldt-Jakob_disease (388)
+3123	HLA-DRB1	Immunological	1	2	1	Sarcoidosis (1349)
+3141	HLCS	Metabolic	1	0	1	Holocarboxylase_synthetase_deficiency (688)
+3145	HMBS	Metabolic	1	5	1	Porphyria (1249)
+3155	HMGCL	Metabolic	1	1	1	HMG-CoA_deficiency (686)
+3156	HMGCR	Metabolic	1	0	1	Statins (1442)
+3158	HMGCS2	Metabolic	1	1	1	HMG-CoA_deficiency (686)
+3162	HMOX1	Metabolic	1	0	1	Heme_oxygenase-1_deficiency (654)
+3172	HNF4A	Endocrine	2	27	1	"Diabetes_mellitus (427), MODY (1020)"
+3176	HNMT	Respiratory	1	12	1	Asthma (153)
+3198	HOXA1	Neurological	2	0	1	"Athabaskan_brainstem_dysgenesis_syndrome (162), Bosley-Salih-Alorainy_syndrome (220)"
+3207	HOXA11	multiple	1	0	1	Radioulnar_synostosis_with_amegakaryocytic_thrombocytopenia (1301)
+3209	HOXA13	multiple	2	0	1	"Guttmacher_syndrome (630), Hand-foot-uterus_syndrome (638)"
+3233	HOXD4	Cancer	1	36	1	Leukemia (886)
+3236	HOXD10	Grey	2	17	2	"Charcot-Marie-Tooth_disease (301), Vertical_talus (1559)"
+3239	HOXD13	Skeletal	2	5	1	"Brachydactyly (224), Synpolydactyly (1470)"
+3240	HP	Hematological	2	0	1	"Anhaptoglobinemia (118), Hypohaptoglobinemia (775)"
+3242	HPD	Metabolic	1	2	1	Tyrosinemia (1540)
+3251	HPRT1	Metabolic	2	0	1	"HPRT-related_gout (704), Lesch-Nyhan_syndrome, (884)"
+3257	HPS1	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+3265	HRAS	Grey	3	13	2	"Bladder_cancer (207), Costello_syndrome (369), Thyroid_carcinoma (1503)"
+3273	HRG	Hematological	1	8	1	Thrombophilia (1497)
+3284	HSD3B2	Metabolic	1	0	1	"3-beta-hydroxysteroid_dehydrogenase,_type_II,_deficiency (5)"
+3290	HSD11B1	Metabolic	1	1	1	Cortisone_reductase_deficiency (368)
+3291	HSD11B2	Grey	2	11	2	"Apparent_mineralocorticoid_excess,_hypertension_due_to (137), Hypertension (752)"
+3293	HSD17B3	Developmental	1	1	1	"Pseudohermaphroditism,_male (1279)"
+3295	HSD17B4	Metabolic	1	0	1	D-bifunctional_protein_deficiency (405)
+3299	HSF4	Ophthamological	1	14	1	Cataract (277)
+3315	HSPB1	Neurological	2	21	1	"Charcot-Marie-Tooth_disease (301), Neuropathy (1099)"
+3329	HSPD1	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+3339	HSPG2	Grey	2	0	2	"Dyssegmental_dysplasia,_Silverman-Handmaker_type (461), Schwartz-Jampel_syndrome,_type_1 (1361)"
+3356	HTR2A	Grey	5	10	2	"Alcohol_dependence (74), Anorexia_nervosa (124), Obsessive-compulsive_disorder (1128), Schizophrenia (1359), Seasonal_affective_disorder (1367)"
+3373	HYAL1	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+3383	ICAM1	Immunological	1	4	1	Malaria (940)
+3386	ICAM4	Hematological	1	22	1	Blood_group (212)
+3423	IDS	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+3425	IDUA	Metabolic	1	6	1	Mucopolysaccharidosis (1033)
+3426	IF	Immunological	1	12	1	Complementary_component_deficiency (240)
+3458	IFNG	Grey	4	7	4	"AIDS (70), Aplastic_anemia (133), Tuberous_sclerosis (1534), Tuberculosis (1533)"
+3459	IFNGR1	Grey	4	5	2	"BCG_infection (191), H._pylori_infection (705), Mycobacterial_infection (1043), Tuberculosis (1533)"
+3460	IFNGR2	Immunological	1	4	1	Mycobacterial_infection (1043)
+3476	IGBP1	Neurological	1	0	1	"Corpus_callosum,_agenesis_of,_with_mental_retardation,_ocular_coloboma_and_micrognathia (366)"
+3479	IGF1	Developmental	1	0	1	Growth_retardation (2628)
+3480	IGF1R	Developmental	1	1	1	Intrauterine_and_postnatal_growth_retardation (819)
+3481	IGF2	Developmental	1	1	1	Intrauterine_and_postnatal_growth_retardation (819)
+3482	IGF2R	Cancer	1	7	1	Hepatic_adenoma (668)
+3483	IGFALS	Endocrine	1	0	1	"Acid-labile_subunit,_deficiency_of (30)"
+3501	IGHG2	Immunological	1	0	1	IgG2_deficiency (798)
+3507	IGHM	Hematological	1	3	1	Agammaglobulinemia (63)
+3508	IGHMBP2	Muscular	1	6	1	Spinal_muscular_atrophy (1426)
+3514	IGKC	Immunological	1	0	1	Kappa_light_chain_deficiency (839)
+3543	IGLL1	Hematological	1	3	1	Agammaglobulinemia (63)
+3549	IHH	Skeletal	2	4	1	"Acrocapitofemoral_dysplasia (33), Brachydactyly (224)"
+3553	IL1B	Cancer	1	9	1	Gastric_cancer (572)
+3557	IL1RN	Cancer	1	9	1	Gastric_cancer (572)
+3559	IL2RA	Immunological	1	0	1	"Interleukin-2_receptor,_alpha_chain,_deficiency_of (816)"
+3561	IL2RG	Immunological	2	8	1	"Combined_immunodeficiency (4350), Severe_combined_immunodeficiency (1383)"
+3566	IL4R	Immunological	1	4	1	Atopy (164)
+3569	IL6	Immunological	1	0	1	Kaposi_sarcoma (838)
+3575	IL7R	Immunological	1	7	1	Severe_combined_immunodeficiency (1383)
+3586	IL10	Grey	3	10	2	"Graft-versus-host_disease (623), HIV (684), Rheumatoid_arthritis (1324)"
+3593	IL12B	Respiratory	1	12	1	Asthma (153)
+3594	IL12RB1	Immunological	1	4	1	Mycobacterial_infection (1043)
+3596	IL13	Grey	2	12	2	"Allergic_rhinitis (83), Asthma (153)"
+3614	IMPDH1	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+3621	ING1	Cancer	1	2	1	Squamous_cell_carcinoma (1437)
+3630	INS	Endocrine	2	5	1	"Hyperproinsulinemia (748), MODY (1020)"
+3640	INSL3	Renal	1	1	1	Cryptorchidism (392)
+3643	INSR	Grey	3	26	3	"Diabetes_mellitus (427), Leprechaunism (881), Rabson-Mendenhall_syndrome (1298)"
+3651	IPF1	Grey	3	27	2	"Diabetes_mellitus (427), MODY (1020), Pancreatic_agenesis (3178)"
+3655	ITGA6	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3659	IRF1	Grey	5	15	3	"Gastric_cancer (572), Macrocytic_anemia (935), Myelodysplastic_syndrome (1045), Myelogenous_leukemia (1047), Nonsmall_cell_lung_cancer (1115)"
+3662	IRF4	Cancer	1	1	1	Multiple_myeloma (9037)
+3664	IRF6	Grey	3	0	3	"Orofacial_cleft (1147), Popliteal_pterygium_syndrome (1246), van_der_Woude_syndrome (3554)"
+3667	IRS1	Endocrine	1	26	1	Diabetes_mellitus (427)
+3674	ITGA2B	Hematological	1	1	1	Glanzmann_thrombasthenia (588)
+3679	ITGA7	Muscular	1	9	1	Myopathy (1059)
+3689	ITGB2	Immunological	1	0	1	Leukocyte_adhesion_deficiency (889)
+3690	ITGB3	Hematological	1	1	1	Glanzmann_thrombasthenia (588)
+3691	ITGB4	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3700	ITIH4	Metabolic	1	7	1	Hypercholesterolemia (724)
+3704	ITPA	Metabolic	1	0	1	Inosine_triphosphatase_deficiency (810)
+3712	IVD	Metabolic	1	0	1	Isovaleric_acidemia (826)
+3717	JAK2	Hematological	3	2	1	"Myelofibrosis,_idiopathic (1046), Polycythemia (1242), Thrombocythemia (1493)"
+3718	JAK3	Immunological	1	0	1	SCID (1362)
+3728	JUP	multiple	1	0	1	Naxos_disease (1077)
+3730	KAL1	multiple	1	1	1	Kallmann_syndrome (836)
+3736	KCNA1	Neurological	1	1	1	Episodic_ataxia (497)
+3753	KCNE1	Grey	2	6	2	"Jervell_and_Lange-Nielsen_syndrome (830), Long_QT_syndrome (912)"
+3757	KCNH2	Cardiovascular	2	6	1	"Acquired_long_QT_syndrome (31), Long_QT_syndrome (912)"
+3758	KCNJ1	multiple	1	4	1	Bartter_syndrome (187)
+3759	KCNJ2	Cardiovascular	1	6	1	Long_QT_syndrome (912)
+3767	KCNJ11	Grey	2	26	2	"Diabetes_mellitus (427), Persistent_hyperinsulinemic_hypoglycemia_of_infancy (3212)"
+3778	KCNMA1	Neurological	1	1	1	Generalized_epilepsy (578)
+3779	KCNMB1	Cardiovascular	1	11	1	Hypertension (752)
+3784	KCNQ1	Grey	3	9	2	"Atrial_fibrillation (166), Jervell_and_Lange-Nielsen_syndrome (830), Long_QT_syndrome (912)"
+3785	KCNQ2	Neurological	2	16	1	"Epilepsy (495), Myokymia_with_neonatal_epilepsy (1057)"
+3786	KCNQ3	Neurological	1	16	1	Epilepsy (495)
+3791	KDR	Cancer	1	1	1	Hemangioma (651)
+3792	KEL	Hematological	1	22	1	Blood_group (212)
+3795	KHK	Metabolic	1	0	1	Fructosuria (557)
+3798	KIF5A	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+3811	KIR3DL1	Immunological	1	2	1	AIDS (70)
+3815	KIT	Grey	6	38	3	"Gastrointestinal_stromal_tumor (574), Germ_cell_tumor (580), Leukemia (886), Mast_cell_leukemia (958), Mastocytosis_with_associated_hematologic_disorder (959), Piebaldism (1226)"
+3816	KLK1	Renal	1	0	1	"Kallikrein,_decreased_urinary_activity_of (835)"
+3818	KLKB1	Hematological	1	0	1	Prekallikrein_deficiency (1259)
+3827	KNG1	Hematological	3	0	1	"Fitzgerald_factor_deficiency (542), High-molecular-weight_kininogen_deficiency (679), Kininogen_deficiency (851)"
+3845	KRAS	Cancer	6	65	1	"Bladder_cancer (207), Breast_cancer (228), Leukemia (886), Lung_cancer (918), Pancreatic_cancer (1178), Stomach_cancer (1449)"
+3848	KRT1	Dermatological	5	10	1	"Cyclic_ichthyosis_with_epidermolytic_hyperkeratosis (396), Epidermolytic_hyperkeratosis (494), Ichthyosis (794), Keratosis_palmoplantaria_striata (847), Unna-Thost_disease,_nonepidermolytic (1545)"
+3849	KRT2A	Dermatological	1	6	1	Ichthyosis (794)
+3850	KRT3	Ophthamological	1	1	1	Meesmann_corneal_dystrophy (971)
+3851	KRT4	Connective_tissue_disorder	1	1	1	White_sponge_nevus (1592)
+3852	KRT5	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3853	KRT6A	Dermatological	1	3	1	Pachyonychia_congenita (1172)
+3854	KRT6B	Dermatological	1	3	1	Pachyonychia_congenita (1172)
+3856	KRT8	Gastrointestinal	1	2	1	Cirrhosis (334)
+3857	KRT9	Dermatological	1	2	1	Epidermolytic_hyperkeratosis (494)
+3858	KRT10	Dermatological	3	7	1	"Epidermolytic_hyperkeratosis (494), Ichthyosis (794), Nevus,_epidermal,_epidermolytic_hyperkeratotic_type (1104)"
+3859	KRT12	Ophthamological	1	1	1	Meesmann_corneal_dystrophy (971)
+3860	KRT13	Connective_tissue_disorder	1	1	1	White_sponge_nevus (1592)
+3861	KRT14	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3868	KRT16	Dermatological	2	3	1	"Pachyonychia_congenita (1172), Palmoplantar_keratoderma (1176)"
+3872	KRT17	Dermatological	2	3	1	"Pachyonychia_congenita (1172), Steatocystoma_multiplex (1444)"
+3875	KRT18	Gastrointestinal	1	2	1	Cirrhosis (334)
+3887	KRTHB1	Dermatological	1	1	1	Monilethrix (1024)
+3892	KRTHB6	Dermatological	1	1	1	Monilethrix (1024)
+3897	L1CAM	Grey	3	0	2	"CRASH_syndrome (384), Hydrocephalus (712), MASA_syndrome (955)"
+3908	LAMA2	Muscular	1	17	1	Muscular_dystrophy (1040)
+3909	LAMA3	Grey	2	10	2	"Epidermolysis_bullosa (493), Laryngoonychocutaneous_syndrome (868)"
+3913	LAMB2	Ophthamological	1	0	1	Microcoria-congenital_nephrosis_syndrome (1009)
+3914	LAMB3	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3918	LAMC2	Dermatological	1	10	1	Epidermolysis_bullosa (493)
+3920	LAMP2	Metabolic	1	8	1	Glycogen_storage_disease (610)
+3930	LBR	Grey	2	0	2	"Greenberg_dysplasia (625), Pelger-Huet_anomaly (1199)"
+3931	LCAT	Metabolic	2	0	1	"Fish-eye_disease (540), Norum_disease (1118)"
+3938	LCT	Metabolic	1	1	1	"Hypolactasia,_adult_type (777)"
+3939	LDHA	Metabolic	1	0	1	Exertional_myoglobinuria_due_to_deficiency_of_LDH-A (512)
+3945	LDHB	Metabolic	1	0	1	Lactate_dehydrogenase-B_deficiency (858)
+3949	LDLR	Metabolic	1	7	1	Hypercholesterolemia (724)
+3952	LEP	Nutritional	1	20	1	Obesity (1126)
+3953	LEPR	Nutritional	1	20	1	Obesity (1126)
+3957	LGALS2	Cardiovascular	1	9	1	Myocardial_infarction (1054)
+3972	LHB	Endocrine	1	0	1	"Hypogonadism,_hypergonadotropic (773)"
+3973	LHCGR	Grey	5	4	4	"Hypogonadotropic_hypogonadism (774), Leydig_cell_adenoma (894), Micropenis (1011), Precocious_puberty,_male (1256), Pseudohermaphroditism,_male (1279)"
+3977	LIFR	multiple	1	0	1	Stuve-Wiedemann_syndrome/Schwartz-Jampel_type_2_syndrome (1455)
+3978	LIG1	multiple	1	0	1	DNA_ligase_I_deficiency (2440)
+3981	LIG4	Grey	2	1	2	"LIG4_syndrome (899), Multiple_myeloma (9037)"
+3982	LIM2	Ophthamological	1	14	1	Cataract (277)
+3988	LIPA	Metabolic	2	0	1	"Cholesteryl_ester_storage_disease (313), Wolman_disease (1604)"
+3990	LIPC	Metabolic	1	0	1	Hepatic_lipase_deficiency (4666)
+3998	LMAN1	Hematological	1	0	1	Combined_factor_V_and_VIII_deficiency (350)
+4000	LMNA	Grey	3	29	3	"Cardiomyopathy (268), Emery-Dreifuss_muscular_dystrophy (474), Lipodystrophy (902)"
+4010	LMX1B	multiple	1	0	1	Nail-patella_syndrome (1070)
+4014	LOR	Grey	2	3	2	"Erythrokeratoderma (507), Vohwinkel_syndrome (1571)"
+4018	LPA	Metabolic	1	0	1	"LPA_deficiency,_congenital (916)"
+4023	LPL	Metabolic	3	0	1	"Chylomicronemia_syndrome,_familial (329), Combined_hyperlipemia (2350), Lipoprotein_lipase_deficiency (906)"
+4026	LPP	Cancer	2	38	1	"Leukemia (886), Lipoma (904)"
+4041	LRP5	Grey	7	10	2	"Bone_mineral_density_variability (217), Exudative_vitreoretinopathy (515), Hyperostosis,_endosteal (741), Osteopetrosis (1161), Osteoporosis (1163), Osteoporosis-pseudoglioma_syndrome (1164), van_Buchem_disease (1554)"
+4049	LTA	Cardiovascular	1	9	1	Myocardial_infarction (1054)
+4059	LU	Hematological	1	22	1	Blood_group (212)
+4068	SH2D1A	Cancer	1	9	1	Lymphoma (925)
+4069	LYZ	Neurological	1	5	1	Amyloidosis (103)
+4070	TACSTD2	Ophthamological	1	6	1	Corneal_dystrophy (362)
+4089	SMAD4	Cancer	3	9	1	"Juvenile_polyposis/hereditary_hemorrhagic_telangiectasia_syndrome (833), Pancreatic_cancer (1178), Polyposis (1245)"
+4125	MAN2B1	Metabolic	1	1	1	Mannosidosis (947)
+4126	MANBA	Metabolic	1	1	1	Mannosidosis (947)
+4128	MAOA	Unclassified	1	0	0	Brunner_syndrome (235)
+4137	MAPT	Neurological	4	5	1	"Dementia (412), Pallidopontonigral_degeneration (1174), Supranuclear_palsy (1462), Tauopathy_and_respiratory_failure (1476)"
+4143	MAT1A	Metabolic	2	1	1	"Hypermethioninemia (739), Methionine_adenosyltransferase_deficiency,_autosomal_recessive (1001)"
+4148	MATN3	Grey	3	12	3	"Epiphyseal_dysplasia (496), Osteoarthritis (1154), Spondyloepiphyseal_dysplasia (1435)"
+4153	MBL2	Immunological	2	0	1	"Chronic_infections,_due_to_opsonin_defect (2327), Meningococcal_disease (987)"
+4157	MC1R	Grey	4	2	2	"Analgesia_from_kappa-opioid_receptor_agonist,_female-specific (107), Ocular_albinism (1130), Red_hair/fair_skin (1306), UV-induced_skin_damage (1553)"
+4158	MC2R	Endocrine	1	1	1	Glucocorticoid_deficiency (598)
+4159	MC3R	Nutritional	1	20	1	Obesity (1126)
+4160	MC4R	Nutritional	1	20	1	Obesity (1126)
+4163	MCC	Cancer	1	33	1	Colon_cancer (346)
+4166	CHST6	Ophthamological	1	4	1	Macular_dystrophy (2937)
+4175	MCM6	Grey	2	1	2	"Hypolactasia,_adult_type (777), Tall_stature (1472)"
+4193	MDM2	Cancer	1	0	1	Accelerated_tumor_formation (22)
+4197	MDS1	Muscular	1	2	1	Myelodysplastic_syndrome (1045)
+4200	ME2	Neurological	1	16	1	Epilepsy (495)
+4204	MECP2	Grey	5	27	3	"Angelman_syndrome (113), Autism (173), Mental_retardation (990), PPM-X_syndrome (1253), Rett_syndrome (1321)"
+4205	MEF2A	Cardiovascular	1	5	1	Coronary_artery_disease (365)
+4210	MEFV	Immunological	1	0	1	Familial_Mediterranean_fever (522)
+4221	MEN1	Grey	8	5	2	"Adrenal_adenoma (2053), Angiofibroma,_sporadic (115), Carcinoid_tumor_of_lung (2265), Hyperparathyroidism (743), Lipoma (904), Multiple_endocrine_neoplasia (1037), Parathyroid_adenoma (1189), Prolactinoma,_hyperparathyroidism,_carcinoid_syndrome (1267)"
+4233	MET	Cancer	2	13	1	"Hepatic_adenoma (668), Renal_cell_carcinoma (1308)"
+4247	MGAT2	Metabolic	1	2	1	Carbohydrate-deficient_glycoprotein_syndrome (263)
+4256	MGP	multiple	1	0	1	Keutel_syndrome (849)
+4261	CIITA	Grey	3	12	3	"Bare_lymphocyte_syndrome (184), Multiple_sclerosis (9038), Rheumatoid_arthritis (1324)"
+4281	MID1	multiple	1	0	1	Opitz_G_syndrome (1142)
+4282	MIF	Connective_tissue_disorder	1	7	1	Rheumatoid_arthritis (1324)
+4284	MIP	Ophthamological	1	14	1	Cataract (277)
+4286	MITF	multiple	2	3	1	"Tietz_syndrome (1508), Waardenburg_syndrome (1574)"
+4287	ATXN3	Neurological	1	0	1	Machado-Joseph_disease (933)
+4292	MLH1	Cancer	4	33	1	"Cafe-au-lait_spots (252), Colon_cancer (346), Muir-Torre_syndrome (1035), Turcot_syndrome (1536)"
+4306	NR3C2	Grey	2	16	2	"Hypertension (752), Pseudohypoaldosteronism (1281)"
+4312	MMP1	Respiratory	1	0	1	"COPD,_rate_of_decline_of_lung_function_in (360)"
+4313	MMP2	Bone	1	1	1	Osteolysis (1157)
+4314	MMP3	Cardiovascular	1	5	1	Coronary_artery_disease (365)
+4329	ALDH6A1	Metabolic	1	0	1	Methylmalonate_semialdehyde_dehydrogenase_deficiency (1003)
+4330	MN1	Cancer	1	3	1	Meningioma (986)
+4337	MOCS1	Metabolic	1	2	1	Molybdenum_cofactor_deficiency (1023)
+4338	MOCS2	Metabolic	1	2	1	Molybdenum_cofactor_deficiency (1023)
+4351	MPI	Metabolic	1	2	1	Carbohydrate-deficient_glycoprotein_syndrome (263)
+4352	MPL	Hematological	1	3	1	Thrombocytopenia (1494)
+4353	MPO	Grey	2	11	2	"Alzheimer_disease (98), Myeloperoxidase_deficiency (1051)"
+4359	MPZ	Grey	4	22	2	"Charcot-Marie-Tooth_disease (301), Dejerine-Sottas_disease (410), Neuropathy (1099), Roussy-Levy_syndrome (1339)"
+4361	MRE11A	Immunological	1	1	1	Ataxia-telangiectasia (157)
+4436	MSH2	Cancer	8	48	1	"Cafe-au-lait_spots (252), Colon_cancer (346), Glioblastoma (590), Lymphoma (925), Lynch_cancer_family_syndrome_II (930), Muir-Torre_syndrome (1035), Neurofibromatosis (1097), Ovarian_cancer (1170)"
+4437	MSH3	Cancer	1	3	1	Endometrial_carcinoma (479)
+4481	MSR1	Cancer	1	11	1	Prostate_cancer (1272)
+4487	MSX1	Grey	3	3	2	"Cleft_palate (336), Hypodontia (769), Witkop_syndrome (1599)"
+4488	MSX2	Skeletal	2	2	1	"Craniosynostosis (383), Parietal_foramina (1190)"
+4522	MTHFD1	Developmental	2	2	1	"Neural_tube_defects,_maternal_risk_of (1090), Spina_bifida (1425)"
+4524	MTHFR	Metabolic	1	1	1	Homocystinuria (698)
+4534	MTM1	Muscular	1	0	1	Myotubular_myopathy (1064)
+4547	MTP	Metabolic	1	1	1	Abetalipoproteinemia (17)
+4548	MTR	Grey	3	2	3	"Down_syndrome (445), Methylcobalamin_deficiency,_cblG_type (1002), Spina_bifida (1425)"
+4552	MTRR	Grey	2	2	2	"Homocystinuria-megaloblastic_anemia,_cbl_E_type (699), Spina_bifida (1425)"
+4591	TRIM37	multiple	1	0	1	Mulibrey_nanism (1036)
+4594	MUT	Metabolic	1	2	1	Methylmalonic_aciduria (1004)
+4595	MUTYH	Cancer	3	42	1	"Adenomas (47), Colon_cancer (346), Gastric_cancer (572)"
+4598	MVK	Grey	2	0	2	"Hyper-IgD_syndrome (728), Mevalonicaciduria (1005)"
+4601	MXI1	Cancer	2	11	1	"Neurofibrosarcoma (1098), Prostate_cancer (1272)"
+4607	MYBPC3	Cardiovascular	1	24	1	Cardiomyopathy (268)
+4609	MYC	Cancer	1	0	1	Burkitt_lymphoma (237)
+4613	MYCN	multiple	1	0	1	Feingold_syndrome (531)
+4618	MYF6	Muscular	2	10	1	"Becker_muscular_dystrophy (193), Myopathy (1059)"
+4620	MYH2	Muscular	1	2	1	Inclusion_body_myopathy (805)
+4624	MYH6	Cardiovascular	2	28	1	"Atrial_fibrillation (166), Cardiomyopathy (268)"
+4625	MYH7	Grey	3	32	2	"Cardiomyopathy (268), Central_core_disease (2287), Myopathy (1059)"
+4626	MYH8	multiple	2	1	1	"Carney_complex (269), Trismus-pseudocomptodactyly_syndrome (1528)"
+4627	MYH9	Grey	5	40	3	"Deafness (406), Epstein_syndrome (500), Fechtner_syndrome (530), May-Hegglin_anomaly (961), Sebastian_syndrome (1368)"
+4633	MYL2	Cardiovascular	1	24	1	Cardiomyopathy (268)
+4634	MYL3	Cardiovascular	1	24	1	Cardiomyopathy (268)
+4640	MYO1A	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+4644	MYO5A	Dermatological	1	2	1	Griscelli_syndrome (627)
+4646	MYO6	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+4647	MYO7A	Grey	2	44	2	"Deafness (406), Usher_syndrome (1551)"
+4653	MYOC	Ophthamological	1	3	1	Glaucoma (589)
+4668	NAGA	Metabolic	2	0	1	"Kanzaki_disease (837), Schindler_disease (1355)"
+4669	NAGLU	Metabolic	1	1	1	Sanfilippo_syndrome (1348)
+4683	NBN	Grey	2	36	2	"Leukemia (886), Nijmegen_breakage_syndrome (1111)"
+4687	NCF1	Immunological	1	3	1	Chronic_granulomatous_disease (327)
+4688	NCF2	Immunological	1	3	1	Chronic_granulomatous_disease (327)
+4692	NDN	multiple	1	1	1	Prader-Willi_syndrome (1254)
+4693	NDP	Grey	3	2	2	"Coats_disease (338), Exudative_vitreoretinopathy (515), Norrie_disease (1117)"
+4703	NEB	Muscular	1	3	1	Nemaline_myopathy (1078)
+4719	NDUFS1	multiple	1	6	1	Mitochondrial_complex_deficiency (1016)
+4720	NDUFS2	multiple	1	6	1	Mitochondrial_complex_deficiency (1016)
+4722	NDUFS3	Neurological	1	11	1	Leigh_syndrome (877)
+4723	NDUFV1	Grey	3	15	2	"Alexander_disease (79), Leigh_syndrome (877), Mitochondrial_complex_deficiency (1016)"
+4724	NDUFS4	Grey	2	14	2	"Leigh_syndrome (877), Mitochondrial_complex_deficiency (1016)"
+4726	NDUFS6	multiple	1	1	1	"Complex_mitochondrial_respiratory_chain,_deficiency_of (351)"
+4728	NDUFS8	Neurological	1	11	1	Leigh_syndrome (877)
+4729	NDUFV2	Neurological	1	10	1	Parkinson_disease (1192)
+4744	NEFH	Neurological	1	5	1	Amyotrophic_lateral_sclerosis (104)
+4747	NEFL	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+4758	NEU1	Metabolic	1	1	1	Sialidosis (1391)
+4760	NEUROD1	Endocrine	1	26	1	Diabetes_mellitus (427)
+4763	NF1	Cancer	5	38	1	"Leukemia (886), Neurofibromatosis (1095), Neurofibromatosis-Noonan_syndrome (1096), Neurofibromatosis (1097), Watson_syndrome (1581)"
+4771	NF2	Cancer	3	5	1	"Meningioma (986), Neurofibromatosis (1097), Schwannomatosis (1360)"
+4792	NFKBIA	Dermatological	1	7	1	Ectodermal_dysplasia (466)
+4795	NFKBIL1	Connective_tissue_disorder	1	7	1	Rheumatoid_arthritis (1324)
+4803	NGFB	Neurological	1	7	1	Neuropathy (1099)
+4810	NHS	Ophthamological	1	0	1	Nance-Horan_syndrome (1071)
+4830	NME1	Cancer	1	1	1	Neuroblastoma (1091)
+4838	NODAL	Developmental	1	1	1	Situs_ambiguus (1399)
+4842	NOS1	Developmental	1	0	1	"Pyloric_stenosis,_infantile_hypertrophic (1294)"
+4843	NOS2A	Immunological	1	4	1	Malaria (940)
+4846	NOS3	Grey	4	22	2	"Alzheimer_disease (98), Coronary_spasms (2365), Hypertension (752), Placental_abruption (1233)"
+4854	NOTCH3	Cardiovascular	1	0	1	Cerebral_arteriopathy_with_subcortical_infarcts_and_leukoencephalopathy (2291)
+4860	NP	Immunological	1	0	1	"Nucleoside_phosphorylase_deficiency,_immunodeficiency_due_to (1122)"
+4864	NPC1	Metabolic	1	2	1	Niemann-Pick_disease (1107)
+4867	NPHP1	Grey	3	5	2	"Joubert_syndrome (831), Nephronophthisis (1082), Senior-Loken_syndrome (1375)"
+4868	NPHS1	Renal	1	1	1	Nephrotic_syndrome (1087)
+4869	NPM1	Cancer	1	36	1	Leukemia (886)
+4882	NPR2	Skeletal	1	1	1	Acromesomelic_dysplasia (39)
+4891	SLC11A2	Hematological	1	8	1	Anemia (110)
+4893	NRAS	Cancer	1	33	1	Colon_cancer (346)
+4901	NRL	Ophthamological	2	32	1	"Retinal_cone_dsytrophy (1315), Retinitis_pigmentosa (1316)"
+4902	NRTN	Gastrointestinal	1	6	1	Hirschsprung_disease (681)
+4914	NTRK1	Grey	2	1	2	"Insensitivity_to_pain (811), Medullary_thyroid_carcinoma (2969)"
+4915	NTRK2	Nutritional	1	20	1	Obesity (1126)
+4920	ROR2	Grey	2	4	2	"Brachydactyly (224), Robinow_syndrome,_autosomal_recessive (1335)"
+4926	NUMA1	Cancer	1	36	1	Leukemia (886)
+4929	NR4A2	Neurological	1	10	1	Parkinson_disease (1192)
+4935	GPR143	Ophthamological	1	2	1	Ocular_albinism (1130)
+4938	OAS1	Immunological	1	1	1	Viral_infection (1562)
+4942	OAT	Metabolic	1	0	1	"Gyrate_atrophy_of_choroid_and_retina_with_ornithinemia,_B6_responsive_or_unresponsive (632)"
+4948	OCA2	Dermatological	1	2	1	Albinism (72)
+4952	OCRL	Grey	2	1	2	"Dent_disease (416), Lowe_syndrome (914)"
+4953	ODC1	Cancer	1	33	1	Colon_cancer (346)
+4968	OGG1	Cancer	1	6	1	Renal_cell_carcinoma (1308)
+4973	OLR1	Cardiovascular	1	9	1	Myocardial_infarction (1054)
+4976	OPA1	Ophthamological	2	4	1	"Glaucoma (589), Optic_atrophy (1144)"
+4978	OPCML	Cancer	1	0	1	"Epithelial_ovarian_cancer,_somatic (498)"
+4982	TNFRSF11B	Bone	1	2	1	Paget_disease (1173)
+4983	OPHN1	Neurological	1	23	1	Mental_retardation (990)
+4988	OPRM1	Neurological	1	0	1	Response_to_morphine-6-glucuronide (1311)
+4990	SIX6	Ophthamological	1	2	1	Microphthalmia (1012)
+5002	SLC22A18	Cancer	3	23	1	"Breast_cancer (228), Lung_cancer (918), Rhabdomyosarcoma (1323)"
+5009	OTC	Metabolic	1	0	1	Ornithine_transcarbamylase_deficiency (1146)
+5019	OXCT1	Metabolic	1	0	1	Ketoacidosis (848)
+5023	P2RX1	Hematological	1	1	1	Bleeding_disorder (209)
+5027	P2RX7	Cancer	1	36	1	Leukemia (886)
+5048	PAFAH1B1	Neurological	2	3	1	"Lissencephaly (908), Subcortical_laminar_heterotopia (1456)"
+5053	PAH	Metabolic	2	3	1	"Hyperphenylalaninemia (746), Phenylketonuria (1216)"
+5063	PAK3	Neurological	1	23	1	Mental_retardation (990)
+5071	PARK2	Grey	3	13	3	"Adenocarcinoma (45), Leprosy (882), Parkinson_disease (1192)"
+5076	PAX2	Grey	2	0	2	"Optic_nerve_coloboma_with_renal_disease (3144), Renal_hypoplasia,_isolated (5308)"
+5077	PAX3	Grey	3	6	2	"Craniofacial-deafness-hand_syndrome (378), Rhabdomyosarcoma (1323), Waardenburg_syndrome (1574)"
+5080	PAX6	Grey	10	17	3	"Aniridia,_type_II (119), Cataract (277), Coloboma,_ocular (345), Ectopia (467), Eye_anomalies (516), Foveal_hypoplasia (548), Keratitis (842), Morning_glory_disc_anomaly (1026), Optic_nerve_hypoplasia/aplasia (5144), Peters_anomaly (1213)"
+5081	PAX7	Cancer	1	3	1	Rhabdomyosarcoma (1323)
+5083	PAX9	Skeletal	2	1	1	"Hypodontia (769), Oligodontia (1139)"
+5091	PC	Metabolic	1	2	1	Pyruvate_dehydrogenase_deficiency (1297)
+5092	PCBD1	Metabolic	1	1	1	Hyperphenylalaninemia (746)
+5095	PCCA	Metabolic	1	1	1	Propionicacidemia (1271)
+5096	PCCB	Metabolic	1	1	1	Propionicacidemia (1271)
+5108	PCM1	Cancer	1	10	1	Thyroid_carcinoma (1503)
+5122	PCSK1	Nutritional	1	20	1	Obesity (1126)
+5133	PDCD1	Immunological	1	3	1	Systemic_lupus_erythematosus (1471)
+5144	PDE4D	Cardiovascular	1	1	1	Stroke (1454)
+5145	PDE6A	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+5155	PDGFB	Cancer	3	3	1	"Dermatofibrosarcoma_protuberans (422), Giant-cell_fibroblastoma (583), Meningioma (986)"
+5156	PDGFRA	Grey	2	1	2	"Gastrointestinal_stromal_tumor (574), Hypereosinophilic_syndrome (726)"
+5157	PDGFRL	Cancer	2	38	1	"Colon_cancer (346), Hepatic_adenoma (668)"
+5158	PDE6B	Ophthamological	2	32	1	"Night_blindness (1110), Retinitis_pigmentosa (1316)"
+5159	PDGFRB	Cancer	2	0	1	"Myelomonocytic_leukemia,_chronic (1050), Myeloproliferative_disorder (1052)"
+5160	PDHA1	Grey	2	13	2	"Leigh_syndrome (877), Pyruvate_dehydrogenase_deficiency (1297)"
+5162	PDHB	Metabolic	1	2	1	Pyruvate_dehydrogenase_deficiency (1297)
+5167	ENPP1	Grey	3	45	3	"Diabetes_mellitus (427), Obesity (1126), Ossification_of_the_posterior_longitudinal_spinal_ligaments (1153)"
+5172	SLC26A4	"Ear,Nose,Throat"	3	40	1	"Deafness (406), Enlarged_vestibular_aqueduct (484), Pendred_syndrome (1204)"
+5184	PEPD	Connective_tissue_disorder	1	0	1	Prolidase_deficiency (1268)
+5189	PEX1	Grey	3	13	2	"Adrenoleukodystrophy (56), Refsum_disease (1307), Zellweger_syndrome (1615)"
+5190	PEX6	multiple	1	1	1	Peroxisomal_biogenesis_disorder (1210)
+5191	PEX7	Grey	2	5	2	"Refsum_disease (1307), Rhizomelic_chondrodysplasia_punctata (1325)"
+5192	PEX10	Grey	2	11	2	"Adrenoleukodystrophy (56), Zellweger_syndrome (1615)"
+5193	PEX12	multiple	1	1	1	Peroxisomal_biogenesis_disorder (1210)
+5194	PEX13	Grey	2	11	2	"Adrenoleukodystrophy (56), Zellweger_syndrome (1615)"
+5195	PEX14	multiple	1	10	1	Zellweger_syndrome (1615)
+5199	PFC	Immunological	1	0	1	Properdin_deficiency (1270)
+5205	ATP8B1	Gastrointestinal	1	3	1	Cholestasis (310)
+5213	PFKM	Metabolic	1	8	1	Glycogen_storage_disease (610)
+5224	PGAM2	Muscular	1	9	1	Myopathy (1059)
+5230	PGK1	Grey	2	9	2	"Hemolytic_anemia (660), Myoglobinuria/hemolysis_due_to_PGK_deficiency (1056)"
+5243	ABCB1	Unclassified	1	0	0	Colchicine_resistance (343)
+5244	ABCB4	Gastrointestinal	2	3	1	"Cholelithiasis (309), Cholestasis (310)"
+5245	PHB	Cancer	1	18	1	Breast_cancer (228)
+5251	PHEX	Metabolic	1	1	1	Hypophosphatemia (783)
+5255	PHKA1	Muscular	1	1	1	Muscle_hypertrophy (1039)
+5256	PHKA2	Metabolic	1	1	1	Glycogenosis (609)
+5257	PHKB	Metabolic	1	0	1	"Phosphorylase_kinase_deficiency_of_liver_and_muscle,_autosomal_recessive (1222)"
+5261	PHKG2	Metabolic	1	1	1	Glycogenosis (609)
+5264	PHYH	Neurological	1	4	1	Refsum_disease (1307)
+5265	SERPINA1	Grey	2	1	2	"Emphysema (475), Hemorrhagic_diathesis (664)"
+5274	SERPINI1	Neurological	1	1	1	Encephalopathy (476)
+5277	PIGA	Hematological	1	0	1	Paroxysmal_nocturnal_hemoglobinuria (3195)
+5290	PIK3CA	Cancer	3	51	1	"Breast_cancer (228), Colon_cancer (346), Ovarian_cancer (1170)"
+5308	PITX2	Grey	3	1	2	"Iridogoniodysgenesis (822), Rieger_syndrome (1331), Ring_dermoid_of_cornea (1332)"
+5309	PITX3	Ophthamological	2	17	1	"Anterior_segment_anomalies_and_cataract (126), Cataract (277)"
+5310	PKD1	Renal	1	3	1	Polycystic_kidney_disease (1241)
+5311	PKD2	Renal	1	3	1	Polycystic_kidney_disease (1241)
+5313	PKLR	Hematological	1	8	1	Anemia (110)
+5314	PKHD1	Renal	1	3	1	Polycystic_kidney_disease (1241)
+5317	PKP1	Dermatological	1	7	1	Ectodermal_dysplasia (466)
+5318	PKP2	Cardiovascular	1	2	1	Arrhythmogenic_right_ventricular_dysplasia (144)
+5320	PLA2G2A	Cancer	1	33	1	Colon_cancer (346)
+5324	PLAG1	Cancer	1	2	1	Adenomas (47)
+5328	PLAU	Neurological	1	11	1	Alzheimer_disease (98)
+5339	PLEC1	Grey	2	27	2	"Epidermolysis_bullosa (493), Muscular_dystrophy (1040)"
+5340	PLG	Grey	2	0	2	"Conjunctivitis,_ligneous (356), Plasminogen_deficiency (1235)"
+5345	SERPINF2	Hematological	1	0	1	Plasmin_inhibitor_deficiency (1234)
+5350	PLN	Cardiovascular	1	24	1	Cardiomyopathy (268)
+5351	PLOD1	Connective_tissue_disorder	2	8	1	"Ehlers-Danlos_syndrome (470), Nevo_syndrome (1103)"
+5352	PLOD2	Unclassified	1	0	0	Bruck_syndrome (233)
+5354	PLP1	Neurological	2	8	1	"Pelizaeus-Merzbacher_disease (1200), Spastic_ataxia/paraplegia (1418)"
+5371	PML	Cancer	1	36	1	Leukemia (886)
+5373	PMM2	Metabolic	1	2	1	Carbohydrate-deficient_glycoprotein_syndrome (263)
+5376	PMP22	Grey	4	22	2	"Charcot-Marie-Tooth_disease (301), Dejerine-Sottas_disease (410), Neuropathy (1099), Roussy-Levy_syndrome (1339)"
+5378	PMS1	Cancer	1	33	1	Colon_cancer (346)
+5395	PMS2	Grey	3	33	2	"Colon_cancer (346), Neuroectodermal_tumors (1093), Turcot_syndrome (1536)"
+5428	POLG	Grey	3	2	2	"Alpers_syndrome (86), Progressive_external_ophthalmoplegia_with_mitochondrial_DNA_deletions (1265), Sensory_ataxic_neuropathy,_dysarthria,_and_ophthalmoparesis (1376)"
+5429	POLH	Dermatological	1	7	1	Xeroderma_pigmentosum (1608)
+5443	POMC	Nutritional	1	20	1	Obesity (1126)
+5444	PON1	Cardiovascular	1	5	1	Coronary_artery_disease (365)
+5445	PON2	Cardiovascular	1	5	1	Coronary_artery_disease (365)
+5447	POR	Grey	3	3	2	"Adrenal_hyperplasia,_congenital (53), Antley-Bixler_syndrome (128), Disordered_steroidogenesis,_isolated (438)"
+5449	POU1F1	Endocrine	1	3	1	Pituitary_hormone_deficiency (5232)
+5456	POU3F4	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+5459	POU4F3	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+5465	PPARA	Metabolic	1	0	1	Hyperapobetalipoproteinemia (719)
+5468	PPARG	Grey	5	55	4	"Diabetes_mellitus (427), Glioblastoma (590), Insulin_resistance (814), Lipodystrophy (902), Obesity (1126)"
+5476	PPGB	Metabolic	1	0	1	Galactosialidosis (568)
+5498	PPOX	Metabolic	1	5	1	Porphyria (1249)
+5506	PPP1R3A	Metabolic	1	2	1	Insulin_resistance (814)
+5519	PPP2R1B	Cancer	1	3	1	Lung_cancer (918)
+5521	PPP2R2B	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+5538	PPT1	Neurological	2	5	1	"Ceroid_lipofuscinosis (295), Ceroid-lipofuscinosis (296)"
+5546	PRCC	Cancer	1	6	1	Renal_cell_carcinoma (1308)
+5551	PRF1	Hematological	1	1	1	Hemophagocytic_lymphohistiocytosis (662)
+5573	PRKAR1A	Grey	5	11	3	"Adrenocortical_carcinoma (54), Carney_complex (269), Myxoma,_intracardiac (1066), Pigmented_adrenocortical_disease,_primary_isolated (3229), Thyroid_carcinoma (1503)"
+5578	PRKCA	Cancer	1	0	1	"Pituitary_tumor,_invasive (7232)"
+5582	PRKCG	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+5589	PRKCSH	Gastrointestinal	1	1	1	Polycystic_liver_disease (3241)
+5621	PRNP	Grey	5	5	2	"Creutzfeldt-Jakob_disease (388), Gerstmann-Straussler_disease (581), Huntington_disease (708), Insomnia (812), Prion_disease_with_protracted_course (1263)"
+5624	PROC	Hematological	1	8	1	Thrombophilia (1497)
+5625	PRODH	Grey	2	9	2	"Hyperprolinemia (749), Schizophrenia (1359)"
+5626	PROP1	Endocrine	1	3	1	Pituitary_hormone_deficiency (5232)
+5627	PROS1	Hematological	1	0	1	Protein_S_deficiency (1273)
+5630	PRPH	Neurological	1	5	1	Amyotrophic_lateral_sclerosis (104)
+5631	PRPS1	Metabolic	1	0	1	Phosphoribosyl_pyrophosphate_synthetase-related_gout (1221)
+5644	PRSS1	Gastrointestinal	1	2	1	Pancreatitis (1179)
+5649	RELN	Neurological	1	3	1	Lissencephaly (908)
+5651	PRSS7	Gastrointestinal	1	0	1	Enterokinase_deficiency (487)
+5660	PSAP	Grey	3	2	2	"Combined_SAP_deficiency (8350), Gaucher_disease (575), Metachromatic_leukodystrophy (996)"
+5663	PSEN1	Neurological	3	16	1	"Alzheimer_disease (98), Dementia (412), Pick_disease (1225)"
+5664	PSEN2	Neurological	1	11	1	Alzheimer_disease (98)
+5723	PSPH	Metabolic	1	0	1	Phosphoserine_phosphatase_deficiency (1223)
+5726	TAS2R38	"Ear,Nose,Throat"	1	0	1	Phenylthiocarbamide_tasting (1217)
+5727	PTCH	Grey	3	7	3	"Basal_cell_carcinoma (188), Basal_cell_nevus_syndrome (2188), Holoprosencephaly (689)"
+5728	PTEN	Grey	9	28	2	"Bannayan-Riley-Ruvalcaba_syndrome (182), Cowden_disease (372), Endometrial_carcinoma (479), Lhermitte-Duclos_syndrome (895), Meningioma (986), Oligodendroglioma (1138), Prostate_cancer (1272), Thyroid_carcinoma (1503), VATER_association_with_hydrocephalus (1555)"
+5729	PTGDR	Respiratory	1	12	1	Asthma (153)
+5740	PTGIS	Cardiovascular	1	11	1	Hypertension (752)
+5741	PTH	Endocrine	1	1	1	Hypoparathyroidism (779)
+5745	PTHR1	Grey	2	2	2	"Enchondromatosis (477), Metaphyseal_chondrodysplasia (997)"
+5770	PTPN1	Metabolic	1	2	1	Insulin_resistance (814)
+5781	PTPN11	Grey	3	36	3	"Leopard_syndrome (880), Leukemia (886), Noonan_syndrome (1116)"
+5782	PTPN12	Cancer	1	33	1	Colon_cancer (346)
+5788	PTPRC	Grey	2	8	2	"Multiple_sclerosis (9038), Severe_combined_immunodeficiency (1383)"
+5795	PTPRJ	Cancer	1	33	1	Colon_cancer (346)
+5805	PTS	Metabolic	1	2	1	Phenylketonuria (1216)
+5818	PVRL1	Grey	3	9	3	"Cleft_palate (336), Ectodermal_dysplasia (466), Zlotogora-Ogur_syndrome (1617)"
+5824	PEX19	multiple	1	10	1	Zellweger_syndrome (1615)
+5825	ABCD3	multiple	1	10	1	Zellweger_syndrome (1615)
+5828	PXMP3	Grey	2	12	2	"Refsum_disease (1307), Zellweger_syndrome (1615)"
+5830	PEX5	Grey	2	11	2	"Adrenoleukodystrophy (56), Zellweger_syndrome (1615)"
+5832	ALDH18A1	Metabolic	1	0	1	Hyperammonemia (717)
+5836	PYGL	Metabolic	1	8	1	Glycogen_storage_disease (610)
+5837	PYGM	Metabolic	1	0	1	McArdle_disease (962)
+5860	QDPR	Metabolic	1	2	1	Phenylketonuria (1216)
+5873	RAB27A	Dermatological	1	2	1	Griscelli_syndrome (627)
+5880	RAC2	Immunological	1	0	1	Neutrophil_immunodeficiency_syndrome (1102)
+5888	RAD51	Cancer	1	18	1	Breast_cancer (228)
+5896	RAG1	Immunological	2	7	1	"Omenn_syndrome (1141), Severe_combined_immunodeficiency (1383)"
+5897	RAG2	Immunological	2	7	1	"Omenn_syndrome (1141), Severe_combined_immunodeficiency (1383)"
+5910	RAP1GDS1	Cancer	1	9	1	Lymphoma (925)
+5913	RAPSN	Muscular	1	6	1	Myasthenic_syndrome (1042)
+5921	RASA1	Grey	3	3	3	"Basal_cell_carcinoma (188), Capillary_malformations (261), Parkes_Weber_syndrome (1191)"
+5925	RB1	Cancer	2	3	1	"Bladder_cancer (207), Retinoblastoma (1317)"
+5932	RBBP8	Cancer	1	8	1	Pancreatic_cancer (1178)
+5950	RBP4	Ophthamological	1	0	1	"Retinol_binding_protein,_deficiency_of (1318)"
+5956	OPN1LW	Ophthamological	2	2	1	"Blue-cone_monochromacy (214), Colorblindness (348)"
+5959	RDH5	Ophthamological	1	2	1	Fundus_albipunctatus (562)
+5961	RDS	Ophthamological	4	32	1	"Butterfly_dystrophy,_retinal (239), Foveomacular_dystrophy,_adult-onset,_with_choroidal_neovascularization (549), Macular_dystrophy (2937), Retinitis_pigmentosa (1316)"
+5972	REN	Grey	2	3	2	"Hyperproreninemia (750), Renal_tubular_dysgenesis (9308)"
+5979	RET	Grey	5	9	3	"Central_hypoventilation_syndrome (287), Colonic_aganglionosis,_total,_with_small_bowel_involvement (347), Hirschsprung_disease (681), Medullary_thyroid_carcinoma (2969), Multiple_endocrine_neoplasia (1037)"
+5993	RFX5	Immunological	1	4	1	Bare_lymphocyte_syndrome (184)
+5994	RFXAP	Immunological	1	4	1	Bare_lymphocyte_syndrome (184)
+5995	RGR	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+6005	RHAG	Hematological	2	8	1	"Anemia (110), Rh-mod_syndrome (1326)"
+6006	RHCE	Hematological	2	23	1	"Blood_group (212), Rh-negative_blood_type (1327)"
+6007	RHD	Hematological	1	1	1	Rh-negative_blood_type (1327)
+6010	RHO	Ophthamological	2	32	1	"Night_blindness (1110), Retinitis_pigmentosa (1316)"
+6011	GRK1	Ophthamological	1	1	1	Oguchi_disease (1137)
+6017	RLBP1	Ophthamological	4	30	1	"Bothnia_retinal_dystrophy (221), Fundus_albipunctatus (562), Newfoundland_rod-cone_dystrophy (1105), Retinitis_pigmentosa (1316)"
+6023	RMRP	Grey	2	2	2	"Cartilage-hair_hypoplasia (276), Metaphyseal_chondrodysplasia (997)"
+6041	RNASEL	Cancer	1	11	1	Prostate_cancer (1272)
+6049	RNF6	Cancer	1	3	1	Esophageal_cancer (508)
+6094	ROM1	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+6100	RP9	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+6101	RP1	Grey	2	32	2	"Hypertriglyceridemia (757), Retinitis_pigmentosa (1316)"
+6102	RP2	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+6103	RPGR	Ophthamological	3	36	1	"Cone_dystrophy (352), Macular_degeneration (937), Retinitis_pigmentosa (1316)"
+6121	RPE65	Ophthamological	2	32	1	"Leber_congenital_amaurosis (873), Retinitis_pigmentosa (1316)"
+6197	RPS6KA3	Grey	2	23	2	"Coffin-Lowry_syndrome (341), Mental_retardation (990)"
+6223	RPS19	Hematological	1	8	1	Anemia (110)
+6247	RS1	Ophthamological	1	0	1	Retinoschisis (1320)
+6261	RYR1	Grey	2	2	2	"Central_core_disease (2287), Malignant_hyperthermia_susceptibility (942)"
+6262	RYR2	Cardiovascular	2	4	1	"Arrhythmogenic_right_ventricular_dysplasia (144), Ventricular_tachycardia (1558)"
+6295	SAG	Ophthamological	1	1	1	Oguchi_disease (1137)
+6299	SALL1	multiple	1	0	1	Townes-Brocks_syndrome (1514)
+6303	SAT	Dermatological	1	3	1	Keratosis_palmoplantaria_striata (847)
+6309	SC5DL	Metabolic	1	0	1	Lathosterolosis (869)
+6310	ATXN1	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+6311	ATXN2	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+6314	ATXN7	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+6315	KLHL1AS	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+6323	SCN1A	Neurological	1	16	1	Epilepsy (495)
+6324	SCN1B	Neurological	1	1	1	Generalized_epilepsy (578)
+6325	SCN2A1	Neurological	1	0	1	Seizures (1371)
+6329	SCN4A	Grey	6	9	3	"Cramps,_potassium-aggravated (376), Hyperkalemic_periodic_paralysis (733), Hypokalemic_periodic_paralysis (776), Myasthenic_syndrome (1042), Myotonia_congenita (1062), Paramyotonia_congenita (1188)"
+6331	SCN5A	Cardiovascular	5	6	1	"Brugada_syndrome (234), Heart_block (647), Long_QT_syndrome (912), Sick_sinus_syndrome (1394), Ventricular_fibrillation,_idiopathic (3558)"
+6335	SCN9A	Neurological	1	0	1	Erythermalgia (502)
+6337	SCNN1A	Endocrine	1	5	1	Pseudohypoaldosteronism (1281)
+6338	SCNN1B	Grey	2	5	2	"Liddle_syndrome (896), Pseudohypoaldosteronism (1281)"
+6340	SCNN1G	Grey	2	5	2	"Liddle_syndrome (896), Pseudohypoaldosteronism (1281)"
+6341	SCO1	Gastrointestinal	1	0	1	"Hepatic_failure,_early_onset,_and_neurologic_disorder (666)"
+6352	CCL5	Immunological	1	3	1	HIV (684)
+6387	CXCL12	Immunological	1	2	1	AIDS (70)
+6389	SDHA	Grey	2	14	2	"Leigh_syndrome (877), Mitochondrial_complex_deficiency (1016)"
+6390	SDHB	Cancer	2	3	1	"Paragangliomas (1186), Pheochromocytoma (1218)"
+6391	SDHC	Cancer	1	2	1	Paragangliomas (1186)
+6392	SDHD	Cancer	4	3	1	"Carcinoid_tumors,_intestinal (265), Merkel_cell_carcinoma (992), Paragangliomas (1186), Pheochromocytoma (1218)"
+6399	TRAPPC2	Skeletal	1	4	1	Spondyloepiphyseal_dysplasia (1435)
+6403	SELP	Immunological	1	4	1	Atopy (164)
+6435	SFTPA1	Respiratory	1	3	1	Pulmonary_fibrosis (1291)
+6439	SFTPB	Respiratory	1	3	1	Pulmonary_fibrosis (1291)
+6440	SFTPC	Respiratory	3	4	1	"Pneumonitis,_desquamative_interstitial (1238), Pulmonary_fibrosis (1291), Surfactant_deficiency (1464)"
+6442	SGCA	Muscular	1	17	1	Muscular_dystrophy (1040)
+6443	SGCB	Muscular	1	17	1	Muscular_dystrophy (1040)
+6444	SGCD	Grey	2	38	2	"Cardiomyopathy (268), Muscular_dystrophy (1040)"
+6445	SGCG	Muscular	1	17	1	Muscular_dystrophy (1040)
+6448	SGSH	Metabolic	1	1	1	Sanfilippo_syndrome (1348)
+6452	SH3BP2	Unclassified	1	0	0	Cherubism (305)
+6468	FBXW4	Skeletal	1	1	1	Split-hand/foot_malformation (1430)
+6469	SHH	Grey	3	5	3	"Coloboma,_ocular (345), Holoprosencephaly (689), Solitary_median_maxillary_central_incisor (1414)"
+6473	SHOX	Skeletal	3	2	1	"Langer_mesomelic_dysplasia (862), Leri-Weill_dyschondrosteosis (883), Short_stature (1387)"
+6476	SI	Metabolic	1	0	1	Sucrose_intolerance (1458)
+6492	SIM1	Nutritional	1	20	1	Obesity (1126)
+6496	SIX3	Developmental	1	4	1	Holoprosencephaly (689)
+6513	SLC2A1	Metabolic	1	0	1	"Glucose_transport_defect,_blood-brain_barrier (600)"
+6514	SLC2A2	Grey	2	26	2	"Diabetes_mellitus (427), Fanconi-Bickel_syndrome (524)"
+6517	SLC2A4	Endocrine	1	26	1	Diabetes_mellitus (427)
+6519	SLC3A1	Grey	2	1	2	"Cystinuria (401), Homozygous_2p16_deletion_syndrome (701)"
+6521	SLC4A1	Grey	5	40	2	"Blood_group (212), Elliptocytosis (472), Hemolytic_anemia (660), Renal_tubular_acidosis (7308), Spherocytosis (1423)"
+6523	SLC5A1	Metabolic	1	0	1	Glucose/galactose_malabsorption (599)
+6524	SLC5A2	Renal	1	0	1	Renal_glucosuria (3308)
+6528	SLC5A5	Endocrine	1	6	1	Hypothyroidism (787)
+6530	SLC6A2	Cardiovascular	1	0	1	Orthostatic_intolerance (1150)
+6532	SLC6A4	Psychiatric	2	2	1	"Anxiety-related_personality_traits (129), Obsessive-compulsive_disorder (1128)"
+6535	SLC6A8	Neurological	2	23	1	"Creatine_deficiency_syndrome,_X-linked (2385), Mental_retardation (990)"
+6555	SLC10A2	Gastrointestinal	1	0	1	"Bile_acid_malabsorption,_primary (202)"
+6556	SLC11A1	Immunological	1	4	1	Mycobacterial_infection (1043)
+6557	SLC12A1	multiple	1	4	1	Bartter_syndrome (187)
+6559	SLC12A3	Renal	1	0	1	Gitelman_syndrome (587)
+6563	SLC14A1	Hematological	1	22	1	Blood_group (212)
+6567	SLC16A2	Neurological	1	0	1	Allan-Herndon-Dudley_syndrome (82)
+6569	SLC34A1	Grey	2	6	2	"Osteoporosis (1163), Urolithiasise (1550)"
+6583	SLC22A4	Connective_tissue_disorder	1	7	1	Rheumatoid_arthritis (1324)
+6584	SLC22A5	Metabolic	1	0	1	Carnitine_deficiency (272)
+6591	SNAI2	multiple	1	3	1	Waardenburg_syndrome (1574)
+6598	SMARCB1	Cancer	1	0	1	Rhabdoid_tumors (1322)
+6606	SMN1	Muscular	1	6	1	Spinal_muscular_atrophy (1426)
+6608	SMO	Cancer	1	3	1	Basal_cell_carcinoma (188)
+6609	SMPD1	Metabolic	1	2	1	Niemann-Pick_disease (1107)
+6611	SMS	Neurological	1	23	1	Mental_retardation (990)
+6620	SNCB	Neurological	1	5	1	Dementia (412)
+6622	SNCA	Neurological	2	15	1	"Dementia (412), Parkinson_disease (1192)"
+6638	SNRPN	multiple	1	1	1	Prader-Willi_syndrome (1254)
+6647	SOD1	Neurological	1	5	1	Amyotrophic_lateral_sclerosis (104)
+6649	SOD3	Unclassified	1	0	0	"Superoxide_dismutase,_elevated_extracellular (1461)"
+6654	SOS1	Connective_tissue_disorder	1	1	1	Fibromatosisl (537)
+6657	SOX2	Ophthamological	1	0	1	Anophthalmia (122)
+6658	SOX3	Grey	2	23	2	"Infundibular_hypoplasia_and_hypopituitarism (809), Mental_retardation (990)"
+6662	SOX9	Skeletal	2	0	1	"Acampomelic_campolelic_dysplasia (18), Campomelic_dysplasia (255)"
+6663	SOX10	Grey	3	1	2	"PCWH (1198), Waardenburg-Shah_syndrome (1573), Yemenite_deaf-blind_hypopigmentation_syndrome (1614)"
+6683	SPAST	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+6687	SPG7	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+6690	SPINK1	Gastrointestinal	3	2	1	"Fibrocalculous_pancreatic_diabetes (535), Pancreatitis (1179), Tropical_calcific_pancreatitis (1529)"
+6697	SPR	Metabolic	1	0	1	Sepiapterin_reductase_deficiency (1377)
+6708	SPTA1	Hematological	3	5	1	"Elliptocytosis (472), Pyropoikilocytosis (1296), Spherocytosis (1423)"
+6710	SPTB	Hematological	3	13	1	"Anemia (110), Elliptocytosis (472), Spherocytosis (1423)"
+6714	SRC	Cancer	1	33	1	Colon_cancer (346)
+6716	SRD5A2	Unclassified	1	0	0	Pseudovaginal_perineoscrotal_hypospadias (1283)
+6736	SRY	Endocrine	1	1	1	Gonadal_dysgenesis (619)
+6755	SSTR5	Endocrine	1	1	1	Acromegaly (38)
+6756	SSX1	Cancer	1	1	1	"Sarcoma,_synovial (1350)"
+6757	SSX2	Cancer	1	1	1	"Sarcoma,_synovial (1350)"
+6770	STAR	Endocrine	1	1	1	Lipoid_adrenal_hyperplasia (903)
+6772	STAT1	Grey	2	4	1	"Mycobacterial_infection (1043), STAT1_deficiency (1441)"
+6777	STAT5B	Grey	2	37	2	"Growth_hormone (628), Leukemia (886)"
+6785	ELOVL4	Ophthamological	2	4	1	"Macular_dystrophy (2937), Stargardt_disease (1439)"
+6792	CDKL5	Neurological	1	1	1	Rett_syndrome (1321)
+6794	STK11	Cancer	3	11	1	"Melanoma (978), Pancreatic_cancer (1178), Peutz-Jeghers_syndrome (1214)"
+6821	SUOX	Metabolic	1	0	1	Sulfite_oxidase_deficiency (1460)
+6833	ABCC8	Grey	2	26	2	"Diabetes_mellitus (427), Hypoglycemia (772)"
+6834	SURF1	Neurological	1	11	1	Leigh_syndrome (877)
+6853	SYN1	Neurological	1	16	1	Epilepsy (495)
+6854	SYN2	Psychiatric	1	8	1	Schizophrenia (1359)
+6886	TAL1	Cancer	1	36	1	Leukemia (886)
+6887	TAL2	Cancer	1	36	1	Leukemia (886)
+6888	TALDO1	Metabolic	1	0	1	Transaldolase_deficiency (1515)
+6891	TAP2	Immunological	2	4	1	"Bare_lymphocyte_syndrome (184), Wegener_granulomatosis (1583)"
+6892	TAPBP	Immunological	1	4	1	Bare_lymphocyte_syndrome (184)
+6898	TAT	Metabolic	1	2	1	Tyrosinemia (1540)
+6899	TBX1	Grey	3	0	2	"Conotruncal_anomaly_face_syndrome (357), DiGeorge_syndrome (432), Velocardiofacial_syndrome (1556)"
+6901	TAZ	Grey	3	24	2	"Barth_syndrome (185), Cardiomyopathy (268), Noncompaction_of_left_ventricular_myocardium (1113)"
+6905	TBCE	Grey	2	0	2	"Hypoparathyroidism-retardation-dysmorphism_syndrome (780), Kenny-Caffey_syndrome-1 (841)"
+6906	SERPINA7	Hematological	1	0	1	Thyroxine-binding_globulin_deficiency (1506)
+6908	TBP	Neurological	3	25	1	"Huntington_disease (708), Parkinson_disease (1192), Spinocereballar_ataxia (1428)"
+6910	TBX5	Developmental	1	0	1	Holt-Oram_syndrome (696)
+6915	TBXA2R	Hematological	1	1	1	Bleeding_disorder (209)
+6926	TBX3	multiple	1	0	1	Ulnar-mammary_syndrome (1543)
+6927	TCF1	Grey	3	34	2	"Diabetes_mellitus (427), Hepatic_adenoma (668), MODY (1020)"
+6928	TCF2	Grey	3	27	2	"Diabetes_mellitus (427), Glomerulocystic_kidney_disease,_hypoplastic (594), MODY (1020)"
+6948	TCN2	Hematological	1	0	1	Transcobalamin_II_deficiency (1516)
+6949	TCOF1	Developmental	1	0	1	Treacher_Collins_mandibulofacial_dysostosis (1520)
+6955	TRA@	Cancer	1	36	1	Leukemia (886)
+6997	TDGF1	Neurological	1	0	1	Forebrain_defects (547)
+7007	TECTA	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+7010	TEK	Cardiovascular	1	1	1	Venous_thrombosis (1557)
+7012	TERC	Grey	2	3	2	"Aplastic_anemia (133), Dyskeratosis (458)"
+7015	TERT	Hematological	1	2	1	Aplastic_anemia (133)
+7018	TF	Hematological	2	1	1	"Atransferrinemia (165), Iron_overload/deficiency (824)"
+7021	TFAP2B	multiple	1	0	1	Char_syndrome (303)
+7030	TFE3	Cancer	1	6	1	Renal_cell_carcinoma (1308)
+7036	TFR2	Metabolic	1	4	1	Hemochromatosis (657)
+7038	TG	Endocrine	3	7	1	"Autoimmune_thyroid_disease (2174), Goiter (617), Hypothyroidism (787)"
+7040	TGFB1	Skeletal	1	0	1	Camurati-Engelmann_disease (257)
+7044	LEFTY2	Developmental	1	1	1	Left-right_axis_malformations (874)
+7045	TGFBI	Ophthamological	1	6	1	Corneal_dystrophy (362)
+7046	TGFBR1	Connective_tissue_disorder	1	1	1	Loeys-Dietz_syndrome (910)
+7048	TGFBR2	Grey	3	37	2	"Colon_cancer (346), Esophageal_cancer (508), Loeys-Dietz_syndrome (910)"
+7050	TGIF	Developmental	1	4	1	Holoprosencephaly (689)
+7051	TGM1	Dermatological	3	8	1	"Ichthyosiform_erythroderma (793), Ichthyosis (794), Self-healing_collodion_baby (1373)"
+7054	TH	Neurological	1	0	1	Segawa_syndrome (1370)
+7056	THBD	Grey	2	17	2	"Myocardial_infarction (1054), Thrombophilia (1497)"
+7066	THPO	Hematological	1	1	1	Thrombocythemia (1493)
+7067	THRA	Cancer	1	2	1	Pituitary_ACTH-secreting_adenoma (1232)
+7068	THRB	Endocrine	1	1	1	Thyroid_hormone_resistance (3503)
+7078	TIMP3	Ophthamological	1	0	1	Sorsby_fundus_dystrophy (1416)
+7080	TITF1	Grey	2	0	2	"Chorea,_hereditary_benign (318), Choreoathetosis,_hypothyroidism,_and_respiratory_distress (320)"
+7084	TK2	Muscular	1	0	1	Mitochondrial_DNA_depletion_myopathy (3016)
+7086	TKT	Metabolic	1	0	1	Wernicke-Korsakoff_syndrome (1589)
+7099	TLR4	Immunological	1	0	1	Endotoxin_hyporesponsiveness (481)
+7100	TLR5	Immunological	1	0	1	Legionaire_disease (876)
+7102	TSPAN7	Neurological	1	23	1	Mental_retardation (990)
+7124	TNF	Grey	5	25	3	"Asthma (153), Dementia (412), Malaria (940), Migraine (1013), Sepsis (1378)"
+7132	TNFRSF1A	Immunological	1	0	1	"Periodic_fever,_familial (1206)"
+7134	TNNC1	Cardiovascular	1	24	1	Cardiomyopathy (268)
+7136	TNNI2	Developmental	1	2	1	Arthrogryposis (146)
+7137	TNNI3	Cardiovascular	1	24	1	Cardiomyopathy (268)
+7138	TNNT1	Muscular	1	3	1	Nemaline_myopathy (1078)
+7139	TNNT2	Cardiovascular	1	24	1	Cardiomyopathy (268)
+7140	TNNT3	Developmental	1	2	1	Arthrogryposis (146)
+7148	TNXB	Connective_tissue_disorder	1	8	1	Ehlers-Danlos_syndrome (470)
+7150	TOP1	Metabolic	1	1	1	DNA_topoisomerase (440)
+7153	TOP2A	Metabolic	1	1	1	DNA_topoisomerase (440)
+7157	TP53	Cancer	11	70	1	"Adrenal_cortical_carcinoma (2054), Breast_cancer (228), Colon_cancer (346), Hepatic_adenoma (668), Histiocytoma (683), Li-Fraumeni_syndrome (898), Multiple_malignancy_syndrome (5037), Nasopharyngeal_carcinoma (1074), Osteosarcoma (1166), Pancreatic_cancer (1178), Thyroid_carcinoma (1503)"
+7167	TPI1	Hematological	1	9	1	Hemolytic_anemia (660)
+7168	TPM1	Cardiovascular	1	24	1	Cardiomyopathy (268)
+7169	TPM2	Grey	2	5	2	"Arthrogryposis (146), Nemaline_myopathy (1078)"
+7170	TPM3	Muscular	1	3	1	Nemaline_myopathy (1078)
+7172	TPMT	Metabolic	1	0	1	6-mercaptopurine_sensitivity (12)
+7173	TPO	Endocrine	4	2	1	"Goiter (617), Hyperthyroidism (755), Thyroid_hormone_resistance (3503), Total_iodide_organification_defect (3512)"
+7201	TRHR	Endocrine	1	0	1	Thyrotropin-releasing_hormone_deficiency (1505)
+7225	TRPC6	Renal	1	2	1	Glomerulosclerosis (596)
+7227	TRPS1	Developmental	1	0	1	Trichorhinophalangeal_syndrome (1524)
+7248	TSC1	Grey	3	2	3	"Focal_cortical_dysplasia,_Taylor_balloon_cell_type (545), Lymphangioleiomyomatosis (920), Tuberous_sclerosis (1534)"
+7249	TSC2	Grey	2	2	2	"Lymphangioleiomyomatosis (920), Tuberous_sclerosis (1534)"
+7251	TSG101	Cancer	1	18	1	Breast_cancer (228)
+7252	TSHB	Endocrine	1	6	1	Hypothyroidism (787)
+7253	TSHR	Grey	3	16	2	"Hyperthroidism (754), Hypothyroidism (787), Thyroid_carcinoma (1503)"
+7259	TSPYL1	Unclassified	1	0	0	Sudden_infant_death_with_dysgenesis_of_the_testes_syndrome (1459)
+7273	TTN	Grey	2	38	2	"Cardiomyopathy (268), Muscular_dystrophy (1040)"
+7274	TTPA	Neurological	1	4	1	Ataxia (154)
+7276	TTR	Grey	4	5	2	"Amyloid_neuropathy (102), Amyloidosis (103), Carpal_tunnel_syndrome,_familial (275), Dystransthyretinemic_hyperthyroxinemia (463)"
+7287	TULP1	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+7291	TWIST1	Developmental	1	1	1	Saethre-Chotzen_syndrome (1344)
+7292	TNFSF4	Cardiovascular	1	9	1	Myocardial_infarction (1054)
+7299	TYR	Grey	2	5	2	"Albinism (72), Waardenburg_syndrome (1574)"
+7305	TYROBP	Bone	1	1	1	Nasu-Hakola_disease (1075)
+7306	TYRP1	Dermatological	1	2	1	Albinism (72)
+7337	UBE3A	Developmental	1	1	1	Angelman_syndrome (113)
+7345	UCHL1	Neurological	1	10	1	Parkinson_disease (1192)
+7350	UCP1	Nutritional	1	20	1	Obesity (1126)
+7351	UCP2	Nutritional	1	20	1	Obesity (1126)
+7352	UCP3	Nutritional	1	20	1	Obesity (1126)
+7356	SCGB1A1	Respiratory	1	12	1	Asthma (153)
+7369	UMOD	Renal	2	0	1	"Hyperuricemic_nephropathy (759), Medullary_cystic_kidney_disease (969)"
+7372	UMPS	Metabolic	1	0	1	Oroticaciduria (1149)
+7374	UNG	Immunological	1	5	1	Immunodeficiency (802)
+7381	UQCRB	multiple	1	6	1	Mitochondrial_complex_deficiency (1016)
+7389	UROD	Metabolic	1	5	1	Porphyria (1249)
+7390	UROS	Metabolic	1	5	1	Porphyria (1249)
+7391	USF1	Metabolic	1	0	1	Hyperlipidemia (736)
+7399	USH2A	Grey	2	36	2	"Retinitis_pigmentosa (1316), Usher_syndrome (1551)"
+7401	USH3A	multiple	1	7	1	Usher_syndrome (1551)
+7415	VCP	Muscular	1	2	1	Inclusion_body_myopathy (805)
+7421	VDR	Bone	1	1	1	Rickets (1330)
+7422	VEGF	Endocrine	1	26	1	Diabetes_mellitus (427)
+7428	VHL	Grey	5	10	2	"Hemangioblastoma,_cerebellar (650), Pheochromocytoma (1218), Polycythemia (1242), Renal_cell_carcinoma (1308), von_Hippel-Lindau_syndrome (1572)"
+7436	VLDLR	Neurological	1	0	1	"Cerebellar_hypoplasia,_VLDLR-associated (4289)"
+7439	VMD2	Ophthamological	3	4	1	"Macular_dystrophy (2937), Maculopathy,_bull's-eye (938), Vitelliform_macular_dystrophy (1566)"
+7450	VWF	Hematological	1	0	1	von_Willebrand_disease (3572)
+7454	WAS	Grey	3	6	2	"Neutropenia (1101), Thrombocytopenia (1494), Wiskott-Aldrich_syndrome (1598)"
+7466	WFS1	Grey	2	0	2	"Hearing_loss,_low-frequency_sensorineural (646), Wolfram_syndrome (1603)"
+7473	WNT3	multiple	1	0	1	"Tetra-amelia,_autosomal_recessive (1482)"
+7486	WRN	multiple	1	0	1	Werner_syndrome (1588)
+7490	WT1	Grey	5	3	3	"Denys-Drash_syndrome (420), Frasier_syndrome (552), Mesangial_sclerosis (993), WAGR_syndrome (1576), Wilms_tumor (1595)"
+7494	XBP1	Psychiatric	1	0	1	Bipolar_disorder (204)
+7498	XDH	Metabolic	1	0	1	"Xanthinuria,_type_I (1607)"
+7499	XG	Hematological	1	22	1	Blood_group (212)
+7503	XIST	Unclassified	1	0	0	"X-inactivation,_familial_skewed (1610)"
+7504	XK	Hematological	1	0	1	McLeod_syndrome (965)
+7507	XPA	Dermatological	1	7	1	Xeroderma_pigmentosum (1608)
+7508	XPC	Dermatological	1	7	1	Xeroderma_pigmentosum (1608)
+7512	XPNPEP2	Immunological	1	1	1	Angioedema (114)
+7517	XRCC3	Cancer	2	22	1	"Breast_cancer (228), Melanoma (978)"
+7531	YWHAE	multiple	1	0	1	Miller-Dieker_lissencephaly (1014)
+7535	ZAP70	Immunological	1	0	1	Selective_T-cell_defect (1372)
+7546	ZIC2	Developmental	1	4	1	Holoprosencephaly (689)
+7547	ZIC3	multiple	1	1	1	Heterotaxy (675)
+7555	ZNF9	Muscular	1	1	1	Myotonic_dystrophy (1063)
+7592	ZNF41	Neurological	1	23	1	Mental_retardation (990)
+7704	ZBTB16	Cancer	1	36	1	Leukemia (886)
+7750	ZNF198	Cancer	1	0	1	Stem-cell_leukemia/lymphoma_syndrome (1445)
+7809	BSND	multiple	1	4	1	Bartter_syndrome (187)
+7827	NPHS2	Renal	1	1	1	Nephrotic_syndrome (1087)
+7840	ALMS1	Neurological	1	0	1	(null) (95)
+7841	GCS1	Metabolic	1	0	1	Glucosidase_I_deficiency (601)
+7849	PAX8	Endocrine	1	6	1	Hypothyroidism (787)
+7852	CXCR4	Immunological	2	0	1	"Myelokathexis,_isolated (1049), WHIM_syndrome (1591)"
+7873	ARMET	Cancer	1	8	1	Pancreatic_cancer (1178)
+7879	RAB7	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+7915	ALDH5A1	Metabolic	1	0	1	Succinic_semialdehyde_dehydrogenase_deficiency (1457)
+7941	PLA2G7	Grey	3	19	3	"Asthma (153), Atopy (164), Platelet_defect/deficiency (1237)"
+7957	EPM2A	Neurological	1	16	1	Epilepsy (495)
+8013	NR4A3	Cancer	1	2	1	Chondrosarcoma (316)
+8021	NUP214	Cancer	1	36	1	Leukemia (886)
+8022	LHX3	Endocrine	1	3	1	Pituitary_hormone_deficiency (5232)
+8028	MLLT10	Cancer	1	36	1	Leukemia (886)
+8029	CUBN	Hematological	1	1	1	Megaloblastic_anemia (975)
+8031	NCOA4	Cancer	1	10	1	Thyroid_carcinoma (1503)
+8048	CSRP3	Cardiovascular	1	24	1	Cardiomyopathy (268)
+8050	PDHX	Metabolic	1	0	1	Lacticacidemia_due_to_PDX1_deficiency (859)
+8074	FGF23	Bone	2	1	1	"Calcinosis,_tumoral (254), Hypophosphatemic_rickets (784)"
+8086	AAAS	multiple	1	0	1	Achalasia-addisonianism-alacrimia_syndrome (24)
+8091	HMGA2	Cancer	3	2	1	"Lipoma (904), Salivary_adenoma (1345), Uterine_leiomyoma (1552)"
+8106	PABPN1	Muscular	1	0	1	Oculopharyngeal_muscular_dystorphy (1135)
+8132	PKDTS	Renal	1	3	1	Polycystic_kidney_disease (1241)
+8139	GAN	Neurological	1	0	1	Giant_axonal_neuropathy (582)
+8144	FIMG1	Muscular	1	0	1	Myasthenia (1041)
+8195	MKKS	Grey	2	7	2	"Bardet-Biedl_syndrome (183), McKusick-Kaufman_syndrome (964)"
+8200	GDF5	Skeletal	4	5	1	"Acromesomelic_dysplasia (39), Brachydactyly (224), Chondrodysplasia,_Grebe_type (2315), Fibular_hypoplasia_and_complex_brachydactyly (539)"
+8242	SMCX	Neurological	1	23	1	Mental_retardation (990)
+8287	USP9Y	Endocrine	1	1	1	Azoospermia (178)
+8288	EPX	Hematological	1	0	1	Eosinophil_peroxidase_deficiency (491)
+8291	DYSF	Muscular	3	25	1	"Miyoshi_myopathy (1018), Muscular_dystrophy (1040), Myopathy (1059)"
+8292	COLQ	Neurological	1	0	1	Endplate_acetylcholinesterase_deficiency (482)
+8301	PICALM	Cancer	1	36	1	Leukemia (886)
+8312	AXIN1	Cancer	1	7	1	Hepatic_adenoma (668)
+8313	AXIN2	Cancer	2	33	1	"Colon_cancer (346), Oligodontia-colorectal_cancer_syndrome (1140)"
+8322	FZD4	Ophthamological	1	2	1	Exudative_vitreoretinopathy (515)
+8379	MAD1L1	Cancer	2	20	1	"Lymphoma (925), Prostate_cancer (1272)"
+8419	BFSP2	Ophthamological	1	14	1	Cataract (277)
+8431	NR0B2	Nutritional	1	20	1	Obesity (1126)
+8438	RAD54L	Cancer	3	54	1	"Breast_cancer (228), Colon_cancer (346), Lymphoma (925)"
+8443	GNPAT	Connective_tissue_disorder	1	2	1	Chondrodysplasia_punctata (315)
+8456	FOXN1	Immunological	1	0	1	"T-cell_immunodeficiency,_congenital_alopecia,_and_nail_dystrophy (3478)"
+8481	OFD1	Skeletal	1	0	1	Oral-facial-digital_syndrome (1145)
+8483	CILP	Skeletal	1	0	1	Lumbar_disc_disease (917)
+8492	PRSS12	Neurological	1	23	1	Mental_retardation (990)
+8493	PPM1D	Cancer	1	18	1	Breast_cancer (228)
+8504	PEX3	multiple	1	10	1	Zellweger_syndrome (1615)
+8517	IKBKG	Dermatological	2	7	1	"Ectodermal_dysplasia (466), Incontinentia_pigmenti (806)"
+8518	IKBKAP	Neurological	1	0	1	Dysautonomia (454)
+8540	AGPS	multiple	1	1	1	Rhizomelic_chondrodysplasia_punctata (1325)
+8546	AP3B1	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+8557	TCAP	Grey	2	38	2	"Cardiomyopathy (268), Muscular_dystrophy (1040)"
+8572	PDLIM4	Bone	1	0	1	Osteoporosis (1165)
+8625	RFXANK	Immunological	1	0	1	MHC_class_II_deficiency (1006)
+8626	TP73L	Grey	6	1	2	"ADULT_syndrome (59), EEC_syndrome (468), Hay-Wells_syndrome (643), Limb-mammary_syndrome (901), Rapp-Hodgkin_syndrome (1305), Split-hand/foot_malformation (1430)"
+8629	JRK	Neurological	1	16	1	Epilepsy (495)
+8643	PTCH2	Cancer	2	4	1	"Basal_cell_carcinoma (188), Medulloblastoma (970)"
+8647	ABCB11	Gastrointestinal	1	3	1	Cholestasis (310)
+8659	ALDH4A1	Metabolic	1	1	1	Hyperprolinemia (749)
+8660	IRS2	Endocrine	1	26	1	Diabetes_mellitus (427)
+8671	SLC4A4	Renal	1	4	1	Renal_tubular_acidosis (7308)
+8701	DNAH11	Grey	2	3	2	"Kartagener_syndrome (840), Situs_ambiguus (1399)"
+8706	B3GALT3	Hematological	1	22	1	Blood_group (212)
+8787	RGS9	Ophthamological	1	1	1	Bradyopsia (225)
+8792	TNFRSF11A	Bone	2	3	1	"Osteolysis (1157), Paget_disease (1173)"
+8795	TNFRSF10B	Cancer	1	2	1	Squamous_cell_carcinoma (1437)
+8803	SUCLA2	multiple	1	1	1	Mitochondrial_DNA_depletion_syndrome (5016)
+8805	TRIM24	Cancer	1	10	1	Thyroid_carcinoma (1503)
+8813	DPM1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+8820	HESX1	Grey	2	3	2	"Pituitary_hormone_deficiency (5232), Septooptic_dysplasia (1380)"
+8833	GMPS	Cancer	1	36	1	Leukemia (886)
+8838	WISP3	Grey	2	4	2	"Arthropathy (147), Spondyloepiphyseal_dysplasia (1435)"
+8842	PROM1	Ophthamological	1	3	1	Retinal_cone_dsytrophy (1315)
+8864	PER2	Neurological	1	0	1	Advanced_sleep_phase_syndrome (60)
+8869	ST3GAL5	Neurological	1	0	1	Amish_infantile_epilepsy_syndrome (100)
+8878	SQSTM1	Bone	1	2	1	Paget_disease (1173)
+8890	EIF2B4	Neurological	2	4	1	"Leukoencephalopathy_with_vanishing_white_matter (891), Ovarioleukodystrophy (1171)"
+8891	EIF2B3	Neurological	1	4	1	Leukoencephalopathy_with_vanishing_white_matter (891)
+8892	EIF2B2	Neurological	2	4	1	"Leukoencephalopathy_with_vanishing_white_matter (891), Ovarioleukodystrophy (1171)"
+8893	EIF2B5	Neurological	2	4	1	"Leukoencephalopathy_with_vanishing_white_matter (891), Ovarioleukodystrophy (1171)"
+8898	MTMR2	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+8910	SGCE	Neurological	1	5	1	Dystonia (462)
+8915	BCL10	Cancer	5	40	1	"Colon_cancer (346), Germ_cell_tumor (580), Lymphoma (925), Mesothelioma (995), Sezary_syndrome (1385)"
+8929	PHOX2B	Grey	3	8	3	"Central_hypoventilation_syndrome (287), Hirschsprung_disease (681), Neuroblastoma (1091)"
+9051	PSTPIP1	Dermatological	1	0	1	"Pyogenic_sterile_arthritis,_pyoderma_gangrenosum,_and_acne (1295)"
+9056	SLC7A7	Metabolic	1	0	1	Lysinuric_protein_intolerance (931)
+9060	PAPSS2	Connective_tissue_disorder	1	0	1	"SEMD,_Pakistani_type (1374)"
+9076	CLDN1	multiple	1	0	1	Neonatal_ichthyosis-sclerosing_cholangitis_syndrome (3079)
+9095	TBX19	Endocrine	1	0	1	Adrenocorticotropic_hormone_deficiency (55)
+9129	PRPF3	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+9132	KCNQ4	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+9150	CTDP1	Ophthamological	1	0	1	Congenital_cataracts (4354)
+9210	BMP15	Endocrine	1	1	1	Ovarian_dysgenesis (3171)
+9211	LGI1	Grey	2	20	2	"Epilepsy (495), Glioblastoma (590)"
+9215	LARGE	Muscular	1	17	1	Muscular_dystrophy (1040)
+9217	VAPB	Grey	2	11	2	"Amyotrophic_lateral_sclerosis (104), Spinal_muscular_atrophy (1426)"
+9227	LRAT	Ophthamological	1	3	1	Retinal_cone_dsytrophy (1315)
+9231	DLG5	Gastrointestinal	1	1	1	Crohn_disease (390)
+9241	NOG	Grey	4	0	2	"Stapes_ankylosis_syndrome_without_symphalangism (1438), Symphalangism,_proximal (1467), Synostoses_syndrome (1469), Tarsal-carpal_coalition_syndrome (1475)"
+9244	CRLF1	multiple	1	0	1	Cold-induced_sweating_syndrome (2344)
+9247	GCM2	Endocrine	1	1	1	Hypoparathyroidism (779)
+9289	GPR56	Neurological	1	0	1	Polymicrogyria (1244)
+9342	SNAP29	Neurological	1	0	1	"Cerebral_dysgenesis,_neuropathy,_ichthyosis,_and_palmoplantar_keratoderma_syndrome (6291)"
+9365	KL	Cardiovascular	1	5	1	Coronary_artery_disease (365)
+9370	ADIPOQ	Endocrine	1	0	1	Adiponectin_deficiency (52)
+9380	GRHPR	Metabolic	1	1	1	Hyperoxaluria (742)
+9381	OTOF	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+9401	RECQL4	multiple	2	0	1	"RAPADILINO_syndrome (1303), Rothmund-Thomson_syndrome (1338)"
+9409	PEX16	multiple	1	10	1	Zellweger_syndrome (1615)
+9414	TJP2	Gastrointestinal	1	2	1	Hypercholanemia (723)
+9420	CYP7B1	Gastrointestinal	1	0	1	Giant_cell_hepatitis (2584)
+9445	ITM2B	Neurological	1	5	1	Dementia (412)
+9451	EIF2AK3	Bone	1	0	1	Wolcott-Rallison_syndrome (1600)
+9459	ARHGEF6	Neurological	1	23	1	Mental_retardation (990)
+9469	CHST3	Skeletal	1	4	1	Spondyloepiphyseal_dysplasia (1435)
+9479	MAPK8IP1	Endocrine	1	26	1	Diabetes_mellitus (427)
+9496	TBX4	Skeletal	1	0	1	Small_patella_syndrome (1406)
+9499	MYOT	Muscular	2	17	1	"Muscular_dystrophy (1040), Myotilinopathy (1061)"
+9509	ADAMTS2	Connective_tissue_disorder	1	8	1	Ehlers-Danlos_syndrome (470)
+9516	LITAF	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+9526	MPDU1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+9562	MINPP1	Cancer	1	10	1	Thyroid_carcinoma (1503)
+9563	H6PD	Metabolic	1	1	1	Cortisone_reductase_deficiency (368)
+9568	GPR51	Psychiatric	1	2	1	Nicotine_addiction (1106)
+9607	CART	Nutritional	1	20	1	Obesity (1126)
+9622	KLK4	Bone	1	3	1	Amelogenesis_imperfecta (99)
+9627	SNCAIP	Neurological	1	10	1	Parkinson_disease (1192)
+9639	ARHGEF10	Neurological	1	0	1	"Slowed_nerve_conduction_velocity,_AD (1404)"
+9657	IQCB1	Renal	1	2	1	Senior-Loken_syndrome (1375)
+9685	ENTH	Psychiatric	1	8	1	Schizophrenia (1359)
+9820	CUL7	multiple	1	0	1	3-M_syndrome (10)
+9821	RB1CC1	Cancer	1	18	1	Breast_cancer (228)
+9839	ZFHX1B	Developmental	1	0	1	Mowat-Wilson_syndrome (1028)
+9856	KIAA0319	Psychiatric	1	1	1	Dyslexia (459)
+9927	MFN2	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+9950	GOLGA5	Cancer	1	10	1	Thyroid_carcinoma (1503)
+9990	SLC12A6	Neurological	1	0	1	Agenesis_of_the_corpus_callosum_with_peripheral_neuropathy (65)
+9992	KCNE2	Cardiovascular	2	9	1	"Atrial_fibrillation (166), Long_QT_syndrome (912)"
+9997	SCO2	Cardiovascular	1	0	1	"Cardioencephalomyopathy,_fatal_infantile,_due_to_cytochrome_c_oxidase_deficiency (267)"
+10002	NR2E3	Ophthamological	2	29	1	"Enhanced_S-cone_syndrome (483), Retinitis_pigmentosa (1316)"
+10008	KCNE3	Renal	1	2	1	Hypokalemic_periodic_paralysis (776)
+10020	GNE	Grey	3	2	2	"Inclusion_body_myopathy (805), Nonaka_myopathy (1112), Sialuria (1392)"
+10060	ABCC9	Cardiovascular	1	24	1	Cardiomyopathy (268)
+10083	USH1C	Grey	2	44	2	"Deafness (406), Usher_syndrome (1551)"
+10084	PQBP1	Neurological	1	0	1	Renpenning_syndrome (1309)
+10117	ENAM	Grey	2	3	2	"Amelogenesis_imperfecta (99), Hypoplastic_enamel_pitting,_localized (785)"
+10128	LRPPRC	Neurological	1	11	1	Leigh_syndrome (877)
+10133	OPTN	Ophthamological	1	3	1	Glaucoma (589)
+10157	AASS	Metabolic	1	0	1	Hyperlysinemia (738)
+10165	SLC25A13	Metabolic	1	1	1	Citrullinemia (335)
+10166	SLC25A15	Metabolic	1	0	1	Hyperornithinemia-hyperammonemia-homocitrullinemia_syndrome (740)
+10195	ALG3	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+10216	PRG4	Skeletal	1	0	1	Camptodactyly-arthropathy-coxa_vara-pericarditis_syndrome (256)
+10243	GPHN	Metabolic	1	2	1	Molybdenum_cofactor_deficiency (1023)
+10269	ZMPSTE24	Grey	2	0	2	"Mandibuloacral_dysplasia_with_type_B_lipodystrophy (945), Restrictive_dermopathy,_lethal (1314)"
+10312	TCIRG1	Bone	1	3	1	Osteopetrosis (1161)
+10320	ZNFN1A1	Cancer	1	36	1	Leukemia (886)
+10395	DLC1	Cancer	1	33	1	Colon_cancer (346)
+10397	NDRG1	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+10461	MERTK	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+10516	FBLN5	Grey	2	6	2	"Cutis_laxa (395), Macular_degeneration (937)"
+10555	AGPAT2	Metabolic	1	4	1	Lipodystrophy (902)
+10558	SPTLC1	Neurological	1	7	1	Neuropathy (1099)
+10560	SLC19A2	Hematological	1	0	1	Thiamine-responsive_megaloblastic_anemia_syndrome (1491)
+10564	ARFGEF2	Neurological	1	0	1	Periventricular_heterotopia_with_microcephaly (1209)
+10577	NPC2	Metabolic	1	2	1	Niemann-Pick_disease (1107)
+10585	POMT1	Grey	2	18	2	"Muscular_dystrophy (1040), Walker-Warburg_syndrome (1578)"
+10594	PRPF8	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+10682	EBP	Connective_tissue_disorder	1	2	1	Chondrodysplasia_punctata (315)
+10683	DLL3	Skeletal	1	1	1	Spondylocostal_dysostosis (1433)
+10686	CLDN16	Renal	1	2	1	Hypomagnesemia (778)
+10743	RAI1	multiple	1	0	1	Smith-Magenis_syndrome (1411)
+10747	MASP2	Immunological	1	0	1	MASP2_deficiency (956)
+10804	GJB6	Grey	2	47	2	"Deafness (406), Ectodermal_dysplasia (466)"
+10841	FTCD	Metabolic	1	0	1	Glutamate_formiminotransferase_deficiency (602)
+10842	C7orf16	Metabolic	1	7	1	Hypercholesterolemia (724)
+10891	PPARGC1A	Metabolic	1	4	1	Lipodystrophy (902)
+10892	MALT1	Cancer	1	0	1	MALT_lymphoma (944)
+10913	EDAR	Dermatological	1	7	1	Ectodermal_dysplasia (466)
+10962	MLLT11	Cancer	1	36	1	Leukemia (886)
+10984	KCNQ1OT1	multiple	1	3	1	Beckwith-Wiedemann_syndrome (194)
+11005	SPINK5	Grey	2	4	2	"Atopy (164), Netherton_syndrome (1088)"
+11081	KERA	Ophthamological	1	6	1	Corneal_dystrophy (362)
+11093	ADAMTS13	Hematological	1	8	1	Thrombophilia (1497)
+11132	CAPN10	Endocrine	1	26	1	Diabetes_mellitus (427)
+11136	SLC7A9	Renal	1	1	1	Cystinuria (401)
+11141	IL1RAPL1	Neurological	1	23	1	Mental_retardation (990)
+11146	GLMN	Cardiovascular	1	0	1	Glomuvenous_malformations (597)
+11178	LZTS1	Cancer	1	3	1	Esophageal_cancer (508)
+11200	CHEK2	Cancer	4	27	1	"Breast_cancer (228), Li-Fraumeni_syndrome (898), Osteosarcoma (1166), Prostate_cancer (1272)"
+11216	AKAP10	Developmental	1	1	1	Longevity (911)
+11231	SEC63	Gastrointestinal	1	1	1	Polycystic_liver_disease (3241)
+11234	HPS5	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+11235	PDCD10	Neurological	1	2	1	Cerebral_cavernous_malformations (4291)
+11236	RNF139	Cancer	1	6	1	Renal_cell_carcinoma (1308)
+11254	SLC6A14	Nutritional	1	20	1	Obesity (1126)
+11281	POU6F2	Cancer	1	3	1	Wilms_tumor (1595)
+11285	B4GALT7	Connective_tissue_disorder	1	8	1	Ehlers-Danlos_syndrome (470)
+11315	PARK7	Neurological	1	10	1	Parkinson_disease (1192)
+11322	EVER1	Dermatological	1	1	1	Epidermodysplasia_verruciformis (492)
+22800	RRAS2	Cancer	1	7	1	Ovarian_cancer (1170)
+22891	ZNF365	Renal	1	1	1	Nephrolithiasis (1081)
+22930	RAB3GAP1	multiple	1	2	1	Walker-Warburg_syndrome (1578)
+22934	RPIA	Metabolic	1	0	1	Ribose_5-phosphate_isomerase_deficiency (1329)
+22954	TRIM32	Muscular	1	17	1	Muscular_dystrophy (1040)
+22976	PAXIP1	Neurological	1	11	1	Alzheimer_disease (98)
+23064	ALS4	Neurological	1	4	1	Ataxia (154)
+23092	ARHGAP26	Cancer	1	36	1	Leukemia (886)
+23095	KIF1B	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+23111	SPG20	Neurological	1	0	1	Troyer_syndrome (1530)
+23209	MLC1	Neurological	1	0	1	Megalencephalic_leukoencephalopathy_with_subcortical_cysts (974)
+23230	VPS13A	Neurological	1	0	1	Choreoacanthocytosis (319)
+23305	ACSL6	Grey	2	4	2	"Myelodysplastic_syndrome (1045), Myelogenous_leukemia (1047)"
+23365	ARHGEF12	Cancer	1	36	1	Leukemia (886)
+23373	MECT1	Cancer	1	1	1	Mucoepidermoid_salivary_gland_carcinoma (1031)
+23389	THRAP2	Developmental	1	1	1	"Transposition_of_great_arteries,_dextro-looped (1519)"
+23414	ZFPM2	Cardiovascular	1	2	1	Tetralogy_of_Fallot (1483)
+23417	MLYCD	Metabolic	1	0	1	Malonyl-CoA_decarboxylase_deficiency (943)
+23418	CRB1	Ophthamological	3	32	1	"Leber_congenital_amaurosis (873), Pigmented_paravenous_chorioretinal_atrophy (1229), Retinitis_pigmentosa (1316)"
+23474	ETHE1	Metabolic	1	0	1	Ethylmalonic_encephalopathy (510)
+23495	TNFRSF13B	Immunological	1	0	1	Immunoglobulin_A_deficiency (804)
+23562	CLDN14	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+23569	PADI4	Connective_tissue_disorder	1	7	1	Rheumatoid_arthritis (1324)
+23592	LEMD3	Grey	3	0	3	"Buschke-Ollendorff_syndrome (238), Melorheostosis_with_osteopoikilosis (982), Osteopoikilosis (1162)"
+23600	AMACR	Metabolic	1	0	1	Alpha-methylacyl-CoA_racemase_deficiency (91)
+23607	CD2AP	Renal	1	2	1	Glomerulosclerosis (596)
+23746	AIPL1	Ophthamological	3	33	1	"Cone_dystrophy (352), Leber_congenital_amaurosis (873), Retinitis_pigmentosa (1316)"
+24140	FTSJ1	Neurological	1	23	1	Mental_retardation (990)
+25788	RAD54B	Cancer	2	39	1	"Colon_cancer (346), Lymphoma (925)"
+25794	FSCN2	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+25814	ATXN10	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+25836	NIPBL	Developmental	1	0	1	Cornelia_de_Lange_syndrome (364)
+25861	DFNB31	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+25894	PLEKHG4	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+25953	MR-1	Neurological	1	0	1	Paroxysmal_kinesigenic_choreoathetosis (1195)
+26012	NELF	Endocrine	1	3	1	Hypogonadotropic_hypogonadism (774)
+26119	LDLRAP1	Metabolic	1	7	1	Hypercholesterolemia (724)
+26121	PRPF31	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+26128	KIAA1279	multiple	1	0	1	Goldberg-Shprintzen_megacolon_syndrome (618)
+26154	ABCA12	Dermatological	1	6	1	Ichthyosis (794)
+26191	PTPN22	Grey	3	36	3	"Diabetes_mellitus (427), Rheumatoid_arthritis (1324), Systemic_lupus_erythematosus (1471)"
+26227	PHGDH	Metabolic	1	0	1	Phosphoglycerate_dehydrogenase_deficiency (1220)
+26276	VPS33B	Gastrointestinal	1	0	1	ARC_syndrome (139)
+26278	SACS	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+26353	HSPB8	Neurological	1	7	1	Neuropathy (1099)
+26503	SLC17A5	Metabolic	2	1	1	"Salla_disease (1346), Sialidosis (1391)"
+26511	CHIC2	Cancer	1	36	1	Leukemia (886)
+26580	BSCL2	Grey	3	10	3	"Lipodystrophy (902), Silver_spastic_paraplegia_syndrome (1396), Spinal_muscular_atrophy (1426)"
+26762	HAVCR1	Immunological	1	4	1	Atopy (164)
+27019	DNAI1	Grey	2	2	2	"Ciliary_dyskinesia (331), Kartagener_syndrome (840)"
+27030	MLH3	Cancer	1	33	1	Colon_cancer (346)
+27031	NPHP3	Renal	1	3	1	Nephronophthisis (1082)
+27032	ATP2C1	Dermatological	1	0	1	Hailey-Hailey_disease (633)
+27130	INVS	Renal	1	3	1	Nephronophthisis (1082)
+27185	DISC1	Psychiatric	1	8	1	Schizophrenia (1359)
+27232	GNMT	Metabolic	1	3	1	Glycine_encephalopathy (608)
+28962	OSTM1	Bone	1	3	1	Osteopetrosis (1161)
+29760	BLNK	Immunological	1	0	1	Hypoglobulinemia_and_absent_B_cells (771)
+29851	ICOS	Immunological	1	0	1	ICOS_deficiency (795)
+29881	NPC1L1	Unclassified	1	0	0	"Ezetimibe,_nonresponse_to (517)"
+29929	ALG6	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+29958	DMGDH	Metabolic	1	0	1	Dimethylglycine_dehydrogenase_deficiency (435)
+30061	SLC40A1	Metabolic	1	4	1	Hemochromatosis (657)
+30813	VSX1	Grey	3	6	2	"Corneal_dystrophy (362), Craniofacial_anomalies,_empty_sella_turcica,_corneal_endothelial_changes,_and_abnormal_retinal_and_auditory_bipolar_cells (377), Keratoconus (844)"
+30835	CD209	Immunological	1	0	1	"Dengue_fever,_protection_against (413)"
+50485	SMARCAL1	Connective_tissue_disorder	1	0	1	Schimke_immunoosseous_dysplasia (1354)
+50506	DUOX2	Endocrine	1	6	1	Hypothyroidism (787)
+50511	SYCP3	Endocrine	1	1	1	Azoospermia (178)
+50617	ATP6V0A4	Renal	1	4	1	Renal_tubular_acidosis (7308)
+50814	NSDHL	Developmental	1	0	1	CHILD_syndrome (306)
+50846	DHH	Endocrine	1	1	1	Gonadal_dysgenesis (619)
+50943	FOXP3	Grey	2	26	2	"Diabetes_mellitus (427), Immunodysregulation,_polyendocrinopathy,_and_enteropathy,_X-linked (803)"
+50945	TBX22	Developmental	1	2	1	Cleft_palate (336)
+50964	SOST	Skeletal	1	0	1	Sclerosteosis (1363)
+51062	SPG3A	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+51099	ABHD5	Metabolic	1	0	1	Chanarin-Dorfman_syndrome (300)
+51119	SBDS	multiple	1	0	1	Shwachman-Diamond_syndrome (1389)
+51128	SAR1B	Gastrointestinal	2	0	1	"Anderson_disease (108), Chylomicron_retention_disease (330)"
+51131	PHF11	Grey	2	12	2	"Asthma (153), IgE_levels_QTL (797)"
+51135	IRAK4	Immunological	1	0	1	IRAK4_deficiency (821)
+51151	SLC45A2	Grey	2	2	2	"Ocular_albinism (1130), Pigmentation_of_hair,_skin,_and_eyes,_variation_in (1227)"
+51156	SERPINA10	Cardiovascular	1	1	1	Venous_thrombosis (1557)
+51168	MYO15A	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+51185	CRBN	Neurological	1	23	1	Mental_retardation (990)
+51251	NT5C3	Hematological	1	8	1	Anemia (110)
+51324	SPG21	Neurological	1	0	1	Mast_syndrome (960)
+51422	PRKAG2	Cardiovascular	2	24	1	"Cardiomyopathy (268), Wolff-Parkinson-White_syndrome (1601)"
+51592	TRIM33	Cancer	1	10	1	Thyroid_carcinoma (1503)
+51684	SUFU	Cancer	1	1	1	Medulloblastoma (970)
+51733	UPB1	Metabolic	1	0	1	Beta-ureidopropionase_deficiency (199)
+51738	GHRL	Nutritional	1	20	1	Obesity (1126)
+51741	WWOX	Cancer	1	3	1	Esophageal_cancer (508)
+53904	MYO3A	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+53947	A4GALT	Hematological	1	22	1	Blood_group (212)
+54209	TREM2	Bone	1	1	1	Nasu-Hakola_disease (1075)
+54332	GDAP1	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+54345	SOX18	Dermatological	1	3	1	Hypotrichosis (788)
+54361	WNT4	Developmental	1	0	1	Rokitansky-Kuster-Hauser_syndrome (1337)
+54413	NLGN3	Psychiatric	2	3	1	"Asperger_syndrome (151), Autism (173)"
+54658	UGT1A1	Grey	3	0	3	"Crigler-Najjar_syndrome (389), Gilbert_syndrome (586), Hyperbilirubinemia (720)"
+54714	CNGB3	Ophthamological	2	6	1	"Achromatopsia (29), Macular_degeneration (937)"
+54806	AHI1	multiple	1	1	1	Joubert_syndrome (831)
+54808	DYM	Grey	2	0	2	"Dyggve-Melchior-Clausen_disease (452), Smith-McCort_dysplasia (1412)"
+54829	ASPN	Connective_tissue_disorder	1	3	1	Osteoarthritis (1154)
+54840	APTX	Neurological	1	4	1	Ataxia (154)
+54880	BCOR	Grey	2	2	2	"Microphthalmia (1012), Oculofaciocardiodental_syndrome (1133)"
+54904	WHSC1L1	Cancer	1	36	1	Leukemia (886)
+54982	CLN6	Neurological	1	5	1	Ceroid-lipofuscinosis (296)
+55109	AGGF1	multiple	1	0	1	Klippel-Trenaunay_syndrome (853)
+55120	FANCL	multiple	1	10	1	Fanconi_anemia (523)
+55212	BBS7	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+55343	SLC35C1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+55605	KIF21A	Ophthamological	1	1	1	Fibrosis (538)
+55612	C20orf42	Dermatological	1	0	1	Kindler_syndrome (850)
+55624	POMGNT1	multiple	1	0	1	Muscle-eye-brain_disease (1038)
+55630	SLC39A4	Dermatological	1	0	1	Acrodermatitis_enteropathica (34)
+55636	CHD7	multiple	1	0	1	CHARGE_syndrome (302)
+55670	PEX26	Grey	3	13	2	"Adrenoleukodystrophy (56), Refsum_disease (1307), Zellweger_syndrome (1615)"
+55755	CDK5RAP2	Neurological	1	4	1	Microcephaly (1007)
+55775	TDP1	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+55806	HR	Dermatological	2	0	1	"Alopecia_universalis (85), Atrichia_with_papular_lesions (167)"
+55811	SAC	Renal	1	0	1	Hypercalciuria (721)
+55835	CENPJ	Neurological	1	4	1	Microcephaly (1007)
+55997	CFC1	Grey	3	2	3	"Double-outlet_right_ventricle (444), Heterotaxy (675), Transposition_of_great_arteries,_dextro-looped (1519)"
+56052	ALG1	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+56172	ANKH	Grey	2	0	2	"Chondrocalcinosis (314), Craniometaphyseal_dysplasia (382)"
+56244	BTNL2	Immunological	1	2	1	Sarcoidosis (1349)
+56246	MRAP	Endocrine	1	1	1	Glucocorticoid_deficiency (598)
+56262	LRRC8A	Hematological	1	3	1	Agammaglobulinemia (63)
+56652	PEO1	Ophthamological	1	2	1	Progressive_external_ophthalmoplegia_with_mitochondrial_DNA_deletions (1265)
+56729	RETN	Grey	2	37	2	"Diabetes_mellitus (427), Hypertension (752)"
+56922	MCCC1	Metabolic	1	1	1	3-Methylcrotonyl-CoA_carboxylase_deficiency (7)
+57096	RPGRIP1	Ophthamological	2	9	1	"Cone_dystrophy (352), Leber_congenital_amaurosis (873)"
+57152	SLURP1	Dermatological	1	0	1	Meleda_disease (979)
+57165	GJA12	Neurological	1	0	1	(null) (1201)
+57167	SALL4	multiple	1	0	1	Duane_syndrome (449)
+57190	SEPN1	Muscular	1	17	1	Muscular_dystrophy (1040)
+57192	MCOLN1	Metabolic	1	2	1	Mucolipidosis (1032)
+57214	KIAA1199	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+57338	JPH3	Neurological	1	3	1	Huntington_disease (708)
+57379	AICDA	Immunological	1	5	1	Immunodeficiency (802)
+57502	NLGN4X	Grey	3	25	2	"Asperger_syndrome (151), Autism (173), Mental_retardation (990)"
+57591	MKL1	Cancer	1	0	1	"Megakaryoblastic_leukemia,_acute (973)"
+57679	ALS2	Neurological	3	13	1	"Amyotrophic_lateral_sclerosis (104), Primary_lateral_sclerosis (1261), Spastic_ataxia/paraplegia (1418)"
+57697	FANCM	multiple	1	10	1	Fanconi_anemia (523)
+57716	PRX	multiple	1	3	1	Dejerine-Sottas_disease (410)
+57817	HAMP	Metabolic	1	4	1	Hemochromatosis (657)
+59344	ALOXE3	Dermatological	1	2	1	Ichthyosiform_erythroderma (793)
+60386	SLC25A19	Neurological	1	4	1	Microcephaly (1007)
+60506	NYX	Ophthamological	1	4	1	Night_blindness (1110)
+60528	ELAC2	Cancer	1	11	1	Prostate_cancer (1272)
+60529	ALX4	Skeletal	1	1	1	Parietal_foramina (1190)
+63869	PSORS6	Dermatological	1	1	1	Psoraisis (1288)
+64072	CDH23	Grey	2	44	2	"Deafness (406), Usher_syndrome (1551)"
+64087	MCCC2	Metabolic	1	1	1	3-Methylcrotonyl-CoA_carboxylase_deficiency (7)
+64127	CARD15	Grey	4	4	4	"Blau_syndrome (208), Crohn_disease (390), Psoraisis (1288), Sarcoidosis (1349)"
+64221	ROBO3	Neurological	1	0	1	Gaze_palsy (576)
+64240	ABCG5	Metabolic	1	1	1	Sitosterolemia (1398)
+64241	ABCG8	Metabolic	1	1	1	Sitosterolemia (1398)
+64324	NSD1	Grey	3	3	2	"Beckwith-Wiedemann_syndrome (194), Sotos_syndrome (1417), Weaver_syndrome (1582)"
+64327	LMBR1	Skeletal	1	0	1	Acheiropody (25)
+64342	HS1BP3	Neurological	1	0	1	"Tremor,_familial_essential (1521)"
+64421	DCLRE1C	Immunological	2	7	1	"Omenn_syndrome (1141), Severe_combined_immunodeficiency (1383)"
+64699	TMPRSS3	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+64805	P2RY12	Hematological	1	3	1	Platelet_defect/deficiency (1237)
+65018	PINK1	Neurological	1	10	1	Parkinson_disease (1192)
+65078	RTN4R	Psychiatric	1	8	1	Schizophrenia (1359)
+65125	WNK1	Endocrine	1	5	1	Pseudohypoaldosteronism (1281)
+65217	PCDH15	Grey	2	44	2	"Deafness (406), Usher_syndrome (1551)"
+65266	WNK4	Endocrine	1	5	1	Pseudohypoaldosteronism (1281)
+78987	CRELD1	Cardiovascular	1	2	1	Atrioventricular_block (168)
+79001	VKORC1	Hematological	2	3	1	"Vitamin_K-dependent_coagulation_defect (1565), Warfarin_resistance/sensitivity (1580)"
+79053	ALG8	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+79058	ASPSCR1	Cancer	1	0	1	Alveolar_soft-part_sarcoma (97)
+79083	MLPH	Dermatological	1	2	1	Griscelli_syndrome (627)
+79087	ALG12	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+79147	FKRP	Muscular	1	17	1	Muscular_dystrophy (1040)
+79158	GNPTAB	Metabolic	1	2	1	Mucolipidosis (1032)
+79577	CDC73	Grey	2	2	2	"Hyperparathyroidism (743), Parathyroid_adenoma (1189)"
+79628	SH3TC2	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+79648	MCPH1	Neurological	2	4	1	"Microcephaly (1007), Premature_chromosome_condensation_with_microcephaly_and_mental_retardation (3260)"
+79751	SLC25A22	Neurological	1	16	1	Epilepsy (495)
+79784	MYH14	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+79796	ALG9	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+79803	HPS6	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+79944	L2HGDH	Metabolic	1	0	1	L-2-hydroxyglutaric_aciduria (857)
+79977	GRHL2	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+80025	PANK2	Grey	2	0	2	"HARP_syndrome (640), Neurodegeneration (1092)"
+80144	FRAS1	multiple	1	1	1	Fraser_syndrome (551)
+80207	OPA3	Grey	2	1	2	"3-methylglutaconicaciduria (9), Optic_atrophy (1144)"
+80270	HSD3B7	Gastrointestinal	1	3	1	Cholestasis (310)
+80324	PUS1	multiple	1	0	1	Mitochondrial_myopathy_and_sideroblastic_anemia (7016)
+80704	SLC19A3	Neurological	1	1	1	Basal_ganglia_disease (4188)
+80781	COL18A1	multiple	1	0	1	Knobloch_syndrome (855)
+81693	AMN	Hematological	1	1	1	Megaloblastic_anemia (975)
+81794	ADAMTS10	Connective_tissue_disorder	1	1	1	Weill-Marchesani_syndrome (1585)
+81846	SBF2	Neurological	1	17	1	Charcot-Marie-Tooth_disease (301)
+83605	CCM2	Neurological	1	2	1	Cerebral_cavernous_malformations (4291)
+83715	ESPN	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+83844	USP26	Renal	1	0	1	Sertoli-cell-only_syndrome (1381)
+83872	HMCN1	Ophthamological	1	4	1	Macular_degeneration (937)
+83990	BRIP1	Grey	2	27	2	"Breast_cancer (228), Fanconi_anemia (523)"
+84059	MASS1	Grey	2	7	2	"Convulsions (359), Usher_syndrome (1551)"
+84062	DTNBP1	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+84100	ARL6	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+84295	PHF6	multiple	1	0	1	Borjeson-Forssman-Lehmann_syndrome (218)
+84343	HPS3	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+84441	MAML2	Cancer	1	1	1	Mucoepidermoid_salivary_gland_carcinoma (1031)
+84572	GNPTG	Metabolic	1	2	1	Mucolipidosis (1032)
+84634	GPR54	Endocrine	1	3	1	Hypogonadotropic_hypogonadism (774)
+84916	CIRH1A	Gastrointestinal	1	2	1	Cirrhosis (334)
+84930	MASTL	Hematological	1	3	1	Thrombocytopenia (1494)
+85300	ATCAY	Neurological	1	4	1	Ataxia (154)
+85358	SHANK3	multiple	1	0	1	Chromosome_22q13.3_deletion_syndrome (326)
+85365	ALG2	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+85366	MYLK2	Cardiovascular	1	24	1	Cardiomyopathy (268)
+85476	GFM1	multiple	1	0	1	Combined_oxidative_phosphorylation_deficiency (6350)
+89781	HPS4	multiple	1	6	1	Hermansky-Pudlak_syndrome (670)
+89884	LHX4	Skeletal	1	2	1	Short_stature (1387)
+90411	MCFD2	Hematological	1	7	1	Factor_x_deficiency (520)
+91647	ATPAF2	multiple	1	1	1	"Complex_mitochondrial_respiratory_chain,_deficiency_of (351)"
+91949	COG7	Metabolic	1	12	1	Congenital_disorder_of_glycosylation (354)
+93986	FOXP2	Neurological	1	0	1	Specific_language_impairment_QTL (1419)
+114327	EFHC1	Neurological	1	2	1	Myoclonic_epilepsy (1055)
+114548	CIAS1	Grey	3	0	2	"CINCA_syndrome (332), Cold-induced_autoinflammatory_syndrome (344), Muckle-Wells_syndrome (1030)"
+114902	C1QTNF5	Ophthamological	1	3	1	Retinal_cone_dsytrophy (1315)
+115761	ARL11	Cancer	1	36	1	Leukemia (886)
+116085	SLC22A12	Renal	1	0	1	Hypouricemia (791)
+116519	APOA5	Metabolic	1	3	1	Hypertriglyceridemia (757)
+117156	SCGB3A2	Respiratory	1	12	1	Asthma (153)
+117531	TMC1	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+118429	ANTXR2	Grey	2	1	2	"Fibromatosisl (537), Hyalinosis,_infantile_systemic (710)"
+120227	CYP2R1	Bone	1	1	1	Rickets (1330)
+120329	CASP12P1	Immunological	1	1	1	Sepsis (1378)
+120892	LRRK2	Neurological	1	10	1	Parkinson_disease (1192)
+121278	TPH2	Psychiatric	1	0	1	Unipolar_depression (1544)
+122042	LGR8	Renal	1	1	1	Cryptorchidism (392)
+123016	TTC8	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+123606	NIPA1	Neurological	1	8	1	Spastic_ataxia/paraplegia (1418)
+124590	USH1G	multiple	1	7	1	Usher_syndrome (1551)
+127534	GJB4	Dermatological	1	2	1	Erythrokeratoderma (507)
+128178	EDARADD	Dermatological	1	7	1	Ectodermal_dysplasia (466)
+129880	BBS5	multiple	1	7	1	Bardet-Biedl_syndrome (183)
+132884	EVC2	Skeletal	1	1	1	Ellis-van_Creveld_syndrome (473)
+136647	C7orf11	Dermatological	1	3	1	Trichothiodystrophy (1525)
+140803	TRPM6	Renal	1	2	1	Hypomagnesemia (778)
+145226	RDH12	Ophthamological	1	6	1	Leber_congenital_amaurosis (873)
+145873	MESP2	Skeletal	1	1	1	Spondylocostal_dysostosis (1433)
+146059	CDAN1	Hematological	1	8	1	Anemia (110)
+146183	OTOA	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+147138	EVER2	Dermatological	1	1	1	Epidermodysplasia_verruciformis (492)
+147409	DSG4	Dermatological	1	3	1	Hypotrichosis (788)
+148738	HFE2	Metabolic	1	4	1	Hemochromatosis (657)
+149998	LIPI	Metabolic	1	3	1	Hypertriglyceridemia (757)
+157570	ESCO2	Developmental	1	0	1	Roberts_syndrome (1334)
+157680	VPS13B	multiple	1	0	1	Cohen_syndrome (342)
+161497	STRC	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+161582	DYX1C1	Psychiatric	1	1	1	Dyslexia (459)
+162417	NAGS	Metabolic	1	0	1	N-acetylglutamate_synthase_deficiency (1067)
+166785	MMAA	Metabolic	1	2	1	Methylmalonic_aciduria (1004)
+170302	ARX	Grey	6	28	2	"Infantile_spasm_syndrome (807), Lissencephaly (908), Mental_retardation (990), Myoclonic_epilepsy (1055), Partington_syndrome (1196), Proud_syndrome (1277)"
+200576	PIP5K3	Ophthamological	1	6	1	Corneal_dystrophy (362)
+201163	FLCN	Grey	4	39	3	"Birt-Hogg-Dube_syndrome (205), Colon_cancer (346), Pneumothorax,_primary_spontaneous (1239), Renal_cell_carcinoma (1308)"
+201294	UNC13D	Hematological	1	1	1	Hemophagocytic_lymphohistiocytosis (662)
+203859	TMEM16E	Bone	1	0	1	Gnthodiaphyseal_dysplasia (615)
+219736	STOX1	Cardiovascular	1	2	1	Preeclampsia (1257)
+255738	PCSK9	Metabolic	1	7	1	Hypercholesterolemia (724)
+256297	PTF1A	Endocrine	1	26	1	Diabetes_mellitus (427)
+257054	MGC25181	Metabolic	1	0	1	D-2-hydroxyglutaric_aciduria (402)
+259236	TMIE	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+259266	ASPM	Neurological	1	4	1	Microcephaly (1007)
+261734	NPHP4	Renal	2	4	1	"Nephronophthisis (1082), Senior-Loken_syndrome (1375)"
+283120	H19	multiple	1	3	1	Beckwith-Wiedemann_syndrome (194)
+285362	SUMF1	Metabolic	1	0	1	Multiple_sulfatase_deficiency (9039)
+285440	CYP4V2	Ophthamological	1	0	1	Bietti_crystalline_corneoretinal_dystrophy (201)
+319100	TAAR6	Psychiatric	1	8	1	Schizophrenia (1359)
+326625	MMAB	Metabolic	1	2	1	Methylmalonic_aciduria (1004)
+338435	SCA25	Neurological	1	12	1	Spinocereballar_ataxia (1428)
+338917	CHX10	Ophthamological	1	2	1	Microphthalmia (1012)
+340024	SLC6A19	Metabolic	1	0	1	Hartnup_disorder (641)
+341640	FREM2	multiple	1	1	1	Fraser_syndrome (551)
+342880	R9AP	Ophthamological	1	1	1	Bradyopsia (225)
+347344	ZNF81	Neurological	1	23	1	Mental_retardation (990)
+348938	ICHTHYIN	Dermatological	1	6	1	Ichthyosis (794)
+374291	NDUFS7	Neurological	1	11	1	Leigh_syndrome (877)
+375298	CERKL	Ophthamological	1	29	1	Retinitis_pigmentosa (1316)
+375611	SLC26A5	"Ear,Nose,Throat"	1	40	1	Deafness (406)
+378465	HSN2	Neurological	1	7	1	Neuropathy (1099)
+378884	NHLRC1	Neurological	1	16	1	Epilepsy (495)
+387082	SUMO4	Endocrine	1	26	1	Diabetes_mellitus (427)
+387129	GPR154	Respiratory	1	12	1	Asthma (153)
+387281	LCRB	Hematological	1	4	1	Thalassemias (1486)
+404672	GTF2H5	Dermatological	1	3	1	Trichothiodystrophy (1525)
+493818	MYMY3	Neurological	1	0	1	Moyamoya_disease (1029)
