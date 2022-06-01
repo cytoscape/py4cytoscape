@@ -104,7 +104,7 @@ def select_all(network=None, base_url=DEFAULT_BASE_URL):
         {'nodes': [370675, 370677, ...], 'edges': [371699, 371187, ...]}
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post(f'network select network=SUID:"{net_suid}" nodeList="all" edgeList="all"')
+    res = commands.commands_post(f'network select network=SUID:"{net_suid}" nodeList="all" edgeList="all"', base_url=base_url)
     return res
 
 
@@ -238,7 +238,7 @@ def select_all_nodes(network=None, base_url=DEFAULT_BASE_URL):
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
-    res = commands.commands_post(f'network select SUID="{suid}" nodeList="all"')
+    res = commands.commands_post(f'network select SUID="{suid}" nodeList="all"', base_url=base_url)
 
     return res['nodes']
 
@@ -309,7 +309,8 @@ def get_selected_nodes(node_suids=False, network=None, base_url=DEFAULT_BASE_URL
         return None
     else:
         selected_node_suids = commands.cyrest_get(f'networks/{net_suid}/nodes',
-                                                  parameters={'column': 'selected', 'query': 'true'})
+                                                  parameters={'column': 'selected', 'query': 'true'},
+                                                  base_url=base_url)
         if node_suids:
             return selected_node_suids
         else:
@@ -516,7 +517,7 @@ def select_all_edges(network=None, base_url=DEFAULT_BASE_URL):
     """
     suid = networks.get_network_suid(network, base_url=base_url)
 
-    res = commands.commands_post(f'network select SUID="{suid}" edgeList="all"')
+    res = commands.commands_post(f'network select SUID="{suid}" edgeList="all"', base_url=base_url)
 
     return res['edges']
 
@@ -656,7 +657,8 @@ def get_selected_edges(edge_suids=False, network=None, base_url=DEFAULT_BASE_URL
         return None
     else:
         selected_edge_suids = commands.cyrest_get(f'networks/{net_suid}/edges',
-                                                  parameters={'column': 'selected', 'query': 'true'})
+                                                  parameters={'column': 'selected', 'query': 'true'},
+                                                  base_url=base_url)
         if edge_suids:
             return selected_edge_suids
         else:
