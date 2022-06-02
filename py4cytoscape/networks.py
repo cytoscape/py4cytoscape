@@ -205,9 +205,9 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
         # suid provided
         network_suid = suid
     else:
-        network_suid = get_network_suid(base_url=DEFAULT_BASE_URL)
+        network_suid = get_network_suid(base_url=base_url)
 
-    res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=DEFAULT_BASE_URL)
+    res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=base_url)
     return res[0]['name']
 
 
