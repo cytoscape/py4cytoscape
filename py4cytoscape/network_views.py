@@ -36,7 +36,6 @@ from . import sandbox
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 @cy_log

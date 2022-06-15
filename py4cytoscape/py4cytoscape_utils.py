@@ -21,7 +21,8 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 import os
 
-DEFAULT_BASE_URL = os.environ.get('DEFAULT_BASE_URL') or 'http://127.0.0.1:1234/v1'
+LOCAL_BASE_URL = 'http://127.0.0.1:1234/v1'
+DEFAULT_BASE_URL = os.environ.get('DEFAULT_BASE_URL') or LOCAL_BASE_URL
 
 # External library imports
 import urllib.parse

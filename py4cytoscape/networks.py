@@ -59,7 +59,6 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS, CATCHUP_NETWORK_TIMEOUT_SECS
 from .exceptions import CyError
-from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 def __init__(self):

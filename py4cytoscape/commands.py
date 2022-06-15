@@ -39,7 +39,7 @@ import os
 # Internal module convenience imports
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, log_http_result, log_http_request, show_error
-from .py4cytoscape_notebook import running_remote, do_request_remote, check_running_remote, get_notebook_is_running
+from .py4cytoscape_notebook import execution_environment, do_request_jupyter_bridge, check_execution_environment, get_notebook_is_running, ExecutionEnvironment
 from .py4cytoscape_sandbox import *
 from .exceptions import CyError
 
@@ -656,8 +656,8 @@ def _command_2_post_query_body(cmd):
 
 def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
     # If we're running through Jupyter-Bridge, get the versions of components along the way
-    if _find_remote_cytoscape():
-        return do_request_remote('version', None, **kwargs).json()
+    if _find_execution_environment() == ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE:
+        return do_request_jupyter_bridge('version', None, **kwargs).json()
     else:
         return {}
 
@@ -691,7 +691,7 @@ def _do_request_local(method, url, **kwargs):
 
 def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
     # Determine whether actual call is local or remote
-    requester = _get_requester()
+    requester, default_sandbox = _get_requester(base_url)
 
     do_initialize_sandbox(requester, base_url=base_url) # make sure there's a sandbox before executing a command
 
@@ -700,17 +700,24 @@ def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
 def do_initialize_sandbox(requester=None, base_url=DEFAULT_BASE_URL):
     # If re-initialize has been requested, reset sandbox to environment's default (i.e., None or default_sandbox)
     if get_sandbox_reinitialize():
-        return do_set_sandbox(_get_default_sandbox(), requester, base_url=base_url)
+        if requester:
+            default_sandbox = get_default_sandbox()
+        else:
+            requester, default_sandbox = _get_requester(base_url)
+        return do_set_sandbox(default_sandbox, requester, base_url=base_url)
     else:
         return get_current_sandbox()
 
 def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     # Set the sandbox to whatever is passed in. Note that sandbox_to_set is a dictionary not a string.
-    requester = requester or _get_requester()
+    if requester:
+        default_sandbox = get_default_sandbox()
+    else:
+        requester, default_sandbox = _get_requester(base_url)
     if not sandbox_to_set['sandboxName']:
         # A null name means that the default sandbox should be used, but honoring the copySamples and reinitialize
         # settings passed in by the caller.
-        sandbox_to_set['sandboxName'] = _get_default_sandbox()['sandboxName']
+        sandbox_to_set['sandboxName'] = default_sandbox['sandboxName']
     sandbox_name = sandbox_to_set['sandboxName']
     if sandbox_name:
         # A named sandbox name means to create one if it doesn't already exist ... otherwise, preserve it and apply
@@ -734,16 +741,16 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
                 raise CyError(message, caller=caller)
     else:
         # A null name really means to use the whole Cytoscape file system. If the default sandbox is set up right,
-        # we should never get here if we're running a remote configuration.
+        # we should never get here if we're not running on a workstation shared with Cytoscape.
         #
-        # But if we are running remotely, we find out what sandbox is running.
+        # But if we are running on a non-shared workstation, we find out what sandbox is running.
         #
         # If we are running on the Cytoscape workstation, we want to find out whether a sandbox is defined, and if so,
         # what it is. If no sandbox is defined, the entire workstation file system is the sandbox. If a sandbox is
         # defined, the caller will consider the file name to be relative to it.
         default_sandbox_path = get_default_sandbox_path()
         if default_sandbox_path is None:
-            if running_remote():
+            if _find_execution_environment(base_url) in {ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE, ExecutionEnvironment.REMOTE_DIRECT_URL}:
                 try:
                     r = requester('POST', f'{base_url}/commands/filetransfer/getFileInfo',
                                   json={'sandboxName': None, 'fileName': '.'},
@@ -765,33 +772,31 @@ def do_set_sandbox(sandbox_to_set, requester=None, base_url=DEFAULT_BASE_URL):
     set_sandbox_reinitialize(False) # No need to initialize again immediately before the next command is issued
     return new_sandbox
 
-def _get_default_sandbox():
-    # Figure out what the default sandbox should be, depending on whether we're running remote or on the Cytoscape workstation
-    default = get_default_sandbox()
-    if len(default) == 0:
-        # There hasn't been a default sandbox calculated yet ... create a new default to reflect whether remote
-        # execution. This determination is deferred until now (instead of occurring when Python execution first starts)
-        # so as to give the user some flexibility regarding when Cytoscape needs to be started ... this allows
-        # Cytoscape to be started only before the user issues the first command.
-        if running_remote():
-            default = sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME)
-        else:
-            default = sandbox_initializer(sandboxName=None)  # for execution on Cytoscape workstation
-        set_default_sandbox(**default)
-    return default
+def _get_requester(base_url):
+    # Figure out whether CyREST available only via Jupyter-Bridge and what the default sandbox should be
+    environment = _find_execution_environment(base_url)
+    if environment == ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE:
+        default_sandbox = set_default_sandbox(**sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME))
+        return do_request_jupyter_bridge, default_sandbox
+    elif environment == ExecutionEnvironment.REMOTE_DIRECT_URL:
+        default_sandbox = set_default_sandbox(**sandbox_initializer(sandboxName=PREDEFINED_SANDBOX_NAME))
+        return _do_request_local, default_sandbox
+    else: # for execution on shared Cytoscape workstation
+        default_sandbox = set_default_sandbox(**sandbox_initializer(sandboxName=None))
+        return _do_request_local, default_sandbox
 
-def _get_requester():
-    # Figure out whether CyREST is local or remote ... if remote, we'll want to go through Jupyter-Bridge
-    return do_request_remote if _find_remote_cytoscape() else _do_request_local
-
-def _do_browser_open(url, **kwargs):
+def _do_browser_open(url, base_url, **kwargs):
     # Figure out whether CyREST is local or remote ... if remote, issue a browser command through Jupyter-Bridge
-    if _find_remote_cytoscape():
-        return do_request_remote('webbrowser', url, **kwargs)
-    else:
+    environment = _find_execution_environment(base_url)
+    if environment == ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE:
+        return do_request_jupyter_bridge('webbrowser', url, **kwargs)
+    elif environment == ExecutionEnvironment.SHARED_WORKSTATION:
         return webbrowser.open(url, new=2, autoraise=True)
+    else:
+        raise CyError('Cannot execute browser on non-local workstation')
 
-def _find_remote_cytoscape():
-    if check_running_remote() is None:
+def _find_execution_environment(base_url):
+    environment = check_execution_environment(base_url)
+    if environment == ExecutionEnvironment.UNKNOWN:
         raise requests.exceptions.RequestException('Cannot find local or remote Cytoscape. Start Cytoscape and then proceed.')
-    return running_remote()
+    return environment

@@ -25,6 +25,7 @@ import uuid
 
 # Internal module convenience imports
 from .py4cytoscape_logger import log_http_result, log_http_request, detail_logger
+from .py4cytoscape_utils import LOCAL_BASE_URL
 
 # print(f'Starting {__name__} module')
 
@@ -56,12 +57,22 @@ class SpoofResponse:
             raise requests.exceptions.HTTPError(
                 u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
 
+# Relationship between py4cytoscape execution environment and Cytoscape execution environment
+from enum import Enum, auto
+class ExecutionEnvironment(Enum):
+    UNKNOWN = auto()
+    SHARED_WORKSTATION = auto()
+    REMOTE_DIRECT_URL = auto()
+    REMOTE_JUPYTER_BRIDGE = auto()
+
 # Create a unique channel that identifies this process so other processes don't mix up messages
 _CHANNEL = None
 
 # Get the name of the Jupyter-bridge server
 _JUPYTER_BRIDGE_URL = os.environ.get('JUPYTER_BRIDGE_URL', 'https://jupyter-bridge.cytoscape.org')
-_CYREST_URL_V1 = 'http://127.0.0.1:1234/v1' # Don't use 'localhost' here because Google Colab will hijack it
+_CYREST_URL_V1 = LOCAL_BASE_URL # Don't use 'localhost' here because Google Colab will hijack it
+
+
 
 def get_browser_client_channel():
     return _CHANNEL
@@ -70,7 +81,7 @@ def get_browser_client_channel():
 def get_jupyter_bridge_url():
     return _JUPYTER_BRIDGE_URL
 
-def do_request_remote(method, url, **kwargs):
+def do_request_jupyter_bridge(method, url, **kwargs):
     log_http_request(method, url, **kwargs)
 
     if 'json' in kwargs:
@@ -135,9 +146,10 @@ def do_request_remote(method, url, **kwargs):
 def _error_content(e):
     return f'{e}' if e.response is None or e.response.text is None or e.response.text == '' else e.response.text
 
-"""Determine whether a notebook is running. This matters because if none is running, we're going to have to
-   connect to Cytoscape only via a local socket. If a notebook is running, there will be an option to connect
-   via either a local socket (preferred) or Jupyter-Bridge (sufficient)."""
+
+
+"""Determine whether a notebook is running. This matters because there are notebook-specific py4cytoscape
+   functions that can display directly in a Notebook."""
 
 _notebook_is_running = None
 def set_notebook_is_running(new_state=None):
@@ -167,45 +179,62 @@ def _check_notebook_is_running():
 
 _check_notebook_is_running()
 
-"""Determine whether we're running locally or on a remote server. If locally (either via raw Python or via a
-   locally installed Notebook), we prefer to connect to Cytoscape over a local socket. If remote, we have to
-   connect over Jupyter-Bridge. Either way, we can determine which by whether Cytoscape answers to a version
-   check. If Cytoscape doesn't answer, we have no information ... and we have to wait until Cytoscape is
-   started and becomes reachable before we can determine local vs remote."""
 
-_running_remote = None # None means "Don't know whether Cytoscape is local or remote yet"
-def running_remote(new_state=None):
-    global _running_remote
-    old_state = _running_remote
+
+"""Determine whether we're running purely locally, remote direct, or remote via Jupyter-Bridge. This determines
+   how Cytoscape is called and what assumptions we can make about its file system. There are combinations:
+   
+   SHARED_WORKSTATION
+        py4cytoscape - in Notebook or non-Notebook on local workstation (or shared Docker)
+        Cytoscape - on local workstation (or shared Docker) (accessed via 127.0.0.1)
+        File System - py4cytoscape can access entire local file system
+   REMOTE_DIRECT_URL
+        py4cytoscape - in Notebook or non-Notebook on local workstation or server
+        Cytoscape - on remote workstation or Docker (accessed via non-local IP address)
+        File System - assume py4cytoscape and Cytoscape file systems are different -- sandbox required
+   REMOTE_JUPYTER_BRIDGE
+        py4cytoscape - in Notebook on remote server (e.g., colab)
+        Cytoscape - on local workstation (accessed via Jupyter-Bridge)
+        File System - assume py4cytoscape and Cytoscape file systems are different -- sandbox required  
+
+Note that Jupyter-Bridge requires that a browser be running on the Cytoscape workstation, and that the
+browser be connected to the Notebook server."""
+
+_execution_environment = ExecutionEnvironment.UNKNOWN
+def execution_environment(new_state=None):
+    global _execution_environment
+    old_state = _execution_environment
     if not new_state is None:
-        _running_remote = new_state
+        _execution_environment = new_state
     return old_state
 
-def check_running_remote():
-    global _running_remote
-    if get_notebook_is_running():
-        if _running_remote is None:
+def check_execution_environment(base_url):
+    global _execution_environment
+    if _execution_environment == ExecutionEnvironment.UNKNOWN:
+        try:
+            # Try connecting to a local or remote Cytoscape directly reachable via URL
+            detail_logger.debug(f'Attempting to direct connect to Cytoscape on {base_url}')
+            r = requests.request('GET', base_url, headers={'Content-Type': 'application/json'})
+            r.raise_for_status()
+            if base_url == _CYREST_URL_V1:
+                _execution_environment = ExecutionEnvironment.SHARED_WORKSTATION
+                detail_logger.debug(f'Detected py4cytoscape running on Cytoscape workstation')
+            else:
+                _execution_environment = ExecutionEnvironment.REMOTE_DIRECT_URL
+                detail_logger.debug(f'Detected py4cytoscape running on Cytoscape workstation at {base_url}')
+        except:
+            # Cytoscape doesn't appear to be reachable via URL, so try reaching a remote Cytoscape via Jupyter-bridge
             try:
-                # Try connecting to a local Cytoscape, first, in case Notebook is on same machine as Cytoscape
-                detail_logger.debug(f'Attempting to connect to local Cytoscape')
-                r = requests.request('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
-                r.raise_for_status()
-                _running_remote = False
-                detail_logger.debug(f'Detected local Cytoscape')
-            except:
-                # Local Cytoscape doesn't appear to be reachable, so try reaching a remote Cytoscape via Jupyter-bridge
-                try:
-                    detail_logger.debug(f'Attempting to connect to remote Cytoscape')
-                    do_request_remote('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
-                    _running_remote = True
-                    detail_logger.debug(f'Detected remote Cytoscape')
-                except Exception as e:
-                    # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
-                    detail_logger.debug(f'Error initially contacting Jupyter-bridge: {_error_content(e)}')
-                    _running_remote = None
-    else:
-        _running_remote = False
-    return _running_remote
+                detail_logger.debug(f'Attempting to connect to remote Cytoscape')
+                do_request_jupyter_bridge('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
+                _execution_environment = ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE
+                detail_logger.debug(f'Detected Cytoscape via Jupyter-Bridge')
+            except Exception as e:
+                # Couldn't reach a local or remote Cytoscape ... use probably didn't start a Cytoscape, so assume he will eventually
+                detail_logger.debug(f'Error initially contacting Jupyter-bridge: {_error_content(e)}')
+    return _execution_environment
+
+
 
 def get_browser_client_js(debug_bridge=False):
     global _CHANNEL
@@ -222,7 +251,7 @@ def get_browser_client_js(debug_bridge=False):
             inject_code = f'var showDebug = true; \n\n' + inject_code
         return inject_code
     except Exception as e:
-        raise requests.exceptions.HTTPError(f'Error creating Jupyter-bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
+        raise requests.exceptions.HTTPError(f'Error creating Jupyter-Bridge browser client for channel {_CHANNEL}: {_error_content(e)}')
 
 
 
