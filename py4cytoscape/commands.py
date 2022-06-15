@@ -656,7 +656,7 @@ def _command_2_post_query_body(cmd):
 
 def sub_versions(base_url=DEFAULT_BASE_URL, **kwargs):
     # If we're running through Jupyter-Bridge, get the versions of components along the way
-    if _find_execution_environment() == ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE:
+    if _find_execution_environment(base_url) == ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE:
         return do_request_jupyter_bridge('version', None, **kwargs).json()
     else:
         return {}
