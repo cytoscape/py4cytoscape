@@ -74,7 +74,7 @@ def cyrest_api(base_url=DEFAULT_BASE_URL):
         >>> cyrest_api() # loads Swagger CyREST API into browser
         True
     """
-    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/')
+    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/swagger.json#/', base_url)
     return res
 
 
@@ -265,7 +265,7 @@ def commands_api(base_url=DEFAULT_BASE_URL):
         >>> commands_api() # loads Swagger CyREST Commands API into browser
         True
     """
-    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/')
+    res = _do_browser_open(f'{base_url}/swaggerUI/swagger-ui/index.html?url={base_url}/commands/swagger.json#/', base_url)
     return res
 
 # TODO: Make sure this works the same as in R
