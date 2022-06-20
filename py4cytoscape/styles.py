@@ -152,6 +152,28 @@ def delete_visual_style(style_name, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
+def delete_all_visual_styles(base_url=DEFAULT_BASE_URL):
+    """Delete all visual styles from current Cytoscape session.
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> delete_all_visual_styles()
+        ''
+    """
+    res = commands.cyrest_delete(f'styles', base_url=base_url, require_json=False)
+    return res
+
+@cy_log
 def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
     """Save one or more visual styles to file.
 

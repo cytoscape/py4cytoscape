@@ -153,6 +153,19 @@ class StylesTests(unittest.TestCase):
         self.assertRaises(CyError, get_current_style, network=12345678)
 
     @print_entry_exit
+    def test_delete_all_visual_styles(self):
+        # Initialization
+        load_test_session()
+
+        # Verify the original style list is more than just 'default'
+        original_style_list = get_visual_style_names()
+        self.assertTrue(len(original_style_list) > 1)
+
+        # Verify that deleting all styles results in just the 'default' list
+        self.assertEqual(delete_all_visual_styles(), '')
+        self.assertListEqual(get_visual_style_names(), ['default'])
+
+    @print_entry_exit
     def test_delete_visual_style(self):
         # Initialization
         load_test_session()
