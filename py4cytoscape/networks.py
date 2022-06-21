@@ -270,16 +270,17 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def get_network_list(base_url=DEFAULT_BASE_URL):
+def get_network_list(base_url=DEFAULT_BASE_URL, *, get_suids=False):
     """Returns the list of Cytoscape network names in the current Cytoscape session.
 
     Args:
+        get_suids (bool): False returns a list of network names; True returns names and SUIDs
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        list: network names
+        list: network names or dictionaries (network name, SUID)
 
     Raises:
         ValueError: if server response has no JSON
@@ -288,17 +289,14 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     Examples:
         >>> get_network_list()
         ['yeastHighQuality.sif', 'galFiltered.sif']
+        >>> get_network_list(get_suids=True)
+        [{"name": 'yeastHighQuality.sif', 'suid':102003}, {"name": 'galFiltered.sif', 'suid':104002}]
     """
-    if get_network_count(base_url=base_url):
-        cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
-        # TODO: This is horribly slow for large networks ... it gets the network in JS format and then digs out the name
-        cy_network_names = [commands.cyrest_get(f'networks/{suid}', base_url=base_url)['data']['name'] for suid in
-                            cy_networks_suids]
+    cy_networks_suids = commands.cyrest_get('networks.names', base_url=base_url)
+    if get_suids:
+        return [{'name': x['name'], 'suid': x['SUID']}   for x in cy_networks_suids]
     else:
-        cy_network_names = []
-
-    return cy_network_names
-
+        return [x['name']   for x in cy_networks_suids]
 
 @cy_log
 def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):

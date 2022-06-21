@@ -158,12 +158,24 @@ class NetworkTests(unittest.TestCase):
         load_test_session()
         load_test_network('data/yeastHighQuality.sif', make_current=False)
 
-        # Verify that all networks are present (in any order)
+        # Verify that all network names are present (in any order)
         self.assertSetEqual(set(get_network_list()), set(['yeastHighQuality.sif', 'galFiltered.sif']))
+        self.assertSetEqual(set(get_network_list(get_suids=False)), set(['yeastHighQuality.sif', 'galFiltered.sif']))
+
+        # Verify that all network names and SUIDs are present (in any order)
+        full_list = get_network_list(get_suids=True)
+        names = {x['name']   for x in full_list}
+        suids = {x['suid']   for x in full_list}
+        self.assertSetEqual(names, set(['yeastHighQuality.sif', 'galFiltered.sif']))
+        for suid in suids:
+            self.assertIsInstance(suid, int)
+        self.assertEqual(len(names), len(suids))
 
         # Verify that when there are no networks, no networks are returned
         delete_all_networks()
         self.assertListEqual(get_network_list(), [])
+        self.assertListEqual(get_network_list(get_suids=False), [])
+        self.assertListEqual(get_network_list(get_suids=True), [])
 
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
