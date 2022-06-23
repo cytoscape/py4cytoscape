@@ -84,12 +84,12 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
-def get_visual_style(style_name, format=None, base_url=DEFAULT_BASE_URL):
+def get_visual_style(style_name, format='cy3', base_url=DEFAULT_BASE_URL):
     """Get all defaults and mappings for a visual style
 
     Args:
         style_name (str): name of style
-        format (str): None for dictionary style, CytoscapeJS for CSS style
+        format (str): None or Cy3 for dictionary style, CytoscapeJS for CSS style
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -112,11 +112,14 @@ def get_visual_style(style_name, format=None, base_url=DEFAULT_BASE_URL):
     if style_name == None or len(style_name.strip()) == 0:
         raise CyError(f'No style name provided')
 
-    if format:
-        if format.lower() == 'cytoscapejs':
-            style_name += '.json'
-        else:
-            raise CyError(f'Unknown style format "{format}"')
+    if format == None:
+        raise CyError(f'Format must be either cy3 or cytoscapejs')
+    elif format.lower() == 'cy3':
+        pass # this is the default ... leave style_name alone
+    elif format.lower() == 'cytoscapejs':
+        style_name += '.json'   # get CSS-style JSON for CytoscapeJS usage
+    else:
+        raise CyError(f'Unknown style format "{format}"')
 
     res = commands.cyrest_get(f'styles/{style_name}', base_url=base_url)
     return res
