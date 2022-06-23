@@ -84,6 +84,45 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
+def get_visual_style(style_name, format=None, base_url=DEFAULT_BASE_URL):
+    """Get all defaults and mappings for a visual style
+
+    Args:
+        style_name (str): name of style
+        format (str): None for dictionary style, CytoscapeJS for CSS style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict or list: dict if format=None or list if format=CytoscapeJS
+
+    Raises:
+        CyError: if empty style name or invalid style format
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_visual_style('galFiltered Style')
+        {'title': 'galFiltered Style', 'defaults': [{'visualProperty': 'COMPOUND_NODE_PADDING', 'value': 10.0}...]}
+        >>> get_visual_style('galFiltered Style', format='CytoscapeJS')
+        [{'format_version': '1.0', 'generated_by': 'cytoscape-3.9.1', 'target_cytoscapejs_version': '~2.1'...}]
+    See Also:
+        :meth:`get_current_style`
+    """
+    if style_name == None or len(style_name.strip()) == 0:
+        raise CyError(f'No style name provided')
+
+    if format:
+        if format.lower() == 'cytoscapejs':
+            style_name += '.json'
+        else:
+            raise CyError(f'Unknown style format "{format}"')
+
+    res = commands.cyrest_get(f'styles/{style_name}', base_url=base_url)
+    return res
+
+
+@cy_log
 def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAULT_BASE_URL):
     """Create a style from defaults and predefined mappings.
 
@@ -91,7 +130,7 @@ def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAU
 
     Args:
         style_name (str): name for style
-        defaults (list): key-value pairs for default mappings.
+        defaults (dict or list): for dict, key-value pairs for default mappings. for list, [{'visualProperty': prop-name, 'value': default-val}, ...]
         mappings (list): visual property mappings, see ``map_visual_property``
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
@@ -112,16 +151,24 @@ def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAU
         >>> edge_width = map_visual_property('edge width', 'EdgeBetweenness', 'p')
         >>> create_visual_style('NewStyle', defaults=defaults, mappings=[node_labels, node_fills, arrow_shapes, edge_width])
         {'title': 'NewStyle'}
+        >>> defaults = [{'visualProperty': 'NODE_SHAPE', 'value': 'diamond'}, {'visualProperty': 'NODE_SIZE', 'value': 30}]
+        >>> create_visual_style('NewStyle1', defaults=defaults)
+        {'title': 'NewStyle1'}
 
     Note:
         To apply the style to a network, first create the network and then call ``set_visual_style``
 
+        This function can be used directly with the ``defaults`` and ``mappings`` members returned by ``get_visual_style``
+
     See Also:
-        :meth:`map_visual_property`, :meth:`set_visual_style`
+        :meth:`map_visual_property`, :meth:`set_visual_style`, :meth:`get_visual_style`
     """
     if mappings is None: mappings = []
-    style_def = []
-    if defaults is not None:
+    if defaults is None:
+        style_def = []
+    elif isinstance(defaults, list):
+        style_def = defaults # already in [{'visualProperty':xxx, 'value':yyy}, ... ] format
+    else:
         style_def = [{'visualProperty': key, 'value': val}  for key, val in defaults.items()]
     style = {'title': style_name, 'defaults': style_def, 'mappings': mappings}
     res = commands.cyrest_post('styles', body=style, base_url=base_url)

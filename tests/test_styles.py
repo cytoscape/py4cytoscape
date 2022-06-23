@@ -61,6 +61,28 @@ class StylesTests(unittest.TestCase):
         self.assertRaises(RequestException, copy_visual_style, 'Solid', '')
 
     @print_entry_exit
+    def test_get_visual_style(self):
+        # Initialization
+        load_test_session()
+
+        # Verify that dictionary-style works
+        res = get_visual_style('galFiltered Style')
+        self.assertIsInstance(res, dict)
+        self.assertTrue(set(res.keys()) >= {'title', 'defaults', 'mappings'})
+
+        # Verify that CytoscapeJS-style works
+        res = get_visual_style('galFiltered Style', format='CytoscapeJS')
+        self.assertIsInstance(res, list)
+        self.assertEqual(len(res), 1)
+        self.assertTrue(set(res[0].keys()) >= {'format_version', 'generated_by', 'target_cytoscapejs_version', 'title', 'style'})
+
+        # Verify that errors are caught
+        self.assertRaises(CyError, get_visual_style, 'galFiltered Style', format='bogus')
+        self.assertRaises(CyError, get_visual_style, 'bogus style')
+        self.assertRaises(CyError, get_visual_style, None)
+        self.assertRaises(CyError, get_visual_style, '  ')
+
+    @print_entry_exit
     def test_create_visual_style(self):
         # Initialization
         load_test_session()
@@ -113,6 +135,11 @@ class StylesTests(unittest.TestCase):
         self.assertIsInstance(res, dict)
         self.assertDictEqual(res, {'title': 'NewStyleEmpty'})
         self.assertListEqual(get_style_all_mappings('NewStyleEmpty'), [])
+
+        # Create a new style based on a style fetched as a dictionary
+        full_style = get_visual_style('NewStyle')
+        create_visual_style('NewStyleAsDict', defaults=full_style['defaults'], mappings=full_style['mappings'])
+        check_new_style('NewStyleAsDict')
 
         # Verify that creating an invalid style returns an error
         node_fills = map_visual_property('node fill color', 'Degree', 'd', [1, 2], ['#FF9900', '#66AAAA'])
@@ -181,40 +208,6 @@ class StylesTests(unittest.TestCase):
 
         # Verify that trying to delete a non-existent style fails
         self.assertRaises(CyError, delete_visual_style, 'SolidCopy')
-
-    @unittest.skip("Can't run this test until CSD-399 is fixed")
-    @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
-    @print_entry_exit
-    def test_get_current_style(self):
-        # Initialization
-        load_test_session()
-
-        # Verify that using suid to get current style works
-        suid = get_network_suid()
-        use_suid_get_style = get_current_style(suid)
-        self.assertEqual(use_suid_get_style, 'galFiltered Style')
-
-        # Verify that using network name to get current style works
-        network_name = get_network_name()
-        use_network_name_get_style = get_current_style(network_name)
-        self.assertEqual(use_suid_get_style, 'galFiltered Style')
-
-        current_style = get_current_style()
-        # Verify that dafult style is galFiltered Style
-        self.assertEqual(current_style, 'galFiltered Style')
-
-        # Verify that changeing the styel to 'default'
-        set_visual_style('default')
-        default_style = get_current_style()
-        self.assertEqual(default_style, 'default')
-
-        # Verify that changeing the styel to 'Big Labels'
-        set_visual_style('Big Labels')
-        big_labels_style = get_current_style()
-        self.assertEqual(big_labels_style, 'Big Labels')
-
-        # Verify that trying to get a non-existent current style
-        self.assertRaises(CyError, get_current_style, network='Does not exist')
 
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit
