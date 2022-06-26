@@ -1163,7 +1163,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 def create_network_from_cytoscapejs(cytoscapejs, title=None, collection='My CytoscapeJS Network Collection', base_url=DEFAULT_BASE_URL):
     """Create a network from CytoscapeJS JSON.
 
-    Takes the dict-encoded JSON format for a CytoscapeJS network (including node coordinates) and creates a Cytoscape
+    Takes the dict-encoded JSON formatted for a CytoscapeJS network (including node coordinates) and creates a Cytoscape
     network. Both nodes and edges can have named attribute values, where the names become Cytoscape columns
     and the values are associated with their node or edge. Once the network is created, it becomes the
     Cytoscape current network.
@@ -1180,11 +1180,7 @@ def create_network_from_cytoscapejs(cytoscapejs, title=None, collection='My Cyto
     Args:
         cytoscapejs (dict): network (nodes, edges, attributes, node positions and metadata) in CytoscapeJS format
         title (str): network name (None means use the name in ``cytoscapejs`` ... if no name, use a generic name)
-        collection (str): collection name (None means
-        nodes (DataFrame): see details and examples below; default NULL to derive nodes from edge sources and targets
-        edges (DataFrame): see details and examples below; default NULL for disconnected set of nodes
-        title (str): network name
-        collection (str): network collection name
+        collection (str): collection name (None means create an unnamed collection)
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
