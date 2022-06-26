@@ -69,19 +69,17 @@ class StylesTests(unittest.TestCase):
         res = get_visual_style('galFiltered Style')
         self.assertIsInstance(res, dict)
         self.assertTrue(set(res.keys()) >= {'title', 'defaults', 'mappings'})
-        res = get_visual_style('galFiltered Style', format='cy3')
+        res = get_visual_style('galFiltered Style', css=False)
         self.assertIsInstance(res, dict)
         self.assertTrue(set(res.keys()) >= {'title', 'defaults', 'mappings'})
 
         # Verify that CytoscapeJS-style works
-        res = get_visual_style('galFiltered Style', format='CytoscapeJS')
+        res = get_visual_style('galFiltered Style', css=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         self.assertTrue(set(res[0].keys()) >= {'format_version', 'generated_by', 'target_cytoscapejs_version', 'title', 'style'})
 
         # Verify that errors are caught
-        self.assertRaises(CyError, get_visual_style, 'galFiltered Style', format=None)
-        self.assertRaises(CyError, get_visual_style, 'galFiltered Style', format='bogus')
         self.assertRaises(CyError, get_visual_style, 'bogus style')
         self.assertRaises(CyError, get_visual_style, None)
         self.assertRaises(CyError, get_visual_style, '  ')

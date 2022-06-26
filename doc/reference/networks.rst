@@ -50,7 +50,9 @@ Import/Export
 .. autosummary::
    :toctree: generated/
 
+   create_cytoscapejs_from_network
    create_igraph_from_network
+   create_network_from_cytoscapejs
    create_network_from_data_frames
    create_network_from_igraph
    create_network_from_networkx

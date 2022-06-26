@@ -27,6 +27,7 @@ from igraph import Graph
 import time
 import re
 import os
+import copy
 
 from test_utils import *
 
@@ -176,6 +177,101 @@ class NetworkTests(unittest.TestCase):
         self.assertListEqual(get_network_list(), [])
         self.assertListEqual(get_network_list(get_suids=False), [])
         self.assertListEqual(get_network_list(get_suids=True), [])
+
+
+    @print_entry_exit
+    def test_create_cytoscapejs_from_network(self):
+        # Initialization
+        load_test_session()
+        load_test_network('data/yeastHighQuality.sif', make_current=False)
+
+        # Verify that the current network (galFiltered) is fetched
+        gal_filtered_js = create_cytoscapejs_from_network()
+        self.assertTrue(set(gal_filtered_js.keys()) >= {'format_version', 'generated_by', 'target_cytoscapejs_version', 'data', 'elements'})
+        self.assertTrue(gal_filtered_js['data']['name'] == 'galFiltered.sif')
+        gal_filtered_suid = gal_filtered_js['data']['SUID']
+
+        # Verify that the current network named by SUID is fetched
+        res = create_cytoscapejs_from_network(network=gal_filtered_suid)
+        self.assertEqual(gal_filtered_js, res)
+
+        # Verify that the current network named by name is fetched
+        res = create_cytoscapejs_from_network(network='galFiltered.sif')
+        self.assertEqual(gal_filtered_js, res)
+
+        # Verify that the non-current network named by name is fetched
+        res = create_cytoscapejs_from_network(network='yeastHighQuality.sif')
+        self.assertEqual(res['data']['name'], 'yeastHighQuality.sif')
+
+        # Verify that the current network is still the galFiltered network
+        res = create_cytoscapejs_from_network()
+        self.assertEqual(res, gal_filtered_js)
+
+        # Verify that error parameters are caught
+        self.assertRaises(CyError, create_cytoscapejs_from_network, network='Bogus')
+
+    @print_entry_exit
+    def test_create_network_from_cytoscapejs(self):
+
+        def get_small_cytoscapejs():
+            return {"data": {"name": "Small Network"},
+                    "elements": {"nodes": [{"data": {"id": "3027848", "name": "YDL194W"}},
+                                           {"data": {"id": "3027846", "name": "YDR277C"}}],
+                                 "edges": [{"data": {"id": "3028566",
+                                                     "source": "3027846",
+                                                     "target": "3027848",
+                                                     "name": "YDR277C (pp) YDL194W",
+                                                     "interaction": "pp"}}]}}
+
+        # Initialization
+        load_test_session()
+        gal_filtered_js = create_cytoscapejs_from_network()
+        gal_filtered_collection = get_collection_name(collection_suid=get_collection_suid())
+
+        # Verify that creating a copy of galFiltered picks up title from JSON and creates a new collection
+        gal_filtered_js1 = copy.deepcopy(gal_filtered_js)
+        gal_filtered_js1['data']['name'] = \
+        gal_filtered_js1['data']['shared_name'] = gal_filtered_js['data']['shared_name'] + '1'
+
+        # gal_filtered1_suid = create_network_from_cytoscapejs(gal_filtered_js1, collection='galFiltered.sif')
+        gal_filtered1_suid = create_network_from_cytoscapejs(gal_filtered_js1)
+        res = create_cytoscapejs_from_network(network=gal_filtered1_suid)
+        res_collection1 = get_collection_name(collection_suid=get_collection_suid(network=gal_filtered1_suid))
+        self.assertNotEqual(gal_filtered_collection, res_collection1)
+        self.assertEqual(res['data']['name'], gal_filtered_js1['data']['name'])
+
+        # Verify that creating a copy of galFiltered with a title and collection works
+        gal_filtered_js2 = copy.deepcopy(gal_filtered_js)
+        gal_filtered_js2['data']['name'] = \
+        gal_filtered_js2['data']['shared_name'] = gal_filtered_js['data']['shared_name'] + '2'
+        gal_filtered2_collection = gal_filtered_collection + '2'
+
+        gal_filtered2_suid = create_network_from_cytoscapejs(gal_filtered_js2, title='Network2', collection=gal_filtered2_collection)
+        res = create_cytoscapejs_from_network(network=gal_filtered2_suid)
+        res_collection2 = get_collection_name(collection_suid=get_collection_suid(network=gal_filtered2_suid))
+        self.assertEqual(gal_filtered2_collection, res_collection2)
+        self.assertEqual(res['data']['name'], 'Network2')
+
+        # Verify that creating a copy of galFiltered with null title and collection picks up JSON title and ugly collection name
+        gal_filtered_js3 = copy.deepcopy(gal_filtered_js)
+        gal_filtered_js3['data']['name'] = \
+        gal_filtered_js3['data']['shared_name'] = gal_filtered_js['data']['shared_name'] + '3'
+
+        gal_filtered3_suid = create_network_from_cytoscapejs(gal_filtered_js3, title=None, collection=None)
+        res = create_cytoscapejs_from_network(network=gal_filtered3_suid)
+        res_collection3 = get_collection_name(collection_suid=get_collection_suid(network=gal_filtered3_suid))
+        self.assertIsNone(res_collection3)
+        self.assertEqual(res['data']['name'], gal_filtered_js3['data']['name'])
+
+        # Verify adding non-conflicting network to collection
+        small_network = get_small_cytoscapejs()
+        small_network_suid = create_network_from_cytoscapejs(small_network, collection=gal_filtered2_collection)
+        self.assertSetEqual(set(get_collection_networks()), {gal_filtered2_suid, small_network_suid})
+
+        # Verify that a network can be added into a session that has no collection
+        close_session(False)
+        res = create_cytoscapejs_from_network(network=create_network_from_cytoscapejs(gal_filtered_js))
+        self.assertEqual(res['data']['name'], gal_filtered_js['data']['name'])
 
     @unittest.skipIf(skip_for_ui(), 'Avoiding test that requires user response')
     @print_entry_exit

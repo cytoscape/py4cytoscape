@@ -84,7 +84,7 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
-def get_visual_style(style_name, format='cy3', base_url=DEFAULT_BASE_URL):
+def get_visual_style(style_name, css=False, base_url=DEFAULT_BASE_URL):
     """Get all defaults and mappings for a visual style
 
     Args:
@@ -98,13 +98,13 @@ def get_visual_style(style_name, format='cy3', base_url=DEFAULT_BASE_URL):
         dict or list: dict if format=None or list if format=CytoscapeJS
 
     Raises:
-        CyError: if empty style name or invalid style format
+        CyError: if empty style name
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> get_visual_style('galFiltered Style')
         {'title': 'galFiltered Style', 'defaults': [{'visualProperty': 'COMPOUND_NODE_PADDING', 'value': 10.0}...]}
-        >>> get_visual_style('galFiltered Style', format='CytoscapeJS')
+        >>> get_visual_style('galFiltered Style', css=True)
         [{'format_version': '1.0', 'generated_by': 'cytoscape-3.9.1', 'target_cytoscapejs_version': '~2.1'...}]
     See Also:
         :meth:`get_current_style`
@@ -112,14 +112,10 @@ def get_visual_style(style_name, format='cy3', base_url=DEFAULT_BASE_URL):
     if style_name == None or len(style_name.strip()) == 0:
         raise CyError(f'No style name provided')
 
-    if format == None:
-        raise CyError(f'Format must be either cy3 or cytoscapejs')
-    elif format.lower() == 'cy3':
-        pass # this is the default ... leave style_name alone
-    elif format.lower() == 'cytoscapejs':
+    if css:
         style_name += '.json'   # get CSS-style JSON for CytoscapeJS usage
     else:
-        raise CyError(f'Unknown style format "{format}"')
+        pass # this is the default ... leave style_name alone
 
     res = commands.cyrest_get(f'styles/{style_name}', base_url=base_url)
     return res
@@ -204,6 +200,8 @@ def delete_visual_style(style_name, base_url=DEFAULT_BASE_URL):
 @cy_log
 def delete_all_visual_styles(base_url=DEFAULT_BASE_URL):
     """Delete all visual styles from current Cytoscape session.
+
+    The 'default' style remains after all other styles are deleted.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,

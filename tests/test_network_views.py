@@ -38,7 +38,6 @@ class NetworkViewsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-
     @print_entry_exit
     def test_get_network_views(self):
         # Initialization
@@ -57,7 +56,6 @@ class NetworkViewsTests(unittest.TestCase):
         self.assertEqual(self._check_view_list(get_network_views('galFiltered.sif')), gal_filtered_view_suid)
 
         self.assertRaises(CyError, get_network_views, 'bogus network')
-
 
     @print_entry_exit
     def test_create_view(self):

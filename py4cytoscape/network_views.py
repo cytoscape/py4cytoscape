@@ -106,7 +106,6 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
     except:
         return []
 
-
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the SUID of a network view.
