@@ -89,13 +89,13 @@ def get_visual_style(style_name, css=False, base_url=DEFAULT_BASE_URL):
 
     Args:
         style_name (str): name of style
-        format (str): None or Cy3 for dictionary style, CytoscapeJS for CSS style
+        css (bool): True to create a CytoscapeJS CSS style, False to create a generic JSON version
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        dict or list: dict if format=None or list if format=CytoscapeJS
+        dict or list: dict if generic JSON, list if CSS
 
     Raises:
         CyError: if empty style name
