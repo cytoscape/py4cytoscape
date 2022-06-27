@@ -4,6 +4,25 @@ Release Log
 ===========
 
 
+
+py4cytoscape 1.4.0
+-------------------
+Release date: 27 June 2022
+
+* Supported Metascape migration from py2cytoscape to py4cytoscape
+* Added names= to get_network_list
+* Added create_cytoscapejs_from_network and create_network_from_cytoscapejs
+* Added get_visual_style_JSON
+* Added delete_all_visual_styles
+* Added sandbox support when Cytoscape is at URL different than 127.0.0.1
+* Fixed bugs for calling Cytoscape at URL different than 127.0.0.1
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.4.0.rst
+
 py4cytoscape 1.3.0
 -------------------
 Release date: 22 May 2022
