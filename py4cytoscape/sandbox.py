@@ -5,7 +5,7 @@
 A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed to be isolated
 from the whole file system. All Python and Cytoscape file operations are carried out relative to the "current sandbox".
 Sandboxes primarily address file access issues when running workflows on a remote server (and accessing Cytoscape
-running on the workstation via Jupyter-Bridge).
+running on the workstation, either via direct HTTP or via Jupyter-Bridge).
 
 When running a workflow on the Cytoscape workstation (i.e., locally, not remotely), the entire workstation's file
 system would be directly accessible to the workflow, and sandboxing isn't an issue. Essentially, this
@@ -13,7 +13,7 @@ acknowledges that the user has rightful and safe access to the file system (subj
 permissions).
 
 When running a workflow on a remote server, accessing files local to the workflow's Python kernel isn't helpful
-because they're on a server that the workstation's Cytoscape can't reach. Additionaly, it's problematic to allow
+because they're on a server that the workstation's Cytoscape can't reach. Additionally, it's problematic to allow
 the Python kernel to access workstation files anyway because 1) errant notebooks could compromise workstation
 security, and 2) notebooks can't easily account for differences in various workstation file systems (e.g.,
 naming files in a Mac is different than in Windows).
