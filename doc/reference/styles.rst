@@ -20,7 +20,7 @@ Style Management
    delete_all_visual_styles
    export_visual_styles
    get_current_style
-   get_visual_style
+   get_visual_style_JSON
    get_visual_style_names
    import_visual_styles
    set_visual_style

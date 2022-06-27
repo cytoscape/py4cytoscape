@@ -84,7 +84,7 @@ def copy_visual_style(from_style, to_style, base_url=DEFAULT_BASE_URL):
     return res
 
 @cy_log
-def get_visual_style(style_name, css=False, base_url=DEFAULT_BASE_URL):
+def get_visual_style_JSON(style_name, css=False, base_url=DEFAULT_BASE_URL):
     """Get all defaults and mappings for a visual style
 
     Args:
@@ -102,12 +102,10 @@ def get_visual_style(style_name, css=False, base_url=DEFAULT_BASE_URL):
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> get_visual_style('galFiltered Style')
+        >>> get_visual_style_JSON('galFiltered Style')
         {'title': 'galFiltered Style', 'defaults': [{'visualProperty': 'COMPOUND_NODE_PADDING', 'value': 10.0}...]}
-        >>> get_visual_style('galFiltered Style', css=True)
+        >>> get_visual_style_JSON('galFiltered Style', css=True)
         [{'format_version': '1.0', 'generated_by': 'cytoscape-3.9.1', 'target_cytoscapejs_version': '~2.1'...}]
-    See Also:
-        :meth:`get_current_style`
     """
     if style_name == None or len(style_name.strip()) == 0:
         raise CyError(f'No style name provided')
@@ -157,10 +155,10 @@ def create_visual_style(style_name, defaults=None, mappings=None, base_url=DEFAU
     Note:
         To apply the style to a network, first create the network and then call ``set_visual_style``
 
-        This function can be used directly with the ``defaults`` and ``mappings`` members returned by ``get_visual_style``
+        This function can be used directly with the ``defaults`` and ``mappings`` members returned by ``get_visual_style_JSON``
 
     See Also:
-        :meth:`map_visual_property`, :meth:`set_visual_style`, :meth:`get_visual_style`
+        :meth:`map_visual_property`, :meth:`set_visual_style`, :meth:`get_visual_style_JSON`
     """
     if mappings is None: mappings = []
     if defaults is None:

@@ -66,23 +66,23 @@ class StylesTests(unittest.TestCase):
         load_test_session()
 
         # Verify that dictionary-style works
-        res = get_visual_style('galFiltered Style')
+        res = get_visual_style_JSON('galFiltered Style')
         self.assertIsInstance(res, dict)
         self.assertTrue(set(res.keys()) >= {'title', 'defaults', 'mappings'})
-        res = get_visual_style('galFiltered Style', css=False)
+        res = get_visual_style_JSON('galFiltered Style', css=False)
         self.assertIsInstance(res, dict)
         self.assertTrue(set(res.keys()) >= {'title', 'defaults', 'mappings'})
 
         # Verify that CytoscapeJS-style works
-        res = get_visual_style('galFiltered Style', css=True)
+        res = get_visual_style_JSON('galFiltered Style', css=True)
         self.assertIsInstance(res, list)
         self.assertEqual(len(res), 1)
         self.assertTrue(set(res[0].keys()) >= {'format_version', 'generated_by', 'target_cytoscapejs_version', 'title', 'style'})
 
         # Verify that errors are caught
-        self.assertRaises(CyError, get_visual_style, 'bogus style')
-        self.assertRaises(CyError, get_visual_style, None)
-        self.assertRaises(CyError, get_visual_style, '  ')
+        self.assertRaises(CyError, get_visual_style_JSON, 'bogus style')
+        self.assertRaises(CyError, get_visual_style_JSON, None)
+        self.assertRaises(CyError, get_visual_style_JSON, '  ')
 
     @print_entry_exit
     def test_create_visual_style(self):
@@ -139,7 +139,7 @@ class StylesTests(unittest.TestCase):
         self.assertListEqual(get_style_all_mappings('NewStyleEmpty'), [])
 
         # Create a new style based on a style fetched as a dictionary
-        full_style = get_visual_style('NewStyle')
+        full_style = get_visual_style_JSON('NewStyle')
         create_visual_style('NewStyleAsDict', defaults=full_style['defaults'], mappings=full_style['mappings'])
         check_new_style('NewStyleAsDict')
 
