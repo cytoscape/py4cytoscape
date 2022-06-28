@@ -5,6 +5,18 @@ Release Log
 
 
 
+py4cytoscape 1.5.0
+-------------------
+Release date: 28 June 2022
+
+* Removed dependence on Enum package due to build errors
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.5.0.rst
+
 py4cytoscape 1.4.0
 -------------------
 Release date: 28 June 2022
