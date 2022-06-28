@@ -181,7 +181,7 @@ def cytoscape_free_memory(base_url=DEFAULT_BASE_URL):
         'Unused memory freed up.'
     """
     try:
-        res = commands.cyrest_get('gc', require_json=False)
+        res = commands.cyrest_get('gc', base_url=base_url, require_json=False)
         return narrate('Unused memory freed up.')
     except:
         raise CyError('CyREST connection problem. py4cytoscape cannot continue!')

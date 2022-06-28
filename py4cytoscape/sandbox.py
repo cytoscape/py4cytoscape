@@ -5,7 +5,7 @@
 A sandbox is a directory on the Cytoscape workstation that is guaranteed writeable and is guaranteed to be isolated
 from the whole file system. All Python and Cytoscape file operations are carried out relative to the "current sandbox".
 Sandboxes primarily address file access issues when running workflows on a remote server (and accessing Cytoscape
-running on the workstation via Jupyter-Bridge).
+running on the workstation, either via direct HTTP or via Jupyter-Bridge).
 
 When running a workflow on the Cytoscape workstation (i.e., locally, not remotely), the entire workstation's file
 system would be directly accessible to the workflow, and sandboxing isn't an issue. Essentially, this
@@ -13,7 +13,7 @@ acknowledges that the user has rightful and safe access to the file system (subj
 permissions).
 
 When running a workflow on a remote server, accessing files local to the workflow's Python kernel isn't helpful
-because they're on a server that the workstation's Cytoscape can't reach. Additionaly, it's problematic to allow
+because they're on a server that the workstation's Cytoscape can't reach. Additionally, it's problematic to allow
 the Python kernel to access workstation files anyway because 1) errant notebooks could compromise workstation
 security, and 2) notebooks can't easily account for differences in various workstation file systems (e.g.,
 naming files in a Mac is different than in Windows).
@@ -174,15 +174,16 @@ def sandbox_remove(sandbox_name=None, base_url=DEFAULT_BASE_URL):
 
     # At this point, the sandbox has been deleted. If it was the current sandbox, there is no more current sandbox.
     # A null current sandbox means that the Cytoscape native file system should be used. This is not OK if we're
-    # executing from a notebook or remotely. To remedy this, we revert to the default sandbox as the new current
-    # sandbox. If that was the sandbox we just deleted, we need to re-initialize so it gets re-created.
+    # executing from on a different workstation than Cytoscape's. To remedy this, we revert to the
+    # default sandbox as the new current sandbox. If that was the sandbox we just deleted, we need to
+    # re-initialize so it gets re-created.
 
     if sandbox_name == default_sandbox_name and default_sandbox_name == current_sandbox_before_remove:
         set_sandbox_reinitialize() # Recreate the default sandbox before the next command executes
     elif sandbox_name == current_sandbox_before_remove:
         # A user-created sandbox was removed, so fall back to the making the default sandbox current ...
         # be sure not to wipe out any work that's already there
-        commands.do_set_sandbox({'sandboxName': default_sandbox_name, 'copySamples': False, 'reinitialize': False})
+        commands.do_set_sandbox({'sandboxName': default_sandbox_name, 'copySamples': False, 'reinitialize': False}, base_url=base_url)
     return res
 
 @cy_log
@@ -224,7 +225,7 @@ def sandbox_get_file_info(file_name, sandbox_name=None, base_url=DEFAULT_BASE_UR
         # is installed. We'll assume failure means it isn't installed. And if that's so, it must mean that we're
         # running on the Cytoscape workstation. If so, get the file metadata the old fashioned way. This way,
         # callers don't have to know or care about the case of the uninstalled FileTransfer app.
-        if not sandbox_name and not get_current_sandbox_name() and file_name and file_name.strip():
+        if not sandbox_name and not get_current_sandbox_name() and file_name and file_name.strip() and base_url == LOCAL_BASE_URL:
             file_path = os.path.abspath(file_name)
             if os.path.exists(file_path):
                 is_file = os.path.isfile(file_name)

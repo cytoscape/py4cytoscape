@@ -36,7 +36,6 @@ from . import sandbox
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
-from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 @cy_log
@@ -106,7 +105,6 @@ def get_network_views(network=None, base_url=DEFAULT_BASE_URL):
         return commands.cyrest_get(f'networks/{net_suid}/views', base_url=base_url)
     except:
         return []
-
 
 @cy_log
 def get_network_view_suid(network=None, base_url=DEFAULT_BASE_URL):

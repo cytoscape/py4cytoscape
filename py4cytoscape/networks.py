@@ -59,7 +59,6 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS, CATCHUP_NETWORK_SECS, CATCHUP_NETWORK_TIMEOUT_SECS
 from .exceptions import CyError
-from .py4cytoscape_notebook import running_remote
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 def __init__(self):
@@ -131,7 +130,7 @@ def rename_network(title, network=None, base_url=DEFAULT_BASE_URL):
     old_suid = get_network_suid(network, base_url=base_url)
     cmd = f'network rename name="{title}" sourceNetwork="SUID:{old_suid}"'
     # TODO: Put double quotes around SUID
-    return commands.commands_post(cmd, base_url)
+    return commands.commands_post(cmd, base_url=base_url)
 
 
 @cy_log
@@ -194,7 +193,7 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
     if isinstance(suid, str):
         # title provided
         if suid == 'current':
-            network_suid = get_network_suid(base_url=DEFAULT_BASE_URL)
+            network_suid = get_network_suid(base_url=base_url)
         else:
             net_names = get_network_list(base_url=base_url)
             if suid in net_names:
@@ -205,9 +204,9 @@ def get_network_name(suid=None, base_url=DEFAULT_BASE_URL):
         # suid provided
         network_suid = suid
     else:
-        network_suid = get_network_suid(base_url=DEFAULT_BASE_URL)
+        network_suid = get_network_suid(base_url=base_url)
 
-    res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=DEFAULT_BASE_URL)
+    res = commands.cyrest_get('networks.names', {'column': 'suid', 'query': network_suid}, base_url=base_url)
     return res[0]['name']
 
 
@@ -271,16 +270,17 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
 
 
 @cy_log
-def get_network_list(base_url=DEFAULT_BASE_URL):
+def get_network_list(base_url=DEFAULT_BASE_URL, *, get_suids=False):
     """Returns the list of Cytoscape network names in the current Cytoscape session.
 
     Args:
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
+        get_suids (bool): False returns a list of network names; True returns names and SUIDs
 
     Returns:
-        list: network names
+        list: network names or dictionaries (network name, SUID)
 
     Raises:
         ValueError: if server response has no JSON
@@ -289,17 +289,14 @@ def get_network_list(base_url=DEFAULT_BASE_URL):
     Examples:
         >>> get_network_list()
         ['yeastHighQuality.sif', 'galFiltered.sif']
+        >>> get_network_list(get_suids=True)
+        [{"name": 'yeastHighQuality.sif', 'suid':102003}, {"name": 'galFiltered.sif', 'suid':104002}]
     """
-    if get_network_count(base_url=base_url):
-        cy_networks_suids = commands.cyrest_get('networks', base_url=base_url)
-        # TODO: This is horribly slow for large networks ... it gets the network in JS format and then digs out the name
-        cy_network_names = [commands.cyrest_get(f'networks/{suid}', base_url=base_url)['data']['name'] for suid in
-                            cy_networks_suids]
+    cy_networks_suids = commands.cyrest_get('networks.names', base_url=base_url)
+    if get_suids:
+        return [{'name': x['name'], 'suid': x['SUID']}   for x in cy_networks_suids]
     else:
-        cy_network_names = []
-
-    return cy_network_names
-
+        return [x['name']   for x in cy_networks_suids]
 
 @cy_log
 def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
@@ -974,7 +971,7 @@ def create_network_from_igraph(igraph, title='From igraph', collection='My Igrap
 
 @cy_log
 def create_network_from_networkx(netx, title='From networkx', collection='My NetworkX Network Collection',
-                              base_url=DEFAULT_BASE_URL):
+                                 base_url=DEFAULT_BASE_URL):
     """Create a Cytoscape network from a NetworkX graph.
 
     Args:
@@ -1162,6 +1159,67 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     return network_suid
 
+@cy_log
+def create_network_from_cytoscapejs(cytoscapejs, title=None, collection='My CytoscapeJS Network Collection', base_url=DEFAULT_BASE_URL):
+    """Create a network from CytoscapeJS JSON.
+
+    Takes the dict-encoded JSON formatted for a CytoscapeJS network (including node coordinates) and creates a Cytoscape
+    network. Both nodes and edges can have named attribute values, where the names become Cytoscape columns
+    and the values are associated with their node or edge. Once the network is created, it becomes the
+    Cytoscape current network.
+
+    Notes:
+        If ``title`` is supplied, it is used as the Cytoscape network name. Otherwise, if the
+        JSON's ['data']['name'] element is present, its value is used as Cytoscape's network name. If
+        neither, the network gets a generic name.
+
+        If ``collection`` is supplied, it is used as the collection to contain the network, even if the
+        collection must be created first. If ``collection`` is None, the new network is created in an
+        unnamed collection.
+
+    Args:
+        cytoscapejs (dict): network (nodes, edges, attributes, node positions and metadata) in CytoscapeJS format
+        title (str): network name (None means use the name in ``cytoscapejs`` ... if no name, use a generic name)
+        collection (str): collection name (None means create an unnamed collection)
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        int: The ``SUID`` of the new network
+
+    Raises:
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_network_from_cytoscapejs({...})
+        213043
+        >>> create_network_from_cytoscapejs({...}, 'new network', 'new collection')
+        220209
+
+    See Also:
+        :meth:`create_cytoscapejs_from_network`, :meth:`import_network_from_file`
+    """
+    # Set up for CytoscapeJS JSON format
+    params = {'format': 'json'}
+
+    # If caller explicitly supplied a null title, let Cytoscape figure it out from the JSON
+    if title is None:
+        if 'data' in cytoscapejs and 'name' in cytoscapejs['data']:
+            title = cytoscapejs['data']['name']
+        else:
+            title = 'From cytoscapejs'
+    params['title'] = title
+
+    # If caller explicitly supplied a null collection, let Cytoscape create a no-named collection
+    if collection is not None:
+        params['collection'] = collection
+
+    # Send JSON to Cytoscape to create new network/view
+    res = commands.cyrest_post('networks', params, cytoscapejs, base_url=base_url)
+    return res['networkSUID']
+
+
 
 @cy_log
 def import_network_from_tabular_file(file=None, first_row_as_column_names=False, start_load_row=1, column_type_list='s,i,t', delimiters='\\,,\t', base_url=DEFAULT_BASE_URL):
@@ -1263,6 +1321,10 @@ def import_network_from_file(file=None, base_url=DEFAULT_BASE_URL):
         {'networks': [131481], 'views': [131850]}
         >>> import_network_from_file('data/yeastHighQuality.sif')
         {'networks': [131481], 'views': [131850]}
+
+    See Also:
+        :meth:`create_network_from_cytoscapejs`
+
     """
     if file is None:
         file = 'sampleData/galFiltered.sif'
@@ -1423,6 +1485,49 @@ def create_networkx_from_network(network=None, base_url=DEFAULT_BASE_URL):
     md_graph.add_nodes_from(n_bunch)
 
     return md_graph
+
+@cy_log
+def create_cytoscapejs_from_network(network=None, base_url=DEFAULT_BASE_URL):
+    """Create a Cytoscape JS representation of a Cytoscape network.
+
+    Notes:
+        Takes a Cytoscape network and translates its nodes and edges into a dict corresponding to a
+        Cytoscape JS JSON document. Attributes, node positions and network metadata are also captured.
+
+    Args:
+        network (SUID or str or None): Name or SUID of a network or view. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: The Cytoscape JS object
+
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> create_cytoscapejs_from_network()
+        {'format_version': '1.0',
+         'generated_by': 'cytoscape-3.9.1',
+         'target_cytoscapejs_version': '~2.1',
+         'data': {
+           'shared_name': 'galFiltered.sif',
+           'Dataset_Name': 'Yeast Perturbation Network',
+           '__Annotations': [''],
+           'name': 'galFiltered.sif',
+           'SUID': 3027163,
+           'selected': True},
+         'elements': {'nodes': [ ... ], 'edges': [ ... ]}
+
+    See Also:
+        :meth:`create_network_from_cytoscapejs`
+    """
+    net_suid = get_network_suid(network, base_url=base_url)
+    res = commands.cyrest_get(f'networks/{net_suid}/views/first', base_url=base_url)
+    return res
 
 
 # ==============================================================================

@@ -104,7 +104,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: the name of the collection associated with SUID
+        str: the name of the collection associated with SUID, or None if collection is unnamed
 
     Raises:
         CyError: if no collection exists
@@ -118,7 +118,7 @@ def get_collection_name(collection_suid=None, base_url=DEFAULT_BASE_URL):
     """
     if collection_suid is None: collection_suid = get_collection_suid(base_url=base_url)
     res = commands.cyrest_get(f'collections/{collection_suid}/tables/default', base_url=base_url)
-    return res['rows'][0]['name']
+    return res['rows'][0]['name'] if 'name' in res['rows'][0] else None
 
 
 @cy_log

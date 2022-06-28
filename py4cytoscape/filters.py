@@ -40,7 +40,6 @@ from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log, show_error
 from .py4cytoscape_tuning import CATCHUP_FILTER_SECS
 from .py4cytoscape_sandbox import get_abs_sandbox_path
-from .py4cytoscape_notebook import running_remote
 
 @cy_log
 def apply_filter(filter_name='Default filter', hide=False, network=None, base_url=DEFAULT_BASE_URL):
