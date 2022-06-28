@@ -58,12 +58,12 @@ class SpoofResponse:
                 u'%s Server Error: %s for url: %s' % (self.status_code, self.reason, self.url), response=self)
 
 # Relationship between py4cytoscape execution environment and Cytoscape execution environment
-from enum import Enum, auto
-class ExecutionEnvironment(Enum):
-    UNKNOWN = auto()
-    SHARED_WORKSTATION = auto()
-    REMOTE_DIRECT_URL = auto()
-    REMOTE_JUPYTER_BRIDGE = auto()
+#from enum import Enum, auto  # This causes major build problems, so leave it out
+class ExecutionEnvironment(): # (Enum):
+    UNKNOWN = 0 # auto()
+    SHARED_WORKSTATION = 1 # auto()
+    REMOTE_DIRECT_URL = 2 # auto()
+    REMOTE_JUPYTER_BRIDGE = 3 # auto()
 
 # Create a unique channel that identifies this process so other processes don't mix up messages
 _CHANNEL = None
