@@ -7,7 +7,7 @@ Release Log
 
 py4cytoscape 1.4.0
 -------------------
-Release date: 27 June 2022
+Release date: 28 June 2022
 
 * Supported Metascape migration from py2cytoscape to py4cytoscape
 * Added names= to get_network_list
