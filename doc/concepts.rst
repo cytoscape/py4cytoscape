@@ -25,6 +25,7 @@ work, you must have Cytoscape running on your workstation.
 Your Python application can be run in several modes:
 
 * Standalone on the workstation that's already running Cytoscape
+* Standalone on a workstation but where Cytoscape is running on another workstation or Docker
 * In a Jupyter Notebook running on the same workstation as your Cytoscape
 * In a Jupyter Notebook running on a remote server (e.g., Google Colab or GenePattern Notebook)
 
