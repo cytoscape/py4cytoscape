@@ -31,7 +31,8 @@ setuptools.setup(
         'python-igraph',
         'colorbrewer',
         'chardet',
-        'decorator'
+        'decorator',
+        'backoff'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',

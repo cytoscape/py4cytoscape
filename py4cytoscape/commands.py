@@ -30,12 +30,12 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # External library imports
 import requests
-from requests.adapters import HTTPAdapter
 import urllib.parse
 import json
 import webbrowser
 import sys
 import os
+import backoff
 
 # Internal module convenience imports
 from .py4cytoscape_utils import *
@@ -43,8 +43,6 @@ from .py4cytoscape_logger import cy_log, log_http_result, log_http_request, show
 from .py4cytoscape_notebook import execution_environment, do_request_jupyter_bridge, check_execution_environment, get_notebook_is_running, ExecutionEnvironment
 from .py4cytoscape_sandbox import *
 from .exceptions import CyError
-
-HTTP_ADAPTER_WITH_RETRIES = HTTPAdapter(max_retries=10)
 
 def __init__(self):
     pass
@@ -683,18 +681,11 @@ def _handle_error(e, force_cy_error=False):
                 show_error(f'In {caller}: {e}\n{content}')
         raise e
 
-
+@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=5)
 def _do_request_local(method, url, **kwargs):
     # Call CyREST via a local URL
     log_http_request(method, url, **kwargs)
-
-    # This is the equivalent of "r = requests.request(method, url, **kwargs)", except that it
-    # enables connection retries in case Cytoscape isn't ready when we submit a request.
-    # For details: https://realpython.com/python-requests/#the-session-object
-    with requests.Session() as session:   # session.close will be automatically called because of "with"
-        session.mount(url, HTTP_ADAPTER_WITH_RETRIES)
-        r = session.request(method, url, **kwargs)
-
+    r = requests.request(method, url, **kwargs)
     log_http_result(r)
     return r
 
