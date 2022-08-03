@@ -444,6 +444,9 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         >>> load_table_data(data, data_key_column='id', table='node', table_key_column='name', network='galfiltered.sif')
         'Success: Data loaded in defaultnode table'
     """
+    if type(table_key_column) is not str:
+        raise CyError('table_key_column must be the name of a single column.')
+
     net_suid = networks.get_network_suid(network, base_url=base_url)
     table_key_column_values = get_table_columns(table=table, namespace=namespace, columns=table_key_column,
                                                 network=net_suid, base_url=base_url)

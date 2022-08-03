@@ -280,6 +280,10 @@ class TablesTests(unittest.TestCase):
         res = load_table_data(test_data_string_keyed, data_key_column='id', table='node', table_key_column='name')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
 
+        # Verify that table key name is a string, not None or a list
+        self.assertRaises(CyError, load_table_data, test_data_string_keyed, data_key_column='id', table='node', table_key_column=None)
+        self.assertRaises(CyError, load_table_data, test_data_string_keyed, data_key_column='id', table='node', table_key_column=['BadCol1', 'BadCol2'])
+
         # Verify that ID column and newcol were added, and that the newcols have values only for the named nodes
         check_values_added(column_names_string_keyed, 'name', test_data_string_keyed, 'id', 'newcol')
 
