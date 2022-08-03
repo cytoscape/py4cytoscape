@@ -307,7 +307,7 @@ class TablesTests(unittest.TestCase):
         test_data_suid_name['IntCol'] = test_data_suid_name['SUID']
         test_data_suid_name['StrCol'] = test_data_suid_name['SUID']
         test_data_suid_name['FloatCol'] = test_data_suid_name['SUID']
-        test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str, 'FloatCol': np.float})
+        test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str_, 'FloatCol': np.float_})
         suid_YBL079W = test_data_suid_name.index[test_data_suid_name.name == 'YBL079W'][0]
         del test_data_suid_name['name']
         test_data_suid_name.at[suid_YBL079W, 'FloatCol'] = np.nan # used to be set_value, but it was deprecated

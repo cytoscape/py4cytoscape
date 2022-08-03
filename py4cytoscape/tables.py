@@ -420,6 +420,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
         data (dataframe): each row is a node and columns contain node attributes
         data_key_column (str): name of data.frame column to use as key; ' default is "row.names"
         table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
+        table_key_column (str): name of Cytoscape table column to use as key; default is "name"
         namespace (str): Namespace of table. Default is "default".
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
@@ -457,14 +458,12 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     if not data_key_column in data.columns:
         raise CyError('Failed to load data. Please check data_key_column.')
 
+    # create table containing columns present in data and already present in Cytoscape table and
     # verify that there is at least one key in the Cytoscape table that matches a key in the data
-    table_keys = table_key_column_values[table_key_column].astype(str).values
-    filter = [str(key) in table_keys     for key in data[data_key_column]]
-    if not True in filter:
+    # Note: we rely on isin() to do the proper type comparison for the data values involved
+    data_subset = data[data[data_key_column].isin(table_key_column_values[table_key_column])]
+    if data_subset.empty:
         raise CyError(f'Provided table key column "{table_key_column}" and data key column "{data_key_column}" do not contain any matches')
-
-    # create table containing columns present in data and already present in Cytoscape table
-    data_subset = data[filter]
 
     # look for elements that are lists (instead of scalars) and turn them into comma-separated strings.
     # Note that CyREST doesn't accept lists or create columns of type list, but comma-separated strings is
