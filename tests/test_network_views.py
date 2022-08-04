@@ -215,8 +215,8 @@ class NetworkViewsTests(unittest.TestCase):
             return filename
 
         check_export(
-            export_image(delete_first('output/test units-pixels height-1000 width-2000 zoom-500', 'jpeg'), type='JPEG', units='pixels',
-                                      height=1000, width=2000, zoom=200, network=None))
+          export_image(delete_first('output/test units-pixels height-1000 width-2000 zoom-500', 'jpeg'), type='JPEG', units='pixels',
+                                    height=1000, width=2000, zoom=200, network=None))
         check_export(export_image(delete_first('output/test', 'pdf'), type='PDF', network=None))
         check_export(export_image(delete_first('output/test res-600 units-inches height-1.7 width-3.5 zoom-500', 'png'), type='PNG',
                                                resolution=600, units='inches', height=1.7, width=3.5, zoom=500,

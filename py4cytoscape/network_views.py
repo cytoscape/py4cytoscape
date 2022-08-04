@@ -36,6 +36,7 @@ from . import sandbox
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_utils import verify_supported_versions
 from .py4cytoscape_sandbox import get_abs_sandbox_path
 
 @cy_log
@@ -241,11 +242,31 @@ def set_current_view(network=None, base_url=DEFAULT_BASE_URL):
     # Added double quotes for SUID
     return res
 
+# Note: All types must be lower case for followon code to work properly
+_JPG_TYPE = 'jpg'
+_PDF_TYPE = 'pdf'
+_PNG_TYPE = 'png'
+_PS_TYPE = 'ps'
+_SVG_TYPE = 'svg'
+_SUPPLIED_TYPE ='*'
+_TYPE_MAP = {'jpg': (_SUPPLIED_TYPE, _JPG_TYPE),
+             'jpeg': (_SUPPLIED_TYPE, _JPG_TYPE),
+             'jpeg (*.jpeg, *.jpg)': (_JPG_TYPE, _JPG_TYPE),
+             'pdf': (_SUPPLIED_TYPE, _PDF_TYPE),
+             'pdf (*.pdf)': (_PDF_TYPE, _PDF_TYPE),
+             'png': (_SUPPLIED_TYPE, _PNG_TYPE),
+             'png (*.png)': (_PNG_TYPE, _PNG_TYPE),
+             'ps': (_SUPPLIED_TYPE, _PS_TYPE),
+             'postscript (*.ps)': (_PS_TYPE, _PS_TYPE),
+             'svg': (_SUPPLIED_TYPE, _SVG_TYPE),
+             'svg (*.svg)': (_SVG_TYPE, _SVG_TYPE)}
 
-# TODO: Need parameter to automatically overwrite file if it exists
+
 @cy_log
 def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
-                 network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False):
+                 network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False,
+                 all_graphics_details=None, hide_labels=None, transparent_background=None,
+                 export_text_as_font=None, orientation=None, page_size=None):
     """ Save the current network view as an image file.
 
     The image is cropped per the current view in Cytoscape. Consider applying :meth:`fit_content` prior to export.
@@ -287,25 +308,58 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         >>> export_image(type='PNG', resolution=600, units='inches', height=1.7, width=3.5, zoom=500, network=13098)
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
     """
-    cmd_string = 'view export'  # a good start
-
-    # filename must be supplied
-    if not filename: filename = networks.get_network_name(network, base_url=base_url)
-
-    # view must be supplied
+    # View must be supplied
     view_SUID = get_network_view_suid(network, base_url=base_url)
 
-    # optional args
-    if resolution: cmd_string += ' Resolution="' + str(resolution) + '"'
-    if units: cmd_string += ' Units="' + str(units) + '"'
-    if height: cmd_string += ' Height="' + str(height) + '"'
-    if width: cmd_string += ' Width="' + str(width) + '"'
-    if zoom: cmd_string += ' Zoom="' + str(zoom) + '"'
+    # Determine which set of parameters are valid or invalid or deprecated based on Cytoscape version,
+    # and then verify that the caller's parameter fit with the Cytoscape version
+    has_v10_params = all_graphics_details is not None \
+                     or hide_labels is not None \
+                     or transparent_background is not None \
+                     or export_text_as_font is not None or \
+                     orientation is not None \
+                     or page_size is not None
+    has_pre_v10_params = resolution is not None \
+                         or units is not None \
+                         or height is not None \
+                         or width is not None
 
-    # TODO: It looks like the '.' should be escaped ... true?
-    # TODO: If a lower case comparison is going to be done, shouldn't filename also be lower-case?
-    if re.search('.' + type.lower() + '$', filename) is None: filename += '.' + type.lower()
+    if check_supported_versions(1, "3.10", base_url=base_url):
+        if has_v10_params:
+            raise CyError('Cannot use Cytoscape v10 parameters with pre-v10 Cytoscape')
+        use_v10_calls = False
+    else:
+        if has_v10_params:
+            if has_pre_v10_params:
+                raise CyError('Cannot use both Cytoscape v10 parameters and pre-v10 parameters')
+            use_v10_calls = True
+        else:
+            use_v10_calls = not has_pre_v10_params
+            if not use_v10_calls:
+                narrate('Warning: use of resolution=, units=, height= and width= parameters for export_image() is deprecated')
+        if use_v10_calls:
+            narrate('Until 3.10 works properly, we will pretend we are using 3.9')
+            use_v10_calls = False
 
+    if zoom is None:
+        zoom = 100
+
+    # Determine which type of file image will be generated
+    type = type.lower()
+    if type in _TYPE_MAP:
+        type_suffix, cy_type = _TYPE_MAP[type]
+        if type_suffix == _SUPPLIED_TYPE:
+            type_suffix = type
+    else:
+        raise CyError(f'Type {type} is unknown; options include {_TYPE_MAP.keys()}')
+
+    # If the caller didn't supply a file name, deduce it from the network title, and
+    # if the file name doesn't have a file suffix appropriate for the image file, add the right suffix
+    if not filename: filename = networks.get_network_name(network, base_url=base_url)
+    if re.search('\.' + type_suffix + '$', filename.lower()) is None: filename += '.' + type_suffix
+
+    # Figure out whether the file already exists, and delete it if the caller asked for an overwrite
+    # Either way, end up with a file name appropriate for the destination file system
     file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         if overwrite_file:
@@ -314,10 +368,30 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
-    res = commands.commands_post(
-        '%s OutputFile="%s" options="%s" view="SUID:%s"' % (cmd_string, full_filename, type.upper(), view_SUID),
-        base_url=base_url)
-    # TODO: Added double quotes to SUID
+    # Generate the parameters appropriate for the Cytoscape function being used
+    if use_v10_calls:
+        cmd_string = 'view export ' + cy_type
+
+        # optional args
+        if all_graphics_details: cmd_string += f' allGraphicsDetails="{all_graphics_details}"'
+        if hide_labels: cmd_string += f' hideLabels="{hide_labels}"'
+        if transparent_background: cmd_string += f' transparentBackground="{transparent_background}"'
+        if export_text_as_font: cmd_string += f' exportTextAsFont="{export_text_as_font}"'
+        if orientation: cmd_string += f' orientation="{orientation}"'
+        if page_size: cmd_string += f' pageSize="{page_size}"'
+    else:
+        cmd_string = f'view export options="{cy_type.upper()}"'  # a good start
+
+        # optional args
+        if resolution: cmd_string += ' Resolution="' + str(resolution) + '"'
+        if units: cmd_string += ' Units="' + str(units) + '"'
+        if height: cmd_string += ' Height="' + str(height) + '"'
+        if width: cmd_string += ' Width="' + str(width) + '"'
+        if zoom: cmd_string += ' Zoom="' + str(zoom) + '"'
+
+    # Call the actual Cytoscape export image function
+    res = commands.commands_post(f'{cmd_string} outputFile="{full_filename}" view="SUID:{view_SUID}"',
+                                 base_url=base_url)
     return res
 
 
