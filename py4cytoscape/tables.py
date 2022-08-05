@@ -151,7 +151,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     # get suid column first and make a dataframe with SUID as index
     res_names = commands.cyrest_get(f'networks/{suid}/tables/{namespace}{table}/columns/SUID', base_url=base_url)
     suid_list = res_names['values']
-    df = pd.DataFrame(index=suid_list, columns=col_list)
+    df = pd.DataFrame(index=suid_list)
 
     # then fill in each requested column
     for col in col_list:
@@ -186,9 +186,9 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         if len(suid_list) != len(cvv):
             narrate('Column "%s" has only %d elements, but should have %d' % (col, len(cvv), len(suid_list)))
             break  # TODO: Is this the right response?
-        # TODO: Consider assigning entire column all at once instead of iterating ... should be OK
-        for val, suid_val in zip(cvv, suid_list):
-            df.at[suid_val, col] = val
+
+        # Assign entire column, assuming values are ordered consistently by Cytoscape
+        df[col] = cvv
 
     return df
 
