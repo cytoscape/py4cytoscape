@@ -3,6 +3,7 @@
 """Functions for managing TABLE columns and table column functions, like map and rename, as well as loading and
 extracting table data in Cytoscape.
 """
+import sys
 
 """Copyright 2020-2022 The Cytoscape Consortium
 
@@ -465,6 +466,18 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     # verify that there is at least one key in the Cytoscape table that matches a key in the data
     # Note: we rely on isin() to do the proper type comparison for the data values involved
     data_subset = data[data[data_key_column].isin(table_key_column_values[table_key_column])]
+    from .py4cytoscape_logger import detail_logger
+    detail_logger.debug(f'Pandas: {pd.__version__}')
+    detail_logger.debug(f'Python: {sys.version}')
+    detail_logger.debug(f'data_key_column: {data_key_column}')
+    detail_logger.debug(f'table_key_column: {table_key_column}')
+    detail_logger.debug(f'data: {data}')
+    detail_logger.debug(f'type(data[data_key_column]): {type(data[data_key_column])}')
+    detail_logger.debug(f'data[data_key_column]: {data[data_key_column]}')
+    detail_logger.debug(f'table_key_column_values: {table_key_column_values}')
+    detail_logger.debug(f'type(table_key_column_values[table_key_column]): {type(table_key_column_values[table_key_column])}')
+    detail_logger.debug(f'table_key_column_values[table_key_column]: {table_key_column_values[table_key_column]}')
+    detail_logger.debug(f'data_subset: {data_subset}')
     if data_subset.empty:
         raise CyError(f'Provided table key column "{table_key_column}" and data key column "{data_key_column}" do not contain any matches')
 
