@@ -222,10 +222,10 @@ def check_execution_environment(base_url):
             else:
                 _execution_environment = ExecutionEnvironment.REMOTE_DIRECT_URL
                 detail_logger.debug(f'Detected py4cytoscape running on Cytoscape workstation at {base_url}')
-        except:
+        except Exception as e1:
             # Cytoscape doesn't appear to be reachable via URL, so try reaching a remote Cytoscape via Jupyter-bridge
             try:
-                detail_logger.debug(f'Attempting to connect to remote Cytoscape')
+                detail_logger.debug(f'Attempting to connect to remote Cytoscape because of error {_error_content(e1)}')
                 do_request_jupyter_bridge('GET', _CYREST_URL_V1, headers={'Content-Type': 'application/json'})
                 _execution_environment = ExecutionEnvironment.REMOTE_JUPYTER_BRIDGE
                 detail_logger.debug(f'Detected Cytoscape via Jupyter-Bridge')
