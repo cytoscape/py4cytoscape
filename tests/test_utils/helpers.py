@@ -54,11 +54,14 @@ def test_select_nodes(node_list):
     else:
         select_nodes(node_list, by_col='COMMON')
 
+
 def clean_session_file(session_filename):
     if os.path.isfile(session_filename): os.remove(session_filename)
 
+
 def skip_for_ui():
     return os.environ.get('PY4CYTOSCAPE_SKIP_UI_TESTS', 'FALSE').upper() == 'TRUE'
+
 
 def show_test_progress():
     return os.environ.get('PY4CYTOSCAPE_SHOW_TEST_PROGRESS', 'TRUE').upper() == 'TRUE'

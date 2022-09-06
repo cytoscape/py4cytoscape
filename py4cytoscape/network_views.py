@@ -264,7 +264,7 @@ _TYPE_MAP = {'jpg': (_SUPPLIED_TYPE, _JPG_TYPE),
 
 @cy_log
 def export_image(filename=None, type='PNG', resolution=None, units=None, height=None, width=None, zoom=None,
-                 network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False,
+                 network=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=False, force_pre_3_10=False,
                  all_graphics_details=None, hide_labels=None, transparent_background=None,
                  export_text_as_font=None, orientation=None, page_size=None):
     """ Save the current network view as an image file.
@@ -276,7 +276,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
-            width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600.
+            width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600. Valid only.
         units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
             The possible values are: pixels (default), inches.
         height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
@@ -289,35 +289,67 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         overwrite_file (bool): False allows Cytoscape show a message box before overwriting the file if the file already
-            exists; True allows Cytoscape to overwrite it without asking
+            exists; True allows Cytoscape to overwrite it without asking. In Cytoscape v3.10 and later, False
+            causes failure if file already exists.
+        force_pre_3_10 (bool): True results in pre-Cytoscape 3.10 image export being called, even if Cytoscape
+            can perform the export using more advanced functionality -- provided for backward compatibility
+        all_graphics_details (bool): True results in image with highest detail; False allows faster image
+            generation. Valid for bitmap formats such as PNG and JPEG.
+        hide_labels (bool): True makes node and edge labels invisible in image. False allows them to be
+            drawn. Valid for all image formats.
+        transparent_background (bool): True causes background to be transparent. Valid only for PNG format.
+        export_text_as_font (bool): True causes text to be exported as fonts. Valid for PDF, PS and SVG formats.
+        orientation (str): 'Portrait' allows more height for drawing space, and 'Landscape' allows more width.
+            Valid for PDF format.
+        page_size (str): Chooses standard page size (i.e., 'Letter', 'Auto', 'Legal', 'Tabloid', 'A0',
+            'A1', 'A2', 'A3', 'A4', or 'A5'). Valid for PDF format.
+
+    Note:
+        This function starts with the assumption of using export functions available in Cytoscape v3.10
+        or later, and accepts parameters pertinent to those functions (i.e., `all_graphics_details`,
+        `hide_labels`, `transparent_background`, `export_text_as_font`, `orientation`, `page_size` and  `zoom`).
+        If the caller supplies parameters appropriate for pre-3.10 Cytoscape (i.e., `resolution`, `units`,
+        `height`, `width` and `zoom`) the pre-v3.10 functions will be used instead. If your Cytoscape
+        is pre-v3.10, the pre-v3.10 functions will be called, and using v3.10 parameters will cause an
+        exception. If your Cytoscape is v3.10 or later, passing no parameters or just the `zoom` parameter,
+        the v3.10 functions will be called, but you can force the pre-v3.10 functions to be used by specifying
+        `force_pre_3_10` as `True`. Mixing pre-v3.10 and v3.10 parameters will cause an exception.
 
     Returns:
         dict:  {'file': name of file} contains absolute path to file that was written
 
     Raises:
-        CyError: if network or view doesn't exist, or if file exists and user opts to not overwrite it
+        CyError: if network or view doesn't exist, or if file exists and user opts to not overwrite it, or attempting to use v3.10 parameters with a pre-v3.10 Cytoscape, or mixing v3.10 and pre-v3.10 parameters
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> export_image('output/test', type='JPEG', units='pixels', height=1000, width=2000, zoom=200)
-        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpeg'}
-        >>> export_image('output/test', type='PDF', network='My Network')
+        >>> export_image('output/test', type='PDF', orientation='Landscape', hide_labels=True)
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.pdf'}
+        >>> export_image('output/test', type='JPEG', all_graphics_details=False, zoom=200)
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpeg'}
+        >>> export_image('output/test', type='JPG', hide_labels=True, zoom=200)
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpg'}
+        >>> export_image('output/test', zoom=200, transparent_background=True)
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
+        >>> export_image('output/test', force_pre_3_10=True) # use pre-v3.10 PNG renderer
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
         >>> export_image('output/test', type='PDF', overwrite_file=True) # overwrite any existing test.pdf
         {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.pdf'}
-        >>> export_image(type='PNG', resolution=600, units='inches', height=1.7, width=3.5, zoom=500, network=13098)
-        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.png'}
+        >>> export_image('output/test', type='SVG', network='My Network')
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.svg'}
+        >>> export_image('output/test', type='jpeg (*.jpeg, *.jpg)', network=13098)
+        {'file': 'C:\\Users\\CyDeveloper\\tests\\output\\test.jpg'}
     """
     # View must be supplied
     view_SUID = get_network_view_suid(network, base_url=base_url)
 
     # Determine which set of parameters are valid or invalid or deprecated based on Cytoscape version,
-    # and then verify that the caller's parameter fit with the Cytoscape version
+    # and then verify that the caller's parameters fit with the Cytoscape version
     has_v10_params = all_graphics_details is not None \
                      or hide_labels is not None \
                      or transparent_background is not None \
-                     or export_text_as_font is not None or \
-                     orientation is not None \
+                     or export_text_as_font is not None \
+                     or orientation is not None \
                      or page_size is not None
     has_pre_v10_params = resolution is not None \
                          or units is not None \
@@ -325,21 +357,30 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
                          or width is not None
 
     if check_supported_versions(1, "3.10", base_url=base_url):
+        # Cytoscape appears to be pre-3.10
         if has_v10_params:
-            raise CyError('Cannot use Cytoscape v10 parameters with pre-v10 Cytoscape')
+            raise CyError('Cannot use Cytoscape v3.10 parameters with pre-v3.10 Cytoscape')
         use_v10_calls = False
     else:
+        # Cytoscape is 3.10 or later
         if has_v10_params:
+            # Caller specified one or more 3.10 parameters
             if has_pre_v10_params:
-                raise CyError('Cannot use both Cytoscape v10 parameters and pre-v10 parameters')
+                raise CyError('Cannot use both Cytoscape v3.10 parameters and pre-v3.10 parameters')
+            if force_pre_3_10:
+                raise CyError('Cannot force call to Cytoscape pre-3.10 if v3.10 parameters are used')
             use_v10_calls = True
         else:
-            use_v10_calls = not has_pre_v10_params
-            if not use_v10_calls:
-                narrate('Warning: use of resolution=, units=, height= and width= parameters for export_image() is deprecated')
-        if use_v10_calls:
-            narrate('Until 3.10 works properly, we will pretend we are using 3.9')
-            use_v10_calls = False
+            # Caller didn't specify any 3.10 parameters, but may have specified some pre-3.10 parameters
+            if force_pre_3_10:
+                use_v10_calls = False
+            else:
+                use_v10_calls = not has_pre_v10_params
+                if not use_v10_calls:
+                    narrate('Warning: use of resolution=, units=, height= and width= parameters for export_image() is deprecated')
+        # if use_v10_calls: # For debugging
+        #     narrate('Until 3.10 works properly, we will pretend we are using 3.9')
+        #     use_v10_calls = False
 
     if zoom is None:
         zoom = 100
@@ -359,13 +400,16 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     if re.search('\.' + type_suffix + '$', filename.lower()) is None: filename += '.' + type_suffix
 
     # Figure out whether the file already exists, and delete it if the caller asked for an overwrite
-    # Either way, end up with a file name appropriate for the destination file system
+    # Either way, end up with a file name appropriate for Cytoscape's file system
     file_info = sandbox.sandbox_get_file_info(filename, base_url=base_url)
     if len(file_info['modifiedTime']) and file_info['isFile']:
         if overwrite_file:
             sandbox.sandbox_remove_file(filename, base_url=base_url)
         else:
-            narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
+            if use_v10_calls:
+                raise CyError(f'This file already exists and will not be overwritten: {filename}')
+            else:
+                narrate('This file already exists. A Cytoscape popup will be generated to confirm overwrite.')
     full_filename = file_info['filePath']
 
     # Generate the parameters appropriate for the Cytoscape function being used
@@ -373,24 +417,23 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         cmd_string = 'view export ' + cy_type
 
         # optional args
-        if all_graphics_details: cmd_string += f' allGraphicsDetails="{all_graphics_details}"'
-        if hide_labels: cmd_string += f' hideLabels="{hide_labels}"'
-        if transparent_background: cmd_string += f' transparentBackground="{transparent_background}"'
-        if export_text_as_font: cmd_string += f' exportTextAsFont="{export_text_as_font}"'
-        if orientation: cmd_string += f' orientation="{orientation}"'
-        if page_size: cmd_string += f' pageSize="{page_size}"'
+        if all_graphics_details is not None: cmd_string += f' allGraphicsDetails="{all_graphics_details}"'
+        if hide_labels is not None: cmd_string += f' hideLabels="{hide_labels}"'
+        if transparent_background is not None: cmd_string += f' transparentBackground="{transparent_background}"'
+        if export_text_as_font is not None: cmd_string += f' exportTextAsFont="{export_text_as_font}"'
+        if orientation is not None: cmd_string += f' orientation="{orientation}"'
+        if page_size is not None: cmd_string += f' pageSize="{page_size}"'
     else:
         cmd_string = f'view export options="{cy_type.upper()}"'  # a good start
 
         # optional args
-        if resolution: cmd_string += ' Resolution="' + str(resolution) + '"'
-        if units: cmd_string += ' Units="' + str(units) + '"'
-        if height: cmd_string += ' Height="' + str(height) + '"'
-        if width: cmd_string += ' Width="' + str(width) + '"'
-        if zoom: cmd_string += ' Zoom="' + str(zoom) + '"'
+        if resolution is not None: cmd_string += ' Resolution="' + str(resolution) + '"'
+        if units is not None: cmd_string += ' Units="' + str(units) + '"'
+        if height is not None: cmd_string += ' Height="' + str(height) + '"'
+        if width is not None: cmd_string += ' Width="' + str(width) + '"'
 
     # Call the actual Cytoscape export image function
-    res = commands.commands_post(f'{cmd_string} outputFile="{full_filename}" view="SUID:{view_SUID}"',
+    res = commands.commands_post(f'{cmd_string} Zoom="{zoom}" outputFile="{full_filename}" view="SUID:{view_SUID}"',
                                  base_url=base_url)
     return res
 
