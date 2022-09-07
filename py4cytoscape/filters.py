@@ -25,6 +25,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 import time
 import json
 import warnings
+import numpy as np
 
 # Internal module imports
 from . import commands
@@ -154,7 +155,14 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
         # TODO: Recommend that this check be limited to GREATER_THAN_OR_EQUAL because that's what the UI supports
         col_vals = tables.get_table_columns(type[:4], column, base_url=base_url)
         crit_max = col_vals[column].max()
+
+        # crit_max will be the type of the Pandas column, which could be np.int64, npfloat64 or string.
+        # The numeric formats can't be directly serialized into JSON, so they have to be converted to
+        # Python types that can be serialized.
+        if isinstance(crit_max, np.int64):  crit_max=int(crit_max)
+        elif isinstance(crit_max, np.float64):  crit_max=float(crit_max)
         criterion = [criterion, crit_max]
+
         # same trick to fix UI does not work for LESS_THAN cases
         # } else if (predicate %in% c("LESS_THAN", "LESS_THAN_OR_EQUAL")){
         #     col.vals <- getTableColumns(substr(type,1,4), column, base.url = base.url)
