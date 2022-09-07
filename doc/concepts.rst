@@ -472,6 +472,37 @@ of publishing a workflow as a Notebook?
         * ``sandbox_get_file_info()``: Get sandbox file metadata
         * ``sandbox_remove_file()``: Remove a sandbox file
 
+Alternate IP Addresses
+----------------------
+
+In the simplest configuration, the Python workflow runs (via command line or Jupyter
+Notebook) on the workstation that's already running Cytoscape. By default, Cytoscape
+listens for py4cytoscape requests on IP address 127.0.0.1 at port 1234. In this
+situation, all py4cytoscape functions that communicate with Cytoscape automatically use
+http://127.0.0.1:1234/v1 as a command root to which individual Cytoscape
+commands are appended (e.g., http://127.0.0.1:1234/v1/version).
+
+You can choose a different port number (e.g., 4444) by starting Cytoscape along with
+the `-R command line parameter <http://manual.cytoscape.org/en/stable/Command_Line_Arguments.html#command-line-arguments>`
+(e.g., cytoscape -R 4444), and then specifing the command root in one of two ways:
+
+* Name the command root in the ``DEFAULT_BASE_URL`` environment variable before importing py4cytoscape (e.g., SET DEFAULT_BASE_URL=http://127.0.0.1:4444/v1)
+
+* Pass the command root as the ``base_url=`` parameter available in each py4cytoscape function that calls Cytoscape (e.g., ``cytoscape_version_info(base_url='http://127.0.0.1:4444/v1')``)
+
+These methods also work when Cytoscape is executing on a different workstation, and
+that workstation can be addressed directly via an IP address (e.g., ``cytoscape_version_info(base_url='http://192.168.2.100:1234/v1')`` or
+``cytoscape_version_info(base_url='http://cytoscape1.ucsd.edu:1234/v1')``) provided that no
+firewall blocks access to Cytoscape.
+
+If Cytoscape is running on a different workstation, py4cytoscape will automatically
+set up a sandbox (see `Sandboxing`_) to enable file transfer between Cytoscape
+and the py4cytoscape workflow.
+
+These methods don't apply to py4cytoscape running on a Jupyter server and
+Cytoscape running on your workstation. That scenario is covered in the
+`Jupyter Notebook`_ section.
+
 Value Generators
 ----------------
 
