@@ -282,7 +282,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
         width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
         zoom (float): The zoom value to proportionally scale the image. The default value is 100.0. Valid only for bitmap
-            formats, such as PNG and JPEG
+            formats, such as PNG and JPEG.
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
             If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -292,17 +292,17 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             exists; True allows Cytoscape to overwrite it without asking. In Cytoscape v3.10 and later, False
             causes failure if file already exists.
         force_pre_3_10 (bool): True results in pre-Cytoscape 3.10 image export being called, even if Cytoscape
-            can perform the export using more advanced functionality -- provided for backward compatibility. Available for Cytoscape v3.10 or later.
+            can perform the export using more advanced functionality -- provided for backward compatibility. The default is False. Available for Cytoscape v3.10 or later.
         all_graphics_details (bool): True results in image with highest detail; False allows faster image
-            generation. Valid for bitmap formats such as PNG and JPEG. Available for Cytoscape v3.10 or later.
+            generation. The default is True. Valid for bitmap formats such as PNG and JPEG. Available for Cytoscape v3.10 or later.
         hide_labels (bool): True makes node and edge labels invisible in image. False allows them to be
-            drawn. Valid for all image formats. Available for Cytoscape v3.10 or later.
-        transparent_background (bool): True causes background to be transparent. Valid only for PNG format. Available for Cytoscape v3.10 or later.
-        export_text_as_font (bool): True causes text to be exported as fonts. Valid for PDF, PS and SVG formats. Available for Cytoscape v3.10 or later.
+            drawn. The default is False. Valid for all image formats. Available for Cytoscape v3.10 or later.
+        transparent_background (bool): True causes background to be transparent. The default is False. Valid only for PNG format. Available for Cytoscape v3.10 or later.
+        export_text_as_font (bool): True causes text to be exported as fonts. The default is True. Valid for PDF, PS and SVG formats. Available for Cytoscape v3.10 or later.
         orientation (str): 'Portrait' allows more height for drawing space, and 'Landscape' allows more width.
-            Valid for PDF format. Available for Cytoscape v3.10 or later.
+            The default is 'Portrait'. Valid for PDF format. Available for Cytoscape v3.10 or later.
         page_size (str): Chooses standard page size (i.e., 'Letter', 'Auto', 'Legal', 'Tabloid', 'A0',
-            'A1', 'A2', 'A3', 'A4', or 'A5'). Valid for PDF format. Available for Cytoscape v3.10 or later.
+            'A1', 'A2', 'A3', 'A4', or 'A5'). The default is 'Letter'. Valid for PDF format. Available for Cytoscape v3.10 or later.
 
     Note:
         This function starts with the assumption of using export functions available in Cytoscape v3.10
