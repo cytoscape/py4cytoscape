@@ -276,11 +276,11 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             Extension is automatically added based on the ``type`` argument. If blank, the current network name will be used.
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
-            width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600. Valid only.
+            width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600. [DEPRECATED as of Cytoscape v3.10]
         units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
-            The possible values are: pixels (default), inches.
-        height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
-        width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
+            The possible values are: pixels (default), inches. [DEPRECATED as of Cytoscape v3.10]
+        height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
+        width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
         zoom (float): The zoom value to proportionally scale the image. The default value is 100.0. Valid only for bitmap
             formats, such as PNG and JPEG
         network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
@@ -292,17 +292,17 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
             exists; True allows Cytoscape to overwrite it without asking. In Cytoscape v3.10 and later, False
             causes failure if file already exists.
         force_pre_3_10 (bool): True results in pre-Cytoscape 3.10 image export being called, even if Cytoscape
-            can perform the export using more advanced functionality -- provided for backward compatibility
+            can perform the export using more advanced functionality -- provided for backward compatibility. Available for Cytoscape v3.10 or later.
         all_graphics_details (bool): True results in image with highest detail; False allows faster image
-            generation. Valid for bitmap formats such as PNG and JPEG.
+            generation. Valid for bitmap formats such as PNG and JPEG. Available for Cytoscape v3.10 or later.
         hide_labels (bool): True makes node and edge labels invisible in image. False allows them to be
-            drawn. Valid for all image formats.
-        transparent_background (bool): True causes background to be transparent. Valid only for PNG format.
-        export_text_as_font (bool): True causes text to be exported as fonts. Valid for PDF, PS and SVG formats.
+            drawn. Valid for all image formats. Available for Cytoscape v3.10 or later.
+        transparent_background (bool): True causes background to be transparent. Valid only for PNG format. Available for Cytoscape v3.10 or later.
+        export_text_as_font (bool): True causes text to be exported as fonts. Valid for PDF, PS and SVG formats. Available for Cytoscape v3.10 or later.
         orientation (str): 'Portrait' allows more height for drawing space, and 'Landscape' allows more width.
-            Valid for PDF format.
+            Valid for PDF format. Available for Cytoscape v3.10 or later.
         page_size (str): Chooses standard page size (i.e., 'Letter', 'Auto', 'Legal', 'Tabloid', 'A0',
-            'A1', 'A2', 'A3', 'A4', or 'A5'). Valid for PDF format.
+            'A1', 'A2', 'A3', 'A4', or 'A5'). Valid for PDF format. Available for Cytoscape v3.10 or later.
 
     Note:
         This function starts with the assumption of using export functions available in Cytoscape v3.10
@@ -311,7 +311,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         If the caller supplies parameters appropriate for pre-3.10 Cytoscape (i.e., `resolution`, `units`,
         `height`, `width` and `zoom`) the pre-v3.10 functions will be used instead. If your Cytoscape
         is pre-v3.10, the pre-v3.10 functions will be called, and using v3.10 parameters will cause an
-        exception. If your Cytoscape is v3.10 or later, passing no parameters or just the `zoom` parameter,
+        exception. If your Cytoscape is v3.10 or later, passing no parameters or just the `zoom` parameter will result in
         the v3.10 functions will be called, but you can force the pre-v3.10 functions to be used by specifying
         `force_pre_3_10` as `True`. Mixing pre-v3.10 and v3.10 parameters will cause an exception.
 
