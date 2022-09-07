@@ -39,6 +39,8 @@ This section discusses conceptual and miscellaneous topics relating to py4cytosc
 
 * `Sandboxing`_ shows how to limit Cytoscape to accessing files in particular directories.
 
+* `Alternate IP Addresses`_ shows how to call Cytoscape on a different IP address or port.
+
 * `Value Generators`_ shows how to automatically generate colors, sizes, shapes, etc. for style mappings.
 
 
@@ -483,8 +485,8 @@ http://127.0.0.1:1234/v1 as a command root to which individual Cytoscape
 commands are appended (e.g., http://127.0.0.1:1234/v1/version).
 
 You can choose a different port number (e.g., 4444) by starting Cytoscape along with
-the `-R command line parameter <http://manual.cytoscape.org/en/stable/Command_Line_Arguments.html#command-line-arguments>`
-(e.g., cytoscape -R 4444), and then specifing the command root in one of two ways:
+the `-R command line parameter <http://manual.cytoscape.org/en/stable/Command_Line_Arguments.html#command-line-arguments>`_
+(e.g., cytoscape -R 4444), and then specifing the py4cytoscape command root in one of two ways:
 
 * Name the command root in the ``DEFAULT_BASE_URL`` environment variable before importing py4cytoscape (e.g., SET DEFAULT_BASE_URL=http://127.0.0.1:4444/v1)
 
