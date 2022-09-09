@@ -30,6 +30,7 @@ import colorbrewer
 import random
 import numpy as np
 import functools
+import pandas as pd
 
 
 # Internal module imports
@@ -1479,6 +1480,7 @@ def _gen_c_color_map(table,
                      style_name,
                      network,
                      base_url):
+
     # Find out all of the values in the named column
     df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
 
@@ -1486,22 +1488,22 @@ def _gen_c_color_map(table,
     palette_to_use = palette[0] if type(palette[0]) is tuple else palette
 
     # For continuous, one tailed means all negative or all positive ... otherwise two-tailed with 0 in between
-    max_data = df_values[table_column].max()
-    min_data = df_values[table_column].min()
-    if type(max_data) in [int, float]:
+    max_data = df_values[table_column].max() if table_column in df_values else np.nan
+    min_data = df_values[table_column].min() if table_column in df_values else np.nan
+    if type(max_data) in [int, float, np.int64, np.float64]:
         if np.isnan(max_data):
             min_data = 0
             max_data = 1
         if np.sign(min_data) == np.sign(max_data):
             # One-tailed mapping ... btw: prefer sequential palette if color mapping
             mid_data = min_data + (max_data - min_data) / 2
-            src_values = [min_data, mid_data, max_data]
+            src_values = [float(min_data), float(mid_data), float(max_data)]
             best_palette = 'sequential'
             map_type = 'one-tailed'
         else:
             # Two-tailed mapping ... btw: prefer divergent palette if color mapping
-            max_max_data = max(abs(min_data), abs(max_data))
-            src_values = [-max_max_data, 0, max_max_data]
+            max_max_data = float(max(abs(min_data), abs(max_data)))
+            src_values = [-max_max_data, 0.0, max_max_data]
             if type(palette[0]) is tuple and len(palette) >= 2:
                 palette_to_use = palette[1]
             best_palette = 'divergent'
@@ -1576,20 +1578,40 @@ def _gen_d_map(table,
 # suitable for passing to style_mapping setter function
 def _map_values(table, table_column, scheme_func, value_name, default_name, default_value, style_name, network, base_url):
 
-    # Find out all of the values in the named column
-    df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
+    table_col_types = tables.get_table_column_types(table=table, network=network, base_url=base_url)
+    if table_column in table_col_types:
+        # Find out all of the values in the named column
+        df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
 
-    # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape) ... guarantee the order by sorting
-    df_freq = df_values[table_column].value_counts()
-    if len(df_freq) > 1:
-        # df_values rows aren't left in a predictable order, so that means the color assignments will vary from
-        # run to run. To make this consistent and testable, we sort all values within the same frequency count.
-        # To do this, we turn the frequency series into a dataframe then sort first on frequency count and then
-        # on value.
-        df_freq = df_freq.to_frame().rename_axis('index').sort_values(by=[table_column, 'index'], ascending=[True, True])
+        # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape) ... guarantee the order by sorting
+        df_freq = df_values[table_column].value_counts()
+        if len(df_freq) > 1:
+            # df_values rows aren't left in a predictable order, so that means the color assignments will vary from
+            # run to run. To make this consistent and testable, we sort all values within the same frequency count.
+            # To do this, we turn the frequency series into a dataframe then sort first on frequency count and then
+            # on value.
+            df_freq = df_freq.to_frame().rename_axis('index').sort_values(by=[table_column, 'index'],
+                                                                          ascending=[True, True])
 
-    # Create the mapped values that correspond to the unique elements
-    src_values = [str(i)   for i in df_freq.index]
+        # Create function to map from DataFrame type to Python type ... this is necessary because if
+        # the table_column has nan values, Pandas will automatically make the column Float64, even if
+        # the non-nan values are integers. When these values are tallied by the value_counts() function,
+        # the type of the result would be Float64, too. The function converts the values back to the
+        # type expected for the Cytoscape data.
+        table_col_type = table_col_types[table_column]
+        if table_col_type in ['Double']:
+            def f(x): return float(x)
+        elif table_col_type in ['Long', 'Integer']:
+            def f(x): return int(x)
+        elif table_col_type in ['Boolean']:
+            def f(x): return bool(x)
+        else:
+            def f(x): return x
+
+        # Create the mapped values that correspond to the unique elements
+        src_values = [str(f(i)) for i in df_freq.index]
+    else:
+        src_values = []
 
     dst_values = scheme_func(len(src_values))
     return {'table_column': table_column, 'table_column_values': src_values, value_name: dst_values,
@@ -1621,12 +1643,14 @@ def _gen_c_map(table,
     df_values = tables.get_table_columns(table=table, columns=table_column, network=network, base_url=base_url)
 
     # For continuous, create triple that contains min, mid, max
-    max_data = df_values[table_column].max()
-    min_data = df_values[table_column].min()
-    if type(max_data) in [int, float]:
+    max_data = df_values[table_column].max() if table_column in df_values else np.nan
+    min_data = df_values[table_column].min() if table_column in df_values else np.nan
+    if type(max_data) in [int, float, np.int64, np.float64]:
         if np.isnan(max_data):
             min_data = 0
             max_data = 1
+        min_data = float(min_data)
+        max_data = float(max_data)
         mid_data = min_data + (max_data - min_data) / 2
         src_values = [min_data, mid_data, max_data]
     else:
