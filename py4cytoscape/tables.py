@@ -126,14 +126,9 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
         4608       0                     1
         4609    2092                     2
         ...
-        >>> get_table_columns(columns='Stress, bogus')
-              Stress bogus
-        4608       0   NaN
-        4609    2092   NaN
-        ...
 
     Note:
-        For requested columns not present in the table, the column is still returned but is full of ``nan`` values.
+        For requested columns not present in the table, the column is not returned, but a warning is shown.
     """
     suid = networks.get_network_suid(network, base_url)
 
