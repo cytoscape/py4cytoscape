@@ -128,9 +128,19 @@ class SanityTests(unittest.TestCase):
     def test_create_networkx_from_network(self):
         # Initialization
         load_test_session()
+        self.maxDiff = None
+        print('revert to previous')
+
+        def normalize_dict(dict_val):
+            # When comparing dicts, we can't be sure of the key ordering, and we don't know whether
+            # some values could be 'nan'. So, to get the comparison right (because nan != nan), we
+            # compare string values.
+            return str({k:dict_val[k]  for k in sorted(dict_val)})
+
+
         cyedge_table = tables.get_table_columns('edge')
         cynode_table = tables.get_table_columns('node')
-        cynode_table.set_index('name', inplace=True)  # Index by 'name' instead of SUID ... drop 'name' from attributes
+        cynode_table.set_index('name', inplace=True) # Index by 'name' instead of SUID ... drop 'name' from attributes
 
         # Verify that the networkx returns the right number of rows and columns
         netx = create_networkx_from_network()
@@ -141,13 +151,18 @@ class SanityTests(unittest.TestCase):
         # Note that edge SUIDs are carried to distinguish multiple edges that connect the same nodes
         netx_out_edges = netx.out_edges(data=True, keys=True)
         for src_node, targ_node, edge_suid, edge_attrs in netx_out_edges:
-            self.assertDictEqual(edge_attrs, dict(cyedge_table.loc[edge_suid]))
+            self.assertEqual(normalize_dict(edge_attrs), normalize_dict(dict(cyedge_table.loc[edge_suid])))
 
         # Verify that all nodes are present, and all attributes are correct. Note that node YER056CA has 'nan' values,
-        # so this verifies that nan is carried into the networkx.
+        # so this verifies that nan is carried into the networkx. (The dictionary comparison is done as as
+        # str() comparison because two nan values don't compare directly as equal.)
         netx_nodes = netx.nodes(data=True)
         for node_name, node_attrs in netx_nodes:
-            self.assertDictEqual(node_attrs, dict(cynode_table.loc[node_name]))
+            self.assertEqual(normalize_dict(node_attrs), normalize_dict(dict(cynode_table.loc[node_name])))
+
+        # Verify that invalid network is caught
+        self.assertRaises(CyError, create_networkx_from_network, network='BogusNetwork')
+
 
     @print_entry_exit
     def test_create_network_from_networkx(self):

@@ -92,10 +92,9 @@ class TablesTests(unittest.TestCase):
 
         # Verify that a bogus column name still returns a column, though it must be all nan
         df = get_table_columns(columns='Stress, bogus')
-        self.assertSetEqual(set(df.columns), {'Stress', 'bogus'})
+        self.assertSetEqual(set(df.columns), {'Stress'})
         self.assertEqual(len(df.index), get_node_count())
         self.assertTrue(True in list(df['Stress'].notnull()))
-        self.assertFalse(False in df['bogus'].isnull())
 
         # Verify that an empty column list returns all columns for edges, too
         df = get_table_columns(table='edge')

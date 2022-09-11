@@ -245,7 +245,7 @@ class ToolsTests(unittest.TestCase):
         create_network_from_data_frames(nodes_1, edges_1, title='Network_1')
 
         # Verify that the simplest union merge works
-        check_merge(merge_networks(['Network_0', 'Network_1']), 'union: Network_0,Network_2')
+        check_merge(merge_networks(['Network_0', 'Network_1']), 'union: Network_0,Network_1')
         check_merge(merge_networks(['Network_0', 'Network_1'], title='My Cool Network'), 'My Cool Network')
 
         # Verify that a node merge map works -- 'called' and 'score_m' were created and have String/Integer types

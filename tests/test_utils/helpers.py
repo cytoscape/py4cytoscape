@@ -29,7 +29,7 @@ def __init__(self):
     pass
 
 
-def load_test_session(session_filename=None):
+def load_test_session(session_filename='data/Yeast Perturbation.cys'):
     if session_filename: session_filename = session_filename
     open_session(session_filename)
 

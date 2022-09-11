@@ -23,6 +23,7 @@
 import unittest
 
 from test_utils import *
+from stat import S_IREAD
 
 
 class SessionTests(unittest.TestCase):
@@ -122,8 +123,9 @@ class SessionTests(unittest.TestCase):
         clean_session_file(OTHER_NAME_CYS)
 
         # Verify that if a session was loaded from the Cytoscape Install directory, trying to save it gives a permission error
-        load_test_session()
-        self.assertRaises(CyError, save_session)
+        ## This was commented out because in 3.10, the install directory became read/write
+        # load_test_session()
+        # self.assertRaises(CyError, save_session)
 
         # Verify that an error is thrown if a crazy file name is used
         self.assertRaises(CyError, save_session, 'totallybogusdir/bogusfile')

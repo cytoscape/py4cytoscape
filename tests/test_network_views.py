@@ -24,7 +24,6 @@ import unittest
 from requests import HTTPError
 import time
 import pathlib
-import filecmp
 from test_utils import *
 
 
@@ -81,7 +80,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         # Verify that creating a view without a layout leaves all nodes at (0, 0)
         self._delete_view(net_suid)
-        gal_filtered_view_suid = create_view(layout=False)
+        gal_filtered_view_suid = create_view(layout=False, network=net_suid)
         verify_layout(net_suid, True)
 
         # Verify that creating a view where one already exists just returns the existing view
@@ -89,7 +88,7 @@ class NetworkViewsTests(unittest.TestCase):
 
         # Create a new view and do a layout, then verify that some nodes shift position
         self._delete_view(net_suid)
-        gal_filtered_view_suid = create_view()
+        gal_filtered_view_suid = create_view(network=net_suid)
         verify_layout(net_suid, False)
 
         # Verify that creating galFiltered views hasn't added views to yeastHighQuality
@@ -370,7 +369,8 @@ class NetworkViewsTests(unittest.TestCase):
                                   width=None, zoom=None, network=gal_filtered_suid))
         check_export(export_image(df('output/test alldefault same', 'png'), type='PNG',
                                   network=gal_filtered_suid))
-        self.assertTrue(filecmp.cmp('output/test alldefault.png', 'output/test alldefault same.png'),
+        self.assertEqual(os.stat('output/test alldefault.png').st_size / 1024,
+                         os.stat('output/test alldefault same.png').st_size / 1024,
                         'test alldefault.png files differ')
 
         input('Verify the export output files in the ./output folder by sight')
