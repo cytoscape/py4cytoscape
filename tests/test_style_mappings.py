@@ -47,7 +47,7 @@ class StyleMappingsTests(unittest.TestCase):
         # Initialization
         load_test_session()
 
-        # Verify continuous property with points list matching color list
+        # Verify continuous property with points list matching color list using hex colors
         res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
                                   ['#0066CC', '#FFFFFF', '#FFFF00'])
         self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
@@ -55,13 +55,29 @@ class StyleMappingsTests(unittest.TestCase):
                               {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
                               {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}])
 
-        # Verify continuous property with points list bracketed on either side by colors
+        # Verify continuous property with points list matching color list using English colors
+        res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
+                                  ['#00FF00', 'White', 'Yellow'])
+        self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
+                             [{'value': -2.426, 'lesser': '#00FF00', 'equal': '#00FF00', 'greater': '#00FF00'},
+                              {'value': 0.0, 'lesser': 'White', 'equal': 'White', 'greater': 'White'},
+                              {'value': 2.058, 'lesser': 'Yellow', 'equal': 'Yellow', 'greater': 'Yellow'}])
+
+        # Verify continuous property with points list bracketed on either side by colors using hex colors
         res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
                                   ['#000000', '#0066CC', '#FFFFFF', '#FFFF00', '#FFFFFF'])
         self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
                              [{'value': -2.426, 'lesser': '#000000', 'equal': '#0066CC', 'greater': '#0066CC'},
                               {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
                               {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFFFF'}])
+
+        # Verify continuous property with points list bracketed on either side by colors using English colors
+        res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
+                                  ['Black', '#0066CC', '#FFFFFF', 'Yellow', 'White'])
+        self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
+                             [{'value': -2.426, 'lesser': 'Black', 'equal': '#0066CC', 'greater': '#0066CC'},
+                              {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
+                              {'value': 2.058, 'lesser': 'Yellow', 'equal': 'Yellow', 'greater': 'White'}])
 
         # Verify discrete mapping to two values
         res = map_visual_property('node shape', 'degree.layout', 'd', [1, 2], ['ellipse', 'rectangle'])
@@ -195,8 +211,10 @@ class StyleMappingsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_border_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_node_property({'prop_func': set_node_border_color_mapping,
                                        'prop_name': 'NODE_BORDER_PAINT',
                                        'new_default': _NEW_DEFAULT,
@@ -210,6 +228,24 @@ class StyleMappingsTests(unittest.TestCase):
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
                                        # 'disc_no_map_params': {'mapping_type': 'd'},
                                        'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_no_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # Run test with English colors
+        self._check_set_node_property({'prop_func': set_node_border_color_mapping,
+                                       'prop_name': 'NODE_BORDER_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_no_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
                                        # 'pass_no_map_params': {'mapping_type': 'p'},
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
@@ -261,8 +297,10 @@ class StyleMappingsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_node_property({'prop_func': set_node_color_mapping,
                                        'prop_name': 'NODE_FILL_COLOR',
                                        'new_default': _NEW_DEFAULT,
@@ -276,6 +314,24 @@ class StyleMappingsTests(unittest.TestCase):
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
                                        # 'disc_invalid_map_params': {'mapping_type': 'd'},
                                        'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # Run test with English colors
+        self._check_set_node_property({'prop_func': set_node_color_mapping,
+                                       'prop_name': 'NODE_FILL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_no_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
                                        # 'pass_invalid_map_params': {'mapping_type': 'p'},
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
@@ -417,8 +473,10 @@ class StyleMappingsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_node_label_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_node_property({'prop_func': set_node_label_color_mapping,
                                        'prop_name': 'NODE_LABEL_COLOR',
                                        'new_default': _NEW_DEFAULT,
@@ -436,6 +494,25 @@ class StyleMappingsTests(unittest.TestCase):
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
                                        })
+        # Run test with English colors
+        self._check_set_node_property({'prop_func': set_node_label_color_mapping,
+                                       'prop_name': 'NODE_LABEL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
 
     @print_entry_exit
     def test_set_node_label_opacity_mapping(self):
@@ -554,8 +631,10 @@ class StyleMappingsTests(unittest.TestCase):
     @unittest.skip('Unknown interaction between the two properties and the "Edge color to arrows" check box')
     @print_entry_exit
     def test_set_edge_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_edge_property({'prop_func': set_edge_color_mapping,
                                        'prop_name': ['EDGE_UNSELECTED_PAINT', 'EDGE_STROKE_UNSELECTED_PAINT'],
                                        'new_default': _NEW_DEFAULT,
@@ -569,6 +648,24 @@ class StyleMappingsTests(unittest.TestCase):
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
                                        # 'disc_invalid_map_params': {'mapping_type': 'd'},
                                        'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # Run test with English colors
+        self._check_set_edge_property({'prop_func': set_edge_color_mapping,
+                                       'prop_name': ['EDGE_UNSELECTED_PAINT', 'EDGE_STROKE_UNSELECTED_PAINT'],
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
                                        # 'pass_invalid_map_params': {'mapping_type': 'p'},
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
@@ -643,8 +740,10 @@ class StyleMappingsTests(unittest.TestCase):
 
     @print_entry_exit
     def test_set_edge_label_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_edge_property({'prop_func': set_edge_label_color_mapping,
                                        'prop_name': 'EDGE_LABEL_COLOR',
                                        'new_default': _NEW_DEFAULT,
@@ -658,6 +757,24 @@ class StyleMappingsTests(unittest.TestCase):
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
                                        # 'disc_invalid_map_params': {'mapping_type': 'd'},
                                        'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # Run test with English colors
+        self._check_set_edge_property({'prop_func': set_edge_label_color_mapping,
+                                       'prop_name': 'EDGE_LABEL_COLOR',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
                                        # 'pass_invalid_map_params': {'mapping_type': 'p'},
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
@@ -799,31 +916,11 @@ class StyleMappingsTests(unittest.TestCase):
                                        })
 
     @print_entry_exit
-    def test_set_edge_target_arrow_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
-        self._check_set_edge_property({'prop_func': set_edge_target_arrow_color_mapping,
-                                       'prop_name': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT',
-                                       'new_default': _NEW_DEFAULT,
-                                       'set_default': 'p',
-                                       'passthru_val': _PASSTHRU_VAL,
-                                       # 'compare_tolerance_percent': 0,
-                                       'cont_test_params': {'colors': ['#FBE723', '#440256']},
-                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
-                                       'cont_bad_map_params': {'colors': ['#FBE72', '#440256']},
-                                       'cont_short_map_params': {'colors': ['#440256']},
-                                       'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
-                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
-                                       'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
-                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
-                                       'invalid_map_params': {'mapping_type': 'X'},
-                                       'exception_check_params': {'mapping_type': 'p'},
-                                       })
-
-    @print_entry_exit
     def test_set_edge_source_arrow_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_edge_property({'prop_func': set_edge_source_arrow_color_mapping,
                                        'prop_name': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT',
                                        'new_default': _NEW_DEFAULT,
@@ -841,11 +938,32 @@ class StyleMappingsTests(unittest.TestCase):
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
                                        })
+        # Run test with English colors
+        self._check_set_edge_property({'prop_func': set_edge_source_arrow_color_mapping,
+                                       'prop_name': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+
 
     @print_entry_exit
     def test_set_edge_target_arrow_color_mapping(self):
-        _NEW_DEFAULT = '#654321'
-        _PASSTHRU_VAL = '#123456'
+        _NEW_DEFAULT = '#A52A2A' # brown
+        _NEW_DEFAULT_S = 'brown'
+        _PASSTHRU_VAL = '#FFC0CB' # pink
+        # Run test with numeric colors
         self._check_set_edge_property({'prop_func': set_edge_target_arrow_color_mapping,
                                        'prop_name': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT',
                                        'new_default': _NEW_DEFAULT,
@@ -859,6 +977,24 @@ class StyleMappingsTests(unittest.TestCase):
                                        'disc_test_params': {'colors': ['#FFFF00', '#00FF00'], 'mapping_type': 'd'},
                                        # 'disc_invalid_map_params': {'mapping_type': 'd'},
                                        'pass_test_params': {'default_color': _NEW_DEFAULT, 'mapping_type': 'p'},
+                                       # 'pass_invalid_map_params': {'mapping_type': 'p'},
+                                       'invalid_map_params': {'mapping_type': 'X'},
+                                       'exception_check_params': {'mapping_type': 'p'},
+                                       })
+        # Run test with English colors
+        self._check_set_edge_property({'prop_func': set_edge_target_arrow_color_mapping,
+                                       'prop_name': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT',
+                                       'new_default': _NEW_DEFAULT,
+                                       'set_default': 'p',
+                                       'passthru_val': _PASSTHRU_VAL,
+                                       # 'compare_tolerance_percent': 0,
+                                       'cont_test_params': {'colors': ['purple', 'green']},
+                                       # 'cont_invalid_map_params': {'mapping_type': 'c'},
+                                       'cont_bad_map_params': {'colors': ['bogus', 'red']},
+                                       'cont_short_map_params': {'colors': ['red']},
+                                       'disc_test_params': {'colors': ['yellow', 'green'], 'mapping_type': 'd'},
+                                       # 'disc_invalid_map_params': {'mapping_type': 'd'},
+                                       'pass_test_params': {'default_color': _NEW_DEFAULT_S, 'mapping_type': 'p'},
                                        # 'pass_invalid_map_params': {'mapping_type': 'p'},
                                        'invalid_map_params': {'mapping_type': 'X'},
                                        'exception_check_params': {'mapping_type': 'p'},
@@ -1003,7 +1139,18 @@ class StyleMappingsTests(unittest.TestCase):
                              '', msg='Check passthru mapping succeeded')
             pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
-                self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
+                if pass_value != profile['passthru_val']:
+                    print('ouch')
+                    time.sleep(2)
+                    new_pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in
+                                       prop_name_list]
+                    for pass_value1 in new_pass_value_list:
+                        if pass_value1 != profile['passthru_val']:
+                            print('ouch ouch')
+                    pass_value_list = new_pass_value_list
+                    pass_value = pass_value1
+
+                self.assertEqual(pass_value, profile['passthru_val'], msg='Check edge property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:
             self.assertRaises(CyError, prop_func, style_name=_TEST_STYLE, table_column=_CONT_COL,
@@ -1133,6 +1280,17 @@ class StyleMappingsTests(unittest.TestCase):
                              msg='Check passthru mapping succeeded')
             pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
+                if pass_value != profile['passthru_val']:
+                    print('ouch')
+                    time.sleep(2)
+                    new_pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_NODE] for prop_name in
+                                       prop_name_list]
+                    for pass_value1 in new_pass_value_list:
+                        if pass_value1 != profile['passthru_val']:
+                            print('ouch ouch')
+                    pass_value_list = new_pass_value_list
+                    pass_value = pass_value1
+
                 self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:

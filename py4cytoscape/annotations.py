@@ -974,7 +974,7 @@ def _get_border_cmd_string(border_thickness, border_color, border_opacity):
     if border_color is None:
         border_color_cmd = ''
     else:
-        verify_hex_color(border_color)
+        border_color = verify_hex_color(border_color)
         border_color_cmd = f' borderColor="{border_color}"'
 
     if border_opacity is None:
@@ -998,7 +998,7 @@ def _get_fill_color_cmd_string(fill_color):
     if fill_color is None:
         return ''
     else:
-        verify_hex_color(fill_color)
+        fill_color = verify_hex_color(fill_color)
         return f' fillColor="{fill_color}"'
 
 
@@ -1069,7 +1069,7 @@ def _get_color_cmd_string(color):
     if color is None:
         return ''
     else:
-        verify_hex_color(color)
+        color = verify_hex_color(color)
         return f' color="{color}"'
 
 

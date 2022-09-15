@@ -28,6 +28,7 @@ DEFAULT_BASE_URL = os.environ.get('DEFAULT_BASE_URL') or LOCAL_BASE_URL
 import urllib.parse
 import re
 import sys
+from colour import Color
 
 # Internal module imports
 from . import tables
@@ -95,25 +96,33 @@ def verify_brightness_contrast(bc):
         raise CyError(f'"{bc}" is invalid. Value must be between -100 and 100).', caller=sys._getframe(1).f_code.co_name)
 
 def verify_hex_color(color):
-    """Validate and provide user feedback when hex color codes is required input.
+    """Validate and provide user feedback when hex color code is required input.
 
     Args:
-        colors (str): a single value, which is a 6 digit hex value
+        colors (str): a single value, which is a 6 digit hex value or a color name
 
     Returns:
-        None
+        str: '#' followed by 6 digit hex value
 
     Raises:
         CyError: if color is invalid
 
     Examples:
         >>> verify_hex_color('#92C5DE')
+        '#92C5DE'
+        >>> verify_hex_color('red')
+        '#FF0000'
     """
-    if not color.startswith('#') or len(color) != 7:
-        raise CyError(f'"{color}" is not a valid hexadecimal color (has to begin with # and be 7 characters long, for example: #FF00FF).', caller=sys._getframe(1).f_code.co_name)
+    try:
+        if color.startswith('#') and len(color) == 7:
+            return color
+        else:
+            return Color(color).get_hex_l()
+    except:
+        raise CyError(f'"{color}" is not a valid color name (e.g., "red") or a hexadecimal color (has to begin with # and be 7 characters long, e.g., #FF00FF).', caller=sys._getframe(1).f_code.co_name)
 
 def verify_hex_colors(colors):
-    """Validate and provide user feedback when hex color codes (or a list of codes) are required input.
+    """Validate and provide user feedback when hex color code (or a list of codes) are required input.
 
     Args:
         colors (str or list): a single value or a list of colors, which are 6 digit hex values
@@ -126,13 +135,17 @@ def verify_hex_colors(colors):
 
     Examples:
         >>> verify_hex_colors('#92C5DE')
+        '#92C5DE'
         >>> verify_hex_colors(['#053061', '#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7', '#FDDBC7', '#F4A582', '#D6604D', '#B2182B', '#67001F'])
+        ['#053061', '#2166AC', '#4393C3', '#92C5DE', '#D1E5F0', '#F7F7F7', '#FDDBC7', '#F4A582', '#D6604D', '#B2182B', '#67001F']
+        >>> verify_hex_colors(['red', 'blue', '#4393C3'])
+        ['#FF0000', '#0000FF', '#4393C3']
     """
-    if colors is None: return
-    if not isinstance(colors, list): colors = [colors]
-
-    for color in colors:
-        verify_hex_color(color)
+    if colors is None: return None
+    if isinstance(colors, list):
+        return [verify_hex_color(c)   for c in colors]
+    else:
+        return verify_hex_color(colors)
 
 def verify_opacity(opacity, max_opacity=100):
     """Validate and provide user feedback when opacity is required input.

@@ -288,5 +288,23 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertRaises(CyError, verify_supported_versions, cytoscape='4.0')
         self.assertRaises(AttributeError, verify_supported_versions, cytoscape='complete trash')
 
+
+    @print_entry_exit
+    def test_verify_colors(self):
+        self.assertEqual(verify_hex_color('#ff0000'), '#ff0000')
+        self.assertEqual(verify_hex_color('blue'), '#0000ff')
+        self.assertRaises(CyError, verify_hex_color, 'garbage')
+        self.assertRaises(CyError, verify_hex_color, '#00FF')
+        self.assertRaises(CyError, verify_hex_color, None)
+
+        self.assertEqual(verify_hex_colors('#ff0000'), '#ff0000')
+        self.assertEqual(verify_hex_colors('blue'), '#0000ff')
+        self.assertListEqual(verify_hex_colors(['#ff0000', '#00FF00', '#FF00FF']), ['#ff0000', '#00FF00', '#FF00FF'])
+        self.assertListEqual(verify_hex_colors(['red', '#00FF00', '#FF00FF']), ['#ff0000', '#00FF00', '#FF00FF'])
+        self.assertIsNone(verify_hex_colors(None))
+        self.assertRaises(CyError, verify_hex_colors, ['red', '#00FF', '#FF00FF'])
+        self.assertRaises(CyError, verify_hex_colors, ['red', None, '#FF00FF'])
+
+
 if __name__ == '__main__':
     unittest.main()

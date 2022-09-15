@@ -381,7 +381,7 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -564,7 +564,7 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
     # check if colors are formatted correctly
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -948,7 +948,7 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1272,7 +1272,7 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1473,7 +1473,7 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1864,7 +1864,7 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:
@@ -1919,7 +1919,7 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_hex_colors(colors)
+    colors = verify_hex_colors(colors)
 
     # set default
     if default_color is not None:

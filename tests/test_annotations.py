@@ -121,6 +121,13 @@ class AppsTests(unittest.TestCase):
                                           'fontStyle': 'bold', 'fontFamily': 'Courier New', 'name': 'ann3 name',
                                           'x': '100.0', 'y': '200.0', 'fontSize': '25', 'text': 'ann3'})
 
+        # Verify that supplying color name is reflected in an annotation
+        res = add_annotation_text(text='ann4', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
+                                  font_style='bold', color='pink', angle=45, name='ann4 name', canvas='background')
+        self._check_expected_values(res, {'canvas': 'background', 'color': '#FFC0CB', 'rotation': '45.0',
+                                          'fontStyle': 'bold', 'fontFamily': 'Courier New', 'name': 'ann4 name',
+                                          'x': '100.0', 'y': '200.0', 'fontSize': '25', 'text': 'ann4'})
+
         # Verify that angle is properly normalized
         res = add_annotation_text(text='angle 181', angle=181)
         self.assertEqual(res['rotation'], '-179.0')
@@ -146,7 +153,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_text, text='bad', font_style='bogus')
 
         # Verify that bad color is detected
-        self.assertRaises(CyError, add_annotation_text, text='bad', color='red')
+        self.assertRaises(CyError, add_annotation_text, text='bad', color='bogus')
 
         # Verify that bad canvas is detected
         self.assertRaises(CyError, add_annotation_text, text='bad', canvas='bogus')
@@ -162,8 +169,8 @@ class AppsTests(unittest.TestCase):
                                       'width',
                                       'y', 'z', 'fontSize', 'text', 'height'}
         EXPECTED_BOUNDED_ELLIPSE_VALS = {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0',
-                                         'color': '#F0F0F0', 'rotation': '45.0', 'fontStyle': 'bold',
-                                         'fillColor': '#A0A0A0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F',
+                                         'color': '#FFC0CB', 'rotation': '45.0', 'fontStyle': 'bold',
+                                         'fillColor': '#008000', 'shapeType': 'ELLIPSE', 'edgeColor': '#800080',
                                          'fontFamily': 'Courier New', 'edgeOpacity': '75.0', 'name': 'ann3 name',
                                          'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'fontSize': '25',
                                          'text': 'ann3', 'height': '30.0'}
@@ -186,9 +193,18 @@ class AppsTests(unittest.TestCase):
 
         # Verify that supplying additional parameters is reflected in an annotation
         res = add_annotation_bounded_text(text='ann3', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
-                                          font_style='bold', color='#F0F0F0', angle=45, type='ELLIPSE',
-                                          custom_shape=None, fill_color='#A0A0A0', opacity=50, border_thickness=2,
-                                          border_color='#0F0F0F', border_opacity=75, height=30, width=31,
+                                          font_style='bold', color='#ffc0cb', angle=45, type='ELLIPSE',
+                                          custom_shape=None, fill_color='#008000', opacity=50, border_thickness=2,
+                                          border_color='#800080', border_opacity=75, height=30, width=31,
+                                          name='ann3 name', canvas='background')
+        self._check_expected_values(res, EXPECTED_BOUNDED_ELLIPSE_VALS)
+
+        # Verify that color names are reflected in an annotation
+        delete_annotation('ann3 name')
+        res = add_annotation_bounded_text(text='ann3', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
+                                          font_style='bold', color='pink', angle=45, type='ELLIPSE',
+                                          custom_shape=None, fill_color='green', opacity=50, border_thickness=2,
+                                          border_color='purple', border_opacity=75, height=30, width=31,
                                           name='ann3 name', canvas='background')
         self._check_expected_values(res, EXPECTED_BOUNDED_ELLIPSE_VALS)
 
@@ -226,13 +242,13 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_bounded_text, text='bad', font_style='bogus')
 
         # Verify that bad color is detected
-        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', color='red')
+        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', color='bogus')
 
         # Verify that bad type is detected
         self.assertRaises(CyError, add_annotation_bounded_text, text='bad', type='bogus shape')
 
         # Verify that bad fill color is detected
-        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', fill_color='red')
+        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', fill_color='bogus')
 
         # Verify that bad opacity is detected
         self.assertRaises(CyError, add_annotation_bounded_text, text='bad', opacity='bad')
@@ -244,7 +260,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_bounded_text, text='bad', border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', border_color='red')
+        self.assertRaises(CyError, add_annotation_bounded_text, text='bad', border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, add_annotation_bounded_text, text='bad', border_opacity='bad')
@@ -272,7 +288,7 @@ class AppsTests(unittest.TestCase):
                                'height'}
         EXPECTED_IMAGE_VALS = {'edgeThickness': '2.0', 'canvas': 'background', 'rotation': '45.0',
                                'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation',
-                               'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0F', 'brightness': '60',
+                               'shapeType': 'RECTANGLE', 'edgeColor': '#FFC0CB', 'brightness': '60',
                                'edgeOpacity': '75.0', 'contrast': '70', 'x': '100.0',
                                'width': '31.0', 'y': '200.0', 'opacity': '0.5', 'height': '30.0'}
 
@@ -295,17 +311,21 @@ class AppsTests(unittest.TestCase):
 
         # Verify that supplying additional parameters is reflected in an annotation, using both HTTP and HTTPS
         res = add_annotation_image(url=self._TEST_HTTPS_URL, x_pos=100, y_pos=200, angle=45, opacity=50,
-                                   brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F',
+                                   brightness=60, contrast=70, border_thickness=2, border_color='#FFC0CB',
                                    border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
         self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': self._TEST_HTTPS_URL, 'name': 'ann3 name'}})
         res = add_annotation_image(url=self._TEST_HTTP_URL, x_pos=100, y_pos=200, angle=45, opacity=50,
-                                   brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F',
+                                   brightness=60, contrast=70, border_thickness=2, border_color='#FFC0CB',
                                    border_opacity=75, height=30, width=31, name='ann3a name', canvas='background')
         self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': self._TEST_HTTP_URL, 'name': 'ann3a name'}})
+        res = add_annotation_image(url=self._TEST_HTTP_URL, x_pos=100, y_pos=200, angle=45, opacity=50,
+                                   brightness=60, contrast=70, border_thickness=2, border_color='pink',
+                                   border_opacity=75, height=30, width=31, name='ann3b name', canvas='background')
+        self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': self._TEST_HTTP_URL, 'name': 'ann3b name'}})
 
         # Verify that supplying additional parameters is reflected in an annotation
         res = add_annotation_image(url=self._TEST_FILE, x_pos=100, y_pos=200, angle=45, opacity=50,
-                                   brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F',
+                                   brightness=60, contrast=70, border_thickness=2, border_color='#FFC0CB',
                                    border_opacity=75, height=30, width=31, name='ann4 name', canvas='background')
         # TODO: Re-enable this check after CSD-675 is fixed
         # self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': TEST_FILE, 'name': 'ann4 name'}})
@@ -344,7 +364,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_image, url=self._TEST_HTTPS_URL, border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, add_annotation_image, url=self._TEST_HTTPS_URL, border_color='red')
+        self.assertRaises(CyError, add_annotation_image, url=self._TEST_HTTPS_URL, border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, add_annotation_image, url=self._TEST_HTTPS_URL, border_opacity='bad')
@@ -372,7 +392,7 @@ class AppsTests(unittest.TestCase):
         EXPECTED_SHAPE_VALS = {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0',
                                'rotation': '45.0',
                                'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
-                               'fillColor': '#F0F0F0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F',
+                               'fillColor': '#008000', 'shapeType': 'ELLIPSE', 'edgeColor': '#FFC0CB',
                                'edgeOpacity': '75.0', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0',
                                'z': '0', 'height': '30.0'}
 
@@ -393,10 +413,18 @@ class AppsTests(unittest.TestCase):
         # Verify that nothing was added to the other network
         self._check_annotation_list(get_annotation_list(network=yeast_high_quality_suid), 0, EXPECTED_IMAGE_KEYS)
 
-        # Verify that supplying additional parameters is reflected in an annotation, using both HTTP and HTTPS
+        # Verify that supplying additional parameters is reflected in an annotation
         res = add_annotation_shape(type='ELLIPSE', custom_shape=None, x_pos=100, y_pos=200, angle=45,
-                                   fill_color='#F0F0F0', opacity=50,
-                                   border_thickness=2, border_color='#0F0F0F',
+                                   fill_color='#008000', opacity=50,
+                                   border_thickness=2, border_color='#FFC0CB',
+                                   border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
+        self._check_expected_values(res, EXPECTED_SHAPE_VALS)
+
+        # Verify that supplying color name parameters is reflected in an annotation
+        delete_annotation('ann3 name')
+        res = add_annotation_shape(type='ELLIPSE', custom_shape=None, x_pos=100, y_pos=200, angle=45,
+                                   fill_color='green', opacity=50,
+                                   border_thickness=2, border_color='pink',
                                    border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
         self._check_expected_values(res, EXPECTED_SHAPE_VALS)
 
@@ -427,7 +455,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_shape, type='bogus')
 
         # Verify that bad fill color is detected
-        self.assertRaises(CyError, add_annotation_shape, fill_color='red')
+        self.assertRaises(CyError, add_annotation_shape, fill_color='bogus')
 
         # Verify that bad opacity is detected
         self.assertRaises(CyError, add_annotation_shape, opacity='bad')
@@ -439,7 +467,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, add_annotation_shape, border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, add_annotation_shape, border_color='red')
+        self.assertRaises(CyError, add_annotation_shape, border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, add_annotation_shape, border_opacity='bad')
@@ -659,18 +687,18 @@ class AppsTests(unittest.TestCase):
 
         # Create ann1 text annotation to play with in gal_filtered network, and explicitly set all attributes
         res = add_annotation_text(text='ann1', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
-                                  font_style='bold', color='#F0F0F0', angle=45, name=INITIAL_NAME, canvas='background')
+                                  font_style='bold', color='#008000', angle=45, name=INITIAL_NAME, canvas='background')
         text_uuid = res['uuid']
-        self._check_expected_values(res, {'canvas': 'background', 'color': '#F0F0F0', 'rotation': '45.0',
+        self._check_expected_values(res, {'canvas': 'background', 'color': '#008000', 'rotation': '45.0',
                                           'fontStyle': 'bold', 'fontFamily': 'Courier New', 'name': INITIAL_NAME,
                                           'x': '100.0', 'y': '200.0', 'fontSize': '25', 'text': 'ann1'})
 
         # Verify that it's possible to change all of the annotation attributes when name identifies annotation
         # ... and this time, specify the network implicitly, too.
         res = update_annotation_text(text='ann1a', annotation_name=INITIAL_NAME, x_pos=101, y_pos=201, font_size=26,
-                                     font_family='Arial', font_style='italic', color='#F0F0F1', angle=46,
+                                     font_family='Arial', font_style='italic', color='#0000FF', angle=46,
                                      name='ann1a name', canvas='foreground')
-        self._check_expected_values(res, {'canvas': 'foreground', 'color': '#F0F0F1', 'rotation': '46.0',
+        self._check_expected_values(res, {'canvas': 'foreground', 'color': '#0000FF', 'rotation': '46.0',
                                           'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation',
                                           'fontStyle': 'italic', 'fontFamily': 'Arial', 'name': 'ann1a name',
                                           'x': '101.0', 'y': '201.0', 'fontSize': '26', 'text': 'ann1a'})
@@ -689,6 +717,14 @@ class AppsTests(unittest.TestCase):
                                           'type': 'org.cytoscape.view.presentation.annotations.TextAnnotation',
                                           'fontStyle': 'bolditalic', 'fontFamily': 'Courier New', 'name': 'ann1b name',
                                           'x': '102.0', 'y': '202.0', 'fontSize': '27', 'text': 'ann1b'})
+
+        # Verify that it's possible to use named colors
+        res = add_annotation_text(text='ann1', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
+                                  font_style='bold', color='aqua', angle=45, name=INITIAL_NAME, canvas='background')
+        text_uuid = res['uuid']
+        self._check_expected_values(res, {'canvas': 'background', 'color': '#00FFFF', 'rotation': '45.0',
+                                          'fontStyle': 'bold', 'fontFamily': 'Courier New', 'name': INITIAL_NAME,
+                                          'x': '100.0', 'y': '200.0', 'fontSize': '25', 'text': 'ann1'})
 
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
@@ -719,7 +755,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_text, annotation_name=text_uuid, font_style='bogus')
 
         # Verify that bad color is detected
-        self.assertRaises(CyError, update_annotation_text, annotation_name=text_uuid, color='red')
+        self.assertRaises(CyError, update_annotation_text, annotation_name=text_uuid, color='bogus')
 
         # Verify that bad canvas is detected
         self.assertRaises(CyError, update_annotation_text, annotation_name=text_uuid, canvas='bogus')
@@ -738,14 +774,14 @@ class AppsTests(unittest.TestCase):
 
         # Create ann1 text annotation to play with in gal_filtered network, and explicitly set all attributes
         res = add_annotation_bounded_text(text='ann1', x_pos=100, y_pos=200, font_size=25, font_family='Courier New',
-                                          font_style='bold', color='#F0F0F0', angle=45, type='ELLIPSE',
-                                          custom_shape=None, fill_color='#A0A0A0', opacity=50, border_thickness=2,
-                                          border_color='#0F0F0F', border_opacity=75, height=30, width=31,
+                                          font_style='bold', color='#ffc0cb', angle=45, type='ELLIPSE',
+                                          custom_shape=None, fill_color='#008000', opacity=50, border_thickness=2,
+                                          border_color='#800080', border_opacity=75, height=30, width=31,
                                           name=INITIAL_NAME, canvas='background')
         text_uuid = res['uuid']
         self._check_expected_values(res, {'edgeThickness': '2.0', 'canvas': 'background', 'fillOpacity': '50.0',
-                                          'color': '#F0F0F0', 'rotation': '45.0', 'fontStyle': 'bold',
-                                          'fillColor': '#A0A0A0', 'shapeType': 'ELLIPSE', 'edgeColor': '#0F0F0F',
+                                          'color': '#FFC0CB', 'rotation': '45.0', 'fontStyle': 'bold',
+                                          'fillColor': '#008000', 'shapeType': 'ELLIPSE', 'edgeColor': '#800080',
                                           'fontFamily': 'Courier New', 'edgeOpacity': '75.0', 'name': INITIAL_NAME,
                                           'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'fontSize': '25',
                                           'text': 'ann1', 'height': '30.0'})
@@ -764,6 +800,21 @@ class AppsTests(unittest.TestCase):
                                           'edgeColor': '#0F0F0E', 'fontFamily': 'Arial', 'edgeOpacity': '76.0',
                                           'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '201.0',
                                           'fontSize': '26', 'text': 'ann1a', 'height': '31.0'})
+
+        # Verify that it's possible to use color names
+        res = update_annotation_bounded_text(text='ann1c', annotation_name=INITIAL_NAME, x_pos=101, y_pos=201,
+                                             font_size=26, font_family='Arial', font_style='italic',
+                                             color='pink', angle=46, type='DIAMOND', custom_shape=None,
+                                             fill_color='green', opacity=51, border_thickness=3,
+                                             border_color='purple', border_opacity=76, height=31, width=32,
+                                             name='ann1c name', canvas='foreground')
+        self._check_expected_values(res, {'edgeThickness': '3.0', 'canvas': 'foreground', 'fillOpacity': '51.0',
+                                          'color': '#FFC0CB', 'rotation': '46.0',
+                                          'type': 'org.cytoscape.view.presentation.annotations.BoundedTextAnnotation',
+                                          'fontStyle': 'italic', 'fillColor': '#008000', 'shapeType': 'DIAMOND',
+                                          'edgeColor': '#800080', 'fontFamily': 'Arial', 'edgeOpacity': '76.0',
+                                          'name': 'ann1c name', 'x': '101.0', 'width': '32.0', 'y': '201.0',
+                                          'fontSize': '26', 'text': 'ann1c', 'height': '31.0'})
 
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
@@ -820,13 +871,13 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, font_style='bogus')
 
         # Verify that bad color is detected
-        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, color='red')
+        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, color='bogus')
 
         # Verify that bad type is detected
         self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, type='bogus shape')
 
         # Verify that bad fill color is detected
-        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, fill_color='red')
+        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, fill_color='bogus')
 
         # Verify that bad opacity is detected
         self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, opacity='bad')
@@ -838,7 +889,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, border_color='red')
+        self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, update_annotation_bounded_text, annotation_name=text_uuid, border_opacity='bad')
@@ -885,18 +936,16 @@ class AppsTests(unittest.TestCase):
                                       y_pos=202, angle=90,
                                       fill_color='#F0F0F1', opacity=51, border_thickness=3, border_color='#0F0F0E',
                                       border_opacity=76, height=31, width=32, name='ann1a name', canvas='foreground')
-        # TODO: This test won't work until CSD-680 is fixed
-        # self._check_expected_values(res, {'edgeThickness': '3.0', 'canvas': 'foreground', 'fillOpacity': '51.0',
-        #                                   'rotation': '90.0',
-        #                                   'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
-        #                                   'fillColor': '#F0F0F1', 'shapeType': 'DIAMOND', 'edgeColor': '#0F0F0E',
-        #                                   'edgeOpacity': '76.0', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0',
-        #                                   'y': '202.0', 'z': '0', 'height': '31.0'})
+        self._check_expected_values(res, {'edgeThickness': '3.0', 'canvas': 'foreground', 'fillOpacity': '51.0',
+                                          'rotation': '90.0',
+                                          'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
+                                          'fillColor': '#F0F0F1', 'shapeType': 'DIAMOND', 'edgeColor': '#0F0F0E',
+                                          'edgeOpacity': '76.0', 'name': 'ann1a name', 'x': '101.0', 'width': '32.0',
+                                          'y': '202.0', 'z': '0', 'height': '31.0'})
 
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
-        # TODO: This test won't work until CSD-678 is fixed
-        # self.assertDictEqual(res, res_yeast_ann1)
+        self.assertDictEqual(res, res_yeast_ann1)
 
         # Verify that it's possible to change all of the annotation attributes when UUID identifies annotation,
         # ... and this time, specify the network explicitly, too.
@@ -904,18 +953,16 @@ class AppsTests(unittest.TestCase):
                                       y_pos=203, angle=135,
                                       fill_color='#F0F0F2', opacity=52, border_thickness=4, border_color='#0F0F0D',
                                       border_opacity=77, height=32, width=33, name='ann1b name', canvas='background')
-        # TODO: This test won't work until CSD-680 is fixed
-        # self._check_expected_values(res, {'edgeThickness': '4.0', 'canvas': 'background', 'fillOpacity': '52.0',
-        #                                   'rotation': '135.0',
-        #                                   'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
-        #                                   'fillColor': '#F0F0F2', 'shapeType': 'OCTAGON', 'edgeColor': '#0F0F0D',
-        #                                   'edgeOpacity': '77.0', 'name': 'ann1b name', 'x': '102.0', 'width': '33.0',
-        #                                   'y': '203.0', 'z': '0', 'height': '32.0'})
+        self._check_expected_values(res, {'edgeThickness': '4.0', 'canvas': 'background', 'fillOpacity': '52.0',
+                                          'rotation': '135.0',
+                                          'type': 'org.cytoscape.view.presentation.annotations.ShapeAnnotation',
+                                          'fillColor': '#F0F0F2', 'shapeType': 'OCTAGON', 'edgeColor': '#0F0F0D',
+                                          'edgeOpacity': '77.0', 'name': 'ann1b name', 'x': '102.0', 'width': '33.0',
+                                          'y': '203.0', 'z': '0', 'height': '32.0'})
 
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
-        # TODO: This test won't work until CSD-678 is fixed
-        # self.assertDictEqual(res, res_yeast_ann1)
+        self.assertDictEqual(res, res_yeast_ann1)
 
         # Verify that types are translated as expected
         res = update_annotation_shape(annotation_name=shape_uuid, type='ROUND_RECTANGLE')
@@ -944,7 +991,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, type='bogus')
 
         # Verify that bad fill color is detected
-        self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, fill_color='red')
+        self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, fill_color='bogus')
 
         # Verify that bad opacity is detected
         self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, opacity='bad')
@@ -956,7 +1003,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, border_color='red')
+        self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, update_annotation_shape, annotation_name=shape_uuid, border_opacity='bad')
@@ -1011,10 +1058,21 @@ class AppsTests(unittest.TestCase):
                                           'name': 'ann1a name', 'x': '101.0', 'width': '32.0', 'y': '201.0', 'z': '0',
                                           'opacity': '0.51', 'height': '31.0'})
 
+        # Verify that colors names can be used as parameters
+        res = update_annotation_image(url=self._TEST_HTTP_URL, annotation_name='ann1a name', x_pos=101, y_pos=201,
+                                      angle=90, opacity=51, brightness=61, contrast=71, border_thickness=3,
+                                      border_color='purple', border_opacity=76, height=31, width=32, name='ann1b name',
+                                      canvas='foreground')
+        self._check_expected_values(res, {'edgeThickness': '3.0', 'canvas': 'foreground', 'rotation': '90.0',
+                                          'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation',
+                                          'URL': self._TEST_HTTP_URL, 'shapeType': 'RECTANGLE', 'edgeColor': '#800080',
+                                          'brightness': '61', 'edgeOpacity': '76.0', 'contrast': '71',
+                                          'name': 'ann1b name', 'x': '101.0', 'width': '32.0', 'y': '201.0', 'z': '0',
+                                          'opacity': '0.51', 'height': '31.0'})
+
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
-        # TODO: This test won't work until CSD-678 is fixed
-        # self.assertDictEqual(res, res_yeast_ann1)
+        self.assertDictEqual(res, res_yeast_ann1)
 
         # Verify that it's possible to change all of the annotation attributes when UUID identifies annotation,
         # ... and this time, specify the network explicitly, too.
@@ -1031,8 +1089,7 @@ class AppsTests(unittest.TestCase):
 
         # Verify that nothing in the yeast network changed
         res = get_annotation_list(network=yeast_high_quality_suid)[0]
-        # TODO: This test won't work until CSD-678 is fixed
-        # self.assertDictEqual(res, res_yeast_ann1)
+        self.assertDictEqual(res, res_yeast_ann1)
 
         # Verify that angle is properly normalized
         res = update_annotation_image(annotation_name=image_uuid, angle=181)
@@ -1071,7 +1128,7 @@ class AppsTests(unittest.TestCase):
         self.assertRaises(CyError, update_annotation_image, annotation_name=image_uuid, border_thickness=-1)
 
         # Verify that bad border color is detected
-        self.assertRaises(CyError, update_annotation_image, annotation_name=image_uuid, border_color='red')
+        self.assertRaises(CyError, update_annotation_image, annotation_name=image_uuid, border_color='bogus')
 
         # Verify that bad border opacity is detected
         self.assertRaises(CyError, update_annotation_image, annotation_name=image_uuid, border_opacity='bad')

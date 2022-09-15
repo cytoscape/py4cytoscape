@@ -199,7 +199,7 @@ def set_node_border_color_default(new_color, style_name=None, base_url=DEFAULT_B
         >>> set_node_border_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'NODE_BORDER_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -292,7 +292,7 @@ def set_node_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_node_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'NODE_FILL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1015,7 +1015,7 @@ def set_node_label_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         >>> set_node_label_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'NODE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1104,7 +1104,7 @@ def set_node_selection_color_default(new_color, style_name=None, base_url=DEFAUL
         >>> set_node_selection_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'NODE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1271,7 +1271,7 @@ def set_edge_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_edge_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1395,7 +1395,7 @@ def set_edge_label_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         >>> set_edge_label_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'EDGE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1577,7 +1577,7 @@ def set_edge_selection_color_default(new_color, style_name=None, base_url=DEFAUL
         >>> set_edge_selection_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'EDGE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1613,7 +1613,7 @@ def set_edge_source_arrow_color_default(new_color, style_name=None, base_url=DEF
         >>> set_edge_source_arrow_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1644,7 +1644,7 @@ def set_edge_target_arrow_color_default(new_color, style_name=None, base_url=DEF
         >>> set_edge_target_arrow_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
@@ -1795,7 +1795,7 @@ def set_background_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         >>> set_background_color_default('#CCCCCC')
         ''
     """
-    verify_hex_colors(new_color)
+    new_color = verify_hex_color(new_color)
 
     style = {'visualProperty': 'NETWORK_BACKGROUND_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)

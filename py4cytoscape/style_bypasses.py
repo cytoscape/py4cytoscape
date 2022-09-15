@@ -533,7 +533,7 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     if isinstance(new_colors, str): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
     return res
@@ -941,7 +941,7 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     if not isinstance(new_colors, list): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
 
@@ -1111,7 +1111,7 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     if isinstance(new_colors, str): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
     return res
@@ -1613,7 +1613,7 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
     if isinstance(new_colors, str): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     # TODO: What to do about lost res?
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_STROKE_UNSELECTED_PAINT', network=network,
@@ -1815,7 +1815,7 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
     if not isinstance(new_colors, list): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_LABEL_COLOR', network=network, base_url=base_url)
 
@@ -2134,7 +2134,7 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
     if not isinstance(new_colors, list): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
@@ -2187,7 +2187,7 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
     if not isinstance(new_colors, list): new_colors = [new_colors]
-    verify_hex_colors(new_colors)
+    new_colors = verify_hex_colors(new_colors)
 
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
