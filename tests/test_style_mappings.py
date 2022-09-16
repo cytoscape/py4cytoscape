@@ -1139,17 +1139,6 @@ class StyleMappingsTests(unittest.TestCase):
                              '', msg='Check passthru mapping succeeded')
             pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
-                if pass_value != profile['passthru_val']:
-                    print('ouch')
-                    time.sleep(2)
-                    new_pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_EDGE] for prop_name in
-                                       prop_name_list]
-                    for pass_value1 in new_pass_value_list:
-                        if pass_value1 != profile['passthru_val']:
-                            print('ouch ouch')
-                    pass_value_list = new_pass_value_list
-                    pass_value = pass_value1
-
                 self.assertEqual(pass_value, profile['passthru_val'], msg='Check edge property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:
@@ -1280,17 +1269,6 @@ class StyleMappingsTests(unittest.TestCase):
                              msg='Check passthru mapping succeeded')
             pass_value_list = [get_node_property(visual_property=prop_name)[_TEST_NODE] for prop_name in prop_name_list]
             for pass_value in pass_value_list:
-                if pass_value != profile['passthru_val']:
-                    print('ouch')
-                    time.sleep(2)
-                    new_pass_value_list = [get_edge_property(visual_property=prop_name)[_TEST_NODE] for prop_name in
-                                       prop_name_list]
-                    for pass_value1 in new_pass_value_list:
-                        if pass_value1 != profile['passthru_val']:
-                            print('ouch ouch')
-                    pass_value_list = new_pass_value_list
-                    pass_value = pass_value1
-
                 self.assertEqual(pass_value, profile['passthru_val'], msg='Check node property equals passthru mapping')
             if 'set_default' in profile and profile['set_default'] == 'p': check_default()
         elif 'pass_no_map_params' in profile:
