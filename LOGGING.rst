@@ -31,11 +31,13 @@ Here is an example of Detail logging involving nested calls::
    2020-06-06 15:29:55,738 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.0-SNAPSHOT'}
 
 ``py4cytoscape`` logs are stored in the ``logs`` directory relative to the Python workflow's
-current directory.
+current directory. The ``logs`` directory can be overridden by setting the PY4CYTOSCAPE_DETAIL_LOGGER environment variable. For example:
+
+    set PY4CYTOSCAPE_DETAIL_LOGGER_DIR=/tmp/p4clogs
 
 Runtime Control
 ---------------
-   
+
 For convenience, Summary logging can be controlled using an environment variable or at execution time. By default, Summary logging is disabled, but can be enabled::
 
    set PY4CYTOSCAPE_SUMMARY_LOGGER=True

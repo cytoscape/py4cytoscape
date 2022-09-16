@@ -36,9 +36,9 @@ from .py4cytoscape_logger_settings import _DETAIL_LOG_DIR, _DETAIL_LOG_LEVEL, _D
 
 # print(f'Starting {__name__} module')
 
-
-_detail_log_base = os.path.join(_DETAIL_LOG_DIR, _DETAIL_LOG_NAME)
-if not os.path.exists(_DETAIL_LOG_DIR): os.makedirs(_DETAIL_LOG_DIR)
+_RESOLVED_DETAIL_LOG_DIR = os.environ.get('PY4CYTOSCAPE_DETAIL_LOGGER_DIR', _DETAIL_LOG_DIR)
+_detail_log_base = os.path.join(_RESOLVED_DETAIL_LOG_DIR, _DETAIL_LOG_NAME)
+if not os.path.exists(_RESOLVED_DETAIL_LOG_DIR): os.makedirs(_RESOLVED_DETAIL_LOG_DIR)
 
 # Set up detail logger
 detail_logger = logging.getLogger('py4...')
