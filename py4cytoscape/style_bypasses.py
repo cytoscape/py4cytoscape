@@ -518,13 +518,15 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
     Examples:
         >>> set_node_color_bypass(get_node_names(), '#FF00FF')
         ''
+        >>> set_node_color_bypass(get_node_names(), 'red')
+        ''
         >>> set_node_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_node_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_node_color_bypass([1255, 1988], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
-        >>> set_node_color_bypass('1255, 1988', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        >>> set_node_color_bypass('1255, 1988', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_node_color_bypass(1255, '#FF00FF', network='galFiltered.sif')
         ''
@@ -926,13 +928,15 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     Examples:
         >>> set_node_label_color_bypass(get_node_names(), '#FF00FF')
         ''
+        >>> set_node_label_color_bypass(get_node_names(), 'red')
+        ''
         >>> set_node_label_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_node_label_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_node_label_color_bypass([1255, 1988], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
-        >>> set_node_label_color_bypass('1255, 1988', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        >>> set_node_label_color_bypass('1255, 1988', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_node_label_color_bypass(1255, '#FF00FF')
         ''
@@ -1096,13 +1100,15 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
     Examples:
         >>> set_node_border_color_bypass(get_node_names(), '#FF00FF')
         ''
+        >>> set_node_border_color_bypass(get_node_names(), 'red')
+        ''
         >>> set_node_border_color_bypass(['YDL194W', 'YBR043C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_node_border_color_bypass('YDL194W, YBR043C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_node_border_color_bypass([1255, 1988], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
-        >>> set_node_border_color_bypass('1255, 1988', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        >>> set_node_border_color_bypass('1255, 1988', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_node_border_color_bypass(1255, '#FF00FF')
         ''
@@ -1598,13 +1604,15 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
     Examples:
         >>> set_edge_color_bypass(get_edge_names(), '#FF00FF')
         ''
+        >>> set_edge_color_bypass(get_edge_names(), 'red')
+        ''
         >>> set_edge_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_edge_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
         >>> set_edge_color_bypass([10288, 16300], ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
         ''
-        >>> set_edge_color_bypass('10288, 16300', ['#FF00FF', '#CCCCCC'], network='galFiltered.sif')
+        >>> set_edge_color_bypass('10288, 16300', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_edge_color_bypass(10288, '#FF00FF')
         ''
@@ -1800,13 +1808,15 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
         ''
+        >>> set_edge_label_color_bypass(get_edge_names(), 'red')
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
-        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass(10288, '#FF00FF')
         ''
@@ -2119,13 +2129,15 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
         ''
+        >>> set_edge_label_color_bypass(get_edge_names(), 'red')
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
-        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass(10288, '#FF00FF')
         ''
@@ -2172,13 +2184,15 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
         ''
+        >>> set_edge_label_color_bypass(get_edge_names(), 'red')
+        ''
         >>> set_edge_label_color_bypass(['YJR022W (pp) YNL050C', 'YJR022W (pp) YNR050C'], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass('YJR022W (pp) YNL050C, YJR022W (pp) YNR050C', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass([10288, 16300], ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
         ''
-        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', '#FFFF00'], network='galFiltered.sif')
+        >>> set_edge_label_color_bypass('10288, 16300', ['#FF00FF', 'blue'], network='galFiltered.sif')
         ''
         >>> set_edge_label_color_bypass(10288, '#FF00FF')
         ''

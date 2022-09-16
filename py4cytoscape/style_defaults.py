@@ -198,6 +198,8 @@ def set_node_border_color_default(new_color, style_name=None, base_url=DEFAULT_B
         ''
         >>> set_node_border_color_default('#CCCCCC')
         ''
+        >>> set_node_border_color_default('red')
+        ''
     """
     new_color = verify_hex_color(new_color)
 
@@ -290,6 +292,8 @@ def set_node_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_node_color_default('#CCCCCC', style_name='galFiltered Style')
         ''
         >>> set_node_color_default('#CCCCCC')
+        ''
+        >>> set_node_color_default('red')
         ''
     """
     new_color = verify_hex_color(new_color)
