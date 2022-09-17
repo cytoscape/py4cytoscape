@@ -345,6 +345,8 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         ''
         >>> set_node_custom_bar_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#FF00FF', '#00FF00'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_bar_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green'], axis_color='blue', slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -363,6 +365,9 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         else:
             palette = cyPalette('rdbu')
             colors = [palette[index] for index in [1, 9]]
+
+    colors = verify_hex_colors(colors)
+    axis_color = verify_hex_color(axis_color)
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -422,6 +427,8 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
         ''
         >>> set_node_custom_box_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#FF00FF', '#00FF00'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_box_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green'], axis_color='blue', slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -430,6 +437,9 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
 
     if colors is None:
         colors = cyPalette('rdbu') * len(columns)
+
+    colors = verify_hex_colors(colors)
+    axis_color = verify_hex_color(axis_color)
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -488,6 +498,8 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
         ''
         >>> set_node_custom_heat_map_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#123456', '#654321', '#112233', '#888888'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_heat_map_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green', 'pink', 'purple'], axis_color='blue', slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -498,6 +510,9 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
         palette = cyPalette('rdbu')
         colors = [palette[index] for index in [2, 6, 10]]
         colors.append('#888888')
+
+    colors = verify_hex_colors(colors)
+    axis_color = verify_hex_color(axis_color)
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -556,6 +571,8 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
         ''
         >>> set_node_custom_line_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#FF00FF', '#00FF00'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_line_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green'], axis_color='blue', slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -564,6 +581,9 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
+
+    colors = verify_hex_colors(colors)
+    axis_color = verify_hex_color(axis_color)
 
     if range is None:
         cols = tables.get_table_columns(columns=columns, base_url=base_url)
@@ -615,6 +635,8 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
         ''
         >>> set_node_custom_pie_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#FF00FF', '#00FF00'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_pie_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green'], slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -623,6 +645,9 @@ def set_node_custom_pie_chart(columns, colors=None, start_angle=0.0,
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
+
+    colors = verify_hex_colors(colors)
+
     chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle}
 
@@ -664,6 +689,8 @@ def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=
         ''
         >>> set_node_custom_ring_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['#FF00FF', '#00FF00'], slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_ring_chart(['AverageShortestPath', 'BetweennessCentrality'], colors=['red', 'green'], slot=2, style_name='galFiltered Style')
+        ''
 
     See Also:
         :meth:`set_node_custom_position`, :meth:`remove_node_custom_graphics`
@@ -672,6 +699,9 @@ def set_node_custom_ring_chart(columns, colors=None, start_angle=0.0, hole_size=
 
     if colors is None:
         colors = cyPalette('set1') * len(columns)
+
+    colors = verify_hex_colors(colors)
+
     chart = {'cy_colors': colors, 'cy_colorScheme': 'Custom', 'cy_dataColumns': columns,
              'cy_startAngle': start_angle, 'cy_holeSize': hole_size}
 
@@ -710,10 +740,12 @@ def set_node_custom_linear_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
     Examples:
         >>> set_node_custom_linear_gradient(style_name='galFiltered Style')
         ''
-        >>> set_node_custom_linear_gradient(colors=['#FF00FF', '#00FF00'], angle=90.0, slot=2, style_name='galFiltered Style')
+        >>> set_node_custom_linear_gradient(colors=['red', 'green'], angle=90.0, slot=2, style_name='galFiltered Style')
         ''
     """
     verify_slot(slot)
+
+    colors = verify_hex_colors(colors)
 
     chart = {'cy_angle': angle, 'cy_gradientColors': colors, 'cy_gradientFractions': anchors}
     style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',
@@ -755,8 +787,12 @@ def set_node_custom_radial_gradient(colors=['#DDDDDD', '#888888'], anchors=[0.0,
         ''
         >>> set_node_custom_radial_gradient(colors=['#FF00FF', '#00FF00'], x_center=0.0, y_center=0.0, slot=2, style_name='galFiltered Style')
         ''
+        >>> set_node_custom_radial_gradient(colors=['red', 'green'], x_center=0.0, y_center=0.0, slot=2, style_name='galFiltered Style')
+        ''
     """
     verify_slot(slot)
+
+    colors = verify_hex_colors(colors)
 
     chart = {'cy_gradientColors': colors, 'cy_gradientFractions': anchors, 'cy_center': {'x': x_center, 'y': y_center}}
     style_string = {'visualProperty': f'NODE_CUSTOMGRAPHICS_{slot}',

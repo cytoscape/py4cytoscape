@@ -183,6 +183,10 @@ class StyleDefaultsTests(unittest.TestCase):
                                                               {'type': 'GROUPED', 'colors': ['#FF00FF', '#00FF00']},
                                                               chart_profile, {'cy_type': 'GROUPED',
                                                                               'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'type': 'GROUPED', 'colors': ['red', 'green']},
+                                                              chart_profile, {'cy_type': 'GROUPED',
+                                                                              'cy_colors': ['#FF0000', '#008000']})
 
         # Verify that specifying an axis range results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
@@ -214,10 +218,13 @@ class StyleDefaultsTests(unittest.TestCase):
                                                               {'axis_width': 0.50}, chart_profile,
                                                               {'cy_axisWidth': 0.5})
 
-        # # Verify that specifying an axis color results in valid properties
+        # Verify that specifying an axis color results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
                                                               {'axis_color': '#FFFFFF'}, chart_profile,
                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
+                                                              {'axis_color': 'purple'}, chart_profile,
+                                                              {'cy_axisColor': '#800080'})
 
         # Verify that specifying an axis font size results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_bar_chart, chart_cols, chart_params,
@@ -234,6 +241,10 @@ class StyleDefaultsTests(unittest.TestCase):
 
         # Verify that error is thrown when type is invalid
         self.assertRaises(CyError, set_node_custom_bar_chart, chart_cols, type='BogusType')
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_bar_chart, chart_cols, type='UP_DOWN', colors=['bogus'])
+        self.assertRaises(CyError, set_node_custom_bar_chart, chart_cols, type='UP_DOWN', axis_color='bogus')
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_bar_chart, chart_cols, slot=10, **chart_params)
@@ -274,6 +285,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_colors': ['#FF0000', '#008000']})
 
         # Verify that specifying an axis range results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
@@ -304,6 +318,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
                                                               {'axis_color': '#FFFFFF'}, chart_profile,
                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
+                                                              {'axis_color': 'purple'}, chart_profile,
+                                                              {'cy_axisColor': '#800080'})
 
         # Verify that specifying an axis font size results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params,
@@ -312,6 +329,10 @@ class StyleDefaultsTests(unittest.TestCase):
 
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_box_chart, chart_cols, chart_params, {'slot': 9}, chart_profile, {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_box_chart, chart_cols, colors=['bogus'])
+        self.assertRaises(CyError, set_node_custom_box_chart, chart_cols, axis_color='bogus')
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_box_chart, chart_cols, slot=10, **chart_params)
@@ -349,6 +370,11 @@ class StyleDefaultsTests(unittest.TestCase):
                                                               chart_profile,
                                                               {'cy_colors': ['#123456', '#654321', '#112233',
                                                                              '#888888']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'colors': ['red', 'green', 'purple', 'yellow']},
+                                                              chart_profile,
+                                                              {'cy_colors': ['#FF0000', '#008000', '#800080',
+                                                                             '#FFFF00']})
 
         # Verify that specifying an axis range results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
@@ -379,6 +405,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
                                                               {'axis_color': '#FFFFFF'}, chart_profile,
                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
+                                                              {'axis_color': 'purple'}, chart_profile,
+                                                              {'cy_axisColor': '#800080'})
 
         # Verify that specifying an axis font size results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params,
@@ -388,6 +417,10 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_heat_map_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, colors=['bogus'])
+        self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, axis_color='bogus')
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_heat_map_chart, chart_cols, slot=10, **chart_params)
@@ -427,6 +460,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_colors': ['#FF0000', '#008000']})
 
         # Verify that specifying an axis range results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
@@ -457,6 +493,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
                                                               {'axis_color': '#FFFFFF'}, chart_profile,
                                                               {'cy_axisColor': '#FFFFFF'})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
+                                                              {'axis_color': 'purple'}, chart_profile,
+                                                              {'cy_axisColor': '#800080'})
 
         # Verify that specifying an axis font size results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params,
@@ -466,6 +505,10 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_line_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_line_chart, chart_cols, colors=['bogus'])
+        self.assertRaises(CyError, set_node_custom_line_chart, chart_cols, axis_color='bogus')
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_line_chart, chart_cols, slot=10, **chart_params)
@@ -502,6 +545,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_colors': ['#FF0000', '#008000']})
 
         # Verify that specifying start angle results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params,
@@ -511,6 +557,9 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_pie_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_pie_chart, chart_cols, colors=['bogus'])
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_pie_chart, chart_cols, slot=10, **chart_params)
@@ -549,6 +598,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_colors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_colors': ['#FF0000', '#008000']})
 
         # Verify that specifying start angle results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params,
@@ -563,6 +615,9 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_ring_chart, chart_cols, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_ring_chart, chart_cols, colors=['bogus'])
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_ring_chart, chart_cols, slot=10, **chart_params)
@@ -585,6 +640,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_gradientColors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_gradientColors': ['#FF0000', '#008000']})
 
         # Verify that specifying anchor colors results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params,
@@ -599,6 +657,9 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_linear_gradient, None, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_linear_gradient, colors=['bogus'])
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_linear_gradient, slot=10, **chart_params)
@@ -622,6 +683,9 @@ class StyleDefaultsTests(unittest.TestCase):
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
                                                               {'colors': ['#FF00FF', '#00FF00']}, chart_profile,
                                                               {'cy_gradientColors': ['#FF00FF', '#00FF00']})
+        chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
+                                                              {'colors': ['red', 'green']}, chart_profile,
+                                                              {'cy_gradientColors': ['#FF0000', '#008000']})
 
         # Verify that specifying anchor colors results in valid properties
         chart_params, chart_profile = self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params,
@@ -636,6 +700,9 @@ class StyleDefaultsTests(unittest.TestCase):
         # Verify that specifying a different slot results in valid properties
         self._check_chart_attrs(set_node_custom_radial_gradient, None, chart_params, {'slot': 9}, chart_profile,
                                 {})
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, set_node_custom_radial_gradient, colors=['bogus'])
 
         # Verify that error is thrown when slot is invalid
         self.assertRaises(CyError, set_node_custom_radial_gradient, slot=10, **chart_params)
