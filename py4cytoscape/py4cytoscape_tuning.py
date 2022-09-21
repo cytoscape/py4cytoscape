@@ -21,11 +21,12 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # print(f'Starting {__name__} module')
 
+from os import environ
 
-CATCHUP_FILTER_SECS = 0 # 1
-MODEL_PROPAGATION_SECS = 1 #2
-CATCHUP_NETWORK_SECS = 4 # How long to sleep between network operation retries
-CATCHUP_NETWORK_TIMEOUT_SECS = 60 # How long to keep retrying network operation
+CATCHUP_FILTER_SECS = int(environ.get('PY4CYTOSCAPE_CATCHUP_FILTER_SECS', '0')) # '1'
+MODEL_PROPAGATION_SECS = int(environ.get('PY4CYTOSCAPE_MODEL_PROPAGATION_SECS', '2'))
+CATCHUP_NETWORK_SECS = int(environ.get('PY4CYTOSCAPE_CATCHUP_NETWORK_SECS', '4')) # How long to sleep between network operation retries
+CATCHUP_NETWORK_TIMEOUT_SECS = int(environ.get('PY4CYTOSCAPE_CATCHUP_NETWORK_TIMEOUT_SECS', '60')) # How long to keep retrying network operation
 
 def set_catchup_filter_secs(delay_secs):
     global CATCHUP_FILTER_SECS
