@@ -1438,7 +1438,7 @@ def _gen_color_map(table,
                    network,
                    base_url):
 
-    mapping_type = normalize_mapping(mapping_type, 'color palette', ['d', 'c'])
+    mapping_type = normalize_mapping(mapping_type, 'color palette', ['d', 'c'], long_name=False)
 
     if isinstance(palette, dict):
         if mapping_type in palette:
@@ -1537,7 +1537,7 @@ def _gen_map(table,
              network,
              base_url):
 
-    mapping_type = normalize_mapping(mapping_type, 'color palette', ['d', 'c'])
+    mapping_type = normalize_mapping(mapping_type, 'color palette', ['d', 'c'], long_name=False)
 
     if isinstance(scheme, dict):
         if mapping_type in scheme:

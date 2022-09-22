@@ -40,6 +40,7 @@ from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
+from .style_visual_props import *
 
 
 # ==============================================================================
@@ -83,6 +84,8 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     Examples:
         >>> map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058], ['#0066CC', '#FFFFFF','#FFFF00'])
         {'mappingType': 'continuous', 'mappingColumn': 'gal1RGexp', 'mappingColumnType': 'Double', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -2.426, 'lesser': '#0066CC', 'equal': '#0066CC', 'greater': '#0066CC'}, {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'}, {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}]}
+        >>> map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058], ['#0066CC', 'white','yellow'])
+        {'mappingType': 'continuous', 'mappingColumn': 'gal1RGexp', 'mappingColumnType': 'Double', 'visualProperty': 'NODE_FILL_COLOR', 'points': [{'value': -2.426, 'lesser': '#0066CC', 'equal': '#0066CC', 'greater': '#0066CC'}, {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'}, {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}]}
         >>> map_visual_property('node shape', 'degree.layout', 'd', [1, 2], ['ellipse', 'rectangle'])
         {'mappingType': 'discrete', 'mappingColumn': 'degree.layout', 'mappingColumnType': 'Integer', 'visualProperty': 'NODE_SHAPE', 'map': [{'key': 1, 'value': 'ellipse'}, {'key': 2, 'value': 'rectangle'}]}
         >>> map_visual_property('node label', 'COMMON', 'p')
@@ -100,23 +103,42 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     See Also:
         :meth:`update_style_mapping`, :meth:`get_visual_property_names`
     """
-    MAPPING_TYPES = {'c': 'continuous', 'd': 'discrete', 'p': 'passthrough'}
-    PROPERTY_NAMES = {'EDGE_COLOR': 'EDGE_UNSELECTED_PAINT', 'EDGE_THICKNESS': 'EDGE_WIDTH',
-                      'NODE_BORDER_COLOR': 'NODE_BORDER_PAINT', 'NODE_BORDER_LINE_TYPE': 'NODE_BORDER_STROKE'}
-
     suid = networks.get_network_suid(network, base_url=base_url)
 
     # process mapping type
-    mapping_type_name = MAPPING_TYPES[mapping_type] if mapping_type in MAPPING_TYPES else mapping_type
+    mapping_type_name = normalize_mapping(mapping_type, visual_prop, ['c', 'd', 'p'])
+
 
     # process visual property, including common alternatives for vp names :)
     visual_prop_name = re.sub('\\s+', '_', visual_prop).upper()
-    if visual_prop_name in PROPERTY_NAMES: visual_prop_name = PROPERTY_NAMES[visual_prop_name]
+    if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
 
     # check visual prop name
     if visual_prop_name not in styles.get_visual_property_names(base_url=base_url):
         raise CyError(
             f'Could not find visual property "{visual_prop_name}". For valid ones, check get_visual_property_names().')
+
+    # if prop is a color, translate color names and verify colors are valid
+    if visual_prop_name in COLOR_PROPERTIES:
+        visual_prop_values = verify_hex_colors(visual_prop_values)
+    elif visual_prop_name in DIMENSION_PROPERTIES.keys():
+        visual_prop_values = verify_dimensions(DIMENSION_PROPERTIES[visual_prop_name], visual_prop_values)
+    elif visual_prop_name in OPACITY_PROPERTIES:
+        visual_prop_values = verify_opacities(visual_prop_values)
+    elif visual_prop_name in SHAPE_PROPERTIES:
+        visual_prop_values = verify_node_shapes(visual_prop_values, styles.get_node_shapes(base_url=base_url))
+    elif visual_prop_name in LINE_STYLE_PROPERTIES:
+        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_line_styles(), 'line style', 'get_line_style')
+    elif visual_prop_name in ARROW_STYLE_PROPERTIES:
+        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_arrow_shapes(), 'arrow style', 'get_arrow_shapes')
+    elif visual_prop_name in TOOLTIP_PROPERTIES | FONT_FACE_PROPERTIES | LABEL_PROPERTIES:
+        if not isinstance(visual_prop_values, str) and not isinstance(visual_prop_values, list):
+            raise CyError(f'Property "{visual_prop_name}" cannot be a {type(visual_prop_values)}. It must be a string.',
+                          caller=sys._getframe(2).f_code.co_name)
+    else:
+        pass # No validation needed
+
+    if visual_prop_values is not None: visual_prop_values = [str(x) for x in visual_prop_values]  # CyREST requires strings
 
     # check mapping column and get type
     tp = visual_prop_name.split('_')[0].lower()
@@ -198,6 +220,8 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
     res = commands.cyrest_get(f'styles/{style_name}/mappings', base_url=base_url)
     vp_list = [prop['visualProperty'] for prop in res]
     exists = visual_prop_name in vp_list
+
+    # TODO: Note that if mapping was created manually and has named colors, the colors won't be mapped and an error will occur
 
     if exists:
         res = commands.cyrest_put(f'styles/{style_name}/mappings/{visual_prop_name}', body=[mapping],
@@ -381,8 +405,6 @@ def set_node_border_color_mapping(table_column, table_column_values=None, colors
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_node_border_color_default(default_color, style_name, base_url=base_url)
@@ -441,14 +463,12 @@ def set_node_border_opacity_mapping(table_column, table_column_values=None, opac
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    verify_opacities(opacities)
-
     # TODO: there is a set_node_border_opacity_default() ... shouldn't we be using that instead?
     if default_opacity is not None:
         verify_opacities(default_opacity)
 
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     return _update_visual_property('NODE_BORDER_TRANSPARENCY', table_column, table_column_values=table_column_values,
@@ -499,8 +519,6 @@ def set_node_border_width_mapping(table_column, table_column_values=None, widths
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('width', widths)
-
     # set default
     if default_width is not None:
         style_defaults.set_node_border_width_default(default_width, style_name, base_url=base_url)
@@ -563,9 +581,6 @@ def set_node_color_mapping(table_column, table_column_values=None, colors=None, 
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    # check if colors are formatted correctly
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_node_color_default(default_color, style_name, base_url=base_url)
@@ -619,19 +634,15 @@ def set_node_combo_opacity_mapping(table_column, table_column_values=None, opaci
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_opacities(opacities)
-
     if default_opacity is not None:
-        verify_opacities(default_opacity)
-
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     # TODO: function results are ignored ... shouldn't we be capturing them?
@@ -694,14 +705,10 @@ def set_node_fill_opacity_mapping(table_column, table_column_values=None, opacit
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    verify_opacities(opacities)
-
     # TODO: There is a set_node_fill_opacity_default() ... should that be called instead?
     if default_opacity is not None:
-        verify_opacities(default_opacity)
-
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     return _update_visual_property('NODE_TRANSPARENCY', table_column, table_column_values=table_column_values,
@@ -795,8 +802,6 @@ def set_node_font_size_mapping(table_column, table_column_values=None, sizes=Non
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('size', sizes)
-
     if default_size is not None:
         style_defaults.set_node_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
@@ -848,8 +853,6 @@ def set_node_height_mapping(table_column, table_column_values=None, heights=None
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('height', heights)
-
     if default_height is not None:
         style_defaults.set_node_height_default(default_height, style_name=style_name, base_url=base_url)
 
@@ -948,8 +951,6 @@ def set_node_label_color_mapping(table_column, table_column_values=None, colors=
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_node_label_color_default(default_color, style_name, base_url=base_url)
@@ -1007,14 +1008,10 @@ def set_node_label_opacity_mapping(table_column, table_column_values=None, opaci
     #    if not table_column_exists(table_column, 'node', network=network, base_url=base_url):
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    verify_opacities(opacities)
-
     # TODO: There is a set_node_label_opacity_default ... should that be called here?
     if default_opacity is not None:
-        verify_opacities(default_opacity)
-
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     return _update_visual_property('NODE_LABEL_TRANSPARENCY', table_column, table_column_values=table_column_values,
@@ -1112,8 +1109,6 @@ def set_node_size_mapping(table_column, table_column_values=None, sizes=None, ma
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('size', sizes)
-
     # set default
     if default_size is not None:
         style_defaults.set_node_size_default(default_size, style_name, base_url=base_url)
@@ -1204,8 +1199,6 @@ def set_node_width_mapping(table_column, table_column_values=None, widths=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('width', widths)
-
     if default_width is not None:
         style_defaults.set_node_width_default(default_width, style_name=style_name, base_url=base_url)
 
@@ -1272,8 +1265,6 @@ def set_edge_color_mapping(table_column, table_column_values=None, colors=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_edge_color_default(default_color, style_name, base_url=base_url)
@@ -1378,8 +1369,6 @@ def set_edge_font_size_mapping(table_column, table_column_values=None, sizes=Non
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('size', sizes)
-
     if default_size is not None:
         style_defaults.set_edge_font_size_default(default_size, style_name=style_name, base_url=base_url)
 
@@ -1473,8 +1462,6 @@ def set_edge_label_color_mapping(table_column, table_column_values=None, colors=
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_edge_label_color_default(default_color, style_name, base_url=base_url)
@@ -1532,14 +1519,10 @@ def set_edge_label_opacity_mapping(table_column, table_column_values=None, opaci
     #    if not table_column_exists(table_column, 'edge', network=network, base_url=base_url):
     #        raise CyError(f'Table column "{table_column}" does not exist')
 
-    verify_opacities(opacities)
-
     # TODO: There is a set_edge_label_opacity_default ... should that be called here?
     if default_opacity is not None:
-        verify_opacities(default_opacity)
-
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     return _update_visual_property('EDGE_LABEL_TRANSPARENCY', table_column, table_column_values=table_column_values,
@@ -1638,8 +1621,6 @@ def set_edge_line_width_mapping(table_column, table_column_values=None, widths=N
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    verify_dimensions('width', widths)
-
     # TODO: R code does not check for valid table_column ... this code does
     # set default
     if default_width is not None:
@@ -1696,14 +1677,10 @@ def set_edge_opacity_mapping(table_column, table_column_values=None, opacities=N
     """
     # TODO: This code checks the table_column ... the R code does not
 
-    verify_opacities(opacities)
-
     # TODO: There is a set_edge_opacity_default ... should that be called here?
     if default_opacity is not None:
-        verify_opacities(default_opacity)
-
         style_defaults.set_visual_property_default(
-            {'visualProperty': 'EDGE_TRANSPARENCY', 'value': str(default_opacity)},
+            {'visualProperty': 'EDGE_TRANSPARENCY', 'value': default_opacity},
             style_name=style_name, base_url=base_url)
 
     return _update_visual_property('EDGE_TRANSPARENCY', table_column, table_column_values=table_column_values,
@@ -1749,8 +1726,6 @@ def set_edge_target_arrow_maping(table_column, table_column_values=None, shapes=
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    # TODO: Validate shape
-
     # TODO: Isn't this the same as set_edge_target_arrow_shape_mapping? ... shouldn't this be renamed?
     # TODO: R code does not check for valid table_column ... this code does
     # set default
@@ -1800,8 +1775,6 @@ def set_edge_source_arrow_mapping(table_column, table_column_values=None, shapes
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    # TODO: Validate shape
-
     # TODO: Isn't this the same as set_edge_source_arrow_shape_mapping? ... shouldn't this be renamed?
     # TODO: R code does not check for valid table_column ... this code does
     # set default
@@ -1864,8 +1837,6 @@ def set_edge_target_arrow_color_mapping(table_column, table_column_values=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_edge_target_arrow_color_default(default_color, style_name, base_url=base_url)
@@ -1919,8 +1890,6 @@ def set_edge_source_arrow_color_mapping(table_column, table_column_values=None, 
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    colors = verify_hex_colors(colors)
-
     # set default
     if default_color is not None:
         style_defaults.set_edge_source_arrow_color_default(default_color, style_name, base_url=base_url)
@@ -2053,7 +2022,6 @@ def set_edge_tooltip_mapping(table_column, style_name=None, network=None, base_u
 def _update_visual_property(visual_prop_name, table_column, table_column_values=[], range_map=[], mapping_type='c',
                             style_name=None, network=None, base_url=DEFAULT_BASE_URL,
                             supported_mappings=['c', 'd', 'p'], table='node'):
-    if range_map is not None: range_map = [str(x) for x in range_map]  # CyREST requires strings
 
     # TODO: Added because all mappings need to do this. R code should probably adopt this, too
     if not table_column_exists(table_column, table, network=network, base_url=base_url):
@@ -2061,13 +2029,13 @@ def _update_visual_property(visual_prop_name, table_column, table_column_values=
 
     # perform mapping
     mapping_type = normalize_mapping(mapping_type, visual_prop_name, supported_mappings)
-    if mapping_type == 'c':
+    if mapping_type == 'continuous':
         mvp = map_visual_property(visual_prop_name, table_column, 'c', table_column_values, range_map,
                                   network=network, base_url=base_url)
-    elif mapping_type == 'd':
+    elif mapping_type == 'discrete':
         mvp = map_visual_property(visual_prop_name, table_column, 'd', table_column_values, range_map,
                                   network=network, base_url=base_url)
-    elif mapping_type == 'p':
+    elif mapping_type == 'passthrough':
         mvp = map_visual_property(visual_prop_name, table_column, 'p', network=network, base_url=base_url)
     else:
         raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')

@@ -54,7 +54,7 @@ class StyleDefaultsTests(unittest.TestCase):
 
         self.assertEqual(update_style_defaults(defaults={}, style_name=self._TEST_STYLE), '')
         self.assertEqual(update_style_defaults(defaults={'edge color': '#654321'}, style_name=self._TEST_STYLE), '')
-        self.assertEqual(update_style_defaults(defaults={'edge width': '50.0',
+        self.assertEqual(update_style_defaults(defaults={'edge width': 50.0,
                                                          'node shape': 'OCTAGON',
                                                          'EDGE_TARGET_ARROW_SHAPE': 'CIRCLE',
                                                          'EDGE_LINE_TYPE': 'ZIGZAG'},
@@ -85,7 +85,7 @@ class StyleDefaultsTests(unittest.TestCase):
         self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'},
                                                      style_name=self._TEST_STYLE), '')
         self.assertEqual(
-            set_visual_property_default({'visualProperty': 'EDGE_WIDTH', 'value': '50.0'}, style_name=self._TEST_STYLE),
+            set_visual_property_default({'visualProperty': 'EDGE_WIDTH', 'value': 50.0}, style_name=self._TEST_STYLE),
             '')
         self.assertEqual(set_visual_property_default({'visualProperty': 'NODE_SHAPE', 'value': 'OCTAGON'},
                                                      style_name=self._TEST_STYLE), '')
@@ -104,16 +104,18 @@ class StyleDefaultsTests(unittest.TestCase):
         self.assertRaises(CyError, get_visual_property_default, 'EDGE_UNSELECTED_PAINT', style_name='bogusStyle')
         self.assertRaises(CyError, set_visual_property_default,
                           {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#654321'}, style_name='bogusStyle')
+        self.assertRaises(CyError, set_visual_property_default, {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': ['#654321']}, style_name=self._TEST_STYLE)
+        self.assertRaises(CyError, set_visual_property_default, {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': None}, style_name=self._TEST_STYLE)
         self.assertRaises(CyError, get_visual_property_default, 'bogusProperty', style_name=self._TEST_STYLE)
         self.assertEqual(set_visual_property_default({'visualProperty': 'bogusProperty', 'value': '#654321'},
                                                      style_name=self._TEST_STYLE), '')
-        self.assertEqual(set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': 'bogusValue'},
-                                                     style_name=self._TEST_STYLE), '')
-        # TODO: Do we want a silent failure for bogus properties?
+        self.assertRaises(CyError, set_visual_property_default, {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': 'bogusValue'},
+                                   style_name=self._TEST_STYLE)
 
     @print_entry_exit
     def test_set_node_border_color_default(self):
         self._check_setter_default(set_node_border_color_default, 'NODE_BORDER_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_node_border_color_default, 'NODE_BORDER_PAINT', 'red', 'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_set_node_border_width_default(self):
@@ -787,6 +789,7 @@ class StyleDefaultsTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_label_color_default(self):
         self._check_setter_default(set_node_label_color_default, 'NODE_LABEL_COLOR', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_node_label_color_default, 'NODE_LABEL_COLOR', 'red', 'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_set_node_label_opacity_default(self):
@@ -795,6 +798,7 @@ class StyleDefaultsTests(unittest.TestCase):
     @print_entry_exit
     def test_set_node_selection_color_default(self):
         self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', 'red', 'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_get_node_selection_color_default(self):
@@ -875,28 +879,36 @@ class StyleDefaultsTests(unittest.TestCase):
     def test_set_edge_selection_color_default(self):
         self._check_setter_default(set_edge_selection_color_default, 'EDGE_SELECTED_PAINT', '#FF00FF', 'bogusColor',
                                    exception_scenario='exception')
+        self._check_setter_default(set_edge_selection_color_default, 'EDGE_SELECTED_PAINT', 'red', 'bogusColor',
+                                   exception_scenario='exception', good_xlate='#FF0000')
         self._check_setter_default(set_edge_selection_color_default, 'EDGE_STROKE_SELECTED_PAINT', '#FFFF00',
                                    'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_selection_color_default, 'EDGE_STROKE_SELECTED_PAINT', 'red',
+                                   'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_set_edge_source_arrow_color_default(self):
         self._check_setter_default(set_edge_source_arrow_color_default, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', '#FF00FF',
                                    'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_source_arrow_color_default, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'red',
+                                   'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_set_edge_target_arrow_color_default(self):
         self._check_setter_default(set_edge_target_arrow_color_default, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', '#FF00FF',
                                    'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_edge_target_arrow_color_default, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'red',
+                                   'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     @print_entry_exit
     def test_set_edge_source_arrow_shape_default(self):
         self._check_setter_default(set_edge_source_arrow_shape_default, 'EDGE_SOURCE_ARROW_SHAPE', 'CIRCLE',
-                                   'BogusShape', exception_scenario='no effect')
+                                   'BogusShape', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_target_arrow_shape_default(self):
         self._check_setter_default(set_edge_target_arrow_shape_default, 'EDGE_TARGET_ARROW_SHAPE', 'CIRCLE',
-                                   'BogusShape', exception_scenario='no effect')
+                                   'BogusShape', exception_scenario='exception')
 
     @print_entry_exit
     def test_set_edge_tooltip_default(self):
@@ -912,6 +924,7 @@ class StyleDefaultsTests(unittest.TestCase):
     @print_entry_exit
     def test_set_background_color_default(self):
         self._check_setter_default(set_background_color_default, 'NETWORK_BACKGROUND_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
+        self._check_setter_default(set_background_color_default, 'NETWORK_BACKGROUND_PAINT', 'red', 'bogusColor', exception_scenario='exception', good_xlate='#FF0000')
 
     def _check_getter_default(self, getter_func, prop_name, new_value):
         # Verify that the node selection color can be fetched and looks different after it's set
@@ -931,9 +944,11 @@ class StyleDefaultsTests(unittest.TestCase):
         new_val = get_visual_property_default(prop_name, style_name=self._TEST_STYLE)
         self.assertEqual(new_val, expected_val)
 
-    def _check_setter_default(self, setter_func, prop_name, good_value, bogus_value=None, exception_scenario=None):
+    def _check_setter_default(self, setter_func, prop_name, good_value, bogus_value=None, exception_scenario=None, good_xlate=None):
         # Initialization
         load_test_session()
+        if good_xlate is None:
+            good_xlate = good_value
 
         # Verify that if there's a bogus value, it's caught
         orig_value = get_visual_property_default(prop_name, style_name=self._TEST_STYLE)
@@ -950,8 +965,12 @@ class StyleDefaultsTests(unittest.TestCase):
 
         # Verify that a good value can be set and that it applies to self._TEST_STYLE but not 'default' style
         self.assertEqual(setter_func(good_value, style_name=self._TEST_STYLE), '')
-        self.assertEqual(get_visual_property_default(prop_name, style_name=self._TEST_STYLE), good_value)
+        self.assertEqual(get_visual_property_default(prop_name, style_name=self._TEST_STYLE), good_xlate)
         self.assertNotEqual(get_visual_property_default(prop_name), good_value)
+
+        # Verify that new value can't be a list or None ... it must be a scalar
+        self.assertRaises(CyError, setter_func, [good_value], style_name=self._TEST_STYLE)
+        self.assertRaises(CyError, setter_func, None, style_name=self._TEST_STYLE)
 
     def _check_chart_attrs(self, chart_func, col_list, base_params, new_params, base_attrs, new_attrs, slot=1):
         # Call the chart function with updated parameters

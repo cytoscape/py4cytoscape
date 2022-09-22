@@ -54,14 +54,20 @@ class StyleMappingsTests(unittest.TestCase):
                              [{'value': -2.426, 'lesser': '#0066CC', 'equal': '#0066CC', 'greater': '#0066CC'},
                               {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
                               {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}])
+        res = map_visual_property('node fill color', 'gal1RGexp', 'continuous', [-2.426, 0.0, 2.058],
+                                  ['#0066CC', '#FFFFFF', '#FFFF00'])
+        self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
+                             [{'value': -2.426, 'lesser': '#0066CC', 'equal': '#0066CC', 'greater': '#0066CC'},
+                              {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
+                              {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}])
 
         # Verify continuous property with points list matching color list using English colors
         res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
                                   ['#00FF00', 'White', 'Yellow'])
         self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
                              [{'value': -2.426, 'lesser': '#00FF00', 'equal': '#00FF00', 'greater': '#00FF00'},
-                              {'value': 0.0, 'lesser': 'White', 'equal': 'White', 'greater': 'White'},
-                              {'value': 2.058, 'lesser': 'Yellow', 'equal': 'Yellow', 'greater': 'Yellow'}])
+                              {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
+                              {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFF00'}])
 
         # Verify continuous property with points list bracketed on either side by colors using hex colors
         res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
@@ -75,17 +81,22 @@ class StyleMappingsTests(unittest.TestCase):
         res = map_visual_property('node fill color', 'gal1RGexp', 'c', [-2.426, 0.0, 2.058],
                                   ['Black', '#0066CC', '#FFFFFF', 'Yellow', 'White'])
         self._check_property(res, 'NODE_FILL_COLOR', 'gal1RGexp', 'Double', 'continuous',
-                             [{'value': -2.426, 'lesser': 'Black', 'equal': '#0066CC', 'greater': '#0066CC'},
+                             [{'value': -2.426, 'lesser': '#000000', 'equal': '#0066CC', 'greater': '#0066CC'},
                               {'value': 0.0, 'lesser': '#FFFFFF', 'equal': '#FFFFFF', 'greater': '#FFFFFF'},
-                              {'value': 2.058, 'lesser': 'Yellow', 'equal': 'Yellow', 'greater': 'White'}])
+                              {'value': 2.058, 'lesser': '#FFFF00', 'equal': '#FFFF00', 'greater': '#FFFFFF'}])
 
         # Verify discrete mapping to two values
         res = map_visual_property('node shape', 'degree.layout', 'd', [1, 2], ['ellipse', 'rectangle'])
         self._check_property(res, 'NODE_SHAPE', 'degree.layout', 'Integer', 'discrete',
-                             [{'key': 1, 'value': 'ellipse'}, {'key': 2, 'value': 'rectangle'}])
+                             [{'key': 1, 'value': 'ELLIPSE'}, {'key': 2, 'value': 'RECTANGLE'}])
+        res = map_visual_property('node shape', 'degree.layout', 'discrete', [1, 2], ['ellipse', 'rectangle'])
+        self._check_property(res, 'NODE_SHAPE', 'degree.layout', 'Integer', 'discrete',
+                             [{'key': 1, 'value': 'ELLIPSE'}, {'key': 2, 'value': 'RECTANGLE'}])
 
         # Verify passthru of node string value
         res = map_visual_property('node label', 'COMMON', 'p')
+        self._check_property(res, 'NODE_LABEL', 'COMMON', 'String', 'passthrough')
+        res = map_visual_property('node label', 'COMMON', 'passthrough')
         self._check_property(res, 'NODE_LABEL', 'COMMON', 'String', 'passthrough')
 
         # Verify passthru of node integer value
@@ -96,17 +107,14 @@ class StyleMappingsTests(unittest.TestCase):
         res = map_visual_property('Edge Target Arrow Shape', 'interaction', 'd', ['pp', 'pd'], ['Arrow', 'T'])
 
         self._check_property(res, 'EDGE_TARGET_ARROW_SHAPE', 'interaction', 'String', 'discrete',
-                             [{'key': 'pp', 'value': 'Arrow'}, {'key': 'pd', 'value': 'T'}])
+                             [{'key': 'pp', 'value': 'ARROW'}, {'key': 'pd', 'value': 'T'}])
 
         # Verify passthru mapping of edge double value
         res = map_visual_property('edge width', 'EdgeBetweenness', 'p')
         self._check_property(res, 'EDGE_WIDTH', 'EdgeBetweenness', 'Double', 'passthrough')
 
-        # Verify that unknown type acts like passthru
-        res = map_visual_property('edge width', 'EdgeBetweenness', 'junktype')
-        self._check_property(res, 'EDGE_WIDTH', 'EdgeBetweenness', 'Double', 'junktype')
-
         # Verify that unknown property, column or bad continuous mapping are caught
+        self.assertRaises(CyError, map_visual_property, 'bogus property', 'EdgeBetweenness', 'junktype')
         self.assertRaises(CyError, map_visual_property, 'bogus property', 'EdgeBetweenness', 'p')
         self.assertRaises(CyError, map_visual_property, 'edge width', 'bogus column', 'p')
         self.assertRaises(CyError, map_visual_property, 'node fill color', 'gal1RGexp', 'c',

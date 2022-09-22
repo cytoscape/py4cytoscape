@@ -34,11 +34,13 @@ from . import styles
 from . import style_dependencies
 from . import tables
 
+
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, show_error
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
+from .style_visual_props import *
 
 
 # ==============================================================================
@@ -77,21 +79,16 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
     See Also:
         :meth:`map_visual_property`
     """
-    _PROPERTY_NAMES = {'EDGE_COLOR': 'EDGE_UNSELECTED_PAINT', 'EDGE_THICKNESS': 'EDGE_WIDTH',
-                       'NODE_BORDER_COLOR': 'NODE_BORDER_PAINT', 'NODE_BORDER_LINE_TYPE': 'NODE_BORDER_STROKE'}
-
-    def normalize_prop_name(prop_name):
-        # Convert white space to '_' and uppercase everything (e.g., 'edge color' -> 'EDGE_COLOR')
-        visual_prop_name = re.sub('\\s+', '_', prop_name).upper()
-        if visual_prop_name in _PROPERTY_NAMES: visual_prop_name = _PROPERTY_NAMES[visual_prop_name]
-        return visual_prop_name
-
     if style_name is None:
         style_name = 'default'
         narrate(f'style_name not specified, so updating "default" style.')
 
     # process visual property, including common alternatives for vp names :)
-    def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
+    def_list = [{'visualProperty': _normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
+
+    # Verify values and adjust them if necessary
+    for prop in def_list:
+        prop['value'] = _validate_prop_value(prop['visualProperty'], prop['value'])
 
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=def_list, base_url=base_url,
                               require_json=False)
@@ -152,12 +149,18 @@ def set_visual_property_default(style_string, style_name=None, base_url=DEFAULT_
     Examples:
         >>> set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': '#CCCCCC'}, style_name='galFiltered Style')
         ''
+        >>> set_visual_property_default({'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': 'pink'}, style_name='galFiltered Style')
+        ''
         >>> set_visual_property_default({'visualProperty': 'EDGE_TARGET_ARROW_SHAPE', 'value': 'CIRCLE'})
         ''
     """
     if style_name is None:
         style_name = 'default'
         narrate(f'style_name not specified, so updating "default" style.')
+
+    style_string['visualProperty'] = _normalize_prop_name(style_string['visualProperty'])
+    # Verify value and adjust it if necessary
+    style_string['value'] = _validate_prop_value(style_string['visualProperty'], style_string['value'])
 
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,
@@ -201,8 +204,6 @@ def set_node_border_color_default(new_color, style_name=None, base_url=DEFAULT_B
         >>> set_node_border_color_default('red')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'NODE_BORDER_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -232,8 +233,6 @@ def set_node_border_width_default(new_width, style_name=None, base_url=DEFAULT_B
         >>> set_node_border_width_default(10)
         ''
     """
-    verify_dimensions('width', new_width)
-
     style = {'visualProperty': 'NODE_BORDER_WIDTH', 'value': new_width}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -263,8 +262,6 @@ def set_node_border_opacity_default(new_opacity, style_name=None, base_url=DEFAU
         >>> set_node_border_opacity_default(10)
         ''
     """
-    verify_opacities(new_opacity)
-
     style = {'visualProperty': 'NODE_BORDER_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -296,8 +293,6 @@ def set_node_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_node_color_default('red')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'NODE_FILL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -902,8 +897,6 @@ def set_node_fill_opacity_default(new_opacity, style_name=None, base_url=DEFAULT
         >>> set_node_fill_opacity_default(10)
         ''
     """
-    verify_opacities(new_opacity)
-
     style = {'visualProperty': 'NODE_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -962,8 +955,6 @@ def set_node_font_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_
         >>> set_node_font_size_default(20)
         ''
     """
-    verify_dimensions('size', new_size)
-
     style = {'visualProperty': 'NODE_LABEL_FONT_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -993,7 +984,6 @@ def set_node_height_default(new_height, style_name=None, base_url=DEFAULT_BASE_U
         >>> set_node_height_default(20)
         ''
     """
-    verify_dimensions('height', new_height)
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
@@ -1055,8 +1045,6 @@ def set_node_label_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         >>> set_node_label_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'NODE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1086,8 +1074,6 @@ def set_node_label_opacity_default(new_opacity, style_name=None, base_url=DEFAUL
         >>> set_node_label_opacity_default(50)
         ''
     """
-    verify_opacities(new_opacity)
-
     style = {'visualProperty': 'NODE_LABEL_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1144,8 +1130,6 @@ def set_node_selection_color_default(new_color, style_name=None, base_url=DEFAUL
         >>> set_node_selection_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'NODE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1175,13 +1159,9 @@ def set_node_shape_default(new_shape, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_node_shape_default('ELLIPSE')
         ''
     """
-    new_shape = new_shape.upper()
-    if new_shape in styles.get_node_shapes(base_url=base_url):
-        style = {'visualProperty': 'NODE_SHAPE', 'value': new_shape}
-        res = set_visual_property_default(style, style_name, base_url=base_url)
-        return res
-    else:
-        raise CyError(f'"{new_shape}" is not a valid shape. For valid ones, check get_node_shapes().')
+    style = {'visualProperty': 'NODE_SHAPE', 'value': new_shape}
+    res = set_visual_property_default(style, style_name, base_url=base_url)
+    return res
 
 
 @cy_log
@@ -1208,8 +1188,6 @@ def set_node_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_URL):
         >>> set_node_size_default(20)
         ''
     """
-    verify_dimensions('size', new_size)
-
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(True, style_name=style_name, base_url=base_url)
 
@@ -1242,8 +1220,6 @@ def set_node_width_default(new_width, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_node_width_default(20)
         ''
     """
-    verify_dimensions('width', new_width)
-
     # TODO: Shouldn't we be setting this back to its original value? ... and checking return result?
     style_dependencies.lock_node_dimensions(False, style_name=style_name, base_url=base_url)
 
@@ -1311,8 +1287,6 @@ def set_edge_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL
         >>> set_edge_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'EDGE_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     # TODO: Is it OK to lose the res value?
@@ -1375,8 +1349,6 @@ def set_edge_font_size_default(new_size, style_name=None, base_url=DEFAULT_BASE_
         >>> set_edge_font_size_default(20)
         ''
     """
-    verify_dimensions('size', new_size)
-
     style = {'visualProperty': 'EDGE_LABEL_FONT_SIZE', 'value': new_size}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1435,8 +1407,6 @@ def set_edge_label_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         >>> set_edge_label_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'EDGE_LABEL_COLOR', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1466,8 +1436,6 @@ def set_edge_label_opacity_default(new_opacity, style_name=None, base_url=DEFAUL
         >>> set_edge_label_opacity_default(10)
         ''
     """
-    verify_opacities(new_opacity)
-
     style = {'visualProperty': 'EDGE_LABEL_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1497,8 +1465,6 @@ def set_edge_line_width_default(new_width, style_name=None, base_url=DEFAULT_BAS
         >>> set_edge_line_width_default(10)
         ''
     """
-    verify_dimensions('width', new_width)
-
     style = {'visualProperty': 'EDGE_WIDTH', 'value': new_width}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1557,8 +1523,6 @@ def set_edge_opacity_default(new_opacity, style_name=None, base_url=DEFAULT_BASE
         >>> set_edge_opacity_default(10)
         ''
     """
-    verify_opacities(new_opacity)
-
     style = {'visualProperty': 'EDGE_TRANSPARENCY', 'value': new_opacity}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1617,8 +1581,6 @@ def set_edge_selection_color_default(new_color, style_name=None, base_url=DEFAUL
         >>> set_edge_selection_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'EDGE_SELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     # TODO: res is lost after this call
@@ -1653,8 +1615,6 @@ def set_edge_source_arrow_color_default(new_color, style_name=None, base_url=DEF
         >>> set_edge_source_arrow_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1684,8 +1644,6 @@ def set_edge_target_arrow_color_default(new_color, style_name=None, base_url=DEF
         >>> set_edge_target_arrow_color_default('#CCCCCC')
         ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
@@ -1834,9 +1792,50 @@ def set_background_color_default(new_color, style_name=None, base_url=DEFAULT_BA
         ''
         >>> set_background_color_default('#CCCCCC')
         ''
+        >>> set_background_color_default('red')
+        ''
     """
-    new_color = verify_hex_color(new_color)
-
     style = {'visualProperty': 'NETWORK_BACKGROUND_PAINT', 'value': new_color}
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
+
+def _validate_prop_value(prop, prop_val):
+    # Check property value to make sure it fits syntax
+
+    def none_check(value):
+        if value is None:
+            raise CyError(f'Property "{prop}" cannot be None. It must be a scalar.',
+                      caller=sys._getframe(4).f_code.co_name)
+        return value
+
+    if isinstance(prop_val, list):
+        raise CyError(f'Property "{prop}" cannot be a list ({prop_val}). It must be a scalar.',
+                      caller=sys._getframe(3).f_code.co_name)
+
+    if prop in COLOR_PROPERTIES:
+        return verify_hex_colors(none_check(prop_val))
+    elif prop in DIMENSION_PROPERTIES:
+        return verify_dimensions(DIMENSION_PROPERTIES[prop], none_check(prop_val))
+    elif prop in OPACITY_PROPERTIES:
+        return verify_opacities(none_check(prop_val))
+    elif prop in SHAPE_PROPERTIES:
+        return verify_node_shapes(none_check(prop_val), styles.get_node_shapes())
+    elif prop in LINE_STYLE_PROPERTIES:
+        return verify_edge_shapes(none_check(prop_val), styles.get_line_styles(), 'line style', 'get_line_style')
+    elif prop in ARROW_STYLE_PROPERTIES:
+        return verify_edge_shapes(none_check(prop_val), styles.get_arrow_shapes(), 'arrow style', 'get_arrow_shapes')
+    elif prop in VISIBLE_PROPERTIES:
+        return verify_bools(none_check(prop_val))
+    elif prop in LABEL_PROPERTIES | TOOLTIP_PROPERTIES | FONT_FACE_PROPERTIES:
+        return verify_strs(none_check(prop_val))
+    elif prop in CUSTOM_GRAPHICS_PROPERTIES:
+        return prop_val
+    else:
+        show_error(f'Warning: setting unknown property "{prop}" to "{prop_val}"')
+        return prop_val
+
+def _normalize_prop_name(prop_name):
+    # Convert white space to '_' and uppercase everything (e.g., 'edge color' -> 'EDGE_COLOR')
+    visual_prop_name = re.sub('\\s+', '_', prop_name).upper()
+    if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
+    return visual_prop_name

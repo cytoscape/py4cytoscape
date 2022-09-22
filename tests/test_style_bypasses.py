@@ -541,26 +541,38 @@ class StyleBypassesTests(unittest.TestCase):
         # Verify that a list of names gets the property set when property is a list of 1
         res = bypass_func(list(all_names['name']), ['#FF0000'], visual_property)
         check_bypass(res, '#FF0000')
+        res = bypass_func(list(all_names['name']), ['blue'], visual_property)
+        check_bypass(res, '#0000FF')
 
         # Verify that a string list of names gets the property set
         res = bypass_func(','.join(list(all_names['name'])), ['#880000'], visual_property)
         check_bypass(res, '#880000')
+        res = bypass_func(','.join(list(all_names['name'])), ['blue'], visual_property)
+        check_bypass(res, '#0000FF')
 
         # Verify that a list of names gets the property set when property is a scalar
         res = bypass_func(list(all_names['name']), '#FF00FF', visual_property)
         check_bypass(res, '#FF00FF')
+        res = bypass_func(list(all_names['name']), 'red', visual_property)
+        check_bypass(res, '#FF0000')
 
         # Verify that a list of names gets the property set when property is a list of one value for each name
         res = bypass_func(list(all_names['name']), ['#0000FF'] * len(all_names.index), visual_property)
         check_bypass(res, '#0000FF')
+        res = bypass_func(list(all_names['name']), ['yellow'] * len(all_names.index), visual_property)
+        check_bypass(res, '#FFFF00')
 
         # Verify that a list of SUIDs gets the property set
         res = bypass_func(list(all_names.index), ['#00FF00'], visual_property)
         check_bypass(res, '#00FF00')
+        res = bypass_func(list(all_names.index), ['pink'], visual_property)
+        check_bypass(res, '#FFC0CB')
 
         # Verify that a string list of SUIDs gets the property set
         res = bypass_func(str(list(all_names.index))[1:-1], ['#008800'], visual_property)
         check_bypass(res, '#008800')
+        res = bypass_func(str(list(all_names.index))[1:-1], ['purple'], visual_property)
+        check_bypass(res, '#800080')
 
         # TODO: Figure out what this should return ... with None for node list
         # self.assertEqual(set_node_property_bypass(None, ['#FF0000'], visual_property), '')
@@ -571,6 +583,10 @@ class StyleBypassesTests(unittest.TestCase):
         # Verify that bad property name is caught
         self.assertRaises(CyError, bypass_func, list(all_names['name']), ['#FF0000'], None)
         self.assertEqual(bypass_func(list(all_names['name']), ['#FF0000'], 'BogusProperty'), '')
+
+        # Verify that bad colors are caught
+        self.assertRaises(CyError, bypass_func, list(all_names['name']), 'bogus', visual_property)
+        self.assertRaises(CyError, bypass_func, list(all_names['name']), ['bogus'], visual_property)
 
         # Verify that mismatch of count of nodes to properties is caught
         self.assertRaises(CyError, bypass_func, list(all_names['name']), ['#FF0000', '#FF00FF'], visual_property)

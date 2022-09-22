@@ -43,9 +43,9 @@ from . import styles
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
-from .py4cytoscape_logger import cy_log
+from .py4cytoscape_logger import cy_log, show_error
 from .py4cytoscape_tuning import MODEL_PROPAGATION_SECS
-
+from .style_visual_props import *
 
 # ==============================================================================
 # I. General Functions
@@ -88,6 +88,8 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
         >>> node_names = list(get_table_columns(columns='name')['name'])
         >>> set_node_property_bypass(node_names, '#FF00FF', 'NODE_FILL_COLOR')
         ''
+        >>> set_node_property_bypass(node_names, 'red', 'NODE_FILL_COLOR')
+        ''
         >>> set_node_property_bypass('YDL194W, YDR277C', '#FF00FF', 'NODE_FILL_COLOR')
         ''
         >>> node_suids = list(get_table_columns(columns='name').index)
@@ -109,14 +111,31 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
 
+    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
+        raise CyError(f'Invalid visual property ... visual_property must be non-null')
+
+    if not isinstance(new_values, list): new_values = [new_values]
+
+    # If the property is verifiable, verify the values and adjust as appropriate
+    if visual_property in NODE_COLOR_PROPERTIES:
+        new_values = verify_hex_colors(new_values)
+    elif visual_property in NODE_DIMENSION_PROPERTIES.keys():
+        new_values = verify_dimensions(NODE_DIMENSION_PROPERTIES[visual_property], new_values)
+    elif visual_property in NODE_OPACITY_PROPERTIES:
+        new_values = verify_opacities(new_values)
+    elif visual_property in NODE_SHAPE_PROPERTIES:
+        new_values = verify_node_shapes(new_values, styles.get_node_shapes(base_url=base_url))
+    elif visual_property in NODE_VISIBLE_PROPERTIES:
+        new_values = verify_bools(new_values)
+    elif visual_property in NODE_LABEL_PROPERTIES | NODE_TOOLTIP_PROPERTIES | NODE_FONT_FACE_PROPERTIES:
+        new_values = verify_strs(new_values)
+    else:
+        show_error(f'Warning: setting unknown node bypass property "{visual_property}"')
+
     # there can be more than one node.SUID per node.name!
     # 'node.SUIDs' and 'new.values' must have the same length
     # TODO: Should we allow a scalar for a new_value, or do we assume a list?
-    if not isinstance(new_values, list): new_values = [new_values]
     if len(new_values) == 1: new_values = new_values * len(node_suids)
-
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError(f'Invalid visual property ... visual_property must be non-null')
 
     if len(new_values) != len(node_suids):
         error = 'The number of nodes ' + str(len(node_suids)) + ' and new values ' + str(len(new_values)) \
@@ -239,6 +258,8 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
         {'data': {}, 'errors': []}
         >>> set_edge_property_bypass('YDR277C (pp) YDL194W, YDR277C (pp) YJR022W', ['#FF00FF'], 'EDGE_UNSELECTED_PAINT')
         {'data': {}, 'errors': []}
+        >>> set_edge_property_bypass('YDR277C (pp) YDL194W, YDR277C (pp) YJR022W', ['red'], 'EDGE_UNSELECTED_PAINT')
+        {'data': {}, 'errors': []}
         >>> edge_suids = list(get_table_columns(table='edge', columns='name').index)
         >>> set_edge_property_bypass(edge_suids, ['#FF00FF'], 'EDGE_UNSELECTED_PAINT', network='galFiltered.sif')
         {'data': {}, 'errors': []}
@@ -258,14 +279,33 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
 
+    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
+        raise CyError('Invalid visual property ... visual_property must be non-null')
+
+    if not isinstance(new_values, list): new_values = [new_values]
+
+    # If the property is verifiable, verify the values and adjust as appropriate
+    if visual_property in EDGE_COLOR_PROPERTIES:
+        new_values = verify_hex_colors(new_values)
+    elif visual_property in EDGE_DIMENSION_PROPERTIES.keys():
+        new_values = verify_dimensions(EDGE_DIMENSION_PROPERTIES[visual_property], new_values)
+    elif visual_property in EDGE_OPACITY_PROPERTIES:
+        new_values = verify_opacities(new_values)
+    elif visual_property in EDGE_LINE_STYLE_PROPERTIES:
+        new_values = verify_edge_shapes(new_values, styles.get_line_styles(base_url=base_url), 'line style', 'get_line_styles')
+    elif visual_property in EDGE_ARROW_STYLE_PROPERTIES:
+        new_values = verify_edge_shapes(new_values, styles.get_arrow_shapes(base_url=base_url), 'arrow shape', 'get_arrow_shapes')
+    elif visual_property in EDGE_VISIBLE_PROPERTIES:
+        new_values = verify_bools(new_values)
+    elif visual_property in EDGE_LABEL_PROPERTIES | EDGE_TOOLTIP_PROPERTIES | EDGE_FONT_FACE_PROPERTIES:
+        new_values = verify_strs(new_values)
+    else:
+        show_error(f'Warning: setting unknown edge bypass property "{visual_property}"')
+
     # there can be more than one edge.SUID per edge.name!
     # 'edge.SUIDs' and 'new.values' must have the same length
     # TODO: Should we allow a scalar for a new_value, or do we assume a list?
-    if not isinstance(new_values, list): new_values = [new_values]
     if len(new_values) == 1: new_values = new_values * len(edge_suids)
-
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property ... visual_property must be non-null')
 
     if len(new_values) != len(edge_suids):
         error = 'The number of nodes ' + str(len(edge_suids)) + ' and new values ' + str(len(new_values)) \
@@ -384,6 +424,10 @@ def set_network_property_bypass(new_value, visual_property, bypass=True, network
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
+
+    # If the property is a color property, verify that all of the colors are valid, and translate named colors
+    if visual_property in NETWORK_COLOR_PROPERTIES:
+        new_value = verify_hex_colors(new_value)
 
     res = commands.cyrest_put(f'networks/{net_suid}/views/{view_suid}/network',
                               parameters={'bypass': bypass},
@@ -534,9 +578,6 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_node_property_bypass(node_names, new_colors, 'NODE_FILL_COLOR', network=network, base_url=base_url)
     return res
 
@@ -589,9 +630,6 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
-    verify_dimensions('size', new_sizes)
-
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
     return res
 
@@ -690,9 +728,6 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
     """
     style_dependencies.lock_node_dimensions(False)
 
-    if not isinstance(new_widths, list): new_widths = [new_widths]
-    verify_dimensions('width', new_widths)
-
     res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
     return res
 
@@ -742,9 +777,6 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     style_dependencies.lock_node_dimensions(False)
-
-    if not isinstance(new_heights, list): new_heights = [new_heights]
-    verify_dimensions('height', new_heights)
 
     res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
     return res
@@ -890,9 +922,6 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
-    verify_dimensions('size', new_sizes)
-
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_LABEL_FONT_SIZE', network=network,
                                    base_url=base_url)
     return res
@@ -944,9 +973,6 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_node_property_bypass(node_names, new_colors, 'NODE_LABEL_COLOR', network=network, base_url=base_url)
 
     return res
@@ -996,24 +1022,6 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
-
-    if len(node_names) != len(new_shapes) and len(new_shapes) != 1:
-        raise CyError(
-            'New_shapes count "%d" is neither 1 nor same as node_names count "%d"' % (len(new_shapes), len(node_names)))
-
-    # convert old to new node shapes
-    # TODO: Why isn't this done on other shape functions?
-    new_shapes = ['ROUND_RECTANGLE' if shape == 'round_rect' else shape for shape in new_shapes]
-    new_shapes = ['RECTANGLE' if shape == 'rect' else shape.upper() for shape in new_shapes]
-
-    # ensure valid node shapes
-    valid_shapes = styles.get_node_shapes(base_url=base_url)
-    for shape in new_shapes:
-        if not shape in valid_shapes:
-            raise CyError(
-                f'"{shape}" is not a valid shape. Please note that some older shapes are no longer available. For valid ones check get_node_shapes().')
-
     res = set_node_property_bypass(node_names, new_shapes, 'NODE_SHAPE', network=network, base_url=base_url)
 
     return res
@@ -1063,9 +1071,6 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
-    verify_dimensions('size', new_sizes)
-
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_BORDER_WIDTH', network=network, base_url=base_url)
     return res
 
@@ -1116,9 +1121,6 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_node_property_bypass(node_names, new_colors, 'NODE_BORDER_PAINT', network=network, base_url=base_url)
     return res
 
@@ -1167,9 +1169,6 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     # TODO: Concerned about losing intermediate res results
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
     res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
@@ -1271,9 +1270,6 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     res = set_node_property_bypass(node_names, new_values, 'NODE_TRANSPARENCY', network=network, base_url=base_url)
     return res
 
@@ -1322,9 +1318,6 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     res = set_node_property_bypass(node_names, new_values, 'NODE_BORDER_TRANSPARENCY', network=network,
                                    base_url=base_url)
     return res
@@ -1374,9 +1367,6 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     res = set_node_property_bypass(node_names, new_values, 'NODE_LABEL_TRANSPARENCY', network=network,
                                    base_url=base_url)
     return res
@@ -1564,9 +1554,6 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     # TODO: Concerned about losing intermediate res results
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
                                    base_url=base_url)
@@ -1620,9 +1607,6 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if isinstance(new_colors, str): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     # TODO: What to do about lost res?
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_STROKE_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
@@ -1770,9 +1754,6 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_sizes, list): new_sizes = [new_sizes]
-    verify_dimensions('size', new_sizes)
-
     res = set_edge_property_bypass(edge_names, new_sizes, 'EDGE_LABEL_FONT_SIZE', network=network,
                                    base_url=base_url)
     return res
@@ -1824,9 +1805,6 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_LABEL_COLOR', network=network, base_url=base_url)
 
     return res
@@ -1924,10 +1902,6 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-
-    if not isinstance(new_widths, list): new_widths = [new_widths]
-    verify_dimensions('width', new_widths)
-
     res = set_edge_property_bypass(edge_names, new_widths, 'EDGE_WIDTH', network=network, base_url=base_url)
     return res
 
@@ -1976,12 +1950,6 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_styles, list): new_styles = [new_styles]
-
-    for style in new_styles:
-        if style not in styles.get_line_styles(base_url=base_url):
-            raise CyError(f'Invalid line style value "{style}". For valid ones, check get_line_styles().')
-
     res = set_edge_property_bypass(edge_names, new_styles, 'EDGE_LINE_TYPE', network=network, base_url=base_url)
 
     return res
@@ -2031,12 +1999,6 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
-
-    for style in new_shapes:
-        if style not in styles.get_arrow_shapes(base_url=base_url):
-            raise CyError(f'Invalid arrow shape value "{style}". For valid ones check, get_arrow_shapes().')
-
     res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_SOURCE_ARROW_SHAPE', network=network,
                                    base_url=base_url)
 
@@ -2087,12 +2049,6 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_shapes, list): new_shapes = [new_shapes]
-
-    for style in new_shapes:
-        if style not in styles.get_arrow_shapes(base_url=base_url):
-            raise CyError(f'Invalid arrow shape value "{style}". For valid ones, check get_arrow_shapes().')
-
     res = set_edge_property_bypass(edge_names, new_shapes, 'EDGE_TARGET_ARROW_SHAPE', network=network,
                                    base_url=base_url)
 
@@ -2145,9 +2101,6 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_SOURCE_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
 
@@ -2200,9 +2153,6 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_colors, list): new_colors = [new_colors]
-    new_colors = verify_hex_colors(new_colors)
-
     res = set_edge_property_bypass(edge_names, new_colors, 'EDGE_TARGET_ARROW_UNSELECTED_PAINT', network=network,
                                    base_url=base_url)
 
@@ -2253,9 +2203,6 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
-    if not isinstance(new_values, list): new_values = [new_values]
-    verify_opacities(new_values)
-
     res = set_edge_property_bypass(edge_names, new_values, 'EDGE_LABEL_TRANSPARENCY', network=network,
                                    base_url=base_url)
     return res
@@ -2548,3 +2495,4 @@ def clear_network_center_bypass(network=None, base_url=DEFAULT_BASE_URL):
     res = clear_network_property_bypass('NETWORK_CENTER_X_LOCATION', network=network, base_url=base_url)
     res = clear_network_property_bypass('NETWORK_CENTER_Y_LOCATION', network=network, base_url=base_url)
     return res
+

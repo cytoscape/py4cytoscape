@@ -38,6 +38,7 @@ from . import cytoscape_system
 from .exceptions import CyError
 from .py4cytoscape_logger import narrate
 
+
 # print(f'Starting {__name__} module')
 
 
@@ -76,6 +77,7 @@ def cyPalette(name='set1'):
     }
     return PALETTES[name]
 
+
 # ------------------------------------------------------------------------------
 def verify_brightness_contrast(bc):
     """Validate and provide user feedback when brightness or contrast is required input.
@@ -93,7 +95,9 @@ def verify_brightness_contrast(bc):
         >>> verify_brightness_contrast(77)
     """
     if not (isinstance(bc, float) or isinstance(bc, int)) or bc < -100 or bc > 100:
-        raise CyError(f'"{bc}" is invalid. Value must be between -100 and 100).', caller=sys._getframe(1).f_code.co_name)
+        raise CyError(f'"{bc}" is invalid. Value must be between -100 and 100).',
+                      caller=sys._getframe(1).f_code.co_name)
+
 
 def verify_hex_color(color):
     """Validate and provide user feedback when hex color code is required input.
@@ -117,9 +121,12 @@ def verify_hex_color(color):
         if color.startswith('#') and len(color) == 7:
             return color
         else:
-            return Color(color).get_hex_l()
+            return Color(color).get_hex_l().upper()
     except:
-        raise CyError(f'"{color}" is not a valid color name (e.g., "red") or a hexadecimal color (has to begin with # and be 7 characters long, e.g., #FF00FF).', caller=sys._getframe(1).f_code.co_name)
+        raise CyError(
+            f'"{color}" is not a valid color name (e.g., "red") or a hexadecimal color (has to begin with # and be 7 characters long, e.g., #FF00FF).',
+            caller=sys._getframe(1).f_code.co_name)
+
 
 def verify_hex_colors(colors):
     """Validate and provide user feedback when hex color code (or a list of codes) are required input.
@@ -128,7 +135,7 @@ def verify_hex_colors(colors):
         colors (str or list): a single value or a list of colors, which are 6 digit hex values
 
     Returns:
-        None
+        str or list: colors as '#' followed by 6 digit hex value
 
     Raises:
         CyError: if color is invalid
@@ -143,9 +150,10 @@ def verify_hex_colors(colors):
     """
     if colors is None: return None
     if isinstance(colors, list):
-        return [verify_hex_color(c)   for c in colors]
+        return [verify_hex_color(c) for c in colors]
     else:
         return verify_hex_color(colors)
+
 
 def verify_opacity(opacity, max_opacity=100):
     """Validate and provide user feedback when opacity is required input.
@@ -154,7 +162,7 @@ def verify_opacity(opacity, max_opacity=100):
         opacity (int or float): a number between 0 and a max
 
     Returns:
-        None
+        int or float: validated opacity
 
     Raises:
         CyError: if opacity is invalid
@@ -163,7 +171,11 @@ def verify_opacity(opacity, max_opacity=100):
         >>> verify_opacity(77)
     """
     if not (isinstance(opacity, float) or isinstance(opacity, int)) or opacity < 0 or opacity > max_opacity:
-        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and {max_opacity}).', caller=sys._getframe(1).f_code.co_name)
+        raise CyError(f'"{opacity}" is not a valid opacity (has to be an integer between 0 and {max_opacity}).',
+                      caller=sys._getframe(1).f_code.co_name)
+
+    return opacity
+
 
 def verify_opacities(opacities):
     """Validate and provide user feedback when opacity is required input.
@@ -172,7 +184,7 @@ def verify_opacities(opacities):
         opacities (int, float or list): a single value or a list of values, all of which are integers or floats
 
     Returns:
-        None
+        str or list: verified opacities
 
     Raises:
         CyError: if opacity is invalid
@@ -181,11 +193,12 @@ def verify_opacities(opacities):
         >>> verify_opacities(177)
         >>> verify_opacities([177, 200])
     """
-    if opacities is None: return
-    if not isinstance(opacities, list):  opacities = [opacities]
+    if opacities is None: return None
+    if isinstance(opacities, list):
+        return [verify_opacity(opacity, max_opacity=255) for opacity in opacities]
+    else:
+        return verify_opacity(opacities, max_opacity=255)
 
-    for opacity in opacities:
-        verify_opacity(opacity, max_opacity=255)
 
 def verify_dimensions(dimension, sizes):
     """Validate and provide user feedback when dimensions is required input.
@@ -195,7 +208,7 @@ def verify_dimensions(dimension, sizes):
         sizes (int, float or list): a single value or a list of values, all of which are integers or floats
 
     Returns:
-        None
+        list: verified dimensions
 
     Raises:
         CyError: if size is invalid
@@ -204,12 +217,19 @@ def verify_dimensions(dimension, sizes):
         >>> verify_dimensions('width', 50)
         >>> verify_dimensions('width', [10, 20])
     """
-    if sizes is None: return
-    if not isinstance(sizes, list): sizes = [sizes]
 
-    for size in sizes:
+    def verify_dimension(dimension, size):
         if not isinstance(size, float) and not isinstance(size, int):
-            raise CyError(f'Illegal {dimension} "{size}". It needs to be a number.', caller=sys._getframe(1).f_code.co_name)
+            raise CyError(f'Illegal {dimension} "{size}". It needs to be a number.',
+                          caller=sys._getframe(2).f_code.co_name)
+        return size
+
+    if sizes is None: return None
+    if isinstance(sizes, list):
+        return [verify_dimension(dimension, size) for size in sizes]
+    else:
+        return verify_dimension(dimension, sizes)
+
 
 def verify_slot(slot):
     """Validate and provide user feedback when slot is required input.
@@ -229,9 +249,11 @@ def verify_slot(slot):
     if not (isinstance(slot, float) or isinstance(slot, int)) or slot < 1 or slot > 9:
         raise CyError(f'slot must be an integer between 1 and 9', caller=sys._getframe(1).f_code.co_name)
 
+
 def verify_unique(value, existing_values):
     if value in existing_values:
         raise CyError(f'{value} is not unique. Please provide a unique value.', caller=sys._getframe(1).f_code.co_name)
+
 
 def verify_positive(number):
     """Validate and provide user feedback when positive number is required input.
@@ -253,6 +275,7 @@ def verify_positive(number):
     if number <= 0:
         raise CyError(f'{number} is invalid. Number must be positive', caller=sys._getframe(1).f_code.co_name)
 
+
 def verify_non_negative(number):
     """Validate and provide user feedback when a non-negative number is required input.
 
@@ -271,7 +294,9 @@ def verify_non_negative(number):
     if not (isinstance(number, float) or isinstance(number, int)):
         raise CyError(f'Value must be a non-negative number.', caller=sys._getframe(1).f_code.co_name)
     if number <= 0:
-        raise CyError(f'{number} is invalid. Number must be greater than or equal to 0', caller=sys._getframe(1).f_code.co_name)
+        raise CyError(f'{number} is invalid. Number must be greater than or equal to 0',
+                      caller=sys._getframe(1).f_code.co_name)
+
 
 def verify_font_style(style):
     """Validate and provide user feedback when font style is required input.
@@ -292,6 +317,7 @@ def verify_font_style(style):
     if style not in valid_styles:
         raise CyError(f'{style} is invalid. Use {valid_styles}', caller=sys._getframe(1).f_code.co_name)
 
+
 def verify_canvas(canvas):
     """Validate acceptable canvas
 
@@ -311,6 +337,145 @@ def verify_canvas(canvas):
     if canvas not in valid_canvases:
         raise CyError(f'{canvas} is invalid. Use {valid_canvases}', caller=sys._getframe(1).f_code.co_name)
 
+
+def verify_node_shapes(shapes, valid_shapes):
+    """Validate list of proposed shapes for nodes
+
+    Args:
+        shapes (list or str): shapes (e.g., 'RECTANGLE', 'HEXAGON')
+        valid_shapes (list): a list of valid shapes
+
+    Returns:
+        list or str: shape(s), updated old shape names to new ones
+
+    Raises:
+        CyError: if a shape is invalid
+
+    Examples:
+        >>> verify_node_shapes('RECTANGLE', styles.get_node_shapes())
+        ['RECTANGLE']
+        >>> verify_node_shapes(['RECTANGLE', 'DIAMOND'], styles.get_node_shapes())
+        ['RECTANGLE', 'DIAMOND']
+    """
+
+    def verify_node_shape(shape, valid_shapes):
+        shape = 'ROUND_RECTANGLE' if shape == 'round_rect' else shape
+        shape = 'RECTANGLE' if shape == 'rect' else shape.upper()
+
+        if shape in valid_shapes:
+            return shape
+        raise CyError(
+            f'"{shape}" is not a valid shape. Please note that some older shapes are no longer available. For valid ones check get_node_shapes().',
+            caller=sys._getframe(2).f_code.co_name)
+
+    if shapes is None: return None
+    if isinstance(shapes, list):
+        return [verify_node_shape(shape, valid_shapes) for shape in shapes]
+    else:
+        return verify_node_shape(shapes, valid_shapes)
+
+
+def verify_edge_shapes(shapes, valid_shapes, style_name, style_authority):
+    """Validate list of proposed shapes for edges
+
+    Args:
+        shapes (list or str): line styles (e.g., 'ZIGZAG', 'SOLID')
+        valid_line_styles (list): a list of valid shapes
+        style_name (str): name of the style being validated
+        style_authority (str): plausible function for getting list of valid shapes
+
+    Returns:
+        list or str: the style
+
+    Raises:
+        CyError: if a style is invalid
+
+    Examples:
+        >>> verify_edge_shapes('SOLID', styles.get_line_styles(), 'line style', 'get_line_styles')
+        ['SOLID']
+        >>> verify_edge_shapes(['SOLID', 'ZIGZAG'], styles.get_line_styles(), 'line style', 'get_line_styles')
+        ['SOLID', 'ZIGZAG']
+    """
+
+    def verify_edge_shape(shape, valid_shapes, style_name, style_authority):
+        shape = shape.upper()
+        if shape in valid_shapes:
+            return shape
+        raise CyError(f'"{shape}" is not a valid {style_name}. For valid ones check {style_authority}().',
+                      caller=sys._getframe(2).f_code.co_name)
+
+    if shapes is None: return None
+    if isinstance(shapes, list):
+        return [verify_edge_shape(shape, valid_shapes, style_name, style_authority) for shape in shapes]
+    else:
+        return verify_edge_shape(shapes, valid_shapes, style_name, style_authority)
+
+
+def verify_bools(bool_values):
+    """Validate list of boolean values
+
+    Args:
+         (list or str): boolean values (e.g., True or False)
+
+    Returns:
+        list or str: the style
+
+    Raises:
+        CyError: if a style is invalid
+
+    Examples:
+        >>> verify_bools(True)
+        True
+        >>> verify_bools('True')
+        'True'
+        >>> verify_bools([True, False])
+        [True, False]
+    """
+
+    def verify_bool(bool_value):
+        if isinstance(bool_value, bool):
+            return bool_value
+        elif isinstance(bool_value, str) and bool_value.upper() in {'TRUE', 'FALSE'}:
+            return bool_value
+        raise CyError(f'"{bool_value}" is not a valid boolean. It must be either true or false.',
+                      caller=sys._getframe(2).f_code.co_name)
+
+    if bool_values is None: return None
+    if isinstance(bool_values, list):
+        return [verify_bool(bool_value) for bool_value in bool_values]
+    else:
+        return verify_bool(bool_values)
+
+def verify_strs(str_values):
+    """Validate list of string values
+
+    Args:
+         (list or str): string values (e.g., 'happy'
+
+    Returns:
+        list or str: the style
+
+    Raises:
+        CyError: if a style is invalid
+
+    Examples:
+        >>> verify_strs('happy')
+        'happy'
+        >>> verify_bools(['happy', 'sad'])
+        ['happy', 'sad']
+    """
+
+    def verify_str(str_value):
+        if isinstance(str_value, str):
+            return str_value
+        raise CyError(f'"{str_value}" is not a valid string.',
+                      caller=sys._getframe(2).f_code.co_name)
+
+    if str_values is None: return None
+    if isinstance(str_values, list):
+        return [verify_str(str_value) for str_value in str_values]
+    else:
+        return verify_str(str_values)
 
 def normalize_rotation(degree):
     """Validates and fixes rotation values from -180 to +180 range to match GUI
@@ -418,7 +583,7 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
     df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
     all_names = df['name'].values
 
-    test_present = [x in all_names   for x in node_suids]
+    test_present = [x in all_names for x in node_suids]
     if not False in test_present:
         return node_suids
 
@@ -515,17 +680,16 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
     all_names = df['name'].values
 
-    test = [edge_suid in all_names   for edge_suid in edge_suids]
+    test = [edge_suid in all_names for edge_suid in edge_suids]
     if not False in test: return edge_suids  # the list already had valid names
 
     all_suids_list = df.index.tolist()
     try:
         # map all SUIDS into column names ... all SUIDs *must* be actual SUIDs
-        edge_names = [all_names[all_suids_list.index(edge_suid)]   for edge_suid in edge_suids]
+        edge_names = [all_names[all_suids_list.index(edge_suid)] for edge_suid in edge_suids]
         return edge_names
     except Exception as e:
         raise CyError(f'Invalid edge SUID in list: {edge_suids}')
-
 
 
 # ------------------------------------------------------------------------------
@@ -560,6 +724,7 @@ def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE
         return False
     return True
 
+
 # ------------------------------------------------------------------------------
 def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
     """Checks to see if min supported versions of api and cytoscape are running.
@@ -593,7 +758,8 @@ def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL,
 
     # Check the CyREST version
     if cyrest > v_api_num:
-        nogo = 'CyREST API version %d or greater is required. You are currently working with version %d.' % (cyrest, v_api_num)
+        nogo = 'CyREST API version %d or greater is required. You are currently working with version %d.' % (
+        cyrest, v_api_num)
 
     # Check the Cytoscape version
     re_v_cytoscape = re.match('([0-9]+)\\.([0-9]+)\\..*$', v_cy_str)
@@ -604,10 +770,12 @@ def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL,
     required_cytoscape_major = int(re_cytoscape.group(1))
     required_cytoscape_minor = int(re_cytoscape.group(2))
 
-    if required_cytoscape_major > v_cytoscape_major or (required_cytoscape_major == v_cytoscape_major and required_cytoscape_minor > v_cytoscape_minor):
+    if required_cytoscape_major > v_cytoscape_major or (
+            required_cytoscape_major == v_cytoscape_major and required_cytoscape_minor > v_cytoscape_minor):
         nogo = f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
 
     return nogo
+
 
 def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
     """Throws exception if min supported versions of api and cytoscape are not running.
@@ -645,14 +813,15 @@ def normalize_list(entity):
     if isinstance(entity, str):  # If it's a string, it could be names, SUIDs, or whatever
         scalar_list = str.split(entity, ',')
         try:
-            return [int(x)    for x in scalar_list] # for each entry, see if it's a number
+            return [int(x) for x in scalar_list]  # for each entry, see if it's a number
         except:
-            return [str.strip(x)   for x in scalar_list] # for each entry, get rid of leading/trialing spaces
+            return [str.strip(x) for x in scalar_list]  # for each entry, get rid of leading/trialing spaces
     elif not isinstance(entity, list):  # If it's not a string, it could be int, int64 or whatever
         # Note that list could contain strings with leading/trailing spaces. Caller will likely think this is an error.
         return [entity]
     else:
         return entity
+
 
 def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
     # Return 'selected' or a comma-separated list of strings as either 'x,y,x' or 'col:x,col:y,col:z'
@@ -661,12 +830,13 @@ def prep_post_query_lists(cmd_list=None, cmd_by_col=None):
     else:
         cmd_list_normal = normalize_list(cmd_list)
         if cmd_by_col is None:
-            cmd_list_normal = [f'{cmd}'   for cmd in cmd_list_normal]
+            cmd_list_normal = [f'{cmd}' for cmd in cmd_list_normal]
         else:
             cmd_list_normal = [f'{cmd_by_col}:{cmd}' for cmd in cmd_list_normal]
         cmd_list_ready = ','.join(cmd_list_normal)
 
     return cmd_list_ready
+
 
 def parse_edges(edge_list):
     # Convert edge list into list of parts: ["xxx (pp) yyy", "zzz (pp) aaa"] into [("xxx", "pp", "yyy"), ("zzz", "pp", "aaa")]
@@ -675,7 +845,7 @@ def parse_edges(edge_list):
         res = re.match('(.*) \((.*)\) (.*)', edge)
         return (res.group(1), res.group(2), res.group(3))
 
-    return [split_edge(x)   for x in edge_list]
+    return [split_edge(x) for x in edge_list]
 
 
 def build_url(base_url=DEFAULT_BASE_URL, command=None):
@@ -706,18 +876,22 @@ def build_url(base_url=DEFAULT_BASE_URL, command=None):
 
 
 # Figure out which kind of visual style mapping is being used
-def normalize_mapping(mapping_type, visual_prop_name, supported_mappings):
+def normalize_mapping(mapping_type, visual_prop_name, supported_mappings, long_name=True):
     if mapping_type in ['continuous', 'c', 'interpolate']:
-        mapping_type = 'c'
+        mapped = ('continuous', 'c')
     elif mapping_type in ['discrete', 'd', 'lookup']:
-        mapping_type = 'd'
+        mapped = ('discrete', 'd')
     elif mapping_type in ['passthrough', 'p']:
-        mapping_type = 'p'
-
-    if mapping_type in supported_mappings:
-        return mapping_type
+        mapped = ('passthrough', 'p')
     else:
-        raise CyError(f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
+        mapped = ('?', '?')
+
+    if mapped[1] in supported_mappings:
+        return mapped[0 if long_name else 1]
+    else:
+        raise CyError(
+            f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
+
 
 def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names if list is unique
@@ -737,30 +911,16 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
         pass
 
     # map all names into SUIDs ... all names *must* be actual names ... and must be str() to match the 'name' column
-    item_names = [str(item_name)   for item_name in item_names]
+    item_names = [str(item_name) for item_name in item_names]
     item_name_to_suid_list = {item_name: list(df[df.name.eq(item_name)].index.values) for item_name in item_names}
     try:
         if unique_list:
             suid_list = [item_name_to_suid_list[item_name].pop(0) for item_name in item_names]
         else:
             suid_list = [item_name_to_suid_list[item_name] for item_name in item_names]
-            suid_list = [s[0] if len(s) <= 1 else s    for s in suid_list] # return scalar if len(list) = 1, blow up if len(list) = 0
+            suid_list = [s[0] if len(s) <= 1 else s for s in
+                         suid_list]  # return scalar if len(list) = 1, blow up if len(list) = 0
     except:
         raise CyError(f'Invalid name in {table_name} name list: {item_names}')
 
     return suid_list
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
