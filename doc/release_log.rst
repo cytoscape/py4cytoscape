@@ -4,6 +4,30 @@ Release Log
 ===========
 
 
+py4cytoscape 1.6.0
+-------------------
+Release date: 30 Sep 2022
+
+* Now supporting Metascape migration from py2cytoscape to py4cytoscape
+* Added sandbox support when Cytoscape is at URL different than 127.0.0.1
+* Fixed bugs for calling Cytoscape at URL different than 127.0.0.1
+* Removed slow n^2 algorithm from get_table_columns()
+* For failed connections to Cytoscape, use exponential backoff retry
+* Updated support for Python's improved comparison semantics and treatment of NANs (e.g., style_auto_mappings(), create_column_filter())
+* Added Alternate IP Address section to Concepts.rst
+* Allow text colors (e.g., "red") in addition to hex colors when setting color properties
+* Allow log directory to be set via PY4CYTOSCAPE_DETAIL_LOGGER environment variable
+* Allow execution delays to be set via environment variable (PY4CYTOSCAPE_CATCHUP_FILTER_SECS, PY4CYTOSCAPE_MODEL_PROPAGATION_SECS, PY4CYTOSCAPE_CATCHUP_NETWORK_SECS, PY4CYTOSCAPE_CATCHUP_NETWORK_TIMEOUT_SECS)
+* Disallow string as value when setting opacity properties
+* Added value syntax checks for map_visual_property(), set_node_property_bypass(), set_edge_property_bypass(), set_network_property_bypass(), set_visual_property_default(), update_style_defaults() & set_visual_property_default()
+* Added ability to use old property names in all property functions
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.6.0.rst
+
 
 py4cytoscape 1.5.0
 -------------------
