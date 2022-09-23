@@ -110,8 +110,7 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
 
 
     # process visual property, including common alternatives for vp names :)
-    visual_prop_name = re.sub('\\s+', '_', visual_prop).upper()
-    if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
+    visual_prop_name = normalize_prop_name(visual_prop)
 
     # check visual prop name
     if visual_prop_name not in styles.get_visual_property_names(base_url=base_url):

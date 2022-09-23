@@ -37,6 +37,7 @@ from . import cytoscape_system
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_logger import narrate
+from .style_visual_props import PROPERTY_NAME_MAP
 
 
 # print(f'Starting {__name__} module')
@@ -892,6 +893,14 @@ def normalize_mapping(mapping_type, visual_prop_name, supported_mappings, long_n
         raise CyError(
             f'mapping_type "{mapping_type}" for property "{visual_prop_name}" not recognized ... must be "{supported_mappings}"')
 
+def normalize_prop_name(prop_name):
+    if prop_name is None:
+        raise CyError(f'Invalid visual property ... visual_property must be non-null')
+
+    # Convert white space to '_' and uppercase everything (e.g., 'edge color' -> 'EDGE_COLOR')
+    visual_prop_name = re.sub('\\s+', '_', prop_name).upper()
+    if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
+    return visual_prop_name
 
 def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names if list is unique

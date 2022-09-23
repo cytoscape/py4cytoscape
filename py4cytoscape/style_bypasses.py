@@ -111,8 +111,7 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
 
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError(f'Invalid visual property ... visual_property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if not isinstance(new_values, list): new_values = [new_values]
 
@@ -197,8 +196,7 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property ... visual_property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if node_names == 'all':
         raise CyError('"all" node_names is not yet supported by CyREST. Please provide a valid node list.')
@@ -279,8 +277,7 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
     # TODO: Shouldn't we allow node_names=None to mean all nodes? ... as is, this causes an error below and is inconsistent with other functions
     # TODO: Find out how to test for bypass=True effects
 
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property ... visual_property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if not isinstance(new_values, list): new_values = [new_values]
 
@@ -367,8 +364,7 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property ... visual_property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if edge_names == 'all':
         raise CyError('"all" edge_names is not yet supported by CyREST. Please provide a valid edge list.')
@@ -425,6 +421,8 @@ def set_network_property_bypass(new_value, visual_property, bypass=True, network
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
+    visual_property = normalize_prop_name(visual_property)
+
     # If the property is a color property, verify that all of the colors are valid, and translate named colors
     if visual_property in NETWORK_COLOR_PROPERTIES:
         new_value = verify_hex_colors(new_value)
@@ -471,8 +469,7 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:  # TODO: Added this ... but what about an invalid property?
-        raise CyError('Invalid visual property ... visual_property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     res = commands.cyrest_delete(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}/bypass',
                                  base_url=base_url)

@@ -129,7 +129,6 @@ class SanityTests(unittest.TestCase):
         # Initialization
         load_test_session()
         self.maxDiff = None
-        print('revert to previous')
 
         def normalize_dict(dict_val):
             # When comparing dicts, we can't be sure of the key ordering, and we don't know whether

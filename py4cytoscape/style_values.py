@@ -83,8 +83,7 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:
-        raise CyError('Invalid visual property ... visual property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if node_names is None:
         res = commands.cyrest_get('networks/' + str(net_suid) + '/views/' + str(view_suid) + '/nodes',
@@ -147,8 +146,7 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:
-        raise CyError('Invalid visual property ... visual property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     if edge_names is None:
         res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/edges',
@@ -197,8 +195,7 @@ def get_network_property(visual_property, network=None, base_url=DEFAULT_BASE_UR
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
 
-    if visual_property is None:
-        raise CyError('Invalid visual property ... visual property must be non-null')
+    visual_property = normalize_prop_name(visual_property)
 
     res = commands.cyrest_get(f'networks/{net_suid}/views/{view_suid}/network/{visual_property}', base_url=base_url)
     return res['value']

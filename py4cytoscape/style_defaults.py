@@ -84,7 +84,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
         narrate(f'style_name not specified, so updating "default" style.')
 
     # process visual property, including common alternatives for vp names :)
-    def_list = [{'visualProperty': _normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
+    def_list = [{'visualProperty': normalize_prop_name(prop), 'value': val} for prop, val in defaults.items()]
 
     # Verify values and adjust them if necessary
     for prop in def_list:
@@ -123,6 +123,8 @@ def get_visual_property_default(property, style_name=None, base_url=DEFAULT_BASE
         style_name = 'default'
         narrate(f'style_name not specified, so accessing "default" style.')
 
+    property = normalize_prop_name(property)
+
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_get(f'styles/{style_name}/defaults/{property}', base_url=base_url)
     return res['value']
@@ -158,7 +160,7 @@ def set_visual_property_default(style_string, style_name=None, base_url=DEFAULT_
         style_name = 'default'
         narrate(f'style_name not specified, so updating "default" style.')
 
-    style_string['visualProperty'] = _normalize_prop_name(style_string['visualProperty'])
+    style_string['visualProperty'] = normalize_prop_name(style_string['visualProperty'])
     # Verify value and adjust it if necessary
     style_string['value'] = _validate_prop_value(style_string['visualProperty'], style_string['value'])
 
@@ -1834,8 +1836,3 @@ def _validate_prop_value(prop, prop_val):
         show_error(f'Warning: setting unknown property "{prop}" to "{prop_val}"')
         return prop_val
 
-def _normalize_prop_name(prop_name):
-    # Convert white space to '_' and uppercase everything (e.g., 'edge color' -> 'EDGE_COLOR')
-    visual_prop_name = re.sub('\\s+', '_', prop_name).upper()
-    if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
-    return visual_prop_name
