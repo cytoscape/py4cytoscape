@@ -32,7 +32,8 @@ setuptools.setup(
         'colorbrewer',
         'chardet',
         'decorator',
-        'backoff'
+        'backoff',
+        'colour'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
