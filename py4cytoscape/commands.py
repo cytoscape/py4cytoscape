@@ -119,7 +119,7 @@ def cyrest_delete(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, re
 
 
 @cy_log
-def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True):
+def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, require_json=True, raw_get=False):
     """Construct a query, make GET call and process the result.
 
     Args:
@@ -129,6 +129,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
         require_json (bool): True if only JSON is accepted as a response; otherwise, return non-JSON if response is non-JSON
+        raw_get (bool): False for normal calls; otherwise, True to skip trying to set the sandbox first
 
     Returns:
         str or dict: a dict if result was JSON; otherwise a string
@@ -145,7 +146,7 @@ def cyrest_get(operation=None, parameters=None, base_url=DEFAULT_BASE_URL, requi
     """
     try:
         url = build_url(base_url, operation)
-        r = _do_request('GET', url, params=parameters, base_url=base_url)
+        r = _do_request('GET', url, params=parameters, base_url=base_url, raw_request=raw_get)
         r.raise_for_status()
         try:
             return r.json()
@@ -681,7 +682,7 @@ def _handle_error(e, force_cy_error=False):
                 show_error(f'In {caller}: {e}\n{content}')
         raise e
 
-@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=5)
+@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
 def _do_request_local(method, url, **kwargs):
     # Call CyREST via a local URL
     log_http_request(method, url, **kwargs)
@@ -689,11 +690,12 @@ def _do_request_local(method, url, **kwargs):
     log_http_result(r)
     return r
 
-def _do_request(method, url, base_url=DEFAULT_BASE_URL, **kwargs):
+def _do_request(method, url, base_url=DEFAULT_BASE_URL, raw_request=False, **kwargs):
     # Determine whether actual call is local or remote
     requester, default_sandbox = _get_requester(base_url)
 
-    do_initialize_sandbox(requester, base_url=base_url) # make sure there's a sandbox before executing a command
+    if not raw_request:
+        do_initialize_sandbox(requester, base_url=base_url) # make sure there's a sandbox before executing a command
 
     return requester(method, url, **kwargs)
 

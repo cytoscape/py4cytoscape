@@ -107,7 +107,7 @@ def cytoscape_api_versions(base_url=DEFAULT_BASE_URL):
         ['v1']
     """
     uri = base_url.split('/v')[0]
-    res = commands.cyrest_get(base_url=uri)
+    res = commands.cyrest_get(base_url=uri, raw_get=True)
     available_api_versions = res['availableApiVersions']
     return available_api_versions
 
