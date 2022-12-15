@@ -44,9 +44,10 @@ class AppsTests(unittest.TestCase):
         self.assertRegex(res['version'], '[0-9]+\\.[0-9]+\\.[0-9]+.*$')  # Verify that version looks like x.y.z
 
         # Verify that an unknown app is caught
-        self.assertRaises(CyError, get_app_information, 'bogus')
+        res = get_app_information('bogus')
+        self.assertDictEqual(res, {'error': "Can't find app 'bogus'"})
 
-    
+
     @print_entry_exit
     def test_get_available_apps(self):
         # Verify that app list contains expected dicts and at least some of the expected apps

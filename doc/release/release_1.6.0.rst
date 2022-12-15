@@ -26,6 +26,7 @@ The themes for this release are:
 * Support updated Python and Pandas libraries (for comparisons)
 * Added environment variables for easier runtime configuration
 * Better syntax checking for visual style properties and values
+* Upgraded to support Cytoscape 3.10
 
 
 API Changes

@@ -146,9 +146,16 @@ class TablesTests(unittest.TestCase):
         self.assertSetEqual(set(get_table_column_names('edge')),
                             {'SUID', 'shared name', 'shared interaction', 'name', 'selected', 'interaction',
                              'EdgeBetweenness'})
-        self.assertSetEqual(set(get_table_column_names('network')),
-                            {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication', 'Dataset Name',
-                             'Dataset URL'})
+        try:
+            verify_supported_versions(cytoscape='3.10')
+            network_columns = {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication',
+                               'Dataset Name',
+                               'Dataset URL', 'EnrichmentTable::organism', 'EnrichmentTable::Gene ID Column'}
+        except:
+            network_columns = {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication', 'Dataset Name',
+                             'Dataset URL'}
+        self.assertSetEqual(set(get_table_column_names('network')), network_columns)
+
         self.assertRaises(CyError, get_table_column_names, 'library')
 
         self.assertRaises(CyError, get_table_column_names, network='bogus')
@@ -174,10 +181,18 @@ class TablesTests(unittest.TestCase):
         self.assertDictEqual(get_table_column_types('edge'),
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String',
                               'selected': 'Boolean', 'interaction': 'String', 'EdgeBetweenness': 'Double'})
-        self.assertDictEqual(get_table_column_types('network'),
-                             {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
+        try:
+            verify_supported_versions(cytoscape='3.10')
+            network_columns = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
                               '__Annotations': 'List', 'publication': 'String', 'Dataset Name': 'String',
-                              'Dataset URL': 'String'})
+                              'Dataset URL': 'String', 'EnrichmentTable::organism': 'String',
+                               'EnrichmentTable::Gene ID Column': 'String'}
+        except:
+            network_columns = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
+                              '__Annotations': 'List', 'publication': 'String', 'Dataset Name': 'String',
+                              'Dataset URL': 'String'}
+        self.assertDictEqual(get_table_column_types('network'), network_columns)
+
         self.assertRaises(CyError, get_table_column_types, 'library')
 
         self.assertRaises(CyError, get_table_column_types, 'edge', network='bogus')

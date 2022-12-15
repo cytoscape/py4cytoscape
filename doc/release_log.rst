@@ -21,6 +21,8 @@ Release date: 30 Sep 2022
 * Disallow string as value when setting opacity properties
 * Added value syntax checks for map_visual_property(), set_node_property_bypass(), set_edge_property_bypass(), set_network_property_bypass(), set_visual_property_default(), update_style_defaults() & set_visual_property_default()
 * Added ability to use old property names in all property functions
+* Fixed occasional status 404 in cytoscape_api_versions()
+* Fixed apps functions to support Cytoscape 3.10 (get_app_information())
 
 
 Release notes
