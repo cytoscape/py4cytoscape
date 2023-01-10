@@ -37,6 +37,7 @@ API Changes
 * Added get_visual_style_JSON()
 * Added delete_all_visual_styles()
 * Added parameters in export_image() to support Cytoscape 3.10 export functions
+* Added set_catchup_network_merge_secs() and PY4CYTOSCAPE_CATCHUP_NETWORK_MERGE_SECS environment variable to control post-merge delay
 
 Deprecations
 ------------

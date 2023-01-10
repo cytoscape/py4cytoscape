@@ -23,6 +23,8 @@ Release date: 30 Sep 2022
 * Added ability to use old property names in all property functions
 * Fixed occasional status 404 in cytoscape_api_versions()
 * Fixed apps functions to support Cytoscape 3.10 (get_app_information())
+* Added set_catchup_network_merge_secs() and PY4CYTOSCAPE_CATCHUP_NETWORK_MERGE_SECS environment variable to control post-merge delay
+* Eliminated futures warning for load_table_data() for use of .iteritems()
 
 
 Release notes
