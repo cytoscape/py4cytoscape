@@ -498,8 +498,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
                                     body={'name': x, 'type': 'Integer'}, require_json=False, base_url=base_url)
 
     existing_cols = get_table_column_names(table, namespace, net_suid, base_url=base_url)
-    [create_col(x[0]) if x[1] == 'int64' and not x[0] in existing_cols else None for x in
-     data_subset.dtypes.iteritems()]
+    [create_col(x[0]) if x[1] == 'int64' and not x[0] in existing_cols else None     for x in data_subset.dtypes.items()]
 
     # finally, add the values for whatever columns we have (and create new columns as needed)
     res = commands.cyrest_put(f'networks/{net_suid}/tables/{tbl}',
