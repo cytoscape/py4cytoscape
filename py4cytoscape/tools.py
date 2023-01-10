@@ -21,6 +21,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # External library imports
 import sys
+import time
 
 # Internal module imports
 from . import commands
@@ -30,6 +31,7 @@ from . import sandbox
 from .exceptions import CyError
 from .py4cytoscape_utils import *
 from .py4cytoscape_logger import cy_log
+from .py4cytoscape_tuning import CATCHUP_NETWORK_MERGE_SECS
 
 
 @cy_log
@@ -444,6 +446,9 @@ def merge_networks(sources=None,
         cmd_string += f' networkMergeMap="{",".join(record_list)}"'
 
     res = commands.commands_post(cmd_string, base_url=base_url)
+
+    # Wait for Cytoscape to finish adding __annotations column to Network table
+    time.sleep(CATCHUP_NETWORK_MERGE_SECS)
 
     return res['SUID'] if 'SUID' in res else res
 

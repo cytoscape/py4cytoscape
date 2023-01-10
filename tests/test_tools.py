@@ -184,8 +184,10 @@ class ToolsTests(unittest.TestCase):
                                    'owes': 'Integer', 'relationship': 'String', 'source': 'String', 'target': 'String',
                                    'weight': 'Double'}
         BASIC_MERGED_NETWORK_PROPS = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
-                                      'EnrichmentTable::organism': 'String',
-                                      'EnrichmentTable::Gene ID Column': 'String', '__Annotations': 'List'}
+                                      '__Annotations': 'List', 'EnrichmentTable:organism': 'String',
+                                      'EnrichmentTable:Gene ID Column': 'String'}
+        BASIC_MERGED_NETWORK_PROPS = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
+         'EnrichmentTable::organism': 'String', 'EnrichmentTable::Gene ID Column': 'String', '__Annotations': 'List'}
         BASIC_MERGED_NODES = {'node X', 'node 12', 'node 13', 'node 10', 'node 11', 'node 2', 'node 3', 'node 0',
                               'node 1'}
         BASIC_MERGED_EDGES = {'node 2 (interacts) node 3', 'node X (destroys) node 0',
@@ -216,6 +218,9 @@ class ToolsTests(unittest.TestCase):
 
         # Setup: clean out previous test
         close_session(False)
+        
+        x = {'first':1, 'second':2}
+        y = {'second':2, 'first': 1}
 
         # Setup: Create the first network (Network_0)
         node_data_0 = {'id': ["node 0", "node 1", "node 2", "node 3", 'node X'],
@@ -232,7 +237,7 @@ class ToolsTests(unittest.TestCase):
         create_network_from_data_frames(nodes_0, edges_0, title='Network_0')
 
         # Setup: Create the second network (Network_1)
-        node_data_1 = {'id': ["node 10", "node 11", "node 12", "node 13", "node X"],
+        node_data_1 = {'id': ["node 10", "node 11", "node 12", "node 13", "node X"],       
                        'first name': ["Barry", "Karen", "Scott", "Robyn", "X"],
                        'age': [7, 5, 4, 0, -1]}
         nodes_1 = df.DataFrame(data=node_data_1, columns=['id', 'first name', 'age'])
