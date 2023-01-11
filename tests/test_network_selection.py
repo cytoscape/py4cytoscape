@@ -555,9 +555,47 @@ class NetworkSelectionTests(unittest.TestCase):
         self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
         self.assertSetEqual(set(expected_edges), set(selection['edges']))
 
-        self.assertRaises(CyError, select_edges_connecting_selected_nodes, network='bogus')
+        self.assertRaises(CyError, select_edges_adjacent_to_selected_nodes, network='bogus')
 
-    
+    @print_entry_exit
+    def test_select_edges_adjacent_to_nodes(self):
+        # Initialization
+        load_test_session()
+        COMMON_NODES = ['PDC1', 'TAH18']
+        NAME_NODES = ['YLR044C', 'YPR048W']
+        EXPECTED_EDGES = ['YPR048W (pp) YDL215C', 'YER179W (pp) YLR044C', 'YGL035C (pd) YLR044C',
+                          'YPR048W (pp) YOR355W', 'YNL216W (pd) YLR044C', 'YNL199C (pp) YPR048W']
+        expected_edges = edge_name_to_edge_suid(EXPECTED_EDGES)  # expected edges
+
+        # Verify that when no edges are selected, no edges get selected
+        self.assertDictEqual(select_edges_adjacent_to_nodes(nodes=None), {})
+
+        # Verify that when some nodes are selected by name, they're returned in the list along with edges that connect them
+        selected_nodes = select_nodes(NAME_NODES, by_col='name')['nodes']
+        selection = select_edges_adjacent_to_nodes(NAME_NODES)
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(expected_edges), set(selection['edges']))
+        self.assertSetEqual(set(selected_nodes), set(get_selected_nodes(node_suids=True)))
+        self.assertSetEqual(set(expected_edges), set(get_selected_edges(edge_suids=True)))
+
+        # Verify that when some nodes are selected by common name, they're returned in the list along with edges that connect them
+        clear_selection(type='both')
+        selection = select_edges_adjacent_to_nodes(COMMON_NODES, by_col='COMMON')
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(expected_edges), set(selection['edges']))
+        self.assertSetEqual(set(selected_nodes), set(get_selected_nodes(node_suids=True)))
+        self.assertSetEqual(set(expected_edges), set(get_selected_edges(edge_suids=True)))
+
+        # Verify that when some nodes are selected by name, they're returned in the list along with edges that connect them, but no nodes remain selected
+        clear_selection(type='both')
+        selection = select_edges_adjacent_to_nodes(NAME_NODES, keep_select_nodes=False)
+        self.assertSetEqual(set(selected_nodes), set(selection['nodes']))
+        self.assertSetEqual(set(expected_edges), set(selection['edges']))
+        self.assertIsNone(get_selected_nodes(node_suids=True))
+        self.assertSetEqual(set(expected_edges), set(get_selected_edges(edge_suids=True)))
+
+        self.assertRaises(CyError, select_edges_adjacent_to_nodes, nodes=None, network='bogus')
+
     @print_entry_exit
     def test_delete_duplicate_edges(self):
         EDGE_TO_DUP = ['YNL216W (pd) YLR044C']

@@ -381,7 +381,7 @@ def delete_selected_nodes(network=None, base_url=DEFAULT_BASE_URL):
         {'nodes': [107504, 107503, ...], 'edges': [108033, 108034]}
     """
     title = networks.get_network_name(network, base_url=base_url)
-    res = commands.commands_post(f'network delete nodeList=selected network="{title}"', base_url=base_url)
+    res = commands.commands_post(f'network delete nodeList="selected" network="{title}"', base_url=base_url)
     # TODO: Added double quotes to network title
     return res
 
@@ -754,10 +754,57 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='edges', network=suid, base_url=base_url)
-    res = commands.commands_post(f'network select adjacentEdges="true" nodeList="selected network="{suid}"',
+    res = commands.commands_post(f'network select adjacentEdges="true" nodeList="selected" network="{suid}"',
                                  base_url=base_url)
     return res
 
+def select_edges_adjacent_to_nodes(nodes, by_col='name', keep_select_nodes=True, network=None, base_url=DEFAULT_BASE_URL):
+    """Take currently selected nodes and add to the selection all edges connected to those nodes, regardless of directionality.
+
+    Any nodes or edges selected beforehand are deselected before any new edges are selected
+
+    Args:
+        nodes (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``SUID`` column of the ``node table`` unless
+            specified in ``nodes_by_col``.
+        by_col (str): Node table column to lookup up provide node values. Default is 'name'.
+        keep_select_nodes (bool): True to return with nodes selected; False to return with no nodes selected
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+         dict: {'nodes': [node list], 'edges': [edge list]}
+    Raises:
+        CyError: if network name or SUID doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> select_edges_adjacent_to_nodes(None)
+        {}
+        >>> select_edges_adjacent_to_nodes(['RAP1'], by_col='COMMON')
+        {'nodes': [107514], 'edges': []}
+        >>> select_edges_adjacent_to_nodes('RAP1, HIS4', by_col='COMMON')
+        {'nodes': [107514, 107511], 'edges': []}
+        >>> select_edges_adjacent_to_nodes([107514, 107511], by_col='SUID')
+        {'nodes': [107514, 107511], 'edges': []}
+        >>> select_edges_adjacent_to_nodes(107514], keep_select_nodes=False)
+        {'nodes': [107514], 'edges': []}
+
+    Note:
+        In the return value, node list is list of all selected edges, and edge list is the SUIDs of selected
+        edges -- dict is {} if no nodes were selected
+    """
+    suid = networks.get_network_suid(title=network, base_url=base_url)
+    clear_selection(type='both', network=suid, base_url=base_url)
+    select_nodes(nodes, by_col=by_col, preserve_current_selection=True, network=network, base_url=base_url)
+    res = commands.commands_post(f'network select adjacentEdges="true" nodeList="selected" network="{suid}"')
+    if not keep_select_nodes:
+        clear_selection(type='nodes', network=suid, base_url=base_url)
+    return res
 
 @cy_log
 def delete_duplicate_edges(network=None, base_url=DEFAULT_BASE_URL, *, ignore_direction=False):
