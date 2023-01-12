@@ -99,6 +99,7 @@ Edges
    select_all
    select_all_edges
    select_edges
+   select_edges_adjacent_to_nodes
    select_edges_adjacent_to_selected_nodes
    select_edges_connecting_selected_nodes
 
