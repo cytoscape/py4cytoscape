@@ -6,7 +6,7 @@ Release Log
 
 py4cytoscape 1.6.0
 -------------------
-Release date: 30 Sep 2022
+Release date: 12 Jan 2023
 
 * Now supporting Metascape migration from py2cytoscape to py4cytoscape
 * Added sandbox support when Cytoscape is at URL different than 127.0.0.1
