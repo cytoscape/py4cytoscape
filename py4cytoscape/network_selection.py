@@ -749,8 +749,8 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
         {'nodes': [103990, 103991, ...], 'edges': [104432, 104431, ...]}
 
     Note:
-        In the return value, node list is list of all selected edges, and edge list is the SUIDs of selected
-        edges -- dict is {} if no nodes were selected or there were no newly created edges
+        In the return value, node list is list of all selected nodes, and edge list is the SUIDs of selected
+        edges -- dict is {} if no nodes were selected or there were no newly selected edges
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='edges', network=suid, base_url=base_url)
@@ -795,8 +795,8 @@ def select_edges_adjacent_to_nodes(nodes, by_col='name', keep_select_nodes=True,
         {'nodes': [107514], 'edges': []}
 
     Note:
-        In the return value, node list is list of all selected edges, and edge list is the SUIDs of selected
-        edges -- dict is {} if no nodes were selected
+        In the return value, node list is list of all selected nodes, and edge list is the SUIDs of selected
+        edges -- dict is {} if no new nodes were selected
     """
     suid = networks.get_network_suid(title=network, base_url=base_url)
     clear_selection(type='both', network=suid, base_url=base_url)
