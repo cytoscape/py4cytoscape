@@ -46,7 +46,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Visualization'
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     test_suite='tests',
 )
 
