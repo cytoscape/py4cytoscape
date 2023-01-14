@@ -758,6 +758,7 @@ def select_edges_adjacent_to_selected_nodes(network=None, base_url=DEFAULT_BASE_
                                  base_url=base_url)
     return res
 
+@cy_log
 def select_edges_adjacent_to_nodes(nodes, by_col='name', keep_select_nodes=True, network=None, base_url=DEFAULT_BASE_URL):
     """Take currently selected nodes and add to the selection all edges connected to those nodes, regardless of directionality.
 
