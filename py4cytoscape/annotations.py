@@ -497,7 +497,7 @@ def ungroup_annotation(names=None, network=None, base_url=DEFAULT_BASE_URL):
         names = [names]
 
     for ann in names:
-        commands.commands_post(f'{cmd_string} uuidOrName="{ann}"', base_url=base_url)
+        commands.commands_get(f'{cmd_string} uuidOrName="{ann}"', base_url=base_url)
 
 
 @cy_log

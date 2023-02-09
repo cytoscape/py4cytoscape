@@ -4,6 +4,19 @@ Release Log
 ===========
 
 
+py4cytoscape 1.7.0
+-------------------
+Release date: dd mmm 2023
+
+* Updated annotations.ungroup() to call Cytoscape via GET instead of POST, per document
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.7.0.rst
+
+
 py4cytoscape 1.6.0
 -------------------
 Release date: 12 Jan 2023
