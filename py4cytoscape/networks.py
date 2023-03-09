@@ -1080,8 +1080,6 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
         1477
     """
 
-    # TODO: Verify the above documentation
-
     def compute_edge_name(source, target, interaction):
         return source + ' (' + interaction + ') ' + target
 
@@ -1097,8 +1095,8 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
             raise CyError('Must provide either nodes or edges')
 
     # create the JSON for a node list ... in cytoscape.js format
-    # TODO: Verify that we really do need this 'id' field ... or maybe we can kill it afterward?
-    json_nodes = [{'data': {'id': node}} for node in nodes[node_id_list]]
+    NODE_ID_COL_NAME = 'id'
+    json_nodes = [{'data': {NODE_ID_COL_NAME: node}} for node in nodes[node_id_list]]
 
     # create the JSON for an edge list ... in cytoscape.js format
     json_edges = []
@@ -1129,7 +1127,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
 
     # load node attributes into Cytoscape network
     if len(set(nodes.columns) - {node_id_list}) != 0:
-        tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=node_id_list, network=network_suid,
+        tables.load_table_data(nodes, data_key_column=node_id_list, table_key_column=NODE_ID_COL_NAME, network=network_suid,
                                base_url=base_url)
 
     if not edges is None:
