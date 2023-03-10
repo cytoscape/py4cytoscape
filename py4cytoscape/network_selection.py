@@ -186,6 +186,9 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         {'nodes': [107514], 'edges': []}
 
     Note:
+        To select a node whose name contains a comma, use '\' to escape the comma. For example,
+        'node1, node\,2' selects 'node1' and 'node,2'.
+
         In the return value, node list is the SUIDs of newly selected nodes
         and edge list is always empty -- dict is {} if no nodes were selected
     """
