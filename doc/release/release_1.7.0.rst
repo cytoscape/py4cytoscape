@@ -21,16 +21,16 @@ Highlights
 
 The themes for this release are:
 
-* Minor bug fix in annotations.ungroup()
+* Minor fixes and documentation updates
 
 
 API Changes
 -----------
 
-*
 
 Deprecations
 ------------
+
 
 Contributors to this release
 ----------------------------
@@ -45,6 +45,6 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
-- #xx by Barry Demchak
+- #99 by Carissa Bleker
 
 
