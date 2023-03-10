@@ -149,8 +149,7 @@ class TablesTests(unittest.TestCase):
         try:
             verify_supported_versions(cytoscape='3.10')
             network_columns = {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication',
-                               'Dataset Name',
-                               'Dataset URL', 'EnrichmentTable::organism', 'EnrichmentTable::Gene ID Column'}
+                               'Dataset Name', 'Dataset URL'}
         except:
             network_columns = {'SUID', 'shared name', 'name', 'selected', '__Annotations', 'publication', 'Dataset Name',
                              'Dataset URL'}
@@ -185,8 +184,7 @@ class TablesTests(unittest.TestCase):
             verify_supported_versions(cytoscape='3.10')
             network_columns = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
                               '__Annotations': 'List', 'publication': 'String', 'Dataset Name': 'String',
-                              'Dataset URL': 'String', 'EnrichmentTable::organism': 'String',
-                               'EnrichmentTable::Gene ID Column': 'String'}
+                              'Dataset URL': 'String'}
         except:
             network_columns = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
                               '__Annotations': 'List', 'publication': 'String', 'Dataset Name': 'String',
