@@ -456,6 +456,10 @@ def get_first_neighbors(node_names=None, as_nested_list=False, network=None, bas
         >>> get_first_neighbors(515677, as_nested_list=False)
         ['YGL035C', 'YOL051W', 'YPL248C', 'YML051W']
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`select_nodes`, :meth:`select_first_neighbors`
     """
@@ -515,6 +519,10 @@ def add_cy_nodes(node_names, skip_duplicate_names=True, network=None, base_url=D
         [{"name": "newnode1", "SUID": 1459}, {"name": "newnode2", "SUID": 1460}]
         >>> add_cy_nodes(['newnode2', 'newnode3'], skip_duplicate_names=True)
         [{"name": "newnode3", "SUID": 1460}]
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     net_suid = get_network_suid(network, base_url=base_url)
     node_names = normalize_list(node_names)
@@ -620,6 +628,10 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
         [{'SUID': 2884, 'source': 1552, 'target': 1698}]
         >>> add_cy_edges([['YKL028W', 'YJR066W'], ['YJR066W', 'YLR452C'], ['YGR046W', 'YLR452C']])
         [{'SUID': 2886, 'source': 1698, 'target': 1645}, {'SUID': 2887, 'source': 1645, 'target': 1534} ...]
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     net_suid = get_network_suid(network, base_url=base_url)
 
@@ -856,6 +868,10 @@ def create_subnetwork(nodes=None, nodes_by_col='SUID', edges=None, edges_by_col=
         1477
         >>> create_subnetwork(nodes=[1502, 1555, 1560, 1701], subnetwork_name=base_name+'xx')
         1477
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     # TODO: Verify that node and edge names can't contain blanks or commas
     title = get_network_suid(network, base_url=base_url)

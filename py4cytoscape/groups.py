@@ -77,6 +77,10 @@ def add_to_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, edges_
         {}
         >>> add_to_group('Group 1', nodes='unselected', edges='unselected') # add all unselected nodes and edges
         {}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     if isinstance(nodes, str) and nodes in {'all', 'selected', 'unselected'}: nodes_by_col = None
     node_list = prep_post_query_lists(nodes, nodes_by_col)
@@ -168,6 +172,10 @@ def create_group(group_name, nodes=None, nodes_by_col='SUID', network=None, base
         {'group': 95335}
         >>> create_group('Group 1', nodes='unselected') # create group with all unselected nodes
         {'group': 95335}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     # TODO: Determine whether group_name can be null ... Commands help says it can be optional
     if isinstance(nodes, str) and nodes in ['all', 'selected', 'unselected']: nodes_by_col = None
@@ -375,6 +383,10 @@ def remove_from_group(group_name, nodes=None, nodes_by_col='SUID', edges=None, e
         {}
         >>> remove_from_group('Group 1', nodes='unselected', edges='unselected') # remove all unselected nodes and edges
         {}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     if isinstance(nodes, str) and nodes in {'all', 'selected', 'unselected'}: nodes_by_col = None
     node_list = prep_post_query_lists(nodes, nodes_by_col)

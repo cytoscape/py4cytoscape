@@ -100,6 +100,10 @@ def set_node_property_bypass(node_names, new_values, visual_property, bypass=Tru
         >>> set_node_property_bypass(12755, ['#FF00FF'], 'NODE_FILL_COLOR', network='galFiltered.sif')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`clear_node_property_bypass`
     """
@@ -190,6 +194,10 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
         >>> clear_node_property_bypass(12755, 'NODE_FILL_COLOR', network='galFiltered.sif')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`
     """
@@ -265,6 +273,10 @@ def set_edge_property_bypass(edge_names, new_values, visual_property, bypass=Tru
         {'data': {}, 'errors': []}
         >>> set_edge_property_bypass(12755, '#FF00FF', 'EDGE_UNSELECTED_PAINT')
         {'data': {}, 'errors': []}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`clear_edge_property_bypass`
@@ -572,6 +584,10 @@ def set_node_color_bypass(node_names, new_colors, network=None, base_url=DEFAULT
         >>> set_node_color_bypass(1255, '#FF00FF', network='galFiltered.sif')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -619,6 +635,10 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
         ''
         >>> set_node_size_bypass(1255, 150.5, network='galFiltered.sif')
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     Note:
         Sets the bypass value of node size for one or more nodes. Only applicable if node dimensions are locked.
@@ -672,6 +692,10 @@ def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFA
         >>> set_node_tooltip_bypass(1255, 'One Tooltip', network='galFiltered.sif')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -719,6 +743,10 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
         ''
         >>> set_node_width_bypass(1255, 80)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -770,6 +798,10 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
         >>> set_node_height_bypass(1255, 80)
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -820,6 +852,10 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
         >>> set_node_label_bypass(1255, 'test label')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -868,6 +904,10 @@ def set_node_font_face_bypass(node_names, new_fonts, network=None, base_url=DEFA
         >>> set_node_font_face_bypass(1255, 'Dialog.italic,plain,20')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -915,6 +955,10 @@ def set_node_font_size_bypass(node_names, new_sizes, network=None, base_url=DEFA
         ''
         >>> set_node_font_size_bypass(1255, 20)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -967,6 +1011,10 @@ def set_node_label_color_bypass(node_names, new_colors, network=None, base_url=D
         >>> set_node_label_color_bypass(1255, '#FF00FF')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -1016,6 +1064,10 @@ def set_node_shape_bypass(node_names, new_shapes, network=None, base_url=DEFAULT
         >>> set_node_shape_bypass(1255, 'ROUND_RECTANGLE')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -1064,6 +1116,10 @@ def set_node_border_width_bypass(node_names, new_sizes, network=None, base_url=D
         ''
         >>> set_node_border_width_bypass(1255, 10)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1115,6 +1171,10 @@ def set_node_border_color_bypass(node_names, new_colors, network=None, base_url=
         >>> set_node_border_color_bypass(1255, '#FF00FF')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -1162,6 +1222,10 @@ def set_node_opacity_bypass(node_names, new_values, network=None, base_url=DEFAU
         ''
         >>> set_node_opacity_bypass(1255, 128)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1212,6 +1276,10 @@ def clear_node_opacity_bypass(node_names, network=None, base_url=DEFAULT_BASE_UR
         ''
         >>> clear_node_opacity_bypass(1255)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_opacity_bypass`
@@ -1264,6 +1332,10 @@ def set_node_fill_opacity_bypass(node_names, new_values, network=None, base_url=
         >>> set_node_fill_opacity_bypass(1255, 128)
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -1311,6 +1383,10 @@ def set_node_border_opacity_bypass(node_names, new_values, network=None, base_ur
         ''
         >>> set_node_border_opacity_bypass(1255, 128)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1360,6 +1436,10 @@ def set_node_label_opacity_bypass(node_names, new_values, network=None, base_url
         ''
         >>> set_node_label_opacity_bypass(1255, 128)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
@@ -1448,6 +1528,10 @@ def hide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> hide_nodes(1255, network='galFiltered.sif')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`hide_nodes`, :meth:`unhide_nodes`, :meth:`unhide_all`
     """
@@ -1494,6 +1578,10 @@ def unhide_nodes(node_names, network=None, base_url=DEFAULT_BASE_URL):
         ''
         >>> hide_nodes(1255)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     See Also:
         :meth:`clear_node_property_bypass`, :meth:`unhide_all`
@@ -1548,6 +1636,10 @@ def set_edge_opacity_bypass(edge_names, new_values, network=None, base_url=DEFAU
         >>> set_edge_opacity_bypass(10288, 128)
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
@@ -1601,6 +1693,10 @@ def set_edge_color_bypass(edge_names, new_colors, network=None, base_url=DEFAULT
         >>> set_edge_color_bypass(10288, '#FF00FF')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1652,6 +1748,10 @@ def set_edge_label_bypass(edge_names, new_labels, network=None, base_url=DEFAULT
         >>> set_edge_label_bypass(10288, 'test label')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1700,6 +1800,10 @@ def set_edge_font_face_bypass(edge_names, new_fonts, network=None, base_url=DEFA
         >>> set_edge_font_face_bypass(10288, 'Dialog.italic,plain,20')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1747,6 +1851,10 @@ def set_edge_font_size_bypass(edge_names, new_sizes, network=None, base_url=DEFA
         ''
         >>> set_edge_font_size_bypass(10288, 20)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1799,6 +1907,10 @@ def set_edge_label_color_bypass(edge_names, new_colors, network=None, base_url=D
         >>> set_edge_label_color_bypass(10288, '#FF00FF')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1848,6 +1960,10 @@ def set_edge_tooltip_bypass(edge_names, new_tooltip, network=None, base_url=DEFA
         >>> set_edge_tooltip_bypass(10288, 'Some Tooltip')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1895,6 +2011,10 @@ def set_edge_line_width_bypass(edge_names, new_widths, network=None, base_url=DE
         ''
         >>> set_edge_width_bypass(10288, 80)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -1944,6 +2064,10 @@ def set_edge_line_style_bypass(edge_names, new_styles, network=None, base_url=DE
         >>> set_edge_shape_bypass(10288, 'SOLID')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -1992,6 +2116,10 @@ def set_edge_source_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
         ''
         >>> set_edge_source_arrow_shape_bypass(10288, 'ARROW')
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -2043,6 +2171,10 @@ def set_edge_target_arrow_shape_bypass(edge_names, new_shapes, network=None, bas
         >>> set_edge_target_arrow_shape_bypass(10288, 'ARROW')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -2078,6 +2210,10 @@ def set_edge_source_arrow_color_bypass(edge_names, new_colors, network=None, bas
     Raises:
         CyError: if invalid color, or if edge or network name doesn't exist
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     Examples:
         >>> set_edge_label_color_bypass(get_edge_names(), '#FF00FF')
@@ -2147,6 +2283,10 @@ def set_edge_target_arrow_color_bypass(edge_names, new_colors, network=None, bas
         >>> set_edge_label_color_bypass(10288, '#FF00FF')
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
     """
@@ -2196,6 +2336,10 @@ def set_edge_label_opacity_bypass(edge_names, new_values, network=None, base_url
         ''
         >>> set_edge_label_opacity_bypass(10288, 128)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`clear_edge_property_bypass`
@@ -2284,6 +2428,10 @@ def hide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         >>> hide_edges(10288)
         ''
 
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
     See Also:
         :meth:`set_edge_property_bypass`, :meth:`hide_edges`, :meth:`unhide_edges`, :meth:`unhide_all`
     """
@@ -2330,6 +2478,10 @@ def unhide_edges(edge_names, network=None, base_url=DEFAULT_BASE_URL):
         ''
         >>> unhide_edges(10288)
         ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     See Also:
         :meth:`clear_edge_property_bypass`, :meth:`unhide_all`

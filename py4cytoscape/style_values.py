@@ -79,6 +79,10 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
         {'YER112W': 'LSM4'}
         >>> get_node_property(visual_property='NODE_LABEL', node_names=391173, network='galFiltered.sif')
         {391173: 'RPL11B'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -142,6 +146,10 @@ def get_edge_property(edge_names=None, visual_property=None, network=None, base_
         {393222: 'pd'}
         >>> get_edge_property(visual_property='EDGE_LABEL', edge_names='YDR277C (pp) YJR022W', network='galFiltered.sif')
         {'YDR277C (pp) YJR022W': 'pp'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     net_suid = networks.get_network_suid(network, base_url=base_url)
     view_suid = network_views.get_network_views(net_suid, base_url=base_url)[0]
@@ -245,6 +253,10 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {395406: '#FFFFEC'}
         >>> get_node_color(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': '#FFFFEC'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     res = get_node_property(node_names, "NODE_FILL_COLOR", network=network, base_url=base_url)
     return res
@@ -287,6 +299,10 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {395406: 50.0}
         >>> get_node_size(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 50.0}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     res = get_node_property(node_names, "NODE_SIZE", network=network, base_url=base_url)
     return res
@@ -329,6 +345,10 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {395406: 50.0}
         >>> get_node_width(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 46.470588235294116}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     res = get_node_property(node_names, "NODE_WIDTH", network=network, base_url=base_url)
     return res
@@ -371,6 +391,10 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {395406: 50.0}
         >>> get_node_height(node_names='YOR215C', network='galFiltered.sif')
         {'YYOR215C': 46.470588235294116}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     res = get_node_property(node_names, "NODE_HEIGHT", network=network, base_url=base_url)
     return res
@@ -418,6 +442,10 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
         >>> get_node_position(node_names='YER112W', network='galFiltered.sif')
                         x                    y
         YER112W  2151.8481399429043 2326.677814454767
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     x_location = get_node_property(node_names, "NODE_X_LOCATION", network=network, base_url=base_url)
     x_values = [x_location[node_name] for node_name in x_location]
@@ -481,6 +509,10 @@ def get_edge_line_width(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
         {421382: 2.0}
         >>> get_edge_line_width(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 2.0}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     res = get_edge_property(edge_names, "EDGE_WIDTH", network=network, base_url=base_url)
     return res
@@ -523,6 +555,10 @@ def get_edge_color(edge_names=None, network=None, base_url=DEFAULT_BASE_URL):
         {421382: '#808080'}
         >>> get_edge_color(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': '#808080'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     res = get_edge_property(edge_names, "EDGE_PAINT", network=network, base_url=base_url)
     return res
@@ -565,6 +601,10 @@ def get_edge_line_style(edge_names=None, network=None, base_url=DEFAULT_BASE_URL
         {421382: 'SOLID'}
         >>> get_edge_line_style(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 'SOLID'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     res = get_edge_property(edge_names, "EDGE_LINE_TYPE", network=network, base_url=base_url)
     return res
@@ -607,6 +647,10 @@ def get_edge_target_arrow_shape(edge_names=None, network=None, base_url=DEFAULT_
         {421382: 'NONE'}
         >>> get_edge_target_arrow_shape(edge_names='YOR355W (pp) YNL091W', network='galFiltered.sif')
         {'YOR355W (pp) YNL091W': 'NONE'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     res = get_edge_property(edge_names, "EDGE_TARGET_ARROW_SHAPE", network=network, base_url=base_url)
     return res

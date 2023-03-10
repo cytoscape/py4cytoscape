@@ -803,6 +803,10 @@ def select_edges_adjacent_to_nodes(nodes, by_col='name', keep_select_nodes=True,
         {'nodes': [107514], 'edges': []}
 
     Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
+    Note:
         In the return value, node list is list of all selected nodes, and edge list is the SUIDs of selected
         edges -- dict is {} if no new nodes were selected
     """

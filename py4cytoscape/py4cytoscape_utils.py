@@ -543,6 +543,10 @@ def node_name_to_node_suid(node_names, network=None, base_url=DEFAULT_BASE_URL, 
         [1022, 1024]
         >>> node_name_to_node_suid(['YDR277C', 'YDR277C', 'YDL194W'], network='myNetwork')
         [[1022, 1024], [1022, 1024], 1023]
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
     """
     return _item_to_suid(node_names, 'node', network=network, base_url=base_url, unique_list=unique_list)
 
@@ -640,6 +644,10 @@ def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, 
         [1022, 1024]
         >>> edge_name_to_edge_suid(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
         [[1022, 1024], [1022, 1024], 1023]
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
     """
     return _item_to_suid(edge_names, 'edge', network=network, base_url=base_url, unique_list=unique_list)
 
