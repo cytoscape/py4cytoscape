@@ -6,7 +6,7 @@ Release Log
 
 py4cytoscape 1.7.0
 -------------------
-Release date: dd mmm 2023
+Release date: 12 Mar 2023
 
 * Updated annotations.ungroup() to call Cytoscape via GET instead of POST, per document
 * Fixed networks.create_network_from_data_frames() to allow key column different than 'id'
@@ -52,7 +52,7 @@ Release notes
 
 py4cytoscape 1.5.0
 -------------------
-Release date: 28 June 2022
+Release date: 28 Jun 2022
 
 * Removed dependence on Enum package due to build errors
 
@@ -64,7 +64,7 @@ Release notes
 
 py4cytoscape 1.4.0
 -------------------
-Release date: 28 June 2022
+Release date: 28 Jun 2022
 
 * Supported Metascape migration from py2cytoscape to py4cytoscape
 * Added names= to get_network_list
