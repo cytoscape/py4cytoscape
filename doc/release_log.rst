@@ -4,6 +4,21 @@ Release Log
 ===========
 
 
+
+
+py4cytoscape 1.8.0
+-------------------
+Release date: dd mmm yyyy
+
+* Items go here ...
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.8.0.rst
+
+
 py4cytoscape 1.7.0
 -------------------
 Release date: 12 Mar 2023
