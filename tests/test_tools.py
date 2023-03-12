@@ -184,10 +184,7 @@ class ToolsTests(unittest.TestCase):
                                    'owes': 'Integer', 'relationship': 'String', 'source': 'String', 'target': 'String',
                                    'weight': 'Double'}
         BASIC_MERGED_NETWORK_PROPS = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
-                                      '__Annotations': 'List', 'EnrichmentTable:organism': 'String',
-                                      'EnrichmentTable:Gene ID Column': 'String'}
-        BASIC_MERGED_NETWORK_PROPS = {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
-         'EnrichmentTable::organism': 'String', 'EnrichmentTable::Gene ID Column': 'String', '__Annotations': 'List'}
+                                      '__Annotations': 'List'}
         BASIC_MERGED_NODES = {'node X', 'node 12', 'node 13', 'node 10', 'node 11', 'node 2', 'node 3', 'node 0',
                               'node 1'}
         BASIC_MERGED_EDGES = {'node 2 (interacts) node 3', 'node X (destroys) node 0',

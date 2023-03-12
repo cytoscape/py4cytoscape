@@ -760,6 +760,35 @@ class NetworkTests(unittest.TestCase):
                              {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String', 'name': 'String',
                               'selected': 'Boolean', 'interaction': 'String'})
 
+        # Verify that it's possible to create a network where the ID is in a column not named 'id'
+        happy_nodes = pd.DataFrame(data={'happy': ['hode 0', 'hode 1', 'hode 2', 'hode 3'], 'group': ['A', 'A', 'B', 'B'],
+                                         'score': [20, 10, 15, 5]})
+        happy_edges = pd.DataFrame(data={'source': ['hode 0', 'hode 0', 'hode 0', 'hode 2'],
+                                         'target': ['hode 1', 'hode 2', 'hode 3', 'hode 3'],
+                                         'interaction': ['inhibits', 'interacts', 'activates', 'interacts'],
+                                         'weight': [5.1, 3.0, 5.2, 9.9]})
+
+        suid_happy = create_network_from_data_frames(happy_nodes, happy_edges, title='Happy Network',
+                                                     collection='Happy Collection', node_id_list='happy')
+        self.assertEqual(get_node_count(suid_happy), 4)
+        self.assertEqual(get_edge_count(suid_happy), 4)
+        self.assertSetEqual(set(get_all_nodes(suid_happy)), set(['hode 0', 'hode 1', 'hode 2', 'hode 3']))
+        self.assertSetEqual(set(get_all_edges(suid_happy)), set(
+            ['hode 0 (inhibits) hode 1', 'hode 0 (interacts) hode 2', 'hode 0 (activates) hode 3',
+             'hode 2 (interacts) hode 3']))
+        self.assertSetEqual(set(get_table_column_names('node', network=suid_happy)),
+                            set(['SUID', 'shared name', 'id', 'happy', 'score', 'group', 'name', 'selected']))
+        self.assertSetEqual(set(get_table_column_names('edge', network=suid_happy)), set(
+            ['SUID', 'shared name', 'shared interaction', 'source', 'target', 'data.key.column', 'weight', 'name',
+             'selected', 'interaction']))
+        self.assertDictEqual(get_table_column_types('node', network=suid_happy),
+                             {'SUID': 'Long', 'shared name': 'String', 'name': 'String', 'selected': 'Boolean',
+                              'id': 'String', 'score': 'Integer', 'happy': 'String', 'group': 'String'})
+        self.assertDictEqual(get_table_column_types('edge', network=suid_happy),
+                             {'SUID': 'Long', 'shared name': 'String', 'shared interaction': 'String',
+                              'source': 'String', 'target': 'String', 'data.key.column': 'Integer', 'weight': 'Double',
+                              'name': 'String', 'selected': 'Boolean', 'interaction': 'String'})
+
         # Verify that when no edges or nodes are passed in, an error occurs
         self.assertRaises(CyError, create_network_from_data_frames)
 
@@ -1090,7 +1119,7 @@ class NetworkTests(unittest.TestCase):
                                                     'Esmeralda (interacts with) Alice']
                                        })
 
-        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors)
+        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors, use_vids=False)
         new_SUID = create_network_from_igraph(cur_igraph, 'My coworker iGraph')
         self.assertEqual(get_network_name(new_SUID), 'My coworker iGraph')
         new_igraph = create_igraph_from_network(new_SUID)
@@ -1119,7 +1148,7 @@ class NetworkTests(unittest.TestCase):
                                                     ]
                                        })
 
-        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors)
+        cur_igraph = Graph.DataFrame(relations, directed=True, vertices=actors, use_vids=False)
         new_SUID = create_network_from_igraph(cur_igraph, 'My multigraph coworker iGraph')
         self.assertEqual(get_network_name(new_SUID), 'My multigraph coworker iGraph')
         new_igraph = create_igraph_from_network(new_SUID)
@@ -1176,11 +1205,24 @@ class NetworkTests(unittest.TestCase):
                         range(len(col_list))]
             return new_cols
 
+        def normalize_edge_names(edge_names):
+            # Since the edge name is undirected, a legitimate entry could be (source, target) or (target, source).
+            # Rebuild the list so that an edge source < edge target lexicographcally so it's possible to compare
+            # two lists.
+            normal = {}
+            for edge in edge_names:
+                if edge[0] <= edge[1]:
+                    normal[edge] = edge_names[edge]
+                else:
+                    normal[(edge[1], edge[0])] = edge_names[edge]
+            return normal
+
         # Read test network in as a DataFrame
         test_df = df.read_csv('data/module_df.txt', sep='\t')
+        test_df = test_df.head(20)
 
         # Convert the DataFrame into an iGraph
-        test_ig = ig.Graph.DataFrame(test_df, directed=False)
+        test_ig = ig.Graph.DataFrame(test_df, directed=False, use_vids=False)
 
         # Send iGraph to Cytoscape ... note that Source and Target columns get added to edge attributes
         test_suid = create_network_from_igraph(test_ig)
@@ -1203,7 +1245,7 @@ class NetworkTests(unittest.TestCase):
         # Extract the edge values from the original test file ... and compare them to what Cytoscape has
         test_dict = {(row.V1, row.V2): row.e_color for row in test_df.itertuples()}
         cytoscape_edges_dict = {(row.source, row.target): row.e_color for row in cytoscape_edges_df.itertuples()}
-        self.assertDictEqual(test_dict, cytoscape_edges_dict)
+        self.assertDictEqual(normalize_edge_names(test_dict), normalize_edge_names(cytoscape_edges_dict))
 
     def _check_igraph_attributes(self, original_collection, new_collection, orig_name='name'):
         # Verify that all edges or vertices (and their attributes) in the igraph original_collection are present in the

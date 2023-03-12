@@ -186,6 +186,10 @@ def select_nodes(nodes, by_col='SUID', preserve_current_selection=True, network=
         {'nodes': [107514], 'edges': []}
 
     Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
+    Note:
         In the return value, node list is the SUIDs of newly selected nodes
         and edge list is always empty -- dict is {} if no nodes were selected
     """
@@ -464,6 +468,10 @@ def select_edges(edges, by_col='SUID', preserve_current_selection=True, network=
         {'nodes': [], 'edges': [108033, 108034, 108103]}
         >>> select_edges('YGL035C (pd) YIL162W, YGL035C (pd) YLR044C, YNL216W (pd) YLR044C', by_col='name', preserve_current_selection=True, network=52)
         {'nodes': [], 'edges': [108033, 108034, 108103]}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
 
     Note:
         In the return value, node list is always empty, and edge list is the SUIDs of newly selected edges -- dict is
@@ -794,6 +802,10 @@ def select_edges_adjacent_to_nodes(nodes, by_col='name', keep_select_nodes=True,
         {'nodes': [107514, 107511], 'edges': []}
         >>> select_edges_adjacent_to_nodes(107514], keep_select_nodes=False)
         {'nodes': [107514], 'edges': []}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
 
     Note:
         In the return value, node list is list of all selected nodes, and edge list is the SUIDs of selected
