@@ -69,8 +69,8 @@ class AppsTests(unittest.TestCase):
         self.assertTrue(app_names.issuperset(
             {'Biomart Web Service Client', 'copycatLayout', 'cyChart', 'PSICQUIC Web Service Client',
              'Diffusion', 'cyREST', 'CyNDEx-2', 'Core Apps', 'cyBrowser', 'SBML Reader', 'PSI-MI Reader',
-             'Network Merge', 'CyCL', 'BioPAX Reader', 'NetworkAnalyzer', 'ID Mapper', 'CX Support',
-             'OpenCL Prefuse Layout', 'JSON Support'}))
+             'Network Merge', 'BioPAX Reader', 'NetworkAnalyzer', 'ID Mapper', 'CX Support',
+             'OpenCL Prefuse Layout', 'JSON Support'}), 'Missing expected installed app')
 
     
     @print_entry_exit
@@ -88,7 +88,8 @@ class AppsTests(unittest.TestCase):
 
         # Verify that the app can be disabled and that it then shows up on the disabled list
         self.assertDictEqual(disable_app(APP_NAME), {'appName': APP_NAME})
-        self.assertIn(APP_NAME, [app['appName'] for app in get_disabled_apps()])
+        disabled_app_names = get_disabled_apps()
+        self.assertIn(APP_NAME, [app['appName'] for app in disabled_app_names])
 
         # Verify that the disabled list is in good form
         res = get_installed_apps()
@@ -164,13 +165,24 @@ class AppsTests(unittest.TestCase):
         self.assertNotIn(APP_NAME, {app_info['appName'] for app_info in get_installed_apps()})
 
         # Verify that installing or uninstalling a non-existent app doesn't change the app list
-        self.assertDictEqual(install_app(BAD_APP_NAME), {})
+        if check_supported_versions(cytoscape='3.10') is None:
+            EXPECTED_INSTALL_ERROR = {'error': f"Can't find app '{BAD_APP_NAME}'"}
+            EXPECTED_UNINSTALL_ERROR = EXPECTED_INSTALL_ERROR
+            EXPECTED_EMPTY_INSTALL_ERROR = {'error': f"Can't find app '{EMPTY_APP_NAME}'"}
+            EXPECTED_EMPTY_UNINSTALL_ERROR = EXPECTED_EMPTY_INSTALL_ERROR
+        else:
+            EXPECTED_INSTALL_ERROR = {}
+            EXPECTED_UNINSTALL_ERROR = {'appName': BAD_APP_NAME}
+            EXPECTED_EMPTY_INSTALL_ERROR = {}
+            EXPECTED_EMPTY_UNINSTALL_ERROR = {'appName': EMPTY_APP_NAME}
+
+        self.assertDictEqual(install_app(BAD_APP_NAME), EXPECTED_INSTALL_ERROR)
         self.assertNotIn(BAD_APP_NAME, {app_info['appName'] for app_info in get_installed_apps()})
-        self.assertDictEqual(uninstall_app(BAD_APP_NAME), {'appName': BAD_APP_NAME})
+        self.assertDictEqual(uninstall_app(BAD_APP_NAME), EXPECTED_UNINSTALL_ERROR)
         self.assertNotIn(BAD_APP_NAME, {app_info['appName'] for app_info in get_installed_apps()})
-        self.assertDictEqual(install_app(EMPTY_APP_NAME), {})
+        self.assertDictEqual(install_app(EMPTY_APP_NAME), EXPECTED_EMPTY_INSTALL_ERROR)
         self.assertNotIn(EMPTY_APP_NAME, {app_info['appName'] for app_info in get_installed_apps()})
-        self.assertDictEqual(uninstall_app(EMPTY_APP_NAME), {'appName': EMPTY_APP_NAME})
+        self.assertDictEqual(uninstall_app(EMPTY_APP_NAME), EXPECTED_EMPTY_UNINSTALL_ERROR)
         self.assertNotIn(EMPTY_APP_NAME, {app_info['appName'] for app_info in get_installed_apps()})
 
     
@@ -214,8 +226,12 @@ class AppsTests(unittest.TestCase):
         self.assertDictEqual(uninstall_app(APP_NAME), {'appName': APP_NAME})
         self.assertDictEqual(get_app_status(APP_NAME), {'appName': APP_NAME, 'status': 'Uninstalled'})
 
-        self.assertRaises(CyError, get_app_status, EMPTY_APP_NAME)
-        self.assertRaises(CyError, get_app_status, BAD_APP_NAME)
+        if check_supported_versions(cytoscape='3.10') is None:
+            self.assertDictEqual(get_app_status(EMPTY_APP_NAME), {'error': f"Can't find app '{EMPTY_APP_NAME}'"})
+            self.assertDictEqual(get_app_status(BAD_APP_NAME), {'error': f"Can't find app '{BAD_APP_NAME}'"})
+        else:
+            self.assertRaises(CyError, get_app_status, EMPTY_APP_NAME)
+            self.assertRaises(CyError, get_app_status, BAD_APP_NAME)
 
     
     @print_entry_exit
