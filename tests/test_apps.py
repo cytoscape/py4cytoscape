@@ -106,20 +106,20 @@ class AppsTests(unittest.TestCase):
         self.assertSetEqual({app['appName'] for app in get_disabled_apps()}, pre_disabled_app_names)
 
         # Verify that enabling the app again doesn't have any effect
-        self.assertDictEqual(enable_app(APP_NAME), {'appName': APP_NAME})
+        self.assertDictEqual(enable_app(APP_NAME), {'error': f"App '{APP_NAME}' is not disabled"})
         self.assertSetEqual({app['appName'] for app in get_disabled_apps()}, pre_disabled_app_names)
 
         # Uninstall the app just to be clean
         self.assertDictEqual(uninstall_app(APP_NAME), {'appName': APP_NAME})
 
         # Verify that enabling and disabling a non-existent app is caught
-        self.assertDictEqual(enable_app(BAD_APP_NAME), {'appName': BAD_APP_NAME})
+        self.assertDictEqual(enable_app(BAD_APP_NAME), {'error': f"Can't find app '{BAD_APP_NAME}'"})
         self.assertNotIn(BAD_APP_NAME, [app['appName'] for app in get_disabled_apps()])
-        self.assertDictEqual(disable_app(BAD_APP_NAME), {'appName': BAD_APP_NAME})
+        self.assertDictEqual(disable_app(BAD_APP_NAME), {'error': f"Can't find app '{BAD_APP_NAME}'"})
         self.assertNotIn(BAD_APP_NAME, [app['appName'] for app in get_disabled_apps()])
-        self.assertDictEqual(enable_app(EMPTY_APP_NAME), {'appName': EMPTY_APP_NAME})
+        self.assertDictEqual(enable_app(EMPTY_APP_NAME), {'error': f"Can't find app '{EMPTY_APP_NAME}'"})
         self.assertNotIn(EMPTY_APP_NAME, [app['appName'] for app in get_disabled_apps()])
-        self.assertDictEqual(disable_app(EMPTY_APP_NAME), {'appName': EMPTY_APP_NAME})
+        self.assertDictEqual(disable_app(EMPTY_APP_NAME), {'error': f"Can't find app '{EMPTY_APP_NAME}'"})
         self.assertNotIn(EMPTY_APP_NAME, [app['appName'] for app in get_disabled_apps()])
 
     
