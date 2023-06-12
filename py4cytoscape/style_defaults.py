@@ -88,7 +88,7 @@ def update_style_defaults(style_name, defaults, base_url=DEFAULT_BASE_URL):
 
     # Verify values and adjust them if necessary
     for prop in def_list:
-        prop['value'] = _validate_prop_value(prop['visualProperty'], prop['value'])
+        prop['value'] = _validate_prop_value(prop['visualProperty'], prop['value'], base_url=base_url)
 
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=def_list, base_url=base_url,
                               require_json=False)
@@ -162,7 +162,7 @@ def set_visual_property_default(style_string, style_name=None, base_url=DEFAULT_
 
     style_string['visualProperty'] = normalize_prop_name(style_string['visualProperty'])
     # Verify value and adjust it if necessary
-    style_string['value'] = _validate_prop_value(style_string['visualProperty'], style_string['value'])
+    style_string['value'] = _validate_prop_value(style_string['visualProperty'], style_string['value'], base_url=base_url)
 
     # TODO: Should the property name be mapped like in update_style_defaults?
     res = commands.cyrest_put(f'styles/{style_name}/defaults', body=[style_string], base_url=base_url,
@@ -1801,7 +1801,7 @@ def set_background_color_default(new_color, style_name=None, base_url=DEFAULT_BA
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
-def _validate_prop_value(prop, prop_val):
+def _validate_prop_value(prop, prop_val, base_url=DEFAULT_BASE_URL):
     # Check property value to make sure it fits syntax
 
     def none_check(value):
@@ -1821,11 +1821,11 @@ def _validate_prop_value(prop, prop_val):
     elif prop in OPACITY_PROPERTIES:
         return verify_opacities(none_check(prop_val))
     elif prop in SHAPE_PROPERTIES:
-        return verify_node_shapes(none_check(prop_val), styles.get_node_shapes())
+        return verify_node_shapes(none_check(prop_val), styles.get_node_shapes(base_url=base_url))
     elif prop in LINE_STYLE_PROPERTIES:
-        return verify_edge_shapes(none_check(prop_val), styles.get_line_styles(), 'line style', 'get_line_style')
+        return verify_edge_shapes(none_check(prop_val), styles.get_line_styles(base_url=base_url), 'line style', 'get_line_style')
     elif prop in ARROW_STYLE_PROPERTIES:
-        return verify_edge_shapes(none_check(prop_val), styles.get_arrow_shapes(), 'arrow style', 'get_arrow_shapes')
+        return verify_edge_shapes(none_check(prop_val), styles.get_arrow_shapes(base_url=base_url), 'arrow style', 'get_arrow_shapes')
     elif prop in VISIBLE_PROPERTIES:
         return verify_bools(none_check(prop_val))
     elif prop in LABEL_PROPERTIES | TOOLTIP_PROPERTIES | FONT_FACE_PROPERTIES:
