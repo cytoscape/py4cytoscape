@@ -21,7 +21,7 @@ Highlights
 
 The themes for this release are:
 
-* Themes go here ...
+* Bug fixes in tables.py and style_defaults.py
 
 
 API Changes
@@ -35,7 +35,8 @@ Deprecations
 Contributors to this release
 ----------------------------
 
-- Contributor goes here
+- Barry Demchak
+- Nils Oberg
 
 
 Pull requests merged in this release
@@ -45,6 +46,7 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
-- #xx by Author goes here
+- #105 by Nils Oberg
+- #107 by ObT1337
 
 

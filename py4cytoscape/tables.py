@@ -481,7 +481,7 @@ def load_table_data(data, data_key_column='row.names', table='node', table_key_c
     # Note that CyREST doesn't accept lists or create columns of type list, but comma-separated strings is
     # the best we can do for the user at this time.
     for col in data_subset.columns:
-        col_val = [','.join(val) if isinstance(val, list) else val for val in data_subset[col]]
+        col_val = [','.join([str(list_element)   for list_element in val]) if isinstance(val, list) else val   for val in data_subset[col]]
         data_subset[col] = col_val
 
     # TODO: Find out whether "factors" are an issue in Python, and why factors could be troublesome in R

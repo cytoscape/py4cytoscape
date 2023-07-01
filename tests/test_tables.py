@@ -320,26 +320,36 @@ class TablesTests(unittest.TestCase):
         # Verify that adding a column with a null works properly, and that adding columns of different types does, too
         # While we're at it, eyeball the running time to see that it's not crazy slow
         test_data_suid_name = get_table_columns(columns=['SUID', 'name'])
-        test_data_suid_name['IntCol'] = test_data_suid_name['SUID']
-        test_data_suid_name['StrCol'] = test_data_suid_name['SUID']
-        test_data_suid_name['FloatCol'] = test_data_suid_name['SUID']
+        suid_list = test_data_suid_name['SUID']
+        test_data_suid_name['IntCol'] = suid_list
+        test_data_suid_name['StrCol'] = suid_list
+        test_data_suid_name['FloatCol'] = suid_list
         test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str_, 'FloatCol': np.float_})
+        test_data_suid_name['ListIntCol'] = [[int(suid), int(suid), int(suid)]   for suid in suid_list]
+        test_data_suid_name['ListFloatCol'] = [[float(suid), float(suid), float(suid)]   for suid in suid_list]
+        test_data_suid_name['ListStrCol'] = [[str(suid), str(suid), str(suid)]   for suid in suid_list]
+        test_data_suid_name['ListBoolCol'] = [[True, False, True]   for suid in suid_list]
         suid_YBL079W = test_data_suid_name.index[test_data_suid_name.name == 'YBL079W'][0]
         del test_data_suid_name['name']
-        test_data_suid_name.at[suid_YBL079W, 'FloatCol'] = np.nan # used to be set_value, but it was deprecated
-#        test_data_suid_name.set_value(suid_YBL079W, 'FloatCol', np.nan)
+        test_data_suid_name.at[suid_YBL079W, 'FloatCol'] = np.nan
+        test_data_suid_name.at[suid_YBL079W, 'ListFloatCol'] = [np.nan, 1.23, np.nan]
         res = load_table_data(test_data_suid_name, data_key_column='SUID', table_key_column='SUID')
         self.assertEqual(res, 'Success: Data loaded in defaultnode table')
         # Make sure that Cytoscape got all of the column types and values right, including the NAN
-        t = get_table_columns(columns=['SUID', 'IntCol', 'StrCol', 'FloatCol'])
-        for suid, intcol, strcol, floatcol in zip(t['SUID'], t['IntCol'], t['StrCol'], t['FloatCol']):
+        t = get_table_columns(columns=['SUID', 'IntCol', 'StrCol', 'FloatCol', 'ListIntCol', 'ListFloatCol', 'ListStrCol', 'ListBoolCol'])
+        for suid, intcol, strcol, floatcol, list_int_col, list_float_col, list_str_col, list_bool_col in zip(t['SUID'], t['IntCol'], t['StrCol'], t['FloatCol'], t['ListIntCol'], t['ListFloatCol'], t['ListStrCol'], t['ListBoolCol']):
             str_suid = str(suid)
             self.assertEqual(str_suid, str(intcol))
             self.assertEqual(str_suid, strcol)
+            self.assertEqual(','.join([str(int(suid)), str(int(suid)), str(int(suid))]), list_int_col)
+            self.assertEqual(','.join([str(suid), str(suid), str(suid)]), list_str_col)
+            self.assertEqual('True,False,True', list_bool_col)
             if suid == suid_YBL079W:
                 self.assertTrue(np.isnan(floatcol))
+                self.assertEqual(list_float_col, 'nan,1.23,nan')
             else:
                 self.assertEqual(str_suid, str(int(floatcol)))
+                self.assertEqual(','.join([str(float(suid)), str(float(suid)), str(float(suid))]), list_float_col)
 
         data = get_table_columns()
         self.assertRaises(CyError, load_table_data, data, table='bogus')

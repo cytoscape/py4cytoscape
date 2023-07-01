@@ -10,7 +10,8 @@ py4cytoscape 1.8.0
 -------------------
 Release date: dd mmm yyyy
 
-* Items go here ...
+* Allowed load_table_data() to handle lists containing float, int and bool instead of just str
+* Fixed base_url= not recognized for update_style_defaults() and set_visual_property_default()
 
 
 Release notes
