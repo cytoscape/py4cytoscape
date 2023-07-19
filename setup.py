@@ -28,7 +28,7 @@ setuptools.setup(
         'pandas',
         'networkx',
         'requests',
-        'python-igraph',
+        'igraph',
         'colorbrewer',
         'chardet',
         'decorator',
