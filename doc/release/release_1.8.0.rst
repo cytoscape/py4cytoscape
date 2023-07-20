@@ -22,6 +22,7 @@ Highlights
 The themes for this release are:
 
 * Bug fixes in tables.py and style_defaults.py
+* Update python-igraph name to igraph
 
 
 API Changes
@@ -41,6 +42,8 @@ Contributors to this release
 
 Pull requests merged in this release
 ------------------------------------
+
+- #112 by Szabolcs Horvat
 
 
 Issues closed in this release

@@ -1420,7 +1420,7 @@ def create_igraph_from_network(network=None, base_url=DEFAULT_BASE_URL):
 
     # set up iGraph vertices ... first create vertex by naming it, then pile on attributes
     # Tutorial: https://igraph.org/python/doc/tutorial/tutorial.html
-    # Source: https://github.com/igraph/python-igraph/blob/master/src/igraph/__init__.py
+    # Source: https://github.com/igraph/igraph/blob/master/src/igraph/__init__.py
     g = ig.Graph(directed=True)
 
     # add all nodes and their attributes

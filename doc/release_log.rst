@@ -12,6 +12,7 @@ Release date: dd mmm yyyy
 
 * Allowed load_table_data() to handle lists containing float, int and bool instead of just str
 * Fixed base_url= not recognized for update_style_defaults() and set_visual_property_default()
+* Update python-igraph name to igraph
 
 
 Release notes

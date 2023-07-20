@@ -4,7 +4,7 @@ networkx
 requests
 colorbrewer
 chardet
-python-igraph
+igraph
 sphinx_autodoc_typehints
 sphinx_rtd_theme
 ipykernel
