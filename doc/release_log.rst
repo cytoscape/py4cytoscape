@@ -8,11 +8,12 @@ Release Log
 
 py4cytoscape 1.8.0
 -------------------
-Release date: dd mmm yyyy
+Release date: 21 Jul 2023
 
 * Allowed load_table_data() to handle lists containing float, int and bool instead of just str
 * Fixed base_url= not recognized for update_style_defaults() and set_visual_property_default()
 * Update python-igraph name to igraph
+* Clean up property value warnings for set_node_property_bypass() and set_edge_property_bypass()
 
 
 Release notes

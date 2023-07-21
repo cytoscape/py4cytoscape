@@ -23,6 +23,7 @@ The themes for this release are:
 
 * Bug fixes in tables.py and style_defaults.py
 * Update python-igraph name to igraph
+* Cleaned up warnings when setting style bypass properties
 
 
 API Changes
