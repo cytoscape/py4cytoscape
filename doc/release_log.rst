@@ -4,6 +4,18 @@ Release Log
 ===========
 
 
+py4cytoscape 1.9.0
+-------------------
+Release date: dd mmm yyyy
+
+* Removed value validation warning from set_visual_property_default()
+
+
+Release notes
+~~~~~~~~~~~~~
+
+.. include:: release/release_1.9.0.rst
+
 
 
 py4cytoscape 1.8.0
