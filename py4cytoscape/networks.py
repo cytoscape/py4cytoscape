@@ -1166,7 +1166,7 @@ def create_network_from_data_frames(nodes=None, edges=None, title='From datafram
                         'apply vizmap')
 
     narrate('Applying preferred layout')
-    _delay_until_stable(lambda: layouts.layout_network(network=network_suid) is not None,
+    _delay_until_stable(lambda: layouts.layout_network(network=network_suid, base_url=base_url) is not None,
                         'layout network')
 
     # TODO: Verify that attribute types are properly set in Cytoscape
