@@ -780,7 +780,8 @@ def set_node_width_bypass(node_names, new_widths, network=None, base_url=DEFAULT
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    style_dependencies.lock_node_dimensions(False)
+    current_style = styles.get_current_style(network=network, base_url=base_url)
+    style_dependencies.lock_node_dimensions(False, style_name=current_style, base_url=base_url)
 
     res = set_node_property_bypass(node_names, new_widths, 'NODE_WIDTH', network=network, base_url=base_url)
     return res
@@ -834,7 +835,8 @@ def set_node_height_bypass(node_names, new_heights, network=None, base_url=DEFAU
     See Also:
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
-    style_dependencies.lock_node_dimensions(False)
+    current_style = styles.get_current_style(network=network, base_url=base_url)
+    style_dependencies.lock_node_dimensions(False, style_name=current_style, base_url=base_url)
 
     res = set_node_property_bypass(node_names, new_heights, 'NODE_HEIGHT', network=network, base_url=base_url)
     return res

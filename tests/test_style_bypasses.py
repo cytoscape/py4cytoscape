@@ -39,8 +39,6 @@ class StyleBypassesTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    _TEST_STYLE = 'galFiltered Style'
-
     @print_entry_exit
     def test_set_node_property_bypass(self):
 
