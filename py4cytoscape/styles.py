@@ -224,7 +224,7 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
     """Save one or more visual styles to file.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to
+        filename (str): Full path or path relative to current working directory, in addition to
             the name of the file. Extension is automatically added based on the ``type`` argument.
             Default is "styles.xml"
         type (str): Type of data file to export, e.g., XML, JSON (case sensitive).

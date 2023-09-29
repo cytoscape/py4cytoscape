@@ -303,7 +303,7 @@ def export_network(filename=None, type='SIF', network=None, base_url=DEFAULT_BAS
     """Export a network to one of mulitple file formats.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory,
+        filename (str): Full path or path relative to current working directory,
             in addition to the name of the file. Extension is automatically added based
             on the ``type`` argument. If blank, then the current network name is used.
         type (str): File type. SIF (default), CX, cyjs, graphML, NNF,  xGMML.

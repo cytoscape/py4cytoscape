@@ -126,7 +126,7 @@ def save_session(filename=None, base_url=DEFAULT_BASE_URL, *, overwrite_file=Tru
     ``filename`` already exists, then it is overwritten.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to the name
+        filename (str): Full path or path relative to current working directory, in addition to the name
             of the file. The ``.cys`` extension is automatically added. Leave blank to update previously
             saved session file.
         base_url (str): Ignore unless you need to specify a custom domain,

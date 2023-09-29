@@ -320,7 +320,7 @@ def export_filters(filename='filters.json', base_url=DEFAULT_BASE_URL, *, overwr
     """Saves filters to file in JSON format.
 
     Args:
-        filename (str): Full path or path relavtive to current working directory, in addition to the name of the file. Default is "filters.json".
+        filename (str): Full path or path relative to current working directory, in addition to the name of the file. Default is "filters.json".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
