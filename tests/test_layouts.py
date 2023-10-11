@@ -36,7 +36,7 @@ class LayoutsTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    
+
     @print_entry_exit
     def test_layout_network(self):
         # Initialize
@@ -58,7 +58,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertRaises(CyError, layout_network, 'bogus')
         self.assertEqual(get_network_suid(), cur_network_suid)
 
-    
+
     @print_entry_exit
     def test_bundle_edges(self):
         # Initialize
@@ -75,7 +75,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertEqual(get_network_suid(), cur_network_suid)
         # To verify, operator should eyeball the network in Cytoscape
 
-    
+
     @print_entry_exit
     def test_clear_edge_bends(self):
         # Initialize
@@ -95,7 +95,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertEqual(get_network_suid(), cur_network_suid)
         # To verify, operator should eyeball the network in Cytoscape
 
-    
+
     @print_entry_exit
     def test_layout_copycat(self):
         # Initialize
@@ -119,7 +119,7 @@ class LayoutsTests(unittest.TestCase):
         # Verify that the copycat unmatched nodes work by removing original nodes, laying out clone in a grid, then returning it to original
         # TODO: Implement this when we have APIs for deleting nodes
 
-    
+
     @print_entry_exit
     def test_get_layout_names(self):
         required_layouts = set(
@@ -128,7 +128,7 @@ class LayoutsTests(unittest.TestCase):
         found_layouts = set(get_layout_names())
         self.assertTrue(found_layouts.issuperset(required_layouts))
 
-    
+
     @print_entry_exit
     def test_get_layout_name_mapping(self):
         required_layouts = {'Attribute Circle Layout': 'attribute-circle', 'Stacked Node Layout': 'stacked-node-layout',
@@ -150,7 +150,7 @@ class LayoutsTests(unittest.TestCase):
             False in [found_layouts[gui_layout_name] == required_layouts[gui_layout_name] for gui_layout_name in
                       required_layouts])
 
-    
+
     @print_entry_exit
     def test_get_layout_property_names(self):
         layouts = {'force-directed': set(
@@ -165,7 +165,7 @@ class LayoutsTests(unittest.TestCase):
 
         self.assertRaises(CyError, get_layout_property_names, 'boguslayout')
 
-    
+
     @print_entry_exit
     def test_get_layout_property_type(self):
         layouts = {'force-directed': [('numIterations', 'int'), ('defaultSpringCoefficient', 'double'),
@@ -181,7 +181,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertRaises(CyError, get_layout_property_type, 'boguslayout', 'bogusparam')
         self.assertRaises(KeyError, get_layout_property_type, 'force-directed', 'bogusparam')
 
-    
+
     @print_entry_exit
     def test_get_layout_property_value(self):
         layouts = {'force-directed': [('numIterations', '100'), ('defaultSpringCoefficient', '0.0001'),
@@ -197,7 +197,7 @@ class LayoutsTests(unittest.TestCase):
         self.assertRaises(CyError, get_layout_property_value, 'boguslayout', 'bogusparam')
         self.assertRaises(KeyError, get_layout_property_value, 'force-directed', 'bogusparam')
 
-    
+
     @print_entry_exit
     def test_set_layout_properties(self):
         # This is tricky ... short of restarting Cytoscape, there doesn't appear to be a way of starting with fresh
@@ -226,6 +226,34 @@ class LayoutsTests(unittest.TestCase):
 
         self.assertRaises(CyError, set_layout_properties, 'boguslayout', {})
         self.assertRaises(CyError, set_layout_properties, 'force-directed', {'bogusparam': 666})
+        
+
+    @print_entry_exit
+    def test_rotate_layout(self):
+        # Initialize
+        load_test_session()
+        cur_network_suid = get_network_suid()
+
+        rotate_layout(90, cur_network_suid, select_only=False)
+        self.assertEqual(get_node_position('YDL081C')['x']['YDL081C'], 199.81368750456022)
+
+        select_nodes(['YGL044C','YOL123W','YKR026C'], by_col='name')
+        rotate_layout(-120, cur_network_suid, select_only=True)
+        self.assertEqual(get_node_position('YGL044C')['y']['YGL044C'], 3797.3504180619493)
+
+
+    @print_entry_exit
+    def test_scale_layout(self):
+        # Initialize
+        load_test_session()
+        cur_network_suid = get_network_suid()
+
+        scale_layout('X Axis', 2, cur_network_suid, select_only=False)
+        self.assertEqual(get_node_position('YDL081C')['x']['YDL081C'], -1236.094914256304)
+
+        select_nodes(['YGL044C','YOL123W','YKR026C'], by_col='name')
+        scale_layout('Y Axis', 5, cur_network_suid, select_only=True)
+        self.assertEqual(get_node_position('YGL044C')['y']['YGL044C'], 3917.1843757340685)
 
 
 if __name__ == '__main__':

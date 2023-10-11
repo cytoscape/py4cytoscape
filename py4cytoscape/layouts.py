@@ -12,17 +12,17 @@ the owner of yFiles.
 
 """Copyright 2020-2022 The Cytoscape Consortium
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the 
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
 persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
@@ -346,10 +346,6 @@ def get_layout_property_value(layout_name, property_name, base_url=DEFAULT_BASE_
 def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_URL):
     """Sets the specified properties for the specified layout.
 
-    Unmentioned properties are left unchanged.
-
-    Run ``getLayoutNames`` to list available layouts. Run ``getLayoutPropertyNames`` to list properties per layout.
-
     Args:
         layout_name (str): Name of the layout
         properties_dict (dict): List of one or more ``property=value`` pairs
@@ -377,4 +373,68 @@ def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_UR
             each_property = [{'name': prop, 'value': value}]
             res = commands.cyrest_put(f'apply/layouts/{layout_name}/parameters', body=each_property,
                                       base_url=base_url, require_json=False)
+    return res
+
+# ==============================================================================
+# IV. Edit layout
+# ------------------------------------------------------------------------------------------------------------------------
+
+@cy_log
+def rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BASE_URL):
+    """Rotate the layout to a network.
+
+    Args:
+        angle (int or float):The angle (in degrees) to rotate the network. From -180 to 180.
+        network (SUID or str or None): Name or SUID of the network; default is "current" network.
+        selected_only (bool): Whether to rotate only current selection. Default is false.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {} empty
+
+    Raises:
+        CyError: if layout_name is invalid
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> rotate_layout(90, 'current', selected_only=False)
+        {}
+    """
+    verify_supported_versions(1, 3.11, base_url=base_url)
+    suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('layout rotate angle='+ str(angle) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(select_only),
+                                 base_url=base_url)
+    return res
+
+
+@cy_log
+def scale_layout(axis, scale_factor, network=None, selected_only=False, base_url=DEFAULT_BASE_URL):
+    """Scale the layout to a network.
+
+    Args:
+        axis (str): Scale the layout in either the X, Y, or both directions.
+        scale_factor (int or float): Scale the layout in either the X, Y, or both directions.
+        network (SUID or str or None): Name or SUID of the network; default is "current" network.
+        selected_only (bool): Whether to rotate only current selection. Default is false.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: {} empty
+
+    Raises:
+        CyError: if layout_name is invalid
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> scale_layout('X Axis', 2, 'current', selected_only=False)
+        {}
+    """
+    verify_supported_versions(1, 3.11, base_url=base_url)
+    suid = networks.get_network_suid(network, base_url=base_url)
+    res = commands.commands_post('layout scale axis='+ axis + ' scaleFactor=' + str(scale_factor) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(select_only),
+                             base_url=base_url)
     return res
