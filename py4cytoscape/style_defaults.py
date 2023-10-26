@@ -1109,6 +1109,36 @@ def get_node_selection_color_default(style_name=None, base_url=DEFAULT_BASE_URL)
 
 
 @cy_log
+def get_node_label_position_default(style_name=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the default node label position.
+
+    Args:
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: node label position value (see ``set_node_label_position_bypass()`` for format of position value)
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_node_label_position_default(style_name='galFiltered Style')
+        'C,C,c,0.00,0.00'
+        >>> get_node_label_position_default()
+        'C,C,c,0.00,0.00'
+
+    See Also:
+        :meth:`set_node_label_position_bypass`
+    """
+    res = get_visual_property_default('NODE_LABEL_POSITION', style_name=style_name, base_url=base_url)
+    return res
+
+
+@cy_log
 def set_node_selection_color_default(new_color, style_name=None, base_url=DEFAULT_BASE_URL):
     """Set the default node border color.
 
@@ -1229,6 +1259,38 @@ def set_node_width_default(new_width, style_name=None, base_url=DEFAULT_BASE_URL
     res = set_visual_property_default(style, style_name, base_url=base_url)
     return res
 
+
+@cy_log
+def set_node_label_position_default(new_node_anchor, new_graphic_anchor, new_justification, new_xoffset, new_yoffset, style_name=None, base_url=DEFAULT_BASE_URL):
+    """Set the default node label position.
+
+    Args:
+        new_node_anchor (str): New position on node to place the graphic: C,NW,N,NE,E,SE,S,SW,W
+        new_graphic_anchor (str): New position on graphic to place the graphic: C,NW,N,NE,E,SE,S,SW,W
+        new_justification (str): New positioning of content within graphic: l,r,c
+        new_xoffset (float): New additional offset in the x direction
+        new_yoffset (float): New additional offset in the y direction
+        style_name (str): Name of style; default is "default" style
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if style name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_label_position_default('S', 'C', 'c', 0.00, 0.00)
+        ''
+        >>> set_node_label_position_default('SE', 'C', 'c', 0.00, 0.00, style_name='My Style')
+        ''
+    """
+    style = {'visualProperty': 'NODE_LABEL_POSITION', 'value': f'{new_node_anchor},{new_graphic_anchor},{new_justification},{new_xoffset},{new_yoffset}'}
+    res = set_visual_property_default(style, style_name, base_url=base_url)
+    return res
 
 @cy_log
 def set_node_tooltip_default(new_tooltip, style_name=None, base_url=DEFAULT_BASE_URL):

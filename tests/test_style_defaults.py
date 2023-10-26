@@ -796,6 +796,24 @@ class StyleDefaultsTests(unittest.TestCase):
         self._check_setter_default(set_node_label_opacity_default, 'NODE_LABEL_TRANSPARENCY', 150, 350, exception_scenario='exception')
 
     @print_entry_exit
+    def test_get_set_node_label_position_default(self):
+        ORIG_VALUE = 'C,C,c,0.00,0.00'
+        NEW_VALUE = 'S,N,l,-100.00,200.00'
+        NEW_VALUE_LIST = NEW_VALUE.split(',')
+
+        # Initialization
+        load_test_session()
+
+        # Verify that the initial label position is what we expect
+        orig_value = get_node_label_position_default(style_name=self._TEST_STYLE)
+        self.assertEqual(orig_value, ORIG_VALUE)
+
+        # Verify that a good value can be set and that it applies to self._TEST_STYLE but not 'default' style
+        self.assertEqual(set_node_label_position_default(NEW_VALUE_LIST[0], NEW_VALUE_LIST[1], NEW_VALUE_LIST[2], NEW_VALUE_LIST[3], NEW_VALUE_LIST[4], style_name=self._TEST_STYLE), '')
+        self.assertEqual(get_node_label_position_default(style_name=self._TEST_STYLE), NEW_VALUE)
+        self.assertEqual(get_node_label_position_default(), ORIG_VALUE)
+
+    @print_entry_exit
     def test_set_node_selection_color_default(self):
         self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', '#FF00FF', 'bogusColor', exception_scenario='exception')
         self._check_setter_default(set_node_selection_color_default, 'NODE_SELECTED_PAINT', 'red', 'bogusColor', exception_scenario='exception', good_xlate='#FF0000')

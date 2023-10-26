@@ -169,6 +169,8 @@ Node Style Bypasses
    set_node_label_color_bypass
    set_node_label_opacity_bypass
    set_node_opacity_bypass
+   set_node_position_bypass
+   set_node_label_position_bypass
    set_node_shape_bypass
    set_node_size_bypass
    set_node_tooltip_bypass
@@ -249,6 +251,7 @@ Node Style Defaults
 .. autosummary::
    :toctree: generated/
 
+   get_node_label_position_default
    get_node_selection_color_default
    set_node_border_color_default
    set_node_border_opacity_default
@@ -261,6 +264,7 @@ Node Style Defaults
    set_node_label_color_default
    set_node_label_default
    set_node_label_opacity_default
+   set_node_label_position_default
    set_node_selection_color_default
    set_node_shape_default
    set_node_size_default
@@ -410,6 +414,7 @@ Node Style Values
 
    get_node_color
    get_node_height
+   get_node_label_position
    get_node_position
    get_node_property
    get_node_size

@@ -10,6 +10,7 @@ Release date: dd mmm yyyy
 
 * Removed value validation warning from set_visual_property_default()
 * Fixed missing URL parameter in create_network_from_data_frames() and create_network_from_networkx()
+* Added style functions for node_position and node_label_position
 
 
 Release notes

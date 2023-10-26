@@ -22,11 +22,23 @@ Highlights
 The themes for this release are:
 
 * General bug fixes
+* New Style functions for node label position and node position
 
 
 API Changes
 -----------
 
+Added:
+
+set_node_position_bypass(node_names, new_x_locations=None, new_y_locations=None, network=None, base_url=DEFAULT_BASE_URL)
+
+set_node_label_position_bypass(node_names, new_positions, network=None, base_url=DEFAULT_BASE_URL)
+
+get_node_label_position_default(style_name=None, base_url=DEFAULT_BASE_URL)
+
+set_node_label_position_default(new_node_anchor, new_graphic_anchor, new_justification, new_xoffset, new_yoffset, style_name=None, base_url=DEFAULT_BASE_URL)
+
+get_node_label_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL)
 
 Deprecations
 ------------
@@ -35,7 +47,7 @@ Deprecations
 Contributors to this release
 ----------------------------
 
-- ... add contributor here
+- Barry Demchak
 
 
 Pull requests merged in this release
@@ -47,6 +59,6 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
-- ... add issue here: #xxx by yyy
+- #125 by Barry Demchak
 
 

@@ -124,6 +124,65 @@ class StyleValuesTests(unittest.TestCase):
         self.assertRaises(CyError, get_node_position, ['bogusName'])
         self.assertRaises(CyError, get_node_position, network='BogusNetwork')
 
+
+    @print_entry_exit
+    def test_get_set_node_label_position(self):
+        # Yes, this tests set_node_label_position_bypass(), too ... normally, we would do this in test_style_bypass.py,
+        # but it's very convenient to do it in conjunction with get_node_label_position()
+        ORIG_VALUE = 'C,C,c,0.00,0.00'
+        TEST_NODE_A = 'YDL194W'
+        NEW_VALUE_0 = 'N,E,l,100.00,-200.00'
+        NEW_VALUE_1 = 'W,N,r,-100.00,200.00'
+
+        # Initialization
+        load_test_session()
+        test_node_A_suid = node_name_to_node_suid(TEST_NODE_A)[0]
+        all_node_names_suids = get_table_columns(columns=['name'])
+        all_node_names = list(all_node_names_suids['name'])
+        all_node_suids = list(all_node_names_suids.index)
+        orig_node_values = {node: ORIG_VALUE  for node in all_node_names}
+        new_node_values_0 = {node: NEW_VALUE_0  for node in all_node_names}
+        new_suid_values_1 = {node: NEW_VALUE_1  for node in all_node_suids}
+
+        def check_position_table(node_list, expected_nodes):
+            # Verify that all nodes are present
+            self.assertSetEqual(set(node_list), set(expected_nodes))
+
+            # Verify that each position is as expected
+            for name in node_list:
+                self.assertEqual(node_list[name], expected_nodes[name])
+
+        # Verify that fetching node label position for all nodes works
+        check_position_table(get_node_label_position(), orig_node_values)
+
+        # Verify that setting/fetching node label position for single node (by name) works
+        set_node_label_position_bypass(TEST_NODE_A, NEW_VALUE_0)
+        check_position_table(get_node_label_position(TEST_NODE_A), {TEST_NODE_A: NEW_VALUE_0})
+
+        # Verify that no other label positions are updated
+        orig_node_values_0 = orig_node_values.copy()
+        orig_node_values_0[TEST_NODE_A] = NEW_VALUE_0
+        check_position_table(get_node_label_position(), orig_node_values_0)
+
+        # Verify that fetching node label position for single node (by suid) works
+        set_node_label_position_bypass(test_node_A_suid, NEW_VALUE_1)
+        check_position_table(get_node_label_position(test_node_A_suid), {test_node_A_suid: NEW_VALUE_1})
+
+        # Verify that setting/fetching node label position for list of nodes (by name) works
+        set_node_label_position_bypass(all_node_names, NEW_VALUE_0)
+        check_position_table(get_node_label_position(all_node_names), new_node_values_0)
+
+        # Verify that setting/fetching node label position for list of nodes (by suid) works
+        set_node_label_position_bypass(all_node_suids, NEW_VALUE_1)
+        check_position_table(get_node_label_position(all_node_suids), new_suid_values_1)
+
+        # Verify that bad node name or network is caught
+        self.assertRaises(CyError, get_node_label_position, ['bogusName'])
+        self.assertRaises(CyError, get_node_label_position, network='BogusNetwork')
+        self.assertRaises(CyError, set_node_label_position_bypass, ['bogusName'])
+        self.assertRaises(CyError, set_node_label_position_bypass, network='BogusNetwork')
+
+
     @print_entry_exit
     def test_get_edge_line_width(self):
         # Initialization

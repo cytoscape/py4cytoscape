@@ -135,6 +135,84 @@ class StyleBypassesTests(unittest.TestCase):
         self.assertRaises(CyError, unhide_all, network='BogusNetwork')
 
     @print_entry_exit
+    def test_set_node_position_bypass(self):
+
+        def check_position_bypasses(use_node_names):
+            # Initialization
+            load_test_session()
+            node_list = get_all_nodes()
+            if not use_node_names:
+                node_list = node_name_to_node_suid(node_list)
+            df_orig_positions = get_node_position(node_list)
+            orig_x_positions = list(df_orig_positions['x'])
+            orig_y_positions = list(df_orig_positions['y'])
+
+            def check_position_slices(x_slice, y_slice):
+                df_new_positions = get_node_position(node_list)
+                new_x_positions = list(df_new_positions['x'])
+                new_y_positions = list(df_new_positions['y'])
+                self.assertListEqual(x_slice, new_x_positions[0:len(x_slice)])
+                self.assertListEqual(orig_x_positions[len(x_slice):len(orig_x_positions)],
+                                     new_x_positions[len(x_slice):len(new_x_positions)])
+                self.assertListEqual(y_slice, new_y_positions[0:len(y_slice)])
+                self.assertListEqual(orig_y_positions[len(y_slice):len(orig_y_positions)],
+                                     new_y_positions[len(y_slice):len(new_y_positions)])
+
+            test_node_0 = node_list[0]
+            test_node_1 = node_list[1]
+
+            # Verify that there are no changes if no positions are provided
+            set_node_position_bypass(node_list)
+            check_position_slices([], [])
+
+            # Verify that if one integer x change is made, the position actually changes and no other positions change
+            set_node_position_bypass(test_node_0, 100)
+            check_position_slices([100], [])
+
+            # Verify that if one float x change is made, the position actually changes and no other positions change
+            set_node_position_bypass(test_node_0, 200.2)
+            check_position_slices([200.2], [])
+
+            # Verify that if one integer y change is made, the position actually changes and no other positions change
+            set_node_position_bypass(test_node_0, new_y_locations=300)
+            check_position_slices([200.2], [300])
+
+            # Verify that if one float y change is made, the position actually changes and no other positions change
+            set_node_position_bypass(test_node_0, new_y_locations=400.4)
+            check_position_slices([200.2], [400.4])
+
+            # Verify that if two integer x changes are made, the positions actually change and no other positions change
+            set_node_position_bypass([test_node_0, test_node_1], [500, 600.6])
+            check_position_slices([500, 600.6], [400.4])
+
+            # Verify that if all nodes (as list) are specified, all positions can be changed
+            all_1 = [1] * len(node_list)
+            all_2 = [2] * len(node_list)
+            set_node_position_bypass(node_list, new_x_locations=all_1, new_y_locations=all_2)
+            check_position_slices(all_1, all_2)
+            set_node_position_bypass(node_list, new_x_locations=orig_x_positions, new_y_locations=orig_y_positions)
+            check_position_slices([], [])
+
+            # Verify that if all nodes (as comma-separated list) are specified, all positions can be changed
+            node_list = ','.join(str(node)  for node in node_list)
+            set_node_position_bypass(node_list, new_x_locations=all_1, new_y_locations=all_2)
+            check_position_slices(all_1, all_2)
+            set_node_position_bypass(node_list, new_x_locations=orig_x_positions, new_y_locations=orig_y_positions)
+            check_position_slices([], [])
+
+        # Test by using node names
+        check_position_bypasses(True)
+
+        # Test by using node SUIDs
+        check_position_bypasses(False)
+
+        # Verify that invalid network is caught and that inputs are checked
+        self.assertRaises(CyError, set_node_position_bypass, [1,2,3], new_x_locations=['a', 'b', 'c'])
+        self.assertRaises(CyError, set_node_position_bypass, [1,2,3], new_y_locations=['a', 'b', 'c'])
+        self.assertRaises(CyError, set_node_position_bypass, [1,2,3], network='BogusNetwork')
+
+
+    @print_entry_exit
     def test_set_node_color_bypass(self):
 
         self._check_node_bypass(set_node_color_bypass, '#800000', '#800080', 'BogusColor', 'NODE_FILL_COLOR', exception_scenario='exception')

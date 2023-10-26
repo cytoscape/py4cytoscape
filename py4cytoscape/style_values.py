@@ -466,6 +466,49 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
 
     return data
 
+@cy_log
+def get_node_label_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Retrieve the actual label position of specified nodes.
+
+    Args:
+        node_names (str or list or int or None): List of node names or SUIDs. Default is None for all nodes.
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        dict: as a collection of {node-name: position} for each node in node_names parameter (see ``set_node_label_position_bypass()`` for format of position values)
+
+    Raises:
+        CyError: if network name or node doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> get_node_label_position()
+        {'YJL190C': 'C,C,c,0.00,0.00', 'YMR291W': 'C,C,c,0.00,0.00', ..., 'YMR058W': 'C,C,c,0.00,0.00'}
+        >>> get_node_label_position('YDL194W')
+        {'YDL194W': 'N,E,l,100.00,-200.00'}
+        >>> get_node_label_position(1293)
+        {1293: 'N,E,l,100.00,-200.00'}
+        >>> get_node_label_position(['YNL135C', 'YGL044C', ...'YBR112C'])
+       {'YNL135C': 'C,C,c,0.00,0.00', 'YGL044C': 'C,C,c,0.00,0.00', ..., 'YBR112C': 'C,C,c,0.00,0.00'}
+        >>> get_node_label_position([421382, 421383, ..., 421380])
+       {421382: 'C,C,c,0.00,0.00', 421383: 'C,C,c,0.00,0.00', ..., 421380: 'C,C,c,0.00,0.00'}
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1 (pd) node\\\\,2' identifies 'node1 (pd) node,2'.
+
+    See Also:
+        :meth:`set_node_label_position_bypass`
+    """
+    res = get_node_property(node_names, 'NODE_LABEL_POSITION', network=network, base_url=base_url)
+    return res
+
+
+
 
 # ==============================================================================
 # II.b. Edge Properties

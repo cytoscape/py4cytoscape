@@ -40,6 +40,7 @@ from . import network_views
 from . import style_dependencies
 from . import styles
 
+
 # Internal module convenience imports
 from .exceptions import CyError
 from .py4cytoscape_utils import *
@@ -679,6 +680,79 @@ def set_node_size_bypass(node_names, new_sizes, network=None, base_url=DEFAULT_B
     res = set_node_property_bypass(node_names, new_sizes, 'NODE_SIZE', network=network, base_url=base_url)
     return res
 
+@cy_log
+def set_node_position_bypass(node_names, new_x_locations=None, new_y_locations=None, network=None, base_url=DEFAULT_BASE_URL):
+    """Sets the bypass value of node position for one or more nodes. Only applicable if node dimensions are locked. See ``lock_node_dimensions()``.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (str or list or int): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
+        new_x_locations (list, int or float): List of x position values, or single value, default is current x position
+        new_y_locations (list, int or float): List of y position values, or single value, default is current y position
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_position_bypass(get_node_names(), new_x_locations, new_y_locations)
+        ''
+        >>> set_node_position_bypass(['YDL194W', 'YBR043C'], [100, 200], [300, 400], network='galFiltered.sif')
+        ''
+        >>> set_node_position_bypass('YDL194W, YBR043C', [100, 200], [300, 400], network='galFiltered.sif')
+        ''
+        >>> set_node_position_bypass([1255, 1988], [100, 200], [300, 400], network='galFiltered.sif')
+        ''
+        >>> set_node_position_bypass('1255, 1988', [100, 200], [300, 400], network='galFiltered.sif')
+        ''
+        >>> set_node_position_bypass(1255, 100, 300, network='galFiltered.sif')
+        ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`, :meth:`lock_node_dimensions`
+    """
+    def check_locations(locations, location_name) :
+        if locations is not None:
+            if not isinstance(locations, list):
+                locations = [locations]
+            for loc in locations:
+                if not isinstance(loc, float) and not isinstance(loc, int):
+                    raise CyError(f'Illegal {location_name} position "{loc}" -- it must be a number.')
+        return locations
+
+    # Check and normalize location parameters
+    new_x_locations = check_locations(new_x_locations, 'x')
+    new_y_locations = check_locations(new_y_locations, 'y')
+
+    # Just validate network if it looks like no locations were passed in
+    if new_x_locations is None and new_y_locations is None:
+        networks.get_network_suid(network, base_url=base_url)
+    else:
+        # Set the node properties bypass
+        if new_x_locations is not None:
+            set_node_property_bypass(node_names, new_x_locations, 'NODE_X_LOCATION', network=network, base_url=base_url)
+        if new_y_locations is not None:
+            set_node_property_bypass(node_names, new_y_locations, 'NODE_Y_LOCATION', network=network, base_url=base_url)
+    return ""
+
 
 @cy_log
 def set_node_tooltip_bypass(node_names, new_tooltip, network=None, base_url=DEFAULT_BASE_URL):
@@ -891,6 +965,60 @@ def set_node_label_bypass(node_names, new_labels, network=None, base_url=DEFAULT
         :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`
     """
     res = set_node_property_bypass(node_names, new_labels, 'NODE_LABEL', network=network, base_url=base_url)
+    return res
+
+
+@cy_log
+def set_node_label_position_bypass(node_names, new_positions, network=None, base_url=DEFAULT_BASE_URL):
+    """Override the label position for particular nodes.
+
+    This method permanently overrides any default values or mappings defined for this visual property
+    of the node or nodes specified. This method ultimately calls the generic function, ``set_node_property_bypass()``
+    which can be used to set any visual property. To restore defaults and mappings, use
+    ``clear_node_property_bypass()``, see examples.
+
+    Args:
+        node_names (str or list or int or None): List of nodes as ``list`` of node names or SUIDs,
+            comma-separated string of node names or SUIDs, or scalar node name
+            or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
+        new_positions (str or list): list of position values or single value. A position value has 5 comma-separated
+            elements: node_anchor, graphic_anchor, justification, x_offset, y_offset. For example: N,C,c,0.00,0.00. For
+            details, see ``set_node_label_position_default()``
+        network (SUID or str or None): Name or SUID of a network. Default is the
+            "current" network active in Cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
+
+    Returns:
+        str: ''
+
+    Raises:
+        CyError: if node or network name doesn't exist
+        requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
+
+    Examples:
+        >>> set_node_label_position_bypass(get_node_names(), 'N,E,l,100.00,-200.00')
+        ''
+        >>> set_node_label_position_bypass(['YDL194W', 'YBR043C'], ['N,E,l,100.00,-200.00', 'W,N,r,-100.00,200.00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_position_bypass('YDL194W, YBR043C', ['N,E,l,100.00,-200.00', 'W,N,r,-100.00,200.00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_position_bypass([1255, 1988], ['N,E,l,100.00,-200.00', 'W,N,r,-100.00,200.00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_position_bypass('1255, 1988', ['N,E,l,100.00,-200.00', 'W,N,r,-100.00,200.00'], network='galFiltered.sif')
+        ''
+        >>> set_node_label_position_bypass(1255, 'N,E,l,100.00,-200.00', network='galFiltered.sif')
+        ''
+
+    Note:
+        To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,
+        'node1, node\\\\,2' identifies 'node1' and 'node,2'.
+
+    See Also:
+        :meth:`set_node_property_bypass`, :meth:`clear_node_property_bypass`, :meth:`set_node_label_position_default`
+    """
+    res = set_node_property_bypass(node_names, new_positions, 'NODE_LABEL_POSITION', network=network, base_url=base_url)
     return res
 
 
