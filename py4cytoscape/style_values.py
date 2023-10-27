@@ -493,9 +493,9 @@ def get_node_label_position(node_names=None, network=None, base_url=DEFAULT_BASE
         >>> get_node_label_position(1293)
         {1293: 'N,E,l,100.00,-200.00'}
         >>> get_node_label_position(['YNL135C', 'YGL044C', ...'YBR112C'])
-       {'YNL135C': 'C,C,c,0.00,0.00', 'YGL044C': 'C,C,c,0.00,0.00', ..., 'YBR112C': 'C,C,c,0.00,0.00'}
+        {'YNL135C': 'C,C,c,0.00,0.00', 'YGL044C': 'C,C,c,0.00,0.00', ..., 'YBR112C': 'C,C,c,0.00,0.00'}
         >>> get_node_label_position([421382, 421383, ..., 421380])
-       {421382: 'C,C,c,0.00,0.00', 421383: 'C,C,c,0.00,0.00', ..., 421380: 'C,C,c,0.00,0.00'}
+        {421382: 'C,C,c,0.00,0.00', 421383: 'C,C,c,0.00,0.00', ..., 421380: 'C,C,c,0.00,0.00'}
 
     Note:
         To identify a node whose name contains a comma, use '\\\\' to escape the comma. For example,

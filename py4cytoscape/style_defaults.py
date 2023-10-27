@@ -1119,7 +1119,7 @@ def get_node_label_position_default(style_name=None, base_url=DEFAULT_BASE_URL):
             and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
-        str: node label position value (see ``set_node_label_position_bypass()`` for format of position value)
+        str: node label position value (see ``set_node_label_position_default()`` for format of position value)
 
     Raises:
         CyError: if style name doesn't exist
@@ -1132,7 +1132,7 @@ def get_node_label_position_default(style_name=None, base_url=DEFAULT_BASE_URL):
         'C,C,c,0.00,0.00'
 
     See Also:
-        :meth:`set_node_label_position_bypass`
+        :meth:`set_node_label_position_default`
     """
     res = get_visual_property_default('NODE_LABEL_POSITION', style_name=style_name, base_url=base_url)
     return res
@@ -1287,6 +1287,9 @@ def set_node_label_position_default(new_node_anchor, new_graphic_anchor, new_jus
         ''
         >>> set_node_label_position_default('SE', 'C', 'c', 0.00, 0.00, style_name='My Style')
         ''
+
+    See Also:
+        :meth:`get_node_label_position_default`
     """
     style = {'visualProperty': 'NODE_LABEL_POSITION', 'value': f'{new_node_anchor},{new_graphic_anchor},{new_justification},{new_xoffset},{new_yoffset}'}
     res = set_visual_property_default(style, style_name, base_url=base_url)
