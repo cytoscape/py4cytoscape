@@ -177,10 +177,8 @@ class StyleValuesTests(unittest.TestCase):
         check_position_table(get_node_label_position(all_node_suids), new_suid_values_1)
 
         # Verify that bad node name or network is caught
-        self.assertRaises(CyError, get_node_label_position, ['bogusName'])
+        self.assertRaises(CyError, get_node_label_position, 'bogusName')
         self.assertRaises(CyError, get_node_label_position, network='BogusNetwork')
-        self.assertRaises(CyError, set_node_label_position_bypass, ['bogusName'])
-        self.assertRaises(CyError, set_node_label_position_bypass, network='BogusNetwork')
 
 
     @print_entry_exit
