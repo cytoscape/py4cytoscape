@@ -735,10 +735,10 @@ def table_column_exists(table_column, table, network=None, base_url=DEFAULT_BASE
 
 
 # ------------------------------------------------------------------------------
-def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
+def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None, test_cytoscape=None):
     """Checks to see if min supported versions of api and cytoscape are running.
 
-    Extracts numerics from api and major cytoscape versions before making comparison.
+    Extracts numerics from api, major and patch cytoscape versions before making comparison, per semantic versioning @ https://semver.org/
 
     Args:
         cyrest (int): minimum CyREST version
@@ -755,35 +755,40 @@ def check_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL,
 
     Examples:
         >>> check_supported_versions(1, 3.7)
-        >>> check__supported_versions(1, '3.10')
+        >>> check_supported_versions(1, '3.10')
+        >>> check_supported_versions(1, '3.10.0')
     """
     if isinstance(cytoscape, float): cytoscape = str(cytoscape)
 
     v = cytoscape_system.cytoscape_version_info(base_url=base_url)
     v_api_str = v['apiVersion']
-    v_cy_str = v['cytoscapeVersion']
+    v_cy_str = v['cytoscapeVersion']  if test_cytoscape is None else test_cytoscape
     v_api_num = int(re.match('v([0-9]+)$', v_api_str).group(1))
-    nogo = None
 
     # Check the CyREST version
     if cyrest > v_api_num:
-        nogo = 'CyREST API version %d or greater is required. You are currently working with version %d.' % (
-        cyrest, v_api_num)
+        return 'CyREST API version %d or greater is required. You are currently working with version %d.' % (cyrest, v_api_num)
 
     # Check the Cytoscape version
-    re_v_cytoscape = re.match('([0-9]+)\\.([0-9]+)\\..*$', v_cy_str)
+    re_v_cytoscape = re.match('^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$', v_cy_str)
     v_cytoscape_major = int(re_v_cytoscape.group(1))
     v_cytoscape_minor = int(re_v_cytoscape.group(2))
+    v_cytoscape_patch = int(re_v_cytoscape.group(3))
 
-    re_cytoscape = re.match('([0-9]+)\\.([0-9]+)*$', cytoscape)
+    re_cytoscape = re.match('^([0-9]+)\\.([0-9]+)?(\\.[0-9]+)?(-.*)*$', cytoscape)
     required_cytoscape_major = int(re_cytoscape.group(1))
     required_cytoscape_minor = int(re_cytoscape.group(2))
+    if re_cytoscape.group(3) is None:
+        required_cytoscape_patch = 0
+    else:
+        required_cytoscape_patch = int(re_cytoscape.group(3)[1:]) # Strip leading '.' and take the rest
 
-    if required_cytoscape_major > v_cytoscape_major or (
-            required_cytoscape_major == v_cytoscape_major and required_cytoscape_minor > v_cytoscape_minor):
-        nogo = f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
-
-    return nogo
+    if v_cytoscape_major > required_cytoscape_major or \
+        (v_cytoscape_major == required_cytoscape_major and v_cytoscape_minor > required_cytoscape_minor) or \
+        (v_cytoscape_major == required_cytoscape_major and v_cytoscape_minor == required_cytoscape_minor and v_cytoscape_patch >= required_cytoscape_patch):
+        return None
+    else:
+        return f'Cytoscape version {cytoscape} or greater is required. You are currently working with version {v_cy_str}.'
 
 
 def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL, caller=None):
@@ -809,6 +814,7 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
     Examples:
         >>> verify_supported_versions(1, 3.7)
         >>> verify_supported_versions(1, '3.10')
+        >>> verify_supported_versions(1, '3.10.1')
     """
     nogo = check_supported_versions(cyrest=cyrest, cytoscape=cytoscape, base_url=base_url)
 

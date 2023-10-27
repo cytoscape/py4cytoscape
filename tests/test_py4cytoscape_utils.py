@@ -283,10 +283,20 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertRaises(CyError, verify_supported_versions, cyrest=2)
         verify_supported_versions(cytoscape=3.7)
         verify_supported_versions(cytoscape='3.7')
+        verify_supported_versions(cytoscape='3.7.10')
         self.assertRaises(CyError, verify_supported_versions, cytoscape='3.200')
         verify_supported_versions(cytoscape='2.7')
         self.assertRaises(CyError, verify_supported_versions, cytoscape='4.0')
         self.assertRaises(AttributeError, verify_supported_versions, cytoscape='complete trash')
+
+        # Verify that patch is supported in all permutations (i.e., cytoscape <= test_cytoscape)
+        self.assertIsNone(check_supported_versions(cytoscape='3.10.1', test_cytoscape='3.10.1'))
+        self.assertIsNone(check_supported_versions(cytoscape='3.10.1', test_cytoscape='3.10.1-SNAPSHOT'))
+        self.assertIsNotNone(check_supported_versions(cytoscape='3.10.2', test_cytoscape='3.10.1-SNAPSHOT'))
+        self.assertIsNotNone(check_supported_versions(cytoscape='3.10.1', test_cytoscape='3.10.0'))
+        self.assertIsNone(check_supported_versions(cytoscape='3.10.1', test_cytoscape='3.10.2'))
+        self.assertIsNotNone(check_supported_versions(cytoscape='3.11', test_cytoscape='3.10.2'))
+        self.assertIsNone(check_supported_versions(cytoscape='3.10.2', test_cytoscape='3.11.0'))
 
 
     @print_entry_exit

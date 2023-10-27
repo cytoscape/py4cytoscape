@@ -23,6 +23,8 @@ The themes for this release are:
 
 * General bug fixes
 * New Style functions for node label position and node position
+* Improved Cytoscape version check
+
 
 
 API Changes
