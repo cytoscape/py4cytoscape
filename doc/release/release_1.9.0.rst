@@ -50,6 +50,7 @@ Contributors to this release
 ----------------------------
 
 - Barry Demchak
+- Yihang Xin
 
 
 Pull requests merged in this release
@@ -62,5 +63,6 @@ Issues closed in this release
 ------------------------------------
 
 - #125 by Barry Demchak
+- #122 by Barry Demchak
 
 
