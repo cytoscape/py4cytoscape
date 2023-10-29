@@ -236,7 +236,7 @@ class LayoutsTests(unittest.TestCase):
 
         # Verify that for selected_only=False, all X coords get changed but no Y coords are changed
         df_all_orig = get_node_position()
-        self.assertDictEqual(rotate_layout(90, cur_network_suid, selected_only=False), {})
+        self.assertDictEqual(rotate_layout(90, selected_only=False, network=cur_network_suid), {})
         df_all_new = get_node_position()
         self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
         self._compare_all_coords(df_all_orig, df_all_new, 'y', {False})  # all y coords must change
@@ -245,7 +245,7 @@ class LayoutsTests(unittest.TestCase):
         df_all_orig = get_node_position()
         selected_nodes = ['YGL044C','YOL123W','YKR026C']
         select_nodes(selected_nodes, by_col='name')
-        self.assertDictEqual(rotate_layout(-120, cur_network_suid, selected_only=True), {})
+        self.assertDictEqual(rotate_layout(-120, selected_only=True, network=cur_network_suid), {})
         df_all_new = get_node_position()
         df_selected_orig = df_all_orig.loc[(df_all_orig['x'].index).isin(selected_nodes)]
         df_selected_new = df_all_new.loc[(df_all_new['x'].index).isin(selected_nodes)]
@@ -266,7 +266,7 @@ class LayoutsTests(unittest.TestCase):
 
         # Verify that for selected_only=False, all X coords get changed but no Y coords are changed
         df_all_orig = get_node_position()
-        self.assertDictEqual(scale_layout('X Axis', 2, cur_network_suid, selected_only=False), {})
+        self.assertDictEqual(scale_layout('X Axis', 2, selected_only=False, network=cur_network_suid), {})
         df_all_new = get_node_position()
         self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
         self._compare_all_coords(df_all_orig, df_all_new, 'y', {True})  # all y coords must be the same
@@ -275,7 +275,7 @@ class LayoutsTests(unittest.TestCase):
         df_all_orig = get_node_position()
         selected_nodes = ['YGL044C','YOL123W','YKR026C']
         select_nodes(selected_nodes, by_col='name')
-        self.assertDictEqual(scale_layout('Y Axis', 5, cur_network_suid, selected_only=True), {})
+        self.assertDictEqual(scale_layout('Y Axis', 5, selected_only=True, network=cur_network_suid), {})
         df_all_new = get_node_position()
         df_selected_orig = df_all_orig.loc[(df_all_orig['x'].index).isin(selected_nodes)]
         df_selected_new = df_all_new.loc[(df_all_new['x'].index).isin(selected_nodes)]

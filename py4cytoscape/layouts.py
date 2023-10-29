@@ -380,13 +380,13 @@ def set_layout_properties(layout_name, properties_dict, base_url=DEFAULT_BASE_UR
 # ------------------------------------------------------------------------------------------------------------------------
 
 @cy_log
-def rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BASE_URL):
+def rotate_layout(angle, selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """Rotate the layout to a network.
 
     Args:
         angle (int or float):The angle (in degrees) to rotate the network. From -180 to 180.
-        network (SUID or str or None): Name or SUID of the network; default is "current" network.
         selected_only (bool): Whether to rotate only current selection. Default is false.
+        network (SUID or str or None): Name or SUID of the network; default is "current" network.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -399,7 +399,7 @@ def rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BAS
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> rotate_layout(90, 'current', selected_only=False)
+        >>> rotate_layout(90, selected_only=False, network='current')
         {}
     """
     verify_supported_versions(1, '3.10.2', base_url=base_url)
@@ -410,14 +410,14 @@ def rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BAS
 
 
 @cy_log
-def scale_layout(axis, scale_factor, network=None, selected_only=False, base_url=DEFAULT_BASE_URL):
+def scale_layout(axis, scale_factor, selected_only=False, network=None, base_url=DEFAULT_BASE_URL):
     """Scale the layout to a network.
 
     Args:
         axis (str): Scale the layout in either the X, Y, or both directions. Choices are 'X Axis', 'Y Axis" or 'Both Axes'
         scale_factor (int or float): Scale the layout along the named axis
-        network (SUID or str or None): Name or SUID of the network; default is "current" network.
         selected_only (bool): Whether to scale only currently selected nodes. Default is false.
+        network (SUID or str or None): Name or SUID of the network; default is "current" network.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -430,7 +430,7 @@ def scale_layout(axis, scale_factor, network=None, selected_only=False, base_url
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
-        >>> scale_layout('X Axis', 2, 'current', selected_only=False)
+        >>> scale_layout('X Axis', 2, selected_only=False, network='current')
         {}
     """
     verify_supported_versions(1, '3.10.2', base_url=base_url)
