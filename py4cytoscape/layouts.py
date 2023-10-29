@@ -395,16 +395,16 @@ def rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BAS
         dict: {} empty
 
     Raises:
-        CyError: if layout_name is invalid
+        CyError: if network name is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> rotate_layout(90, 'current', selected_only=False)
         {}
     """
-    verify_supported_versions(1, 3.11, base_url=base_url)
+    verify_supported_versions(1, '3.10.2', base_url=base_url)
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('layout rotate angle='+ str(angle) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(select_only),
+    res = commands.commands_post('layout rotate angle='+ str(angle) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(selected_only),
                                  base_url=base_url)
     return res
 
@@ -414,10 +414,10 @@ def scale_layout(axis, scale_factor, network=None, selected_only=False, base_url
     """Scale the layout to a network.
 
     Args:
-        axis (str): Scale the layout in either the X, Y, or both directions.
-        scale_factor (int or float): Scale the layout in either the X, Y, or both directions.
+        axis (str): Scale the layout in either the X, Y, or both directions. Choices are 'X Axis', 'Y Axis" or 'Both Axes'
+        scale_factor (int or float): Scale the layout along the named axis
         network (SUID or str or None): Name or SUID of the network; default is "current" network.
-        selected_only (bool): Whether to rotate only current selection. Default is false.
+        selected_only (bool): Whether to scale only currently selected nodes. Default is false.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -426,15 +426,15 @@ def scale_layout(axis, scale_factor, network=None, selected_only=False, base_url
         dict: {} empty
 
     Raises:
-        CyError: if layout_name is invalid
+        CyError: if network name is invalid
         requests.exceptions.RequestException: if can't connect to Cytoscape or Cytoscape returns an error
 
     Examples:
         >>> scale_layout('X Axis', 2, 'current', selected_only=False)
         {}
     """
-    verify_supported_versions(1, 3.11, base_url=base_url)
+    verify_supported_versions(1, '3.10.2', base_url=base_url)
     suid = networks.get_network_suid(network, base_url=base_url)
-    res = commands.commands_post('layout scale axis='+ axis + ' scaleFactor=' + str(scale_factor) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(select_only),
+    res = commands.commands_post('layout scale axis='+ axis + ' scaleFactor=' + str(scale_factor) + ' network="SUID:' + str(suid) + '"' + ' selectedOnly=' + str(selected_only),
                              base_url=base_url)
     return res

@@ -24,6 +24,7 @@ The themes for this release are:
 * General bug fixes
 * New Style functions for node label position and node position
 * Improved Cytoscape version check
+* Added scale and rotate functions
 
 
 
@@ -41,6 +42,10 @@ get_node_label_position_default(style_name=None, base_url=DEFAULT_BASE_URL)
 set_node_label_position_default(new_node_anchor, new_graphic_anchor, new_justification, new_xoffset, new_yoffset, style_name=None, base_url=DEFAULT_BASE_URL)
 
 get_node_label_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL)
+
+scale_layout(axis, scale_factor, network=None, selected_only=False, base_url=DEFAULT_BASE_URL)
+
+rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BASE_URL)
 
 Deprecations
 ------------

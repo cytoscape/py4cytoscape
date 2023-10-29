@@ -234,13 +234,29 @@ class LayoutsTests(unittest.TestCase):
         load_test_session()
         cur_network_suid = get_network_suid()
 
-        rotate_layout(90, cur_network_suid, select_only=False)
-        self.assertEqual(get_node_position('YDL081C')['x']['YDL081C'], 199.81368750456022)
+        # Verify that for selected_only=False, all X coords get changed but no Y coords are changed
+        df_all_orig = get_node_position()
+        self.assertDictEqual(rotate_layout(90, cur_network_suid, selected_only=False), {})
+        df_all_new = get_node_position()
+        self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
+        self._compare_all_coords(df_all_orig, df_all_new, 'y', {False})  # all y coords must change
 
-        select_nodes(['YGL044C','YOL123W','YKR026C'], by_col='name')
-        rotate_layout(-120, cur_network_suid, select_only=True)
-        self.assertEqual(get_node_position('YGL044C')['y']['YGL044C'], 3797.3504180619493)
+        # Verify that for selected_only=True, selected Y coords get changed but no X coords are changed
+        df_all_orig = get_node_position()
+        selected_nodes = ['YGL044C','YOL123W','YKR026C']
+        select_nodes(selected_nodes, by_col='name')
+        self.assertDictEqual(rotate_layout(-120, cur_network_suid, selected_only=True), {})
+        df_all_new = get_node_position()
+        df_selected_orig = df_all_orig.loc[(df_all_orig['x'].index).isin(selected_nodes)]
+        df_selected_new = df_all_new.loc[(df_all_new['x'].index).isin(selected_nodes)]
+        df_unselected_orig = df_all_orig.loc[~(df_all_orig['x'].index).isin(selected_nodes)]
+        df_unselected_new = df_all_new.loc[~(df_all_new['x'].index).isin(selected_nodes)]
+        self._compare_all_coords(df_selected_orig, df_selected_new, 'x', {False}) # all selected x coords must change
+        self._compare_all_coords(df_selected_orig, df_selected_new, 'y', {False}) # all selected x coords must change
+        self._compare_all_coords(df_unselected_orig, df_unselected_new, 'x', {True}) # all unselected x coords must be the same
+        self._compare_all_coords(df_unselected_orig, df_unselected_new, 'y', {True}) # all unselected y coords must be the same
 
+        self.assertRaises(CyError, rotate_layout, -120, network='bogusnetwork')
 
     @print_entry_exit
     def test_scale_layout(self):
@@ -248,12 +264,38 @@ class LayoutsTests(unittest.TestCase):
         load_test_session()
         cur_network_suid = get_network_suid()
 
-        scale_layout('X Axis', 2, cur_network_suid, select_only=False)
-        self.assertEqual(get_node_position('YDL081C')['x']['YDL081C'], -1236.094914256304)
+        # Verify that for selected_only=False, all X coords get changed but no Y coords are changed
+        df_all_orig = get_node_position()
+        self.assertDictEqual(scale_layout('X Axis', 2, cur_network_suid, selected_only=False), {})
+        df_all_new = get_node_position()
+        self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
+        self._compare_all_coords(df_all_orig, df_all_new, 'y', {True})  # all y coords must be the same
 
-        select_nodes(['YGL044C','YOL123W','YKR026C'], by_col='name')
-        scale_layout('Y Axis', 5, cur_network_suid, select_only=True)
-        self.assertEqual(get_node_position('YGL044C')['y']['YGL044C'], 3917.1843757340685)
+        # Verify that for selected_only=True, selected Y coords get changed but no X coords are changed
+        df_all_orig = get_node_position()
+        selected_nodes = ['YGL044C','YOL123W','YKR026C']
+        select_nodes(selected_nodes, by_col='name')
+        self.assertDictEqual(scale_layout('Y Axis', 5, cur_network_suid, selected_only=True), {})
+        df_all_new = get_node_position()
+        df_selected_orig = df_all_orig.loc[(df_all_orig['x'].index).isin(selected_nodes)]
+        df_selected_new = df_all_new.loc[(df_all_new['x'].index).isin(selected_nodes)]
+        df_unselected_orig = df_all_orig.loc[~(df_all_orig['x'].index).isin(selected_nodes)]
+        df_unselected_new = df_all_new.loc[~(df_all_new['x'].index).isin(selected_nodes)]
+        self._compare_all_coords(df_selected_orig, df_selected_new, 'x', {True}) # all selected x coords must be the same
+        self._compare_all_coords(df_selected_orig, df_selected_new, 'y', {False}) # all selected x coords must change
+        self._compare_all_coords(df_unselected_orig, df_unselected_new, 'x', {True}) # all unselected x coords must be the same
+        self._compare_all_coords(df_unselected_orig, df_unselected_new, 'y', {True}) # all unselected y coords must be the same
+
+        self.assertRaises(CyError, scale_layout, 'Y Axis', 5, network='bogusnetwork')
+
+    def _compare_all_coords(self, df_orig_coord, df_new_coord, coord_name, comparison):
+        # Compare coordinates to see if they're close. Cytoscape seems to return slightly different coordinates even
+        # when the coordinate doesn't change.
+        coord_compare = {abs(orig - new) < 0.001 for orig, new in zip(df_orig_coord[coord_name], df_new_coord[coord_name])}
+
+        # comparison == {True} means all coordinates were pretty much the same, and
+        # comparison == {False} means no coordinates were pretty much the same
+        self.assertSetEqual(coord_compare, comparison, f'At least one {coord_name} coordinate was incorrect')
 
 
 if __name__ == '__main__':

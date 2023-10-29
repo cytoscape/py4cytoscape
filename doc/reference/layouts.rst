@@ -15,6 +15,8 @@ Perform Layout
    clear_edge_bends
    layout_copycat
    layout_network
+   rotate_layout
+   scale_layout
 
 Layout Properties
 -----------------
