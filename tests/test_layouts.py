@@ -264,14 +264,14 @@ class LayoutsTests(unittest.TestCase):
         load_test_session()
         cur_network_suid = get_network_suid()
 
-        # Verify that for selected_only=False, all X coords get changed but no Y coords are changed
+        # Verify that for selected_only=False & 'X Axis', all X coords get changed but no Y coords are changed
         df_all_orig = get_node_position()
         self.assertDictEqual(scale_layout('X Axis', 2, selected_only=False, network=cur_network_suid), {})
         df_all_new = get_node_position()
         self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
         self._compare_all_coords(df_all_orig, df_all_new, 'y', {True})  # all y coords must be the same
 
-        # Verify that for selected_only=True, selected Y coords get changed but no X coords are changed
+        # Verify that for selected_only=True & 'Y Axis', selected Y coords get changed but no X coords are changed
         df_all_orig = get_node_position()
         selected_nodes = ['YGL044C','YOL123W','YKR026C']
         select_nodes(selected_nodes, by_col='name')
@@ -285,6 +285,13 @@ class LayoutsTests(unittest.TestCase):
         self._compare_all_coords(df_selected_orig, df_selected_new, 'y', {False}) # all selected x coords must change
         self._compare_all_coords(df_unselected_orig, df_unselected_new, 'x', {True}) # all unselected x coords must be the same
         self._compare_all_coords(df_unselected_orig, df_unselected_new, 'y', {True}) # all unselected y coords must be the same
+
+        # Verify that for selected_only=False & 'X Axis', all X coords get changed but no Y coords are changed
+        df_all_orig = get_node_position()
+        self.assertDictEqual(scale_layout('Both', 0.1, selected_only=False, network=cur_network_suid), {})
+        df_all_new = get_node_position()
+        self._compare_all_coords(df_all_orig, df_all_new, 'x', {False}) # all x coords must change
+        self._compare_all_coords(df_all_orig, df_all_new, 'y', {False})  # all y coords must change
 
         self.assertRaises(CyError, scale_layout, 'Y Axis', 5, network='bogusnetwork')
 
