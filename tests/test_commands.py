@@ -42,7 +42,7 @@ class CommandsTests(unittest.TestCase):
     def test_cyrest_api(self):
         self.assertTrue(cyrest_api())
 
-        time.sleep(10) # This is tricky ... it seems like bad things happen if cyrest_api doesn't wait until completion
+        time.sleep(30) # This is tricky ... it seems like bad things happen if cyrest_api doesn't wait until completion
 
     @print_entry_exit
     def test_cyrest_delete(self):
@@ -143,7 +143,7 @@ class CommandsTests(unittest.TestCase):
     def test_commands_api(self):
         self.assertTrue(commands_api())
 
-        time.sleep(10) # This is tricky ... it seems like bad things happen if commands_api doesn't wait until completion
+        time.sleep(30) # This is tricky ... it seems like bad things happen if commands_api doesn't wait until completion
 
     @print_entry_exit
     def test_commands_get(self):
