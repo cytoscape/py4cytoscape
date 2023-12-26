@@ -6,7 +6,7 @@ Release Log
 
 py4cytoscape 1.9.0
 -------------------
-Release date: dd mmm yyyy
+Release date: 26 Dec 2023
 
 .. include:: release/release_1.9.0.rst
 
