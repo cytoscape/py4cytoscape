@@ -1,5 +1,3 @@
-Release notes
-~~~~~~~~~~~~~
 
 Announcement: py4cytoscape 1.9.0
 ---------------------------------
