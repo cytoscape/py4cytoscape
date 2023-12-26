@@ -1,6 +1,7 @@
 
-Announcement: py4cytoscape 1.9.0
----------------------------------
+py4cytoscape 1.9.0
+-------------------
+Release date: 26 Dec 2023
 
 We're happy to announce the release of py4cytoscape 1.9.0!
 
@@ -10,10 +11,6 @@ enable control of Cytoscape from within standalone and Notebook Python programmi
 nearly identical functionality to `RCy3 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6880260/>`_, an R package in
 Bioconductor available to R programmers.
 
-
-Highlights
-----------
-
 The themes for this release are:
 
 * General bug fixes
@@ -21,7 +18,8 @@ The themes for this release are:
 * Improved Cytoscape version check
 * Added scale and rotate functions
 
-Specifically:
+Release notes
+~~~~~~~~~~~~~
 
 * Removed value validation warning from set_visual_property_default()
 * Fixed missing URL parameter in create_network_from_data_frames() and create_network_from_networkx()
