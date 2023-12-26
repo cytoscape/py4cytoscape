@@ -1,3 +1,6 @@
+Release notes
+~~~~~~~~~~~~~
+
 Announcement: py4cytoscape 1.9.0
 ---------------------------------
 
@@ -10,12 +13,6 @@ nearly identical functionality to `RCy3 <https://www.ncbi.nlm.nih.gov/pmc/articl
 Bioconductor available to R programmers.
 
 
-
-
-
-
-
-
 Highlights
 ----------
 
@@ -26,6 +23,13 @@ The themes for this release are:
 * Improved Cytoscape version check
 * Added scale and rotate functions
 
+Specifically:
+
+* Removed value validation warning from set_visual_property_default()
+* Fixed missing URL parameter in create_network_from_data_frames() and create_network_from_networkx()
+* Added style functions for node_position and node_label_position
+* Allowed Cytoscape version check to include patch level (e.g., x.y.patch)
+* Added layout functions scale_layout() and rotate_layout() to match Cytoscape's Layout Tools
 
 
 API Changes
@@ -47,6 +51,7 @@ scale_layout(axis, scale_factor, network=None, selected_only=False, base_url=DEF
 
 rotate_layout(angle, network=None, selected_only=False, base_url=DEFAULT_BASE_URL)
 
+
 Deprecations
 ------------
 
@@ -61,13 +66,24 @@ Contributors to this release
 Pull requests merged in this release
 ------------------------------------
 
-- ... add pull request here: #xxx by yyy
-
 
 Issues closed in this release
 ------------------------------------
 
 - #125 by Barry Demchak
+- #124 by Barry Demchak
+- #123 by Barry Demchak
 - #122 by Barry Demchak
+- #121 by Minghao Gong
+- #119 by Minghao Gong
+- #118 by Minghao Gong
+- #117 by Minghao Gong
+- #116 by Minghao Gong
+- #115 by Minghao Gong
+- #113 by Jack Hart
+- #111 by Minghao Gong
+- #110 by Minghao Gong
+- #109 by Minghao Gong
+- #108 by Minghao Gong
 
 

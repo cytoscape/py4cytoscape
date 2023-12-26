@@ -8,16 +8,6 @@ py4cytoscape 1.9.0
 -------------------
 Release date: dd mmm yyyy
 
-* Removed value validation warning from set_visual_property_default()
-* Fixed missing URL parameter in create_network_from_data_frames() and create_network_from_networkx()
-* Added style functions for node_position and node_label_position
-* Allowed Cytoscape version check to include patch level (e.g., x.y.patch)
-* Added layout functions scale_layout() and rotate_layout() to match Cytoscape's Layout Tools
-
-
-Release notes
-~~~~~~~~~~~~~
-
 .. include:: release/release_1.9.0.rst
 
 
