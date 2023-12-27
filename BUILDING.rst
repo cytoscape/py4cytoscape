@@ -20,4 +20,5 @@ Building ``py4cytoscape``
 16. Update the version number in both py4cytoscape/_version.py and build.bat
 17. Create a new release file in doc/release to match the version number (e.g., release_0.0.1.rst)
 18. Update the theme list in doc/release_log.rst and reference the release file you just created
-19. Activate the new branch in ReadTheDocs.org(https://readthedocs.org/projects/py4cytoscape/versions/)
+19. Check all changes into github
+20. Activate the new branch in ReadTheDocs.org(https://readthedocs.org/projects/py4cytoscape/versions/)
