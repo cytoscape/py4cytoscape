@@ -1586,12 +1586,26 @@ def _map_values(table, table_column, scheme_func, value_name, default_name, defa
         # Find the frequency distribution, with most common elements first (... not same ordering as Cytoscape) ... guarantee the order by sorting
         df_freq = df_values[table_column].value_counts()
         if len(df_freq) > 1:
-            # df_values rows aren't left in a predictable order, so that means the color assignments will vary from
-            # run to run. To make this consistent and testable, we sort all values within the same frequency count.
-            # To do this, we turn the frequency series into a dataframe then sort first on frequency count and then
-            # on value.
-            df_freq = df_freq.to_frame().rename_axis('index').sort_values(by=[table_column, 'index'],
-                                                                          ascending=[True, True])
+            # df_freq is a series that looks like this (3.0, 1) (4.0, 1) where the first element is newcol
+            # and the second is the count of each value of newcol.
+
+            # We want a version of df_freq that's sorted by the count so we can get the newcol values in
+            # sorted order ... we don't care about the actual counts once we have the sorted list. However,
+            # if we sort just on the count, the order of the newcol values isn't consistent from run to run.
+            # To make this testable, we sort on count *and* newcol values.
+
+            # We convert the series to a dataframe with the column names derived from the df_freq series
+            # column names. Unfortunately, pre-2.0 Pandas name the columns as ['', 'newcol'],
+            # which is wrong. Pandas 2.0+ do this right, and we get ['newcol', 'count']. So, we adjust
+            # our sort request to accommodate either case.
+
+            df_freq = df_freq.to_frame()
+            if df_freq.index.name is None:
+                # Use the old Panda's layout, which is ['', 'newcol']
+                df_freq = df_freq.rename_axis('index').sort_values(by=[table_column, 'index'], ascending=[True, True])
+            else:
+                # Use the new Panda's layout, which is ['newcol', 'count']
+                df_freq = df_freq.sort_values(['count', table_column], ascending=[True, True])
 
         # Create function to map from DataFrame type to Python type ... this is necessary because if
         # the table_column has nan values, Pandas will automatically make the column Float64, even if
