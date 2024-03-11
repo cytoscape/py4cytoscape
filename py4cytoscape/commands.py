@@ -682,7 +682,7 @@ def _handle_error(e, force_cy_error=False):
                 show_error(f'In {caller}: {e}\n{content}')
         raise e
 
-@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
+@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=10)
 def _do_request_local(method, url, **kwargs):
     # Call CyREST via a local URL
     log_http_request(method, url, **kwargs)
