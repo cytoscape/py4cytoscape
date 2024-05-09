@@ -130,7 +130,7 @@ def get_table_columns(table='node', columns=None, namespace='default', network=N
     Note:
         For requested columns not present in the table, the column is not returned, but a warning is shown.
     """
-    suid = networks.get_network_suid(network, base_url)
+    suid = networks.get_network_suid(network, base_url=base_url)
 
     # column information (names and types)
     table_col_info = get_table_column_types(table, namespace=namespace, network=network, base_url=base_url)

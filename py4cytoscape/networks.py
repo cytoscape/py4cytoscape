@@ -91,7 +91,7 @@ def set_current_network(network=None, base_url=DEFAULT_BASE_URL):
         >>> set_current_network(1502) # sets network having SUID 1502 as current
         {}
     """
-    suid = get_network_suid(network)
+    suid = get_network_suid(network, base_url=base_url)
     cmd = f'network set current network="SUID:{suid}"'
     res = commands.commands_post(cmd, base_url=base_url)
     # TODO: Put double quotes around SUID
@@ -386,7 +386,7 @@ def delete_network(network=None, base_url=DEFAULT_BASE_URL):
         >>> delete_network('galFiltered.sif') # delete network having name
         ''
     """
-    suid = get_network_suid(network)
+    suid = get_network_suid(network, base_url=base_url)
     res = commands.cyrest_delete(f'networks/{suid}', base_url=base_url, require_json=False)
     return res
 

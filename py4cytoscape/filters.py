@@ -145,7 +145,7 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
     if column not in tables.get_table_column_names(type[:4], base_url=base_url):
         raise CyError('Column "%s" does not exist in the "%s" table' % (column, type[:4]))
 
-    if predicate == "REGEX" and check_supported_versions(cytoscape='3.9'):
+    if predicate == "REGEX" and check_supported_versions(cytoscape='3.9', base_url=base_url):
         show_error('Warning -- Cytoscape version pre-3.9 in use ... REGEX filter may hang forever')
     elif predicate in ['BETWEEN', 'IS_NOT_BETWEEN']:
         if not isinstance(criterion, list) or len(criterion) != 2:
@@ -396,7 +396,7 @@ def import_filters(filename, base_url=DEFAULT_BASE_URL):
 
 def _create_filter_and_finish(cmd, cmd_body, hide, apply, network, base_url):
     AUTO_APPLY_THRESHOLD = 100000
-    if check_supported_versions(cytoscape='3.9') is None:
+    if check_supported_versions(cytoscape='3.9', base_url=base_url) is None:
         cmd_body['apply'] = apply
         res = commands.cyrest_post(cmd, body=cmd_body, base_url=base_url)
     else:
@@ -418,7 +418,7 @@ def _create_filter_and_finish(cmd, cmd_body, hide, apply, network, base_url):
 
 
 def _check_selected(hide, network, base_url):
-    if check_supported_versions(cytoscape='3.9'):
+    if check_supported_versions(cytoscape='3.9', base_url=base_url):
     # This delay became unnecessary in Cytoscape 3.9
         show_error('Warning -- Cytoscape version pre-3.9 in use ... settling delay inserted after filter execution')
         time.sleep(CATCHUP_FILTER_SECS)  # Yikes! Have to wait a second for selection to settle!
