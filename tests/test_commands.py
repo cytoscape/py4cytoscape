@@ -48,6 +48,7 @@ class CommandsTests(unittest.TestCase):
     def test_cyrest_delete(self):
         # Initialization
         load_test_session()
+        cur_network_suid = get_network_suid()
 
         # Verify that deleting a view returns a non-JSON result
         self.assertEqual(len(get_network_views()), 1)
@@ -55,7 +56,7 @@ class CommandsTests(unittest.TestCase):
         self.assertEqual(res, '')
 
         # Verify that an HTTP error results in an exception
-        self.assertListEqual(get_network_views(), [])  # Behavior when there are no views
+        self.assertListEqual(get_network_views(cur_network_suid), [])  # Behavior when there are no views
         self.assertRaises(RequestException, cyrest_delete, 'session',
                           base_url='http://totallybogus')  # test non-existent URL
         self.assertRaises(RequestException, cyrest_delete, 'session',
