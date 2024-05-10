@@ -13,12 +13,12 @@ Bioconductor available to R programmers.
 
 The themes for this release are:
 
-* ... add themes here
+* Add missing parameters to enable non-default base_url
 
 Release notes
 ~~~~~~~~~~~~~
 
-* ... add specifics here
+* Added base_url parameter propagation in filters, networks and tables functions
 
 
 API Changes
@@ -38,7 +38,7 @@ Deprecations
 Contributors to this release
 ----------------------------
 
-- ... add a contributor name here ...
+- Barry Demchak
 
 
 Pull requests merged in this release
