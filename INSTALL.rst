@@ -30,6 +30,14 @@ instructions for installing the full `scientific Python stack
    `PyCharm <https://www.jetbrains.com/pycharm/>`_ and other integrated development
    environments often install their own Python distributions.
 
+   If you are using the MSYS2 distribution on Windows and have `pacboy` installed,
+   you can install `py4cytoscape` and its dependencies with the following commands:
+
+   .. code-block:: bash
+
+      pacboy -S python-{requests,networkx,igraph,pandas,pip}:p --needed
+      pip install py4cytoscape
+
 Below we assume you have a suitable Python environment already configured on
 your computer and you intend to install ``py4cytoscape`` inside of it.  If you want
 to create and work with Python virtual environments, please follow instructions
