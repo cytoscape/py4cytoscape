@@ -30,6 +30,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 
 # External library imports
 import requests
+from http import HTTPStatus
 import urllib.parse
 import json
 import webbrowser
@@ -297,10 +298,21 @@ def commands_get(cmd_string, base_url=DEFAULT_BASE_URL):
         ['app: Network Merge, status: Installed']
         >>> commands_get('view')
         ["Available commands for 'view':", 'create', 'destroy', 'export', 'fit content', 'fit selected', ...]
+
+    Note:
+        Extremely long commands may result in an immediate "URI Too Long" failure because
+        `commands_get()` uses HTTP GET to call the CyREST API, and HTTP GET has known limitations.
+        You can use `commands_post()` instead, though the return value will be different.
+        `commands_post()` uses HTTP POST, which has no limitations.
+
+    See Also:
+        :meth:`commands_post`
     """
     try:
         get_url, parameters = _command_2_get_query(cmd_string, base_url=base_url)
         r = _do_request('GET', get_url, params=parameters, headers={'Accept': 'text/plain'}, base_url=base_url)
+        if r.status_code == HTTPStatus.REQUEST_URI_TOO_LONG:
+            narrate('URI Too Long: The command you attempted to execute is too large to be handled via GET request. Consider switching to commands_post() for larger queries.')
         r.raise_for_status()
 
         # Break response into a list of lines and return it
@@ -420,9 +432,17 @@ def commands_run(cmd_string, base_url=DEFAULT_BASE_URL):
     Examples:
         >>> commands_run('session new destroyCurrentSession=true')
         []
+
+    Note:
+        Extremely long commands may result in an immediate "URI Too Long" failure because
+        `commands_run()` uses HTTP GET to call the CyREST API, and HTTP GET has known limitations.
+        You can use `commands_post()` instead, though the return value will be different.
+        `commands_post()` uses HTTP POST, which has no limitations.
+
+    See Also:
+        :meth:`commands_post`
     """
     return commands_get(cmd_string, base_url=base_url)
-
 
 # TODO: Take another look at the R version ... it seems to be passing in the wrong parameter name. Comments seem wrong.
 @cy_log

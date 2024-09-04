@@ -160,6 +160,14 @@ class CommandsTests(unittest.TestCase):
         self._check_cy_result(commands_get('apps status app="Network Merge"'),
                               ['app: Network Merge, status: Installed'])
 
+        # Verify that we give a decent error when the command line is too long for an HTTP GET call
+        try:
+            res = commands_run(' long' * 10000)
+            self.assertTrue(False, 'commands_get should have thrown a long URI exception but did not')
+        except CyError as e:
+            self.assertTrue('Bad Message 414' in str(e))
+            self.assertTrue('URI Too Long' in str(e))
+
         # Verify that bad commands are caught
         self.assertRaises(CyError, commands_get, 'session open file="c:/file name"')
         self.assertRaises(RequestException, commands_get, '', base_url='http://totallybogus')
@@ -216,6 +224,14 @@ class CommandsTests(unittest.TestCase):
         res = commands_run('session new destroyCurrentSession=true')
         self.assertIsInstance(res, list)
         self.assertListEqual(res, [])
+
+        # Verify that we give a decent error when the command line is too long for an HTTP GET call
+        try:
+            res = commands_run('session new destroyCurrentSession=true' + ' long' * 10000)
+            self.assertTrue(False, 'commands_run should have thrown a long URI exception but did not')
+        except CyError as e:
+            self.assertTrue('Bad Message 414' in str(e))
+            self.assertTrue('URI Too Long' in str(e))
 
         # Verify that bad commands are caught
         self.assertRaises(CyError, commands_run, 'total junk')

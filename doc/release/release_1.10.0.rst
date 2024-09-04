@@ -14,11 +14,13 @@ Bioconductor available to R programmers.
 The themes for this release are:
 
 * Add missing parameters to enable non-default base_url
+* Add documentation & checks for large commands
 
 Release notes
 ~~~~~~~~~~~~~
 
 * Added base_url parameter propagation in filters, networks and tables functions
+* Add documentation & check for outsize commands_run and commands_get requests
 
 
 API Changes
@@ -39,6 +41,7 @@ Contributors to this release
 ----------------------------
 
 - Barry Demchak
+- Harsh Sharma
 
 
 Pull requests merged in this release
@@ -49,6 +52,8 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
-- #xxx by ccc ... add issues and contributors here ...
+- #137 by Harsh Sharma
+- #135 by Minghao Gong
+- #127 by Athina Gavriilidou
 
 

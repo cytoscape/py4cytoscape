@@ -52,4 +52,3 @@ class CyError(Exception):
         super().__init__(whole_error)
         show_error(whole_error)     # was: print(whole_error, file=sys.stderr)
 
-
