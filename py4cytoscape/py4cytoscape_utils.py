@@ -582,23 +582,37 @@ def node_suid_to_node_name(node_suids, network=None, base_url=DEFAULT_BASE_URL):
         >>> node_suid_to_node_name('YDR277C, YDL194W', network='myNetwork')
         ['YDR277C', 'YDL194W']
     """
-    if node_suids is None: return None
+    if node_suids is None:
+        return None
+    
     node_suids = normalize_list(node_suids)
-
+    
+    # Fetch the node data from Cytoscape
     df = tables.get_table_columns('node', ['name'], 'default', network, base_url=base_url)
-    all_names = df['name'].values
+    suid_to_name = dict(zip(df.index, df['name']))
+    all_names = set(df['name'])
 
-    test_present = [x in all_names for x in node_suids]
-    if not False in test_present:
-        return node_suids
+    # Determine if the list contains only SUIDs or only names
+    are_all_suids = all(isinstance(item, int) for item in node_suids)
+    are_all_names = all(isinstance(item, str) for item in node_suids)
 
-    all_suids_list = df.index.tolist()
-    try:
-        # map all SUIDS into column names ... all SUIDs *must* be actual SUIDs
-        node_names = [all_names[all_suids_list.index(node_suid)] for node_suid in node_suids]
-        return node_names
-    except Exception as e:
-        raise CyError(f'Invalid node SUID in list: {node_suids}')
+    if not (are_all_suids or are_all_names):
+        raise CyError(f'List contains a mix of SUIDs and names: {node_suids}')
+    
+    node_names = []
+    for item in node_suids:
+        if are_all_suids:
+            if item in suid_to_name:
+                node_names.append(suid_to_name[item])
+            else:
+                raise CyError(f'Invalid node SUID in list: {item}')
+        elif are_all_names:
+            if item in all_names:
+                node_names.append(item)
+            else:
+                raise CyError(f'Invalid node name in list: {item}')
+    
+    return node_names
 
 
 def edge_name_to_edge_suid(edge_names, network=None, base_url=DEFAULT_BASE_URL, *, unique_list=False):
@@ -683,22 +697,37 @@ def edge_suid_to_edge_name(edge_suids, network=None, base_url=DEFAULT_BASE_URL):
         >>> edge_suid_to_edge_name(['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W'], network='myNetwork')
         ['YDR277C (pp) YDL194W', 'YDR277C (pp) YDR206W']
     """
-    if edge_suids is None: return None
+    if edge_suids is None:
+        return None
+
     edge_suids = normalize_list(edge_suids)
 
+    # Fetch the edge data from Cytoscape
     df = tables.get_table_columns('edge', ['name'], 'default', network, base_url=base_url)
-    all_names = df['name'].values
+    suid_to_name = dict(zip(df.index, df['name']))
+    all_names = set(df['name'])
 
-    test = [edge_suid in all_names for edge_suid in edge_suids]
-    if not False in test: return edge_suids  # the list already had valid names
+    # Determine if the list contains only SUIDs or only names
+    are_all_suids = all(isinstance(item, int) for item in edge_suids)
+    are_all_names = all(isinstance(item, str) for item in edge_suids)
 
-    all_suids_list = df.index.tolist()
-    try:
-        # map all SUIDS into column names ... all SUIDs *must* be actual SUIDs
-        edge_names = [all_names[all_suids_list.index(edge_suid)] for edge_suid in edge_suids]
-        return edge_names
-    except Exception as e:
-        raise CyError(f'Invalid edge SUID in list: {edge_suids}')
+    if not (are_all_suids or are_all_names):
+        raise CyError(f'List contains a mix of SUIDs and names: {edge_suids}')
+
+    edge_names = []
+    for item in edge_suids:
+        if are_all_suids:
+            if item in suid_to_name:
+                edge_names.append(suid_to_name[item])
+            else:
+                raise CyError(f'Invalid edge SUID in list: {item}')
+        elif are_all_names:
+            if item in all_names:
+                edge_names.append(item)
+            else:
+                raise CyError(f'Invalid edge name in list: {item}')
+
+    return edge_names    
 
 
 # ------------------------------------------------------------------------------
@@ -917,33 +946,39 @@ def normalize_prop_name(prop_name):
     return visual_prop_name
 
 def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
-    # Translate a list of node or edge names into a list of SUIDs ... account for duplicatated names if list is unique
-    if item_names is None: return None
+    # Translate a list of node or edge names into a list of SUIDs ... account for duplicated names if the list is unique
+    if item_names is None:
+        return None
+    
+    # Normalize input item names
     item_names = normalize_list(item_names)
-
     df = tables.get_table_columns(table_name, ['name'], 'default', network, base_url=base_url)
+    all_suids = set(df.index)
 
-    # Check all item names to see if they're all valid SUIDs ... if so, we're already done
-    all_suids = df.index
-    try:
-        item_names = [int(i) for i in item_names]
-        found_valid_suids = [i in all_suids for i in item_names]
-        if False not in found_valid_suids:
-            return item_names
-    except:
-        pass
+    # Check if all item names are valid SUIDs, return immediately if true
+    if all(item_name in all_suids for item_name in item_names):
+        return item_names
 
-    # map all names into SUIDs ... all names *must* be actual names ... and must be str() to match the 'name' column
-    item_names = [str(item_name) for item_name in item_names]
-    item_name_to_suid_list = {item_name: list(df[df.name.eq(item_name)].index.values) for item_name in item_names}
+    # Map all names to SUIDs for O(1) lookup, allowing multiple SUIDs per name
+    item_name_to_suid_list = {}
+    for suid, name in zip(df.index, df['name']):
+        if name not in item_name_to_suid_list:
+            item_name_to_suid_list[name] = []
+        item_name_to_suid_list[name].append(suid)
+
+    # Convert item names to SUIDs
+    suid_list = []
     try:
-        if unique_list:
-            suid_list = [item_name_to_suid_list[item_name].pop(0) for item_name in item_names]
-        else:
-            suid_list = [item_name_to_suid_list[item_name] for item_name in item_names]
-            suid_list = [s[0] if len(s) <= 1 else s for s in
-                         suid_list]  # return scalar if len(list) = 1, blow up if len(list) = 0
+        for item_name in item_names:
+            if unique_list:
+                suid_entry = item_name_to_suid_list[item_name].pop(0)
+            else:
+                suid_entry = item_name_to_suid_list[item_name]
+                suid_entry = suid_entry[0] if len(suid_entry) == 1 else suid_entry 
+                # return scalar if len(list) = 1, blow up if len(list) = 0
+            suid_list.append(suid_entry)
     except:
         raise CyError(f'Invalid name in {table_name} name list: {item_names}')
 
     return suid_list
+
