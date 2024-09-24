@@ -1,7 +1,7 @@
 
 py4cytoscape 1.10.0
 -------------------
-Release date: dd mmm yyyy
+Release date: 24 Sep 2024
 
 We're happy to announce the release of py4cytoscape 1.10.0!
 
@@ -24,19 +24,31 @@ Release notes
 * Added base_url parameter propagation in filters, networks and tables functions
 * Add documentation & check for outsize commands_run and commands_get requests
 * Speed improvement on functions that convert node or edge names to SUIDs
+
     edge_name_to_edge_suid
         convert_edge_name_to_edge_info
+
         create_network_from_data_frames
+
         clear_edge_property_bypass
+
         set_edge_property_bypass
+
         get_edge_property
+
         get_table_value
+
     node_name_to_name_suid
         add_cy_edges
+
         get_first_neighbors
+
         clear_node_property_bypass
+
         set_node_property_bypass
+
         get_node_property
+
         get_table_value
 
 
