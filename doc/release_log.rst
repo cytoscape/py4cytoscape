@@ -3,6 +3,8 @@
 Release Log
 ===========
 
+.. include:: release/release_1.11.0.rst
+
 .. include:: release/release_1.10.0.rst
 
 .. include:: release/release_1.9.0.rst
