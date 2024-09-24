@@ -25,7 +25,9 @@ Release notes
 * Add documentation & check for outsize commands_run and commands_get requests
 * Speed improvement on functions that convert node or edge names to SUIDs
 
-    edge_name_to_edge_suid
+    Edges:
+        edge_name_to_edge_suid
+
         convert_edge_name_to_edge_info
 
         create_network_from_data_frames
@@ -38,7 +40,9 @@ Release notes
 
         get_table_value
 
-    node_name_to_name_suid
+    Nodes:
+        node_name_to_name_suid
+
         add_cy_edges
 
         get_first_neighbors
