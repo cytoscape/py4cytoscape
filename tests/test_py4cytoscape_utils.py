@@ -77,6 +77,7 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
 
         self.assertRaises(CyError, node_suid_to_node_name, ['YBR043C', 'junk', 'YDR277C'])
         self.assertRaises(CyError, node_suid_to_node_name, suids_with_name)
+        self.assertRaises(CyError, node_suid_to_node_name, str(suids_with_name)[1:-1])
         self.assertRaises(CyError, node_suid_to_node_name, suids_with_none)
 
     @print_entry_exit
