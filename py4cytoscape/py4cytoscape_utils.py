@@ -962,9 +962,13 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
     # Map all names to SUIDs for O(1) lookup, allowing multiple SUIDs per name
     item_name_to_suid_list = {}
     for suid, name in zip(df.index, df['name']):
+        try:
+            name = int(name)  # Attempt to convert the name to an integer.
+        except ValueError:
+            pass  # If conversion fails, keep the name as a string.
         if name not in item_name_to_suid_list:
-            item_name_to_suid_list[name] = []
-        item_name_to_suid_list[name].append(suid)
+            item_name_to_suid_list[name] = []  # Initialize the key with an empty list if it doesn't exist.
+        item_name_to_suid_list[name].append(suid)  # Add the suid to the list associated with the name.
 
     # Convert item names to SUIDs
     suid_list = []
