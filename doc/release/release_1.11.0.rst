@@ -1,7 +1,7 @@
 
 py4cytoscape 1.11.0
 -------------------
-Release date: DD MMM YYYY
+Release date: 29 Sep 2024
 
 We're happy to announce the release of py4cytoscape 1.11.0!
 
@@ -13,13 +13,13 @@ Bioconductor available to R programmers.
 
 The themes for this release are:
 
-* Add theme here
+* Minor bug fixes
 
 
 Release notes
 ~~~~~~~~~~~~~
 
-* Add notes here
+* Fixed py4cytoscape_utils node_name_to_node_suid() to allow nodes named by integers instead of alphanumerics
 
 
 API Changes
@@ -27,28 +27,29 @@ API Changes
 
 Added:
 
-* Add API changes here
+None
 
 
 Deprecations
 ------------
 
-* Add deprecations here
+None
 
 
 Contributors to this release
 ----------------------------
 
-- add contributor here (e.g.. Barry Demchak)
+- Barry Demchak
+- Harsh Sharma
 
 
 Pull requests merged in this release
 ------------------------------------
 
-- Add pull requests here (e.g., #140 by Barry Demchak)
+- #143 by Harsh Sharma
 
 Issues closed in this release
 ------------------------------------
 
-- Add closed issues here (e.g., #137 by Harsh Sharma)
+- #142 by Barry Demchak
 
