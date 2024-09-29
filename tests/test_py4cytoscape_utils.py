@@ -113,6 +113,7 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertRaises(CyError, node_name_to_node_suid, names_with_none) # try bad node SUID
         self.assertEqual(node_name_to_node_suid(suids_str), suids) # try string list of node SUIDs
         self.assertEqual(node_name_to_node_suid(suids[0]), [suids[0]]) # try just a single node SUID
+        self.assertEqual(node_name_to_node_suid(str(suids[0])), [suids[0]]) # try just a single node SUID as string
 
         # Verify that when there are two of the same-named nodes, one of their SUIDs is returned if one node is queried
         suid_orig = index[values.index('YGR009C')]

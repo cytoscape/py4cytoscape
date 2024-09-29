@@ -853,7 +853,14 @@ def verify_supported_versions(cyrest=1, cytoscape=3.6, base_url=DEFAULT_BASE_URL
 
 
 def normalize_list(entity):
-    # Return a Python list of strings given a Python list, a string list of strings, a string list of ints, or a scalar
+    # Try to return a list representing entity, but the actual return value depends on the entity passed in
+    # If the entity is str, it could contain a single value or a comma-separated list of values
+    #     if all of these values look like integers, the return value is a python list of integers (e.g., '1,2,3' -> [1,2,3] or '1'->[1])
+    #     if at least one value doesn't look like an integer, the return value is a python list of strings (e.g., 'A,B,1' -> ['A','B','1'] or 'A' -> ['A'])
+    # If the entity is a list, the list is just returned as is (e.g., ['A','B','C'] -> ['A','B','C'] or [1,2,3] -> [1,2,3])
+    #     Note that this could defeat the intention of normalization if the list contains values of mixed
+    #     type (e.g., [1, 'A']) that are likely an error. But we let the caller detect this error.
+    # If the entity is neither list nor string, it is returned as a python list of length 1 (e.g., 123 -> [123]
     if isinstance(entity, str):  # If it's a string, it could be names, SUIDs, or whatever
         scalar_list = str.split(entity, ',')
         try:
@@ -861,7 +868,6 @@ def normalize_list(entity):
         except:
             return [str.strip(x) for x in scalar_list]  # for each entry, get rid of leading/trialing spaces
     elif not isinstance(entity, list):  # If it's not a string, it could be int, int64 or whatever
-        # Note that list could contain strings with leading/trailing spaces. Caller will likely think this is an error.
         return [entity]
     else:
         return entity
@@ -950,22 +956,30 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
     if item_names is None:
         return None
     
-    # Normalize input item names
+    # Normalize input item names ... item_names could come back as a list of name ints (if all items look
+    # like ints) or strings (if at least one name isn't an int). Normal situation is list of strings, but
+    # list of ints is legitimate if the input names are already a list of SUIDs or if the table's name
+    # column contains names that look like ints.
     item_names = normalize_list(item_names)
+
+    # Get a table of column names indexed by SUID and a set containing all of the SUIDs
     df = tables.get_table_columns(table_name, ['name'], 'default', network, base_url=base_url)
     all_suids = set(df.index)
 
     # Check if all item names are valid SUIDs, return immediately if true
+    # (... fails if any item is a string or a number that's not a SUID but could be an item name)
     if all(item_name in all_suids for item_name in item_names):
         return item_names
 
     # Map all names to SUIDs for O(1) lookup, allowing multiple SUIDs per name
     item_name_to_suid_list = {}
-    for suid, name in zip(df.index, df['name']):
+    for suid, name in zip(df.index, df['name']): # loop through all known SUIDS/names
         try:
-            name = int(name)  # Attempt to convert the name to an integer.
+            name = int(name)    # name looks like a number ... important because item_names will contain number if item looks like a number
         except ValueError:
-            pass  # If conversion fails, keep the name as a string.
+            pass    # name looks like a string ... use it as is
+
+        # Add name and SUID(s) to map
         if name not in item_name_to_suid_list:
             item_name_to_suid_list[name] = []  # Initialize the key with an empty list if it doesn't exist.
         item_name_to_suid_list[name].append(suid)  # Add the suid to the list associated with the name.
