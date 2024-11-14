@@ -651,7 +651,7 @@ def palette_color_brewer_d_RdYlGn(reverse=False):
 # ------------------------------------------------------------------------------
 
 @_scheme('discrete')
-def scheme_d_shapes():
+def scheme_d_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of node shapes of a given size
 
     Returns:
@@ -663,10 +663,10 @@ def scheme_d_shapes():
     See Also:
         :meth:`gen_node_shape_map`
     """
-    return lambda value_count: _scheme_d_shapes(value_count, styles.get_node_shapes(), 'shapes')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_node_shapes(base_url=base_url), 'shapes')
 
 @_scheme('discrete')
-def scheme_d_line_styles():
+def scheme_d_line_styles(base_url=DEFAULT_BASE_URL):
     """Generate list of line styles of a given size
 
     Returns:
@@ -678,10 +678,10 @@ def scheme_d_line_styles():
     See Also:
         :meth:`gen_edge_line_style_map`
     """
-    return lambda value_count: _scheme_d_shapes(value_count, styles.get_line_styles(), 'line styles')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_line_styles(base_url=base_url), 'line styles')
 
 @_scheme('discrete')
-def scheme_d_arrow_shapes():
+def scheme_d_arrow_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of arrow shapes of a given size
 
     Returns:
@@ -693,7 +693,7 @@ def scheme_d_arrow_shapes():
     See Also:
         :meth:`gen_edge_arrow_map`
     """
-    return lambda value_count: _scheme_d_shapes(value_count, styles.get_arrow_shapes(), 'arrow shapes')
+    return lambda value_count: _scheme_d_shapes(value_count, styles.get_arrow_shapes(base_url=base_url), 'arrow shapes')
 
 @_scheme('discrete')
 def scheme_d_number_random(min_value=0, max_value=255):
@@ -1301,7 +1301,7 @@ def gen_node_shape_map(table_column,
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    return _gen_d_shape_map('node', table_column, scheme_d_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
+    return _gen_d_shape_map('node', table_column, scheme_d_shapes(base_url=base_url), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
 
 @cy_log
@@ -1339,7 +1339,7 @@ def gen_edge_line_style_map(table_column,
     See Also:
         `Value Generators <https://py4cytoscape.readthedocs.io/en/0.0.9/concepts.html#value-generators>`_ in the Concepts section in the py4cytoscape User Manual.
     """
-    return _gen_d_shape_map('edge', table_column, scheme_d_line_styles(), 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
+    return _gen_d_shape_map('edge', table_column, scheme_d_line_styles(base_url=base_url), 'line_styles', 'default_line_style', default_line_style, style_name, network, base_url)
 
 @cy_log
 def gen_edge_arrow_map(table_column,
@@ -1373,7 +1373,7 @@ def gen_edge_arrow_map(table_column,
     See Also:
         :meth:`set_edge_source_arrow_shape_mapping`, :meth:`set_edge_target_arrow_shape_mapping`
     """
-    return _gen_d_shape_map('edge', table_column, scheme_d_arrow_shapes(), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
+    return _gen_d_shape_map('edge', table_column, scheme_d_arrow_shapes(base_url=base_url), 'shapes', 'default_shape', default_shape, style_name, network, base_url)
 
 # Generate a brewer palette of a given size, and interpolate if there isn't a palette of the desired size
 def _palette_color_brewer(value_count, palette, reverse):

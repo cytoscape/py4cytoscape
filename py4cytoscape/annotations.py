@@ -175,7 +175,7 @@ def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=Non
 
     cmd_string += _get_angle_cmd_string(angle)
 
-    cmd_string += _get_type_cmd_string(type)
+    cmd_string += _get_type_cmd_string(type, base_url)
 
     cmd_string += _get_custom_shape_cmd_string(custom_shape)
 
@@ -326,7 +326,7 @@ def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, a
 
     cmd_string, net_suid = _build_base_cmd_string('annotation add shape', network, base_url)  # a good start
 
-    cmd_string += _get_type_cmd_string(type)
+    cmd_string += _get_type_cmd_string(type, base_url)
 
     cmd_string += _get_custom_shape_cmd_string(custom_shape)
 
@@ -645,7 +645,7 @@ def update_annotation_bounded_text(text=None, annotation_name=None, x_pos=None, 
 
     cmd_string += _get_angle_cmd_string(angle)
 
-    cmd_string += _get_type_cmd_string(type)
+    cmd_string += _get_type_cmd_string(type, base_url)
 
     cmd_string += _get_custom_shape_cmd_string(custom_shape)
 
@@ -717,7 +717,7 @@ def update_annotation_shape(type=None, custom_shape=None, annotation_name=None, 
 
     cmd_string, net_suid = _build_base_cmd_string('annotation update shape', network, base_url)  # a good start
 
-    cmd_string += _get_type_cmd_string(type)
+    cmd_string += _get_type_cmd_string(type, base_url)
 
     cmd_string += _get_custom_shape_cmd_string(custom_shape)
 
@@ -907,12 +907,12 @@ def _get_x_y_pos_cmd_string(x_pos, y_pos, net_suid, base_url):
     return f' x="{x_pos}" y="{y_pos}"'
 
 
-def _get_type_cmd_string(type):
+def _get_type_cmd_string(type, base_url):
     if type is None:
         return ''
     else:
         type = type.upper()
-        if type not in styles.get_node_shapes():
+        if type not in styles.get_node_shapes(base_url=base_url):
             raise CyError(f'{type} is invalid. Choose a shape from get_node_shapes()')
         if type == 'ROUND_RECTANGLE':
             type = 'Rounded Rectangle'

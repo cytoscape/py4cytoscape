@@ -127,9 +127,9 @@ def map_visual_property(visual_prop, table_column, mapping_type, table_column_va
     elif visual_prop_name in SHAPE_PROPERTIES:
         visual_prop_values = verify_node_shapes(visual_prop_values, styles.get_node_shapes(base_url=base_url))
     elif visual_prop_name in LINE_STYLE_PROPERTIES:
-        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_line_styles(), 'line style', 'get_line_style')
+        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_line_styles(base_url=base_url), 'line style', 'get_line_style')
     elif visual_prop_name in ARROW_STYLE_PROPERTIES:
-        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_arrow_shapes(), 'arrow style', 'get_arrow_shapes')
+        visual_prop_values = verify_edge_shapes(visual_prop_values, styles.get_arrow_shapes(base_url=base_url), 'arrow style', 'get_arrow_shapes')
     elif visual_prop_name in TOOLTIP_PROPERTIES | FONT_FACE_PROPERTIES | LABEL_PROPERTIES:
         if not isinstance(visual_prop_values, str) and not isinstance(visual_prop_values, list):
             raise CyError(f'Property "{visual_prop_name}" cannot be a {type(visual_prop_values)}. It must be a string.',
