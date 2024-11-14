@@ -13,13 +13,13 @@ Bioconductor available to R programmers.
 
 The themes for this release are:
 
-*
+* Bug fixes
 
 
 Release notes
 ~~~~~~~~~~~~~
 
-*
+* Updated style functions to propagate base_url parameters where needed
 
 
 API Changes
@@ -27,7 +27,7 @@ API Changes
 
 Added:
 
-* Add API changes here
+* Added base_url=DEFAULT_BASE_URL parameter to style_auto_mappings.py functions (scheme_d_shapes(), scheme_d_line_styles(), and scheme_d_arrow_shapes())
 
 
 Deprecations
@@ -39,7 +39,8 @@ Deprecations
 Contributors to this release
 ----------------------------
 
-- add contributor here (e.g.. Barry Demchak)
+- Barry Demchak
+- Stephan Grein
 
 
 Pull requests merged in this release
@@ -50,5 +51,5 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
-- Add closed issues here (e.g., #137 by Harsh Sharma)
+- #147 by Barry Demchak
 
