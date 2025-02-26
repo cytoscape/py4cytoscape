@@ -26,7 +26,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 """
 
 # External library imports
-import colorbrewer
 import random
 import numpy as np
 import functools
@@ -36,6 +35,7 @@ import pandas as pd
 # Internal module imports
 from . import styles
 from . import tables
+from . import py4cytoscape_colorbrewer
 
 # Internal module convenience imports
 from .exceptions import CyError
@@ -66,8 +66,6 @@ def _scheme(scheme_type):
     return decorator_scheme
 
 
-# Brewer palettes taken from https://github.com/dsc/colorbrewer-python/blob/master/colorbrewer.py
-
 @_palette('qualitative')
 def palette_color_random():
     """Generate random color map of a given size
@@ -97,7 +95,7 @@ def palette_color_brewer_q_Pastel2(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel2, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Pastel2, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Pastel1(reverse=False):
@@ -112,7 +110,7 @@ def palette_color_brewer_q_Pastel1(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Pastel1, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Pastel1, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Dark2(reverse=False):
@@ -127,7 +125,7 @@ def palette_color_brewer_q_Dark2(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Dark2, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Dark2, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Accent(reverse=False):
@@ -142,7 +140,7 @@ def palette_color_brewer_q_Accent(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Accent, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Accent, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Paired(reverse=False):
@@ -157,7 +155,7 @@ def palette_color_brewer_q_Paired(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Paired, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Paired, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Set1(reverse=False):
@@ -172,7 +170,7 @@ def palette_color_brewer_q_Set1(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set1, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Set1, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Set2(reverse=False):
@@ -187,7 +185,7 @@ def palette_color_brewer_q_Set2(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set2, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Set2, reverse)
 
 @_palette('qualitative')
 def palette_color_brewer_q_Set3(reverse=False):
@@ -202,7 +200,7 @@ def palette_color_brewer_q_Set3(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Set3, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Set3, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_YlGn(reverse=False):
@@ -217,7 +215,7 @@ def palette_color_brewer_s_YlGn(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGn, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.YlGn, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_YlGnBu(reverse=False):
@@ -232,7 +230,7 @@ def palette_color_brewer_s_YlGnBu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlGnBu, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.YlGnBu, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_GnBu(reverse=False):
@@ -247,7 +245,7 @@ def palette_color_brewer_s_GnBu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.GnBu, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.GnBu, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_BuGn(reverse=False):
@@ -262,7 +260,7 @@ def palette_color_brewer_s_BuGn(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuGn, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.BuGn, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_PuBuGn(reverse=False):
@@ -277,7 +275,7 @@ def palette_color_brewer_s_PuBuGn(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBuGn, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PuBuGn, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_PuBu(reverse=False):
@@ -292,7 +290,7 @@ def palette_color_brewer_s_PuBu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuBu, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PuBu, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_BuPu(reverse=False):
@@ -307,7 +305,7 @@ def palette_color_brewer_s_BuPu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BuPu, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.BuPu, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_RdPu(reverse=False):
@@ -322,7 +320,7 @@ def palette_color_brewer_s_RdPu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdPu, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.RdPu, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_PuRd(reverse=False):
@@ -337,7 +335,7 @@ def palette_color_brewer_s_PuRd(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuRd, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PuRd, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_OrRd(reverse=False):
@@ -352,7 +350,7 @@ def palette_color_brewer_s_OrRd(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.OrRd, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.OrRd, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_YlOrRd(reverse=False):
@@ -367,7 +365,7 @@ def palette_color_brewer_s_YlOrRd(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrRd, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.YlOrRd, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_YlOrBr(reverse=False):
@@ -382,7 +380,7 @@ def palette_color_brewer_s_YlOrBr(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.YlOrBr, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.YlOrBr, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Purples(reverse=False):
@@ -397,7 +395,7 @@ def palette_color_brewer_s_Purples(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Purples, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Purples, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Blues(reverse=False):
@@ -412,7 +410,7 @@ def palette_color_brewer_s_Blues(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Blues, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Blues, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Greens(reverse=False):
@@ -427,7 +425,7 @@ def palette_color_brewer_s_Greens(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greens, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Greens, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Oranges(reverse=False):
@@ -442,7 +440,7 @@ def palette_color_brewer_s_Oranges(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Oranges, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Oranges, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Reds(reverse=False):
@@ -457,7 +455,7 @@ def palette_color_brewer_s_Reds(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Reds, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Reds, reverse)
 
 @_palette('sequential')
 def palette_color_brewer_s_Greys(reverse=False):
@@ -472,7 +470,7 @@ def palette_color_brewer_s_Greys(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Greys, reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Greys, reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_PuOr(reverse=False):
@@ -491,7 +489,7 @@ def palette_color_brewer_d_PuOr(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PuOr, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PuOr, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_BrBG(reverse=False):
@@ -510,7 +508,7 @@ def palette_color_brewer_d_BrBG(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.BrBG, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.BrBG, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_PRGn(reverse=False):
@@ -529,7 +527,7 @@ def palette_color_brewer_d_PRGn(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PRGn, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PRGn, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_PiYG(reverse=False):
@@ -548,7 +546,7 @@ def palette_color_brewer_d_PiYG(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.PiYG, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.PiYG, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_RdBu(reverse=False):
@@ -567,7 +565,7 @@ def palette_color_brewer_d_RdBu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdBu, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.RdBu, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_RdGy(reverse=False):
@@ -586,7 +584,7 @@ def palette_color_brewer_d_RdGy(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdGy, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.RdGy, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_RdYlBu(reverse=False):
@@ -605,7 +603,7 @@ def palette_color_brewer_d_RdYlBu(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlBu, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.RdYlBu, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_Spectral(reverse=False):
@@ -624,7 +622,7 @@ def palette_color_brewer_d_Spectral(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.Spectral, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.Spectral, not reverse)
 
 @_palette('divergent')
 def palette_color_brewer_d_RdYlGn(reverse=False):
@@ -643,7 +641,7 @@ def palette_color_brewer_d_RdYlGn(reverse=False):
     See Also:
         :meth:`gen_node_color_map`, :meth:`gen_edge_color_map`
     """
-    return lambda value_count: _palette_color_brewer(value_count, colorbrewer.RdYlGn, not reverse)
+    return lambda value_count: _palette_color_brewer(value_count, py4cytoscape_colorbrewer.RdYlGn, not reverse)
 
 
 # ==============================================================================

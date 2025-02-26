@@ -324,7 +324,7 @@ class TablesTests(unittest.TestCase):
         test_data_suid_name['IntCol'] = suid_list
         test_data_suid_name['StrCol'] = suid_list
         test_data_suid_name['FloatCol'] = suid_list
-        test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str_, 'FloatCol': np.float_})
+        test_data_suid_name = test_data_suid_name.astype({'IntCol': np.int64, 'StrCol': np.str_, 'FloatCol': np.float64})
         test_data_suid_name['ListIntCol'] = [[int(suid), int(suid), int(suid)]   for suid in suid_list]
         test_data_suid_name['ListFloatCol'] = [[float(suid), float(suid), float(suid)]   for suid in suid_list]
         test_data_suid_name['ListStrCol'] = [[str(suid), str(suid), str(suid)]   for suid in suid_list]

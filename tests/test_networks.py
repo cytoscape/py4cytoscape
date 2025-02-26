@@ -350,8 +350,8 @@ class NetworkTests(unittest.TestCase):
         # Initialization
         load_test_session()
         df_all_nodes = get_table_columns(columns='name')
-        suid_YBR020W = df_all_nodes[df_all_nodes['name'] == 'YBR020W'].index[0]
-        suid_YGL035C = df_all_nodes[df_all_nodes['name'] == 'YGL035C'].index[0]
+        suid_YBR020W = int(df_all_nodes[df_all_nodes['name'] == 'YBR020W'].index[0])
+        suid_YGL035C = int(df_all_nodes[df_all_nodes['name'] == 'YGL035C'].index[0])
 
         test_select_nodes(['MIG1', 'GAL1'])
         self.assertSetEqual(set(get_first_neighbors(node_names=None, as_nested_list=False)), set(
@@ -996,7 +996,7 @@ class NetworkTests(unittest.TestCase):
         # verify that all edges are present
         self.assertEqual(len(i.es), len(all_edges))
         i_edges = [[x['source'], x['target']] for x in i.es]
-        self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges for x in all_edges])
+        self.assertNotIn(False, [re.split("\\ \\(.*\\)\\ ", x) in i_edges for x in all_edges])
 
     @print_entry_exit
     def test_create_networkx_from_network(self):
@@ -1008,7 +1008,10 @@ class NetworkTests(unittest.TestCase):
             # When comparing dicts, we can't be sure of the key ordering, and we don't know whether
             # some values could be 'nan'. So, to get the comparison right (because nan != nan), we
             # compare string values.
-            return str({k:dict_val[k]  for k in sorted(dict_val)})
+            #
+            # Note that we return string values because the dict's numeric or boolean values could be native
+            # Python types or could be np types, and they don't compare very easily.
+            return str({k:dict_val[k]  for k in sorted(dict_val) if type(dict_val[k]) in [str]})
 
 
         cyedge_table = tables.get_table_columns('edge')

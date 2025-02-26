@@ -78,7 +78,6 @@ def cyPalette(name='set1'):
     }
     return PALETTES[name]
 
-
 # ------------------------------------------------------------------------------
 def verify_brightness_contrast(bc):
     """Validate and provide user feedback when brightness or contrast is required input.
@@ -892,7 +891,7 @@ def parse_edges(edge_list):
     # Convert edge list into list of parts: ["xxx (pp) yyy", "zzz (pp) aaa"] into [("xxx", "pp", "yyy"), ("zzz", "pp", "aaa")]
 
     def split_edge(edge):
-        res = re.match('(.*) \((.*)\) (.*)', edge)
+        res = re.match(r'(.*) \((.*)\) (.*)', edge)
         return (res.group(1), res.group(2), res.group(3))
 
     return [split_edge(x) for x in edge_list]
@@ -976,7 +975,7 @@ def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_UR
     for suid, name in zip(df.index, df['name']): # loop through all known SUIDS/names
         try:
             name = int(name)    # name looks like a number ... important because item_names will contain number if item looks like a number
-        except ValueError:
+        except (ValueError, TypeError):
             pass    # name looks like a string ... use it as is
 
         # Add name and SUID(s) to map

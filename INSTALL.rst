@@ -73,7 +73,7 @@ Install the latest version (Python Console)
 
 Install the *current* release of ``py4cytoscape`` with ``pip``::
 
-   pip install igraph requests pandas networkx colorbrewer chardet decorator backoff colour
+   pip install igraph requests pandas networkx chardet decorator backoff colour
    pip install py4cytoscape
 
 
@@ -83,19 +83,19 @@ Install the development version (Python Console)
 To install the *latest* py4cytoscape development version, instead
 of ``pip install py4cytoscape``, use::
 
-   pip install igraph requests pandas networkx colorbrewer chardet decorator backoff colour
+   pip install igraph requests pandas networkx chardet decorator backoff colour
    pip install git+https://github.com/cytoscape/py4cytoscape.git
    
 To install the py4cytoscape branch (for example 0.0.10) version, instead
 of ``pip install py4cytoscape``, use::
 
-   pip install igraph requests pandas networkx colorbrewer chardet decorator backoff colour
+   pip install igraph requests pandas networkx chardet decorator backoff colour
    pip install git+https://github.com/cytoscape/py4cytoscape.git@0.0.10
 
 Alternately, to install *a particular* py4cytoscape development version (e.g., 0.0.11), instead
 of ``pip install py4cytoscape``, use::
 
-   pip install igraph requests pandas networkx colorbrewer chardet decorator backoff colour
+   pip install igraph requests pandas networkx chardet decorator backoff colour
    git clone git://github.com/cytoscape/py4cytoscape@0.0.11
 
 Verify Cytoscape connection

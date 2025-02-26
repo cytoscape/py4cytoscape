@@ -20,6 +20,7 @@ Release notes
 ~~~~~~~~~~~~~
 
 * Updated style functions to propagate base_url parameters where needed
+* Removed incompatibilities with Python 3.13.2
 
 
 API Changes
@@ -41,6 +42,7 @@ Contributors to this release
 
 - Barry Demchak
 - Stephan Grein
+- Carissa Bleker
 
 
 Pull requests merged in this release

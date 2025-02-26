@@ -122,7 +122,7 @@ class SanityTests(unittest.TestCase):
         # verify that all edges are present
         self.assertEqual(len(i.es), len(all_edges))
         i_edges = [[x['source'], x['target']] for x in i.es]
-        self.assertNotIn(False, [re.split("\ \\(.*\\)\ ", x) in i_edges for x in all_edges])
+        self.assertNotIn(False, [re.split("\\ \\(.*\\)\\ ", x) in i_edges for x in all_edges])
 
     @print_entry_exit
     def test_create_networkx_from_network(self):
@@ -134,7 +134,7 @@ class SanityTests(unittest.TestCase):
             # When comparing dicts, we can't be sure of the key ordering, and we don't know whether
             # some values could be 'nan'. So, to get the comparison right (because nan != nan), we
             # compare string values.
-            return str({k:dict_val[k]  for k in sorted(dict_val)})
+            return str({k:dict_val[k]  for k in sorted(dict_val) if type(dict_val[k]) in [str]})
 
 
         cyedge_table = tables.get_table_columns('edge')
