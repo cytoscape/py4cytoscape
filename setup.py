@@ -29,6 +29,7 @@ setuptools.setup(
         'networkx',
         'requests',
         'igraph',
+        'colorbrewer',
         'chardet',
         'decorator',
         'backoff',
