@@ -670,3 +670,82 @@ Shape generators don't require a ``scheme`` parameter, and automatically have a 
     set_edge_target_arrow_shape_mapping(**gen_edge_arrow_map('interaction',
                                                              style_name='galFiltered Style'))
 
+Setting X-Y Coordinates
+-----------------------
+
+There are no py4cytoscape functions that set the X-Y coordinates of a node in
+a graph view. There are a number of indirect methods for setting coordinates,
+and they involve setting the view style's `NODE_X_LOCATION` and `NODE_Y_LOCATION`
+attributes. They are generally unintuitive.
+
+The following function is a demonstration of how node coordinates can be set
+from a DataFrame that uses the node name as its index and has columns `x` and
+`y` containing the coordinate for each indexed node. For example:
+
+.. code:: python
+
+    import pandas as pd
+
+    # initialize list of X and Y coordinates
+    coords = {'x': [100, 200, 300],
+              'y': [1000, 2000, 3000]}
+
+    df = pd.DataFrame(coords, index=['node1', 'node2', 'node3']
+    print(df)
+
+         x    y
+    node1   100 1000
+    node2   200 2000
+    node3   300 3000
+
+.. code:: python
+
+    def layout_from_coords(network, table):
+        '''
+        network : int
+            Cytoscape suid, where to apply the layout
+        table: DataFrame
+            Pandas DataFrame, index as node names, and columns 'x' and 'y' with coordinates
+        '''
+
+        # Create X and Y node attribute columns and merge in X and Y coordinate values
+        p4c.load_table_data(table, network=network)
+
+        # Save away the current style
+        current_style = p4c.styles.get_current_style(network=network)
+
+        # Create a temporary style that matches the current style
+        tmp_style = 'tmp-layout'
+        p4c.copy_visual_style(current_style, tmp_style)
+        p4c.set_visual_style(tmp_style, network=network)
+
+        # Redraw nodes at coordinates contained in the X and Y node attribute columns
+        p4c.update_style_mapping(tmp_style, p4c.map_visual_property('NODE_X_LOCATION', 'x', 'p'))
+        p4c.update_style_mapping(tmp_style, p4c.map_visual_property('NODE_Y_LOCATION', 'y', 'p'))
+
+        # After the redraw, the temporary style and X and Y columns are not needed
+        p4c.delete_visual_style(tmp_style)
+        p4c.tables.delete_table_column('x')
+        p4c.tables.delete_table_column('y')
+
+        # Revert to the original style
+        p4c.set_visual_style(current_style, network=network)
+
+    # Demostrate the use of the layout_from_coords() function
+    layout_from_coords('current', df)
+
+The `layout_from_coords()` function applies the list of X-Y coordinates for
+`node1`, `node2` and `node3`.
+
+It creates temporary node attributes columns `x` and `y` in the current network, then
+copies the `DataFrame` values into those columns.
+
+Next, it creates a temporary style (tmp-layout) and sets the node X and Y coordinates
+to come from the new `x` and `y` columns (by using the `map_visual_property()` function).
+This has the effect of immediately repositioning the nodes in the network view.
+
+Finally, it reverts the network view to its original style and deletes the `x`
+and `y` columns, as they're no longer needed -- the node repositioning was
+accomplished as a side effect of calling the `map_visual_property()` function.
+
+Feel free to copy and adapt this function to your needs.
