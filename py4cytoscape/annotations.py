@@ -242,6 +242,10 @@ def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=N
         {'edgeThickness': '1.0', 'canvas': 'foreground', 'rotation': '0.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': '683b7c67-dcb3-459f-9505-b8ec05f3c76f', 'URL': 'https://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#000000', 'brightness': '0', 'edgeOpacity': '100.0', 'contrast': '0', 'name': 'Image 1', 'x': '2449.9784057344455', 'width': '500.0', 'y': '1882.9888145962157', 'z': '0', 'opacity': '1.0', 'height': '100.0'}
         >>> add_annotation_image(url='https://www.ucsd.edu/_resources/img/logo_UCSD.png', x_pos=100, y_pos=200, angle=45, opacity=50, brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F', border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
         {'edgeThickness': '2.0', 'canvas': 'background', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'a67674cf-f787-4b7c-bae5-3a6b00a2f00c', 'URL': 'https://www.ucsd.edu/_resources/img/logo_UCSD.png', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0F', 'brightness': '60', 'edgeOpacity': '75.0', 'contrast': '70', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'opacity': '0.5', 'height': '30.0'}
+        >>> add_annotation_image(url='C:\\MyFiles\\logo_UCSD.jpg', x_pos=100, y_pos=200, angle=45, opacity=50, brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F', border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
+        {'edgeThickness': '2.0', 'canvas': 'background', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'a67674cf-f787-4b7c-bae5-3a6b00a2f00c', 'URL': 'file:C:/MyFiles/logo_UCSD.jpg', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0F', 'brightness': '60', 'edgeOpacity': '75.0', 'contrast': '70', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'opacity': '0.5', 'height': '30.0'}
+        >>> add_annotation_image(url='C:/MyFiles/logo_UCSD.jpg', x_pos=100, y_pos=200, angle=45, opacity=50, brightness=60, contrast=70, border_thickness=2, border_color='#0F0F0F', border_opacity=75, height=30, width=31, name='ann3 name', canvas='background')
+        {'edgeThickness': '2.0', 'canvas': 'background', 'rotation': '45.0', 'type': 'org.cytoscape.view.presentation.annotations.ImageAnnotation', 'uuid': 'a67674cf-f787-4b7c-bae5-3a6b00a2f00c', 'URL': 'file:C:/MyFiles/logo_UCSD.jpg', 'shapeType': 'RECTANGLE', 'edgeColor': '#0F0F0F', 'brightness': '60', 'edgeOpacity': '75.0', 'contrast': '70', 'name': 'ann3 name', 'x': '100.0', 'width': '31.0', 'y': '200.0', 'z': '0', 'opacity': '0.5', 'height': '30.0'}
     """
 
     cmd_string, net_suid = _build_base_cmd_string('annotation add image', network, base_url)  # a good start
@@ -1040,7 +1044,7 @@ def _get_url_cmd_string(url, optional=False):
             raise CyError(f'URL or path to image file must be provided.')
 
     if re.search('^http[s]*://', url) == None:
-        url = sandbox.get_abs_sandbox_path(url)
+        url = 'file:' + sandbox.get_abs_sandbox_path(url)
     return f' url="{url}"'
 
 

@@ -21,6 +21,7 @@ Release notes
 
 * Updated style functions to propagate base_url parameters where needed
 * Removed incompatibilities with Python 3.13.2
+* Fixed add_annotation_image mishandling of URL when it specified a local file
 
 
 API Changes
@@ -53,5 +54,9 @@ Pull requests merged in this release
 Issues closed in this release
 ------------------------------------
 
+- #144 by Barry Demchak, Carissa Bleker
+- #131 by Barry Demchak, Carissa Bleker
 - #147 by Barry Demchak
+- #148 by Barry Demchak, Carissa Bleker
+
 
