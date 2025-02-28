@@ -10,8 +10,8 @@ Note that yFiles layouts are not available due to licensing restrictions with yW
 the owner of yFiles.
 
 Note that these functions pertain to laying out all or part of a network algorithmically. For
-an example of how to lay out a network node-by-node, see Setting X-Y Coordinates
-`<https://py4cytoscape.readthedocs.io/en/latest/concepts.html#setting-x-y-coordinates>`_
+an example of how to lay out a network node-by-node, see `Setting X-Y Coordinates
+<https://py4cytoscape.readthedocs.io/en/latest/concepts.html#setting-x-y-coordinates>`_
 in the Concepts section of the py4cytoscape User Manual.
 
 """

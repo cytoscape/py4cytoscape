@@ -211,7 +211,7 @@ def update_style_mapping(style_name, mapping, base_url=DEFAULT_BASE_URL):
 
     Note:
         To see how to use this function to change a node's X and Y coordinates in a network view,
-        see Setting X-Y Coordinates `<https://py4cytoscape.readthedocs.io/en/latest/concepts.html#setting-x-y-coordinates>`_
+        see `Setting X-Y Coordinates <https://py4cytoscape.readthedocs.io/en/latest/concepts.html#setting-x-y-coordinates>`_
         in the Concepts section of the py4cytoscape User Manual.
     """
     visual_prop_name = mapping['visualProperty']
