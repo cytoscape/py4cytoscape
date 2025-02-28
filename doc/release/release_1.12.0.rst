@@ -14,6 +14,7 @@ Bioconductor available to R programmers.
 The themes for this release are:
 
 * Bug fixes
+* Documentation improvements
 
 
 Release notes
@@ -22,6 +23,7 @@ Release notes
 * Updated style functions to propagate base_url parameters where needed
 * Removed incompatibilities with Python 3.13.2
 * Fixed add_annotation_image mishandling of URL when it specified a local file
+* Added Setting X-Y Coordinates to Concepts section of user manual
 
 
 API Changes
