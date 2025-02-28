@@ -700,8 +700,8 @@ columns `x` and `y`). For example:
     node2   200 2000
     node3   300 3000
 
-A function that sets the X-Y coordinates is presented below; it can be copied and
-customized as needed:
+A function that sets the X-Y coordinates is presented below; you can copy and
+customize it as needed:
 
 .. code:: python
 
