@@ -8,7 +8,7 @@ Building ``py4cytoscape``
 4. Verify that the requirements.txt file in the docs directory correctly identifies all external dependencies.
 5. Verify that the setup.py file correctly identifies all external dependencies. If any dependencies have changed, be sure to update the Install.rst file, too.
 6. Verify that changes to the [user manual]() are correct. Be sure to activate automatic ReadTheDocs [building](https://readthedocs.org/projects/py4cytoscape/versions/) for this new version.
-7. Check all sources (including documents and tests) into Github, merge them into the Master branch, and make Master the current branch
+7. Check all sources (including documents and tests) into Github, make Master the current branch, merge changes into the Master branch, commit to GitHub
 8. Successfully execute all tests by using the tests/runalltests.bat and tests/runsanitytests.bat files
 9. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
 10. Execute both local and remote GangSu workflows (e.g., [Workflow1](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic%20protocol%201.ipynb) and [Workflow2](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic_protocol_2.ipynb#scrollTo=cZ9Gr2Pjnapm)) on Google Colab

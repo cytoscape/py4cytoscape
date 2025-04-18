@@ -1,7 +1,7 @@
 
 py4cytoscape 1.12.0
 -------------------
-Release date: dd mmm yyyy
+Release date: 18 Apr 2025
 
 We're happy to announce the release of py4cytoscape 1.12.0!
 
