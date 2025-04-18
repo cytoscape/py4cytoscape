@@ -950,6 +950,29 @@ def normalize_prop_name(prop_name):
     if visual_prop_name in PROPERTY_NAME_MAP: visual_prop_name = PROPERTY_NAME_MAP[visual_prop_name]
     return visual_prop_name
 
+# This code isn't necessary for this package, but can be re-included if it's necessary to parse out
+# a file: URL
+# # If a url has the file: scheme, return the file part ... otherwise, return None ... per discussion on
+# # https://en.wikipedia.org/wiki/File_URI_scheme
+# def parse_file_url(url):
+#     file_part = None
+#     if url and url.startswith('file:'):
+#         file_part = url[5:]
+#         if re.search('^///[a-zA-Z]:', file_part):
+#             file_part = file_part[3:]  # Accept Windows drive:path (e.g., file:///C:/foo -> C:/foo)
+#         elif file_part.startswith('///'):
+#             file_part = file_part[2:]  # Accept empty host with absolute local path (e.g., file:///etc/foo -> /etc/foo)
+#         elif file_part.startswith('//./'):
+#             file_part = file_part[2:]  # Accept empty host with relative local path (e.g., file://./etc/foo -> ./etc/foo)
+#         elif file_part.startswith('//'):
+#             pass  # Accept host with absolute local path (e.g., file://host/myfile -> //host/myfile)
+#         elif file_part.startswith('/'):
+#             pass  # accept absolute path (e.g., file:/myfile -> /myfile)
+#         else:
+#             pass # accept relative path (e.g., file:myfile -> myfile)
+#     return file_part
+
+
 def _item_to_suid(item_names, table_name, network=None, base_url=DEFAULT_BASE_URL, unique_list=False):
     # Translate a list of node or edge names into a list of SUIDs ... account for duplicated names if the list is unique
     if item_names is None:

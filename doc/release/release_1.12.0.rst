@@ -24,6 +24,7 @@ Release notes
 * Removed incompatibilities with Python 3.13.2
 * Fixed add_annotation_image mishandling of URL when it specified a local file
 * Added Setting X-Y Coordinates to Concepts section of user manual
+* Added better file: scheme handling for images in add_annotation_image() and update_annotation_image()
 
 
 API Changes

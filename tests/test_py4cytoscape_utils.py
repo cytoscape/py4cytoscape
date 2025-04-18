@@ -317,6 +317,29 @@ class Py4cytoscapeUtilsTests(unittest.TestCase):
         self.assertRaises(CyError, verify_hex_colors, ['red', '#00FF', '#FF00FF'])
         self.assertRaises(CyError, verify_hex_colors, ['red', None, '#FF00FF'])
 
+    # This code isn't necessary for this package, but can be re-included if it's necessary to parse out
+    # a file: URL
+    # @print_entry_exit
+    # def test_verify_parse_file_url(self):
+    #     self.assertIsNone(parse_file_url(None))
+    #     self.assertIsNone(parse_file_url('https://foo'))
+    #     self.assertIsNone(parse_file_url('a'))
+    #
+    #     self.assertEqual(parse_file_url('file:'), '')
+    #     self.assertEqual(parse_file_url('file:///c:/foo'), 'c:/foo')
+    #     self.assertEqual(parse_file_url('file:///C:/foo'), 'C:/foo')
+    #     self.assertEqual(parse_file_url('file:///'), '/')
+    #     self.assertEqual(parse_file_url('file:///etc/foo'), '/etc/foo')
+    #     self.assertEqual(parse_file_url('file://./'), './')
+    #     self.assertEqual(parse_file_url('file://./foo'), './foo')
+    #     self.assertEqual(parse_file_url('file://'), '//')
+    #     self.assertEqual(parse_file_url('file://host/foo'), '//host/foo')
+    #     self.assertEqual(parse_file_url('file:/'), '/')
+    #     self.assertEqual(parse_file_url('file:/etc/foo'), '/etc/foo')
+    #     self.assertEqual(parse_file_url('file:etc/foo'), 'etc/foo')
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

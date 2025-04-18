@@ -2,6 +2,7 @@
 
 """ Test functions in annotations.py.
 """
+import os.path
 
 """License:
     Copyright 2022 The Cytoscape Consortium
@@ -42,6 +43,7 @@ class AppsTests(unittest.TestCase):
     _TEST_HTTP_URL = 'http://www.ucsd.edu/_resources/img/logo_UCSD.png'
     _TEST_HTTPS_URL = 'https://www.ucsd.edu/_resources/img/logo_UCSD.png'
     _TEST_FILE = 'data/annotation_image_1.jpg'
+
 
     @print_entry_exit
     def test_get_annotation_list(self):
@@ -306,6 +308,14 @@ class AppsTests(unittest.TestCase):
         res1 = get_annotation_list(network=gal_filtered_suid)
         self._check_annotation_list(res1, 2, EXPECTED_IMAGE_KEYS)
 
+        # All variations of local file names should produce images, too
+        res = add_annotation_image(network=gal_filtered_suid, url=self._TEST_FILE)
+        local_file_with_scheme = res['URL']
+        self.assertTrue(local_file_with_scheme.startswith('file:/'))
+        res = add_annotation_image(network=gal_filtered_suid, url=local_file_with_scheme)
+        local_file_no_schema = local_file_with_scheme[6:] # get rid of file:/
+        res = add_annotation_image(network=gal_filtered_suid, url=local_file_no_schema)
+
         # Verify that nothing was added to the other network
         self._check_annotation_list(get_annotation_list(network=yeast_high_quality_suid), 0, EXPECTED_IMAGE_KEYS)
 
@@ -328,7 +338,7 @@ class AppsTests(unittest.TestCase):
                                    brightness=60, contrast=70, border_thickness=2, border_color='#FFC0CB',
                                    border_opacity=75, height=30, width=31, name='ann4 name', canvas='background')
         # TODO: Re-enable this check after CSD-675 is fixed
-        # self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': TEST_FILE, 'name': 'ann4 name'}})
+        # self._check_expected_values(res, {**EXPECTED_IMAGE_VALS, **{'URL': self._TEST_FILE, 'name': 'ann4 image'}})
 
         # Verify that angle is properly normalized
         res = add_annotation_image(url=self._TEST_HTTPS_URL, angle=181)
