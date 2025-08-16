@@ -260,7 +260,8 @@ class NetworkTests(unittest.TestCase):
         gal_filtered3_suid = create_network_from_cytoscapejs(gal_filtered_js3, title=None, collection=None)
         res = create_cytoscapejs_from_network(network=gal_filtered3_suid)
         res_collection3 = get_collection_name(collection_suid=get_collection_suid(network=gal_filtered3_suid))
-        self.assertIsNone(res_collection3)
+        # for pre-Cytoscape 3.10.4, name should be None ... for 3.10.4 and after, name should match network name
+        self.assertTrue(res_collection3 is None or res_collection3 == gal_filtered_js3['data']['name'])
         self.assertEqual(res['data']['name'], gal_filtered_js3['data']['name'])
 
         # Verify adding non-conflicting network to collection
