@@ -652,6 +652,12 @@ def palette_color_brewer_d_RdYlGn(reverse=False):
 def scheme_d_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of node shapes of a given size
 
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain, port or 
+        version to connect to the CyREST API. Default is http://localhost:1234 
+        and the latest version of the CyREST API supported by this version of 
+        py4cytoscape.
+
     Returns:
         lambda: generates a list of shapes
 
@@ -667,6 +673,12 @@ def scheme_d_shapes(base_url=DEFAULT_BASE_URL):
 def scheme_d_line_styles(base_url=DEFAULT_BASE_URL):
     """Generate list of line styles of a given size
 
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain, port or 
+        version to connect to the CyREST API. Default is http://localhost:1234 
+        and the latest version of the CyREST API supported by this version of 
+        py4cytoscape.
+
     Returns:
         lambda: generates a list of line styles
 
@@ -681,6 +693,12 @@ def scheme_d_line_styles(base_url=DEFAULT_BASE_URL):
 @_scheme('discrete')
 def scheme_d_arrow_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of arrow shapes of a given size
+
+    Args:
+        base_url (str): Ignore unless you need to specify a custom domain, port or 
+        version to connect to the CyREST API. Default is http://localhost:1234 
+        and the latest version of the CyREST API supported by this version of 
+        py4cytoscape.
 
     Returns:
         lambda: generates a list of arrow shapes
@@ -942,6 +960,7 @@ def gen_edge_opacity_map(table_column,
     Args:
         table_column (str): Name of Cytoscape edge table column to map values from
         number_scheme (dict or func): Descriptor for functions that return an opacity list of a given length
+        mapping_type (str): continuous or discrete (c, d) mapping; default is continuous
         default_number (int): Opacity value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -1000,6 +1019,7 @@ def gen_node_width_map(table_column,
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
         number_scheme (dict or func): Descriptor for functions that return a width list of a given length
+        mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): width value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the
@@ -1227,6 +1247,7 @@ def gen_edge_size_map(table_column,
     Args:
         table_column (str): Name of Cytoscape node table column to map values from
         number_scheme (dict or func): Descriptor for functions that return a size list of a given length
+        mapping_type (str): continuous or discrete (c, d); default is continuous
         default_number (int): size value to set as default for all unmapped values
         style_name (str): name for style
         network (SUID or str or None): Name or SUID of a network or view. Default is the

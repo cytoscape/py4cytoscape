@@ -318,7 +318,7 @@ def set_node_custom_bar_chart(columns, type='GROUPED', colors=None, range=None, 
         orientation (str): HORIZONTAL or VERTICAL (default).
         col_axis (bool): Show axis with column labels. Default is False.
         range_axis (bool): Show axis with range of values. Default is False.
-        zero_line (book): Show a line at zero. Default is False.
+        zero_line (bool): Show a line at zero. Default is False.
         axis_width (float): Width of axis lines, if shown. Default is 0.25.
         axis_color (str): Color of axis lines, if shown. Default is black ('#000000').
         axis_font_size(int): Font size of axis labels, if shown. Default is 1.
@@ -399,9 +399,8 @@ def set_node_custom_box_chart(columns, colors=None, range=None, orientation='VER
             set of colors from an appropriate Brewer cy_palette.
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         orientation (str): HORIZONTAL or VERTICAL (default).
-        col_axis (bool): Show axis with column labels. Default is False.
         range_axis (bool): Show axis with range of values. Default is False.
-        zero_line (book): Show a line at zero. Default is False.
+        zero_line (bool): Show a line at zero. Default is False.
         axis_width (float): Width of axis lines, if shown. Default is 0.25.
         axis_color (str): Color of axis lines, if shown. Default is black ('#000000').
         axis_font_size(int): Font size of axis labels, if shown. Default is 1.
@@ -472,7 +471,7 @@ def set_node_custom_heat_map_chart(columns, colors=None, range=None, orientation
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         orientation (str): HORIZONTAL (default) or VERTICAL.
         range_axis (bool): Show axis with range of values. Default is False.
-        zero_line (book): Show a line at zero. Default is False.
+        zero_line (bool): Show a line at zero. Default is False.
         axis_width (float): Width of axis lines, if shown. Default is 0.25.
         axis_color (str): Color of axis lines, if shown. Default is black ('#000000').
         axis_font_size(int): Font size of axis labels, if shown. Default is 1.
@@ -545,7 +544,7 @@ def set_node_custom_line_chart(columns, colors=None, range=None, line_width=1.0,
         range (list): Min and max values of chart. Default is to use min and max from specified data columns.
         line_width (float): Width of chart line. Default is 1.0.
         range_axis (bool): Show axis with range of values. Default is False.
-        zero_line (book): Show a line at zero. Default is False.
+        zero_line (bool): Show a line at zero. Default is False.
         axis_width (float): Width of axis lines, if shown. Default is 0.25.
         axis_color (str): Color of axis lines, if shown. Default is black ('#000000').
         axis_font_size(int): Font size of axis labels, if shown. Default is 1.

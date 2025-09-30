@@ -215,7 +215,7 @@ def get_network_suid(title=None, base_url=DEFAULT_BASE_URL):
     """Get the SUID of a network.
 
     Args:
-        suid (SUID or str or None): Name of the network; default is "current" network. If an SUID is
+        title (SUID or str or None): Name of the network; default is "current" network. If an SUID is
             provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
@@ -608,7 +608,7 @@ def add_cy_edges(source_target_list, edge_type='interacts with', directed=False,
 
     Args:
         source_target_list (list or list of lists): Source and target node pairs
-        edgeType (str): The type of interaction. Default is 'interacts with'.
+        edge_type (str): The type of interaction. Default is 'interacts with'.
         directed (bool): Indicates whether interactions are directed. Default is ``FALSE``.
         network (SUID or str or None): Name or SUID of a network or view. Default is the
             "current" network active in Cytoscape.
@@ -991,7 +991,7 @@ def create_network_from_networkx(netx, title='From networkx', collection='My Net
     """Create a Cytoscape network from a NetworkX graph.
 
     Args:
-        netx (Graph, DiGraph, MultiGraph or MultiDiGraph): networkx object
+        netx (Graph or DiGraph or MultiGraph or MultiDiGraph): networkx object
         title (str): network name
         collection (str): network collection name
         base_url (str): Ignore unless you need to specify a custom domain,

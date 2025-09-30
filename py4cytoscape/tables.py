@@ -525,8 +525,8 @@ def map_table_column(column, species, map_from, map_to, force_single=True, table
         column (str): Name of column containing identifiers of type specified by ``map.from``
         species (str): Common name for species associated with identifiers, e.g., Human. See details.
         map_from (str): Type of identifier found in specified ``column``. See details.
-        map.to (str): Type of identifier to populate in new column. See details.
-        force.single (bool): Whether to return only first result in cases of one-to-many mappings; otherwise
+        map_to (str): Type of identifier to populate in new column. See details.
+        force_single (bool): Whether to return only first result in cases of one-to-many mappings; otherwise
             the new column will hold lists of identifiers. Default is TRUE.
         table (str): name of Cytoscape table to load data into, e.g., node, edge or network; default is "node"
         namespace (str): Namespace of table. Default is "default".

@@ -183,7 +183,6 @@ def get_network_ndex_id(network=None, base_url=DEFAULT_BASE_URL):
     Args:
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
-        metadata (dict): A list of structured information describing the network
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.

@@ -229,7 +229,7 @@ def export_visual_styles(filename=None, type='XML', styles=None, base_url=DEFAUL
             Default is "styles.xml"
         type (str): Type of data file to export, e.g., XML, JSON (case sensitive).
             Default is XML. Note: Only XML can be read by ``import_visual_styles()``.
-        styles (str) The styles to be exported, listed as a comma-separated string. If no styles are
+        styles (str): The styles to be exported, listed as a comma-separated string. If no styles are
             specified, only the current one is exported.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
@@ -339,6 +339,7 @@ def set_visual_style(style_name, network=None, base_url=DEFAULT_BASE_URL):
 
     Args:
         style_name (str): Name of a visual style
+        network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.

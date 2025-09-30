@@ -201,7 +201,7 @@ def cybrowser_send(id=None, script='', base_url=DEFAULT_BASE_URL):
 
     Args:
         id (str): The identifier for the new browser window
-        script (str) A string that represents a JavaScript variable, script, or call to be executed in the browser.
+        script (str): A string that represents a JavaScript variable, script, or call to be executed in the browser.
             Note that only string results are returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
@@ -398,7 +398,7 @@ def merge_networks(sources=None,
         network_merge_map (list): A list of column merge records specifying how to merge network table data. Each record
             should be of the form: ["network1 column", "network2 column", "merged column", "type"], where column names
             are provided and type is String, Integer, Double or List.
-        in_network_merge (bool) If True (default), nodes and edges with matching attributes in the same network will be
+        in_network_merge (bool): If True (default), nodes and edges with matching attributes in the same network will be
             merged.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234

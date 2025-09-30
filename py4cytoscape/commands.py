@@ -375,7 +375,7 @@ def commands_post(cmd, base_url=DEFAULT_BASE_URL):
     query URL, executes a POST request, and parses the result content into a dict object.
 
     Args:
-        cmd_string (str): command
+        cmd (str): Command to be executed in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
@@ -556,6 +556,8 @@ def command_run_file(file, args=None, base_url=DEFAULT_BASE_URL):
     Cytoscape commands, one per line. Arguments to the script are provided by the args argument
 
     Args:
+        file (str): Path to the file containing Cytoscape commands, one per line.
+        args (list or None): Provide arguments to the script. Default is None.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.

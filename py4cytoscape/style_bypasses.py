@@ -181,7 +181,6 @@ def clear_node_property_bypass(node_names, visual_property, network=None, base_u
             comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
-        bypass (bool): Whether to set permanent bypass value. Default is True
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -371,7 +370,6 @@ def clear_edge_property_bypass(edge_names, visual_property, network=None, base_u
             comma-separated string of edge names or SUIDs, or scalar edge name
             or SUID. Edge names should be found in the ``name`` column of the ``edges table``.
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
-        bypass (bool): Whether to set permanent bypass value. Default is True
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -485,7 +483,6 @@ def clear_network_property_bypass(visual_property, network=None, base_url=DEFAUL
 
     Args:
         visual_property (str): Name of a visual property. See ``get_visual_property_names``.
-        bypass (bool): Whether to set permanent bypass value. Default is True
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -693,8 +690,8 @@ def set_node_position_bypass(node_names, new_x_locations=None, new_y_locations=N
         node_names (str or list or int): List of nodes as ``list`` of node names or SUIDs,
             comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``nodes table``.
-        new_x_locations (list, int or float): List of x position values, or single value, default is current x position
-        new_y_locations (list, int or float): List of y position values, or single value, default is current y position
+        new_x_locations (list or int or float): List of x position values, or single value, default is current x position
+        new_y_locations (list or int or float): List of y position values, or single value, default is current y position
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,

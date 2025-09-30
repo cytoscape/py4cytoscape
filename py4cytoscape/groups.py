@@ -266,7 +266,7 @@ def get_group_info(group, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve information about a group by name or identifier.
 
     Args:
-        group_name (str or SUID): Group name or SUID.
+        group (str or SUID): Group name or SUID.
         network (SUID or str or None): Name or SUID of a network. Default is the
             "current" network active in Cytoscape.
         base_url (str): Ignore unless you need to specify a custom domain,
@@ -406,7 +406,7 @@ def delete_group(groups=None, groups_by_col='SUID', network=None, base_url=DEFAU
     """Delete one or more groups, while leaving member nodes intact.
 
     Args:
-        groups (list or str or None) List of group SUIDs, names, other column values or keywords: all, selected,
+        groups (list or str or None): List of group SUIDs, names, other column values or keywords: all, selected,
             unselected. Default is the currently selected group.
         groups_by_col (str): name of node table column corresponding to provided groups list. Default is 'SUID'.
         network (SUID or str or None): Name or SUID of a network. Default is the

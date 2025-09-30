@@ -277,7 +277,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
             width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600. [DEPRECATED as of Cytoscape v3.10]
-        units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
+        units (str): The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
             The possible values are: pixels (default), inches. [DEPRECATED as of Cytoscape v3.10]
         height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
         width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG. [DEPRECATED as of Cytoscape v3.10]
@@ -448,8 +448,6 @@ def toggle_graphics_details(base_url=DEFAULT_BASE_URL):
     See :meth:`cytoscape_memory_status`.
 
     Args:
-        network (str or SUID or None): Name or SUID of the network or view. Default is the "current" network active in Cytoscape.
-            If a network view SUID is provided, then it is validated and returned.
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.
