@@ -649,7 +649,7 @@ def palette_color_brewer_d_RdYlGn(reverse=False):
 # ------------------------------------------------------------------------------
 
 @_scheme('discrete')
-def scheme_d_shapes(=DEFAULT_BASE_URL):
+def scheme_d_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of node shapes of a given size
 
     Args:
