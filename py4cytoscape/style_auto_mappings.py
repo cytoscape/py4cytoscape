@@ -649,14 +649,13 @@ def palette_color_brewer_d_RdYlGn(reverse=False):
 # ------------------------------------------------------------------------------
 
 @_scheme('discrete')
-def scheme_d_shapes(base_url=DEFAULT_BASE_URL):
+def scheme_d_shapes(=DEFAULT_BASE_URL):
     """Generate list of node shapes of a given size
 
     Args:
-        base_url (str): Ignore unless you need to specify a custom domain, port or 
-        version to connect to the CyREST API. Default is http://localhost:1234 
-        and the latest version of the CyREST API supported by this version of 
-        py4cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         lambda: generates a list of shapes
@@ -674,10 +673,9 @@ def scheme_d_line_styles(base_url=DEFAULT_BASE_URL):
     """Generate list of line styles of a given size
 
     Args:
-        base_url (str): Ignore unless you need to specify a custom domain, port or 
-        version to connect to the CyREST API. Default is http://localhost:1234 
-        and the latest version of the CyREST API supported by this version of 
-        py4cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         lambda: generates a list of line styles
@@ -695,10 +693,9 @@ def scheme_d_arrow_shapes(base_url=DEFAULT_BASE_URL):
     """Generate list of arrow shapes of a given size
 
     Args:
-        base_url (str): Ignore unless you need to specify a custom domain, port or 
-        version to connect to the CyREST API. Default is http://localhost:1234 
-        and the latest version of the CyREST API supported by this version of 
-        py4cytoscape.
+        base_url (str): Ignore unless you need to specify a custom domain,
+            port or version to connect to the CyREST API. Default is http://localhost:1234
+            and the latest version of the CyREST API supported by this version of py4cytoscape.
 
     Returns:
         lambda: generates a list of arrow shapes
