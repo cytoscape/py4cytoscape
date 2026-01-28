@@ -137,7 +137,7 @@ def add_annotation_bounded_text(text=None, x_pos=None, y_pos=None, font_size=Non
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
@@ -221,7 +221,7 @@ def add_annotation_image(url=None, x_pos=None, y_pos=None, angle=None, opacity=N
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
@@ -311,7 +311,7 @@ def add_annotation_shape(type=None, custom_shape=None, x_pos=None, y_pos=None, a
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
@@ -612,7 +612,7 @@ def update_annotation_bounded_text(text=None, annotation_name=None, x_pos=None, 
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
@@ -702,7 +702,7 @@ def update_annotation_shape(type=None, custom_shape=None, annotation_name=None, 
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0
@@ -783,7 +783,7 @@ def update_annotation_image(url=None, annotation_name=None, x_pos=None, y_pos=No
         border_color (str): hexadecimal color; default is #000000 (black)
         border_opacity (int): Integer between 0 and 100; default is 100
         height (int): Height of bounding shape; default is based on text height
-        width (int) Width of bounding shape; default is based on text length
+        width (int): Width of bounding shape; default is based on text length
         name (str): Name of annotation object; default is "Text"
         canvas (str): Canvas to display annotation, i.e., foreground (default) or background
         z_order (int): Arrangement order specified by number (larger values are in front of smaller values); default is 0

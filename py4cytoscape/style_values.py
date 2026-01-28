@@ -46,7 +46,7 @@ def get_node_property(node_names=None, visual_property=None, network=None, base_
     """Get values for any node property of the specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.
@@ -221,7 +221,7 @@ def get_node_color(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual fill color of specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.
@@ -267,7 +267,7 @@ def get_node_size(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual size of specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.
@@ -313,7 +313,7 @@ def get_node_width(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual width of specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.
@@ -359,7 +359,7 @@ def get_node_height(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual height of specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.
@@ -405,7 +405,7 @@ def get_node_position(node_names=None, network=None, base_url=DEFAULT_BASE_URL):
     """Retrieve the actual x,y position of specified nodes.
 
     Args:
-        nodes_names (str or list or int or None): List of nodes or None. If node list:
+        node_names (str or list or int or None): List of nodes or None. If node list:
             ``list`` of node names or SUIDs, comma-separated string of node names or SUIDs, or scalar node name
             or SUID. Node names should be found in the ``name`` column of the ``node table``. If list is None,
             default is all nodes.

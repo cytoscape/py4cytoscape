@@ -366,6 +366,7 @@ def sandbox_get_from(source_file, dest_file=None, overwrite=True, sandbox_name =
     Args:
         source_file (str): Name of file to read (as absolute path or sandbox-relative path)
         dest_file (str): Name of file in the Python workflow's file system ... if None, use file name in source_file
+        overwrite (bool): False causes error if dest_file already exists; True replaces it if it exists
         sandbox_name (str): Name of sandbox containing file. None means "the current sandbox".
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://localhost:1234

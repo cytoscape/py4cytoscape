@@ -95,7 +95,7 @@ def create_column_filter(filter_name, column, criterion, predicate, caseSensitiv
     Args:
         filter_name (str): Name for new filter.
         column (str): Table column to base filter upon.
-        criterion (list, bool, str, int or float): For boolean columns: True or False. For string columns: a
+        criterion (list or bool or str or int or float): For boolean columns: True or False. For string columns: a
             string value, e.g., "hello". If the predicate is REGEX then this can be a regular expression as
             accepted by the Java Pattern class (https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html).
             For numeric columns: If the predicate is BETWEEN or IS_NOT_BETWEEN then this is a two-element list of
@@ -199,7 +199,7 @@ def create_degree_filter(filter_name, criterion, predicate='BETWEEN', edge_type=
         filter_name (str): Name for new filter.
         criterion (list): A two-element vector of numbers, example: [1,5].
         predicate (str):  BETWEEN (default) or IS_NOT_BETWEEN
-        edgeType (str): Type of edges to consider in degree count: ANY (default), UNDIRECTED, INCOMING, OUTGOING, DIRECTED
+        edge_type (str): Type of edges to consider in degree count: ANY (default), UNDIRECTED, INCOMING, OUTGOING, DIRECTED
         hide (bool): Whether to hide filtered out nodes and edges. Default is FALSE.
             Ignored if all nodes or edges are filtered out. This is an alternative to filtering for node and edge selection.
         network (SUID or str or None): Name or SUID of the network. Default is the "current" network active in Cytoscape.

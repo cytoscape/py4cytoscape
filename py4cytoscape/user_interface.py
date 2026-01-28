@@ -133,8 +133,6 @@ def hide_all_panels(base_url=DEFAULT_BASE_URL):
     """Hide control, table, tool and results panels.
 
     Args:
-        panel_name (str): Name of the panel. Multiple ways of referencing panels is supported:
-           (WEST == control panel, control, c), (SOUTH == table panel, table, ta), (SOUTH_WEST == tool panel, tool, to), (EAST == results panel, results, r)
         base_url (str): Ignore unless you need to specify a custom domain,
             port or version to connect to the CyREST API. Default is http://127.0.0.1:1234
             and the latest version of the CyREST API supported by this version of py4cytoscape.

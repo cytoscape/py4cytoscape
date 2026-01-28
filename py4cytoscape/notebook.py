@@ -45,7 +45,7 @@ def notebook_export_show_image(filename='image', type='PNG', resolution=None, un
         type (str): Type of image to export, e.g., PNG (default), JPEG, PDF, SVG, PS (PostScript).
         resolution (int): The resolution of the exported image, in DPI. Valid only for bitmap formats, when the selected
             width and height 'units' is inches. The possible values are: 72 (default), 100, 150, 300, 600.
-        units (str) The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
+        units (str): The units for the 'width' and 'height' values. Valid only for bitmap formats, such as PNG and JPEG.
             The possible values are: pixels (default), inches.
         height (float): The height of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
         width (float): The width of the exported image. Valid only for bitmap formats, such as PNG and JPEG.
