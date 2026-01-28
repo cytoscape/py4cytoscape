@@ -397,7 +397,7 @@ def export_image(filename=None, type='PNG', resolution=None, units=None, height=
     # If the caller didn't supply a file name, deduce it from the network title, and
     # if the file name doesn't have a file suffix appropriate for the image file, add the right suffix
     if not filename: filename = networks.get_network_name(network, base_url=base_url)
-    if re.search('\.' + type_suffix + '$', filename.lower()) is None: filename += '.' + type_suffix
+    if re.search(r'\.' + type_suffix + '$', filename.lower()) is None: filename += '.' + type_suffix
 
     # Figure out whether the file already exists, and delete it if the caller asked for an overwrite
     # Either way, end up with a file name appropriate for Cytoscape's file system
