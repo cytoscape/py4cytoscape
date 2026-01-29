@@ -369,6 +369,8 @@ class NetworkViewsTests(unittest.TestCase):
                                   width=None, zoom=None, network=gal_filtered_suid))
         check_export(export_image(df('output/test alldefault same', 'png'), type='PNG',
                                   network=gal_filtered_suid))
+        check_export(export_image(df('output/test alldefault same.pdf', 'pdf'), type='PDF',
+                                  network=gal_filtered_suid))
         self.assertEqual(os.stat('output/test alldefault.png').st_size / 1024,
                          os.stat('output/test alldefault same.png').st_size / 1024,
                         'test alldefault.png files differ')

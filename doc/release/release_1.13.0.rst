@@ -13,43 +13,44 @@ Bioconductor available to R programmers.
 
 The themes for this release are:
 
-* Theme1
+* Updated DocStrings
+* Bug fixes to address deprecated syntaxes
 
 
 Release notes
 ~~~~~~~~~~~~~
 
-* Note1
+* Updated DocStrings for use by MCP server for AI coding
 
 
 API Changes
 -----------
 
-Added:
-
-* Added1
-
-
 Deprecations
 ------------
-
-* Deprecation1
 
 
 Contributors to this release
 ----------------------------
 
-- ContributorName1
-
+- Barry Demchak
+- Alex Pico
+- Kozo Nishida
+- Matthias Koenig
+- Jeanine Liebold
 
 Pull requests merged in this release
 ------------------------------------
 
-- PullRequests1 here (e.g., #140 by Barry Demchak)
+- #82 by Kozo Nashida
+- #149 by Jeanine Liebold
+- #151 by Matthias Koenig
+
 
 Issues closed in this release
-------------------------------------
+-----------------------------------
 
-- Issue1 (e.g., #144 by Barry Demchak, Carissa Bleker)
+
+
 
 
