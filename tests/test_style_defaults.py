@@ -1003,7 +1003,7 @@ class StyleDefaultsTests(unittest.TestCase):
         expected_attrs = base_attrs.copy()
         expected_attrs.update(new_attrs)
         whole_prop = get_visual_property_default('NODE_CUSTOMGRAPHICS_' + str(slot), style_name=self._TEST_STYLE)
-        chart_dict = json.loads(re.split(':', whole_prop, 1)[1])
+        chart_dict = json.loads(re.split(':', whole_prop, maxsplit=1)[1])
         self.assertDictEqual(chart_dict, expected_attrs)
         return chart_params, expected_attrs
 
