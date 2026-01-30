@@ -1197,18 +1197,6 @@ class NetworkTests(unittest.TestCase):
         # Test igraph having multiple vertices connect to a single vertex, with each edge having a different attr
         # per RCy3 issue #56 (https://github.com/cytoscape/RCy3/issues/56)
 
-        def rename_dup_columns(col_list, col_name):
-            # See if a column name exists, and if so, rename all other same-name columns.
-            # Especially important for graphs that come with a ``source`` or ``target`` name
-            # created by get_edge_dataframe (which creates these columns) when these columns
-            # were already in the graph as a result of creating the graph from a Cytoscape
-            # network.
-            first_index = col_list.index(col_name)
-            replacement_name = col_name + '.original'
-            new_cols = [replacement_name if i != first_index and col_list[i] == col_name else col_list[i] for i in
-                        range(len(col_list))]
-            return new_cols
-
         def normalize_edge_names(edge_names):
             # Since the edge name is undirected, a legitimate entry could be (source, target) or (target, source).
             # Rebuild the list so that an edge source < edge target lexicographcally so it's possible to compare
@@ -1238,17 +1226,15 @@ class NetworkTests(unittest.TestCase):
         cytoscape_edges_df = cytoscape_ig.get_edge_dataframe()
         cytoscape_nodes_df = cytoscape_ig.get_vertex_dataframe()
 
-        # Rename the Cytoscape Source and Target attributes so they're not in the way
-        edge_col_names = rename_dup_columns(list(cytoscape_edges_df.columns), 'source')
-        cytoscape_edges_df.columns = rename_dup_columns(edge_col_names, 'target')
-
-        # Convert iGraph vertex identifiers into vertex names
-        cytoscape_edges_df['source'].replace(cytoscape_nodes_df['name'], inplace=True)
-        cytoscape_edges_df['target'].replace(cytoscape_nodes_df['name'], inplace=True)
+        # Convert the iGraph edges to a dataframe and extract the source, target and e_color attributes for each edge
+        edge_df = pd.DataFrame({
+            "source": [cytoscape_ig.vs[e.source]["name"] for e in cytoscape_ig.es],
+            "target": [cytoscape_ig.vs[e.target]["name"] for e in cytoscape_ig.es],
+            **{attr: cytoscape_ig.es[attr] for attr in cytoscape_ig.es.attributes()}})
+        cytoscape_edges_dict = {(row.source, row.target): row.e_color for row in edge_df.itertuples()}
 
         # Extract the edge values from the original test file ... and compare them to what Cytoscape has
         test_dict = {(row.V1, row.V2): row.e_color for row in test_df.itertuples()}
-        cytoscape_edges_dict = {(row.source, row.target): row.e_color for row in cytoscape_edges_df.itertuples()}
         self.assertDictEqual(normalize_edge_names(test_dict), normalize_edge_names(cytoscape_edges_dict))
 
     def _check_igraph_attributes(self, original_collection, new_collection, orig_name='name'):
