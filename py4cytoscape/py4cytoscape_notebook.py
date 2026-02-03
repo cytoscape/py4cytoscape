@@ -144,12 +144,12 @@ def do_request_jupyter_bridge(method, url, **kwargs):
         content = content or 'None'
         raise requests.exceptions.HTTPError(u'Undeciperable message received from Jupyter-bridge: %s' % (str(content)))
 
-    print('contacting SpoofResponse: ' + str(url) + str(cy_reply))
+    print('contacting SpoofResponse: ' + str(url))
     r = SpoofResponse(url, cy_reply['status'], cy_reply['reason'], cy_reply['text'])
-    print('SpoofResponse returned: ' + str(r))
     if cy_reply['status'] == 0:
         raise requests.exceptions.HTTPError(u'Could not contact url: %s' % (url), response=r)
 
+    print('SpoofResponse returned: ' + str(r))
     log_http_result(r)
     return r
 
