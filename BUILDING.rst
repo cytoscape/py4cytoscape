@@ -11,7 +11,7 @@ Building ``py4cytoscape``
 7. Check all sources (including documents and tests) into Github, make Master the current branch, merge changes into the Master branch, commit to GitHub
 8. Successfully execute all tests by using the tests/runalltests.bat and tests/runsanitytests.bat files
 9. Execute liveness test (e.g., [Sanity Test](https://github.com/bdemchak/cytoscape-jupyter/tree/main/sanity-test)) on Google Colab
-10. Execute both local and remote GangSu workflows (e.g., [Workflow1](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic%20protocol%201.ipynb) and [Workflow2](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic_protocol_2.ipynb#scrollTo=cZ9Gr2Pjnapm)) on Google Colab
+10. Execute both local and remote GangSu workflows using Firefox (e.g., [Workflow1](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic%20protocol%201.ipynb) and [Workflow2](https://colab.research.google.com/github/bdemchak/cytoscape-jupyter/blob/main/gangsu/basic_protocol_2.ipynb#scrollTo=cZ9Gr2Pjnapm)) on Google Colab
 11. Execute build.bat to check into PyPI __... be sure you updated the version number in build.bat first__
 12. Again, successfully execute all tests by using the tests/runalltests.bat file, Gang Su workflows and the Sanity Test. (Change Sanity Test to fetch ``py4cytoscape`` from PyPI instead of Github.)
 13. Check any/all changes to the [user manual](https://py4cytoscape.readthedocs.io/en/latest/) and fix them now. (Note that the manual is automatically re-compiled when changes are made to the Master branch in Github.)
