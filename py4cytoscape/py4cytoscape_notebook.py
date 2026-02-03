@@ -103,7 +103,7 @@ def do_request_jupyter_bridge(method, url, **kwargs):
     # Call Jupyter-bridge to request a Cytoscape operation. Jupyter-bridge will put the request into a queue, and
     # the local browser will pick it out, use it to call Cytoscape, and then queue a reply.
     try:
-        print('calling requests.request')
+        print('calling requests.request: ' + f'{_JUPYTER_BRIDGE_URL}/queue_request?channel={_CHANNEL}')
         r = requests.request('POST', f'{_JUPYTER_BRIDGE_URL}/queue_request?channel={_CHANNEL}',
                              headers={'Content-Type': 'application/json'}, json=http_request)
         print('back from requests.request: ' + str(r))
@@ -116,11 +116,14 @@ def do_request_jupyter_bridge(method, url, **kwargs):
     # and return a reply.
     try:
         while True:
+            print('Picking up reply from Jupyter-bridge: ' + f'{_JUPYTER_BRIDGE_URL}/dequeue_reply?channel={_CHANNEL}')
             r = requests.request('GET', f'{_JUPYTER_BRIDGE_URL}/dequeue_reply?channel={_CHANNEL}')
             if r.status_code != 408: break  # keep waiting for a result as long as we keep getting connection timeouts
         r.raise_for_status()
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error receiving from Jupyter-bridge: {_error_content(e)}')
+
+    print('done picking up reply from jupyter-bridge: ' + str(r))
 
     # We really need a JSON message coming from Jupyter-bridge. It will contain the Cytoscape HTTP response in a dict.
     # If the dict is bad, we can't continue. I have seen this happen, but as a consequence of questionable networking.
@@ -141,10 +144,12 @@ def do_request_jupyter_bridge(method, url, **kwargs):
         content = content or 'None'
         raise requests.exceptions.HTTPError(u'Undeciperable message received from Jupyter-bridge: %s' % (str(content)))
 
+    print('contacting SpoofResponse: ' + str(url))
     r = SpoofResponse(url, cy_reply['status'], cy_reply['reason'], cy_reply['text'])
     if cy_reply['status'] == 0:
         raise requests.exceptions.HTTPError(u'Could not contact url: %s' % (url), response=r)
 
+    print('SpoofResponse returned: ' + str(r))
     log_http_result(r)
     return r
 
