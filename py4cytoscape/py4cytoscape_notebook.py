@@ -82,7 +82,6 @@ def get_jupyter_bridge_url():
     return _JUPYTER_BRIDGE_URL
 
 def do_request_jupyter_bridge(method, url, **kwargs):
-    print('in do_request_jupyter_bridge')
     log_http_request(method, url, **kwargs)
 
     if 'json' in kwargs:
@@ -98,19 +97,15 @@ def do_request_jupyter_bridge(method, url, **kwargs):
                     'data': data,
                     'headers': kwargs['headers'] if 'headers' in kwargs else None
                     }
-    print('about to issue:' + str(http_request))
 
     # Call Jupyter-bridge to request a Cytoscape operation. Jupyter-bridge will put the request into a queue, and
     # the local browser will pick it out, use it to call Cytoscape, and then queue a reply.
     try:
-        print('calling requests.request')
         r = requests.request('POST', f'{_JUPYTER_BRIDGE_URL}/queue_request?channel={_CHANNEL}',
                              headers={'Content-Type': 'application/json'}, json=http_request)
-        print('back from requests.request: ' + str(r))
         r.raise_for_status()
     except Exception as e:
         raise requests.exceptions.HTTPError(f'Error posting to Jupyter-bridge: {_error_content(e)}')
-    print('done contacting jupyter-bridge')
 
     # Call Juptyer-bridge to pick up a reply queued by the local browser, which called Cytoscape to execute an operation
     # and return a reply.
