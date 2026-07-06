@@ -52,7 +52,7 @@ Cytoscape can also be driven through a **Model Context Protocol (MCP)** server (
 ## Prerequisites
 
 - Cytoscape Desktop is running.
-- The `cytoscape-mcp` server is active and listening (default endpoint: `http://localhost:1234/mcp`).
+- The `cytoscape-mcp` server is active and listening. The examples below use the default endpoint `http://localhost:1234/mcp`; substitute your own host and port if you have configured them differently.
 
 > The endpoint accepts `POST`, `DELETE`, and `OPTIONS`. A plain `GET /mcp` returns `405 Method Not Allowed` — this is expected, not an error.
 
@@ -81,7 +81,7 @@ curl -sS -i -X POST http://localhost:1234/mcp \
 A successful response is `200 OK` and includes the session id in the response headers, e.g.:
 
 ```
-Mcp-Session-Id: 2d28b700-e47e-47f5-88e3-c8da4d8c166a
+Mcp-Session-Id: <session-id>
 ```
 
 and a body reporting the server info and capabilities:
@@ -97,7 +97,7 @@ Capture the `Mcp-Session-Id` value for all subsequent requests.
 Send the `initialized` notification (no response body is returned):
 
 ```bash
-SESSION="2d28b700-e47e-47f5-88e3-c8da4d8c166a"
+SESSION="<session-id-from-step-1>"
 curl -sS -X POST http://localhost:1234/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
@@ -124,17 +124,17 @@ The server currently exposes one tool:
 
 ## Usage example: load a network from a file
 
-Invoke the tool with a bundled Cytoscape sample network (`galFiltered.sif`):
+Invoke the tool with a network file. The `galFiltered.sif` sample network ships with Cytoscape in its `sampleData` directory; replace the path below with the location on your system:
 
 ```bash
 curl -sS -X POST http://localhost:1234/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
   -H "Mcp-Session-Id: $SESSION" \
-  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"load_cytoscape_network_view","arguments":{"source":"network-file","file_path":"/Applications/Cytoscape_v3.10.4/sampleData/galFiltered.sif"}}}'
+  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"load_cytoscape_network_view","arguments":{"source":"network-file","file_path":"/path/to/sampleData/galFiltered.sif"}}}'
 ```
 
-The result arrives on the SSE stream and reports the new network:
+The result arrives on the SSE stream and reports the new network (the `network_suid` is assigned by Cytoscape and will vary):
 
 ```json
 {"status":"success","network_suid":578,"node_count":330,"edge_count":359,"network_name":"galFiltered"}
