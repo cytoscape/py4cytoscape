@@ -45,9 +45,117 @@ For an explanation of log configuration and use, see the [LOGGING.rst](LOGGING.r
 
 ``py4cytoscape`` has extensive test suites. Maintainers can learn more about testing in the [TESTING.rst](TESTING.rst) file.
 
- 
- 
+# Cytoscape MCP Integration
 
+Cytoscape can also be driven through a **Model Context Protocol (MCP)** server (`cytoscape-mcp`), which lets MCP-aware clients (agents, IDEs, or plain HTTP tooling) load and inspect networks in a running Cytoscape Desktop. The server speaks JSON-RPC 2.0 over the MCP *streamable HTTP* transport.
+
+## Prerequisites
+
+- Cytoscape Desktop is running.
+- The `cytoscape-mcp` server is active and listening. The examples below use the default endpoint `http://localhost:1234/mcp`; substitute your own host and port if you have configured them differently.
+
+> The endpoint accepts `POST`, `DELETE`, and `OPTIONS`. A plain `GET /mcp` returns `405 Method Not Allowed` — this is expected, not an error.
+
+## Required headers
+
+Every request must send:
+
+- `Content-Type: application/json`
+- `Accept: application/json, text/event-stream` (the server may reply with an SSE `event: message` stream)
+
+After the handshake, include the session id returned by `initialize`:
+
+- `Mcp-Session-Id: <session-id>`
+
+## Integration steps
+
+### 1. Initialize (handshake + connectivity test)
+
+```bash
+curl -sS -i -X POST http://localhost:1234/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"my-client","version":"0.0.1"}}}'
+```
+
+A successful response is `200 OK` and includes the session id in the response headers, e.g.:
+
+```
+Mcp-Session-Id: <session-id>
+```
+
+and a body reporting the server info and capabilities:
+
+```json
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"logging":{},"prompts":{"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"cytoscape-mcp","version":"1.0.2"}}}
+```
+
+Capture the `Mcp-Session-Id` value for all subsequent requests.
+
+### 2. Complete the handshake
+
+Send the `initialized` notification (no response body is returned):
+
+```bash
+SESSION="<session-id-from-step-1>"
+curl -sS -X POST http://localhost:1234/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","method":"notifications/initialized"}'
+```
+
+### 3. Discover available tools
+
+```bash
+curl -sS -X POST http://localhost:1234/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/list"}'
+```
+
+The server currently exposes one tool:
+
+- **`load_cytoscape_network_view`** — creates a new Cytoscape network collection with a view from one of three sources:
+  - `ndex` — an NDEx network id
+  - `network-file` — a local network file (e.g. `.sif`, `.cys`)
+  - `tabular-file` — a delimited file with column mapping
+
+## Usage example: load a network from a file
+
+Invoke the tool with a network file. The `galFiltered.sif` sample network ships with Cytoscape in its `sampleData` directory; replace the path below with the location on your system:
+
+```bash
+curl -sS -X POST http://localhost:1234/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"load_cytoscape_network_view","arguments":{"source":"network-file","file_path":"/path/to/sampleData/galFiltered.sif"}}}'
+```
+
+The result arrives on the SSE stream and reports the new network (the `network_suid` is assigned by Cytoscape and will vary):
+
+```json
+{"status":"success","network_suid":578,"node_count":330,"edge_count":359,"network_name":"galFiltered"}
+```
+
+## Usage example: load a network from NDEx
+
+```bash
+curl -sS -X POST http://localhost:1234/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Mcp-Session-Id: $SESSION" \
+  -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"load_cytoscape_network_view","arguments":{"source":"ndex","network_id":"a7e43e3d-c7f8-11ec-8d17-005056ae23aa"}}}'
+```
+
+## Troubleshooting
+
+- **`405 Method Not Allowed`** — you used `GET`; the MCP endpoint requires `POST`.
+- **`406 Not Acceptable`** — add `text/event-stream` to the `Accept` header.
+- **Missing/invalid session** — ensure `Mcp-Session-Id` matches the value returned by `initialize`; re-run the handshake if the server was restarted.
+- **Tool call fails to create a network** — confirm Cytoscape Desktop is running and the `file_path` is accessible to the machine hosting Cytoscape.
 
 ## License
 
