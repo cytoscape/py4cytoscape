@@ -194,3 +194,174 @@ def llm_infer_stream(prompt, model_key=None, host=DEFAULT_LLM_HOST, config=None)
             raise CyError(f"LLM streaming inference failed on host '{host}': {e}", caller=caller)
 
     return _generate()
+
+
+@cy_log
+def llm_list_loaded_models(host=DEFAULT_LLM_HOST):
+    """List the LLM model identifiers currently loaded in memory in LM Studio.
+
+    Args:
+        host (str): Host and port of the LM Studio server. Default is ``localhost:1234``.
+
+    Returns:
+        list: list of identifier strings for each loaded model
+            (e.g. ``['mistralai/mistral-7b-instruct-v0.3']``)
+
+    Raises:
+        CyError: if the ``lmstudio`` package is not installed or the server can't be reached
+
+    Examples:
+        >>> llm_list_loaded_models()
+        ['mistralai/mistral-7b-instruct-v0.3']
+    """
+    caller = sys._getframe().f_code.co_name
+    lms = _import_lmstudio(caller)
+    try:
+        with lms.Client(api_host=host) as client:
+            handles = client.llm.list_loaded()
+    except Exception as e:
+        raise CyError(f"Could not reach LM Studio server at '{host}': {e}", caller=caller)
+    return [getattr(h, 'identifier', str(h)) for h in handles]
+
+
+@cy_log
+def llm_load_model(model_key, identifier=None, ttl=3600, config=None, host=DEFAULT_LLM_HOST):
+    """Load a model into memory in the local LM Studio server.
+
+    If the model is already loaded, no additional instance is created and the
+    existing model identifier is returned.
+
+    Args:
+        model_key (str): Model key to load (e.g. ``mistralai/mistral-7b-instruct-v0.3``).
+            Must correspond to a downloaded model.
+        identifier (str): Optional custom identifier for this instance. If None,
+            the server assigns one (usually the same as ``model_key``).
+        ttl (int): Time-to-live in seconds before the server auto-unloads the model
+            when idle. Default is 3600 (1 hour). Pass None to disable auto-unload.
+        config (dict): Optional model load parameters (e.g. context length, GPU layers).
+        host (str): Host and port of the LM Studio server. Default is ``localhost:1234``.
+
+    Returns:
+        str: The identifier of the loaded model instance.
+
+    Raises:
+        CyError: if the ``lmstudio`` package is not installed, ``model_key`` is empty,
+            the model is not downloaded, or the server can't be reached
+
+    Examples:
+        >>> llm_load_model('mistralai/mistral-7b-instruct-v0.3')
+        'mistralai/mistral-7b-instruct-v0.3'
+        >>> llm_load_model('mistralai/mistral-7b-instruct-v0.3', ttl=None)
+        'mistralai/mistral-7b-instruct-v0.3'
+    """
+    caller = sys._getframe().f_code.co_name
+    if not model_key or str(model_key).strip() == '':
+        raise CyError('model_key must be a non-empty string', caller=caller)
+    lms = _import_lmstudio(caller)
+    try:
+        with lms.Client(api_host=host) as client:
+            # Avoid loading a duplicate instance if already present
+            handles = client.llm.list_loaded()
+            for h in handles:
+                if getattr(h, 'identifier', None) == model_key:
+                    return model_key
+            kwargs = {'ttl': ttl}
+            if identifier is not None:
+                kwargs['instance_identifier'] = identifier
+            if config is not None:
+                kwargs['config'] = config
+            handle = client.llm.load_new_instance(model_key, **kwargs)
+            return getattr(handle, 'identifier', model_key)
+    except CyError:
+        raise
+    except Exception as e:
+        raise CyError(f"Failed to load model '{model_key}' on host '{host}': {e}", caller=caller)
+
+
+@cy_log
+def llm_unload_model(model_key, host=DEFAULT_LLM_HOST):
+    """Unload a model from memory in the local LM Studio server.
+
+    If the model is not currently loaded, the call is a no-op and returns False.
+
+    Args:
+        model_key (str): Identifier of the loaded model to unload.
+        host (str): Host and port of the LM Studio server. Default is ``localhost:1234``.
+
+    Returns:
+        bool: True if the model was unloaded, False if it was not loaded.
+
+    Raises:
+        CyError: if the ``lmstudio`` package is not installed, ``model_key`` is empty,
+            or the server can't be reached
+
+    Examples:
+        >>> llm_unload_model('mistralai/mistral-7b-instruct-v0.3')
+        True
+        >>> llm_unload_model('model/not-loaded')
+        False
+    """
+    caller = sys._getframe().f_code.co_name
+    if not model_key or str(model_key).strip() == '':
+        raise CyError('model_key must be a non-empty string', caller=caller)
+    lms = _import_lmstudio(caller)
+    try:
+        with lms.Client(api_host=host) as client:
+            handles = client.llm.list_loaded()
+            loaded_ids = [getattr(h, 'identifier', None) for h in handles]
+            if model_key not in loaded_ids:
+                return False
+            client.llm.unload(model_key)
+            return True
+    except CyError:
+        raise
+    except Exception as e:
+        raise CyError(f"Failed to unload model '{model_key}' on host '{host}': {e}", caller=caller)
+
+
+@cy_log
+def llm_ensure_model_loaded(model_key, ttl=3600, config=None, host=DEFAULT_LLM_HOST):
+    """Ensure a model is loaded, loading it first if necessary.
+
+    This is the recommended helper to call before running inference: it avoids
+    loading a redundant instance when the model is already in memory.
+
+    Args:
+        model_key (str): Model key to ensure is loaded.
+        ttl (int): Time-to-live in seconds passed to :func:`llm_load_model` when
+            the model needs to be loaded. Default is 3600 (1 hour).
+        config (dict): Optional load configuration passed to :func:`llm_load_model`.
+        host (str): Host and port of the LM Studio server. Default is ``localhost:1234``.
+
+    Returns:
+        bool: True if the model was already loaded, False if it had to be loaded now.
+
+    Raises:
+        CyError: if the ``lmstudio`` package is not installed, the model is not
+            downloaded, or the server can't be reached
+
+    Examples:
+        >>> llm_ensure_model_loaded('mistralai/mistral-7b-instruct-v0.3')  # already in memory
+        True
+        >>> llm_ensure_model_loaded('mistralai/mistral-7b-instruct-v0.3')  # was not loaded
+        False
+    """
+    caller = sys._getframe().f_code.co_name
+    if not model_key or str(model_key).strip() == '':
+        raise CyError('model_key must be a non-empty string', caller=caller)
+    lms = _import_lmstudio(caller)
+    try:
+        with lms.Client(api_host=host) as client:
+            handles = client.llm.list_loaded()
+            already_loaded = any(getattr(h, 'identifier', None) == model_key for h in handles)
+            if already_loaded:
+                return True
+            kwargs = {'ttl': ttl}
+            if config is not None:
+                kwargs['config'] = config
+            client.llm.load_new_instance(model_key, **kwargs)
+            return False
+    except CyError:
+        raise
+    except Exception as e:
+        raise CyError(f"Failed to ensure model '{model_key}' is loaded on host '{host}': {e}", caller=caller)
