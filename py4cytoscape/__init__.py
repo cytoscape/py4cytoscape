@@ -51,6 +51,7 @@ from .py4cytoscape_tuning import set_catchup_filter_secs, set_catchup_network_se
 from ._version import __version__
 from .notebook import *
 from .annotations import *
+from .llm_inference import *
 
 # Note that we have tried to enforce documentation standards for modules and private functions per:
 # https://www.python.org/dev/peps/pep-0257/ and https://www.python.org/dev/peps/pep-0008/#comments

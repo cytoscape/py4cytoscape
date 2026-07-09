@@ -35,6 +35,9 @@ setuptools.setup(
         'backoff',
         'colour'
     ],
+    extras_require={
+        'llm': ['lmstudio>=1.0'],  # Optional: local LLM inference via LM Studio (see llm_inference module)
+    },
     classifiers=[
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
